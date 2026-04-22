@@ -1,9 +1,7 @@
-# research
-
-リサーチ・調査系の成果物をまとめるリポジトリ。
+# news
 
 - `report/` — 日次ニュースレポート
-- `future-prediction/` — 未来予測・予測検証レポート
+- `future-prediction/` — 今日のニュースと昨日までの日次ニュースFuture欄の答え合わせ
 
 ---
 
