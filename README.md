@@ -9,13 +9,13 @@
 
 ### ニュース
 
-ChatGPT Images 2.0（gpt-image-2）公開でネイティブ推論・2K解像度・1プロンプト8枚一貫生成へ。Codex が computer use / web workflows / image gen / memory / automations / SSH devboxes へ拡張。OpenClaw CVE-2026-41329（CVSS 9.9、サンドボックス回避→権限昇格）公開。Vercel が Context.ai 経由のサプライチェーン侵害を確認、OAuth トークン侵害→内部環境横展開→BreachForums で $2M 出品。CISA KEV に Cisco Catalyst SD-WAN Manager 3件含む 8件追加。Anthropic が Claude Code の Pro 除外 A/B テストを開始→即日撤回。Hugging Face ml-intern が Qwen3-1.7B の GPQA を 10h 未満で 8.5%→32%（Claude Code 22.99% 超え）。Amazon–Anthropic $25B の後続報道で 100,000+ 組織が Bedrock で Claude 利用、Q2 2026 から 5GW 稼働。
+Google Cloud Next '26 で第8世代 TPU を訓練 / 推論 2SKU 分割発表（**TPU 8t** 訓練・前世代比 3x 演算 / **TPU 8i** 推論・$ あたり 80% 性能向上、FP4 ネイティブ）、1 superpod = 9,600 チップ / 121 exaflops / 2PB 共有メモリ、$750M 企業 AI 導入基金。Tesla Q1 2026 決算で EPS $0.41・売上 $22.38B・gross margin 21.1%、**Optimus 第1世代工場 Q2 準備開始 / 年産 100 万台計画**、Fremont の Model S/X ライン転用。OpenClaw CVE-2026-41329（CVSS 9.9、サンドボックス回避→権限昇格）公開。Vercel が Context.ai 経由のサプライチェーン侵害を確認、OAuth トークン侵害→内部環境横展開→BreachForums で $2M 出品。Neura Robotics × AWS が Physical AI 戦略提携、Amazon FC 展開可能性検討。DEEPX × Hyundai Motor Group Robotics LAB が次世代 Physical AI コンピュート提携。Anthropic 売上 $30B 超で OpenAI $25B を上回り、自社 AI チップ開発を模索。
 
 [news-20260422.md](report/news-20260422.md)
 
 ### 答え合わせ
 
-過去3日（4/19〜4/21）の Future セクション 9 予測のうち、Relevance 4以上が 6件、3が 2件、2が 1件。「間接プロンプトインジェクションの主CVEカテゴリ化」「ローカル>クラウド逆転」「CI/エージェント Secret 流出」「ハイパースケーラ排他同盟」の 4件は 1〜3日で新規具体事例（CVE・侵害・投資・ベンチ超え）が出揃い実態追認フェーズへ。「Headless Everything」は Codex の GUI 方向拡張と ChatGPT Images 2.0 の UI 多重化で逆方向の動きが強く Relevance 2。ユーザー予測「悪性ローカルLLMのマルウェア化」は SGLang CVE-2026-5760 が定義的初例、「RL/LLM による予測改善の普及」は ml-intern の GRPO 相当最適化が直接型。
+過去3日（4/19〜4/21）の Future セクション 9 予測のうち Relevance 5 が 4件（間接プロンプトインジェクションの主CVE化 / ローカル>クラウド逆転 / CI・エージェント Secret 流出 / ハイパースケーラ排他同盟）、4 が 2件、3 が 2件、2 が 1件。間接プロンプトインジェクション系は OpenClaw CVE-2026-41329 に加え **Google Antigravity の find_by_name ツール経由 RCE** が本日分で加わり、LLM エージェントランタイム横断の脆弱性クラスタを形成。ハイパースケーラ排他同盟は **TPU 8t/8i の訓練・推論 2SKU 分離**と **Anthropic の自社 AI チップ検討報道**が並列で出て Trainium / TPU / MAIA / MI300X の分化が「5極体制固定化」予測の筋書きを強化。「Headless Everything」は Codex の GUI 拡張・ChatGPT Images 2.0 の UI 多重化で逆方向、Relevance 2。ユーザー予測「悪性ローカルLLMのマルウェア化」は SGLang CVE-2026-5760 が定義的初例、「RL/LLM による予測改善の普及」は ml-intern の GRPO 相当最適化が直接型。
 
 [future-prediction-20260422.md](future-prediction/future-prediction-20260422.md)
 
