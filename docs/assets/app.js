@@ -647,11 +647,17 @@
         if (supported > 0) {
           const bx = p.x + r * 0.75;
           const by = p.y - r * 0.75;
-          ctx.fillStyle = withAlpha("#c26a1e", 0.95 * alpha);
+          // Very dark burnt-orange fill with a bright orange rim so
+          // the badge reads clearly against both the cold graph
+          // background and warm heatmap nodes around it.
+          ctx.fillStyle = withAlpha("#2a0f03", 0.98 * alpha);
           ctx.beginPath();
           ctx.arc(bx, by, 7, 0, Math.PI * 2);
           ctx.fill();
-          ctx.fillStyle = withAlpha("#fff3c4", alpha);
+          ctx.strokeStyle = withAlpha("#e07a1a", 0.95 * alpha);
+          ctx.lineWidth = 1.2;
+          ctx.stroke();
+          ctx.fillStyle = withAlpha("#ffd8a0", alpha);
           ctx.font = "700 10px system-ui, sans-serif";
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
