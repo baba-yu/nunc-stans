@@ -33,6 +33,16 @@
     prediction: 3,
   };
 
+  // Per-type depth half-range. d3-force is 2D, so we assign each node a
+  // stable z at init derived from its id. Rotation then actually shows
+  // depth instead of collapsing everything to a line.
+  const Z_RANGE_BY_TYPE = {
+    category: 30,
+    theme: 70,
+    subtheme: 100,
+    prediction: 140,
+  };
+
   // Heat color stops (UI §8.2). Index 0..4 plus a hot core band.
   const HEAT_STOPS = [
     { t: 0.00, c: "#203047" }, // --heat-0
@@ -145,6 +155,23 @@
     const g = Math.round(ca.g + (cb.g - ca.g) * t);
     const bl = Math.round(ca.b + (cb.b - ca.b) * t);
     return `rgb(${r},${g},${bl})`;
+  }
+
+  // Stable 0..1 hash so each node id gets the same z every reload.
+  function hashUnit(s) {
+    let h = 2166136261 >>> 0;
+    const str = String(s || "");
+    for (let i = 0; i < str.length; i++) {
+      h ^= str.charCodeAt(i);
+      h = Math.imul(h, 16777619);
+    }
+    return ((h >>> 0) % 10000) / 10000;
+  }
+
+  function zFor(node) {
+    const range = Z_RANGE_BY_TYPE[node.type] || 40;
+    const t = hashUnit(node.id) * 2 - 1; // -1..1
+    return t * range;
   }
 
   function radiusFor(node) {
@@ -261,9 +288,13 @@
     const rn = visibleNodes.map((n) => {
       const p = prior.get(n.id);
       const init = n.layout || {};
+      // z is derived from the stable id hash (see zFor). Simulation stays
+      // 2D in (x, y); z is fixed per node so rotation reveals real depth.
+      const z = (p && typeof p.z === "number") ? p.z : zFor(n);
       return Object.assign({}, n, {
         x: p ? p.x : (typeof init.x === "number" ? init.x + state.width / 2 : state.width / 2 + (Math.random() - 0.5) * 60),
         y: p ? p.y : (typeof init.y === "number" ? init.y + state.height / 2 : state.height / 2 + (Math.random() - 0.5) * 60),
+        z: z,
         vx: p ? p.vx : 0,
         vy: p ? p.vy : 0,
         fx: p ? p.fx : null,
@@ -354,21 +385,21 @@
   // Yaw about Y then pitch about X, then orthographic projection with
   // zoom and pan. The resulting z is the depth value used for front/back
   // sorting so nodes toward the viewer overlap nodes behind them.
-  function projectNode(nx, ny) {
+  function projectNode(nx, ny, nz) {
     const cx = state.width / 2;
     const cy = state.height / 2;
 
     const x0 = nx - cx;
     const y0 = ny - cy;
-    // z0 = 0 (flat plane)
+    const z0 = (typeof nz === "number") ? nz : 0;
 
     const cy0 = Math.cos(state.rotation.y), sy0 = Math.sin(state.rotation.y);
     const cx0 = Math.cos(state.rotation.x), sx0 = Math.sin(state.rotation.x);
 
     // Yaw around Y axis
-    const x1 =  x0 * cy0;            // + z0 * sy0 (=0)
+    const x1 =  x0 * cy0 + z0 * sy0;
     const y1 =  y0;
-    const z1 = -x0 * sy0;            // + z0 * cy0 (=0)
+    const z1 = -x0 * sy0 + z0 * cy0;
 
     // Pitch around X axis
     const x2 =  x1;
@@ -387,12 +418,13 @@
     };
   }
 
-  // Inverse of projectNode assuming z_world = 0.
-  // Useful when we need to answer "what world (x, y) does this screen
-  // (px, py) correspond to?" e.g. during node drag.
-  function unprojectScreen(px, py) {
+  // Inverse of projectNode for a given fixed z_world.
+  // During drag we keep the node at its own z and solve for world x, y
+  // that project to the desired screen coords.
+  function unprojectScreen(px, py, nz) {
     const cx = state.width / 2;
     const cy = state.height / 2;
+    const z0 = (typeof nz === "number") ? nz : 0;
 
     const sx = (px - cx - state.pan.x) / state.zoom;
     const sy = (py - cy - state.pan.y) / state.zoom;
@@ -400,12 +432,14 @@
     const cy0 = Math.cos(state.rotation.y), sy0 = Math.sin(state.rotation.y);
     const cx0 = Math.cos(state.rotation.x), sx0 = Math.sin(state.rotation.x);
 
-    // From forward transform (z_world=0):
-    //   sx = x * cosY
-    //   sy = y * cosX + x * sinY * sinX
+    // Forward (keeping z_world = z0 constant):
+    //   sx = x * cosY + z * sinY
+    //   sy = y * cosX + x * sinY * sinX - z * cosY * sinX
     const EPS = 1e-6;
-    const x = Math.abs(cy0) < EPS ? 0 : sx / cy0;
-    const y = Math.abs(cx0) < EPS ? 0 : (sy - x * sy0 * sx0) / cx0;
+    const x = Math.abs(cy0) < EPS ? 0 : (sx - z0 * sy0) / cy0;
+    const y = Math.abs(cx0) < EPS
+      ? 0
+      : (sy + z0 * cy0 * sx0 - x * sy0 * sx0) / cx0;
     return { x: x + cx, y: y + cy };
   }
 
@@ -426,8 +460,8 @@
       const s = (typeof l.source === "object") ? l.source : nodeById(l.source);
       const t = (typeof l.target === "object") ? l.target : nodeById(l.target);
       if (!s || !t) continue;
-      const ps = projectNode(s.x, s.y);
-      const pt = projectNode(t.x, t.y);
+      const ps = projectNode(s.x, s.y, s.z);
+      const pt = projectNode(t.x, t.y, t.z);
 
       let alpha = 0.28;
       if (focused) {
@@ -450,7 +484,7 @@
 
     // --- Nodes (z-sorted: farther first, closer last = on top) ---
     const drawOrder = state.renderNodes
-      .map((n) => ({ n, z: projectNode(n.x, n.y).z }))
+      .map((n) => ({ n, z: projectNode(n.x, n.y, n.z).z }))
       .sort((a, b) => a.z - b.z);
     for (const entry of drawOrder) {
       const n = entry.n;
@@ -459,7 +493,7 @@
       const realization = (typeof m.realization_score === "number") ? m.realization_score : 1;
       const contradiction = (typeof m.contradiction_score === "number") ? m.contradiction_score : 0;
 
-      const p = projectNode(n.x, n.y);
+      const p = projectNode(n.x, n.y, n.z);
       const r = radiusFor(n) * (0.7 + 0.3 * state.zoom);
 
       let alpha = 1.0;
@@ -596,7 +630,7 @@
     layer.innerHTML = "";
     for (const n of state.renderNodes) {
       if (!labelVisibleForNode(n, state.zoom)) continue;
-      const p = projectNode(n.x, n.y);
+      const p = projectNode(n.x, n.y, n.z);
       const r = radiusFor(n) * (0.7 + 0.3 * state.zoom);
 
       const div = document.createElement("div");
@@ -626,7 +660,7 @@
   function nodeAt(clientX, clientY) {
     // Check front-most first (highest z) so the node visibly on top wins.
     const candidates = state.renderNodes
-      .map((n) => ({ n, p: projectNode(n.x, n.y) }))
+      .map((n) => ({ n, p: projectNode(n.x, n.y, n.z) }))
       .sort((a, b) => b.p.z - a.p.z);
     for (const { n, p } of candidates) {
       const r = radiusFor(n) * (0.7 + 0.3 * state.zoom) + 2;
@@ -674,7 +708,7 @@
         // Record screen-space offset between pointer and the node's
         // currently-projected center, so the node doesn't jump to the
         // cursor when you grab the edge.
-        const proj = projectNode(hit.x, hit.y);
+        const proj = projectNode(hit.x, hit.y, hit.z);
         state.dragOffset = { dx: ev.clientX - proj.x, dy: ev.clientY - proj.y };
         state.simulation && state.simulation.alphaTarget(0.3).restart();
         canvas.classList.add("dragging");
@@ -709,7 +743,7 @@
         // instead of flying off when the plane is tilted.
         const targetScreenX = ev.clientX - (state.dragOffset ? state.dragOffset.dx : 0);
         const targetScreenY = ev.clientY - (state.dragOffset ? state.dragOffset.dy : 0);
-        const world = unprojectScreen(targetScreenX, targetScreenY);
+        const world = unprojectScreen(targetScreenX, targetScreenY, state.draggingNode.z);
         state.draggingNode.fx = world.x;
         state.draggingNode.fy = world.y;
         scheduleDraw();
