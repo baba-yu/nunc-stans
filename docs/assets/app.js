@@ -72,7 +72,7 @@
 
   const state = {
     manifest: null,
-    scopeId: "tech",
+    scopeId: "mix",
     windowId: "30d",
     graphsByScope: new Map(),   // scope_id -> parsed graph
     selectedNodeId: null,
