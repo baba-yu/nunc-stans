@@ -1,5 +1,6 @@
 # news
 
+- [News Explorer (GitHub Pages)](https://baba-yu.github.io/news/) — 注目コンテンツの探索ダッシュボード
 - `report/` — 日次ニュースレポート
 - `future-prediction/` — 今日のニュースと昨日までの日次ニュースFuture欄の答え合わせ
 
