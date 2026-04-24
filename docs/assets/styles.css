@@ -388,12 +388,19 @@ body[data-tool="pan"]    #graph-canvas { cursor: move; }
   margin-right: 6px;
 }
 
-.evidence-list a {
+.evidence-list a,
+.repo-link {
   color: var(--panel-accent);
   text-decoration: none;
   word-break: break-all;
 }
-.evidence-list a:hover { text-decoration: underline; }
+.evidence-list a:hover,
+.repo-link:hover { text-decoration: underline; }
+.repo-link::before {
+  content: "\2197  ";          /* ↗ arrow to signal external link */
+  color: var(--text-muted);
+  margin-right: 2px;
+}
 
 /* Grass strip mini */
 .grass-strip {

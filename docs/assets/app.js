@@ -11,6 +11,9 @@
 
   const DATA_DIR = "data";
   const STORAGE_KEY = "fp-dashboard-state";
+  // Base URL used to turn report/validation paths into GitHub article links.
+  // Change this if you fork the repo.
+  const REPO_BLOB_URL = "https://github.com/baba-yu/news/blob/main/";
 
   // Zoom thresholds (UI §7.1)
   const ZOOM_THRESHOLDS = {
@@ -283,13 +286,19 @@
       return -90;
     });
 
-    const center = d3.forceCenter(state.width / 2, state.height / 2).strength(0.03);
+    const cx = state.width / 2, cy = state.height / 2;
+    // Pull each node toward the world origin. Stronger than d3.forceCenter
+    // (which only re-centers the centroid) so the cloud stays anchored
+    // around the crosshair instead of drifting off-screen.
+    const pullX = d3.forceX(cx).strength(0.08);
+    const pullY = d3.forceY(cy).strength(0.08);
     const collide = d3.forceCollide().radius((d) => radiusFor(d) + 6).strength(0.85);
 
     state.simulation = d3.forceSimulation(rn)
       .force("link", linkForce)
       .force("charge", charge)
-      .force("center", center)
+      .force("x", pullX)
+      .force("y", pullY)
       .force("collide", collide)
       .alpha(0.7)
       .alphaDecay(0.03)
@@ -777,7 +786,12 @@
     // Resize
     window.addEventListener("resize", () => {
       resizeCanvas();
-      if (state.simulation) state.simulation.force("center", d3.forceCenter(state.width / 2, state.height / 2).strength(0.03));
+      if (state.simulation) {
+        const cx = state.width / 2, cy = state.height / 2;
+        state.simulation.force("x", d3.forceX(cx).strength(0.08));
+        state.simulation.force("y", d3.forceY(cy).strength(0.08));
+        state.simulation.alpha(0.3).restart();
+      }
       scheduleDraw();
     });
 
@@ -988,8 +1002,8 @@
         ${detail.prediction_date ? `<p class="muted">prediction date: ${detail.prediction_date}</p>` : ""}
         ${parents.length ? `<h3>Lineage</h3>
           <ul class="related-list">${parents.map(listItem).join("")}</ul>` : ""}
-        ${detail.source_report_path ? `<h3>Source report</h3><p><span class="muted">${escapeHTML(detail.source_report_path)}</span></p>` : ""}
-        ${detail.validation_report_path ? `<h3>Validation report</h3><p><span class="muted">${escapeHTML(detail.validation_report_path)}</span></p>` : ""}
+        ${detail.source_report_path ? `<h3>Source report</h3><p>${repoLink(detail.source_report_path)}</p>` : ""}
+        ${detail.validation_report_path ? `<h3>Validation report</h3><p>${repoLink(detail.validation_report_path)}</p>` : ""}
         ${renderEvidenceLinks(detail.evidence || detail.evidence_links)}
       `;
     }
@@ -1067,6 +1081,15 @@
     if (!n) return "";
     const label = escapeHTML(n.short_label || n.label || n.id);
     return `<li data-goto="${escapeHTML(n.id)}"><span class="rtype">${n.type}</span>${label}</li>`;
+  }
+
+  // Build a clickable link to a repo-relative path on GitHub.
+  function repoLink(path) {
+    if (!path) return "";
+    // strip any leading "./" or "/"
+    const rel = String(path).replace(/^\.?\/+/, "");
+    const url = REPO_BLOB_URL + rel;
+    return `<a class="repo-link" href="${escapeHTML(url)}" target="_blank" rel="noreferrer noopener">${escapeHTML(rel)}</a>`;
   }
 
   function escapeHTML(s) {
