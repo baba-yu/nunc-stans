@@ -56,13 +56,18 @@
     pan: { x: 0, y: 0 },
     rotation: { x: 0, y: 0 },
 
+    // Tool: "rotate" or "pan" — primary empty-space drag behavior.
+    // shift/space temporarily flips to the other tool regardless of setting.
+    tool: "rotate",
+
     // Interaction scratch
     isPointerDown: false,
     pointerStart: null,
     pointerCurrent: null,
     axisLocked: null,
     draggingNode: null,
-    panMode: false, // shift or space
+    dragOffset: null,   // screen-space offset between pointer and node at pick-up
+    panMode: false,     // true when current drag pans (tool=pan or shift/space held)
 
     // Sim + data (live)
     simulation: null,
@@ -96,6 +101,7 @@
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
         scopeId: state.scopeId,
         windowId: state.windowId,
+        tool: state.tool,
       }));
     } catch (_) { /* ignore */ }
   }
@@ -327,31 +333,63 @@
     });
   }
 
-  // Apply current pan/zoom/rotation to a node position.
-  // Rotation is a light "graph plane tilt" approximation — we scale x by cos(rotY)
-  // and y by cos(rotX) plus a small shear. This keeps all code 2D while still
-  // honoring the spec's rotate-on-empty-drag interaction.
+  // Proper 3D rotation (graph lives on the z=0 plane).
+  // Yaw about Y then pitch about X, then orthographic projection with
+  // zoom and pan. The resulting z is the depth value used for front/back
+  // sorting so nodes toward the viewer overlap nodes behind them.
   function projectNode(nx, ny) {
     const cx = state.width / 2;
     const cy = state.height / 2;
 
-    let x = nx - cx;
-    let y = ny - cy;
+    const x0 = nx - cx;
+    const y0 = ny - cy;
+    // z0 = 0 (flat plane)
 
-    const cosY = Math.cos(state.rotation.y);
-    const cosX = Math.cos(state.rotation.x);
-    const sinY = Math.sin(state.rotation.y);
-    const sinX = Math.sin(state.rotation.x);
+    const cy0 = Math.cos(state.rotation.y), sy0 = Math.sin(state.rotation.y);
+    const cx0 = Math.cos(state.rotation.x), sx0 = Math.sin(state.rotation.x);
 
-    // tilt: scale + subtle shear for 3D feel
-    const px = x * cosY + y * sinY * 0.12;
-    const py = y * cosX - x * sinX * 0.12;
+    // Yaw around Y axis
+    const x1 =  x0 * cy0;            // + z0 * sy0 (=0)
+    const y1 =  y0;
+    const z1 = -x0 * sy0;            // + z0 * cy0 (=0)
+
+    // Pitch around X axis
+    const x2 =  x1;
+    const y2 =  y1 * cx0 - z1 * sx0;
+    const z2 =  y1 * sx0 + z1 * cx0;
+
+    // Slight foreshortening: nodes closer to viewer get drawn a touch larger.
+    // Keep subtle (±8%) so the knowledge graph reads as flat-ish tilt.
+    const depthScale = 1 + z2 * 0.0008;
 
     return {
-      x: cx + px * state.zoom + state.pan.x,
-      y: cy + py * state.zoom + state.pan.y,
-      scale: state.zoom * (0.65 + 0.35 * (Math.abs(cosX) + Math.abs(cosY)) / 2),
+      x: cx + x2 * state.zoom + state.pan.x,
+      y: cy + y2 * state.zoom + state.pan.y,
+      z: z2,
+      scale: state.zoom * depthScale,
     };
+  }
+
+  // Inverse of projectNode assuming z_world = 0.
+  // Useful when we need to answer "what world (x, y) does this screen
+  // (px, py) correspond to?" e.g. during node drag.
+  function unprojectScreen(px, py) {
+    const cx = state.width / 2;
+    const cy = state.height / 2;
+
+    const sx = (px - cx - state.pan.x) / state.zoom;
+    const sy = (py - cy - state.pan.y) / state.zoom;
+
+    const cy0 = Math.cos(state.rotation.y), sy0 = Math.sin(state.rotation.y);
+    const cx0 = Math.cos(state.rotation.x), sx0 = Math.sin(state.rotation.x);
+
+    // From forward transform (z_world=0):
+    //   sx = x * cosY
+    //   sy = y * cosX + x * sinY * sinX
+    const EPS = 1e-6;
+    const x = Math.abs(cy0) < EPS ? 0 : sx / cy0;
+    const y = Math.abs(cx0) < EPS ? 0 : (sy - x * sy0 * sx0) / cx0;
+    return { x: x + cx, y: y + cy };
   }
 
   function draw() {
@@ -361,6 +399,9 @@
 
     const focused = state.focusedNodeId;
     const related = focused ? relatedIds(focused) : null;
+
+    // Draw the origin marker (before links so it sits underneath).
+    drawCenterMarker(ctx);
 
     // --- Links ---
     ctx.lineCap = "round";
@@ -390,8 +431,12 @@
       ctx.stroke();
     }
 
-    // --- Nodes ---
-    for (const n of state.renderNodes) {
+    // --- Nodes (z-sorted: farther first, closer last = on top) ---
+    const drawOrder = state.renderNodes
+      .map((n) => ({ n, z: projectNode(n.x, n.y).z }))
+      .sort((a, b) => a.z - b.z);
+    for (const entry of drawOrder) {
+      const n = entry.n;
       const m = metricsFor(n, state.windowId);
       const attention = (typeof m.attention_score === "number") ? m.attention_score : 0;
       const realization = (typeof m.realization_score === "number") ? m.realization_score : 1;
@@ -469,6 +514,28 @@
     if (anyPulsing()) scheduleDraw();
   }
 
+  // Subtle origin marker: concentric dashed ring + crosshair.
+  // Sits at the world (cx, cy) which — after projection — is always at
+  // (cx + pan.x, cy + pan.y), independent of rotation.
+  function drawCenterMarker(ctx) {
+    const cx = state.width / 2 + state.pan.x;
+    const cy = state.height / 2 + state.pan.y;
+    ctx.save();
+    ctx.lineWidth = 1;
+    ctx.setLineDash([3, 4]);
+    ctx.strokeStyle = "rgba(130, 170, 210, 0.28)";
+    ctx.beginPath(); ctx.arc(cx, cy, 18, 0, Math.PI * 2); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.strokeStyle = "rgba(130, 170, 210, 0.22)";
+    ctx.beginPath();
+    ctx.moveTo(cx - 9, cy); ctx.lineTo(cx + 9, cy);
+    ctx.moveTo(cx, cy - 9); ctx.lineTo(cx, cy + 9);
+    ctx.stroke();
+    ctx.fillStyle = "rgba(24, 199, 216, 0.55)";
+    ctx.beginPath(); ctx.arc(cx, cy, 1.8, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+  }
+
   function anyPulsing() {
     for (const n of state.renderNodes) {
       const m = metricsFor(n, state.windowId);
@@ -540,10 +607,11 @@
   /* ---------------- Hit-test ---------------- */
 
   function nodeAt(clientX, clientY) {
-    // Reverse: for each rendered node get projected pos and compare
-    for (let i = state.renderNodes.length - 1; i >= 0; i--) {
-      const n = state.renderNodes[i];
-      const p = projectNode(n.x, n.y);
+    // Check front-most first (highest z) so the node visibly on top wins.
+    const candidates = state.renderNodes
+      .map((n) => ({ n, p: projectNode(n.x, n.y) }))
+      .sort((a, b) => b.p.z - a.p.z);
+    for (const { n, p } of candidates) {
       const r = radiusFor(n) * (0.8 + 0.4 * state.zoom) + 2;
       const dx = clientX - p.x, dy = clientY - p.y;
       if (dx * dx + dy * dy <= r * r) return n;
@@ -586,29 +654,47 @@
       if (hit) {
         state.draggingNode = hit;
         hit.fx = hit.x; hit.fy = hit.y;
+        // Record screen-space offset between pointer and the node's
+        // currently-projected center, so the node doesn't jump to the
+        // cursor when you grab the edge.
+        const proj = projectNode(hit.x, hit.y);
+        state.dragOffset = { dx: ev.clientX - proj.x, dy: ev.clientY - proj.y };
         state.simulation && state.simulation.alphaTarget(0.3).restart();
         canvas.classList.add("dragging");
       } else {
         state.draggingNode = null;
-        state.panMode = ev.shiftKey || state.spaceHeld;
+        state.dragOffset = null;
+        // Shift or held-space temporarily flips the empty-space drag tool.
+        const temp = ev.shiftKey || state.spaceHeld;
+        const effective = temp ? (state.tool === "pan" ? "rotate" : "pan") : state.tool;
+        state.panMode = (effective === "pan");
         canvas.classList.add(state.panMode ? "panning" : "dragging");
       }
     });
 
     canvas.addEventListener("pointermove", (ev) => {
       state.pointerCurrent = { x: ev.clientX, y: ev.clientY };
-      if (!state.isPointerDown) return;
+
+      // Hover feedback: show pointer cursor when over a node.
+      if (!state.isPointerDown) {
+        const hover = nodeAt(ev.clientX, ev.clientY);
+        canvas.classList.toggle("over-node", !!hover);
+        return;
+      }
 
       const dx = ev.clientX - state.pointerStart.x;
       const dy = ev.clientY - state.pointerStart.y;
 
       if (state.draggingNode) {
-        // Drag node — we drag in screen space then un-project roughly
-        const nodeProj = projectNode(state.draggingNode.x, state.draggingNode.y);
-        // Approximate inverse using zoom only (ignores rotation jitter for simplicity)
-        const invScale = 1 / state.zoom;
-        state.draggingNode.fx = state.draggingNode.x + (ev.clientX - nodeProj.x) * invScale;
-        state.draggingNode.fy = state.draggingNode.y + (ev.clientY - nodeProj.y) * invScale;
+        // Drag: un-project the screen position the node center should be
+        // at (pointer - stored offset) back into world coords. This stays
+        // correct under any rotation or zoom — the node tracks your finger
+        // instead of flying off when the plane is tilted.
+        const targetScreenX = ev.clientX - (state.dragOffset ? state.dragOffset.dx : 0);
+        const targetScreenY = ev.clientY - (state.dragOffset ? state.dragOffset.dy : 0);
+        const world = unprojectScreen(targetScreenX, targetScreenY);
+        state.draggingNode.fx = world.x;
+        state.draggingNode.fy = world.y;
         scheduleDraw();
         return;
       }
@@ -647,6 +733,7 @@
         n.vy = (ev.movementY || 0) * 0.6;
         state.simulation && state.simulation.alphaTarget(0).alpha(0.35).restart();
         state.draggingNode = null;
+        state.dragOffset = null;
 
         // Treat as click if barely moved
         const moved = Math.hypot(
@@ -700,6 +787,9 @@
     });
     document.querySelectorAll(".menu-btn[data-window]").forEach((btn) => {
       btn.addEventListener("click", () => selectWindow(btn.dataset.window));
+    });
+    document.querySelectorAll(".menu-btn[data-tool]").forEach((btn) => {
+      btn.addEventListener("click", () => selectTool(btn.dataset.tool));
     });
 
     // Panel close
@@ -773,6 +863,22 @@
     document.querySelectorAll(".menu-btn[data-window]").forEach((btn) => {
       btn.setAttribute("aria-checked", String(btn.dataset.window === windowId));
     });
+  }
+  function updateToolButtons(tool) {
+    document.querySelectorAll(".menu-btn[data-tool]").forEach((btn) => {
+      btn.setAttribute("aria-checked", String(btn.dataset.tool === tool));
+    });
+    document.body.setAttribute("data-tool", tool);
+    const hint = document.getElementById("hint-tool");
+    if (hint) hint.textContent = tool === "pan" ? "empty drag: pan" : "empty drag: rotate";
+  }
+
+  function selectTool(tool) {
+    if (tool !== "pan" && tool !== "rotate") return;
+    if (tool === state.tool) return;
+    state.tool = tool;
+    updateToolButtons(tool);
+    saveState();
   }
 
   /* ---------------- Detail panel ---------------- */
@@ -984,12 +1090,14 @@
     if (saved) {
       if (saved.scopeId) state.scopeId = saved.scopeId;
       if (saved.windowId) state.windowId = saved.windowId;
+      if (saved.tool === "pan" || saved.tool === "rotate") state.tool = saved.tool;
     }
 
     try {
       await loadManifest();
       updateScopeButtons(state.scopeId);
       updateWindowButtons(state.windowId);
+      updateToolButtons(state.tool);
 
       await loadScopeGraph(state.scopeId);
       rebuildSimulation();

@@ -23,6 +23,14 @@
       <button class="menu-btn win" data-window="30d" role="radio" aria-checked="true">30D</button>
       <button class="menu-btn win" data-window="90d" role="radio" aria-checked="false">90D</button>
     </div>
+    <div class="menu-group tool-group" role="radiogroup" aria-label="Empty-space drag tool">
+      <button class="menu-btn tool" data-tool="pan"    role="radio" aria-checked="false" title="Pan (translate the view)">
+        <span class="tool-ic" aria-hidden="true">&#x21F1;</span><span class="tool-lbl">PAN</span>
+      </button>
+      <button class="menu-btn tool" data-tool="rotate" role="radio" aria-checked="true"  title="Rotate (tilt the graph plane)">
+        <span class="tool-ic" aria-hidden="true">&#x270B;</span><span class="tool-lbl">ROT</span>
+      </button>
+    </div>
   </nav>
 
   <!-- Header (top-left, metadata) -->
@@ -34,8 +42,8 @@
   <!-- Hint strip (bottom-left) -->
   <aside id="hint-strip">
     <span>drag node: move</span>
-    <span>empty drag: rotate</span>
-    <span>shift/space drag: pan</span>
+    <span id="hint-tool">empty drag: rotate</span>
+    <span>shift/space: temp-pan</span>
     <span>wheel: zoom</span>
     <span>click node: details</span>
   </aside>

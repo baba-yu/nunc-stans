@@ -77,8 +77,12 @@ body::before {
   touch-action: none;
 }
 
-#graph-canvas.dragging { cursor: grabbing; }
-#graph-canvas.panning  { cursor: move; }
+/* Tool-driven cursor: rotate = open hand, pan = move arrows */
+body[data-tool="rotate"] #graph-canvas { cursor: grab; }
+body[data-tool="pan"]    #graph-canvas { cursor: move; }
+#graph-canvas.over-node { cursor: pointer; }
+#graph-canvas.dragging  { cursor: grabbing; }
+#graph-canvas.panning   { cursor: move; }
 
 /* ------------------------------------------------------------
    Label overlay (HTML labels on top of canvas)
@@ -162,6 +166,24 @@ body::before {
 .menu-btn[aria-checked="true"] {
   background: var(--menu-active);
   color: var(--menu-active-text);
+}
+
+/* Tool icon buttons */
+.menu-btn.tool {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 10px;
+  min-width: 64px;
+}
+.menu-btn.tool .tool-ic {
+  font-size: 14px;
+  line-height: 1;
+}
+.menu-btn.tool .tool-lbl {
+  font-size: 10px;
+  letter-spacing: 0.08em;
 }
 
 /* ------------------------------------------------------------
