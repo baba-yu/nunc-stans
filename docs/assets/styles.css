@@ -138,8 +138,14 @@ body[data-tool="pan"]    #graph-canvas { cursor: move; }
   will-change: transform;
 }
 
-#top-menu      { top: 16px; }
-#category-menu { top: 170px; max-width: 220px; min-width: 180px; }
+#top-menu      { top: 16px; max-height: calc(100vh - 32px); overflow: hidden; }
+#category-menu {
+  top: 170px;
+  max-width: 220px;
+  min-width: 180px;
+  max-height: calc(100vh - 186px);   /* 170 top + 16 bottom gutter */
+  overflow: hidden;                  /* inner .category-filters scrolls */
+}
 
 /* When the detail panel is open, slide both menus from top-right to
    top-left so they stay visible alongside the 420px panel. */
@@ -195,11 +201,22 @@ body.panel-open #meta-header {
   display: flex !important;
   flex-direction: column !important;
   gap: 4px;
-  max-height: calc(100vh - 260px);
+  flex: 1 1 auto;
+  min-height: 0;          /* allow flex child to shrink so overflow kicks in */
   overflow-y: auto;
   border: 1px solid var(--panel-border);
   border-radius: 4px;
   padding: 4px;
+}
+/* Thin cold-palette scrollbar inside menus */
+.category-filters::-webkit-scrollbar { width: 6px; }
+.category-filters::-webkit-scrollbar-track { background: transparent; }
+.category-filters::-webkit-scrollbar-thumb {
+  background: rgba(130, 170, 210, 0.25);
+  border-radius: 3px;
+}
+.category-filters::-webkit-scrollbar-thumb:hover {
+  background: rgba(24, 199, 216, 0.45);
 }
 .menu-btn.cat-filter {
   padding: 5px 8px;
