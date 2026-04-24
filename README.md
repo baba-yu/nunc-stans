@@ -5,6 +5,40 @@
 
 ---
 
+## 2026-04-24
+
+### ニュース
+
+- **DeepSeek V4 Preview 公開** — V4-Pro（1.6T MoE / 49B active）+ V4-Flash（284B / 13B active）同時公開、ネイティブ 1M token context、Hybrid Attention で 1M context 時 FLOPs 27% / KV キャッシュ 10% に削減。Hugging Face オープンウェイト、API は Pro $0.145/$3.48 per M tokens。Simon Willison「フロンティア手前の価格破壊」
+- **OpenAI GPT-5.5 / GPT-5.5 Pro 公開（Apr 23）** — ChatGPT Plus/Pro/Business/Enterprise + Codex に展開、SWE-bench **88.7%**、MMLU 92.4%、幻覚 **-60%** vs GPT-5.4。NVIDIA GB200 NVL72 ラック運用、API 価格 2x
+- **Intel Q1 2026 決算：EPS $0.29 / 売上 $13.58B で大幅ビート、株価 +20%** — データセンタ +22% YoY、AI 関連事業が全売上の **60%**、+40% YoY。Intel 18A プロセス立ち上がり寄与、6 四半期連続ガイダンス超過
+- **Anthropic Claude Code 品質低下ポストモーテム公開、使用制限リセット** — 3/4 reasoning effort「high→medium」変更 + 3/26 idle 時 thinking クリアバグ + 4/16 verbosity 削減 prompt の 3 件が複合し Sonnet 4.6 / Opus 4.6 の知性低下を誘発と結論。v2.1.116 で全 revert、4/23 全サブスクの使用制限リセット
+- **Siemens × Humanoid の HMND 01 Alpha、Erlangen 工場で 8 時間連続ロジスティクス自律稼働** — NVIDIA Physical AI + KinetIQ + Siemens Xcelerator 統合、60 tote/h × 8h × pick-and-place 成功率 **90%+**。本番ライン組込み（PoC → 本番の質的跳躍）
+- **Tencent Hunyuan Hy3 Preview オープンソース化**、**0G × Alibaba Qwen オンチェーン提携**、**Qwen3.6-27B** 拡散継続 — 中国 AI ラボ 3 社がオープン重みフロンティアに同週投入
+- **ServiceNow、決算後 -18%（2026 YTD -45%）**、Salesforce / Workday / Oracle / IBM も連鎖下落で「AI disruption on legacy SaaS」独立テーマ化
+- **Tesla Optimus V3 量産タイムライン確定** — Fremont Model S/X ライン転用で 7 月末〜8 月量産、第 1 世代年産 100 万、Giga Texas 第 2 工場 10M 規模、2026 capex $25B 超
+- **AWS Bedrock AgentCore Managed Harness 詳細仕様** — 3 API で稼働、filesystem persistence、AgentCore CLI、pre-built coding skills、US/EU/APAC preview
+- **Google Cloud Next '26 Day 3** — Agentic Data Cloud + Agentic Defense、Workspace Skills / Meet「Take Notes For Me」、TPU 8i（inference 最適化 / SRAM 3x）
+- **Anthropic Project Glasswing 40+ 組織参加** — AWS / Apple / Google / MS / NVIDIA / JPMorgan / Linux Foundation など。$100M Mythos クレジット + $4M オープンソース寄付
+- **重大 CVE 公開**：ToToLink A3300R 9.8 / Ntfy parseActions 9.8 / Kofax Capture 9.8 / hackage-server 9.9 / Pipecat 9.8。CISA KEV に **Marimo Pre-Auth RCE (CVE-2026-39987)** 追加、連邦機関修正期限 May 7
+- **Mercor データ流出の集団訴訟化** — 4TB / 顔生体情報 / API キーが TeamPCP により LiteLLM CI/CD 経由で流出、7+ クラスアクション提訴、Anthropic Mythos Preview 侵入との連鎖（Proofpoint）
+
+[news-20260424.md](report/news-20260424.md)
+
+### 答え合わせ
+
+- 直近 1 週間 14 予測の検証。Relevance 5 が 6 件 / 4 が 3 件 / 3 が 4 件 / 2 が 1 件 / 1 が 1 件
+- **Relevance 5**：間接プロンプトインジェクションの CVE 主カテゴリ化（10 件 in-the-wild + Antigravity RCE + CVE-2026-21520）、CI/エージェント Secret 流出（Mercor 訴訟 + Mythos 連鎖）、プロプライエタリ再膨張 × オープン地政学分断（DeepSeek V4 + Tencent Hy3 + GPT-5.5 2x 価格）、Physical AI の SaaS/RaaS 化（Siemens × Humanoid 本番 8h）、Agent Control Plane ハイパースケーラ競争（AgentCore + Agentic Data Cloud + ServiceNow -18%）、第三者ベンダ境界攻撃の標準化（Mercor → Mythos の訴訟段階）
+- **Relevance 4**：ローカル>クラウド逆転（DeepSeek V4 + Qwen3.6 + Bonsai-8B 1.15GB）、OAuth 横断信任（CVE-2026-21520 + PipeLeak + Mercor/Mythos）、27B Dense + 1M context 標準化（DeepSeek V4 ネイティブ 1M、ただし Dense ではなく MoE 型で側面）
+- **Relevance 1-2**：Headless Everything 標準化（今日は関連報道なし）、GGUF 署名検証標準化（SGLang CVE 言及のみで具体進展なし）
+- ユーザー予測1（悪性ローカルLLMのマルウェア化）：SGLang CVE / Pipecat CVE / 10 件 Indirect Prompt Injection で「ローカル LLM 実行層が malware 動作のホスト」構造が段階的に組み上がり
+- ユーザー予測2（RL/LLM による予測改善の普及）：本日直接事例なし。Anthropic 品質ポストモーテムと GPT-5.5 の planning/tool/self-check 特化は隣接兆候
+- ユーザー予測3（電力/計算資源逼迫で AI SaaS 値上げ）：**最強相関** — GPT-5.5 が API 価格 2x、Alphabet 2026 capex $175-185B（2025 の 2x）、Tesla capex $25B 超、ServiceNow 等レガシー SaaS 連鎖下落で「料金体系変化先行」顕在化
+
+[future-prediction-20260424.md](future-prediction/future-prediction-20260424.md)
+
+---
+
 ## 2026-04-23
 
 ### ニュース
@@ -62,21 +96,3 @@
 - ユーザー予測「RL/LLM による予測改善の普及」は ml-intern の GRPO 相当最適化が直接型
 
 [future-prediction-20260422.md](future-prediction/future-prediction-20260422.md)
-
----
-
-## 2026-04-21
-
-### ニュース
-
-- Amazon が Anthropic に追加 $25B 投資発表（即時 $5B + マイルストーン $20B）、Anthropic は 10年で $100B 超を AWS 支出、Trainium2/3 で 5GW 計算資源
-- Qwen3.6-Max-Preview（プロプライエタリ）公開、SWE-bench Pro / SkillsBench / SciCode 等でトップスコア、260K コンテキスト + preserve_thinking
-- SGLang CVE-2026-5760（CVSS 9.8、GGUF 経由 Jinja2 SSTI で RCE）の広報拡大
-- CISA KEV に 8件追加、連邦機関は Apr 23 期限
-- Simon Willison が Claude 系 system prompt の git タイムライン化で Opus 4.6→4.7 差分公開（Knowledge Cutoff が 2026-01 更新、`developer platform`→`Claude Platform` 改称）
-
-[news-20260421.md](report/news-20260421.md)
-
-### 答え合わせ
-
-- 該当日の future-prediction ファイルなし
