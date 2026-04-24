@@ -76,6 +76,11 @@
     // shift/space temporarily flips to the other tool regardless of setting.
     tool: "rotate",
 
+    // Category visibility filter. Keys are like "tech.security" — when
+    // a category id is in this set, that category and everything under
+    // it is hidden. Stored per scope in localStorage.
+    hiddenByScope: {}, // { [scopeId]: Set<string> }
+
     // Interaction scratch
     isPointerDown: false,
     pointerStart: null,
@@ -114,12 +119,56 @@
 
   function saveState() {
     try {
+      const hidden = {};
+      for (const [k, v] of Object.entries(state.hiddenByScope)) {
+        hidden[k] = Array.from(v || []);
+      }
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
         scopeId: state.scopeId,
         windowId: state.windowId,
         tool: state.tool,
+        hidden: hidden,
       }));
     } catch (_) { /* ignore */ }
+  }
+
+  function currentHidden() {
+    let s = state.hiddenByScope[state.scopeId];
+    if (!s) { s = new Set(); state.hiddenByScope[state.scopeId] = s; }
+    return s;
+  }
+
+  function categoryIdOf(node) {
+    // Every node (category/theme/subtheme/prediction) carries category_id
+    // when exported by the backend; a theme's id IS its category’s child,
+    // and category nodes have category_id == their own id.
+    if (node.type === "category") return node.id;
+    return node.category_id || null;
+  }
+
+  function nodeIsHidden(node) {
+    const hidden = currentHidden();
+    if (!hidden.size) return false;
+    // Predictions may attach to multiple categories via parent_ids (1:N).
+    // Show a prediction if ANY of its linked categories is still visible.
+    if (node.type === "prediction" && Array.isArray(node.parent_ids)) {
+      const linked = new Set();
+      const g = currentGraph();
+      if (g && g._index) {
+        for (const pid of node.parent_ids) {
+          const pn = g._index.get(pid);
+          if (pn && pn.category_id) linked.add(pn.category_id);
+        }
+      }
+      if (linked.size === 0) {
+        const own = categoryIdOf(node);
+        return !!(own && hidden.has(own));
+      }
+      for (const c of linked) if (!hidden.has(c)) return false;
+      return true;
+    }
+    const own = categoryIdOf(node);
+    return !!(own && hidden.has(own));
   }
   function loadPersisted() {
     try {
@@ -211,6 +260,9 @@
   /* ---------------- Visibility by zoom ---------------- */
 
   function isVisibleAtZoom(node, zoom) {
+    // Category filter overrides everything else.
+    if (nodeIsHidden(node)) return false;
+
     // Respect explicit per-node visibility hint
     const v = node.visibility || {};
     const minZ = (typeof v.min_zoom === "number") ? v.min_zoom : null;
@@ -854,6 +906,10 @@
     document.querySelectorAll(".menu-btn[data-tool]").forEach((btn) => {
       btn.addEventListener("click", () => selectTool(btn.dataset.tool));
     });
+    const catAll  = document.getElementById("cat-all");
+    const catNone = document.getElementById("cat-none");
+    if (catAll)  catAll.addEventListener("click",  () => setAllCategories(true));
+    if (catNone) catNone.addEventListener("click", () => setAllCategories(false));
 
     // Panel close
     document.getElementById("panel-close").addEventListener("click", () => {
@@ -897,6 +953,7 @@
       state.focusedNodeId = null;
       closeDetailPanel();
     }
+    rebuildCategoryFilters();
     rebuildSimulation();
     if (stillPresent) openDetailPanel(nodeById(state.selectedNodeId));
   }
@@ -927,6 +984,55 @@
       btn.setAttribute("aria-checked", String(btn.dataset.window === windowId));
     });
   }
+  function rebuildCategoryFilters() {
+    const holder = document.getElementById("category-filters");
+    if (!holder) return;
+    holder.innerHTML = "";
+    const g = currentGraph();
+    if (!g) return;
+    const cats = g.nodes.filter((n) => n.type === "category");
+    cats.sort((a, b) => {
+      const aa = (a.short_label || a.label || a.id).toLowerCase();
+      const bb = (b.short_label || b.label || b.id).toLowerCase();
+      return aa.localeCompare(bb);
+    });
+    const hidden = currentHidden();
+    for (const c of cats) {
+      const btn = document.createElement("button");
+      btn.className = "menu-btn cat-filter";
+      btn.dataset.category = c.id;
+      btn.setAttribute("aria-pressed", String(!hidden.has(c.id)));
+      btn.textContent = c.short_label || c.label || c.id;
+      btn.title = c.label || c.id;
+      btn.addEventListener("click", () => toggleCategory(c.id));
+      holder.appendChild(btn);
+    }
+  }
+
+  function toggleCategory(catId) {
+    const hidden = currentHidden();
+    if (hidden.has(catId)) hidden.delete(catId); else hidden.add(catId);
+    const btn = document.querySelector(`.menu-btn.cat-filter[data-category="${CSS.escape(catId)}"]`);
+    if (btn) btn.setAttribute("aria-pressed", String(!hidden.has(catId)));
+    saveState();
+    rebuildSimulation();
+    scheduleDraw();
+  }
+
+  function setAllCategories(visible) {
+    const hidden = currentHidden();
+    const g = currentGraph();
+    if (!g) return;
+    hidden.clear();
+    if (!visible) {
+      for (const n of g.nodes) if (n.type === "category") hidden.add(n.id);
+    }
+    rebuildCategoryFilters();
+    saveState();
+    rebuildSimulation();
+    scheduleDraw();
+  }
+
   function updateToolButtons(tool) {
     document.querySelectorAll(".menu-btn[data-tool]").forEach((btn) => {
       btn.setAttribute("aria-checked", String(btn.dataset.tool === tool));
@@ -971,12 +1077,14 @@
 
     el.classList.add("open");
     el.setAttribute("aria-hidden", "false");
+    document.body.classList.add("panel-open");
   }
 
   function closeDetailPanel() {
     const el = document.getElementById("detail-panel");
     el.classList.remove("open");
     el.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("panel-open");
   }
 
   function subtitleFor(n) {
@@ -1163,6 +1271,11 @@
       if (saved.scopeId) state.scopeId = saved.scopeId;
       if (saved.windowId) state.windowId = saved.windowId;
       if (saved.tool === "pan" || saved.tool === "rotate") state.tool = saved.tool;
+      if (saved.hidden && typeof saved.hidden === "object") {
+        for (const [scope, arr] of Object.entries(saved.hidden)) {
+          if (Array.isArray(arr)) state.hiddenByScope[scope] = new Set(arr);
+        }
+      }
     }
 
     try {
@@ -1172,6 +1285,7 @@
       updateToolButtons(state.tool);
 
       await loadScopeGraph(state.scopeId);
+      rebuildCategoryFilters();
       rebuildSimulation();
       setStatus("");
       installEventHandlers();
