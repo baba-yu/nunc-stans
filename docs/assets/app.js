@@ -647,11 +647,11 @@
         if (supported > 0) {
           const bx = p.x + r * 0.75;
           const by = p.y - r * 0.75;
-          ctx.fillStyle = withAlpha("#18c7d8", 0.92 * alpha);
+          ctx.fillStyle = withAlpha("#c26a1e", 0.95 * alpha);
           ctx.beginPath();
           ctx.arc(bx, by, 7, 0, Math.PI * 2);
           ctx.fill();
-          ctx.fillStyle = withAlpha("#07111f", alpha);
+          ctx.fillStyle = withAlpha("#fff3c4", alpha);
           ctx.font = "700 10px system-ui, sans-serif";
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
@@ -1265,7 +1265,7 @@
         ${parents.length ? `<h3>Lineage</h3>
           <ul class="related-list">${parents.map(listItem).join("")}</ul>` : ""}
         ${detail.source_report_path ? `<h3>Source report</h3><p>${repoLink(detail.source_report_path)}</p>` : ""}
-        ${detail.validation_report_path ? `<h3>Validation report</h3><p>${repoLink(detail.validation_report_path)}</p>` : ""}
+        ${renderValidationReports(detail)}
         ${renderEvidenceLinks(detail.evidence || detail.evidence_links)}
       `;
     }
@@ -1393,6 +1393,43 @@
     if (!n) return "";
     const label = escapeHTML(n.short_label || n.label || n.id);
     return `<li data-goto="${escapeHTML(n.id)}"><span class="rtype">${n.type}</span>${label}</li>`;
+  }
+
+  // Render the validation-reports section for a prediction panel:
+  //   "Validation reports · N in 30d"
+  //   + up to 3 most recent (within window), each as a repo link.
+  // Falls back to the single legacy path if only that is available.
+  function renderValidationReports(detail) {
+    const all = Array.isArray(detail.validation_reports) ? detail.validation_reports : [];
+    if (all.length === 0) {
+      if (detail.validation_report_path) {
+        return `<h3>Validation report</h3><p>${repoLink(detail.validation_report_path)}</p>`;
+      }
+      return "";
+    }
+    const ww = (state.manifest && state.manifest.windows) || [];
+    const winDef = ww.find((w) => w.window_id === state.windowId);
+    const days = winDef ? winDef.days : 30;
+    const latest = (state.manifest && state.manifest.latest_report_date) || null;
+    let startISO = null;
+    if (latest) {
+      const end = new Date(latest + "T00:00:00Z");
+      const start = new Date(end);
+      start.setUTCDate(start.getUTCDate() - (days - 1));
+      startISO = start.toISOString().slice(0, 10);
+    }
+    const inWindow = startISO
+      ? all.filter((r) => r.date && r.date >= startISO)
+      : all;
+    const head = `Validation reports · ${inWindow.length} in ${state.windowId} · ${all.length} total`;
+    const top3 = inWindow.slice(0, 3);
+    const more = inWindow.length > top3.length ? inWindow.length - top3.length : 0;
+    const body = top3
+      .map((r) => `<li><span class="rtype">${escapeHTML(r.date)}</span>${repoLink(r.path)}</li>`)
+      .join("");
+    const moreLine = more > 0 ? `<li class="muted">+${more} more older in window</li>` : "";
+    return `<h3>${escapeHTML(head)}</h3>
+      <ul class="related-list">${body}${moreLine}</ul>`;
   }
 
   // Build a clickable link to a repo-relative path on GitHub.
