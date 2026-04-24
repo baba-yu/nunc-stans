@@ -87,6 +87,10 @@
     // shift/space temporarily flips to the other tool regardless of setting.
     tool: "rotate",
 
+    // Panel navigation history — ids of previously viewed nodes, most
+    // recent last. Back button pops the stack.
+    panelHistory: [],
+
     // Category visibility filter. Single Set shared across all scopes —
     // hiding tech.security persists when you switch to business or mix.
     // Stored as an array in localStorage under 'hidden'.
@@ -974,6 +978,8 @@
           // click on empty = deselect
           state.selectedNodeId = null;
           state.focusedNodeId = null;
+          state.panelHistory.length = 0;
+          updatePanelBackButton();
           closeDetailPanel();
           scheduleDraw();
         }
@@ -989,6 +995,8 @@
       if (ev.key === "Escape") {
         state.selectedNodeId = null;
         state.focusedNodeId = null;
+        state.panelHistory.length = 0;
+        updatePanelBackButton();
         closeDetailPanel();
         scheduleDraw();
       }
@@ -1024,22 +1032,59 @@
     if (catAll)  catAll.addEventListener("click",  () => setAllCategories(true));
     if (catNone) catNone.addEventListener("click", () => setAllCategories(false));
 
-    // Panel close
+    // Panel close / back
     document.getElementById("panel-close").addEventListener("click", () => {
       state.selectedNodeId = null;
       state.focusedNodeId = null;
+      state.panelHistory.length = 0;
+      updatePanelBackButton();
       closeDetailPanel();
       scheduleDraw();
     });
+    document.getElementById("panel-back").addEventListener("click", navigateBack);
   }
 
   /* ---------------- Node click / focus ---------------- */
 
   function handleNodeClick(n) {
+    // Push the current selection onto the history stack (unless it's
+    // the same node we're already on — dedupe consecutive same-id
+    // clicks). Navigation via back button calls handleNodeClick with
+    // skipHistory=true via navigateBack().
+    if (state.selectedNodeId && state.selectedNodeId !== n.id) {
+      const hist = state.panelHistory;
+      if (hist.length === 0 || hist[hist.length - 1] !== state.selectedNodeId) {
+        hist.push(state.selectedNodeId);
+        if (hist.length > 64) hist.shift(); // bound it
+      }
+    }
     state.selectedNodeId = n.id;
     state.focusedNodeId = n.id;
     openDetailPanel(n);
+    updatePanelBackButton();
     scheduleDraw();
+  }
+
+  function navigateBack() {
+    const hist = state.panelHistory;
+    if (hist.length === 0) return;
+    const prevId = hist.pop();
+    const target = nodeById(prevId);
+    if (target) {
+      state.selectedNodeId = target.id;
+      state.focusedNodeId = target.id;
+      openDetailPanel(target);
+    }
+    updatePanelBackButton();
+    scheduleDraw();
+  }
+
+  function updatePanelBackButton() {
+    const btn = document.getElementById("panel-back");
+    if (!btn) return;
+    const canGoBack = state.panelHistory.length > 0;
+    btn.disabled = !canGoBack;
+    btn.title = canGoBack ? `Back to previous (${state.panelHistory.length} in history)` : "Back";
   }
 
   /* ---------------- Menu ---------------- */
