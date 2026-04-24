@@ -22,12 +22,15 @@
     showPredictions: 2.0,
   };
 
-  // Node radius by type (UI §8.4). Used as fallback when node.layout.radius missing.
+  // Node radius by type. Kept smaller than the UI spec §8.4 suggestion
+  // (28/24/16/9) — the original sizes read too heavy with ~30 nodes on
+  // screen. Frontend value wins over any node.layout.radius from the
+  // backend so the UI stays under our control.
   const RADIUS_BY_TYPE = {
-    category: 28,
-    theme: 24,
-    subtheme: 16,
-    prediction: 9,
+    category: 16,
+    theme: 13,
+    subtheme: 9,
+    prediction: 5,
   };
 
   // Heat color stops (UI §8.2). Index 0..4 plus a hot core band.
@@ -145,8 +148,13 @@
   }
 
   function radiusFor(node) {
-    if (node.layout && typeof node.layout.radius === "number") return node.layout.radius;
-    return RADIUS_BY_TYPE[node.type] || 12;
+    // Prefer our per-type config over layout.radius so updating RADIUS_BY_TYPE
+    // actually changes visible size. Fall back to layout.radius only for
+    // unknown node types, with a conservative cap.
+    const byType = RADIUS_BY_TYPE[node.type];
+    if (typeof byType === "number") return byType;
+    const layoutR = node.layout && typeof node.layout.radius === "number" ? node.layout.radius : 10;
+    return Math.min(layoutR, 14);
   }
 
   function metricsFor(node, windowId) {
