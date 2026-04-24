@@ -139,7 +139,7 @@ body[data-tool="pan"]    #graph-canvas { cursor: move; }
 }
 
 #top-menu      { top: 16px; }
-#category-menu { top: 208px; max-width: 240px; }
+#category-menu { top: 170px; max-width: 220px; min-width: 180px; }
 
 /* When the detail panel is open, slide both menus from top-right to
    top-left so they stay visible alongside the 420px panel. */
@@ -192,11 +192,14 @@ body.panel-open #meta-header {
 
 /* Category filter list — stacked vertical toggle buttons. */
 .category-filters {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  max-height: calc(100vh - 320px);
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px;
+  max-height: calc(100vh - 260px);
   overflow-y: auto;
+  border: 1px solid var(--panel-border);
+  border-radius: 4px;
+  padding: 4px;
 }
 .menu-btn.cat-filter {
   padding: 5px 8px;
