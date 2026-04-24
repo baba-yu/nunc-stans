@@ -14,6 +14,7 @@
 - **Intel Q1 2026 決算：EPS $0.29 / 売上 $13.58B で大幅ビート、株価 +20%** — データセンタ +22% YoY、AI 関連事業が全売上の **60%**、+40% YoY。Intel 18A プロセス立ち上がり寄与、6 四半期連続ガイダンス超過
 - **Anthropic Claude Code 品質低下ポストモーテム公開、使用制限リセット** — 3/4 reasoning effort「high→medium」変更 + 3/26 idle 時 thinking クリアバグ + 4/16 verbosity 削減 prompt の 3 件が複合し Sonnet 4.6 / Opus 4.6 の知性低下を誘発と結論。v2.1.116 で全 revert、4/23 全サブスクの使用制限リセット
 - **Siemens × Humanoid の HMND 01 Alpha、Erlangen 工場で 8 時間連続ロジスティクス自律稼働** — NVIDIA Physical AI + KinetIQ + Siemens Xcelerator 統合、60 tote/h × 8h × pick-and-place 成功率 **90%+**。本番ライン組込み（PoC → 本番の質的跳躍）
+- **Agentic AI Security ソリューションプロバイダ軸が一気に成立** — Zero-trust access control 側で **Okta for AI Agents（2026-04-30 GA）** が AI エージェントを第一級 identity として中央ディレクトリ登録、**Keycard**（$38M 調達、Anchor.dev / Runebook 買収 + Smallstep 提携）が Control Plane で workload attestation（SPIFFE/mTLS）+ dynamic / task-scoped / revocable トークン提供、**Cisco Zero Trust Access**（Duo IAM + MCP 強制 + intent-aware monitoring）、**Microsoft Zero Trust for AI**（Entra Agent ID + Purview + Defender for AI）、**CSA Agentic Trust Framework**（ベンダ中立 Zero Trust 仕様）、**Wiz AI-APP**（Google Cloud 傘下、code-to-runtime）、**CrowdStrike / Palo Alto** が Project Glasswing ローンチパートナー。Behavior analytics 側は **Exabeam Agent Behavior Analytics** が「AI Insider 脅威」新設 + OWASP Agentic Top 10 全対応 + Google Cloud Partner of the Year 2026、**Zenity**（Gartner Hype Cycle 2 カテゴリ掲載 + Fortune Cyber 60 + FedRAMP In Process）、**Arize / Braintrust / Galileo / Fiddler / Levo.ai / LangSmith** 参入
 - **Tencent Hunyuan Hy3 Preview オープンソース化**、**0G × Alibaba Qwen オンチェーン提携**、**Qwen3.6-27B** 拡散継続 — 中国 AI ラボ 3 社がオープン重みフロンティアに同週投入
 - **ServiceNow、決算後 -18%（2026 YTD -45%）**、Salesforce / Workday / Oracle / IBM も連鎖下落で「AI disruption on legacy SaaS」独立テーマ化
 - **Tesla Optimus V3 量産タイムライン確定** — Fremont Model S/X ライン転用で 7 月末〜8 月量産、第 1 世代年産 100 万、Giga Texas 第 2 工場 10M 規模、2026 capex $25B 超
@@ -22,18 +23,23 @@
 - **Anthropic Project Glasswing 40+ 組織参加** — AWS / Apple / Google / MS / NVIDIA / JPMorgan / Linux Foundation など。$100M Mythos クレジット + $4M オープンソース寄付
 - **重大 CVE 公開**：ToToLink A3300R 9.8 / Ntfy parseActions 9.8 / Kofax Capture 9.8 / hackage-server 9.9 / Pipecat 9.8。CISA KEV に **Marimo Pre-Auth RCE (CVE-2026-39987)** 追加、連邦機関修正期限 May 7
 - **Mercor データ流出の集団訴訟化** — 4TB / 顔生体情報 / API キーが TeamPCP により LiteLLM CI/CD 経由で流出、7+ クラスアクション提訴、Anthropic Mythos Preview 侵入との連鎖（Proofpoint）
+- **RSAC 2026 で CrowdStrike / Cisco / Palo Alto が agentic SOC ツール一斉出荷**、ただし agent telemetry 標準化欠如が共通ギャップと VentureBeat 分析
 
 [news-20260424.md](report/news-20260424.md)
 
 ### 答え合わせ
 
-- 直近 1 週間 14 予測の検証。Relevance 5 が 6 件 / 4 が 3 件 / 3 が 4 件 / 2 が 1 件 / 1 が 1 件
-- **Relevance 5**：間接プロンプトインジェクションの CVE 主カテゴリ化（10 件 in-the-wild + Antigravity RCE + CVE-2026-21520）、CI/エージェント Secret 流出（Mercor 訴訟 + Mythos 連鎖）、プロプライエタリ再膨張 × オープン地政学分断（DeepSeek V4 + Tencent Hy3 + GPT-5.5 2x 価格）、Physical AI の SaaS/RaaS 化（Siemens × Humanoid 本番 8h）、Agent Control Plane ハイパースケーラ競争（AgentCore + Agentic Data Cloud + ServiceNow -18%）、第三者ベンダ境界攻撃の標準化（Mercor → Mythos の訴訟段階）
-- **Relevance 4**：ローカル>クラウド逆転（DeepSeek V4 + Qwen3.6 + Bonsai-8B 1.15GB）、OAuth 横断信任（CVE-2026-21520 + PipeLeak + Mercor/Mythos）、27B Dense + 1M context 標準化（DeepSeek V4 ネイティブ 1M、ただし Dense ではなく MoE 型で側面）
-- **Relevance 1-2**：Headless Everything 標準化（今日は関連報道なし）、GGUF 署名検証標準化（SGLang CVE 言及のみで具体進展なし）
-- ユーザー予測1（悪性ローカルLLMのマルウェア化）：SGLang CVE / Pipecat CVE / 10 件 Indirect Prompt Injection で「ローカル LLM 実行層が malware 動作のホスト」構造が段階的に組み上がり
-- ユーザー予測2（RL/LLM による予測改善の普及）：本日直接事例なし。Anthropic 品質ポストモーテムと GPT-5.5 の planning/tool/self-check 特化は隣接兆候
-- ユーザー予測3（電力/計算資源逼迫で AI SaaS 値上げ）：**最強相関** — GPT-5.5 が API 価格 2x、Alphabet 2026 capex $175-185B（2025 の 2x）、Tesla capex $25B 超、ServiceNow 等レガシー SaaS 連鎖下落で「料金体系変化先行」顕在化
+- 直近 1 週間 15 予測の検証（更新版）。Relevance 5 が **8 件** / 4 が 2 件 / 3 が 3 件 / 2 が 1 件 / 1 が 1 件。更新版は **Agent Control Plane / OAuth 横断信任 / 第三者ベンダ境界 / Agent Registry** の 4 予測を決定的に裏付ける新セクション（Zero-trust Access Control + Agent Behavior Analytics）を含む
+- **Agent Registry（4/19-2）** Relevance **3→5 昇格**：Okta for AI Agents（Apr 30 GA）+ Keycard Control Plane で成果物・権限・監査の配布標準が具体プロダクトとして現出
+- **Secret 流出 OWASP 昇格（4/20-2）** Relevance 5 維持・具体化：Exabeam が「AI Insider 脅威」新設 + **OWASP Agentic Top 10 全 10 カテゴリ対応** で予測したフレームワーク昇格が実商用化
+- **OAuth 横断信任（4/22-3）** Relevance **4→5 昇格**：Okta for AI Agents + Cisco Duo IAM + MCP ポリシー + Microsoft Entra Agent ID + CSA Agentic Trust Framework が同時展開、「SSO が AI 拡張スコープを分離」予測が正面突破
+- **第三者ベンダ境界（4/23-3）** Relevance 5 維持・拡張：Zenity FedRAMP In Process + Microsoft Zero Trust for AI（データ取込〜挙動全体）+ CSA ATF の ベンダ中立 governance 化
+- **Agent Control Plane（4/23-1）** Relevance 5 維持・市場成熟段階：AWS / Google / Okta / Keycard / Cisco / Microsoft 同期公表、RSAC 2026 で CrowdStrike / Cisco / Palo Alto agentic SOC 一斉出荷、ただし agent telemetry 標準化欠如が共通ギャップ
+- **Relevance 5 その他**：間接プロンプトインジェクション CVE 化（4/19-3、10 件 in-the-wild + Antigravity RCE + CVE-2026-21520）、プロプライエタリ再膨張 × オープン地政学分断（4/21-3、DeepSeek V4 + Tencent Hy3 + GPT-5.5 2x）、Physical AI SaaS/RaaS 化（4/22-2、Siemens × Humanoid 本番 8h）
+- **Relevance 1-2**：Headless Everything（4/20-3、今日も進展なし）、GGUF 署名検証標準化（4/21-1、SGLang / Pipecat CVE のみで標準化なし）
+- ユーザー予測1（悪性ローカルLLMのマルウェア化）：SGLang / Pipecat CVE の RCE 経路 + 10 件 Indirect PI + Exabeam「AI Insider 脅威」+ Levo.ai eBPF runtime 検知で、ローカル LLM 実行層の malware ホスト化に検知側 / 規制側が同時進行で対応中
+- ユーザー予測2（RL/LLM による予測改善）：本日も直接事例なし。Anthropic 品質ポストモーテム + GPT-5.5 の planning/tool/self-check + Galileo Luna-2 evaluators（agent drift 自動特定）が隣接兆候
+- ユーザー予測3（電力/計算資源逼迫で AI SaaS 値上げ）：**最強相関** — GPT-5.5 API 価格 2x、Alphabet 2026 capex $175-185B（2025 の 2x）、Tesla capex $25B 超、ServiceNow 等 Legacy SaaS 連鎖下落、+ エージェントセキュリティ層（Keycard $38M / Okta Showcase / Zenity Fortune Cyber 60）で新規 SaaS 請求ライン追加の二極構造
 
 [future-prediction-20260424.md](future-prediction/future-prediction-20260424.md)
 
