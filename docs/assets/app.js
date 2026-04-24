@@ -27,10 +27,10 @@
   // screen. Frontend value wins over any node.layout.radius from the
   // backend so the UI stays under our control.
   const RADIUS_BY_TYPE = {
-    category: 16,
-    theme: 13,
-    subtheme: 9,
-    prediction: 5,
+    category: 11,
+    theme: 8,
+    subtheme: 5,
+    prediction: 3,
   };
 
   // Heat color stops (UI §8.2). Index 0..4 plus a hot core band.
@@ -460,7 +460,7 @@
       const contradiction = (typeof m.contradiction_score === "number") ? m.contradiction_score : 0;
 
       const p = projectNode(n.x, n.y);
-      const r = radiusFor(n) * (0.8 + 0.4 * state.zoom);
+      const r = radiusFor(n) * (0.7 + 0.3 * state.zoom);
 
       let alpha = 1.0;
       if (focused) {
@@ -597,7 +597,7 @@
     for (const n of state.renderNodes) {
       if (!labelVisibleForNode(n, state.zoom)) continue;
       const p = projectNode(n.x, n.y);
-      const r = radiusFor(n) * (0.8 + 0.4 * state.zoom);
+      const r = radiusFor(n) * (0.7 + 0.3 * state.zoom);
 
       const div = document.createElement("div");
       div.className = `node-label ${labelClassFor(n.type)}`;
@@ -629,7 +629,7 @@
       .map((n) => ({ n, p: projectNode(n.x, n.y) }))
       .sort((a, b) => b.p.z - a.p.z);
     for (const { n, p } of candidates) {
-      const r = radiusFor(n) * (0.8 + 0.4 * state.zoom) + 2;
+      const r = radiusFor(n) * (0.7 + 0.3 * state.zoom) + 2;
       const dx = clientX - p.x, dy = clientY - p.y;
       if (dx * dx + dy * dy <= r * r) return n;
     }
