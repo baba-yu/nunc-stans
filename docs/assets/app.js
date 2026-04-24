@@ -87,10 +87,10 @@
     // shift/space temporarily flips to the other tool regardless of setting.
     tool: "rotate",
 
-    // Category visibility filter. Keys are like "tech.security" — when
-    // a category id is in this set, that category and everything under
-    // it is hidden. Stored per scope in localStorage.
-    hiddenByScope: {}, // { [scopeId]: Set<string> }
+    // Category visibility filter. Single Set shared across all scopes —
+    // hiding tech.security persists when you switch to business or mix.
+    // Stored as an array in localStorage under 'hidden'.
+    hiddenCategories: new Set(),
 
     // Interaction scratch
     isPointerDown: false,
@@ -130,23 +130,17 @@
 
   function saveState() {
     try {
-      const hidden = {};
-      for (const [k, v] of Object.entries(state.hiddenByScope)) {
-        hidden[k] = Array.from(v || []);
-      }
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
         scopeId: state.scopeId,
         windowId: state.windowId,
         tool: state.tool,
-        hidden: hidden,
+        hidden: Array.from(state.hiddenCategories),
       }));
     } catch (_) { /* ignore */ }
   }
 
   function currentHidden() {
-    let s = state.hiddenByScope[state.scopeId];
-    if (!s) { s = new Set(); state.hiddenByScope[state.scopeId] = s; }
-    return s;
+    return state.hiddenCategories;
   }
 
   function categoryIdOf(node) {
@@ -1139,12 +1133,18 @@
   }
 
   function setAllCategories(visible) {
+    // ALL / NONE only affects the categories visible in the *current*
+    // graph — other scopes keep whatever state they had. Since the
+    // hidden set is shared, you can (e.g.) hide everything in tech
+    // and still see business on BIZ, and the original tech state
+    // returns when you swap back.
     const hidden = currentHidden();
     const g = currentGraph();
     if (!g) return;
-    hidden.clear();
-    if (!visible) {
-      for (const n of g.nodes) if (n.type === "category") hidden.add(n.id);
+    for (const n of g.nodes) {
+      if (n.type !== "category") continue;
+      if (visible) hidden.delete(n.id);
+      else hidden.add(n.id);
     }
     rebuildCategoryFilters();
     saveState();
@@ -1487,10 +1487,16 @@
       if (saved.scopeId) state.scopeId = saved.scopeId;
       if (saved.windowId) state.windowId = saved.windowId;
       if (saved.tool === "pan" || saved.tool === "rotate") state.tool = saved.tool;
-      if (saved.hidden && typeof saved.hidden === "object") {
-        for (const [scope, arr] of Object.entries(saved.hidden)) {
-          if (Array.isArray(arr)) state.hiddenByScope[scope] = new Set(arr);
+      if (Array.isArray(saved.hidden)) {
+        state.hiddenCategories = new Set(saved.hidden);
+      } else if (saved.hidden && typeof saved.hidden === "object") {
+        // Legacy per-scope map → flatten to a single set so old sessions
+        // that already had filters stay sensible after upgrade.
+        const merged = new Set();
+        for (const arr of Object.values(saved.hidden)) {
+          if (Array.isArray(arr)) for (const id of arr) merged.add(id);
         }
+        state.hiddenCategories = merged;
       }
     }
 
