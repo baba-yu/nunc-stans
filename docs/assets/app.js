@@ -68,6 +68,17 @@
     return Array.isArray(m && m.grass_daily) && m.grass_daily.length > 0;
   }
 
+  // Bucket a 0..1 score into the same 5 discrete levels grass_level
+  // uses (PRD §6.6) and return it normalized back to 0..1 so the
+  // heat gradient lines up consistently across all three metrics.
+  function toHeatBin(v) {
+    if (v <= 0.05) return 0 / 4;
+    if (v <= 0.25) return 1 / 4;
+    if (v <= 0.50) return 2 / 4;
+    if (v <= 0.75) return 3 / 4;
+    return 4 / 4;
+  }
+
   /* ---------------- State ---------------- */
 
   const state = {
@@ -594,17 +605,18 @@
         alpha = related.has(n.id) ? 1.0 : 0.22;
       }
 
-      // Heat driver picks the metric the user selected in the menu.
-      //   attention / realization  → continuous 0..1
-      //   grass                   → grass_level 0..4 stepped to 5 bins
+      // Heat driver picks the metric the user selected. All three
+      // modes are binned into the same 5 steps (PRD grass breakpoints:
+      // 0.05 / 0.25 / 0.50 / 0.75) so a score of 0.62 reads the same
+      // color whether you viewed it as attention or realization.
       let heatT = 0;
       if (state.heatMetric === "realization") {
-        heatT = typeof m.realization_score === "number" ? m.realization_score : 0;
+        heatT = toHeatBin(typeof m.realization_score === "number" ? m.realization_score : 0);
       } else if (state.heatMetric === "grass") {
         const lvl = typeof m.grass_level === "number" ? m.grass_level : 0;
         heatT = Math.max(0, Math.min(4, lvl)) / 4;
       } else {
-        heatT = attention;
+        heatT = toHeatBin(attention);
       }
 
       // Fill via radial gradient (core brighter than rim)
