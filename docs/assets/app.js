@@ -56,6 +56,9 @@
   const WARN_T = 0.40;
   const WARN_STRONG_T = 0.25;
   const CONTRADICT_T = 0.60;
+  // A prediction reads as "supported" when its realization score
+  // clears the same bar prediction_status uses on the backend.
+  const SUPPORT_T = 0.70;
 
   // A node is considered "new / unvalidated" in the current window when
   // it has no per-day activity entries — i.e. nothing cited this
@@ -637,23 +640,22 @@
         ctx.textBaseline = "middle";
         ctx.fillText("!", p.x, p.y + 1);
       } else if (n.type !== "prediction") {
-        // Aggregate: count descendant predictions that are actually
-        // low-realization themselves. The badge reads as "N weak
-        // summaries under this group" rather than "this group is
-        // broken" (which is what a center ! tends to imply).
-        const weak = countWeakDescendantPredictions(n);
-        if (weak > 0) {
+        // Aggregate: count descendant predictions that are doing
+        // well. Reads as "N supported summaries under this group"
+        // — a positive signal, not an alarm.
+        const supported = countSupportedDescendantPredictions(n);
+        if (supported > 0) {
           const bx = p.x + r * 0.75;
           const by = p.y - r * 0.75;
-          ctx.fillStyle = withAlpha("#ff4d2e", 0.92 * alpha);
+          ctx.fillStyle = withAlpha("#18c7d8", 0.92 * alpha);
           ctx.beginPath();
           ctx.arc(bx, by, 7, 0, Math.PI * 2);
           ctx.fill();
-          ctx.fillStyle = withAlpha("#ffffff", alpha);
+          ctx.fillStyle = withAlpha("#07111f", alpha);
           ctx.font = "700 10px system-ui, sans-serif";
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
-          ctx.fillText(String(weak), bx, by + 1);
+          ctx.fillText(String(supported), bx, by + 1);
         }
       }
     }
@@ -693,11 +695,9 @@
     return false;
   }
 
-  // Count prediction descendants (by walking child_ids transitively)
-  // whose own metrics read as "low realization". Used by aggregate
-  // (category/theme/subtheme) nodes to surface a per-child warning
-  // count rather than aliasing the group-average behind a center '!'.
-  function countWeakDescendantPredictions(node) {
+  // Walk child_ids transitively and count prediction descendants
+  // matching a status predicate.
+  function countDescendantPredictionsWhere(node, predicate) {
     const g = currentGraph();
     if (!g || !g._index) return 0;
     let n = 0;
@@ -709,7 +709,7 @@
       visited.add(cur.id);
       if (cur.type === "prediction") {
         const m = metricsFor(cur, state.windowId);
-        if (hasEvidence(m) && (m.realization_score ?? 1) < WARN_T) n++;
+        if (predicate(m)) n++;
         continue;
       }
       for (const cid of cur.child_ids || []) {
@@ -718,6 +718,19 @@
       }
     }
     return n;
+  }
+
+  function countSupportedDescendantPredictions(node) {
+    return countDescendantPredictionsWhere(
+      node,
+      (m) => hasEvidence(m) && (m.realization_score ?? 0) >= SUPPORT_T,
+    );
+  }
+  function countWeakDescendantPredictions(node) {
+    return countDescendantPredictionsWhere(
+      node,
+      (m) => hasEvidence(m) && (m.realization_score ?? 1) < WARN_T,
+    );
   }
 
   // Canvas roundRect polyfill for the "new" pill background.
@@ -1289,15 +1302,15 @@
       pills.push(`<span class="pill new">new · not yet validated</span>`);
     } else {
       if (m.status) pills.push(`<span class="pill">${m.status}</span>`);
-      if (typeof m.realization_score === "number" && m.realization_score < WARN_T) {
-        // Pill wording differs: aggregates report how many children
-        // are weak, predictions report themselves.
-        if (n && n.type !== "prediction") {
-          const weak = countWeakDescendantPredictions(n);
-          if (weak > 0) pills.push(`<span class="pill warn">${weak} weak summaries</span>`);
-        } else {
-          pills.push(`<span class="pill warn">low realization</span>`);
-        }
+      if (n && n.type !== "prediction") {
+        // Aggregates — positive signal (how many summaries are
+        // working) plus an optional weak count when it's meaningful.
+        const supported = countSupportedDescendantPredictions(n);
+        if (supported > 0) pills.push(`<span class="pill good">${supported} supported</span>`);
+        const weak = countWeakDescendantPredictions(n);
+        if (weak > 0) pills.push(`<span class="pill warn">${weak} weak</span>`);
+      } else if (typeof m.realization_score === "number" && m.realization_score < WARN_T) {
+        pills.push(`<span class="pill warn">low realization</span>`);
       }
     }
     // Contradiction axis is retired; pill only survives for legacy data

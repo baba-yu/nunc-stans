@@ -476,6 +476,7 @@ body.panel-open #meta-header {
 .pill.warn       { background: rgba(255, 77, 46, 0.14); color: #ffb1a0; border-color: rgba(255, 77, 46, 0.35); }
 .pill.contradict { background: rgba(199, 75, 216, 0.14); color: #e5b3ff; border-color: rgba(199, 75, 216, 0.35); }
 .pill.new        { background: rgba(24, 199, 216, 0.16); color: #9be8f1; border-color: rgba(24, 199, 216, 0.42); }
+.pill.good       { background: rgba(24, 199, 216, 0.18); color: #9be8f1; border-color: rgba(24, 199, 216, 0.48); }
 
 .related-list {
   list-style: none;
