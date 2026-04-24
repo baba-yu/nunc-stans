@@ -335,7 +335,8 @@
 
   /* ---------------- Simulation ---------------- */
 
-  function rebuildSimulation() {
+  function rebuildSimulation(opts) {
+    const { preservePriorPositions = false } = opts || {};
     const g = currentGraph();
     if (!g) return;
 
@@ -346,15 +347,17 @@
       .filter((l) => visibleIds.has(linkEndId(l.source)) && visibleIds.has(linkEndId(l.target)))
       .map((l) => ({ ...l })); // shallow copy so d3 can mutate
 
-    // Prepare render nodes — reuse existing positions if same id present
+    // Prepare render nodes — reuse existing positions if same id present.
+    // When preservePriorPositions is on, we also PIN the prior nodes via
+    // fx/fy so force rearrangement can't drag them while the newly added
+    // nodes settle. Pins release after a short settle interval.
     const prior = new Map(state.renderNodes.map((n) => [n.id, n]));
+    const newlyPinned = [];
     const rn = visibleNodes.map((n) => {
       const p = prior.get(n.id);
       const init = n.layout || {};
-      // z is derived from the stable id hash (see zFor). Simulation stays
-      // 2D in (x, y); z is fixed per node so rotation reveals real depth.
       const z = (p && typeof p.z === "number") ? p.z : zFor(n);
-      return Object.assign({}, n, {
+      const node = Object.assign({}, n, {
         x: p ? p.x : (typeof init.x === "number" ? init.x + state.width / 2 : state.width / 2 + (Math.random() - 0.5) * 60),
         y: p ? p.y : (typeof init.y === "number" ? init.y + state.height / 2 : state.height / 2 + (Math.random() - 0.5) * 60),
         z: z,
@@ -363,6 +366,13 @@
         fx: p ? p.fx : null,
         fy: p ? p.fy : null,
       });
+      if (preservePriorPositions && p && node.fx == null && node.fy == null) {
+        node.fx = node.x;
+        node.fy = node.y;
+        node._scopeSwitchPin = true;
+        newlyPinned.push(node);
+      }
+      return node;
     });
     state.renderNodes = rn;
     state.renderLinks = visibleLinks;
@@ -389,9 +399,6 @@
     });
 
     const cx = state.width / 2, cy = state.height / 2;
-    // Pull each node toward the world origin. Stronger than d3.forceCenter
-    // (which only re-centers the centroid) so the cloud stays anchored
-    // around the crosshair instead of drifting off-screen.
     const pullX = d3.forceX(cx).strength(0.08);
     const pullY = d3.forceY(cy).strength(0.08);
     const collide = d3.forceCollide().radius((d) => radiusFor(d) + 6).strength(0.85);
@@ -402,10 +409,27 @@
       .force("x", pullX)
       .force("y", pullY)
       .force("collide", collide)
-      .alpha(0.7)
-      .alphaDecay(0.03)
+      // Lower alpha when preserving so pinned nodes read as stable and
+      // new nodes settle gently instead of throwing the whole layout.
+      .alpha(preservePriorPositions ? 0.25 : 0.7)
+      .alphaDecay(preservePriorPositions ? 0.05 : 0.03)
       .velocityDecay(0.35)
       .on("tick", scheduleDraw);
+
+    // Release scope-switch pins after the layout has had a chance to
+    // absorb the new nodes.
+    if (newlyPinned.length) {
+      setTimeout(() => {
+        for (const n of newlyPinned) {
+          if (n._scopeSwitchPin) {
+            n.fx = null;
+            n.fy = null;
+            delete n._scopeSwitchPin;
+          }
+        }
+        if (state.simulation) state.simulation.alpha(0.05).restart();
+      }, 2000);
+    }
 
     scheduleDraw();
   }
@@ -1055,7 +1079,7 @@
       closeDetailPanel();
     }
     rebuildCategoryFilters();
-    rebuildSimulation();
+    rebuildSimulation({ preservePriorPositions: true });
     if (stillPresent) openDetailPanel(nodeById(state.selectedNodeId));
   }
 
