@@ -470,12 +470,19 @@
       }
 
       let stroke = `rgba(130, 170, 210, ${alpha})`;
+      let dash = null;
       if (l.type === "contradicts") stroke = `rgba(199, 75, 216, ${Math.max(alpha, 0.5)})`;
       else if (l.type === "supports") stroke = `rgba(24, 199, 216, ${Math.max(alpha, 0.45)})`;
       else if (l.type === "derived_from") stroke = `rgba(255, 184, 77, ${Math.max(alpha, 0.4)})`;
+      else if (l.type === "shares_prediction") {
+        // Dashed gold line between categories that share a prediction.
+        stroke = `rgba(255, 184, 77, ${Math.max(alpha * 0.85, 0.4)})`;
+        dash = [6, 5];
+      }
 
       ctx.strokeStyle = stroke;
       ctx.lineWidth = Math.max(0.6, (l.weight || 1) * 1.1);
+      if (dash) ctx.setLineDash(dash); else ctx.setLineDash([]);
       ctx.beginPath();
       ctx.moveTo(ps.x, ps.y);
       ctx.lineTo(pt.x, pt.y);
