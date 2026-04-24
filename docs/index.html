@@ -12,7 +12,10 @@
   <!-- HTML label overlay (positioned absolutely) -->
   <div id="label-layer" aria-hidden="true"></div>
 
-  <!-- Top-right square menu (fixed, always visible) -->
+  <!-- Top-right menu stack. Top-menu + category-menu share a flex
+       column so category-menu auto-positions below top-menu
+       regardless of how many rows top-menu has, without overlap. -->
+  <div id="top-menu-stack">
   <nav id="top-menu" aria-label="Dashboard controls">
     <div class="menu-group" role="tablist" aria-label="Scope">
       <button class="menu-btn tab" data-scope="mix" role="tab" aria-selected="true">MIX</button>
@@ -50,6 +53,7 @@
       <!-- buttons injected by JS -->
     </div>
   </nav>
+  </div>
 
   <!-- Header (top-left, metadata) -->
   <header id="meta-header">

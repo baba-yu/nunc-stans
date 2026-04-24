@@ -120,11 +120,26 @@ body[data-tool="pan"]    #graph-canvas { cursor: move; }
 /* ------------------------------------------------------------
    Top-right fixed square menu (UI §4)
    ------------------------------------------------------------ */
-#top-menu,
-#category-menu {
+/* Right-side menu stack: top-menu + category-menu stacked via flex.
+   Stack owns fixed positioning + slide-on-panel-open; inner menus
+   are plain flex items so category-menu always sits under top-menu
+   no matter how tall top-menu grows. */
+#top-menu-stack {
   position: fixed;
+  top: 16px;
   right: 16px;
   z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: calc(100vh - 32px);
+  max-width: calc(100vw - 32px);
+  transition: transform 260ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  will-change: transform;
+}
+
+#top-menu,
+#category-menu {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -134,23 +149,19 @@ body[data-tool="pan"]    #graph-canvas { cursor: move; }
   border-radius: 6px;
   box-shadow: var(--shadow-deep);
   backdrop-filter: blur(6px);
-  transition: transform 260ms cubic-bezier(0.22, 0.61, 0.36, 1);
-  will-change: transform;
 }
-
-#top-menu      { top: 16px; max-height: calc(100vh - 32px); overflow: hidden; }
+#top-menu      { flex: 0 0 auto; }
 #category-menu {
-  top: 170px;
+  flex: 1 1 auto;
+  min-height: 0;               /* allow shrink so inner list scrolls */
   max-width: 220px;
   min-width: 180px;
-  max-height: calc(100vh - 186px);   /* 170 top + 16 bottom gutter */
-  overflow: hidden;                  /* inner .category-filters scrolls */
+  overflow: hidden;
 }
 
-/* When the detail panel is open, slide both menus from top-right to
-   top-left so they stay visible alongside the 420px panel. */
-body.panel-open #top-menu,
-body.panel-open #category-menu {
+/* When the detail panel is open, slide the whole stack from top-right
+   to top-left so it stays visible alongside the 420px panel. */
+body.panel-open #top-menu-stack {
   transform: translateX(calc(-100vw + 100% + 32px));
 }
 body.panel-open #meta-header {
@@ -160,10 +171,16 @@ body.panel-open #meta-header {
 }
 @media (max-width: 640px) {
   /* On narrow screens the panel covers the full width, so don't bother. */
-  body.panel-open #top-menu,
-  body.panel-open #category-menu {
+  body.panel-open #top-menu-stack {
     transform: none;
   }
+  #top-menu-stack {
+    /* Give more room on narrow screens — scrollbar lives inside. */
+    max-width: calc(100vw - 16px);
+    right: 8px;
+    top: 8px;
+  }
+  #category-menu { max-width: none; }
 }
 
 .menu-head {
