@@ -379,6 +379,12 @@
 
     if (state.simulation) state.simulation.stop();
 
+    // Strength multiplier: when we're preserving an earlier view
+    // (scope switch), push every force down dramatically so the
+    // new scope's nodes drift into space rather than yanking
+    // the entire existing layout around.
+    const k = preservePriorPositions ? 0.2 : 1.0;
+
     const linkForce = d3.forceLink(visibleLinks)
       .id((d) => d.id)
       .distance((l) => {
@@ -389,18 +395,20 @@
         if (sType === "subtheme" || tType === "subtheme") return 70;
         return 55;
       })
-      .strength(0.35);
+      .strength(0.35 * k);
 
     const charge = d3.forceManyBody().strength((d) => {
-      if (d.type === "category") return -420;
-      if (d.type === "theme")    return -300;
-      if (d.type === "subtheme") return -160;
-      return -90;
+      const base =
+        d.type === "category" ? -420 :
+        d.type === "theme"    ? -300 :
+        d.type === "subtheme" ? -160 :
+                                -90;
+      return base * k;
     });
 
     const cx = state.width / 2, cy = state.height / 2;
-    const pullX = d3.forceX(cx).strength(0.08);
-    const pullY = d3.forceY(cy).strength(0.08);
+    const pullX = d3.forceX(cx).strength(0.08 * k);
+    const pullY = d3.forceY(cy).strength(0.08 * k);
     const collide = d3.forceCollide().radius((d) => radiusFor(d) + 6).strength(0.85);
 
     state.simulation = d3.forceSimulation(rn)
@@ -409,28 +417,14 @@
       .force("x", pullX)
       .force("y", pullY)
       .force("collide", collide)
-      // Lower alpha when preserving so pinned nodes read as stable and
-      // new nodes settle gently instead of throwing the whole layout.
-      .alpha(preservePriorPositions ? 0.25 : 0.7)
-      .alphaDecay(preservePriorPositions ? 0.05 : 0.03)
+      .alpha(preservePriorPositions ? 0.15 : 0.7)
+      .alphaDecay(preservePriorPositions ? 0.08 : 0.03)
       .velocityDecay(0.35)
       .on("tick", scheduleDraw);
 
-    // Release scope-switch pins after the layout has had a chance to
-    // absorb the new nodes.
-    if (newlyPinned.length) {
-      setTimeout(() => {
-        for (const n of newlyPinned) {
-          if (n._scopeSwitchPin) {
-            n.fx = null;
-            n.fy = null;
-            delete n._scopeSwitchPin;
-          }
-        }
-        if (state.simulation) state.simulation.alpha(0.05).restart();
-      }, 2000);
-    }
-
+    // Scope-switch pins stay until the user explicitly drags a node
+    // (pointerdown clears fx/fy on release), so the prior view
+    // never drifts on its own. No auto-release timer.
     scheduleDraw();
   }
 
