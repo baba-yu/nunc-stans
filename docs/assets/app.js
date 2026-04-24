@@ -603,19 +603,22 @@
         ctx.stroke();
       }
 
-      // Decide the center badge:
-      //   no evidence yet      → 'new' tag (accent-cyan)
-      //   realization < 0.25   → '!' + pulsing red outline
-      //   realization < 0.40   → '!'
-      //   otherwise            → nothing
+      // Marker priority:
+      //   no evidence yet                      → 'new' tag (cyan text)
+      //   prediction with low realization      → center '!' (+ pulse)
+      //   aggregate (cat/theme/sub) with weak  → corner badge with
+      //                                          count of weak child
+      //                                          *predictions*
+      //   otherwise                            → nothing
       if (!hasEvidence(m)) {
-        // "new" marker — text only, fixed size, allowed to overflow the node.
         ctx.fillStyle = withAlpha("#18c7d8", alpha);
         ctx.font = "700 10px system-ui, sans-serif";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         ctx.fillText("new", p.x, p.y + 1);
-      } else if (realization < WARN_T) {
+      } else if (n.type === "prediction" && realization < WARN_T) {
+        // Predictions get the urgent center marker — it really does
+        // mean "this item is weak".
         if (realization < WARN_STRONG_T) {
           const pulse = 0.5 + 0.5 * Math.sin(performance.now() / 250);
           ctx.beginPath();
@@ -628,12 +631,30 @@
         ctx.beginPath();
         ctx.arc(p.x, p.y, r * 0.55, 0, Math.PI * 2);
         ctx.fill();
-
         ctx.fillStyle = withAlpha("#ffffff", alpha);
         ctx.font = `bold ${Math.round(r * 0.95)}px system-ui, sans-serif`;
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         ctx.fillText("!", p.x, p.y + 1);
+      } else if (n.type !== "prediction") {
+        // Aggregate: count descendant predictions that are actually
+        // low-realization themselves. The badge reads as "N weak
+        // summaries under this group" rather than "this group is
+        // broken" (which is what a center ! tends to imply).
+        const weak = countWeakDescendantPredictions(n);
+        if (weak > 0) {
+          const bx = p.x + r * 0.75;
+          const by = p.y - r * 0.75;
+          ctx.fillStyle = withAlpha("#ff4d2e", 0.92 * alpha);
+          ctx.beginPath();
+          ctx.arc(bx, by, 7, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = withAlpha("#ffffff", alpha);
+          ctx.font = "700 10px system-ui, sans-serif";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText(String(weak), bx, by + 1);
+        }
       }
     }
 
@@ -665,12 +686,38 @@
 
   function anyPulsing() {
     for (const n of state.renderNodes) {
+      if (n.type !== "prediction") continue; // only predictions pulse now
       const m = metricsFor(n, state.windowId);
-      // Only pulse when the node has evidence but low realization —
-      // unvalidated ("new") nodes should stay calm.
       if (hasEvidence(m) && (m.realization_score ?? 1) < WARN_STRONG_T) return true;
     }
     return false;
+  }
+
+  // Count prediction descendants (by walking child_ids transitively)
+  // whose own metrics read as "low realization". Used by aggregate
+  // (category/theme/subtheme) nodes to surface a per-child warning
+  // count rather than aliasing the group-average behind a center '!'.
+  function countWeakDescendantPredictions(node) {
+    const g = currentGraph();
+    if (!g || !g._index) return 0;
+    let n = 0;
+    const stack = [node];
+    const visited = new Set();
+    while (stack.length) {
+      const cur = stack.pop();
+      if (visited.has(cur.id)) continue;
+      visited.add(cur.id);
+      if (cur.type === "prediction") {
+        const m = metricsFor(cur, state.windowId);
+        if (hasEvidence(m) && (m.realization_score ?? 1) < WARN_T) n++;
+        continue;
+      }
+      for (const cid of cur.child_ids || []) {
+        const cn = g._index.get(cid);
+        if (cn) stack.push(cn);
+      }
+    }
+    return n;
   }
 
   // Canvas roundRect polyfill for the "new" pill background.
@@ -1139,7 +1186,7 @@
 
     // Common description
     const desc = detail.description || n.description || "";
-    const statusPills = renderStatusPills(m);
+    const statusPills = renderStatusPills(m, n);
 
     // Metrics block.
     //   Attention    — how much this theme/category was cited in the
@@ -1235,7 +1282,7 @@
     `;
   }
 
-  function renderStatusPills(m) {
+  function renderStatusPills(m, n) {
     const pills = [];
     const isNew = !hasEvidence(m);
     if (isNew) {
@@ -1243,7 +1290,14 @@
     } else {
       if (m.status) pills.push(`<span class="pill">${m.status}</span>`);
       if (typeof m.realization_score === "number" && m.realization_score < WARN_T) {
-        pills.push(`<span class="pill warn">low realization</span>`);
+        // Pill wording differs: aggregates report how many children
+        // are weak, predictions report themselves.
+        if (n && n.type !== "prediction") {
+          const weak = countWeakDescendantPredictions(n);
+          if (weak > 0) pills.push(`<span class="pill warn">${weak} weak summaries</span>`);
+        } else {
+          pills.push(`<span class="pill warn">low realization</span>`);
+        }
       }
     }
     // Contradiction axis is retired; pill only survives for legacy data
