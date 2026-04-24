@@ -1106,13 +1106,23 @@
     const desc = detail.description || n.description || "";
     const statusPills = renderStatusPills(m);
 
-    // Metrics block
+    // Metrics block.
+    //   Attention    — how much this theme/category was cited in the
+    //                  validation reports inside the window, weighted by
+    //                  the relevance score attached to each citation.
+    //   Realization  — mean observed relevance (1-5 → 0.2-1.0) across
+    //                  evidence in the window, weighted 0.65 new + 0.35
+    //                  continuing. Reflects "is this prediction actually
+    //                  playing out" — low means unrealized.
+    //   Daily level  — today's grass cell level (0-4), for quick read.
+    const attTip = "How often this topic was cited (frequency × relevance) in the window";
+    const realTip = "Weighted mean observed relevance (0.65 * new + 0.35 * continuing)";
+    const grassTip = "Today's daily-activity level (0-4, drives the strip below)";
     const mm = `
       <div class="metrics-grid">
-        ${metricTile("Attention",     m.attention_score)}
-        ${metricTile("Realization",   m.realization_score)}
-        ${metricTile("Contradiction", m.contradiction_score)}
-        ${metricTile("Grass",         typeof m.grass_level === "number" ? m.grass_level / 4 : 0, m.grass_level)}
+        ${metricTile("Attention",    m.attention_score,   undefined, attTip)}
+        ${metricTile("Realization",  m.realization_score, undefined, realTip)}
+        ${metricTile("Daily level",  typeof m.grass_level === "number" ? m.grass_level / 4 : 0, m.grass_level, grassTip)}
       </div>
     `;
 
@@ -1165,22 +1175,24 @@
       `;
     }
 
+    const stripHeader = renderGrassStripHeader(m);
     return `
       <div>${statusPills}</div>
       ${desc ? `<p style="margin-top:10px">${escapeHTML(desc)}</p>` : ""}
       <h3>Window · ${state.windowId}</h3>
       ${mm}
-      <h3>Grass (last ~30 days)</h3>
+      <h3>${stripHeader}</h3>
       ${strip}
       ${extras}
     `;
   }
 
-  function metricTile(k, v, override) {
+  function metricTile(k, v, override, tooltip) {
     const shown = (override !== undefined) ? override : (typeof v === "number" ? v.toFixed(2) : "—");
     const barPct = clamp((typeof v === "number" ? v : 0), 0, 1) * 100;
+    const titleAttr = tooltip ? ` title="${escapeHTML(tooltip)}"` : "";
     return `
-      <div class="metric">
+      <div class="metric"${titleAttr}>
         <div class="k">${k}</div>
         <div class="v">${shown}</div>
         <div class="bar"><span style="width:${barPct}%"></span></div>
@@ -1192,21 +1204,55 @@
     const pills = [];
     if (m.status) pills.push(`<span class="pill">${m.status}</span>`);
     if (typeof m.realization_score === "number" && m.realization_score < WARN_T) pills.push(`<span class="pill warn">low realization</span>`);
+    // Contradiction axis is retired; pill only survives for legacy data
+    // where the backend still emits a nonzero score.
     if (typeof m.contradiction_score === "number" && m.contradiction_score >= CONTRADICT_T) pills.push(`<span class="pill contradict">contradicted</span>`);
     return pills.join(" ");
   }
 
+  function windowDays(windowId) {
+    if (windowId === "7d") return 7;
+    if (windowId === "30d") return 30;
+    if (windowId === "90d") return 90;
+    return 30;
+  }
+
+  function renderGrassStripHeader(m) {
+    const arr = Array.isArray(m.grass_daily) ? m.grass_daily : [];
+    const days = windowDays(state.windowId);
+    if (arr.length === 0) return `Daily activity · no data in ${days}d window`;
+    return `Daily activity · ${arr.length} day${arr.length === 1 ? "" : "s"} of data · last ${days}d`;
+  }
+
   function renderGrassStrip(m) {
-    // Use synthetic strip from grass_level — backend may provide more detail later
-    const lvl = Math.max(0, Math.min(4, Math.round(m.grass_level || 0)));
+    // Real data: one cell per date the backend reports for the current
+    // window. Days outside the window, or days with no cited evidence,
+    // are rendered as empty cells so the strip still shows the full
+    // window length and the reader can read "last activity was N days
+    // ago" at a glance.
+    const days = windowDays(state.windowId);
+    const arr = Array.isArray(m.grass_daily) ? m.grass_daily : [];
+    const byDate = new Map();
+    for (const row of arr) if (row && row.date) byDate.set(row.date, row);
+
+    // Anchor the strip to the latest-report date from the manifest so
+    // every node's strip lines up temporally.
+    const endISO = (state.manifest && state.manifest.latest_report_date) || null;
+    const endDate = endISO ? new Date(endISO + "T00:00:00Z") : new Date();
+
     const cells = [];
-    for (let i = 0; i < 30; i++) {
-      // vary with streak + noise
-      const active = (Math.sin(i * 0.7 + lvl) + 1) * 0.5 + (lvl / 4) * 0.3;
-      const cellLvl = Math.max(0, Math.min(4, Math.round(active * lvl)));
-      cells.push(`<span data-lvl="${cellLvl}"></span>`);
+    for (let i = days - 1; i >= 0; i--) {
+      const d = new Date(endDate);
+      d.setUTCDate(d.getUTCDate() - i);
+      const iso = d.toISOString().slice(0, 10);
+      const row = byDate.get(iso);
+      const lvl = row ? Math.max(0, Math.min(4, row.grass_level | 0)) : 0;
+      const title = row
+        ? `${iso} · lvl ${lvl} · attn ${(row.attention_score || 0).toFixed(2)}`
+        : `${iso} · no activity`;
+      cells.push(`<span data-lvl="${lvl}" title="${title}"></span>`);
     }
-    return `<div class="grass-strip">${cells.join("")}</div>`;
+    return `<div class="grass-strip" data-days="${days}">${cells.join("")}</div>`;
   }
 
   function renderEvidenceSummary(detail) {
