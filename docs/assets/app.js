@@ -57,6 +57,14 @@
   const WARN_STRONG_T = 0.25;
   const CONTRADICT_T = 0.60;
 
+  // A node is considered "new / unvalidated" in the current window when
+  // it has no per-day activity entries — i.e. nothing cited this
+  // prediction/theme yet. It's distinct from "low realization" (which
+  // means we *did* see it but it landed poorly).
+  function hasEvidence(m) {
+    return Array.isArray(m && m.grass_daily) && m.grass_daily.length > 0;
+  }
+
   /* ---------------- State ---------------- */
 
   const state = {
@@ -586,7 +594,7 @@
         ctx.stroke();
       }
 
-      // Contradiction ring (purple/red)
+      // Contradiction ring (purple/red) — legacy data only.
       if (contradiction >= CONTRADICT_T) {
         ctx.beginPath();
         ctx.arc(p.x, p.y, r + 3, 0, Math.PI * 2);
@@ -595,18 +603,36 @@
         ctx.stroke();
       }
 
-      // Warning pulsing outline (< 0.25)
-      if (realization < WARN_STRONG_T) {
-        const pulse = 0.5 + 0.5 * Math.sin(performance.now() / 250);
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, r + 5 + pulse * 3, 0, Math.PI * 2);
-        ctx.strokeStyle = withAlpha("#ff4d2e", (0.45 + 0.5 * pulse) * alpha);
-        ctx.lineWidth = 2.2;
+      // Decide the center badge:
+      //   no evidence yet      → 'new' tag (accent-cyan)
+      //   realization < 0.25   → '!' + pulsing red outline
+      //   realization < 0.40   → '!'
+      //   otherwise            → nothing
+      if (!hasEvidence(m)) {
+        // "new" badge — no evidence in this window yet.
+        const w = r * 1.6;
+        const h = r * 0.9;
+        ctx.fillStyle = withAlpha("#07111f", 0.88 * alpha);
+        roundRect(ctx, p.x - w / 2, p.y - h / 2, w, h, Math.min(4, h / 2));
+        ctx.fill();
+        ctx.strokeStyle = withAlpha("#18c7d8", 0.9 * alpha);
+        ctx.lineWidth = 1.2;
         ctx.stroke();
-      }
 
-      // Warning `!` at center
-      if (realization < WARN_T) {
+        ctx.fillStyle = withAlpha("#18c7d8", alpha);
+        ctx.font = `700 ${Math.round(r * 0.55)}px system-ui, sans-serif`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("new", p.x, p.y + 1);
+      } else if (realization < WARN_T) {
+        if (realization < WARN_STRONG_T) {
+          const pulse = 0.5 + 0.5 * Math.sin(performance.now() / 250);
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, r + 5 + pulse * 3, 0, Math.PI * 2);
+          ctx.strokeStyle = withAlpha("#ff4d2e", (0.45 + 0.5 * pulse) * alpha);
+          ctx.lineWidth = 2.2;
+          ctx.stroke();
+        }
         ctx.fillStyle = withAlpha("#07111f", 0.85 * alpha);
         ctx.beginPath();
         ctx.arc(p.x, p.y, r * 0.55, 0, Math.PI * 2);
@@ -649,9 +675,27 @@
   function anyPulsing() {
     for (const n of state.renderNodes) {
       const m = metricsFor(n, state.windowId);
-      if ((m.realization_score ?? 1) < WARN_STRONG_T) return true;
+      // Only pulse when the node has evidence but low realization —
+      // unvalidated ("new") nodes should stay calm.
+      if (hasEvidence(m) && (m.realization_score ?? 1) < WARN_STRONG_T) return true;
     }
     return false;
+  }
+
+  // Canvas roundRect polyfill for the "new" pill background.
+  function roundRect(ctx, x, y, w, h, r) {
+    const rr = Math.max(0, Math.min(r, Math.min(w, h) / 2));
+    ctx.beginPath();
+    ctx.moveTo(x + rr, y);
+    ctx.lineTo(x + w - rr, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + rr);
+    ctx.lineTo(x + w, y + h - rr);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - rr, y + h);
+    ctx.lineTo(x + rr, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - rr);
+    ctx.lineTo(x, y + rr);
+    ctx.quadraticCurveTo(x, y, x + rr, y);
+    ctx.closePath();
   }
 
   function withAlpha(color, a) {
@@ -1202,8 +1246,15 @@
 
   function renderStatusPills(m) {
     const pills = [];
-    if (m.status) pills.push(`<span class="pill">${m.status}</span>`);
-    if (typeof m.realization_score === "number" && m.realization_score < WARN_T) pills.push(`<span class="pill warn">low realization</span>`);
+    const isNew = !hasEvidence(m);
+    if (isNew) {
+      pills.push(`<span class="pill new">new · not yet validated</span>`);
+    } else {
+      if (m.status) pills.push(`<span class="pill">${m.status}</span>`);
+      if (typeof m.realization_score === "number" && m.realization_score < WARN_T) {
+        pills.push(`<span class="pill warn">low realization</span>`);
+      }
+    }
     // Contradiction axis is retired; pill only survives for legacy data
     // where the backend still emits a nonzero score.
     if (typeof m.contradiction_score === "number" && m.contradiction_score >= CONTRADICT_T) pills.push(`<span class="pill contradict">contradicted</span>`);
