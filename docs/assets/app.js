@@ -609,18 +609,9 @@
       //   realization < 0.40   → '!'
       //   otherwise            → nothing
       if (!hasEvidence(m)) {
-        // "new" badge — no evidence in this window yet.
-        const w = r * 1.6;
-        const h = r * 0.9;
-        ctx.fillStyle = withAlpha("#07111f", 0.88 * alpha);
-        roundRect(ctx, p.x - w / 2, p.y - h / 2, w, h, Math.min(4, h / 2));
-        ctx.fill();
-        ctx.strokeStyle = withAlpha("#18c7d8", 0.9 * alpha);
-        ctx.lineWidth = 1.2;
-        ctx.stroke();
-
+        // "new" marker — text only, fixed size, allowed to overflow the node.
         ctx.fillStyle = withAlpha("#18c7d8", alpha);
-        ctx.font = `700 ${Math.round(r * 0.55)}px system-ui, sans-serif`;
+        ctx.font = "700 10px system-ui, sans-serif";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         ctx.fillText("new", p.x, p.y + 1);
