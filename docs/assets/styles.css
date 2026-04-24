@@ -1,0 +1,418 @@
+/* ============================================================
+   Future Prediction Theme Intelligence Dashboard
+   Cold low-temperature palette per UI (1).md §8.1
+   ============================================================ */
+
+:root {
+  /* Background (UI §8.1) */
+  --bg-0: #07111f;
+  --bg-1: #0b1728;
+  --bg-2: #10233a;
+  --grid-line: rgba(130, 170, 210, 0.08);
+  --text-main: #d8e7f7;
+  --text-muted: #8fa8c2;
+
+  /* Heat (UI §8.2) */
+  --heat-0: #203047;
+  --heat-1: #2464a8;
+  --heat-2: #18c7d8;
+  --heat-3: #ffb84d;
+  --heat-4: #ff4d2e;
+  --heat-core: #fff3c4;
+
+  /* UI chrome */
+  --panel-bg: rgba(10, 22, 38, 0.92);
+  --panel-border: rgba(130, 170, 210, 0.18);
+  --panel-accent: #18c7d8;
+  --warn: #ff4d2e;
+  --contradict: #c74bd8;
+
+  --menu-bg: rgba(9, 19, 33, 0.88);
+  --menu-active: #18c7d8;
+  --menu-active-text: #07111f;
+  --menu-text: #d8e7f7;
+
+  --shadow-deep: 0 14px 40px rgba(0, 0, 0, 0.55);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  color: var(--text-main);
+  font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+               "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+  background:
+    radial-gradient(circle at 40% 35%, rgba(40, 80, 120, 0.22), transparent 42%),
+    linear-gradient(180deg, #07111f 0%, #0b1728 55%, #08111d 100%);
+}
+
+body::before {
+  /* Subtle grid overlay */
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: 56px 56px;
+  z-index: 0;
+  opacity: 0.7;
+}
+
+#graph-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  cursor: grab;
+  touch-action: none;
+}
+
+#graph-canvas.dragging { cursor: grabbing; }
+#graph-canvas.panning  { cursor: move; }
+
+/* ------------------------------------------------------------
+   Label overlay (HTML labels on top of canvas)
+   ------------------------------------------------------------ */
+#label-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.node-label {
+  position: absolute;
+  transform: translate(-50%, 0);
+  color: var(--text-main);
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: rgba(7, 17, 31, 0.72);
+  white-space: nowrap;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+  user-select: none;
+}
+
+.node-label.cat  { color: #b7d6ff; font-weight: 600; font-size: 12px; }
+.node-label.th   { color: var(--text-main); font-weight: 500; }
+.node-label.sub  { color: var(--text-muted); font-size: 10px; }
+.node-label.pred { color: var(--text-muted); font-size: 10px; font-style: italic; }
+
+/* ------------------------------------------------------------
+   Top-right fixed square menu (UI §4)
+   ------------------------------------------------------------ */
+#top-menu {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px;
+  background: var(--menu-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 6px;
+  box-shadow: var(--shadow-deep);
+  backdrop-filter: blur(6px);
+}
+
+.menu-group {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 2px;
+  border: 1px solid var(--panel-border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.menu-btn {
+  border: 0;
+  padding: 8px 14px;
+  min-width: 52px;
+  color: var(--menu-text);
+  background: transparent;
+  font: inherit;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  font-size: 11px;
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.menu-btn:hover { background: rgba(24, 199, 216, 0.12); }
+
+.menu-btn[aria-selected="true"],
+.menu-btn[aria-checked="true"] {
+  background: var(--menu-active);
+  color: var(--menu-active-text);
+}
+
+/* ------------------------------------------------------------
+   Header (top-left)
+   ------------------------------------------------------------ */
+#meta-header {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 9;
+  pointer-events: none;
+  color: var(--text-main);
+}
+#meta-header .title {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+}
+#meta-header .meta-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* ------------------------------------------------------------
+   Hint strip (bottom-left)
+   ------------------------------------------------------------ */
+#hint-strip {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  z-index: 9;
+  display: flex;
+  gap: 14px;
+  font-size: 10.5px;
+  color: var(--text-muted);
+  letter-spacing: 0.03em;
+  pointer-events: none;
+}
+#hint-strip span::before {
+  content: "• ";
+  color: var(--panel-accent);
+}
+
+/* ------------------------------------------------------------
+   Detail panel (slide-in from right)
+   ------------------------------------------------------------ */
+#detail-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(420px, 100vw);
+  background: var(--panel-bg);
+  border-left: 1px solid var(--panel-border);
+  box-shadow: -12px 0 40px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  transform: translateX(105%);
+  transition: transform 260ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+}
+
+#detail-panel.open { transform: translateX(0); }
+
+.panel-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 20px 20px 14px;
+  border-bottom: 1px solid var(--panel-border);
+}
+.panel-type {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--panel-accent);
+  margin-bottom: 6px;
+}
+#panel-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--text-main);
+  max-width: 320px;
+  word-break: break-word;
+}
+.panel-subtitle {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+#panel-close {
+  border: 0;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 24px;
+  line-height: 1;
+  padding: 4px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+#panel-close:hover { color: var(--text-main); background: rgba(255,255,255,0.06); }
+
+.panel-body {
+  overflow-y: auto;
+  padding: 16px 20px 40px;
+  flex: 1;
+}
+
+.panel-body h3 {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  margin: 18px 0 6px;
+  font-weight: 600;
+}
+
+.panel-body p { margin: 4px 0; color: var(--text-main); }
+.panel-body .muted { color: var(--text-muted); }
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-top: 8px;
+}
+.metric {
+  background: rgba(16, 35, 58, 0.6);
+  border: 1px solid var(--panel-border);
+  border-radius: 4px;
+  padding: 8px 10px;
+}
+.metric .k {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+.metric .v {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-main);
+  font-variant-numeric: tabular-nums;
+  margin-top: 2px;
+}
+.metric .bar {
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(130, 170, 210, 0.15);
+  margin-top: 8px;
+  overflow: hidden;
+}
+.metric .bar > span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--heat-1), var(--heat-2), var(--heat-3));
+}
+
+.pill {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  background: rgba(24, 199, 216, 0.12);
+  color: var(--panel-accent);
+  border: 1px solid rgba(24, 199, 216, 0.25);
+  text-transform: lowercase;
+  margin-right: 4px;
+}
+
+.pill.warn       { background: rgba(255, 77, 46, 0.14); color: #ffb1a0; border-color: rgba(255, 77, 46, 0.35); }
+.pill.contradict { background: rgba(199, 75, 216, 0.14); color: #e5b3ff; border-color: rgba(199, 75, 216, 0.35); }
+
+.related-list {
+  list-style: none;
+  padding: 0;
+  margin: 4px 0 0 0;
+}
+.related-list li {
+  padding: 6px 8px;
+  border: 1px solid var(--panel-border);
+  border-radius: 4px;
+  margin-bottom: 4px;
+  cursor: pointer;
+  background: rgba(16, 35, 58, 0.4);
+  font-size: 12.5px;
+  transition: background 120ms ease;
+}
+.related-list li:hover { background: rgba(24, 199, 216, 0.12); }
+.related-list li .rtype {
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin-right: 6px;
+}
+
+.evidence-list a {
+  color: var(--panel-accent);
+  text-decoration: none;
+  word-break: break-all;
+}
+.evidence-list a:hover { text-decoration: underline; }
+
+/* Grass strip mini */
+.grass-strip {
+  display: grid;
+  grid-template-columns: repeat(30, 1fr);
+  gap: 2px;
+  margin-top: 6px;
+}
+.grass-strip > span {
+  height: 12px;
+  border-radius: 1px;
+  background: var(--heat-0);
+}
+.grass-strip > span[data-lvl="1"] { background: var(--heat-1); }
+.grass-strip > span[data-lvl="2"] { background: var(--heat-2); }
+.grass-strip > span[data-lvl="3"] { background: var(--heat-3); }
+.grass-strip > span[data-lvl="4"] { background: var(--heat-4); }
+
+/* ------------------------------------------------------------
+   Loading / status pill
+   ------------------------------------------------------------ */
+.status-pill {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  padding: 8px 14px;
+  background: rgba(7, 17, 31, 0.92);
+  border: 1px solid var(--panel-border);
+  color: var(--text-main);
+  border-radius: 999px;
+  font-size: 12px;
+  z-index: 30;
+}
+.status-pill.err { color: #ffb1a0; border-color: rgba(255, 77, 46, 0.4); }
+
+/* ------------------------------------------------------------
+   Responsive: hide hint strip on narrow screens
+   ------------------------------------------------------------ */
+@media (max-width: 640px) {
+  #hint-strip { display: none; }
+  #meta-header { max-width: 55vw; }
+  #detail-panel { width: 100vw; }
+}

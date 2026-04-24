@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Future Prediction Theme Intelligence</title>
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <!-- Graph canvas -->
+  <canvas id="graph-canvas"></canvas>
+  <!-- HTML label overlay (positioned absolutely) -->
+  <div id="label-layer" aria-hidden="true"></div>
+
+  <!-- Top-right square menu (fixed, always visible) -->
+  <nav id="top-menu" aria-label="Dashboard controls">
+    <div class="menu-group" role="tablist" aria-label="Scope">
+      <button class="menu-btn tab" data-scope="tech" role="tab" aria-selected="true">TECH</button>
+      <button class="menu-btn tab" data-scope="business" role="tab" aria-selected="false">BIZ</button>
+    </div>
+    <div class="menu-group" role="radiogroup" aria-label="Window">
+      <button class="menu-btn win" data-window="7d" role="radio" aria-checked="false">7D</button>
+      <button class="menu-btn win" data-window="30d" role="radio" aria-checked="true">30D</button>
+      <button class="menu-btn win" data-window="90d" role="radio" aria-checked="false">90D</button>
+    </div>
+  </nav>
+
+  <!-- Header (top-left, metadata) -->
+  <header id="meta-header">
+    <div class="title">Future Prediction Theme Intelligence</div>
+    <div class="meta-sub" id="meta-sub">loading…</div>
+  </header>
+
+  <!-- Hint strip (bottom-left) -->
+  <aside id="hint-strip">
+    <span>drag node: move</span>
+    <span>empty drag: rotate</span>
+    <span>shift/space drag: pan</span>
+    <span>wheel: zoom</span>
+    <span>click node: details</span>
+  </aside>
+
+  <!-- Right slide-in detail panel -->
+  <section id="detail-panel" aria-hidden="true">
+    <div class="panel-head">
+      <div>
+        <div id="panel-type" class="panel-type">—</div>
+        <h2 id="panel-title">Select a node</h2>
+        <div id="panel-subtitle" class="panel-subtitle"></div>
+      </div>
+      <button id="panel-close" aria-label="Close panel">×</button>
+    </div>
+    <div class="panel-body" id="panel-body">
+      <p class="muted">Click a node in the graph to see details here.</p>
+    </div>
+  </section>
+
+  <!-- Loading / error overlay -->
+  <div id="app-status" class="status-pill" hidden></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+  <script type="module" src="assets/app.js"></script>
+</body>
+</html>
