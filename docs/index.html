@@ -24,6 +24,11 @@
       <button class="menu-btn win" data-window="30d" role="radio" aria-checked="true">30D</button>
       <button class="menu-btn win" data-window="90d" role="radio" aria-checked="false">90D</button>
     </div>
+    <div class="menu-group" role="radiogroup" aria-label="Heatmap metric">
+      <button class="menu-btn heat" data-heat="attention"   role="radio" aria-checked="true"  title="Heatmap based on attention (frequency x relevance)">ATT</button>
+      <button class="menu-btn heat" data-heat="realization" role="radio" aria-checked="false" title="Heatmap based on realization score">REAL</button>
+      <button class="menu-btn heat" data-heat="grass"       role="radio" aria-checked="false" title="Heatmap based on today's daily level (0-4)">DAILY</button>
+    </div>
     <div class="menu-group tool-group" role="radiogroup" aria-label="Empty-space drag tool">
       <button class="menu-btn tool" data-tool="pan"    role="radio" aria-checked="false" title="Pan (translate the view)">
         <span class="tool-ic" aria-hidden="true">&#x21F1;</span><span class="tool-lbl">PAN</span>

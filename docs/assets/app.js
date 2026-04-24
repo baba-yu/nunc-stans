@@ -87,6 +87,12 @@
     // shift/space temporarily flips to the other tool regardless of setting.
     tool: "rotate",
 
+    // Which metric drives the node heat coloring. One of
+    //   "attention"   — continuous attention_score   (0..1)
+    //   "realization" — continuous realization_score (0..1)
+    //   "grass"       — discrete  grass_level        (0..4, stepped to 5 bins)
+    heatMetric: "attention",
+
     // Panel navigation history — ids of previously viewed nodes, most
     // recent last. Back button pops the stack.
     panelHistory: [],
@@ -138,6 +144,7 @@
         scopeId: state.scopeId,
         windowId: state.windowId,
         tool: state.tool,
+        heatMetric: state.heatMetric,
         hidden: Array.from(state.hiddenCategories),
       }));
     } catch (_) { /* ignore */ }
@@ -587,9 +594,22 @@
         alpha = related.has(n.id) ? 1.0 : 0.22;
       }
 
+      // Heat driver picks the metric the user selected in the menu.
+      //   attention / realization  → continuous 0..1
+      //   grass                   → grass_level 0..4 stepped to 5 bins
+      let heatT = 0;
+      if (state.heatMetric === "realization") {
+        heatT = typeof m.realization_score === "number" ? m.realization_score : 0;
+      } else if (state.heatMetric === "grass") {
+        const lvl = typeof m.grass_level === "number" ? m.grass_level : 0;
+        heatT = Math.max(0, Math.min(4, lvl)) / 4;
+      } else {
+        heatT = attention;
+      }
+
       // Fill via radial gradient (core brighter than rim)
-      const coreColor = heatColor(Math.min(1, attention + 0.15));
-      const rimColor = heatColor(attention * 0.85);
+      const coreColor = heatColor(Math.min(1, heatT + 0.15));
+      const rimColor = heatColor(heatT * 0.85);
       const grad = ctx.createRadialGradient(p.x, p.y, r * 0.15, p.x, p.y, r);
       grad.addColorStop(0, withAlpha(coreColor, alpha));
       grad.addColorStop(1, withAlpha(rimColor, alpha));
@@ -1027,6 +1047,9 @@
     document.querySelectorAll(".menu-btn[data-tool]").forEach((btn) => {
       btn.addEventListener("click", () => selectTool(btn.dataset.tool));
     });
+    document.querySelectorAll(".menu-btn[data-heat]").forEach((btn) => {
+      btn.addEventListener("click", () => selectHeatMetric(btn.dataset.heat));
+    });
     const catAll  = document.getElementById("cat-all");
     const catNone = document.getElementById("cat-none");
     if (catAll)  catAll.addEventListener("click",  () => setAllCategories(true));
@@ -1212,6 +1235,20 @@
     state.tool = tool;
     updateToolButtons(tool);
     saveState();
+  }
+
+  function updateHeatButtons(metric) {
+    document.querySelectorAll(".menu-btn[data-heat]").forEach((btn) => {
+      btn.setAttribute("aria-checked", String(btn.dataset.heat === metric));
+    });
+  }
+  function selectHeatMetric(metric) {
+    if (!["attention", "realization", "grass"].includes(metric)) return;
+    if (metric === state.heatMetric) return;
+    state.heatMetric = metric;
+    updateHeatButtons(metric);
+    saveState();
+    scheduleDraw();
   }
 
   /* ---------------- Detail panel ---------------- */
@@ -1532,6 +1569,9 @@
       if (saved.scopeId) state.scopeId = saved.scopeId;
       if (saved.windowId) state.windowId = saved.windowId;
       if (saved.tool === "pan" || saved.tool === "rotate") state.tool = saved.tool;
+      if (["attention", "realization", "grass"].includes(saved.heatMetric)) {
+        state.heatMetric = saved.heatMetric;
+      }
       if (Array.isArray(saved.hidden)) {
         state.hiddenCategories = new Set(saved.hidden);
       } else if (saved.hidden && typeof saved.hidden === "object") {
@@ -1550,6 +1590,7 @@
       updateScopeButtons(state.scopeId);
       updateWindowButtons(state.windowId);
       updateToolButtons(state.tool);
+      updateHeatButtons(state.heatMetric);
 
       await loadScopeGraph(state.scopeId);
       rebuildCategoryFilters();
