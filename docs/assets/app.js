@@ -818,12 +818,33 @@
   }
 
   function relatedIds(focusedId) {
+    // Highlight the focused node, every ancestor (transitive parents),
+    // every descendant (transitive children), and any node directly
+    // joined to the focused one by a link (catches shares_prediction
+    // edges between categories that aren't in the parent/child tree).
     const set = new Set([focusedId]);
-    const node = nodeById(focusedId);
-    if (!node) return set;
-    for (const p of node.parent_ids || []) set.add(p);
-    for (const c of node.child_ids || []) set.add(c);
-    // Also links
+    const start = nodeById(focusedId);
+    if (!start) return set;
+
+    // Walk up through parent_ids
+    const upStack = [...(start.parent_ids || [])];
+    while (upStack.length) {
+      const id = upStack.pop();
+      if (set.has(id)) continue;
+      set.add(id);
+      const n = nodeById(id);
+      if (n && n.parent_ids) for (const p of n.parent_ids) upStack.push(p);
+    }
+    // Walk down through child_ids
+    const downStack = [...(start.child_ids || [])];
+    while (downStack.length) {
+      const id = downStack.pop();
+      if (set.has(id)) continue;
+      set.add(id);
+      const n = nodeById(id);
+      if (n && n.child_ids) for (const c of n.child_ids) downStack.push(c);
+    }
+    // Direct link neighbors (covers shares_prediction & friends)
     for (const l of state.renderLinks) {
       const s = linkEndId(l.source), t = linkEndId(l.target);
       if (s === focusedId) set.add(t);
