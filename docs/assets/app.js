@@ -15,10 +15,14 @@
   // Change this if you fork the repo.
   const REPO_BLOB_URL = "https://github.com/baba-yu/news/blob/main/";
 
-  // Zoom thresholds (UI §7.1)
+  // Zoom-driven progressive reveal. Inverted from the original UI
+  // §7.1 spec: categories are the broad-bucket overview and stay
+  // visible at every zoom level; themes / subthemes / predictions
+  // appear as the user drills in. Reads natural ("supermarket
+  // signage first, product shelves next").
   const ZOOM_THRESHOLDS = {
-    showCategories: 0.75,
-    showSubthemes: 1.25,
+    showThemes:      0.75,
+    showSubthemes:   1.25,
     showPredictions: 2.0,
   };
 
@@ -298,8 +302,8 @@
     if (maxZ !== null && zoom > maxZ) return false;
 
     // Fallback: generic zoom thresholds by type
-    if (node.type === "theme") return true;
-    if (node.type === "category") return zoom >= ZOOM_THRESHOLDS.showCategories;
+    if (node.type === "category") return true;
+    if (node.type === "theme") return zoom >= ZOOM_THRESHOLDS.showThemes;
     if (node.type === "subtheme") return zoom >= ZOOM_THRESHOLDS.showSubthemes;
     if (node.type === "prediction") return zoom >= ZOOM_THRESHOLDS.showPredictions;
     return true;
@@ -308,7 +312,8 @@
   function labelVisibleForNode(node, zoom) {
     if (node.type === "prediction") return zoom >= ZOOM_THRESHOLDS.showPredictions;
     if (node.type === "subtheme") return zoom >= ZOOM_THRESHOLDS.showSubthemes;
-    return zoom >= 0.6;
+    if (node.type === "theme") return zoom >= ZOOM_THRESHOLDS.showThemes;
+    return true;  // categories: always
   }
 
   /* ---------------- Fetch ---------------- */
