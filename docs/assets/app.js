@@ -882,11 +882,19 @@
     return "pred";
   }
   function labelTextFor(n) {
-    const t = n.short_label || n.label || n.id;
     if (n.type === "prediction") {
+      // Predictions always need truncation; short_label is best.
+      const t = n.short_label || n.label || n.id;
       return t.length > 32 ? t.slice(0, 32) + "…" : t;
     }
-    return t;
+    // Themes / subthemes carry meaningful punctuation in their
+    // canonical label (e.g. "1-bit / Edge LLM") that the seed
+    // short_label sometimes drops. Prefer canonical to keep the
+    // slash, hyphen, etc. Categories use short_label first since
+    // their short forms are intentionally tight ("Runtime" vs
+    // "Inference Runtime").
+    if (n.type === "category") return n.short_label || n.label || n.id;
+    return n.label || n.short_label || n.id;
   }
 
   /* ---------------- Hit-test ---------------- */
