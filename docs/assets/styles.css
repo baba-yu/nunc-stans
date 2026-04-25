@@ -456,6 +456,25 @@ body.panel-open #meta-header {
 .panel-body p { margin: 4px 0; color: var(--text-main); }
 .panel-body .muted { color: var(--text-muted); }
 
+/* Inline markdown rendering inside the panel body. */
+.md-body strong { color: var(--text-main); font-weight: 700; }
+.md-body em { color: var(--text-main); font-style: italic; }
+.md-body code {
+  font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+  font-size: 12px;
+  padding: 1px 4px;
+  background: rgba(130, 170, 210, 0.12);
+  border-radius: 3px;
+}
+.md-body a { color: var(--panel-accent); }
+.md-body a:hover { text-decoration: underline; }
+.md-body ul {
+  margin: 4px 0 4px 0;
+  padding-left: 18px;
+}
+.md-body li { margin: 2px 0; }
+.md-body p { margin: 6px 0; }
+
 .metrics-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

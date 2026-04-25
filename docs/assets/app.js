@@ -1469,7 +1469,7 @@
       extras = `
         ${detail.full_prediction_summary || detail.summary ? `
           <h3>Full prediction</h3>
-          <p>${escapeHTML(detail.full_prediction_summary || detail.summary)}</p>` : ""}
+          <div class="md-body">${renderMarkdown(detail.full_prediction_summary || detail.summary)}</div>` : ""}
         ${detail.prediction_date ? `<p class="muted">prediction date: ${detail.prediction_date}</p>` : ""}
         ${parents.length ? `<h3>Lineage</h3>
           <ul class="related-list">${parents.map(listItem).join("")}</ul>` : ""}
@@ -1482,7 +1482,7 @@
     const stripHeader = renderGrassStripHeader(m);
     return `
       <div>${statusPills}</div>
-      ${desc ? `<p style="margin-top:10px">${escapeHTML(desc)}</p>` : ""}
+      ${desc ? `<div class="md-body" style="margin-top:10px">${renderMarkdown(desc)}</div>` : ""}
       <h3>Window · ${state.windowId}</h3>
       ${mm}
       <h3>${stripHeader}</h3>
@@ -1763,6 +1763,54 @@
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;")
       .replace(/'/g, "&#39;");
+  }
+
+  // Tiny markdown -> HTML for the panel's long-form text. Escapes
+  // first, then turns a small whitelist of inline markers and a few
+  // block patterns into HTML. Anything we don't recognize stays
+  // literal — better than executing surprising input.
+  function renderMarkdown(s) {
+    if (s == null) return "";
+    let t = escapeHTML(String(s));
+
+    // Inline code spans: keep first so * inside code stays literal.
+    t = t.replace(/`([^`]+?)`/g, '<code>$1</code>');
+    // Links: [text](url) — url already HTML-escaped (& -> &amp; is fine in href)
+    t = t.replace(
+      /\[([^\]\n]+?)\]\((https?:\/\/[^\s)]+)\)/g,
+      '<a href="$2" target="_blank" rel="noreferrer noopener">$1</a>',
+    );
+    // Bold ** ** (handle before single * for italics)
+    t = t.replace(/\*\*([^*\n]+?)\*\*/g, '<strong>$1</strong>');
+    // Italic * * (require non-space adjacent so multiplication stays literal)
+    t = t.replace(/(^|[\s(])\*([^*\s][^*\n]*?[^*\s]|[^*\s])\*(?=[\s).,!?:;]|$)/g, '$1<em>$2</em>');
+
+    // Blocks: split lines, group consecutive bullets into <ul>.
+    const lines = t.split(/\r?\n/);
+    const out = [];
+    let inUL = false;
+    for (const raw of lines) {
+      const line = raw.trimEnd();
+      const bullet = line.match(/^\s*[-*]\s+(.*)$/);
+      if (bullet) {
+        if (!inUL) { out.push("<ul>"); inUL = true; }
+        out.push(`<li>${bullet[1]}</li>`);
+      } else {
+        if (inUL) { out.push("</ul>"); inUL = false; }
+        if (line === "") out.push("");
+        else out.push(line);
+      }
+    }
+    if (inUL) out.push("</ul>");
+    // Paragraph join: blank line splits paragraphs.
+    const joined = out.join("\n").replace(/\n{2,}/g, "\n\n");
+    const paras = joined.split(/\n\n/).map((p) => {
+      const trimmed = p.trim();
+      if (!trimmed) return "";
+      if (/^<(ul|ol|li|h[1-6]|blockquote)/.test(trimmed)) return trimmed;
+      return `<p>${trimmed.replace(/\n/g, "<br>")}</p>`;
+    });
+    return paras.filter(Boolean).join("");
   }
 
   /* ---------------- Boot ---------------- */
