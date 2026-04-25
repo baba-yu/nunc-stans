@@ -554,7 +554,7 @@ body.panel-open #meta-header {
   border-radius: 4px;
   border: 1px solid var(--panel-border);
   background:
-    linear-gradient(0deg, rgba(7, 17, 31, 0.55), rgba(7, 17, 31, 0.55)),
+    linear-gradient(0deg, rgba(7, 17, 31, 0.85), rgba(7, 17, 31, 0.85)),
     var(--bg, #203047);
   background-blend-mode: normal;
 }
