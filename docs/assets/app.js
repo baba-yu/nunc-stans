@@ -1339,8 +1339,8 @@
       </div>
     `;
 
-    // Grass strip
-    const strip = renderGrassStrip(m);
+    // Activity chart (was: grass strip)
+    const strip = renderActivityChart(m);
 
     // Type-specific
     if (n.type === "category") {
@@ -1449,6 +1449,97 @@
     const days = windowDays(state.windowId);
     if (arr.length === 0) return `Daily activity · no data in ${days}d window`;
     return `Daily activity · ${arr.length} day${arr.length === 1 ? "" : "s"} of data · last ${days}d`;
+  }
+
+  // Node's current heat value under the selected metric, mirroring the
+  // logic in draw(). Used to tint the activity chart background.
+  function nodeHeatT(m) {
+    if (state.heatMetric === "realization") {
+      return toHeatBin(typeof m.realization_score === "number" ? m.realization_score : 0);
+    }
+    if (state.heatMetric === "grass") {
+      const lvl = typeof m.grass_level === "number" ? m.grass_level : 0;
+      return Math.max(0, Math.min(4, lvl)) / 4;
+    }
+    return toHeatBin(typeof m.attention_score === "number" ? m.attention_score : 0);
+  }
+
+  // Inline SVG line chart of daily attention_score across the
+  // selected window. Background tinted with the node's current heat
+  // color so the panel reads as "this node, over time".
+  function renderActivityChart(m) {
+    const days = windowDays(state.windowId);
+    const arr = Array.isArray(m.grass_daily) ? m.grass_daily : [];
+    const byDate = new Map();
+    for (const row of arr) if (row && row.date) byDate.set(row.date, row);
+
+    const endISO = (state.manifest && state.manifest.latest_report_date) || null;
+    const endDate = endISO ? new Date(endISO + "T00:00:00Z") : new Date();
+
+    // One sample per day in window, with 0 for empty days.
+    const samples = [];
+    for (let i = days - 1; i >= 0; i--) {
+      const d = new Date(endDate);
+      d.setUTCDate(d.getUTCDate() - i);
+      const iso = d.toISOString().slice(0, 10);
+      const row = byDate.get(iso);
+      samples.push({
+        date: iso,
+        v: row ? Math.max(0, Math.min(1, row.attention_score || 0)) : 0,
+        cited: !!row,
+      });
+    }
+
+    // Layout
+    const W = 360, H = 70, pad = { l: 4, r: 4, t: 6, b: 14 };
+    const innerW = W - pad.l - pad.r;
+    const innerH = H - pad.t - pad.b;
+    const xAt = (i) => pad.l + (samples.length === 1 ? innerW / 2 : (i / (samples.length - 1)) * innerW);
+    const yAt = (v) => pad.t + (1 - v) * innerH;
+
+    const heatT = nodeHeatT(m);
+    const bg = heatColor(heatT);
+
+    if (arr.length === 0) {
+      return `
+        <div class="activity-chart" style="--bg:${bg};">
+          <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true">
+            <line x1="${pad.l}" y1="${yAt(0)}" x2="${W - pad.r}" y2="${yAt(0)}"
+                  stroke="rgba(130,170,210,0.35)" stroke-dasharray="2 4" stroke-width="1"/>
+          </svg>
+          <div class="activity-empty">no activity in ${days}d</div>
+        </div>`;
+    }
+
+    // Polyline path for the line; circles for cited days.
+    const linePts = samples.map((s, i) => `${xAt(i).toFixed(1)},${yAt(s.v).toFixed(1)}`).join(" ");
+    const dots = samples
+      .map((s, i) => s.cited
+        ? `<circle cx="${xAt(i).toFixed(1)}" cy="${yAt(s.v).toFixed(1)}" r="2.4" fill="#e07a1a" />`
+        : ""
+      )
+      .join("");
+
+    // Sparse x-axis tick: first, middle, last date.
+    const ticks = [];
+    if (samples.length > 0) {
+      const idxs = samples.length === 1 ? [0] : [0, Math.floor((samples.length - 1) / 2), samples.length - 1];
+      for (const i of idxs) {
+        const lab = samples[i].date.slice(5); // MM-DD
+        ticks.push(`<text x="${xAt(i).toFixed(1)}" y="${H - 2}" text-anchor="${i === 0 ? "start" : i === samples.length - 1 ? "end" : "middle"}" font-size="9" fill="rgba(130,170,210,0.7)">${lab}</text>`);
+      }
+    }
+
+    return `
+      <div class="activity-chart" style="--bg:${bg};" title="Daily attention over the last ${days} days">
+        <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true">
+          <line x1="${pad.l}" y1="${yAt(0)}" x2="${W - pad.r}" y2="${yAt(0)}" stroke="rgba(130,170,210,0.18)" stroke-width="1"/>
+          <line x1="${pad.l}" y1="${yAt(0.5)}" x2="${W - pad.r}" y2="${yAt(0.5)}" stroke="rgba(130,170,210,0.10)" stroke-dasharray="2 3" stroke-width="1"/>
+          <polyline points="${linePts}" fill="none" stroke="#ffd8a0" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+          ${dots}
+          ${ticks.join("")}
+        </svg>
+      </div>`;
   }
 
   function renderGrassStrip(m) {
