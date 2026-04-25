@@ -1307,7 +1307,7 @@
     const total = cats.length;
     const keep = inFocus.length;
     btn.disabled = keep === 0 || keep === total;
-    btn.textContent = `FOCUS (${keep})`;
+    btn.textContent = "FOCUS";
     btn.title =
       keep === total
         ? `All ${total} categories already in this node's lineage — nothing to filter`
