@@ -1490,8 +1490,8 @@
       });
     }
 
-    // Layout
-    const W = 360, H = 70, pad = { l: 4, r: 4, t: 6, b: 14 };
+    // Layout — left padding holds y-axis labels.
+    const W = 360, H = 78, pad = { l: 22, r: 4, t: 6, b: 14 };
     const innerW = W - pad.l - pad.r;
     const innerH = H - pad.t - pad.b;
     const xAt = (i) => pad.l + (samples.length === 1 ? innerW / 2 : (i / (samples.length - 1)) * innerW);
@@ -1501,11 +1501,17 @@
     const bg = heatColor(heatT);
 
     if (arr.length === 0) {
+      const yTicksEmpty = [0, 1].map((v) => {
+        const y = yAt(v);
+        const label = v === 1 ? "1.0" : "0";
+        return `<text x="${pad.l - 3}" y="${(y + 3).toFixed(1)}" text-anchor="end" font-size="9" fill="rgba(130,170,210,0.55)">${label}</text>`;
+      }).join("");
       return `
         <div class="activity-chart" style="--bg:${bg};">
           <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true">
             <line x1="${pad.l}" y1="${yAt(0)}" x2="${W - pad.r}" y2="${yAt(0)}"
                   stroke="rgba(130,170,210,0.35)" stroke-dasharray="2 4" stroke-width="1"/>
+            ${yTicksEmpty}
           </svg>
           <div class="activity-empty">no activity in ${days}d</div>
         </div>`;
@@ -1530,11 +1536,20 @@
       }
     }
 
+    // Y-axis labels (0 / 0.5 / 1.0) on the left margin.
+    const yTicks = [0, 0.5, 1].map((v) => {
+      const y = yAt(v);
+      const label = v === 1 ? "1.0" : v === 0.5 ? "0.5" : "0";
+      return `<text x="${pad.l - 3}" y="${(y + 3).toFixed(1)}" text-anchor="end" font-size="9" fill="rgba(130,170,210,0.7)">${label}</text>`;
+    }).join("");
+
     return `
       <div class="activity-chart" style="--bg:${bg};" title="Daily attention over the last ${days} days">
         <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true">
-          <line x1="${pad.l}" y1="${yAt(0)}" x2="${W - pad.r}" y2="${yAt(0)}" stroke="rgba(130,170,210,0.18)" stroke-width="1"/>
+          <line x1="${pad.l}" y1="${yAt(1)}" x2="${W - pad.r}" y2="${yAt(1)}" stroke="rgba(130,170,210,0.10)" stroke-dasharray="2 3" stroke-width="1"/>
           <line x1="${pad.l}" y1="${yAt(0.5)}" x2="${W - pad.r}" y2="${yAt(0.5)}" stroke="rgba(130,170,210,0.10)" stroke-dasharray="2 3" stroke-width="1"/>
+          <line x1="${pad.l}" y1="${yAt(0)}" x2="${W - pad.r}" y2="${yAt(0)}" stroke="rgba(130,170,210,0.18)" stroke-width="1"/>
+          ${yTicks}
           <polyline points="${linePts}" fill="none" stroke="#ffd8a0" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
           ${dots}
           ${ticks.join("")}
