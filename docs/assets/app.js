@@ -1261,6 +1261,13 @@
     updateHeatButtons(metric);
     saveState();
     scheduleDraw();
+    // The detail panel's activity-chart background follows the
+    // heat metric — re-render the open panel so the tint updates
+    // without forcing the user to re-click the node.
+    if (state.selectedNodeId) {
+      const n = nodeById(state.selectedNodeId);
+      if (n) openDetailPanel(n);
+    }
   }
 
   /* ---------------- Detail panel ---------------- */
