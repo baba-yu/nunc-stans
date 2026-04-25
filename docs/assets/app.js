@@ -1038,6 +1038,7 @@
           state.focusedNodeId = null;
           state.panelHistory.length = 0;
           updatePanelBackButton();
+      updateFocusButton();
           closeDetailPanel();
           scheduleDraw();
         }
@@ -1055,6 +1056,7 @@
         state.focusedNodeId = null;
         state.panelHistory.length = 0;
         updatePanelBackButton();
+      updateFocusButton();
         closeDetailPanel();
         scheduleDraw();
       }
@@ -1088,10 +1090,12 @@
     document.querySelectorAll(".menu-btn[data-heat]").forEach((btn) => {
       btn.addEventListener("click", () => selectHeatMetric(btn.dataset.heat));
     });
-    const catAll  = document.getElementById("cat-all");
-    const catNone = document.getElementById("cat-none");
-    if (catAll)  catAll.addEventListener("click",  () => setAllCategories(true));
-    if (catNone) catNone.addEventListener("click", () => setAllCategories(false));
+    const catAll   = document.getElementById("cat-all");
+    const catNone  = document.getElementById("cat-none");
+    const catFocus = document.getElementById("cat-focus");
+    if (catAll)   catAll.addEventListener("click",   () => setAllCategories(true));
+    if (catNone)  catNone.addEventListener("click",  () => setAllCategories(false));
+    if (catFocus) catFocus.addEventListener("click", isolateHighlightedCategories);
 
     // Panel close / back
     document.getElementById("panel-close").addEventListener("click", () => {
@@ -1099,6 +1103,7 @@
       state.focusedNodeId = null;
       state.panelHistory.length = 0;
       updatePanelBackButton();
+      updateFocusButton();
       closeDetailPanel();
       scheduleDraw();
     });
@@ -1137,6 +1142,7 @@
       openDetailPanel(target);
     }
     updatePanelBackButton();
+    updateFocusButton();
     scheduleDraw();
   }
 
@@ -1256,6 +1262,34 @@
     saveState();
     rebuildSimulation();
     scheduleDraw();
+  }
+
+  // FOCUS: set the category filter so that only the categories
+  // currently highlighted (= in relatedIds of the focused node)
+  // remain visible. Other categories from the same scope go into
+  // the hidden set; categories from other scopes are untouched
+  // (they were already kept independent from this scope's filter).
+  function isolateHighlightedCategories() {
+    if (!state.focusedNodeId) return;
+    const related = relatedIds(state.focusedNodeId);
+    const g = currentGraph();
+    if (!g) return;
+    const hidden = currentHidden();
+    for (const n of g.nodes) {
+      if (n.type !== "category") continue;
+      if (related.has(n.id)) hidden.delete(n.id);
+      else hidden.add(n.id);
+    }
+    rebuildCategoryFilters();
+    saveState();
+    rebuildSimulation();
+    scheduleDraw();
+  }
+
+  function updateFocusButton() {
+    const btn = document.getElementById("cat-focus");
+    if (!btn) return;
+    btn.disabled = !state.focusedNodeId;
   }
 
   function updateToolButtons(tool) {
