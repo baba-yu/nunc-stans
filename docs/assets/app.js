@@ -1128,6 +1128,7 @@
     state.focusedNodeId = n.id;
     openDetailPanel(n);
     updatePanelBackButton();
+    updateFocusButton();
     scheduleDraw();
   }
 
