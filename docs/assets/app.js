@@ -1289,7 +1289,30 @@
   function updateFocusButton() {
     const btn = document.getElementById("cat-focus");
     if (!btn) return;
-    btn.disabled = !state.focusedNodeId;
+    if (!state.focusedNodeId) {
+      btn.disabled = true;
+      btn.textContent = "FOCUS";
+      btn.title = "Select a node, then this hides every category not in its lineage";
+      return;
+    }
+    // Show how many categories will stay visible if FOCUS is clicked.
+    // If that count equals the total category count in the graph,
+    // nothing would change — make the button look idle.
+    const g = currentGraph();
+    if (!g) return;
+    const related = relatedIds(state.focusedNodeId);
+    const cats = g.nodes.filter((n) => n.type === "category");
+    const inFocus = cats.filter((c) => related.has(c.id));
+    const total = cats.length;
+    const keep = inFocus.length;
+    btn.disabled = keep === 0 || keep === total;
+    btn.textContent = `FOCUS (${keep})`;
+    btn.title =
+      keep === total
+        ? `All ${total} categories already in this node's lineage — nothing to filter`
+        : keep === 0
+        ? "No category is in this node's lineage"
+        : `Hide ${total - keep} of ${total} categories not in this node's lineage`;
   }
 
   function updateToolButtons(tool) {

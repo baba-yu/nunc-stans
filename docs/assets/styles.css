@@ -208,9 +208,13 @@ body.panel-open #meta-header {
   border-radius: 3px;
   cursor: pointer;
 }
-.menu-mini-btn:hover {
+.menu-mini-btn:hover:not([disabled]) {
   color: var(--text-main);
   background: rgba(24, 199, 216, 0.1);
+}
+.menu-mini-btn[disabled] {
+  opacity: 0.32;
+  cursor: default;
 }
 
 /* Category filter list — stacked vertical toggle buttons. */
