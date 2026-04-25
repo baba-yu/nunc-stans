@@ -869,7 +869,7 @@
 
       const div = document.createElement("div");
       div.className = `node-label ${labelClassFor(n.type)}`;
-      div.textContent = labelTextFor(n);
+      div.innerHTML = renderMarkdownInline(labelTextFor(n));
       div.style.left = p.x + "px";
       div.style.top = (p.y + r + 4) + "px";
       layer.appendChild(div);
@@ -1763,6 +1763,18 @@
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;")
       .replace(/'/g, "&#39;");
+  }
+
+  // Same whitelist as renderMarkdown, but only the inline pieces:
+  // **bold**, *italic*, `code`. No links, no list expansion. Used
+  // for short captions where block conversion would mangle layout.
+  function renderMarkdownInline(s) {
+    if (s == null) return "";
+    let t = escapeHTML(String(s));
+    t = t.replace(/`([^`]+?)`/g, '<code>$1</code>');
+    t = t.replace(/\*\*([^*\n]+?)\*\*/g, '<strong>$1</strong>');
+    t = t.replace(/(^|[\s(])\*([^*\s][^*\n]*?[^*\s]|[^*\s])\*(?=[\s).,!?:;]|$)/g, '$1<em>$2</em>');
+    return t;
   }
 
   // Tiny markdown -> HTML for the panel's long-form text. Escapes
