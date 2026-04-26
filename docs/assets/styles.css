@@ -281,7 +281,7 @@ body.panel-open #meta-header {
 
 .menu-btn {
   border: 0;
-  padding: 8px 14px;
+  padding: 5px 12px;
   min-width: 52px;
   color: var(--menu-text);
   background: transparent;
@@ -701,4 +701,25 @@ body.panel-open #meta-header {
 #meta-sub.snap-mode {
   color: rgba(143, 168, 194, 0.65);
   font-style: italic;
+}
+
+/* ------------------------------------------------------------
+   Category-menu collapse toggle
+   ------------------------------------------------------------ */
+.menu-mini-btn.cat-toggle {
+  font-size: 12px;
+  padding: 0 4px;
+  transition: transform 120ms ease;
+}
+#category-menu[data-collapsed="true"] .menu-mini-btn.cat-toggle {
+  transform: rotate(-90deg);
+}
+#category-menu[data-collapsed="true"] .menu-head-title {
+  display: none;
+}
+#category-menu[data-collapsed="true"] #category-filters {
+  display: none;
+}
+#category-menu[data-collapsed="true"] {
+  padding-bottom: 0;
 }
