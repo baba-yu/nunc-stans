@@ -641,3 +641,64 @@ body.panel-open #meta-header {
   #meta-header { max-width: 55vw; }
   #detail-panel { width: 100vw; }
 }
+
+/* ------------------------------------------------------------
+   Locale switcher + snapshot navigator (feature/locale)
+   ------------------------------------------------------------ */
+.menu-btn.lang {
+  /* Keep tight so the 4 codes fit on one row alongside scope/window
+     buttons. Mirror the base .menu-btn rule for spacing. */
+  min-width: 38px;
+  padding: 8px 8px;
+  font-size: 10.5px;
+  letter-spacing: 0.10em;
+}
+
+/* Snapshot navigator group — label + dropdown.
+   The role="group" wrapper carries .snap-group; it overrides the
+   default 1fr-grid layout of .menu-group so the label and select
+   sit side-by-side rather than each filling its own column. */
+.menu-group.snap-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  grid-auto-flow: initial;
+  grid-auto-columns: initial;
+}
+.menu-lbl {
+  font-size: 9.5px;
+  letter-spacing: 0.10em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.menu-select {
+  flex: 1 1 auto;
+  border: 1px solid var(--panel-border);
+  background: rgba(7, 17, 31, 0.7);
+  color: var(--menu-text);
+  font: inherit;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  padding: 4px 6px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.menu-select:hover {
+  border-color: rgba(24, 199, 216, 0.4);
+}
+.menu-select:focus {
+  outline: none;
+  border-color: var(--menu-active);
+}
+
+/* Hidden until the boot sequence confirms snapshots/index.json exists. */
+.snap-group[hidden] { display: none; }
+
+/* Muted-color treatment for the meta header subtitle when the
+   dashboard is rendering a past snapshot rather than live data. */
+#meta-sub.snap-mode {
+  color: rgba(143, 168, 194, 0.65);
+  font-style: italic;
+}

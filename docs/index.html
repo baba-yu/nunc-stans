@@ -40,6 +40,19 @@
         <span class="tool-ic" aria-hidden="true">&#x270B;</span><span class="tool-lbl">ROT</span>
       </button>
     </div>
+    <div class="menu-group" role="radiogroup" aria-label="Language">
+      <button class="menu-btn lang" data-locale="en"  role="radio" aria-checked="true">EN</button>
+      <button class="menu-btn lang" data-locale="ja"  role="radio" aria-checked="false">JA</button>
+      <button class="menu-btn lang" data-locale="es"  role="radio" aria-checked="false">ES</button>
+      <button class="menu-btn lang" data-locale="fil" role="radio" aria-checked="false">FIL</button>
+    </div>
+    <div class="menu-group snap-group" role="group" aria-label="Snapshot navigation">
+      <label for="snap-select" class="menu-lbl">SNAP</label>
+      <select id="snap-select" class="menu-select">
+        <option value="live" selected>LIVE</option>
+        <!-- options injected by JS from data/snapshots/index.json -->
+      </select>
+    </div>
   </nav>
 
   <!-- Category filter menu (sits under #top-menu, populated by JS per scope) -->
