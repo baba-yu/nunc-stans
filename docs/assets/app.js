@@ -9,8 +9,207 @@
 
   /* ---------------- Config ---------------- */
 
-  const DATA_DIR = "data";
+  // Base directory for graph + manifest JSON. Mutable: switching to
+  // a snapshot rewrites this to `data/snapshots/<date>/` and re-fetches.
+  let DATA_DIR = "data";
+  const LIVE_DATA_DIR = "data";
   const STORAGE_KEY = "fp-dashboard-state";
+
+  /* ---------------- Locale ---------------- */
+
+  // Chrome-string dictionary for the 4 supported locales. Every key
+  // present in EN must appear in the other 3; localeStr() falls back
+  // to EN when a key is missing. Node label translations come from
+  // the per-node `labels` block on the graph JSON, not this dict.
+  const LOCALE_STRINGS = {
+    en: {
+      "scope.mix":      "MIX",
+      "scope.tech":     "TECH",
+      "scope.business": "BIZ",
+      "window.7d":      "7D",
+      "window.30d":     "30D",
+      "window.90d":     "90D",
+      "heat.attention":   "ATT",
+      "heat.realization": "REAL",
+      "heat.grass":       "DAILY",
+      "tool.pan":    "PAN",
+      "tool.rotate": "ROT",
+      "snap.label":  "SNAP",
+      "snap.live":   "LIVE",
+      "lang.label":  "LANG",
+      "cat.title":   "Categories",
+      "cat.focus":   "FOCUS",
+      "cat.all":     "ALL",
+      "cat.none":    "NONE",
+      "hint.dragnode":  "drag node: move",
+      "hint.clicknode": "click node: details",
+      "hint.tool.rotate": "empty drag: rotate",
+      "hint.tool.pan":    "empty drag: pan",
+      "hint.shiftspace":  "shift/space: temp-pan",
+      "hint.wheel":       "wheel: zoom",
+      "panel.placeholder": "Click a node in the graph to see details here.",
+      "panel.select":      "Select a node",
+      "panel.back":        "Back",
+      "panel.close":       "Close",
+      "panel.window":      "Window",
+      "panel.attention":   "Attention",
+      "panel.realization": "Realization",
+      "panel.daily":       "Daily level",
+      "panel.snap_mode":   "snapshot",
+      "loading.manifest":  "loading manifest…",
+      "loading.scope":     "loading…",
+      "meta.sub.scope":    "scope",
+      "meta.sub.window":   "window",
+      "meta.sub.report":   "report",
+      "meta.sub.build":    "build",
+      "title":             "Future Prediction Theme Intelligence",
+    },
+    ja: {
+      "scope.mix":      "MIX",
+      "scope.tech":     "技術",
+      "scope.business": "ビジ",
+      "window.7d":      "7日",
+      "window.30d":     "30日",
+      "window.90d":     "90日",
+      "heat.attention":   "注目",
+      "heat.realization": "実現",
+      "heat.grass":       "日次",
+      "tool.pan":    "パン",
+      "tool.rotate": "回転",
+      "snap.label":  "履歴",
+      "snap.live":   "最新",
+      "lang.label":  "言語",
+      "cat.title":   "カテゴリ",
+      "cat.focus":   "絞込",
+      "cat.all":     "全表示",
+      "cat.none":    "全非表示",
+      "hint.dragnode":  "ノードドラッグ: 移動",
+      "hint.clicknode": "ノードクリック: 詳細",
+      "hint.tool.rotate": "空白ドラッグ: 回転",
+      "hint.tool.pan":    "空白ドラッグ: パン",
+      "hint.shiftspace":  "shift/space: 一時パン",
+      "hint.wheel":       "ホイール: ズーム",
+      "panel.placeholder": "ノードをクリックすると詳細が表示されます。",
+      "panel.select":      "ノードを選択",
+      "panel.back":        "戻る",
+      "panel.close":       "閉じる",
+      "panel.window":      "ウィンドウ",
+      "panel.attention":   "注目度",
+      "panel.realization": "実現度",
+      "panel.daily":       "日次レベル",
+      "panel.snap_mode":   "スナップショット",
+      "loading.manifest":  "マニフェストを読み込み中…",
+      "loading.scope":     "読み込み中…",
+      "meta.sub.scope":    "スコープ",
+      "meta.sub.window":   "ウィンドウ",
+      "meta.sub.report":   "レポート",
+      "meta.sub.build":    "ビルド",
+      "title":             "予測テーマ・インテリジェンス",
+    },
+    es: {
+      "scope.mix":      "MIX",
+      "scope.tech":     "TEC",
+      "scope.business": "NEG",
+      "window.7d":      "7D",
+      "window.30d":     "30D",
+      "window.90d":     "90D",
+      "heat.attention":   "ATEN",
+      "heat.realization": "REAL",
+      "heat.grass":       "DIARIO",
+      "tool.pan":    "MOV",
+      "tool.rotate": "ROT",
+      "snap.label":  "SNAP",
+      "snap.live":   "EN VIVO",
+      "lang.label":  "IDIOMA",
+      "cat.title":   "Categorías",
+      "cat.focus":   "ENFOQUE",
+      "cat.all":     "TODO",
+      "cat.none":    "NADA",
+      "hint.dragnode":  "arrastrar nodo: mover",
+      "hint.clicknode": "clic en nodo: detalles",
+      "hint.tool.rotate": "arrastre vacío: rotar",
+      "hint.tool.pan":    "arrastre vacío: mover",
+      "hint.shiftspace":  "shift/space: pan temp",
+      "hint.wheel":       "rueda: zoom",
+      "panel.placeholder": "Haz clic en un nodo para ver los detalles.",
+      "panel.select":      "Selecciona un nodo",
+      "panel.back":        "Atrás",
+      "panel.close":       "Cerrar",
+      "panel.window":      "Ventana",
+      "panel.attention":   "Atención",
+      "panel.realization": "Realización",
+      "panel.daily":       "Nivel diario",
+      "panel.snap_mode":   "instantánea",
+      "loading.manifest":  "cargando manifiesto…",
+      "loading.scope":     "cargando…",
+      "meta.sub.scope":    "alcance",
+      "meta.sub.window":   "ventana",
+      "meta.sub.report":   "informe",
+      "meta.sub.build":    "build",
+      "title":             "Inteligencia de Temas de Predicción",
+    },
+    fil: {
+      "scope.mix":      "MIX",
+      "scope.tech":     "TECH",
+      "scope.business": "BIZ",
+      "window.7d":      "7A",
+      "window.30d":     "30A",
+      "window.90d":     "90A",
+      "heat.attention":   "PANSIN",
+      "heat.realization": "REAL",
+      "heat.grass":       "ARAW-ARAW",
+      "tool.pan":    "GALAW",
+      "tool.rotate": "IKOT",
+      "snap.label":  "SNAP",
+      "snap.live":   "LIVE",
+      "lang.label":  "WIKA",
+      "cat.title":   "Mga Kategorya",
+      "cat.focus":   "TUUNAN",
+      "cat.all":     "LAHAT",
+      "cat.none":    "WALA",
+      "hint.dragnode":  "i-drag ang node: galaw",
+      "hint.clicknode": "i-click ang node: detalye",
+      "hint.tool.rotate": "i-drag ang puwang: ikot",
+      "hint.tool.pan":    "i-drag ang puwang: galaw",
+      "hint.shiftspace":  "shift/space: temp-pan",
+      "hint.wheel":       "gulong: zoom",
+      "panel.placeholder": "I-click ang node para makita ang detalye.",
+      "panel.select":      "Pumili ng node",
+      "panel.back":        "Bumalik",
+      "panel.close":       "Isara",
+      "panel.window":      "Window",
+      "panel.attention":   "Pansin",
+      "panel.realization": "Pagkatupad",
+      "panel.daily":       "Antas Araw-araw",
+      "panel.snap_mode":   "snapshot",
+      "loading.manifest":  "iniluluwas ang manifest…",
+      "loading.scope":     "iniluluwas…",
+      "meta.sub.scope":    "saklaw",
+      "meta.sub.window":   "window",
+      "meta.sub.report":   "ulat",
+      "meta.sub.build":    "build",
+      "title":             "Future Prediction Theme Intelligence",
+    },
+  };
+
+  function localeStr(key) {
+    const loc = state.locale || "en";
+    return (LOCALE_STRINGS[loc] && LOCALE_STRINGS[loc][key])
+        || (LOCALE_STRINGS.en && LOCALE_STRINGS.en[key])
+        || key;
+  }
+
+  // Pull a per-locale value out of a node's labels block. Backwards
+  // compatible: if labels is missing (older graph JSON without the
+  // locale fan-out), falls back to the node's flat field.
+  function nodeLabel(node, field) {
+    if (node && node.labels && node.labels[field]) {
+      const sub = node.labels[field];
+      const loc = state.locale || "en";
+      return sub[loc] || sub.en || node[field] || "";
+    }
+    return (node && node[field]) || "";
+  }
   // Base URL used to turn report/validation paths into GitHub article links.
   // Change this if you fork the repo.
   const REPO_BLOB_URL = "https://github.com/baba-yu/news/blob/main/";
@@ -102,6 +301,13 @@
     // shift/space temporarily flips to the other tool regardless of setting.
     tool: "rotate",
 
+    // Active locale code (en|ja|es|fil). Persisted alongside scope/window.
+    locale: "en",
+
+    // Active snapshot date (YYYYMMDD) or null when on live data.
+    // Persisted in localStorage so a refresh keeps the user's history view.
+    snapshotDate: null,
+
     // Which metric drives the node heat coloring. One of
     //   "attention"   — continuous attention_score   (0..1)
     //   "realization" — continuous realization_score (0..1)
@@ -160,6 +366,8 @@
         windowId: state.windowId,
         tool: state.tool,
         heatMetric: state.heatMetric,
+        locale: state.locale,
+        snapshotDate: state.snapshotDate,
         hidden: Array.from(state.hiddenCategories),
       }));
     } catch (_) { /* ignore */ }
@@ -325,7 +533,7 @@
   }
 
   async function loadManifest() {
-    setStatus("loading manifest…");
+    setStatus(localeStr("loading.manifest"));
     state.manifest = await fetchJSON(`${DATA_DIR}/manifest.json`);
     // Apply defaults if user had no persisted state
     if (!loadPersisted()) {
@@ -351,7 +559,21 @@
     if (!el || !state.manifest) return;
     const report = state.manifest.latest_report_date || "";
     const build = state.manifest.build_id || "";
-    el.textContent = `scope: ${state.scopeId} · window: ${state.windowId} · report ${report || "—"} · build ${build.slice(0, 10) || "—"}`;
+    if (state.snapshotDate) {
+      const d = state.snapshotDate;
+      const human = d.length === 8
+        ? `${d.slice(0,4)}-${d.slice(4,6)}-${d.slice(6,8)}`
+        : d;
+      el.textContent = `${localeStr("panel.snap_mode")} ${human}-pre-review`;
+      el.classList.add("snap-mode");
+      return;
+    }
+    el.classList.remove("snap-mode");
+    el.textContent =
+      `${localeStr("meta.sub.scope")}: ${state.scopeId} · ` +
+      `${localeStr("meta.sub.window")}: ${state.windowId} · ` +
+      `${localeStr("meta.sub.report")} ${report || "—"} · ` +
+      `${localeStr("meta.sub.build")} ${(build || "").slice(0, 10) || "—"}`;
   }
 
   /* ---------------- Simulation ---------------- */
@@ -882,19 +1104,16 @@
     return "pred";
   }
   function labelTextFor(n) {
+    // Locale-aware (feature/locale): pull through node.labels[loc]
+    // when present, with per-field EN fallback.
     if (n.type === "prediction") {
-      // Predictions always need truncation; short_label is best.
-      const t = n.short_label || n.label || n.id;
+      const t = nodeLabel(n, "short_label") || nodeLabel(n, "label") || n.id;
       return t.length > 32 ? t.slice(0, 32) + "…" : t;
     }
-    // Themes / subthemes carry meaningful punctuation in their
-    // canonical label (e.g. "1-bit / Edge LLM") that the seed
-    // short_label sometimes drops. Prefer canonical to keep the
-    // slash, hyphen, etc. Categories use short_label first since
-    // their short forms are intentionally tight ("Runtime" vs
-    // "Inference Runtime").
-    if (n.type === "category") return n.short_label || n.label || n.id;
-    return n.label || n.short_label || n.id;
+    if (n.type === "category") {
+      return nodeLabel(n, "short_label") || nodeLabel(n, "label") || n.id;
+    }
+    return nodeLabel(n, "label") || nodeLabel(n, "short_label") || n.id;
   }
 
   /* ---------------- Hit-test ---------------- */
@@ -1098,6 +1317,15 @@
     document.querySelectorAll(".menu-btn[data-heat]").forEach((btn) => {
       btn.addEventListener("click", () => selectHeatMetric(btn.dataset.heat));
     });
+    // Language switcher (feature/locale).
+    document.querySelectorAll(".menu-btn.lang[data-locale]").forEach((btn) => {
+      btn.addEventListener("click", () => selectLocale(btn.dataset.locale));
+    });
+    // Snapshot navigator (feature/locale).
+    const snapSel = document.getElementById("snap-select");
+    if (snapSel) {
+      snapSel.addEventListener("change", () => selectSnapshot(snapSel.value));
+    }
     const catAll   = document.getElementById("cat-all");
     const catNone  = document.getElementById("cat-none");
     const catFocus = document.getElementById("cat-focus");
@@ -1226,8 +1454,8 @@
     if (!g) return;
     const cats = g.nodes.filter((n) => n.type === "category");
     cats.sort((a, b) => {
-      const aa = (a.short_label || a.label || a.id).toLowerCase();
-      const bb = (b.short_label || b.label || b.id).toLowerCase();
+      const aa = (nodeLabel(a, "short_label") || nodeLabel(a, "label") || a.id).toLowerCase();
+      const bb = (nodeLabel(b, "short_label") || nodeLabel(b, "label") || b.id).toLowerCase();
       return aa.localeCompare(bb);
     });
     const hidden = currentHidden();
@@ -1236,8 +1464,8 @@
       btn.className = "menu-btn cat-filter";
       btn.dataset.category = c.id;
       btn.setAttribute("aria-pressed", String(!hidden.has(c.id)));
-      btn.textContent = c.short_label || c.label || c.id;
-      btn.title = c.label || c.id;
+      btn.textContent = nodeLabel(c, "short_label") || nodeLabel(c, "label") || c.id;
+      btn.title = nodeLabel(c, "label") || c.id;
       btn.addEventListener("click", () => toggleCategory(c.id));
       holder.appendChild(btn);
     }
@@ -1330,7 +1558,7 @@
     });
     document.body.setAttribute("data-tool", tool);
     const hint = document.getElementById("hint-tool");
-    if (hint) hint.textContent = tool === "pan" ? "empty drag: pan" : "empty drag: rotate";
+    if (hint) hint.textContent = tool === "pan" ? localeStr("hint.tool.pan") : localeStr("hint.tool.rotate");
   }
 
   function selectTool(tool) {
@@ -1346,6 +1574,155 @@
       btn.setAttribute("aria-checked", String(btn.dataset.heat === metric));
     });
   }
+  // ----- Locale (feature/locale) -----
+
+  function updateLocaleButtons(locale) {
+    document.querySelectorAll(".menu-btn.lang[data-locale]").forEach((btn) => {
+      btn.setAttribute("aria-checked", String(btn.dataset.locale === locale));
+    });
+  }
+
+  function applyChromeStrings() {
+    // Update text content of every translatable chrome bit. We
+    // overwrite hard-coded EN labels each time so switching locales
+    // is a single redraw — the original HTML doubles as the EN
+    // fallback.
+    const m = (sel, key) => {
+      const el = document.querySelector(sel);
+      if (el) el.textContent = localeStr(key);
+    };
+    m('.menu-btn.tab[data-scope="mix"]',      "scope.mix");
+    m('.menu-btn.tab[data-scope="tech"]',     "scope.tech");
+    m('.menu-btn.tab[data-scope="business"]', "scope.business");
+    m('.menu-btn.win[data-window="7d"]',  "window.7d");
+    m('.menu-btn.win[data-window="30d"]', "window.30d");
+    m('.menu-btn.win[data-window="90d"]', "window.90d");
+    m('.menu-btn.heat[data-heat="attention"]',   "heat.attention");
+    m('.menu-btn.heat[data-heat="realization"]', "heat.realization");
+    m('.menu-btn.heat[data-heat="grass"]',       "heat.grass");
+    // Tool labels are inside a child span.
+    const updateTool = (sel, key) => {
+      const el = document.querySelector(`${sel} .tool-lbl`);
+      if (el) el.textContent = localeStr(key);
+    };
+    updateTool('.menu-btn.tool[data-tool="pan"]',    "tool.pan");
+    updateTool('.menu-btn.tool[data-tool="rotate"]', "tool.rotate");
+    // Category menu chrome
+    const catTitle = document.querySelector("#category-menu .menu-head-title");
+    if (catTitle) catTitle.textContent = localeStr("cat.title");
+    const catFocus = document.getElementById("cat-focus");
+    if (catFocus && state.focusedNodeId == null) catFocus.textContent = localeStr("cat.focus");
+    const catAll = document.getElementById("cat-all");
+    if (catAll) catAll.textContent = localeStr("cat.all");
+    const catNone = document.getElementById("cat-none");
+    if (catNone) catNone.textContent = localeStr("cat.none");
+    // Snap label + LIVE option
+    const snapLbl = document.querySelector('.snap-group .menu-lbl');
+    if (snapLbl) snapLbl.textContent = localeStr("snap.label");
+    const liveOpt = document.querySelector('#snap-select option[value="live"]');
+    if (liveOpt) liveOpt.textContent = localeStr("snap.live");
+    // Hint strip
+    const hints = document.querySelectorAll("#hint-strip span");
+    if (hints.length >= 5) {
+      hints[0].textContent = localeStr("hint.dragnode");
+      // hints[1] = #hint-tool, set in updateToolButtons
+      hints[2].textContent = localeStr("hint.shiftspace");
+      hints[3].textContent = localeStr("hint.wheel");
+      hints[4].textContent = localeStr("hint.clicknode");
+    }
+    // Page title in #meta-header
+    const titleEl = document.querySelector("#meta-header .title");
+    if (titleEl) titleEl.textContent = localeStr("title");
+    // Panel placeholder, panel buttons
+    const panelBack = document.getElementById("panel-back");
+    if (panelBack) panelBack.title = localeStr("panel.back");
+    const panelClose = document.getElementById("panel-close");
+    if (panelClose) panelClose.setAttribute("aria-label", localeStr("panel.close"));
+    // Tool hint in current state
+    const toolHint = document.getElementById("hint-tool");
+    if (toolHint) {
+      toolHint.textContent = state.tool === "pan"
+        ? localeStr("hint.tool.pan")
+        : localeStr("hint.tool.rotate");
+    }
+  }
+
+  function selectLocale(locale) {
+    if (!locale || !LOCALE_STRINGS[locale]) return;
+    if (locale === state.locale) return;
+    state.locale = locale;
+    updateLocaleButtons(locale);
+    saveState();
+    applyChromeStrings();
+    updateMetaHeader();
+    // Re-render labels + open panel (node labels read state.locale).
+    rebuildCategoryFilters();
+    scheduleDraw();
+    if (state.selectedNodeId) {
+      const n = nodeById(state.selectedNodeId);
+      if (n) openDetailPanel(n);
+    }
+  }
+
+  // ----- Snapshot navigator (feature/locale) -----
+
+  // Walks data/snapshots/index.json and populates the dropdown.
+  // The file shape is {"snapshots": [{"date": "20260426"}, ...]} or
+  // a bare array of date strings; we accept both.
+  async function loadSnapshotIndex() {
+    const group = document.querySelector(".snap-group");
+    const sel = document.getElementById("snap-select");
+    if (!group || !sel) return;
+    try {
+      const r = await fetch(`${LIVE_DATA_DIR}/snapshots/index.json`, { cache: "no-store" });
+      if (!r.ok) throw new Error("no snapshots");
+      const data = await r.json();
+      const list = Array.isArray(data) ? data : (data.snapshots || []);
+      if (!list.length) { group.hidden = true; return; }
+      // Append options (newest first if array of strings sorts that way).
+      for (const entry of list) {
+        const date = (typeof entry === "string") ? entry : (entry.date || entry.id);
+        if (!date) continue;
+        const opt = document.createElement("option");
+        opt.value = String(date);
+        opt.textContent = String(date);
+        sel.appendChild(opt);
+      }
+      group.hidden = false;
+      // Restore the persisted snapshot selection if present.
+      if (state.snapshotDate) {
+        sel.value = state.snapshotDate;
+      }
+    } catch (_) {
+      // No snapshots manifest — hide the group entirely.
+      group.hidden = true;
+    }
+  }
+
+  async function selectSnapshot(value) {
+    const sel = document.getElementById("snap-select");
+    const isLive = !value || value === "live";
+    state.snapshotDate = isLive ? null : value;
+    DATA_DIR = isLive ? LIVE_DATA_DIR : `${LIVE_DATA_DIR}/snapshots/${value}`;
+    saveState();
+    // Update meta-sub style hint.
+    const sub = document.getElementById("meta-sub");
+    if (sub) sub.classList.toggle("snap-mode", !isLive);
+    // Drop the cached graphs so re-fetch hits the new base URL.
+    state.graphsByScope.clear();
+    state.manifest = null;
+    try {
+      await loadManifest();
+      await loadScopeGraph(state.scopeId);
+      rebuildCategoryFilters();
+      rebuildSimulation();
+      updateMetaHeader();
+      setStatus("");
+    } catch (e) {
+      setStatus("snapshot load failed: " + (e && e.message ? e.message : e), true);
+    }
+  }
+
   function selectHeatMetric(metric) {
     if (!["attention", "realization", "grass"].includes(metric)) return;
     if (metric === state.heatMetric) return;
@@ -1849,6 +2226,12 @@
       if (["attention", "realization", "grass"].includes(saved.heatMetric)) {
         state.heatMetric = saved.heatMetric;
       }
+      if (typeof saved.locale === "string" && ["en","ja","es","fil"].includes(saved.locale)) {
+        state.locale = saved.locale;
+      }
+      if (typeof saved.snapshotDate === "string" && /^\d{8}$/.test(saved.snapshotDate)) {
+        state.snapshotDate = saved.snapshotDate;
+      }
       if (Array.isArray(saved.hidden)) {
         state.hiddenCategories = new Set(saved.hidden);
       } else if (saved.hidden && typeof saved.hidden === "object") {
@@ -1868,12 +2251,25 @@
       updateWindowButtons(state.windowId);
       updateToolButtons(state.tool);
       updateHeatButtons(state.heatMetric);
+      updateLocaleButtons(state.locale);
+      applyChromeStrings();
+      // Snapshot index loads asynchronously; if a saved snapshot was
+      // active on last visit, re-point DATA_DIR before the fetch.
+      if (state.snapshotDate) {
+        DATA_DIR = `${LIVE_DATA_DIR}/snapshots/${state.snapshotDate}`;
+      }
 
       await loadScopeGraph(state.scopeId);
       rebuildCategoryFilters();
       rebuildSimulation();
       setStatus("");
       installEventHandlers();
+      // Populate the snapshot dropdown (gracefully no-ops if 404).
+      loadSnapshotIndex();
+      // Apply snap-mode styling if we restored a snapshot view from
+      // localStorage on this session.
+      const subEl = document.getElementById("meta-sub");
+      if (subEl) subEl.classList.toggle("snap-mode", !!state.snapshotDate);
     } catch (err) {
       console.error(err);
       setStatus("failed to load data: " + (err && err.message ? err.message : err), true);
