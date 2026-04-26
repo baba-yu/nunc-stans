@@ -40,14 +40,12 @@ into whichever theme has the longest description. The theme with the
 highest score wins as the **primary parent**. Any other theme whose
 score is at least 0.55× the primary's score becomes a **secondary
 parent**, so genuinely cross-cutting predictions surface in more than
-one cluster instead of being shoehorned into one. See
-`SECONDARY_THEME_THRESHOLD` in `app/src/export.py`.
+one cluster instead of being shoehorned into one. The exact 0.55 ratio is a tunable threshold inside the matcher.
 
 ## How metrics are computed
 
 Per window (`7d` / `30d` / `90d`) and per theme/category, the dashboard
-shows a bundle of scores derived from the validation tables. The
-formulas live in `app/src/analytics/scoring.py`:
+shows a bundle of scores derived from the validation tables:
 
 ```
 new_signal        = min(1, Σ relevance_normalized for new evidence / 3.0)
@@ -68,10 +66,7 @@ re-cite of an older prediction.
 Relevance is a 1-5 judgement on each validation row: **5** = today's
 news clearly confirms the prediction; **3** = adjacent or partial
 match; **1** = no signal, the prediction is being kept alive only by
-the periodic re-check. The same number drives the dormant-pool tier
-transitions described in `design/memory-policy.md` — a relevance-4
-hit pulls a prediction out of dormancy, two consecutive low pings push
-it deeper.
+the periodic re-check. The same number drives the dormant-pool tier transitions in the memory model — a relevance-4 hit pulls a prediction out of dormancy, two consecutive low pings push it deeper.
 
 ## Why frequency matters
 
@@ -104,12 +99,13 @@ English reader see the same numbers. If a translation for a given node
 isn't present, the English label shows in its place rather than a
 blank.
 
-## Where to look in the codebase
+## How the layers connect
 
-- `app/src/analytics/scoring.py` — the scoring functions referenced above.
-- `app/src/ingest.py` — the IDF token-overlap matcher and the
-  prediction-identity logic.
-- `app/src/export.py` — produces `docs/data/graph-{tech,business,mix}.json`,
-  including the secondary-parent expansion at the 0.55 threshold.
-- `docs/assets/app.js` — the dashboard renderer that consumes those graph
-  JSONs and draws the tree, panel, and SNAP control.
+The pipeline has four conceptual stages, each owned by its own layer of code:
+
+- **Scoring** — pure functions that turn relevance counts into the metrics described above.
+- **Ingest** — the IDF token-overlap matcher and prediction-identity logic that decides which theme a prediction belongs to and gives it a stable id.
+- **Export** — produces `docs/data/graph-{tech,business,mix}.json` (and `manifest.json`), including the secondary-parent expansion at the 0.55 ratio.
+- **Renderer** — `docs/assets/app.js` consumes those graph JSONs and draws the tree, panel, and SNAP control.
+
+Only the rendered artefacts under `docs/` and the markdown sources under `report/` and `future-prediction/` are part of the public repository; the scoring/ingest/export implementation is kept private.
