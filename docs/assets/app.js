@@ -1678,46 +1678,4 @@
       d.setUTCDate(d.getUTCDate() - i);
       const iso = d.toISOString().slice(0, 10);
       const row = byDate.get(iso);
-      const lvl = row ? Math.max(0, Math.min(4, row.grass_level | 0)) : 0;
-      const title = row
-        ? `${iso} · lvl ${lvl} · attn ${(row.attention_score || 0).toFixed(2)}`
-        : `${iso} · no activity`;
-      cells.push(`<span data-lvl="${lvl}" title="${title}"></span>`);
-    }
-    return `<div class="grass-strip" data-days="${days}">${cells.join("")}</div>`;
-  }
-
-  function renderEvidenceSummary(detail) {
-    const sup = detail.supporting_evidence_count;
-    const con = detail.contradicting_evidence_count;
-    if (sup == null && con == null) return "";
-    return `
-      <h3>Evidence summary</h3>
-      <p class="muted">supporting: ${sup ?? "—"} · contradicting: ${con ?? "—"}</p>
-    `;
-  }
-
-  function renderEvidenceLinks(list) {
-    if (!Array.isArray(list) || !list.length) return "";
-    return `
-      <h3>Evidence (${list.length})</h3>
-      <ul class="related-list evidence-list">
-        ${list.map((e) => {
-          const title = escapeHTML(e.title || e.source_name || e.url || "(untitled)");
-          const url   = e.url ? escapeHTML(e.url) : "";
-          const dir   = e.support_direction ? `<span class="rtype">${escapeHTML(e.support_direction)}</span>` : "";
-          return `<li>${dir}${url ? `<a href="${url}" target="_blank" rel="noreferrer noopener">${title}</a>` : title}</li>`;
-        }).join("")}
-      </ul>
-    `;
-  }
-
-  function listItem(n) {
-    if (!n) return "";
-    const label = escapeHTML(n.short_label || n.label || n.id);
-    return `<li data-goto="${escapeHTML(n.id)}"><span class="rtype">${n.type}</span>${label}</li>`;
-  }
-
-  // Render the validation-reports section for a prediction panel:
-  //   "Validation reports · N in 30d"
-  //   + 
+      const lvl = row ? Ma

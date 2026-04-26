@@ -604,18 +604,4 @@ body.panel-open #meta-header {
 .grass-strip[data-days="7"]  { grid-template-columns: repeat(7, 1fr); }
 .grass-strip[data-days="30"] { grid-template-columns: repeat(30, 1fr); }
 .grass-strip[data-days="90"] { grid-template-columns: repeat(90, 1fr); gap: 1px; }
-.grass-strip > span {
-  height: 12px;
-  border-radius: 1px;
-  background: var(--heat-0);
-  opacity: 0.55;     /* empty-day baseline */
-}
-.grass-strip > span[data-lvl="1"] { background: var(--heat-1); opacity: 1; }
-.grass-strip > span[data-lvl="2"] { background: var(--heat-2); opacity: 1; }
-.grass-strip > span[data-lvl="3"] { background: var(--heat-3); opacity: 1; }
-.grass-strip > span[data-lvl="4"] { background: var(--heat-4); opacity: 1; }
-
-/* ------------------------------------------------------------
-   Loading / status pill
-   ------------------------------------------------------------ */
-.statu
+.g
