@@ -618,26 +618,4 @@ body.panel-open #meta-header {
 /* ------------------------------------------------------------
    Loading / status pill
    ------------------------------------------------------------ */
-.status-pill {
-  position: fixed;
-  left: 50%;
-  bottom: 24px;
-  transform: translateX(-50%);
-  padding: 8px 14px;
-  background: rgba(7, 17, 31, 0.92);
-  border: 1px solid var(--panel-border);
-  color: var(--text-main);
-  border-radius: 999px;
-  font-size: 12px;
-  z-index: 30;
-}
-.status-pill.err { color: #ffb1a0; border-color: rgba(255, 77, 46, 0.4); }
-
-/* ------------------------------------------------------------
-   Responsive: hide hint strip on narrow screens
-   ------------------------------------------------------------ */
-@media (max-width: 640px) {
-  #hint-strip { display: none; }
-  #meta-header { max-width: 55vw; }
-  #detail-panel { width: 100vw; }
-}
+.statu
