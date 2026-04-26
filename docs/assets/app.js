@@ -885,6 +885,24 @@
         ctx.stroke();
       }
 
+      // Recently-revived prediction (longshot hit within 14d): pulsing
+      // gold halo + star. Decoupled from heat color so the celebration
+      // is unmistakable.
+      if (isRevivedRecently(n)) {
+        const pulse = 0.50 + 0.40 * Math.sin(performance.now() / 380);
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, r + 5, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(255, 215, 80, ${(pulse * alpha).toFixed(3)})`;
+        ctx.lineWidth = 3;
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, r + 11, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(255, 215, 80, ${(pulse * 0.35 * alpha).toFixed(3)})`;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        drawStar(ctx, p.x + r * 0.78, p.y - r * 0.78, Math.max(4, r * 0.55), alpha);
+      }
+
       // Marker priority:
       //   no evidence yet                      → 'new' tag (cyan text)
       //   prediction with low realization      → center '!' (+ pulse)
@@ -971,8 +989,41 @@
     ctx.restore();
   }
 
+  // Recently-revived predictions (longshot hit from dormant pool within 14 days)
+  // get a star + pulsing gold halo until the timestamp ages out.
+  const REVIVAL_HIGHLIGHT_DAYS = 14;
+  function isRevivedRecently(node) {
+    if (!node || node.type !== "prediction") return false;
+    const ts = node.detail && node.detail.huge_longshot_hit_at;
+    if (!ts) return false;
+    const ms = Date.parse(ts);
+    if (isNaN(ms)) return false;
+    const ageMs = Date.now() - ms;
+    return ageMs >= 0 && ageMs <= REVIVAL_HIGHLIGHT_DAYS * 86400000;
+  }
+  function drawStar(ctx, cx, cy, outerR, alpha) {
+    const innerR = outerR * 0.45;
+    ctx.save();
+    ctx.beginPath();
+    for (let i = 0; i < 10; i++) {
+      const ang = -Math.PI / 2 + (i * Math.PI) / 5;
+      const rr = (i % 2 === 0) ? outerR : innerR;
+      const x = cx + Math.cos(ang) * rr;
+      const y = cy + Math.sin(ang) * rr;
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+    ctx.fillStyle = `rgba(255, 215, 80, ${(0.95 * alpha).toFixed(3)})`;
+    ctx.strokeStyle = `rgba(255, 255, 255, ${(0.85 * alpha).toFixed(3)})`;
+    ctx.lineWidth = 1;
+    ctx.fill();
+    ctx.stroke();
+    ctx.restore();
+  }
+
   function anyPulsing() {
     for (const n of state.renderNodes) {
+      if (isRevivedRecently(n)) return true;
       if (n.type !== "prediction") continue; // only predictions pulse now
       const m = metricsFor(n, state.windowId);
       if (hasEvidence(m) && (m.realization_score ?? 1) < WARN_STRONG_T) return true;
