@@ -301,6 +301,9 @@
     // shift/space temporarily flips to the other tool regardless of setting.
     tool: "rotate",
 
+    // Category menu collapsed state. Persisted alongside scope/window.
+    categoryMenuCollapsed: false,
+
     // Active locale code (en|ja|es|fil). Persisted alongside scope/window.
     locale: "en",
 
@@ -367,6 +370,7 @@
         tool: state.tool,
         heatMetric: state.heatMetric,
         locale: state.locale,
+        categoryMenuCollapsed: state.categoryMenuCollapsed,
         snapshotDate: state.snapshotDate,
         hidden: Array.from(state.hiddenCategories),
       }));
@@ -1332,6 +1336,19 @@
     if (catAll)   catAll.addEventListener("click",   () => setAllCategories(true));
     if (catNone)  catNone.addEventListener("click",  () => setAllCategories(false));
     if (catFocus) catFocus.addEventListener("click", isolateHighlightedCategories);
+    const catToggle = document.getElementById("cat-toggle");
+    const catMenu = document.getElementById("category-menu");
+    const applyCatCollapse = () => {
+      if (!catMenu || !catToggle) return;
+      catMenu.dataset.collapsed = state.categoryMenuCollapsed ? "true" : "false";
+      catToggle.setAttribute("aria-expanded", state.categoryMenuCollapsed ? "false" : "true");
+    };
+    applyCatCollapse();
+    if (catToggle) catToggle.addEventListener("click", () => {
+      state.categoryMenuCollapsed = !state.categoryMenuCollapsed;
+      applyCatCollapse();
+      saveState();
+    });
 
     // Panel close / back
     document.getElementById("panel-close").addEventListener("click", () => {
@@ -2226,6 +2243,7 @@
       if (["attention", "realization", "grass"].includes(saved.heatMetric)) {
         state.heatMetric = saved.heatMetric;
       }
+      if (typeof saved.categoryMenuCollapsed === "boolean") state.categoryMenuCollapsed = saved.categoryMenuCollapsed;
       if (typeof saved.locale === "string" && ["en","ja","es","fil"].includes(saved.locale)) {
         state.locale = saved.locale;
       }
