@@ -185,6 +185,7 @@ body.panel-open #meta-header {
 
 .menu-head {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 6px;
   padding: 0 2px 2px;
@@ -713,9 +714,6 @@ body.panel-open #meta-header {
 }
 #category-menu[data-collapsed="true"] .menu-mini-btn.cat-toggle {
   transform: rotate(-90deg);
-}
-#category-menu[data-collapsed="true"] .menu-head-title {
-  display: none;
 }
 #category-menu[data-collapsed="true"] #category-filters {
   display: none;
