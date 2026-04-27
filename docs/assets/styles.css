@@ -156,10 +156,7 @@ body[data-tool="pan"]    #graph-canvas { cursor: move; }
   min-height: 0;               /* allow shrink so inner list scrolls */
   max-width: 220px;
   min-width: 180px;
-  /* visible so the bottom-edge collapse handle (bottom:-12px) isn't
-     clipped; the inner .category-filters owns its own scroll. */
-  overflow: visible;
-  margin-bottom: 12px;         /* leave room for the protruding handle */
+  overflow: hidden;
 }
 
 /* When the detail panel is open, slide the whole stack from top-right
@@ -773,59 +770,3 @@ body.panel-open #meta-header {
   font-style: italic;
 }
 
-/* ------------------------------------------------------------
-   Category-menu collapse toggle
-   ------------------------------------------------------------
-   The handle hangs off the bottom-outer edge of #category-menu so
-   collapsing leaves only the title row + handle, with .menu-head's
-   FOCUS/ALL/NONE quick-actions on a single row above it. */
-#category-menu { position: relative; }
-
-.cat-toggle-handle {
-  position: absolute;
-  left: 50%;
-  bottom: -12px;                 /* sits half outside the box border */
-  transform: translateX(-50%);
-  width: 44px;
-  height: 18px;
-  padding: 0;
-  border: 1px solid var(--panel-border);
-  border-top-color: rgba(130, 170, 210, 0.3);
-  background: var(--menu-bg);
-  color: var(--text-muted);
-  border-radius: 0 0 8px 8px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font: inherit;
-  line-height: 1;
-  z-index: 2;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
-  backdrop-filter: blur(6px);
-}
-.cat-toggle-handle:hover {
-  color: var(--text-main);
-  background: rgba(24, 199, 216, 0.12);
-}
-.cat-toggle-handle .chev {
-  display: inline-block;
-  font-size: 10px;
-  line-height: 1;
-  transition: transform 160ms ease;
-}
-/* Expanded state: chevron points up (= "click to collapse upward").
-   Collapsed state: rotates 180° to point down (= "click to expand"). */
-#category-menu[data-collapsed="true"] .cat-toggle-handle .chev {
-  transform: rotate(180deg);
-}
-#category-menu[data-collapsed="true"] .menu-head,
-#category-menu[data-collapsed="true"] #category-filters {
-  display: none;
-}
-#category-menu[data-collapsed="true"] {
-  padding: 0;
-  min-height: 6px;
-  flex: 0 0 auto;
-  border-color: rgba(130, 170, 210, 0.12);
-}

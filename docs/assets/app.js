@@ -54,7 +54,7 @@
       "panel.window":      "Window",
       "panel.attention":   "Attention",
       "panel.realization": "Hit rate",
-      "panel.daily":       "Daily level",
+      "panel.daily_precision": "Daily precision",
       "panel.snap_mode":   "snapshot",
       "loading.manifest":  "loading manifest…",
       "loading.scope":     "loading…",
@@ -97,7 +97,7 @@
       "panel.window":      "ウィンドウ",
       "panel.attention":   "注目度",
       "panel.realization": "的中率",
-      "panel.daily":       "日次レベル",
+      "panel.daily_precision": "日次精度",
       "pill.low_realization": "的中率低",
       "panel.snap_mode":   "スナップショット",
       "loading.manifest":  "マニフェストを読み込み中…",
@@ -140,7 +140,7 @@
       "panel.window":      "Ventana",
       "panel.attention":   "Atención",
       "panel.realization": "Tasa de acierto",
-      "panel.daily":       "Nivel diario",
+      "panel.daily_precision": "Precisión diaria",
       "pill.low_realization": "tasa de acierto baja",
       "panel.snap_mode":   "instantánea",
       "loading.manifest":  "cargando manifiesto…",
@@ -183,7 +183,7 @@
       "panel.window":      "Window",
       "panel.attention":   "Pansin",
       "panel.realization": "Tumpak",
-      "panel.daily":       "Antas Araw-araw",
+      "panel.daily_precision": "Tumpak araw-araw",
       "pill.low_realization": "mababang tumpak",
       "panel.snap_mode":   "snapshot",
       "loading.manifest":  "iniluluwas ang manifest…",
@@ -305,9 +305,6 @@
     // shift/space temporarily flips to the other tool regardless of setting.
     tool: "rotate",
 
-    // Category menu collapsed state. Persisted alongside scope/window.
-    categoryMenuCollapsed: false,
-
     // Top-menu collapsed state — only meaningful on small viewports
     // where the mobile toggle is visible. Not persisted: a refresh
     // should always start expanded so the user can see the controls.
@@ -386,7 +383,6 @@
         tool: state.tool,
         heatMetric: state.heatMetric,
         locale: state.locale,
-        categoryMenuCollapsed: state.categoryMenuCollapsed,
         snapshotDate: state.snapshotDate,
         hidden: Array.from(state.hiddenCategories),
       }));
@@ -938,9 +934,13 @@
       // Marker priority:
       //   no evidence yet                      → 'new' tag (cyan text)
       //   prediction with low realization      → center '!' (+ pulse)
-      //   aggregate (cat/theme/sub) with weak  → corner badge with
-      //                                          count of weak child
-      //                                          *predictions*
+      //   aggregate (cat/theme/sub) with
+      //     supported descendants              → orange top-right
+      //                                          count badge
+      //   aggregate with new (unvalidated)
+      //     descendants                        → cyan top-left count
+      //                                          badge (independent of
+      //                                          the orange one)
       //   otherwise                            → nothing
       if (!hasEvidence(m)) {
         ctx.fillStyle = withAlpha("#18c7d8", alpha);
@@ -994,6 +994,30 @@
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
           ctx.fillText(String(supported), bx, by + 1);
+        }
+
+        // Aggregate "new" indicator: at least one descendant prediction
+        // summary that has not been validated yet. Sits in the
+        // top-LEFT corner, mirroring the orange supported badge so the
+        // two signals never overlap.
+        const newCount = countNewDescendantPredictions(n);
+        if (newCount > 0) {
+          const bx = p.x - r * 0.75;
+          const by = p.y - r * 0.75;
+          ctx.fillStyle = withAlpha("#062731", 0.98 * alpha);
+          ctx.beginPath();
+          ctx.arc(bx, by, 7, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = withAlpha("#18c7d8", 0.95 * alpha);
+          ctx.lineWidth = 1.2;
+          ctx.stroke();
+          ctx.fillStyle = withAlpha("#bdf2f8", alpha);
+          ctx.font = "700 9px system-ui, sans-serif";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          // Compact label so the count fits inside r=7 even for 99+.
+          const label = newCount > 99 ? "99+" : String(newCount);
+          ctx.fillText(label, bx, by + 1);
         }
       }
     }
@@ -1102,6 +1126,14 @@
       node,
       (m) => hasEvidence(m) && (m.realization_score ?? 1) < WARN_T,
     );
+  }
+  // Count descendant prediction summaries that haven't been validated
+  // yet (no grass_daily evidence). Drives the cyan "new" corner badge
+  // on aggregates so categories/themes that contain freshly-authored
+  // predictions surface them even when the aggregate itself already
+  // has evidence from sibling predictions.
+  function countNewDescendantPredictions(node) {
+    return countDescendantPredictionsWhere(node, (m) => !hasEvidence(m));
   }
 
   // Canvas roundRect polyfill for the "new" pill background.
@@ -1509,19 +1541,6 @@
     if (catAll)   catAll.addEventListener("click",   () => setAllCategories(true));
     if (catNone)  catNone.addEventListener("click",  () => setAllCategories(false));
     if (catFocus) catFocus.addEventListener("click", isolateHighlightedCategories);
-    const catToggle = document.getElementById("cat-toggle");
-    const catMenu = document.getElementById("category-menu");
-    const applyCatCollapse = () => {
-      if (!catMenu || !catToggle) return;
-      catMenu.dataset.collapsed = state.categoryMenuCollapsed ? "true" : "false";
-      catToggle.setAttribute("aria-expanded", state.categoryMenuCollapsed ? "false" : "true");
-    };
-    applyCatCollapse();
-    if (catToggle) catToggle.addEventListener("click", () => {
-      state.categoryMenuCollapsed = !state.categoryMenuCollapsed;
-      applyCatCollapse();
-      saveState();
-    });
 
     // Mobile-only top-menu toggle. Hidden on wide viewports via CSS
     // (.mobile-only). Toggles a body class so #top-menu can collapse
@@ -2126,6 +2145,11 @@
         if (supported > 0) pills.push(`<span class="pill good">${supported} supported</span>`);
         const weak = countWeakDescendantPredictions(n);
         if (weak > 0) pills.push(`<span class="pill warn">${weak} weak</span>`);
+        // Surface freshly-authored summaries on aggregates that have
+        // already accumulated some validated children — those would
+        // otherwise hide the "new" status entirely.
+        const fresh = countNewDescendantPredictions(n);
+        if (fresh > 0) pills.push(`<span class="pill new">${fresh} new</span>`);
       } else if (typeof m.realization_score === "number" && m.realization_score < WARN_T) {
         pills.push(`<span class="pill warn">${localeStr("pill.low_realization")}</span>`);
       }
@@ -2146,8 +2170,9 @@
   function renderGrassStripHeader(m) {
     const arr = Array.isArray(m.grass_daily) ? m.grass_daily : [];
     const days = windowDays(state.windowId);
-    if (arr.length === 0) return `Daily activity · no data in ${days}d window`;
-    return `Daily activity · ${arr.length} day${arr.length === 1 ? "" : "s"} of data · last ${days}d`;
+    const head = localeStr("panel.daily_precision");
+    if (arr.length === 0) return `${head} · no data in ${days}d window`;
+    return `${head} · ${arr.length} day${arr.length === 1 ? "" : "s"} of data · last ${days}d`;
   }
 
   // Node's current heat value under the selected metric, mirroring the
@@ -2163,14 +2188,15 @@
     return toHeatBin(typeof m.attention_score === "number" ? m.attention_score : 0);
   }
 
-  // Inline SVG line chart of the daily relevance level (1-5) across
+  // Inline SVG line chart of the daily precision score (1-5) across
   // the selected window. The underlying attention_score (0-1) is the
   // mean of per-evidence relevance which lives on a 1-5 scale (a
   // single relevance-1 cite ≈ 0.2, a single relevance-5 cite ≈ 1.0),
   // so the chart un-normalises that back to the human 1-5 scale.
-  // Days with no cited evidence sit at 0 (below the 1-5 band) so
-  // gaps in activity stay visually distinct from "low activity".
-  // Background tint stays driven by the heat metric (Hit rate).
+  // Days with no cited evidence are simply omitted — the polyline
+  // breaks into segments around the gaps so absence reads as absence
+  // instead of "low precision". Background tint stays driven by the
+  // heat metric (Hit rate).
   function renderActivityChart(m) {
     const days = windowDays(state.windowId);
     const arr = Array.isArray(m.grass_daily) ? m.grass_daily : [];
@@ -2181,12 +2207,12 @@
     const endDate = endISO ? new Date(endISO + "T00:00:00Z") : new Date();
 
     // Map the 0..1 attention_score back onto the 1..5 relevance scale.
-    // Days with no row collapse to 0 so they read as "no activity".
     const toLevel = (att) => {
       const a = Math.max(0, Math.min(1, att || 0));
       return 1 + 4 * a;
     };
 
+    // Build per-day samples; only cited days carry a level.
     const samples = [];
     for (let i = days - 1; i >= 0; i--) {
       const d = new Date(endDate);
@@ -2195,7 +2221,7 @@
       const row = byDate.get(iso);
       samples.push({
         date: iso,
-        level: row ? toLevel(row.attention_score) : 0,
+        level: row ? toLevel(row.attention_score) : null,
         cited: !!row,
       });
     }
@@ -2205,9 +2231,8 @@
     const innerW = W - pad.l - pad.r;
     const innerH = H - pad.t - pad.b;
     const xAt = (i) => pad.l + (samples.length === 1 ? innerW / 2 : (i / (samples.length - 1)) * innerW);
-    // Y-domain spans 0..5 so empty days (0) stay visually below the
-    // 1-5 active band without clipping.
-    const yAt = (lvl) => pad.t + (1 - lvl / 5) * innerH;
+    // Y-domain spans the 1..5 precision band.
+    const yAt = (lvl) => pad.t + (1 - (lvl - 1) / 4) * innerH;
 
     const heatT = nodeHeatT(m);
     const bg = heatColor(heatT);
@@ -2220,7 +2245,7 @@
       return `
         <div class="activity-chart" style="--bg:${bg};">
           <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true">
-            <line x1="${pad.l}" y1="${yAt(0)}" x2="${W - pad.r}" y2="${yAt(0)}"
+            <line x1="${pad.l}" y1="${yAt(1)}" x2="${W - pad.r}" y2="${yAt(1)}"
                   stroke="rgba(130,170,210,0.35)" stroke-dasharray="2 4" stroke-width="1"/>
             ${yTicksEmpty}
           </svg>
@@ -2228,8 +2253,30 @@
         </div>`;
     }
 
-    // Polyline path for the line; circles for cited days only.
-    const linePts = samples.map((s, i) => `${xAt(i).toFixed(1)},${yAt(s.level).toFixed(1)}`).join(" ");
+    // Split samples into runs of consecutive cited days so the
+    // polyline breaks at gaps instead of dragging a misleading line
+    // through nothing.
+    const runs = [];
+    let cur = null;
+    for (let i = 0; i < samples.length; i++) {
+      const s = samples[i];
+      if (s.cited) {
+        if (!cur) { cur = []; runs.push(cur); }
+        cur.push({ x: xAt(i), y: yAt(s.level) });
+      } else {
+        cur = null;
+      }
+    }
+    const polylines = runs
+      .filter((run) => run.length >= 2)
+      .map((run) => {
+        const pts = run.map((p) => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(" ");
+        return `<polyline points="${pts}" fill="none" stroke="#ffd8a0" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>`;
+      })
+      .join("");
+    // Single-cited-day runs render as just the dot below.
+
+    // Dots on every cited day (also marks isolated single-day runs).
     const dots = samples
       .map((s, i) => s.cited
         ? `<circle cx="${xAt(i).toFixed(1)}" cy="${yAt(s.level).toFixed(1)}" r="2.4" fill="#e07a1a" />`
@@ -2247,20 +2294,20 @@
       }
     }
 
-    // Y-axis labels at 1, 3, 5 — the relevance band.
+    // Y-axis labels at 1, 3, 5 — the precision band.
     const yTicks = [1, 3, 5].map((lvl) => {
       const y = yAt(lvl);
       return `<text x="${pad.l - 3}" y="${(y + 3).toFixed(1)}" text-anchor="end" font-size="9" fill="rgba(130,170,210,0.7)">${lvl}</text>`;
     }).join("");
 
     return `
-      <div class="activity-chart" style="--bg:${bg};" title="Daily relevance level (1-5) over the last ${days} days">
+      <div class="activity-chart" style="--bg:${bg};" title="Daily precision (1-5) over the last ${days} days">
         <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true">
           <line x1="${pad.l}" y1="${yAt(5)}" x2="${W - pad.r}" y2="${yAt(5)}" stroke="rgba(130,170,210,0.10)" stroke-dasharray="2 3" stroke-width="1"/>
           <line x1="${pad.l}" y1="${yAt(3)}" x2="${W - pad.r}" y2="${yAt(3)}" stroke="rgba(130,170,210,0.10)" stroke-dasharray="2 3" stroke-width="1"/>
           <line x1="${pad.l}" y1="${yAt(1)}" x2="${W - pad.r}" y2="${yAt(1)}" stroke="rgba(130,170,210,0.18)" stroke-width="1"/>
           ${yTicks}
-          <polyline points="${linePts}" fill="none" stroke="#ffd8a0" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+          ${polylines}
           ${dots}
           ${ticks.join("")}
         </svg>
@@ -2462,7 +2509,6 @@
       // attention/grass preference so legacy users aren't stranded
       // with a metric they can't change anymore.
       state.heatMetric = "realization";
-      if (typeof saved.categoryMenuCollapsed === "boolean") state.categoryMenuCollapsed = saved.categoryMenuCollapsed;
       if (typeof saved.locale === "string" && ["en","ja","es","fil"].includes(saved.locale)) {
         state.locale = saved.locale;
       }
