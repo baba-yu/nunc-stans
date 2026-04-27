@@ -513,6 +513,22 @@
     if (minZ !== null && zoom < minZ) return false;
     if (maxZ !== null && zoom > maxZ) return false;
 
+    // Window-origin filter for predictions. A 7d view should only show
+    // predictions authored in the last 7 days; same shape for 30d / 90d.
+    // Three orthogonal concepts that are deliberately separate:
+    //   - Window filter (here): origin in window range, applied client-side.
+    //   - Hot / Lukewarm: relevance encoded in metrics_by_window[w].status.
+    //   - Dormant: pool membership in node.detail.dormant, applied across
+    //     all windows (a separate visual signal, not a filter).
+    if (node.type === "prediction" && node.detail && node.detail.prediction_date
+        && state.manifest && state.manifest.latest_report_date) {
+      const days = windowDays(state.windowId);
+      const latest = new Date(state.manifest.latest_report_date + "T00:00:00Z");
+      const origin = new Date(node.detail.prediction_date + "T00:00:00Z");
+      const diff = Math.floor((latest - origin) / (1000 * 60 * 60 * 24));
+      if (diff >= days) return false;  // origin older than the window
+    }
+
     // Fallback: generic zoom thresholds by type
     if (node.type === "category") return true;
     if (node.type === "theme") return zoom >= ZOOM_THRESHOLDS.showThemes;
@@ -1959,7 +1975,24 @@
 
   function renderStatusPills(m, n) {
     const pills = [];
-    const isNew = !hasEvidence(m);
+    // Three orthogonal signals are pillared separately so they don't
+    // mask each other:
+    //   - Dormant (node.detail.dormant): pool-membership maintained by
+    //     Task 4. Applies across all windows; emit a "dormant" pill in
+    //     addition to whatever the per-window status says (so a node
+    //     that's parked in the pool but still receiving Lukewarm pings
+    //     in 30d shows "dormant · weakly_supported" together).
+    //   - Hot / Lukewarm (m.status): relevance signal of evidence in
+    //     the current window. Renders the pill text directly.
+    //   - "new" pill: fired only when a prediction has truly never been
+    //     validated — no grass_daily anywhere yet — and is also not in
+    //     the dormant pool (a parked prediction is "new" only the first
+    //     day it is generated; afterwards "dormant" is the right story).
+    const isDormantNode = !!(n && n.detail && n.detail.dormant);
+    const isNew = !hasEvidence(m) && !isDormantNode;
+    if (isDormantNode) {
+      pills.push(`<span class="pill">dormant · parked for revival</span>`);
+    }
     if (isNew) {
       pills.push(`<span class="pill new">new · not yet validated</span>`);
     } else {
