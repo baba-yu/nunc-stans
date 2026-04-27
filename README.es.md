@@ -56,4 +56,63 @@ Noticias de predicciones futuras + dashboard.
 - **SGLang CVE-2026-5760 (CVSS 9.8) — RCE vía GGUF chat_template malicioso (Jinja2 SSTI), PoC público + CERT/CC VU#915947** — Un archivo GGUF crafteado con SSTI Jinja2 en `tokenizer.chat_template` + frase trigger Qwen3 reranker activa la ruta vulnerable en `entrypoints/openai/serving_rerank.py`; SGLang renderiza la plantilla vía `jinja2.Environment()` → ejecución de código arbitrario. **PoC público en `github.com/Stuub/SGLang-0.5.9-RCE`**, CERT/CC VU#915947 emitido, fix recomendado `ImmutableSandboxedEnvironment`. Servidores de inferencia AI confirmados como **segunda primitiva AI-infra weaponizada tras LMDeploy SSRF**.
 - **Qwen3.6-27B (22 de abril, tracción 23-26 de abril) — Apache 2.0 dense 27B supera a 397B-A17B MoE en coding** — SWE-bench Verified **77.2% vs 76.2%**, Terminal-Bench 2.0 59.3 iguala a Claude Opus 4.5; **40 tok/s en RTX 3090 Q4_K_M ~16.8 GB VRAM**, contexto 262K (extensible a 1M), nuevo mecanismo **Thinking Preservation**. Establece nueva baseline "single-GPU coding agent."
 - **Microsoft ASP.NET Core CVE-2026-40372 (CVSS 9.1) — parche de emergencia out-of-band para defecto de cookie-forging con privilegio SYSTEM en DataProtection 10.0.0-10.0.6** — `ManagedAuthenticatedEncryptor` calcula el tag de validación HMAC en offset incorrecto; un ciphertext con tag HMAC todo-cero es incorrectamente aceptado como válido. Permite **forjar cookies de autenticación, manipular tokens antiforgery, descifrar payloads protegidos** — impersonación completa hasta SYSTEM. Fixed en `Microsoft.AspNetCore.DataProtection 10.0.7`. Requiere **rotar el key ring DataProtection + auditar tokens long-lived emitidos durante la ventana vulnerable**.
-- **OpenClaw v2026.4.25-beta train (26 de abril, beta.3-7+) — upgrades voice reply / TTS, 6 nuevos providers
+- **OpenClaw v2026.4.25-beta train (26 de abril, beta.3-7+) — upgrades voice reply / TTS, 6 nuevos providers TTS** — Azure Speech / Xiaomi / Local CLI / Inworld / Volcengine / ElevenLabs v3. **beta.3 (13:00 26 abr) → beta.4 (13:24 26 abr) → beta.7+ entrega en una sola tarde** — tempo de release sub-24h bajo hardening continuo del voice-stack. Voice reply pasa de "disponible" a "production-shaped."
+- **Pillar Security: Antigravity prompt-injection sandbox escape vía flag `find_by_name -X` exec-batch (Google parcheó, bug bounty pagado)** — El parámetro Pattern de `find_by_name` inserta `-X` en `fd`, logrando RCE pese al Secure Mode de Antigravity. **Tercer agentic-IDE vendor confirmado vulnerable a la clase prompt-injection estilo comentario.**
+- **Postmortem de ingeniería Anthropic sobre regresión Claude Code del 23 de abril — corte de reasoning del 4 de marzo + issue de verbosity-prompt del 16 de abril, fixed el 20 de abril en v2.1.116** — Postmortem oficial de Anthropic en anthropic.com/engineering/april-23-postmortem enmarca **dos regresiones de calidad distintas de semanas** en Claude Code + Agent SDK + Cowork que llevaron a usuarios a culparse a sí mismos.
+- **Cluster de regresión Claude Code v2.1.119 / v2.1.120 en 24 horas (24-25 de abril)** — **8 regresiones envían en 24 horas**: ruptura de auto-update grado retract, cambio silencioso de modelo, dos crashes resume-time, bug duplicación UI, freeze `/mcp` solo WSL2, regresión CLAUDE.md-ignorado, promesa rota `sandbox.excludedCommands`, cuelgue worktree macOS. Checklist de supervivencia apunta a usuarios al rollback v2.1.117.
+- **Inyección indirecta de prompts en el wild — Google Online Security Blog + Help Net Security 24 abr, alza 32% YoY nov 2025-feb 2026** — Pieza primaria de investigación de Google cuantifica **un aumento de 32% en contenido prompt-injection malicioso** crawleado en la web abierta, con **10 ataques IPI confirmados en el wild** documentados — la amenaza se generaliza desde "comentarios GitHub" a **"la web abierta."**
+- **Ollama MLX backend deep-dive del 23 de abril (gingter.org) — Foundry Local sigue Metal-only, brecha MLX se ensancha** — Ollama en M5 Max ve **prefill 1.57x / decode 1.93x en Qwen3.5-35B-A3B con NVFP4**; el soporte MLX de Foundry Local sigue siendo issue abierto (`microsoft/Foundry-Local#329`).
+- **llama.cpp builds b8936 + b8937 aterrizan en una hora el 26 de abril (08:54 + 09:28 UTC)** — Dos builds en una hora un domingo — rompiendo el patrón previo "no-window-release."
+- **Toma de cap de mercado $5T NVIDIA + AMD +13.9% + récords Nasdaq / S&P 500 (24 abr, carry-forward)** — Beat Q1 2026 Intel (EPS $0.29 vs $0.01, revenue $13.6B +7% YoY, +24% close el 24 abr — mejor movimiento single-day desde 1987) ahora consolidado como catalizador, con iShares Semiconductor ETF +40.4% MTD a través del 24 abr.
+
+[news-20260426.md](report/es/news-20260426.md)
+
+### Predictions check
+
+- **17 predicciones revisadas durante la última semana (4/19-4/25). 8 alcanzan Relevance 5, 4 alcanzan Relevance 4, 5 quedan en Relevance 1-2.**
+- **Inyección indirecta de prompts como categoría top de CVE (4/19)** Relevance 5: triple-confirmada por **SGLang CVE-2026-5760 + Pillar Antigravity + Google IPI 32% YoY**.
+- **Inversión local-first cloud-overflow (4/20)** Relevance 5: codificada explícitamente en el Future #3 de hoy — **"agente coding consumer-GPU desplaza al API coding cloud-only en ≥30% de workloads dev para Q3 2026."** Impulsado por la 3-corner squeeze Qwen3.6-27B + Ollama MLX + DeepSeek V4-Pro.
+- **Predicción supply-chain GGUF (4/21)** Relevance 5: aterriza decisivamente con **PoC + CERT/CC VU#915947 para SSTI chat_template SGLang** — misma clase de vulnerabilidad que CVE-2024-34359 ("Llama Drama") en llama-cpp-python.
+- **Régimen de 5 polos hyperscaler-frontier-lab (4/21)** Relevance 5: Big-3-confirmado vía el **Google × Anthropic $40B / 5GW deal** completando el trío (Amazon $25B + Microsoft $13B+ + Google $40B). Future #1 de hoy explícitamente predice que para Q3 2026, **estrategia LLM multi-cloud enterprise pasa de "multi-runtime" a "multi-frontier-vendor."**
+- **División propietaria vs open-weight (4/21)** Relevance 5: se afila vía **GPT-5.5 API +2x** vs **DeepSeek V4-Pro a ~7x más barato** aterrizando la misma ventana; pieza Bloomberg-via-CCTV del 26 abr alinea oficialmente DeepSeek V4 con Huawei Ascend.
+- **Agent Registry / OAuth trust / Agent Control Plane (4/19, 4/22, 4/23)** Relevance 5: todos convergen en **blueprint Showcase 2026 de Okta con Agent Gateway como central MCP control plane**, protocolo Cross App Access, guía MCP Security / Zero Trust de TrueFoundry.
+- **Estándar 27B-dense + 1M-context (4/23)** Relevance 5: entregado decisivamente por **Qwen3.6-27B superando a 397B-A17B MoE en SWE-bench Verified a precios consumer-GPU** (40 tok/s en RTX 3090 Q4_K_M ~16.8 GB).
+- **Tesis tres-clouds-oligopolio (4/25)** Relevance 5 — validación keystone del día. Run-rate revenue anual Anthropic supera **$30B** (vs ~$9B fines 2025).
+- **Relevance 4**: fuga de secrets vía CI / agentes (4/20, tercer agentic-IDE RCE de Pillar); Physical-AI-as-RaaS (4/22, BMW Leipzig + Tesla Earth Day + Hannover Messe); 1M-context-default-open-weight (4/24, DeepSeek V4 + Qwen3.6-27B); MCP-protocol-attack-surface (4/25, threat + defense en misma ventana).
+- **Relevance 1-2**: training 1-bit native (4/19), Headless Everything (4/20), división SKU training-vs-inference (4/22) sin progreso directo hoy. Frontera vendor-third-party (4/23) y reset valuación SaaS-displacement (4/24) registran solo señales débiles — la acción de mercado de hoy es hardware-rally-driven (NVIDIA $5T retake / AMD +13.9% / Intel +24%) en lugar de las caídas encadenadas predichas Workday / Atlassian / Box / Smartsheet 15%+.
+- Predicción 1 del usuario (LLM local malicioso → malware): **fuerte corroboración**. SGLang CVE-2026-5760 es exactamente el modo de fallo — un archivo de modelo (GGUF) lleva código ejecutable (Jinja2 SSTI en `tokenizer.chat_template`) que dispara dentro del servidor de inferencia; PoC público + CERT/CC VU#915947 lo weaponizan. Agent Gateway de Okta como central MCP control plane + "MCP Security: Guide to Zero Trust for Agentic AI" de TrueFoundry formalizan la arquitectura **"diseñar intencionalmente paths del sistema a los que solo AI no puede acceder"** como categoría real de producto.
+- Predicción 2 del usuario (división cloud vs local, aumentos SaaS): **confirmación directa codificada**. Future #3 de hoy explícitamente: **"agente coding consumer-GPU desplaza al API coding cloud-only en ≥30% de workloads dev para Q3 2026."** GPT-5.5 API a $5 / $30 (aumento 2x, con Codex recortando ~40% output tokens para "compensar el alza per-token vía costo per-task") aterriza la misma semana en que DeepSeek V4-Pro shipped a ~7x más barato que Claude Opus 4.7.
+- Predicción 3 del usuario (forecasting RL/LLM): sin caso directo hoy. Adyacente más cercano es el postmortem de ingeniería Anthropic (un análisis de regresión de calidad, no una pieza de mejora de forecasting). Carry-only.
+
+[future-prediction-20260426.md](future-prediction/es/future-prediction-20260426.md)
+
+---
+
+## 2026-04-25
+
+### News
+
+- **NVIDIA recupera capitalización de $5.12T al cierre del 24 de abril** — La superación de Intel después del cierre del 23 de abril enciende el sector de chips. NVIDIA cierra en récord $208.27 (+4.3%); la distancia con Alphabet supera $1T. AMD añade **+13.90% ($347.77)** el mismo día (print 5 de mayo).
+- **Tesla convierte el 25 de abril en marketing del Día de la Tierra, regala "Plant Cubes" plantadas por Optimus V3** — En tiendas oficiales en EE. UU., los participantes de demos FSD (Supervised) reciben un Plant Cube plantado por Optimus. El print del 23 de abril reafirmó **debut de V3 a mediados de 2026 / producción en masa julio-agosto**, con capex 2026 oficialmente guiada por encima de $25B.
+- **Google Cloud × Thinking Machines Lab: acuerdo GB300 multi-billón de dólares (anunciado 22 de abril)** — TML de Mira Murati adopta VMs A4X Max de Google Cloud impulsadas por NVIDIA **GB300**; velocidad de entrenamiento / serving **2x** generación previa.
+- **BMW Group inicia pruebas serias de humanoide AEON en Plant Leipzig desde abril 2026 + abre Centro de Competencia Physical AI** — Sobre el récord de Spartanburg de Figure 02 (**30,000 vehículos X3 en 10 meses / 90,000 piezas / 1.2M pasos / 1,250 horas**), BMW abre el primer hub Physical AI europeo en Leipzig.
+- **Hannover Messe 2026 (20-24 de abril) cierra con Physical AI como primer tema central** — 130,000 visitantes / 4,000 expositores / 1,600 ponentes; AEON / HMND 01 / Apptronik Apollo / Agility Digit expuestos en paralelo.
+- **OpenAI GPT-5.5 / GPT-5.5 Pro API público 24 de abril** — input $5.00 / output $30.00 per M tokens (**aumento 2x** vs GPT-5.4); Pro a $30 / $180. Codex reduce tokens de salida ~40% para compensar el costo por tarea.
+- **DeepSeek V4 Pro benchmarks detallados** — IMOAnswerBench **89.8** (sobre Claude Opus 4.7 75.3 / Gemini 3.1-Pro 81.0, cerca de GPT-5.4 91.4); agentic sobre Sonnet 4.5, clase Opus 4.5. Precio: **$1.74 input / $3.48 output per M tokens (1/7 de Opus 4.7)**, Apache 2.0, integración estrecha con Huawei Ascend.
+- **Claude Code v2.1.117 (25 de abril)** — `/resume` auto-resume sesiones grandes / colgadas antes del reload para prevenir desbordamiento de contexto.
+- **OpenClaw v2026.4.23 (24 de abril)** — Image gen + edición de imagen de referencia vía Codex OAuth en Providers/OpenAI; también vía API `image_generate` en Providers/OpenRouter.
+- **AWS Bedrock AgentCore Browser añade interacción a nivel de OS (22 de abril)** — Carga de archivos / manejo de diálogos OS / cambio entre múltiples ventanas.
+- **Salesforce Q4: Agentforce ARR $800M / 29,000 deals (+50% QoQ)** — FY2026 revenue $41.5B, Q4 EPS $3.81 / revenue $11.20B (+12.1% YoY).
+- **Nginx UI CVE-2026-33032 (MCPwn, CVSS 9.8) activamente explotada en el mundo real** — Endpoint `/mcp_message` con allowlist IP por defecto vacía bypassa el middleware de auth; 12 llamadas a herramientas MCP no autenticadas expuestas; 2 HTTP requests para tomar Nginx por completo.
+- **Saltcorn CVE-2026-41478 (CVSS 9.9) divulgado (24 de abril)** — SQL injection en Mobile-Sync.
+- **Amazon × Anthropic adicional $25B + 5GW capacidad Trainium2/3 (detalle finalizado 20 de abril)** — $5B inmediato + $20B vinculado a hitos.
+- **AI Tinkerers SF + AI Dev 26 x SF + Sage Future en sucesión (28-30 de abril)**.
+
+[news-20260425.md](report/en/news-20260425.md)
+
+### Predictions check
+
+- 17 predicciones validadas durante la última semana. Validación continua **Relevance 5** en 6 ejes: **Agent Control Plane / confianza OAuth / SaaS-ización Physical AI / estándar de pesos abiertos 1M-context / alianza exclusiva hyperscaler × laboratorio de frontera / división propietaria × abierto**.
+- Más detalle en [future-prediction-20260425.md](future-prediction/en/future-prediction-20260425.md). Para resúmenes diarios completos en español, próximamente.
+
+---
