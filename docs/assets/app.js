@@ -2070,10 +2070,7 @@
       `;
     } else if (n.type === "theme") {
       const parentCat = n.parent_ids && n.parent_ids[0] ? nodeById(n.parent_ids[0]) : null;
-      const subs = (n.child_ids || []).map((id) => nodeById(id)).filter(Boolean);
-      const preds = sortPredictionsByDateDesc(
-        subs.flatMap((s) => (s.child_ids || []).map((id) => nodeById(id))).filter(Boolean)
-      );
+      const preds = sortPredictionsByDateDesc(collectDescendantPredictions(n));
       extras = `
         ${parentCat ? `<h3>Parent category</h3><ul class="related-list">${listItem(parentCat)}</ul>` : ""}
         <h3>Predictions (${preds.length})</h3>
@@ -2081,9 +2078,7 @@
         ${renderEvidenceSummary(detail)}
       `;
     } else if (n.type === "subtheme") {
-      const preds = sortPredictionsByDateDesc(
-        (n.child_ids || []).map((id) => nodeById(id)).filter(Boolean)
-      );
+      const preds = sortPredictionsByDateDesc(collectDescendantPredictions(n));
       extras = `
         <h3>Predictions (${preds.length})</h3>
         <ul class="related-list">${preds.map((p) => listItem(p, { bare: true })).join("") || '<li class="muted">none</li>'}</ul>
@@ -2091,15 +2086,28 @@
       `;
     } else if (n.type === "prediction") {
       const parents = (n.parent_ids || []).map(nodeById).filter(Boolean);
-      // For each parent subtheme, walk up to its theme + category and
-      // render a single "{CATEGORY} → {THEME}" breadcrumb. Long names
-      // truncate via CSS ellipsis (.crumb).
-      const lineageRows = parents.map((sub) => {
-        const theme = (sub.parent_ids || []).map(nodeById).find(Boolean) || null;
-        const cat = theme ? ((theme.parent_ids || []).map(nodeById).find(Boolean) || null) : null;
+      // For each parent, render a single "{CATEGORY} → {THEME}"
+      // breadcrumb. The current data graph is 3-level
+      // (category > theme > prediction) so a parent IS a theme — but
+      // the loop also handles the legacy 4-level layout where the
+      // parent is a subtheme by walking one step further.
+      // Long names truncate via CSS ellipsis (.crumb).
+      // Dedupe: cross-cut categorization can list the same theme via
+      // multiple subtheme parents in legacy graphs.
+      const seenTheme = new Set();
+      const lineageRows = parents.map((p) => {
+        const theme = p.type === "theme"
+          ? p
+          : ((p.parent_ids || []).map(nodeById).find((x) => x && x.type === "theme") || null);
+        const cat = theme
+          ? ((theme.parent_ids || []).map(nodeById).find((x) => x && x.type === "category") || null)
+          : null;
+        const themeKey = theme ? theme.id : `__no_theme__${p.id}`;
+        if (seenTheme.has(themeKey)) return "";
+        seenTheme.add(themeKey);
         const catLabel = cat ? (cat.short_label || cat.label || cat.id) : "—";
         const themeLabel = theme ? (theme.short_label || theme.label || theme.id) : "—";
-        const targetId = (theme && theme.id) || sub.id;
+        const targetId = (theme && theme.id) || p.id;
         return `<li class="lineage-row" data-goto="${escapeHTML(targetId)}">
           <span class="crumb crumb-cat" title="${escapeHTML(catLabel)}">${escapeHTML(catLabel)}</span>
           <span class="crumb-sep" aria-hidden="true">→</span>
@@ -2419,6 +2427,35 @@
       if (db) return 1;
       return 0;
     });
+  }
+
+  // Walk an aggregate node's descendant tree and return all prediction
+  // nodes underneath it. Handles both the legacy 4-level hierarchy
+  // (category > theme > subtheme > prediction) and the current 3-level
+  // shape (category > theme > prediction) without assuming a fixed
+  // depth. Predictions reachable from multiple parents (cross-cut
+  // categorization) are deduped.
+  function collectDescendantPredictions(node) {
+    const g = currentGraph();
+    if (!g || !g._index) return [];
+    const out = [];
+    const seenPred = new Set();
+    const visited = new Set();
+    const stack = [node];
+    while (stack.length) {
+      const cur = stack.pop();
+      if (!cur || visited.has(cur.id)) continue;
+      visited.add(cur.id);
+      if (cur.type === "prediction") {
+        if (!seenPred.has(cur.id)) { seenPred.add(cur.id); out.push(cur); }
+        continue;
+      }
+      for (const cid of cur.child_ids || []) {
+        const cn = g._index.get(cid);
+        if (cn) stack.push(cn);
+      }
+    }
+    return out;
   }
 
   // Render the validation-reports section for a prediction panel:
