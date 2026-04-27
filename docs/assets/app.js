@@ -53,7 +53,7 @@
       "panel.close":       "Close",
       "panel.window":      "Window",
       "panel.attention":   "Attention",
-      "panel.realization": "Realization",
+      "panel.realization": "Accuracy",
       "panel.daily":       "Daily level",
       "panel.snap_mode":   "snapshot",
       "loading.manifest":  "loading manifest…",
@@ -63,6 +63,7 @@
       "meta.sub.report":   "report",
       "meta.sub.build":    "build",
       "title":             "Future Prediction Theme Intelligence",
+      "pill.low_realization": "low accuracy",
     },
     ja: {
       "scope.mix":      "MIX",
@@ -95,8 +96,9 @@
       "panel.close":       "閉じる",
       "panel.window":      "ウィンドウ",
       "panel.attention":   "注目度",
-      "panel.realization": "実現度",
+      "panel.realization": "的中度",
       "panel.daily":       "日次レベル",
+      "pill.low_realization": "的中度低",
       "panel.snap_mode":   "スナップショット",
       "loading.manifest":  "マニフェストを読み込み中…",
       "loading.scope":     "読み込み中…",
@@ -137,8 +139,9 @@
       "panel.close":       "Cerrar",
       "panel.window":      "Ventana",
       "panel.attention":   "Atención",
-      "panel.realization": "Realización",
+      "panel.realization": "Precisión",
       "panel.daily":       "Nivel diario",
+      "pill.low_realization": "precisión baja",
       "panel.snap_mode":   "instantánea",
       "loading.manifest":  "cargando manifiesto…",
       "loading.scope":     "cargando…",
@@ -179,8 +182,9 @@
       "panel.close":       "Isara",
       "panel.window":      "Window",
       "panel.attention":   "Pansin",
-      "panel.realization": "Pagkatupad",
+      "panel.realization": "Katumpakan",
       "panel.daily":       "Antas Araw-araw",
+      "pill.low_realization": "mababang katumpakan",
       "panel.snap_mode":   "snapshot",
       "loading.manifest":  "iniluluwas ang manifest…",
       "loading.scope":     "iniluluwas…",
@@ -304,6 +308,16 @@
     // Category menu collapsed state. Persisted alongside scope/window.
     categoryMenuCollapsed: false,
 
+    // Top-menu collapsed state — only meaningful on small viewports
+    // where the mobile toggle is visible. Not persisted: a refresh
+    // should always start expanded so the user can see the controls.
+    topMenuCollapsed: false,
+
+    // Active touch pointers, keyed by pointerId. Used to detect pinch
+    // (>=2 simultaneous touch contacts) and feed two-finger zoom.
+    activeTouches: new Map(),
+    pinch: null,                 // { dist, mid:{x,y}, zoom0, pan0 }
+
     // Active locale code (en|ja|es|fil). Persisted alongside scope/window.
     locale: "en",
 
@@ -311,11 +325,13 @@
     // Persisted in localStorage so a refresh keeps the user's history view.
     snapshotDate: null,
 
-    // Which metric drives the node heat coloring. One of
+    // Which metric drives the node heat coloring. The UI selector was
+    // removed (only realization remains user-facing as Accuracy), but
+    // the internal state is kept for code that still branches on it.
     //   "attention"   — continuous attention_score   (0..1)
-    //   "realization" — continuous realization_score (0..1)
+    //   "realization" — continuous realization_score (0..1, the default)
     //   "grass"       — discrete  grass_level        (0..4, stepped to 5 bins)
-    heatMetric: "attention",
+    heatMetric: "realization",
 
     // Panel navigation history — ids of previously viewed nodes, most
     // recent last. Back button pops the stack.
@@ -943,12 +959,15 @@
           ctx.lineWidth = 2.2;
           ctx.stroke();
         }
+        // Backdrop disc just large enough to anchor the glyph on heat
+        // colors; the "!" itself intentionally overflows the node radius
+        // so it reads even at small zoom.
         ctx.fillStyle = withAlpha("#07111f", 0.85 * alpha);
         ctx.beginPath();
-        ctx.arc(p.x, p.y, r * 0.55, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, r * 0.95, 0, Math.PI * 2);
         ctx.fill();
         ctx.fillStyle = withAlpha("#ffffff", alpha);
-        ctx.font = `bold ${Math.round(r * 0.95)}px system-ui, sans-serif`;
+        ctx.font = `900 ${Math.round(r * 2.2)}px system-ui, sans-serif`;
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         ctx.fillText("!", p.x, p.y + 1);
@@ -1225,8 +1244,76 @@
       scheduleDraw();
     }, { passive: false });
 
+    // ---------- Pinch zoom (two-finger touch) ----------
+    function pinchSnapshot() {
+      const pts = Array.from(state.activeTouches.values()).slice(0, 2);
+      const dx = pts[1].x - pts[0].x;
+      const dy = pts[1].y - pts[0].y;
+      const dist = Math.hypot(dx, dy) || 1;
+      const mid = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 };
+      return { dist, mid };
+    }
+    function beginPinch() {
+      const snap = pinchSnapshot();
+      state.pinch = {
+        dist0: snap.dist,
+        mid0: snap.mid,
+        zoom0: state.zoom,
+        pan0: { x: state.pan.x, y: state.pan.y },
+      };
+    }
+    function updatePinch() {
+      if (!state.pinch) return;
+      const snap = pinchSnapshot();
+      const factor = snap.dist / state.pinch.dist0;
+      const newZoom = clamp(state.pinch.zoom0 * factor, 0.3, 4.0);
+
+      // Anchor zoom to the initial midpoint so the pinch feels stable
+      // (the world point under that midpoint stays under it). Same math
+      // as the wheel handler.
+      const mx = state.pinch.mid0.x;
+      const my = state.pinch.mid0.y;
+      const cx = state.width / 2 + state.pinch.pan0.x;
+      const cy = state.height / 2 + state.pinch.pan0.y;
+      let panX = state.pinch.pan0.x + (mx - cx) * (1 - newZoom / state.pinch.zoom0);
+      let panY = state.pinch.pan0.y + (my - cy) * (1 - newZoom / state.pinch.zoom0);
+
+      // Add midpoint translation so two-finger drag also pans.
+      panX += (snap.mid.x - state.pinch.mid0.x);
+      panY += (snap.mid.y - state.pinch.mid0.y);
+
+      state.zoom = newZoom;
+      state.pan.x = panX;
+      state.pan.y = panY;
+      rebuildSimulation();
+      scheduleDraw();
+    }
+
     // Pointer down
     canvas.addEventListener("pointerdown", (ev) => {
+      // Track touch contacts for pinch detection. We do NOT capture
+      // the pointer in pinch mode — capture is per-pointer, but pinch
+      // needs to listen to multiple. The first finger captures
+      // normally so single-finger drag still routes here.
+      if (ev.pointerType === "touch") {
+        state.activeTouches.set(ev.pointerId, { x: ev.clientX, y: ev.clientY });
+        if (state.activeTouches.size >= 2) {
+          // Entered pinch. Drop any in-flight single-finger drag/pan
+          // so the second finger doesn't yank a node off-screen.
+          if (state.draggingNode) {
+            state.draggingNode.fx = null;
+            state.draggingNode.fy = null;
+            state.draggingNode = null;
+            state.dragOffset = null;
+          }
+          state.isPointerDown = false;
+          state.panMode = false;
+          canvas.classList.remove("dragging", "panning");
+          beginPinch();
+          return;
+        }
+      }
+
       canvas.setPointerCapture(ev.pointerId);
       state.isPointerDown = true;
       state.pointerStart = { x: ev.clientX, y: ev.clientY };
@@ -1256,6 +1343,16 @@
     });
 
     canvas.addEventListener("pointermove", (ev) => {
+      // Update tracked touch position first (used by pinch math).
+      if (ev.pointerType === "touch" && state.activeTouches.has(ev.pointerId)) {
+        state.activeTouches.set(ev.pointerId, { x: ev.clientX, y: ev.clientY });
+      }
+      // Pinch takes priority while two fingers are down.
+      if (state.pinch && state.activeTouches.size >= 2) {
+        updatePinch();
+        return;
+      }
+
       state.pointerCurrent = { x: ev.clientX, y: ev.clientY };
 
       // Hover feedback: show pointer cursor when over a node.
@@ -1303,6 +1400,15 @@
     });
 
     const endDrag = (ev) => {
+      // Release tracked touch contact regardless of mode.
+      if (ev.pointerType === "touch") {
+        state.activeTouches.delete(ev.pointerId);
+        if (state.pinch && state.activeTouches.size < 2) {
+          // Drop pinch when a finger lifts. Don't treat the remaining
+          // finger as a fresh drag — let the user lift fully.
+          state.pinch = null;
+        }
+      }
       if (!state.isPointerDown) return;
       state.isPointerDown = false;
       canvas.classList.remove("dragging", "panning");
@@ -1415,6 +1521,23 @@
       state.categoryMenuCollapsed = !state.categoryMenuCollapsed;
       applyCatCollapse();
       saveState();
+    });
+
+    // Mobile-only top-menu toggle. Hidden on wide viewports via CSS
+    // (.mobile-only). Toggles a body class so #top-menu can collapse
+    // its inner groups while leaving the toggle button itself visible.
+    const topToggle = document.getElementById("top-menu-toggle");
+    const topMenu = document.getElementById("top-menu");
+    const applyTopMenuCollapse = () => {
+      if (!topMenu || !topToggle) return;
+      topMenu.dataset.collapsed = state.topMenuCollapsed ? "true" : "false";
+      document.body.classList.toggle("top-menu-collapsed", state.topMenuCollapsed);
+      topToggle.setAttribute("aria-expanded", state.topMenuCollapsed ? "false" : "true");
+    };
+    applyTopMenuCollapse();
+    if (topToggle) topToggle.addEventListener("click", () => {
+      state.topMenuCollapsed = !state.topMenuCollapsed;
+      applyTopMenuCollapse();
     });
 
     // Panel close / back
@@ -1879,23 +2002,22 @@
     const desc = detail.description || n.description || "";
     const statusPills = renderStatusPills(m, n);
 
-    // Metrics block.
-    //   Attention    — how much this theme/category was cited in the
-    //                  validation reports inside the window, weighted by
-    //                  the relevance score attached to each citation.
-    //   Realization  — mean observed relevance (1-5 → 0.2-1.0) across
-    //                  evidence in the window, weighted 0.65 new + 0.35
-    //                  continuing. Reflects "is this prediction actually
-    //                  playing out" — low means unrealized.
-    //   Daily level  — today's grass cell level (0-4), for quick read.
+    // Metrics block. Order: Accuracy (left, primary "did the prediction
+    // hit") then Attention (right, "how loud was the topic"). The old
+    // "Daily level" tile was removed because it duplicated the Daily
+    // Activity chart below.
+    //   Accuracy   — mean observed relevance (1-5 → 0.2-1.0) across
+    //                evidence in the window, weighted 0.65 new + 0.35
+    //                continuing. Low = prediction is missing.
+    //   Attention  — how much this theme/category was cited in the
+    //                validation reports inside the window, weighted by
+    //                relevance.
     const attTip = "How often this topic was cited (frequency × relevance) in the window";
     const realTip = "Weighted mean observed relevance (0.65 * new + 0.35 * continuing)";
-    const grassTip = "Today's daily-activity level (0-4, drives the strip below)";
     const mm = `
       <div class="metrics-grid">
-        ${metricTile("Attention",    m.attention_score,   undefined, attTip)}
-        ${metricTile("Realization",  m.realization_score, undefined, realTip)}
-        ${metricTile("Daily level",  typeof m.grass_level === "number" ? m.grass_level / 4 : 0, m.grass_level, grassTip)}
+        ${metricTile(localeStr("panel.realization"), m.realization_score, undefined, realTip)}
+        ${metricTile(localeStr("panel.attention"),   m.attention_score,   undefined, attTip)}
       </div>
     `;
 
@@ -2005,7 +2127,7 @@
         const weak = countWeakDescendantPredictions(n);
         if (weak > 0) pills.push(`<span class="pill warn">${weak} weak</span>`);
       } else if (typeof m.realization_score === "number" && m.realization_score < WARN_T) {
-        pills.push(`<span class="pill warn">low realization</span>`);
+        pills.push(`<span class="pill warn">${localeStr("pill.low_realization")}</span>`);
       }
     }
     // Contradiction axis is retired; pill only survives for legacy data
@@ -2041,9 +2163,14 @@
     return toHeatBin(typeof m.attention_score === "number" ? m.attention_score : 0);
   }
 
-  // Inline SVG line chart of daily attention_score across the
-  // selected window. Background tinted with the node's current heat
-  // color so the panel reads as "this node, over time".
+  // Inline SVG line chart of the daily relevance level (1-5) across
+  // the selected window. The underlying attention_score (0-1) is the
+  // mean of per-evidence relevance which lives on a 1-5 scale (a
+  // single relevance-1 cite ≈ 0.2, a single relevance-5 cite ≈ 1.0),
+  // so the chart un-normalises that back to the human 1-5 scale.
+  // Days with no cited evidence sit at 0 (below the 1-5 band) so
+  // gaps in activity stay visually distinct from "low activity".
+  // Background tint stays driven by the heat metric (Accuracy).
   function renderActivityChart(m) {
     const days = windowDays(state.windowId);
     const arr = Array.isArray(m.grass_daily) ? m.grass_daily : [];
@@ -2053,7 +2180,13 @@
     const endISO = (state.manifest && state.manifest.latest_report_date) || null;
     const endDate = endISO ? new Date(endISO + "T00:00:00Z") : new Date();
 
-    // One sample per day in window, with 0 for empty days.
+    // Map the 0..1 attention_score back onto the 1..5 relevance scale.
+    // Days with no row collapse to 0 so they read as "no activity".
+    const toLevel = (att) => {
+      const a = Math.max(0, Math.min(1, att || 0));
+      return 1 + 4 * a;
+    };
+
     const samples = [];
     for (let i = days - 1; i >= 0; i--) {
       const d = new Date(endDate);
@@ -2062,7 +2195,7 @@
       const row = byDate.get(iso);
       samples.push({
         date: iso,
-        v: row ? Math.max(0, Math.min(1, row.attention_score || 0)) : 0,
+        level: row ? toLevel(row.attention_score) : 0,
         cited: !!row,
       });
     }
@@ -2072,16 +2205,17 @@
     const innerW = W - pad.l - pad.r;
     const innerH = H - pad.t - pad.b;
     const xAt = (i) => pad.l + (samples.length === 1 ? innerW / 2 : (i / (samples.length - 1)) * innerW);
-    const yAt = (v) => pad.t + (1 - v) * innerH;
+    // Y-domain spans 0..5 so empty days (0) stay visually below the
+    // 1-5 active band without clipping.
+    const yAt = (lvl) => pad.t + (1 - lvl / 5) * innerH;
 
     const heatT = nodeHeatT(m);
     const bg = heatColor(heatT);
 
     if (arr.length === 0) {
-      const yTicksEmpty = [0, 1].map((v) => {
-        const y = yAt(v);
-        const label = v === 1 ? "1.0" : "0";
-        return `<text x="${pad.l - 3}" y="${(y + 3).toFixed(1)}" text-anchor="end" font-size="9" fill="rgba(130,170,210,0.55)">${label}</text>`;
+      const yTicksEmpty = [1, 5].map((lvl) => {
+        const y = yAt(lvl);
+        return `<text x="${pad.l - 3}" y="${(y + 3).toFixed(1)}" text-anchor="end" font-size="9" fill="rgba(130,170,210,0.55)">${lvl}</text>`;
       }).join("");
       return `
         <div class="activity-chart" style="--bg:${bg};">
@@ -2094,11 +2228,11 @@
         </div>`;
     }
 
-    // Polyline path for the line; circles for cited days.
-    const linePts = samples.map((s, i) => `${xAt(i).toFixed(1)},${yAt(s.v).toFixed(1)}`).join(" ");
+    // Polyline path for the line; circles for cited days only.
+    const linePts = samples.map((s, i) => `${xAt(i).toFixed(1)},${yAt(s.level).toFixed(1)}`).join(" ");
     const dots = samples
       .map((s, i) => s.cited
-        ? `<circle cx="${xAt(i).toFixed(1)}" cy="${yAt(s.v).toFixed(1)}" r="2.4" fill="#e07a1a" />`
+        ? `<circle cx="${xAt(i).toFixed(1)}" cy="${yAt(s.level).toFixed(1)}" r="2.4" fill="#e07a1a" />`
         : ""
       )
       .join("");
@@ -2113,19 +2247,18 @@
       }
     }
 
-    // Y-axis labels (0 / 0.5 / 1.0) on the left margin.
-    const yTicks = [0, 0.5, 1].map((v) => {
-      const y = yAt(v);
-      const label = v === 1 ? "1.0" : v === 0.5 ? "0.5" : "0";
-      return `<text x="${pad.l - 3}" y="${(y + 3).toFixed(1)}" text-anchor="end" font-size="9" fill="rgba(130,170,210,0.7)">${label}</text>`;
+    // Y-axis labels at 1, 3, 5 — the relevance band.
+    const yTicks = [1, 3, 5].map((lvl) => {
+      const y = yAt(lvl);
+      return `<text x="${pad.l - 3}" y="${(y + 3).toFixed(1)}" text-anchor="end" font-size="9" fill="rgba(130,170,210,0.7)">${lvl}</text>`;
     }).join("");
 
     return `
-      <div class="activity-chart" style="--bg:${bg};" title="Daily attention over the last ${days} days">
+      <div class="activity-chart" style="--bg:${bg};" title="Daily relevance level (1-5) over the last ${days} days">
         <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true">
-          <line x1="${pad.l}" y1="${yAt(1)}" x2="${W - pad.r}" y2="${yAt(1)}" stroke="rgba(130,170,210,0.10)" stroke-dasharray="2 3" stroke-width="1"/>
-          <line x1="${pad.l}" y1="${yAt(0.5)}" x2="${W - pad.r}" y2="${yAt(0.5)}" stroke="rgba(130,170,210,0.10)" stroke-dasharray="2 3" stroke-width="1"/>
-          <line x1="${pad.l}" y1="${yAt(0)}" x2="${W - pad.r}" y2="${yAt(0)}" stroke="rgba(130,170,210,0.18)" stroke-width="1"/>
+          <line x1="${pad.l}" y1="${yAt(5)}" x2="${W - pad.r}" y2="${yAt(5)}" stroke="rgba(130,170,210,0.10)" stroke-dasharray="2 3" stroke-width="1"/>
+          <line x1="${pad.l}" y1="${yAt(3)}" x2="${W - pad.r}" y2="${yAt(3)}" stroke="rgba(130,170,210,0.10)" stroke-dasharray="2 3" stroke-width="1"/>
+          <line x1="${pad.l}" y1="${yAt(1)}" x2="${W - pad.r}" y2="${yAt(1)}" stroke="rgba(130,170,210,0.18)" stroke-width="1"/>
           ${yTicks}
           <polyline points="${linePts}" fill="none" stroke="#ffd8a0" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
           ${dots}
@@ -2324,9 +2457,11 @@
       if (saved.scopeId) state.scopeId = saved.scopeId;
       if (saved.windowId) state.windowId = saved.windowId;
       if (saved.tool === "pan" || saved.tool === "rotate") state.tool = saved.tool;
-      if (["attention", "realization", "grass"].includes(saved.heatMetric)) {
-        state.heatMetric = saved.heatMetric;
-      }
+      // Heat-metric selector was removed (only realization survives,
+      // surfaced in the panel as "Accuracy"). Ignore any persisted
+      // attention/grass preference so legacy users aren't stranded
+      // with a metric they can't change anymore.
+      state.heatMetric = "realization";
       if (typeof saved.categoryMenuCollapsed === "boolean") state.categoryMenuCollapsed = saved.categoryMenuCollapsed;
       if (typeof saved.locale === "string" && ["en","ja","es","fil"].includes(saved.locale)) {
         state.locale = saved.locale;

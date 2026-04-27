@@ -16,6 +16,12 @@
        column so category-menu auto-positions below top-menu
        regardless of how many rows top-menu has, without overlap. -->
   <div id="top-menu-stack">
+  <!-- Mobile-only top-menu collapse toggle. Hidden on wide viewports
+       via media query; on narrow viewports it floats above #top-menu
+       and lets the user free up the canvas. -->
+  <button id="top-menu-toggle" type="button" class="mobile-only menu-toggle" aria-controls="top-menu" aria-expanded="true" title="Show/hide menu">
+    <span class="bars" aria-hidden="true"><span></span><span></span><span></span></span>
+  </button>
   <nav id="top-menu" aria-label="Dashboard controls">
     <div class="menu-group" role="tablist" aria-label="Scope">
       <button class="menu-btn tab" data-scope="mix" role="tab" aria-selected="true">MIX</button>
@@ -26,11 +32,6 @@
       <button class="menu-btn win" data-window="7d" role="radio" aria-checked="false">7D</button>
       <button class="menu-btn win" data-window="30d" role="radio" aria-checked="true">30D</button>
       <button class="menu-btn win" data-window="90d" role="radio" aria-checked="false">90D</button>
-    </div>
-    <div class="menu-group" role="radiogroup" aria-label="Heatmap metric">
-      <button class="menu-btn heat" data-heat="attention"   role="radio" aria-checked="true"  title="Heatmap based on attention (frequency x relevance)">ATT</button>
-      <button class="menu-btn heat" data-heat="realization" role="radio" aria-checked="false" title="Heatmap based on realization score">REAL</button>
-      <button class="menu-btn heat" data-heat="grass"       role="radio" aria-checked="false" title="Heatmap based on today's daily level (0-4)">DAILY</button>
     </div>
     <div class="menu-group tool-group" role="radiogroup" aria-label="Empty-space drag tool">
       <button class="menu-btn tool" data-tool="pan"    role="radio" aria-checked="false" title="Pan (translate the view)">
@@ -58,7 +59,6 @@
   <!-- Category filter menu (sits under #top-menu, populated by JS per scope) -->
   <nav id="category-menu" aria-label="Category filters">
     <div class="menu-head">
-      <button class="menu-mini-btn cat-toggle" id="cat-toggle" title="Collapse/expand categories" aria-expanded="true">&#x25BE;</button>
       <span class="menu-head-title">Categories</span>
       <button class="menu-mini-btn" id="cat-focus" title="Isolate to highlighted categories" disabled>FOCUS</button>
       <button class="menu-mini-btn" id="cat-all" title="Show all">ALL</button>
@@ -67,6 +67,9 @@
     <div class="category-filters" id="category-filters" role="group">
       <!-- buttons injected by JS -->
     </div>
+    <button class="cat-toggle-handle" id="cat-toggle" title="Collapse/expand categories" aria-expanded="true" aria-controls="category-filters">
+      <span class="chev" aria-hidden="true">&#x25B2;</span>
+    </button>
   </nav>
   </div>
 

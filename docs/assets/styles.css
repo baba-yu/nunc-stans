@@ -156,7 +156,10 @@ body[data-tool="pan"]    #graph-canvas { cursor: move; }
   min-height: 0;               /* allow shrink so inner list scrolls */
   max-width: 220px;
   min-width: 180px;
-  overflow: hidden;
+  /* visible so the bottom-edge collapse handle (bottom:-12px) isn't
+     clipped; the inner .category-filters owns its own scroll. */
+  overflow: visible;
+  margin-bottom: 12px;         /* leave room for the protruding handle */
 }
 
 /* When the detail panel is open, slide the whole stack from top-right
@@ -169,6 +172,51 @@ body.panel-open #meta-header {
   pointer-events: none;
   transition: opacity 200ms ease;
 }
+/* Mobile-only utility: hidden by default, surfaced under media query. */
+.mobile-only { display: none; }
+
+/* Hamburger toggle that floats just left of the top-menu stack on
+   narrow viewports. Stays visible even while the menu is collapsed
+   so the user can re-open it. */
+.menu-toggle {
+  align-self: flex-end;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid var(--panel-border);
+  background: var(--menu-bg);
+  color: var(--text-main);
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: var(--shadow-deep);
+  backdrop-filter: blur(6px);
+  display: none;                 /* shown via .mobile-only @media */
+  align-items: center;
+  justify-content: center;
+}
+.menu-toggle .bars {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 18px;
+}
+.menu-toggle .bars span {
+  display: block;
+  height: 2px;
+  background: currentColor;
+  border-radius: 1px;
+  transition: transform 160ms ease, opacity 160ms ease;
+}
+.menu-toggle[aria-expanded="false"] .bars span:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+.menu-toggle[aria-expanded="false"] .bars span:nth-child(2) {
+  opacity: 0;
+}
+.menu-toggle[aria-expanded="false"] .bars span:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
 @media (max-width: 640px) {
   /* On narrow screens the panel covers the full width, so don't bother. */
   body.panel-open #top-menu-stack {
@@ -181,22 +229,43 @@ body.panel-open #meta-header {
     top: 8px;
   }
   #category-menu { max-width: none; }
+
+  /* Surface the mobile-only chrome and let the top-menu collapse. */
+  .mobile-only { display: inline-flex; }
+  .menu-toggle { display: inline-flex; }
+
+  #top-menu[data-collapsed="true"] {
+    display: none;
+  }
+  /* When the top-menu is collapsed, also hide the category-menu so
+     the canvas is unobstructed. The toggle remains accessible. */
+  body.top-menu-collapsed #category-menu {
+    display: none;
+  }
 }
 
 .menu-head {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   padding: 0 2px 2px;
   border-bottom: 1px solid var(--panel-border);
+  min-width: 0;
 }
 .menu-head-title {
   font-size: 10px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text-muted);
-  flex: 1;
+  flex: 1 1 auto;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.menu-head .menu-mini-btn {
+  flex: 0 0 auto;
 }
 .menu-mini-btn {
   border: 1px solid var(--panel-border);
@@ -706,18 +775,57 @@ body.panel-open #meta-header {
 
 /* ------------------------------------------------------------
    Category-menu collapse toggle
-   ------------------------------------------------------------ */
-.menu-mini-btn.cat-toggle {
-  font-size: 12px;
-  padding: 0 4px;
-  transition: transform 120ms ease;
+   ------------------------------------------------------------
+   The handle hangs off the bottom-outer edge of #category-menu so
+   collapsing leaves only the title row + handle, with .menu-head's
+   FOCUS/ALL/NONE quick-actions on a single row above it. */
+#category-menu { position: relative; }
+
+.cat-toggle-handle {
+  position: absolute;
+  left: 50%;
+  bottom: -12px;                 /* sits half outside the box border */
+  transform: translateX(-50%);
+  width: 44px;
+  height: 18px;
+  padding: 0;
+  border: 1px solid var(--panel-border);
+  border-top-color: rgba(130, 170, 210, 0.3);
+  background: var(--menu-bg);
+  color: var(--text-muted);
+  border-radius: 0 0 8px 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: inherit;
+  line-height: 1;
+  z-index: 2;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(6px);
 }
-#category-menu[data-collapsed="true"] .menu-mini-btn.cat-toggle {
-  transform: rotate(-90deg);
+.cat-toggle-handle:hover {
+  color: var(--text-main);
+  background: rgba(24, 199, 216, 0.12);
 }
+.cat-toggle-handle .chev {
+  display: inline-block;
+  font-size: 10px;
+  line-height: 1;
+  transition: transform 160ms ease;
+}
+/* Expanded state: chevron points up (= "click to collapse upward").
+   Collapsed state: rotates 180° to point down (= "click to expand"). */
+#category-menu[data-collapsed="true"] .cat-toggle-handle .chev {
+  transform: rotate(180deg);
+}
+#category-menu[data-collapsed="true"] .menu-head,
 #category-menu[data-collapsed="true"] #category-filters {
   display: none;
 }
 #category-menu[data-collapsed="true"] {
-  padding-bottom: 0;
+  padding: 0;
+  min-height: 6px;
+  flex: 0 0 auto;
+  border-color: rgba(130, 170, 210, 0.12);
 }
