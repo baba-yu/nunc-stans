@@ -53,7 +53,7 @@
       "panel.close":       "Close",
       "panel.window":      "Window",
       "panel.attention":   "Attention",
-      "panel.realization": "Accuracy",
+      "panel.realization": "Hit rate",
       "panel.daily":       "Daily level",
       "panel.snap_mode":   "snapshot",
       "loading.manifest":  "loading manifest…",
@@ -63,7 +63,7 @@
       "meta.sub.report":   "report",
       "meta.sub.build":    "build",
       "title":             "Future Prediction Theme Intelligence",
-      "pill.low_realization": "low accuracy",
+      "pill.low_realization": "low hit rate",
     },
     ja: {
       "scope.mix":      "MIX",
@@ -139,9 +139,9 @@
       "panel.close":       "Cerrar",
       "panel.window":      "Ventana",
       "panel.attention":   "Atención",
-      "panel.realization": "Aciertos",
+      "panel.realization": "Tasa de acierto",
       "panel.daily":       "Nivel diario",
-      "pill.low_realization": "pocos aciertos",
+      "pill.low_realization": "tasa de acierto baja",
       "panel.snap_mode":   "instantánea",
       "loading.manifest":  "cargando manifiesto…",
       "loading.scope":     "cargando…",
@@ -182,9 +182,9 @@
       "panel.close":       "Isara",
       "panel.window":      "Window",
       "panel.attention":   "Pansin",
-      "panel.realization": "Katumpakan",
+      "panel.realization": "Tumpak",
       "panel.daily":       "Antas Araw-araw",
-      "pill.low_realization": "mababang katumpakan",
+      "pill.low_realization": "mababang tumpak",
       "panel.snap_mode":   "snapshot",
       "loading.manifest":  "iniluluwas ang manifest…",
       "loading.scope":     "iniluluwas…",
@@ -326,7 +326,7 @@
     snapshotDate: null,
 
     // Which metric drives the node heat coloring. The UI selector was
-    // removed (only realization remains user-facing as Accuracy), but
+    // removed (only realization remains user-facing as Hit rate), but
     // the internal state is kept for code that still branches on it.
     //   "attention"   — continuous attention_score   (0..1)
     //   "realization" — continuous realization_score (0..1, the default)
@@ -2002,11 +2002,11 @@
     const desc = detail.description || n.description || "";
     const statusPills = renderStatusPills(m, n);
 
-    // Metrics block. Order: Accuracy (left, primary "did the prediction
+    // Metrics block. Order: Hit rate (left, primary "did the prediction
     // hit") then Attention (right, "how loud was the topic"). The old
     // "Daily level" tile was removed because it duplicated the Daily
     // Activity chart below.
-    //   Accuracy   — mean observed relevance (1-5 → 0.2-1.0) across
+    //   Hit rate   — mean observed relevance (1-5 → 0.2-1.0) across
     //                evidence in the window, weighted 0.65 new + 0.35
     //                continuing. Low = prediction is missing.
     //   Attention  — how much this theme/category was cited in the
@@ -2170,7 +2170,7 @@
   // so the chart un-normalises that back to the human 1-5 scale.
   // Days with no cited evidence sit at 0 (below the 1-5 band) so
   // gaps in activity stay visually distinct from "low activity".
-  // Background tint stays driven by the heat metric (Accuracy).
+  // Background tint stays driven by the heat metric (Hit rate).
   function renderActivityChart(m) {
     const days = windowDays(state.windowId);
     const arr = Array.isArray(m.grass_daily) ? m.grass_daily : [];
@@ -2458,7 +2458,7 @@
       if (saved.windowId) state.windowId = saved.windowId;
       if (saved.tool === "pan" || saved.tool === "rotate") state.tool = saved.tool;
       // Heat-metric selector was removed (only realization survives,
-      // surfaced in the panel as "Accuracy"). Ignore any persisted
+      // surfaced in the panel as "Hit rate"). Ignore any persisted
       // attention/grass preference so legacy users aren't stranded
       // with a metric they can't change anymore.
       state.heatMetric = "realization";
