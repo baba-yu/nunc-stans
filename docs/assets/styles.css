@@ -172,6 +172,37 @@ body.panel-open #meta-header {
 /* Mobile-only utility: hidden by default, surfaced under media query. */
 .mobile-only { display: none; }
 
+/* Floating PAN ↔ ROTATE toggle (mobile only). Fixed bottom-left
+   above the hint strip. Active icon (matching state.tool) shows;
+   the other is hidden via [data-when]. */
+.tool-toggle {
+  position: fixed;
+  left: 12px;
+  bottom: 12px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--panel-border);
+  background: var(--menu-bg);
+  color: var(--text-main);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: var(--shadow-deep);
+  backdrop-filter: blur(6px);
+  display: none;                 /* shown via .mobile-only @media */
+  align-items: center;
+  justify-content: center;
+  z-index: 11;
+  font-size: 18px;
+  line-height: 1;
+}
+.tool-toggle:hover { background: rgba(24, 199, 216, 0.12); }
+.tool-toggle .ic { display: none; line-height: 1; }
+.tool-toggle[data-tool="rotate"] .ic[data-when="rotate"],
+.tool-toggle[data-tool="pan"]    .ic[data-when="pan"] {
+  display: inline-block;
+}
+
 /* Hamburger toggle that floats just left of the top-menu stack on
    narrow viewports. Stays visible even while the menu is collapsed
    so the user can re-open it. */
@@ -230,6 +261,7 @@ body.panel-open #meta-header {
   /* Surface the mobile-only chrome and let the top-menu collapse. */
   .mobile-only { display: inline-flex; }
   .menu-toggle { display: inline-flex; }
+  .tool-toggle { display: inline-flex; }
 
   #top-menu[data-collapsed="true"] {
     display: none;
@@ -239,6 +271,9 @@ body.panel-open #meta-header {
   body.top-menu-collapsed #category-menu {
     display: none;
   }
+  /* Hint strip is desktop-oriented copy; the floating tool-toggle
+     replaces its purpose on small screens. */
+  #hint-strip { display: none; }
 }
 
 .menu-head {
@@ -620,6 +655,35 @@ body.panel-open #meta-header {
   letter-spacing: 0.1em;
   color: var(--text-muted);
   margin-right: 6px;
+}
+
+/* Lineage breadcrumb: '{CATEGORY} → {THEME}' on a single row, with
+   each crumb truncated independently so neither half steals all the
+   space when the other is short. */
+.lineage-list .lineage-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.lineage-list .crumb {
+  flex: 1 1 0;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lineage-list .crumb-cat {
+  color: var(--text-muted);
+}
+.lineage-list .crumb-theme {
+  color: var(--text-main);
+  font-weight: 600;
+}
+.lineage-list .crumb-sep {
+  flex: 0 0 auto;
+  color: var(--text-muted);
+  font-size: 11px;
 }
 
 .evidence-list a,

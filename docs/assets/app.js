@@ -1542,6 +1542,21 @@
     if (catNone)  catNone.addEventListener("click",  () => setAllCategories(false));
     if (catFocus) catFocus.addEventListener("click", isolateHighlightedCategories);
 
+    // Mobile floating PAN ↔ ROTATE toggle. Cycles state.tool; styling
+    // lives in CSS (.tool-toggle on .mobile-only is shown on narrow
+    // viewports only). aria-checked mirrors state.tool so the active
+    // icon swaps via the [data-when] selector.
+    const toolToggle = document.getElementById("tool-toggle");
+    const applyToolToggle = () => {
+      if (!toolToggle) return;
+      toolToggle.dataset.tool = state.tool;
+    };
+    applyToolToggle();
+    if (toolToggle) toolToggle.addEventListener("click", () => {
+      selectTool(state.tool === "pan" ? "rotate" : "pan");
+      applyToolToggle();
+    });
+
     // Mobile-only top-menu toggle. Hidden on wide viewports via CSS
     // (.mobile-only). Toggles a body class so #top-menu can collapse
     // its inner groups while leaving the toggle button itself visible.
@@ -1792,6 +1807,8 @@
     if (tool === state.tool) return;
     state.tool = tool;
     updateToolButtons(tool);
+    const toolToggle = document.getElementById("tool-toggle");
+    if (toolToggle) toolToggle.dataset.tool = tool;
     saveState();
   }
 
@@ -2054,35 +2071,48 @@
     } else if (n.type === "theme") {
       const parentCat = n.parent_ids && n.parent_ids[0] ? nodeById(n.parent_ids[0]) : null;
       const subs = (n.child_ids || []).map((id) => nodeById(id)).filter(Boolean);
-      const preds = subs.flatMap((s) => (s.child_ids || []).map((id) => nodeById(id))).filter(Boolean);
+      const preds = sortPredictionsByDateDesc(
+        subs.flatMap((s) => (s.child_ids || []).map((id) => nodeById(id))).filter(Boolean)
+      );
       extras = `
         ${parentCat ? `<h3>Parent category</h3><ul class="related-list">${listItem(parentCat)}</ul>` : ""}
-        <h3>Subthemes (${subs.length})</h3>
-        <ul class="related-list">${subs.map(listItem).join("") || '<li class="muted">none</li>'}</ul>
-        ${preds.length ? `<h3>Prediction summaries (${preds.length})</h3>
-          <ul class="related-list">${preds.map(listItem).join("")}</ul>` : ""}
+        <h3>Predictions (${preds.length})</h3>
+        <ul class="related-list">${preds.map((p) => listItem(p, { bare: true })).join("") || '<li class="muted">none</li>'}</ul>
         ${renderEvidenceSummary(detail)}
       `;
     } else if (n.type === "subtheme") {
-      const parentTheme = n.parent_ids && n.parent_ids[0] ? nodeById(n.parent_ids[0]) : null;
-      const parentCat   = parentTheme ? (parentTheme.parent_ids || []).map(nodeById).filter(Boolean)[0] : null;
-      const preds = (n.child_ids || []).map((id) => nodeById(id)).filter(Boolean);
+      const preds = sortPredictionsByDateDesc(
+        (n.child_ids || []).map((id) => nodeById(id)).filter(Boolean)
+      );
       extras = `
-        ${parentCat ? `<h3>Category</h3><ul class="related-list">${listItem(parentCat)}</ul>` : ""}
-        ${parentTheme ? `<h3>Theme</h3><ul class="related-list">${listItem(parentTheme)}</ul>` : ""}
-        <h3>Prediction summaries (${preds.length})</h3>
-        <ul class="related-list">${preds.map(listItem).join("") || '<li class="muted">none</li>'}</ul>
+        <h3>Predictions (${preds.length})</h3>
+        <ul class="related-list">${preds.map((p) => listItem(p, { bare: true })).join("") || '<li class="muted">none</li>'}</ul>
         ${renderEvidenceSummary(detail)}
       `;
     } else if (n.type === "prediction") {
       const parents = (n.parent_ids || []).map(nodeById).filter(Boolean);
+      // For each parent subtheme, walk up to its theme + category and
+      // render a single "{CATEGORY} → {THEME}" breadcrumb. Long names
+      // truncate via CSS ellipsis (.crumb).
+      const lineageRows = parents.map((sub) => {
+        const theme = (sub.parent_ids || []).map(nodeById).find(Boolean) || null;
+        const cat = theme ? ((theme.parent_ids || []).map(nodeById).find(Boolean) || null) : null;
+        const catLabel = cat ? (cat.short_label || cat.label || cat.id) : "—";
+        const themeLabel = theme ? (theme.short_label || theme.label || theme.id) : "—";
+        const targetId = (theme && theme.id) || sub.id;
+        return `<li class="lineage-row" data-goto="${escapeHTML(targetId)}">
+          <span class="crumb crumb-cat" title="${escapeHTML(catLabel)}">${escapeHTML(catLabel)}</span>
+          <span class="crumb-sep" aria-hidden="true">→</span>
+          <span class="crumb crumb-theme" title="${escapeHTML(themeLabel)}">${escapeHTML(themeLabel)}</span>
+        </li>`;
+      }).join("");
       extras = `
         ${detail.full_prediction_summary || detail.summary ? `
           <h3>Full prediction</h3>
           <div class="md-body">${renderMarkdown(detail.full_prediction_summary || detail.summary)}</div>` : ""}
         ${detail.prediction_date ? `<p class="muted">prediction date: ${detail.prediction_date}</p>` : ""}
-        ${parents.length ? `<h3>Lineage</h3>
-          <ul class="related-list">${parents.map(listItem).join("")}</ul>` : ""}
+        ${lineageRows ? `<h3>Lineage</h3>
+          <ul class="related-list lineage-list">${lineageRows}</ul>` : ""}
         ${detail.source_report_path ? `<h3>Source report</h3><p>${repoLink(detail.source_report_path)}</p>` : ""}
         ${renderValidationReports(detail)}
         ${renderEvidenceLinks(detail.evidence || detail.evidence_links)}
@@ -2370,10 +2400,25 @@
     `;
   }
 
-  function listItem(n) {
+  function listItem(n, opts) {
     if (!n) return "";
     const label = escapeHTML(n.short_label || n.label || n.id);
-    return `<li data-goto="${escapeHTML(n.id)}"><span class="rtype">${n.type}</span>${label}</li>`;
+    const showType = !(opts && opts.bare);
+    const prefix = showType ? `<span class="rtype">${n.type}</span>` : "";
+    return `<li data-goto="${escapeHTML(n.id)}">${prefix}${label}</li>`;
+  }
+
+  // Sort an array of prediction nodes newest-first by detail.prediction_date.
+  // Nodes missing a date sink to the bottom in their original order.
+  function sortPredictionsByDateDesc(preds) {
+    return preds.slice().sort((a, b) => {
+      const da = (a && a.detail && a.detail.prediction_date) || "";
+      const db = (b && b.detail && b.detail.prediction_date) || "";
+      if (da && db) return db.localeCompare(da);
+      if (da) return -1;
+      if (db) return 1;
+      return 0;
+    });
   }
 
   // Render the validation-reports section for a prediction panel:

@@ -85,6 +85,14 @@
     <span>click node: details</span>
   </aside>
 
+  <!-- Mobile-only floating tool toggle (PAN ↔ ROTATE). Lives at the
+       bottom-left of the viewport so the canvas stays usable while
+       the menu is collapsed. The detail panel may overlay it. -->
+  <button id="tool-toggle" type="button" class="mobile-only tool-toggle" aria-label="Toggle pan / rotate" title="Toggle pan / rotate">
+    <span class="ic" data-when="rotate" aria-hidden="true">&#x270B;</span>
+    <span class="ic" data-when="pan" aria-hidden="true">&#x21F1;</span>
+  </button>
+
   <!-- Right slide-in detail panel -->
   <section id="detail-panel" aria-hidden="true">
     <div class="panel-head">
