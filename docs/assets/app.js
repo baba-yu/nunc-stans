@@ -1993,7 +1993,10 @@
 
     const detail = n.detail || {};
     typeEl.textContent = `${n.type} · ${n.scope_id || state.scopeId}`;
-    title.textContent = detail.title || n.label || n.id;
+    // Prefer the locale fan-out from labels.* over the EN-only
+    // detail.title / top-level n.label so a JA / ES / FIL session
+    // doesn't fall back to English copy.
+    title.textContent = nodeLabel(n, "label") || detail.title || n.id;
     subtitle.textContent = detail.subtitle || subtitleFor(n);
 
     body.innerHTML = renderPanelBody(n);
@@ -2034,8 +2037,11 @@
     let extras = "";
     const detail = n.detail || {};
 
-    // Common description
-    const desc = detail.description || n.description || "";
+    // Common description — use the labels.* locale fan-out so JA / ES
+    // / FIL sessions read in their language. detail.description is
+    // EN-only on the export side; only fall back to it when nodeLabel
+    // has nothing for the active locale.
+    const desc = nodeLabel(n, "description") || detail.description || "";
     const statusPills = renderStatusPills(m, n);
 
     // Metrics block. Order: Hit rate (left, primary "did the prediction
@@ -2105,8 +2111,12 @@
         const themeKey = theme ? theme.id : `__no_theme__${p.id}`;
         if (seenTheme.has(themeKey)) return "";
         seenTheme.add(themeKey);
-        const catLabel = cat ? (cat.short_label || cat.label || cat.id) : "—";
-        const themeLabel = theme ? (theme.short_label || theme.label || theme.id) : "—";
+        const catLabel = cat
+          ? (nodeLabel(cat, "short_label") || nodeLabel(cat, "label") || cat.id)
+          : "—";
+        const themeLabel = theme
+          ? (nodeLabel(theme, "short_label") || nodeLabel(theme, "label") || theme.id)
+          : "—";
         const targetId = (theme && theme.id) || p.id;
         return `<li class="lineage-row" data-goto="${escapeHTML(targetId)}">
           <span class="crumb crumb-cat" title="${escapeHTML(catLabel)}">${escapeHTML(catLabel)}</span>
@@ -2114,10 +2124,23 @@
           <span class="crumb crumb-theme" title="${escapeHTML(themeLabel)}">${escapeHTML(themeLabel)}</span>
         </li>`;
       }).join("");
+      // Full-text prediction summary, locale-aware. The export emits
+      // detail.prediction_summary_locales = { en, ja, es, fil }; the
+      // top-level detail.prediction_summary is the EN string kept as
+      // a fallback. Older field names (full_prediction_summary /
+      // summary) are still read for snapshots that predate the rename.
+      const summaryByLocale = (detail && detail.prediction_summary_locales) || {};
+      const fullSummary = summaryByLocale[state.locale]
+        || summaryByLocale.en
+        || detail.prediction_summary
+        || detail.full_prediction_summary
+        || detail.summary
+        || nodeLabel(n, "summary")
+        || "";
       extras = `
-        ${detail.full_prediction_summary || detail.summary ? `
+        ${fullSummary ? `
           <h3>Full prediction</h3>
-          <div class="md-body">${renderMarkdown(detail.full_prediction_summary || detail.summary)}</div>` : ""}
+          <div class="md-body">${renderMarkdown(fullSummary)}</div>` : ""}
         ${detail.prediction_date ? `<p class="muted">prediction date: ${detail.prediction_date}</p>` : ""}
         ${lineageRows ? `<h3>Lineage</h3>
           <ul class="related-list lineage-list">${lineageRows}</ul>` : ""}
@@ -2410,7 +2433,8 @@
 
   function listItem(n, opts) {
     if (!n) return "";
-    const label = escapeHTML(n.short_label || n.label || n.id);
+    const localized = nodeLabel(n, "short_label") || nodeLabel(n, "label") || n.id;
+    const label = escapeHTML(localized);
     const showType = !(opts && opts.bare);
     const prefix = showType ? `<span class="rtype">${n.type}</span>` : "";
     return `<li data-goto="${escapeHTML(n.id)}">${prefix}${label}</li>`;
