@@ -28,7 +28,7 @@
 - **llama.cpp build b8936（Apr 26 03:28 UTC）— AVX2 Q6_K 最適化** — `ggml-cpu: optimize avx2 q6_k (#22345)` がメイン、macOS / iOS / Linux / Android / Windows + CPU / Vulkan / ROCm / OpenVINO / SYCL / CUDA バックエンドのフルマルチプラットフォームバイナリを Apr 26 公開
 - **Simon Willison `GPT-5.5 prompting guide` + `WHY ARE YOU LIKE THIS` + Romain Huet 引用（Apr 25）** — OpenAI 公式プロンプトガイド公開を起点にコミュニティの GPT-5.5 検証フェーズに突入
 
-[news-20260426.md](report/news-20260426.md)
+[news-20260426.md](report/ja/news-20260426.md)
 
 ### 答え合わせ
 
@@ -43,7 +43,7 @@
 - ユーザー予測2（クラウド vs ローカル分化、SaaS 値上げ）：**逆方向と整合の混在状態** — DeepSeek V4-Pro API 75% OFF（28x 安価）でクラウド側暴落、OpenClaw V4 Flash オンボーディングデフォルト化でクラウド既定方向。一方 Big Tech capex 高止まり（MSFT FY26 $146B / GOOGL $175-185B / META $115-135B）+ 中国 LLM × Huawei Ascend 地政学分断で長期構造は維持
 - ユーザー予測3（RL/LLM による予測改善）：本日も直接事例なし。SGLang + Miles の Day-0 verified RL（Step-0 train-inference diff 0.02-0.03）で RL 訓練インフラ民主化が前進、ユーザ予測の前提条件整備段階
 
-[future-prediction-20260426.md](future-prediction/future-prediction-20260426.md)
+[future-prediction-20260426.md](future-prediction/ja/future-prediction-20260426.md)
 
 ---
 
@@ -68,7 +68,7 @@
 - **Amazon × Anthropic 追加 $25B 投資 + 5GW Trainium2/3 容量（Apr 20 詳細確定）** — $5B 即時 + $20B マイルストン連動、Anthropic は AWS に 10 年 $100B コミット、2026 末までに 1GW Trainium2/3 同時稼働
 - **AI Tinkerers SF + AI Dev 26 x SF + Sage Future の連続開催（Apr 28-30）** — Apr 29 AI Tinkerers SF VIP Dinner（Building Software Factories with Kiro & B-Capital）、Apr 28-29 AI Dev 26 x SF @ Pier 48（3,000+ 開発者）、Apr 28-30 Sage Future @ Moscone Center
 
-[news-20260425.md](report/news-20260425.md)
+[news-20260425.md](report/ja/news-20260425.md)
 
 ### 答え合わせ
 
@@ -86,7 +86,7 @@
 - ユーザー予測2（クラウド vs ローカル分化、SaaS 値上げ）：**GPT-5.5 API 2x 値上げ × DeepSeek V4 Pro 7x 価格破壊**の同日対比で本週最も精度の高い予測。「料金体系変化が先行」が決定的に確認、「役割分化」も Apache 2.0 で Opus 4.5 級が手元で動く形に進行
 - ユーザー予測3（RL/LLM による予測改善の普及）：本日も直接事例なし。Claude Code v2.1.117 `/resume` 自動要約 + DeepSeek V4 Hybrid Attention + GPT-5.5 Codex 40% 出力削減が隣接兆候
 
-[future-prediction-20260425.md](future-prediction/future-prediction-20260425.md)
+[future-prediction-20260425.md](future-prediction/ja/future-prediction-20260425.md)
 
 ---
 
@@ -110,7 +110,7 @@
 - **Mercor データ流出の集団訴訟化** — 4TB / 顔生体情報 / API キーが TeamPCP により LiteLLM CI/CD 経由で流出、7+ クラスアクション提訴、Anthropic Mythos Preview 侵入との連鎖（Proofpoint）
 - **RSAC 2026 で CrowdStrike / Cisco / Palo Alto が agentic SOC ツール一斉出荷**、ただし agent telemetry 標準化欠如が共通ギャップと VentureBeat 分析
 
-[news-20260424.md](report/news-20260424.md)
+[news-20260424.md](report/ja/news-20260424.md)
 
 ### 答え合わせ
 
@@ -126,7 +126,7 @@
 - ユーザー予測2（RL/LLM による予測改善）：本日も直接事例なし。Anthropic 品質ポストモーテム + GPT-5.5 の planning/tool/self-check + Galileo Luna-2 evaluators（agent drift 自動特定）が隣接兆候
 - ユーザー予測3（電力/計算資源逼迫で AI SaaS 値上げ）：**最強相関** — GPT-5.5 API 価格 2x、Alphabet 2026 capex $175-185B（2025 の 2x）、Tesla capex $25B 超、ServiceNow 等 Legacy SaaS 連鎖下落、+ エージェントセキュリティ層（Keycard $38M / Okta Showcase / Zenity Fortune Cyber 60）で新規 SaaS 請求ライン追加の二極構造
 
-[future-prediction-20260424.md](future-prediction/future-prediction-20260424.md)
+[future-prediction-20260424.md](future-prediction/ja/future-prediction-20260424.md)
 
 ---
 
