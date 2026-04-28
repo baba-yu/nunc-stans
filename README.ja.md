@@ -2,6 +2,10 @@
 
 *Available in: [English](README.md) | [Español](README.es.md) | [Filipino](README.fil.md)*
 
+<!-- ai-notice -->
+> **ご注意:** 本ページの記事および要約は、Anthropic 社の生成AI「Claude」によって作成されています。
+
+
 - [News Explorer (GitHub Pages)](https://baba-yu.github.io/news/) — 未来予測ダッシュボード
 - `report/` — 日次ニュースレポート
 - `future-prediction/` — 今日のニュースと昨日までの日次ニュースFuture欄の答え合わせ

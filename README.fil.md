@@ -2,6 +2,10 @@
 
 *Available in: [English](README.md) | [日本語](README.ja.md) | [Español](README.es.md)*
 
+<!-- ai-notice -->
+> **Paalala:** Ang mga artikulo at buod sa pahinang ito ay nilikha ng generative AI na Claude ng Anthropic.
+
+
 Future predictions news + dashboard.
 
 - [News Explorer (GitHub Pages)](https://baba-yu.github.io/news/) — future-prediction dashboard

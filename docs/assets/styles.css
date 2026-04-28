@@ -445,6 +445,14 @@ body.panel-open #meta-header {
   color: var(--text-muted);
   margin-top: 2px;
 }
+#meta-header .meta-ai-notice {
+  font-size: 10.5px;
+  color: var(--text-muted);
+  opacity: 0.85;
+  margin-top: 4px;
+  max-width: 520px;
+  font-style: italic;
+}
 
 /* ------------------------------------------------------------
    Hint strip (bottom-left)

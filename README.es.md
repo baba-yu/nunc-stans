@@ -2,6 +2,10 @@
 
 *Available in: [English](README.md) | [日本語](README.ja.md) | [Filipino](README.fil.md)*
 
+<!-- ai-notice -->
+> **Nota:** Los artículos y resúmenes de esta página son generados por Claude (IA generativa) de Anthropic.
+
+
 Noticias de predicciones futuras + dashboard.
 
 - [News Explorer (GitHub Pages)](https://baba-yu.github.io/news/) — dashboard de predicciones futuras
