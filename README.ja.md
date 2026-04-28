@@ -8,6 +8,41 @@
 
 ---
 
+## 2026-04-28
+
+### News
+
+- **OpenAI–Microsoft が4月27日に提携を再構築 — AGI条項撤廃、Microsoftライセンスは2032年まで非独占に、収益シェアは2030年で打ち止め、OpenAIは全クラウドで販売可能に(AWS $38Bは契約済)** — 10年来の「AGI条項」(OpenAI取締役会がAGIを宣言した時点でMicrosoftのIP権利が無効化される条項)が消滅。収益シェア支払いはAGI宣言の有無にかかわらず2030年で停止。Microsoftの約$135B / 27%の経済的持分は維持されるが、独占性は消失 — OpenAIはAWS / Oracle / Googleで全製品ラインを展開可能。AWS契約は7年で$38B、$50Bの上振れ余地あり。**ハイパースケーラーとAIラボの資本連動仮説の直接的な触媒**として、Mag 7決算前の地合いを支配。
+- **Mag 7 スーパーウィーク(4/28-30)+ FOMC(4/28-29、Powell議長最後の会合)が同48時間に圧縮 — Microsoft / Alphabet / Amazon / Meta が4/29、Apple は4/30、2026年合計AI設備投資 約$700B、政策金利は3.50-3.75%で据え置き(コンセンサス100%)** — Microsoft EPS $4.04 / 売上$81.4B / Azure +38%予想; Alphabet EPS $2.64 / 売上$92.2B / FY26設備投資$175B-$185B再確認の見通し; Meta EPS $7.51 / 売上$55.5B(+31%YoY); Amazon AWSは$200B AI計画。NVDAは4/27に+4%で52週高値更新; AMDは5/5決算前の4/24に史上最高値$352.99。WTIは+2.09%で$96.37、ブレントは+2.75%で$108.23、ホルムズ海峡情勢が要因。イランは海峡再開に向け米国へ新提案を提示。**Powell任期は5/15まで** — Warsh氏は4/21に上院銀行委員会公聴会。
+- **AWS × Anthropic、4/27にTrainium / Graviton シリコンレベルへ深化 + Claude Cowork が Bedrock に着地; AWS × Meta は Graviton 大規模展開契約; AgentCore CLI が14リージョンで GA、マネージドハーネスは4リージョンでプレビュー** — Anthropicは最先端基盤モデルを**AWS Trainium + Graviton**上で訓練、Annapurna Labsとシリコンレベルで共同設計、$5B-$33B / $100B 10年コミットを背景に。**Claude Cowork が Bedrock 内で稼働**(データはAWS内に常駐); 「Claude Platform on AWS」統合開発体験が後続。**Metaは数千万コアのGraviton**をエージェント型AIのCPU集約ワークロードに展開。AgentCoreマネージドハーネスプレビューはモデル非依存のエージェントループを提供、セッションごとのmicroVM、セッション中のモデル切替、ファイルシステム永続化を実現; CLIは現在CDK対応、Terraformは近日中; SkillsはKiro Powerで利用可能、Claude Code / Codex / Cursorは来週対応。
+- **Totolink A8000RU CVE 連発(CVE-2026-7153 / 7154 / 7156 / 7202、いずれもCVSS 9.8、4/27-28)+ Cisco ISE 認証不要 RCE 勧告 + SGLang CVE-2026-5760 は4/28時点でも未パッチ** — **Totolink A8000RU ファームウェア 7.1cu.643_b20200521 を狙うクリティカルなOSコマンドインジェクション CVE が48時間で4件公開**(4/27に7153/7154/7156、4/28に7202)、すべて公開PoCあり、認証不要のリモート攻撃経路。**Cisco ISE 認証不要リモートコード実行勧告**(cisco-sa-ise-unauth-rce-ZAd2GnJ6)も同時期に公開。SGLangのGGUF SSTIプリミティブには**依然としてアップストリームのパッチがない** — v0.5.10は`ImmutableSandboxedEnvironment`緩和なしで出荷; コピペクラスはvLLM(CVE-2025-61620)/ LMDeploy(CVE-2026-33626)へ拡大中。
+- **野生環境における間接プロンプトインジェクション(4/24-27) — 10件の新規IPIペイロード(Google + Forcepoint)、OpenAIはプロンプトインジェクションが恒久化することを公に認める** — Forcepointが**新規10件の野生IPIペイロード**を追加、決済対応エージェントを狙う完全指定のPayPalトランザクションや、メタタグ名前空間インジェクションによるStripe寄付リンク誘導が含まれる。間接インジェクションは現在エンタープライズプロンプトインジェクション量の80%超; OpenAIは**プロンプトインジェクションクラスは恒久的**であり、防御側が遅れていることを公に認める — 脅威クラスは「パッチ可能」から「設計制約」へ移行。
+- **AI Dev 26 x SF が本日(4/28)Pier 48 で開幕、開発者3,000人以上、Andrew Ng がホスト; Microsoft VibeVoice フロンティア音声 OSS が4/27に注目を集める; `talkie-1930-13b-base` が4/28出荷** — DeepLearning.AI のSF旗艦イベントは4/28-29の2日間、トラックは**Agentic AI / Context Engineering / Multimodal AI Apps / AI Governance / Coding-with-AI** + AI Startup Track。**VibeVoice**はMicrosoftによるMITライセンスのWhisper系STT、話者分離をモデル内蔵、50以上の言語対応。**Talkie-1930**はNick Levine / David Duvenaud / Alec Radfordによる、1931年以前の歴史的テキスト260Bトークンで訓練された13B言語モデル — 初の本格的な「ヴィンテージ」LMリリース。
+- **Figure AI が Figure 03 を月産約240台 + 90分ビルドケイデンス + $39B評価額にスケール; Tesla Optimus V3 公開を7月下旬に延期; Boston Dynamics Atlas は Hyundai+DeepMind 2026 配備が確定** — Figure 03 月次出荷数が倍増(2-3-4月で60→120→240)、BotQが年12,000台超へスケール、BMWスパータンバーグのパイロットで30,000台以上の車両をサポート。**Tesla Optimus V3 公開は7月下旬から8月初頭**に移動、Fremont生産開始の直前に; Gigafactory Texasの5.2M sqftのOptimus拡張は年1,000万台を目標; 一般販売は2027年末、価格$20K-$30K帯。
+- **Cerebras IPO 5月中旬、$22B-$25B レンジ確定; OpenAI契約は$20B+ / 750MW、2028年まで; Hugging Face Spacesが HF Buckets 永続ストレージ + エージェントトレースのデータセットアップロード + ZeroGPU クォータ超過クレジットを4/26-28に投入** — Cerebras主幹事はMorgan Stanley / Citi / Barclays / UBS; 2025年売上の24%がG42、62%がMBZUAI(集中リスク)。Spacesは現在HF Bucketsを永続ボリュームとしてマウント可能; **Claude Code / Codex / Pi のエージェントトレースが直接Hugging Face Datasetsへアップロード**、トレース形式の自動検出と専用ビューアを備える; ZeroGPU 前払いクレジット($1 / 10分)でPROユーザはクォータ超過利用が可能。
+
+[news-20260428.md](report/ja/news-20260428.md)
+
+### Predictions check
+
+- **直近1週間(4/21-4/27)で20予測検証。Relevance 5 が6件、Relevance 3-4 が5件、Relevance 1-2 が3件; ドーマント・プールから1件 ping(リバイバル・レリバンス1)。** 本日の3つのFuture予測(AGI条項解消テンプレート + AI-Infra KEV サブカタログ + トークンあたりマージン・ゲート設備投資開示)は次ステップ拡張で、4/28-30 + Q3 2026 ウィンドウに集約。
+- **ハイパースケーラー対AIラボ資本連結 → コンピュート・スタック・ロックイン(4/26)** Relevance 5: **OpenAI/Microsoft AGI条項撤廃 + AWS $38B for OpenAI + Anthropic が AWS Trainium + Graviton にシリコンレベルで連携 + Claude Cowork が Bedrock 内 + Meta は Graviton をスケール展開**。コンピュート・スタック・ロックインの硬化をリアルタイムに直接確認 — ただし経路は「各クラウドが各ラボを独占」ではなく「各フロンティア・ラボがマルチクラウド配布」に変化。
+- **推論サーバ プリミティブ サプライチェーン(4/26)** Relevance 5: **SGLang CVE-2026-5760 が公開後10日以上未パッチ**、**Totolink A8000RU CVE クアッド(7153/7154/7156/7202、すべてCVSS 9.8)が48時間で着弾**、Cisco ISE 認証不要RCE勧告、Google + Forcepoint IPI 32% YoY上昇。NIST/CISAへの圧力は引き締まる。
+- **Mag 7 Q1決算がAI capex ROIナラティブをリセット(4/27)** Relevance 5: **FOMC + Mag 7 スーパーウィークが同じ48時間のテープに収束**、2026年 capex 約$700B 集計; 「Why This Week Could Be Huge For AI Stocks」+「Can Big Tech Justify $645 Billion In AI Spending?」がナラティブをアンカー; 本日のFuture #3 はQ3 2026までのトークンあたりマージン・ゲート設備投資開示として継承。
+- **3クラウド訓練オリゴポリ仮説(4/25)** Relevance 5: **OpenAI が AWS でクリア(11月署名 $38B、$50Bヘッドルーム)** + Microsoft 非独占。**Anthropic は AWS Trainium + Graviton にシリコンレベルで載る**一方、Google($40B / 5GW)と Amazon($25B + 5GW / 10年 $100B)のアンカーも維持。3クラウド訓練オリゴポリ仮説を直接補強。
+- **Agent Control Plane(4/23)** Relevance 5: **AgentCore Managed Harness 4リージョンプレビュー + CLI 14リージョン GA + Skills を Kiro Power に**; **Claude Cowork が Bedrock 内部で AWS データレジデンシーを保ったまま稼働**; 「Claude Platform on AWS」統合サーフェスも近日。直接的な拡張。
+- **GGUFサプライチェーン(4/21)** Relevance 5: SGLang CVE-2026-5760 は v0.5.10 で `ImmutableSandboxedEnvironment` 緩和なしで出荷; コピペクラスは vLLM CVE-2025-61620 / LMDeploy CVE-2026-33626 へ拡大。
+- **Relevance 4**: 5極ハイパースケーラー対フロンティアラボ体制(4/21、シリコンレベルで部分的に補強 / 独占解除で部分的に反転); 訓練 vs 推論 SKU 分離(4/22、Trainium + Graviton CPUレーンがGPUに並列); MCPプロトコル攻撃面(4/25、Okta Agent Gateway + 仮想MCPサーバ・レジストリ); AI-Infra CVE クラス → 規制プリミティブ(4/27、AI-Infra サブカタログはまだだが圧力は引き締まる)。
+- **Relevance 3**: Physical-AI-as-RaaS(4/22、Figure 03倍化 + Optimus V3 + Atlas); 27B Dense + 1Mコンテキスト(4/23、Qwen3.6-27B + V4-Flash + Bonsai-8B); 1Mコンテキスト・デフォルト・オープン重み(4/24); Physical-AI 8h生産(4/24); Physical-AI リーグテーブル IROS/GTC(4/25、リーグテーブル公開はまだ); コンシューマGPU コーディング・エージェント ≥30%(4/26); 州自律エージェント法定アイデンティティ法(4/27、Okta GA 4/30 がアンカーだが州法は未署名)。
+- **Relevance 1-2**: プロプライエタリ再拡張 vs オープン重み(4/21、talkie-1930 オープン公開と Qwen3.6-Max-Preview API限定で混在); OAuthトラスト・スコープ(4/22、IPIエビデンスがリスクベクトルを補強するがSSOスコープ・カーブアウトはなし); サードパーティ・ベンダ境界 + URLネーミング・エントロピー(4/23、新規コントラクター・インシデントやURLランダム化義務化なし); SaaS置換バリュエーションリセット(4/24、ナラティブは維持、新規下落はウィンドウ内になし)。ドーマント・プール 20260420-3「Headless Everything」はシグナル・トークンのみ点灯 — 内容はマッチせず; リバイバル・レリバンス1; 次の周期 ping は 2026-05-11。
+- ユーザー予測 1(悪性ローカル LLM → マルウェア + ゼロトラストが基本セーフガード):**ゼロトラスト側に強い信号、悪性ローカルLLM側はやや弱い**。Okta for AI Agents GA は4/30で残り2日、「AI 単独でアクセス不可なシステムパスを意図的に設計する」パターンを実装 — Agent Discovery & Governance + Agent Gateway + 仮想MCPサーバ・レジストリ + クレデンシャル・ヴォルト + ユニバーサル・ログアウト。Microsoft Zero Trust for AI(RSAC 2026継続)、Cisco/CrowdStrike/Splunk のコンセンサスがベースラインを補強。Google + Forcepoint IPI in-the-wild(10件の新規ペイロード)とOpenAIのプロンプト・インジェクション恒久化への公的譲歩は、「監視は必要だが十分ではない」但し書きにマップする。
+- ユーザー予測 2(クラウド API は先進タスク、ローカル LLM は日常運用、SaaS 値上げが触発):**需給両面のシグナル存在、消費者向け SaaS の明示的値上げイベントはまだ未着弾**。需要側: 4/27の契約再構築は計算をハイパースケーラ所有のシリコン経由に明示的にルーティング; Mag 7 スーパーウィークは2026年 capex 約 $700B を集計、トークンあたりマージン・ゲート仮説が硬化。供給側: DeepSeek V4-Pro $1.74/$3.48 で1Mコンテキスト; PrismML Bonsai-8B 1-bit が iPhone 17 Pro Max / M4 Pro / RTX 4090 で 44/131/368 tok/s; Qwen3.6-27B が Apache-2.0 Dense オプション。トークンあたりマージン・ゲート開示は、予測した価格構造シフトの先行指標。
+- ユーザー予測 3(RL/LLM ベース予測精度向上):**直接シグナルなし**。隣接するが確証ではない: AgentCore Managed Harness のセッション中モデル・スワップ + セッション毎マイクロVM(フォーキャスト・エヴァル親和的); Anthropic Rate Limits API + Claude Managed Agents パブリック・ベータ(バッチ・エヴァル向けプログラマブル・ハーネス)。Carry-only。
+
+[future-prediction-20260428.md](future-prediction/ja/future-prediction-20260428.md)
+
+---
+
 ## 2026-04-27
 
 ### News
@@ -83,47 +118,5 @@
 - ユーザー予測3(RL/LLM による予測改善):本日直接事例なし。最も近い隣接は Anthropic エンジニアリングポストモーテム(品質リグレッション分析、予測改善ピースではない)。Carry-only
 
 [future-prediction-20260426.md](future-prediction/ja/future-prediction-20260426.md)
-
----
-
-## 2026-04-25
-
-### News
-
-- **NVIDIA、Apr 24 終値で時価総額 $5.12 兆を再達成** — Intel の Apr 23 引け後決算大幅ビートを起点にチップセクタ全面高、NVIDIA は $208.27(+4.3%)で過去最高値引け、Alphabet との時価総額差は $1 兆超に拡大。AMD は同日 **+13.90%($347.77)** で続伸(決算 5/5)、Nasdaq Composite **+1.63% / 24,836.60**、S&P 500 **+0.80% / 7,165.08** の最高値引け
-- **Tesla、Apr 25 を Earth Day マーケティングデーに、Optimus V3「Plant Cube」を限定配布** — 米国直営店で FSD (Supervised) デモドライブ参加者に Optimus が植えた Plant Cube 配布。Apr 23 決算で **V3 mid-2026 デビュー / 7-8 月量産** 再確認、2026 capex $25B 超ガイダンス、Fremont 年産 100 万体 / Giga Texas 第 2 工場 1,000 万体規模
-- **Google Cloud × Thinking Machines Lab、複数億ドル規模 GB300 契約(Apr 22 発表)** — Mira Murati の TML が NVIDIA **GB300** 搭載 Google Cloud **A4X Max** VM を採用、訓練 / サービング速度前世代比 **2x**。Anthropic / Meta に続く Google Cloud 3 件目のフロンティアラボ契約
-- **BMW Group、Apr 2026 から Leipzig 工場で AEON ヒューマノイド本格テスト + Physical AI Center of Competence 設立** — Spartanburg の **Figure 02 が 10 ヶ月で 30,000 台 / 9 万部品 / 1.2M ステップ / 1,250 時間稼働**、欧州初の Physical AI 拠点を Leipzig に開設。Hexagon Robotics 製 **AEON**(22 センサ / 自己交換バッテリ / 4 層 Physical AI / 20 デモで自律動作習得)を Apr 2026 から導入し夏のパイロット本番へ
-- **Hannover Messe 2026(Apr 20-24)閉幕、Physical AI が初の中心テーマ** — 130,000 来場者 / 4,000 出展者 / 1,600 講演者、AEON / HMND 01 / Apptronik Apollo / Agility Digit 並列展示
-- **OpenAI GPT-5.5 / GPT-5.5 Pro API 公開(Apr 24)** — 入力 $5.00 / 出力 $30.00 per M tokens(GPT-5.4 比 **2x**)、Pro $30 / $180、Codex は出力トークン 40% 削減で per-task コストを相殺
-- **DeepSeek V4 Pro ベンチ詳報** — IMOAnswerBench **89.8**(Claude Opus 4.7 75.3 / Gemini 3.1-Pro 81.0 上回り、GPT-5.4 91.4 に肉薄)、agentic で Sonnet 4.5 を上回り Opus 4.5 級。価格 **$1.74 / $3.48 per M tokens(Opus 4.7 の 1/7)**、Apache 2.0、Huawei Ascend 緊密統合
-- **Claude Code v2.1.117(Apr 25)** — `/resume` がストール / 大型セッションを reload 前に auto-summarize、コンテキスト溢れ防止
-- **OpenClaw v2026.4.23(Apr 24)** — Providers/OpenAI に Codex OAuth 経由の image gen + reference image editing 追加
-- **AWS Bedrock AgentCore Browser、OS レベル インタラクション拡張(Apr 22)** — ファイルアップロード / OS ダイアログ操作 / マルチウィンドウ切替
-- **Salesforce Q4: Agentforce ARR $800M / 29,000 deals (+50% QoQ)** — FY2026 売上 $41.5B、Q4 EPS $3.81 / 売上 $11.20B(+12.1% YoY)
-- **Nginx UI CVE-2026-33032(MCPwn、CVSS 9.8)実環境悪用** — `/mcp_message` エンドポイントの IP allowlist が空既定で auth ミドルウェアを bypass、MCP ツール 12 個が無認証で晒される、2 HTTP リクエストで Nginx 完全乗っ取り
-- **Saltcorn CVE-2026-41478(CVSS 9.9)公開(Apr 24)** — Mobile-Sync SQL injection
-- **Amazon × Anthropic 追加 $25B + 5GW Trainium2/3 容量(Apr 20 詳細確定)** — $5B 即時 + $20B マイルストーン連動
-- **AI Tinkerers SF + AI Dev 26 x SF + Sage Future 連続(Apr 28-30)**
-
-[news-20260425.md](report/ja/news-20260425.md)
-
-### Predictions check
-
-- 17 予測を 1 週間で検証。**Relevance 5** 連続検証 6 軸:**Agent Control Plane / OAuth 信任 / Physical AI SaaS 化 / 1M context オープン重み標準 / ハイパースケーラ × フロンティアラボ独占同盟 / プロプライエタリ × オープン分裂**
-- **プロプライエタリ × オープン分裂(4/21-3)** Relevance 5:GPT-5.5 API 2x 値上げ × DeepSeek V4 Pro 7x 価格破壊が **同日リリース**で決着。Apus 4.5 級が Apache 2.0 オープン重みでローカル動作する構造
-- **ハイパースケーラ × フロンティアラボ独占同盟(4/21-2)** Relevance 5:Google × Thinking Machines Lab GB300 契約で 3 社目を確定、Amazon × Anthropic $25B + 5GW Trainium 容量 + 10 年 $100B 詳細確定、Vera Rubin 7 chip 量産で「訓練 = 3 クラウドオリゴポリ / 推論 = レイヤード」2 層構造ロックイン
-- **Physical AI SaaS / RaaS 化(4/22-2)** Relevance 5:BMW Leipzig AEON Apr 2026 トライアル + Spartanburg Figure 02 10 ヶ月 30,000 台 + Hannover Messe 2026 Physical AI 初の中心テーマ + Tesla Optimus Earth Day Plant Cube 配布同期 — RaaS / フリート管理 SaaS への構造転換が可視化
-- **Physical AI 8h 連続稼働 = 調達要件(4/24-2)** Relevance 5:BMW Spartanburg Figure 02 1,250 時間稼働確定、IROS 10 月 / GTC 秋 2026 で「OEM 採用数 × 連続稼働 × MTBF」リーグテーブル化が視野
-- **Agent Control Plane(4/23-1)** Relevance 5:Okta for AI Agents Apr 30 GA カウントダウン + AWS Bedrock AgentCore Browser OS レベル + Managed Harness CLI / Skills + Salesforce Agentforce ARR $800M / 29,000 deals (+50% QoQ) — 課金エンジン本格起動
-- **OAuth 信任(4/22-3)** Relevance 5:Okta for AI Agents プレ GA「同社最重要プロダクト」、Microsoft Copilot Studio CVE-2026-21520 で Capsule Security が「パッチだけでは間接プロンプトインジェクションを塞げない」と断言 — エンタープライズ MCP / agent 接続点監査が必須化
-- **1M context 既定(4/24-1)** Relevance 5:DeepSeek V4 Pro Hybrid Attention で長コンテキスト推論コストを V3.2 比 27% に / KV cache 10% 圧縮、Apache 2.0 で「1M トークン争奪戦」再点火
-- **Agent Registry(4/19-2)** Relevance 5:Okta for AI Agents の Agent Gateway / MCP virtual server / Okta MCP registry + AWS Bedrock AgentCore Managed Harness + CLI + Skills(Kiro Power 即時 / Claude Code、Codex、Cursor 来週)— 配給層構築進行
-- **Relevance 1-2**:Headless Everything(4/20-3、Relevance 1)— AgentCore Browser OS レベル拡張で逆方向。1bit ネイティブ学習(4/19-1、Relevance 1)— 新 Qwen / Llama 派生なし。SKU 分裂(4/22-1、Relevance 2) と CI Secret leak OWASP 昇格(4/20-2、Relevance 2)— 直接進展なし
-- ユーザー予測 1(悪性ローカル LLM → マルウェア):**Nginx UI CVE-2026-33032(MCPwn)** が MCP プロトコル統合層自体の構造欠陥をマルウェア経路化。本日 Future #3 が「OWASP MCP Top 10 公式公開 / MCP-over-mTLS 業界標準化 / Keycard / Okta / Wiz / Levo.ai / Pillar Security による MCP Gateway / Firewall 製品 Q4 ローンチ」と予測 — 強い裏付け
-- ユーザー予測 2(クラウド vs ローカル、SaaS 値上げ):**同日 GPT-5.5 API 2x × DeepSeek V4 Pro 7x 価格破壊**で **週内最も精度高い予測**。「価格体系変更が先行」決着、「役割分担」が Apus 4.5 級が Apache 2.0 でローカル動作で進行
-- ユーザー予測 3(RL/LLM 予測改善の波及):本日直接事例なし。隣接信号:Claude Code v2.1.117 `/resume` 自動要約 + DeepSeek V4 Hybrid Attention + GPT-5.5 Codex 出力 40% 削減
-
-[future-prediction-20260425.md](future-prediction/ja/future-prediction-20260425.md)
 
 ---
