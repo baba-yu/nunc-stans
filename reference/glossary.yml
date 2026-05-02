@@ -1,0 +1,110 @@
+# Stream A — auto-curated jargon glossary (seed file).
+#
+# Day-0 seed of 10 terms picked manually so the dashboard's hover
+# tooltip works on day-1, before extract-glossary-candidates and
+# define-glossary-terms have had time to build the active set
+# from real news.
+#
+# After Day 0 the daily flow (1_daily_update) runs:
+#   1. extract-glossary-candidates — adds rows with status='candidate'
+#      to the SQLite glossary_terms table.
+#   2. define-glossary-terms — promotes candidates to 'active' once
+#      they appear on >=3 distinct days in a 14-day window AND fills
+#      one_liner_eli14 + why_it_matters.
+# This YAML file is read once during DB bootstrap to insert the seed
+# rows. After bootstrap the SQLite table is the source of truth and
+# this file is reference-only (drift is allowed; only the SQLite
+# rows drive runtime behavior).
+#
+# Reviewed-by-human flag stays true on these seed rows so the weekly
+# theme review (5_weekly_theme_review) doesn't surface them in its
+# "needs human eyes" queue.
+
+terms:
+  - term: MCP
+    aliases: [Model Context Protocol]
+    one_liner_eli14: "A shared way for AI assistants to talk to outside tools (files, search, GitHub). Like USB for AI."
+    why_it_matters: "If MCP wins, agents become portable across vendors. Otherwise we're stuck with vendor-specific glue."
+    canonical_link: https://modelcontextprotocol.io/
+    status: active
+    reviewed_by_human: true
+
+  - term: MITRE-CNA
+    aliases: [CNA, CVE Numbering Authority]
+    one_liner_eli14: "An organization MITRE has trusted to assign CVE IDs. Like a city issuing license plates for software bugs."
+    why_it_matters: "Once a vendor or domain (e.g. AI agents) has its own CNA, vulnerabilities get tracked formally — that gates enterprise risk transfer."
+    canonical_link: https://www.cve.org/ProgramOrganization/CNAs
+    status: active
+    reviewed_by_human: true
+
+  - term: ATT&CK
+    aliases: ["MITRE ATT&CK", "ATT&CK v19"]
+    one_liner_eli14: "A list of all the tricks attackers actually use, organized like a recipe book. Defenders compare their detections against it."
+    why_it_matters: "Standard vocabulary for talking about attacker behavior. Without it, every security vendor invents their own taxonomy."
+    canonical_link: https://attack.mitre.org/
+    status: active
+    reviewed_by_human: true
+
+  - term: CVE
+    aliases: ["Common Vulnerabilities and Exposures"]
+    one_liner_eli14: "A unique ID for every known software bug that can be exploited. Lets the world refer to the same problem unambiguously."
+    why_it_matters: "If a bug has no CVE, it's invisible to enterprise patch programs and compliance checks."
+    canonical_link: https://www.cve.org/
+    status: active
+    reviewed_by_human: true
+
+  - term: CVSS
+    aliases: ["Common Vulnerability Scoring System"]
+    one_liner_eli14: "A 0-10 score for how bad a software bug is. 9-10 means drop everything and patch."
+    why_it_matters: "Drives the cutoff for what enterprises must patch within how many days. Score >= 8.0 is the spotlight zone."
+    canonical_link: https://www.first.org/cvss/
+    status: active
+    reviewed_by_human: true
+
+  - term: KV-cache
+    aliases: ["key-value cache", "KV cache"]
+    one_liner_eli14: "Memory the AI keeps for the words you've already said in the conversation, so it doesn't have to re-read them."
+    why_it_matters: "KV-cache size and reuse drive most of the cost and latency in serving long-context LLMs."
+    canonical_link: null
+    status: active
+    reviewed_by_human: true
+
+  - term: TurboQuant
+    aliases: []
+    one_liner_eli14: "A way to shrink an AI model so it runs on tiny hardware while keeping most of its smarts."
+    why_it_matters: "The latest in a long line of quantization tricks. If it sticks, more inference moves to local devices and less to cloud."
+    canonical_link: null
+    status: active
+    reviewed_by_human: true
+
+  - term: CSAI
+    aliases: ["CSAI Foundation", "Coalition for Secure AI"]
+    one_liner_eli14: "An industry group setting rules for how AI agents are kept safe — like a homeowners' association for AI security."
+    why_it_matters: "If CSAI's rules become a CNA-issued standard, agentic AI risk becomes a compliance category, not just a research topic."
+    canonical_link: https://www.coalitionforsecureai.org/
+    status: active
+    reviewed_by_human: true
+
+  - term: SLA
+    aliases: ["Service Level Agreement"]
+    one_liner_eli14: "A written promise about how often a service will be available and how fast it will respond."
+    why_it_matters: "Determines how much an AI vendor pays you back when their service fails. The teeth behind every cloud contract."
+    canonical_link: null
+    status: active
+    reviewed_by_human: true
+
+  - term: capex
+    aliases: ["capital expenditure", "capital expense"]
+    one_liner_eli14: "Money a company spends on big things that last (data centers, GPUs) — counted differently than monthly bills."
+    why_it_matters: "Hyperscaler capex tells you how much compute is coming online and where the AI infrastructure bottleneck will be."
+    canonical_link: null
+    status: active
+    reviewed_by_human: true
+
+  - term: hyperscaler
+    aliases: [hyperscalers]
+    one_liner_eli14: "One of the very big cloud companies (AWS, Azure, Google, Meta, Oracle) that runs millions of servers."
+    why_it_matters: "Their capex and AI alliances steer the entire market — frontier-lab pricing, chip availability, regional datacenter buildouts."
+    canonical_link: null
+    status: active
+    reviewed_by_human: true

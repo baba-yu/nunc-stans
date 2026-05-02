@@ -2003,7 +2003,21 @@
     // Prefer the locale fan-out from labels.* over the EN-only
     // detail.title / top-level n.label so a JA / ES / FIL session
     // doesn't fall back to English copy.
-    title.textContent = nodeLabel(n, "label") || detail.title || n.id;
+    let titleText = nodeLabel(n, "label") || detail.title || n.id;
+    if (n.type === "prediction") {
+      // Stream J: when the writer has supplied a dedicated
+      // `predictions.title`, prefer it; otherwise clean the legacy
+      // 140-char label so markdown / scope prefixes don't leak in.
+      const fullText =
+        nodeLabel(n, "summary")
+        || (detail.prediction_summary_locales && detail.prediction_summary_locales[state.locale])
+        || (detail.prediction_summary_locales && detail.prediction_summary_locales.en)
+        || detail.prediction_summary
+        || titleText;
+      const dedicated = nodeLabel(n, "title") || detail.title_clean || "";
+      titleText = cleanPredictionTitle(dedicated || titleText, fullText);
+    }
+    title.textContent = titleText;
     subtitle.textContent = detail.subtitle || subtitleFor(n);
 
     body.innerHTML = renderPanelBody(n);
@@ -2542,6 +2556,43 @@
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;")
       .replace(/'/g, "&#39;");
+  }
+
+  // Stream J quick fix (Phase 0): the prediction title slot historically
+  // received the full prediction summary verbatim — so the panel showed
+  // raw markdown (`**…**`), a redundant scope prefix `(Tech)` already
+  // present in the badge above, and 140-char truncations like
+  // `…spec…` instead of a real summary. Until the writer starts emitting
+  // a dedicated `predictions.title` column (Stream J full), we clean the
+  // displayed title at render time:
+  //   1. drop leading scope prefix
+  //   2. strip stray markdown asterisks
+  //   3. fall back to first sentence + ellipsis when too long
+  function cleanPredictionTitle(raw, fallbackFullText) {
+    let s = String(raw == null ? "" : raw).trim();
+    // Strip leading scope prefix in any of (Tech) / (Non-Tech) / (Business) / (Biz) / (Mix) shapes.
+    s = s.replace(/^\(\s*(?:tech|non[-\s]?tech|business|biz|mix)\s*\)\s*/i, "");
+    // Strip markdown bold/italic markers — they don't render in the title slot.
+    s = s.replace(/\*+/g, "");
+    // Collapse leftover whitespace.
+    s = s.replace(/\s+/g, " ").trim();
+    // Empty after cleaning → use fallback full text the same way.
+    if (!s && fallbackFullText) {
+      return cleanPredictionTitle(fallbackFullText, null);
+    }
+    // First-sentence fallback when the slot is overlong (≥ 80 chars).
+    if (s.length >= 80) {
+      // Match the first sentence terminator; allow common abbreviations
+      // by requiring whitespace + uppercase or end-of-string after.
+      const m = s.match(/^([^.!?]{8,160}?[.!?])(\s|$)/);
+      if (m) {
+        s = m[1].trim();
+      } else {
+        // No clean sentence break — hard-truncate and add an ellipsis.
+        s = s.slice(0, 78).replace(/\s+\S*$/, "").trim() + "…";
+      }
+    }
+    return s;
   }
 
   // Same whitelist as renderMarkdown, but only the inline pieces:
