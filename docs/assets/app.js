@@ -1751,15 +1751,82 @@
   // remain visible. Other categories from the same scope go into
   // the hidden set; categories from other scopes are untouched
   // (they were already kept independent from this scope's filter).
+  // Categories that should stay visible when FOCUS is clicked,
+  // given the currently selected node. Replaces relatedIds for this
+  // path because relatedIds also includes link-neighbour categories
+  // (shares_prediction edges), which made FOCUS effectively a no-op
+  // when the user picked a category that shared predictions with all
+  // other categories. Now:
+  //
+  //   category    — only that category itself
+  //   theme       — only that theme's parent category
+  //   subtheme    — the parent theme's parent category
+  //   prediction  — every category in the prediction's ancestor chain
+  //                 (no link-neighbour cross-pollution)
+  //
+  // Returns null when there's no focused node; an empty Set when the
+  // selected node has no resolvable category ancestor.
+  function focusedCategoryIds() {
+    const id = state.focusedNodeId;
+    if (!id) return null;
+    const n = nodeById(id);
+    if (!n) return null;
+    if (n.type === "category") return new Set([n.id]);
+    const cats = new Set();
+    if (n.type === "theme") {
+      for (const pId of (n.parent_ids || [])) {
+        const p = nodeById(pId);
+        if (p && p.type === "category") cats.add(p.id);
+      }
+      return cats;
+    }
+    if (n.type === "subtheme") {
+      for (const pId of (n.parent_ids || [])) {
+        const p = nodeById(pId);
+        if (!p) continue;
+        if (p.type === "category") { cats.add(p.id); continue; }
+        if (p.type === "theme") {
+          for (const ppId of (p.parent_ids || [])) {
+            const pp = nodeById(ppId);
+            if (pp && pp.type === "category") cats.add(pp.id);
+          }
+        }
+      }
+      return cats;
+    }
+    if (n.type === "prediction") {
+      // Walk up through parent_ids transitively, collecting only
+      // category-typed ancestors. Stops at categories (no further
+      // ancestors in this 3-level graph).
+      const seen = new Set();
+      const stack = [...(n.parent_ids || [])];
+      while (stack.length) {
+        const pId = stack.pop();
+        if (seen.has(pId)) continue;
+        seen.add(pId);
+        const p = nodeById(pId);
+        if (!p) continue;
+        if (p.type === "category") {
+          cats.add(p.id);
+        } else if (p.parent_ids) {
+          for (const pp of p.parent_ids) stack.push(pp);
+        }
+      }
+      return cats;
+    }
+    return cats;
+  }
+
   function isolateHighlightedCategories() {
     if (!state.focusedNodeId) return;
-    const related = relatedIds(state.focusedNodeId);
+    const keep = focusedCategoryIds();
+    if (!keep || keep.size === 0) return;
     const g = currentGraph();
     if (!g) return;
     const hidden = currentHidden();
     for (const n of g.nodes) {
       if (n.type !== "category") continue;
-      if (related.has(n.id)) hidden.delete(n.id);
+      if (keep.has(n.id)) hidden.delete(n.id);
       else hidden.add(n.id);
     }
     rebuildCategoryFilters();
@@ -1777,24 +1844,20 @@
       btn.title = "Select a node, then this hides every category not in its lineage";
       return;
     }
-    // Show how many categories will stay visible if FOCUS is clicked.
-    // If that count equals the total category count in the graph,
-    // nothing would change — make the button look idle.
     const g = currentGraph();
     if (!g) return;
-    const related = relatedIds(state.focusedNodeId);
+    const keep = focusedCategoryIds() || new Set();
     const cats = g.nodes.filter((n) => n.type === "category");
-    const inFocus = cats.filter((c) => related.has(c.id));
     const total = cats.length;
-    const keep = inFocus.length;
-    btn.disabled = keep === 0 || keep === total;
+    const keepCount = cats.filter((c) => keep.has(c.id)).length;
+    btn.disabled = keepCount === 0 || keepCount === total;
     btn.textContent = "FOCUS";
     btn.title =
-      keep === total
+      keepCount === total
         ? `All ${total} categories already in this node's lineage — nothing to filter`
-        : keep === 0
+        : keepCount === 0
         ? "No category is in this node's lineage"
-        : `Hide ${total - keep} of ${total} categories not in this node's lineage`;
+        : `Hide ${total - keepCount} of ${total} categories not in this node's lineage`;
   }
 
   function updateToolButtons(tool) {
@@ -2807,83 +2870,210 @@
     if (labels) labels.style.display = isGraph ? "" : "none";
     if (list) list.hidden = view !== "list";
     if (evid) evid.hidden = view !== "evidence";
+    // Toggle body class so CSS can hide top-menu / category-menu /
+    // meta-header / detail-panel / hint-strip when the user is on
+    // LIST or EVIDENCE — the alt-views own the full viewport.
+    document.body.classList.toggle("alt-view-mode", !isGraph);
+    if (!isGraph) {
+      // Close the right slide-in panel when leaving GRAPH so an
+      // open node detail doesn't bleed into the alt-view.
+      const dp = document.getElementById("detail-panel");
+      if (dp) {
+        dp.classList.remove("open");
+        dp.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("panel-open");
+      }
+    }
     if (view === "list") renderListView();
     if (view === "evidence") renderEvidenceView();
   }
 
-  function renderListView() {
+  // Stream G LIST: full predictions list with cascading filters
+  // (scope > category > theme) + status / window / has-bridge.
+  // Default sort: scope > category > theme > realization desc.
+  // Loads scopes lazily — switching scope filter triggers a fetch
+  // of that scope's graph if it isn't already cached.
+  async function renderListView() {
     const body = document.getElementById("list-body");
-    if (!body || !state.graph) return;
-    const statusFilter = document.getElementById("list-status").value;
-    const windowFilter = document.getElementById("list-window").value || state.windowId;
-    const hasBridge = document.getElementById("list-has-bridge").checked;
-    const preds = (state.graph.nodes || []).filter((n) => n.type === "prediction");
-    const filtered = preds.filter((n) => {
-      const m = (n.metrics_by_window && n.metrics_by_window[windowFilter]) || {};
-      if (statusFilter && m.status !== statusFilter) return false;
-      const bridges = (n.detail && n.detail.bridges) || [];
-      if (hasBridge && bridges.length === 0) return false;
-      return true;
-    });
-    filtered.sort((a, b) => {
-      const aS = (a.scope_id || "") + (a.category_id || "") + (a.theme_id || "");
-      const bS = (b.scope_id || "") + (b.category_id || "") + (b.theme_id || "");
-      if (aS !== bS) return aS.localeCompare(bS);
+    if (!body) return;
+    const scopeSel = document.getElementById("list-scope");
+    const catSel = document.getElementById("list-category");
+    const themeSel = document.getElementById("list-theme");
+    const statusSel = document.getElementById("list-status");
+    const winSel = document.getElementById("list-window");
+    const bridgeChk = document.getElementById("list-has-bridge");
+    if (!scopeSel) return;
+
+    // First open: align the scope selector with the active GRAPH scope.
+    if (!scopeSel.value) scopeSel.value = state.scopeId || "mix";
+
+    const targetScope = scopeSel.value;
+    if (!state.graphsByScope.has(targetScope)) {
+      body.innerHTML = `<p class="muted">Loading ${escapeHTML(targetScope)}…</p>`;
+      try {
+        await loadScopeGraph(targetScope);
+      } catch (e) {
+        body.innerHTML = `<p class="muted">failed to load scope: ${escapeHTML(targetScope)}</p>`;
+        return;
+      }
+    }
+    const g = state.graphsByScope.get(targetScope);
+    if (!g) {
+      body.innerHTML = `<p class="muted">Graph for ${escapeHTML(targetScope)} unavailable.</p>`;
+      return;
+    }
+
+    populateListCategoryOptions(g, catSel.value);
+    populateListThemeOptions(g, catSel.value, themeSel.value);
+
+    const catFilter = catSel.value;
+    const themeFilter = themeSel.value;
+    const statusFilter = statusSel.value;
+    const windowFilter = winSel.value || state.windowId;
+    const hasBridge = !!bridgeChk.checked;
+
+    let preds = (g.nodes || []).filter((n) => n.type === "prediction");
+    if (catFilter)   preds = preds.filter((n) => n.category_id === catFilter);
+    if (themeFilter) preds = preds.filter((n) => n.theme_id === themeFilter);
+    if (statusFilter) {
+      preds = preds.filter((n) => {
+        const m = (n.metrics_by_window && n.metrics_by_window[windowFilter]) || {};
+        return m.status === statusFilter;
+      });
+    }
+    if (hasBridge) {
+      preds = preds.filter((n) => ((n.detail && n.detail.bridges) || []).length > 0);
+    }
+
+    preds.sort((a, b) => {
+      const ac = a.category_id || "";
+      const bc = b.category_id || "";
+      if (ac !== bc) return ac.localeCompare(bc);
+      const at = a.theme_id || "";
+      const bt = b.theme_id || "";
+      if (at !== bt) return at.localeCompare(bt);
       const ar = (a.metrics_by_window && a.metrics_by_window[windowFilter] && a.metrics_by_window[windowFilter].realization_score) || 0;
       const br = (b.metrics_by_window && b.metrics_by_window[windowFilter] && b.metrics_by_window[windowFilter].realization_score) || 0;
       return br - ar;
     });
-    if (!filtered.length) {
+
+    if (!preds.length) {
       body.innerHTML = `<p class="muted">No predictions match the current filters.</p>`;
       return;
     }
+
+    const cap = 300;
+    const rows = preds.slice(0, cap).map((n) => {
+      const detail = n.detail || {};
+      const m = (n.metrics_by_window && n.metrics_by_window[windowFilter]) || {};
+      const cat = nodeById(n.category_id);
+      const theme = nodeById(n.theme_id);
+      const catLabel = cat ? (nodeLabel(cat, "short_label") || nodeLabel(cat, "label") || cat.id)
+                           : (n.category_id || "—");
+      const themeLabel = theme ? (nodeLabel(theme, "short_label") || nodeLabel(theme, "label") || theme.id)
+                               : (n.theme_id || "—");
+      const title = cleanPredictionTitle(
+        nodeLabel(n, "title") || detail.title_clean || nodeLabel(n, "label"),
+        detail.prediction_summary || "",
+      );
+      const eli = (detail.reasoning && detail.reasoning.eli14) || "";
+      const status = m.status || "no_signal";
+      const real = (typeof m.realization_score === "number")
+        ? m.realization_score.toFixed(2) : "—";
+      const contradiction =
+        (typeof m.contradiction_signal === "number" && m.contradiction_signal) ||
+        (typeof detail.latest_contradiction_score === "number" && detail.latest_contradiction_score) ||
+        0;
+      const isContradicted = status === "contradicted" || contradiction >= 0.60;
+      const evidence = (detail.evidence || []);
+      const lastEv = evidence.length ? (evidence[0].validation_date || "") : "";
+      return `<tr data-goto="${escapeHTML(n.id)}">
+        <td class="cell-scope">${escapeHTML(n.scope_id || targetScope)}</td>
+        <td class="cell-category">${escapeHTML(catLabel)}</td>
+        <td class="cell-theme">${escapeHTML(themeLabel)}</td>
+        <td class="cell-title">${escapeHTML(title)}</td>
+        <td class="cell-eli">${escapeHTML(eli)}</td>
+        <td class="cell-status status-${escapeHTML(status)}">${escapeHTML(status)}</td>
+        <td class="cell-real">${real}</td>
+        <td class="cell-contradicts">${isContradicted ? "✗" : ""}</td>
+        <td class="cell-last-ev">${escapeHTML(lastEv)}</td>
+        <td class="cell-open"><button type="button" class="open-in-graph" title="Open in graph">&rarr;</button></td>
+      </tr>`;
+    }).join("");
+
     body.innerHTML = `
       <table class="list-table">
         <thead>
           <tr>
             <th>Scope</th>
             <th>Category</th>
+            <th>Theme</th>
             <th>Title</th>
             <th>ELI14</th>
             <th>Status</th>
-            <th>Realization</th>
-            <th>Bridge?</th>
+            <th>Realiz.</th>
+            <th>×</th>
+            <th>Last evidence</th>
+            <th></th>
           </tr>
         </thead>
-        <tbody>
-          ${filtered.slice(0, 200).map((n) => {
-            const detail = n.detail || {};
-            const m = (n.metrics_by_window && n.metrics_by_window[windowFilter]) || {};
-            const title = cleanPredictionTitle(
-              nodeLabel(n, "title") || detail.title_clean || nodeLabel(n, "label"),
-              detail.prediction_summary || "",
-            );
-            const eli = (detail.reasoning && detail.reasoning.eli14) || "";
-            const bridges = (detail.bridges || []).length;
-            return `<tr data-goto="${escapeHTML(n.id)}">
-              <td>${escapeHTML(n.scope_id || "—")}</td>
-              <td>${escapeHTML((n.category_id || "—").split(".").pop())}</td>
-              <td>${escapeHTML(title)}</td>
-              <td class="eli">${escapeHTML(eli)}</td>
-              <td>${escapeHTML(m.status || "no_signal")}</td>
-              <td>${typeof m.realization_score === "number" ? m.realization_score.toFixed(2) : "—"}</td>
-              <td>${bridges > 0 ? `✓ (${bridges})` : ""}</td>
-            </tr>`;
-          }).join("")}
-        </tbody>
+        <tbody>${rows}</tbody>
       </table>
-      <p class="muted">${filtered.length} predictions match (showing first 200).</p>
+      <p class="muted">${preds.length} predictions match${preds.length > cap ? ` (showing first ${cap})` : ""}.</p>
     `;
+
     body.querySelectorAll("tr[data-goto]").forEach((row) => {
       row.addEventListener("click", () => {
         const id = row.dataset.goto;
         const target = nodeById(id);
-        if (target) {
-          setView("graph");
-          handleNodeClick(target);
+        if (!target) return;
+        // If the row's scope differs from the current GRAPH scope,
+        // switch the GRAPH scope first so the node actually exists in
+        // the rendered simulation when we click into it.
+        const rowScope = target.scope_id;
+        if (rowScope && rowScope !== state.scopeId) {
+          state.scopeId = rowScope;
+          updateScopeButtons(state.scopeId);
+          loadScopeGraph(state.scopeId).then(() => {
+            rebuildCategoryFilters();
+            rebuildSimulation();
+            setView("graph");
+            const t2 = nodeById(id);
+            if (t2) handleNodeClick(t2);
+          });
+          return;
         }
+        setView("graph");
+        handleNodeClick(target);
       });
     });
+  }
+
+  function populateListCategoryOptions(g, currentValue) {
+    const sel = document.getElementById("list-category");
+    if (!sel) return;
+    const cats = (g.nodes || []).filter((n) => n.type === "category");
+    cats.sort((a, b) => (nodeLabel(a, "label") || a.id).localeCompare(nodeLabel(b, "label") || b.id));
+    const prev = currentValue || sel.value;
+    sel.innerHTML = `<option value="">all</option>` + cats.map((c) =>
+      `<option value="${escapeHTML(c.id)}">${escapeHTML(nodeLabel(c, "label") || c.id)}</option>`
+    ).join("");
+    if (prev && cats.some((c) => c.id === prev)) sel.value = prev;
+  }
+
+  function populateListThemeOptions(g, categoryFilter, currentValue) {
+    const sel = document.getElementById("list-theme");
+    if (!sel) return;
+    let themes = (g.nodes || []).filter((n) => n.type === "theme");
+    if (categoryFilter) {
+      themes = themes.filter((t) => (t.parent_ids || []).includes(categoryFilter));
+    }
+    themes.sort((a, b) => (nodeLabel(a, "label") || a.id).localeCompare(nodeLabel(b, "label") || b.id));
+    const prev = currentValue || sel.value;
+    sel.innerHTML = `<option value="">all</option>` + themes.map((t) =>
+      `<option value="${escapeHTML(t.id)}">${escapeHTML(nodeLabel(t, "label") || t.id)}</option>`
+    ).join("");
+    if (prev && themes.some((t) => t.id === prev)) sel.value = prev;
   }
 
   async function renderEvidenceView() {
@@ -2953,12 +3143,32 @@
     document.querySelectorAll(".menu-btn.view").forEach((btn) => {
       btn.addEventListener("click", () => setView(btn.dataset.view));
     });
-    ["list-status", "list-window", "list-has-bridge"].forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) el.addEventListener("change", () => {
-        if (state.view === "list") renderListView();
-      });
+    document.querySelectorAll("[data-view-back]").forEach((btn) => {
+      btn.addEventListener("click", () => setView("graph"));
     });
+    // Re-render LIST when any of its filters change. Scope and Category
+    // changes also clear downstream selections so cascading stays sane.
+    const reRender = () => { if (state.view === "list") renderListView(); };
+    const onChange = (id, fn) => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener("change", fn);
+    };
+    onChange("list-scope", () => {
+      const cat = document.getElementById("list-category");
+      const theme = document.getElementById("list-theme");
+      if (cat) cat.value = "";
+      if (theme) theme.value = "";
+      reRender();
+    });
+    onChange("list-category", () => {
+      const theme = document.getElementById("list-theme");
+      if (theme) theme.value = "";
+      reRender();
+    });
+    onChange("list-theme",     reRender);
+    onChange("list-status",    reRender);
+    onChange("list-window",    reRender);
+    onChange("list-has-bridge", reRender);
   }
 
   /* ---------------- Boot ---------------- */

@@ -962,36 +962,99 @@ details.full-prediction[open] > summary {
   border-color: var(--menu-active);
 }
 
+/* When a non-GRAPH view is active, hide all the GRAPH-only chrome
+   (top menu, category menu, meta header, hint strip, mobile tool
+   toggle, right detail panel) so the alt-view owns the whole
+   viewport. The user explicitly requested this — having the menu +
+   detail panel hovering over LIST/EVIDENCE was distracting. */
+body.alt-view-mode #top-menu-stack,
+body.alt-view-mode #meta-header,
+body.alt-view-mode #hint-strip,
+body.alt-view-mode #tool-toggle,
+body.alt-view-mode #detail-panel,
+body.alt-view-mode #app-status {
+  display: none !important;
+}
+body.alt-view-mode {
+  /* Cancel the body shift the open detail panel adds. */
+  margin-right: 0 !important;
+}
+
 .alt-view {
   position: fixed;
-  inset: 80px 24px 24px 24px;
-  background: var(--panel-bg);
-  border: 1px solid var(--panel-border);
-  border-radius: 6px;
-  padding: 18px 22px;
+  inset: 0;
+  background: var(--bg-0);
+  padding: 18px 22px 24px;
   overflow: auto;
   z-index: 5;
   color: var(--text-main);
-  box-shadow: var(--shadow-deep);
 }
 .alt-view[hidden] { display: none; }
+.alt-view-head {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas: "back title" "filters filters";
+  column-gap: 14px;
+  row-gap: 6px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.alt-view-back {
+  grid-area: back;
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--panel-border);
+  border-radius: 4px;
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: color 120ms ease, border-color 120ms ease, background 120ms ease;
+}
+.alt-view-back:hover {
+  color: var(--text-main);
+  border-color: var(--menu-active);
+  background: rgba(24, 199, 216, 0.08);
+}
 .alt-view-head h2 {
-  margin: 0 0 8px;
+  grid-area: title;
+  margin: 0;
   font-size: 16px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
+.alt-view-head > p.muted {
+  grid-column: 1 / -1;
+  margin: 0;
+}
 .list-filters {
+  grid-area: filters;
   display: flex;
   gap: 14px;
   align-items: center;
-  margin: 8px 0 14px;
+  margin: 4px 0 6px;
   font-size: 12px;
   color: var(--text-muted);
+  flex-wrap: wrap;
 }
-.list-filters select,
+.list-filters label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.list-filters select {
+  background: rgba(10, 22, 38, 0.7);
+  color: var(--text-main);
+  border: 1px solid var(--panel-border);
+  border-radius: 3px;
+  padding: 3px 6px;
+  font-family: inherit;
+  font-size: 12px;
+  max-width: 240px;
+}
 .list-filters input[type="checkbox"] {
-  margin-left: 6px;
+  accent-color: var(--menu-active);
 }
 .list-filters .cb {
   display: inline-flex;
@@ -1026,10 +1089,60 @@ details.full-prediction[open] > summary {
 .list-table tbody tr:hover {
   background: rgba(24, 199, 216, 0.06);
 }
-.list-table .eli {
+.list-table .eli,
+.list-table .cell-eli {
   color: var(--text-muted);
   font-style: italic;
   max-width: 320px;
+}
+.list-table .cell-scope,
+.list-table .cell-category,
+.list-table .cell-theme {
+  white-space: nowrap;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.list-table .cell-title {
+  max-width: 360px;
+  font-weight: 500;
+}
+.list-table .cell-status {
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.list-table .cell-status.status-supported        { color: #52c798; }
+.list-table .cell-status.status-weakly_supported { color: #ffb84d; }
+.list-table .cell-status.status-no_signal        { color: var(--text-muted); }
+.list-table .cell-status.status-contradicted     { color: var(--contradict); }
+.list-table .cell-status.status-mixed            { color: #c8b6ff; }
+.list-table .cell-real,
+.list-table .cell-last-ev {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.list-table .cell-contradicts {
+  text-align: center;
+  color: var(--contradict);
+  font-weight: 600;
+}
+.list-table .cell-open {
+  text-align: center;
+}
+.list-table .open-in-graph {
+  background: transparent;
+  color: var(--menu-active);
+  border: 1px solid var(--panel-border);
+  border-radius: 3px;
+  padding: 2px 8px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1;
+}
+.list-table .open-in-graph:hover {
+  background: rgba(24, 199, 216, 0.12);
+  border-color: var(--menu-active);
 }
 
 /* Evidence reverse view */

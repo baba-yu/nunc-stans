@@ -16,8 +16,22 @@
   <!-- Stream G (Phase 3): flat LIST view of predictions, hidden by default. -->
   <section id="list-view" class="alt-view" hidden aria-label="Predictions list">
     <header class="alt-view-head">
+      <button class="alt-view-back" data-view-back type="button" title="Back to graph">&larr; GRAPH</button>
       <h2>Predictions list</h2>
       <div class="list-filters">
+        <label>Scope
+          <select id="list-scope">
+            <option value="mix">mix</option>
+            <option value="tech">tech</option>
+            <option value="business">business</option>
+          </select>
+        </label>
+        <label>Category
+          <select id="list-category"><option value="">all</option></select>
+        </label>
+        <label>Theme
+          <select id="list-theme"><option value="">all</option></select>
+        </label>
         <label>Status
           <select id="list-status">
             <option value="">all</option>
@@ -45,6 +59,7 @@
   <!-- Stream F (Phase 3): EVIDENCE reverse-view, hidden by default. -->
   <section id="evidence-view" class="alt-view" hidden aria-label="Evidence reverse view">
     <header class="alt-view-head">
+      <button class="alt-view-back" data-view-back type="button" title="Back to graph">&larr; GRAPH</button>
       <h2>Evidence reverse view</h2>
       <p class="muted">Click an evidence row to highlight predictions it has contributed to in the past 90 days.</p>
     </header>
