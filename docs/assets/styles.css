@@ -844,3 +844,109 @@ body.panel-open #meta-header {
   font-style: italic;
 }
 
+/* Stream I (Phase 2): prediction-detail tabs.
+   Tabs sit just under the metrics tiles in the prediction node panel.
+   Tab buttons use the existing menu-active palette so they read as
+   chrome rather than content. Empty bodies render a `.muted` paragraph
+   so the user always knows the slot exists, even before data lands. */
+.prediction-tabs {
+  display: flex;
+  gap: 6px;
+  margin: 14px 0 8px;
+  border-bottom: 1px solid var(--panel-border);
+  padding-bottom: 4px;
+  flex-wrap: wrap;
+}
+.prediction-tabs .ptab {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-muted);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 6px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: color 120ms ease, border-color 120ms ease, background 120ms ease;
+}
+.prediction-tabs .ptab:hover {
+  color: var(--text-main);
+}
+.prediction-tabs .ptab.is-active {
+  color: var(--menu-active-text);
+  background: var(--menu-active);
+  border-color: var(--menu-active);
+}
+.prediction-tabs .ptab-count {
+  font-size: 11px;
+  opacity: 0.85;
+  margin-left: 4px;
+}
+.prediction-tab-bodies .ptab-body {
+  margin: 8px 0 6px;
+}
+.prediction-tab-bodies .ptab-body[hidden] {
+  display: none;
+}
+
+/* Stream C reasoning trace — labelled rows under the Reasoning tab. */
+.reasoning-trace {
+  display: grid;
+  grid-template-columns: minmax(72px, max-content) 1fr;
+  gap: 6px 12px;
+  align-items: baseline;
+}
+.reasoning-trace .reasoning-key {
+  color: var(--text-muted);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.reasoning-trace .reasoning-val {
+  color: var(--text-main);
+}
+
+/* Stream D bridges — list of validation-time bridge paragraphs. */
+.bridges-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.bridges-list .bridge-item + .bridge-item {
+  border-top: 1px dashed var(--panel-border);
+  margin-top: 10px;
+  padding-top: 10px;
+}
+.bridges-list .bridge-meta {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  margin-bottom: 4px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.bridges-list .bridge-date {
+  font-variant-numeric: tabular-nums;
+}
+.bridges-list .bridge-dim code {
+  background: rgba(24, 199, 216, 0.12);
+  color: var(--menu-active);
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 11px;
+}
+
+/* Full prediction text now lives in a collapsed disclosure under the
+   tabs (was a top-level h3 before). */
+details.full-prediction > summary {
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+details.full-prediction[open] > summary {
+  color: var(--text-main);
+  margin-bottom: 6px;
+}
+

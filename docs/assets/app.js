@@ -2031,6 +2031,9 @@
       });
     });
 
+    // Stream I: prediction-tab click wiring (no-op when n.type !== prediction)
+    attachPredictionTabHandlers(body);
+
     el.classList.add("open");
     el.setAttribute("aria-hidden", "false");
     document.body.classList.add("panel-open");
@@ -2158,16 +2161,29 @@
         || detail.summary
         || nodeLabel(n, "summary")
         || "";
+      // Stream I (Phase 2): four-tab right pane
+      //   Reasoning  — Stream C reasoning_* + eli14
+      //   Bridge     — Stream D validation-time bridge paragraphs
+      //   JTBD-Tasks — Stream E (Phase 3 — placeholder for now)
+      //   Reverse    — Stream F (Phase 3 — placeholder for now)
+      // Tabs are progressive: Reasoning is selected by default; the other
+      // three are clickable. We render all four tab bodies inline (each
+      // wrapped in a div the click handler toggles `hidden` on) so that
+      // clicks don't have to re-render the whole panel.
+      const tabsHtml = renderPredictionTabs(detail);
       extras = `
-        ${fullSummary ? `
-          <h3>Full prediction</h3>
-          <div class="md-body">${renderMarkdown(fullSummary)}</div>` : ""}
+        ${tabsHtml}
         ${detail.prediction_date ? `<p class="muted">prediction date: ${detail.prediction_date}</p>` : ""}
         ${lineageRows ? `<h3>Lineage</h3>
           <ul class="related-list lineage-list">${lineageRows}</ul>` : ""}
         ${detail.source_report_path ? `<h3>Source report</h3><p>${repoLink(detail.source_report_path)}</p>` : ""}
         ${renderValidationReports(detail)}
         ${renderEvidenceLinks(detail.evidence || detail.evidence_links)}
+        ${fullSummary ? `
+          <details class="full-prediction" style="margin-top:14px">
+            <summary>Full prediction text</summary>
+            <div class="md-body" style="margin-top:8px">${renderMarkdown(fullSummary)}</div>
+          </details>` : ""}
       `;
     }
 
@@ -2181,6 +2197,102 @@
       ${strip}
       ${extras}
     `;
+  }
+
+  // Stream I: four-tab right pane for prediction details. Reads
+  // `detail.reasoning` (Stream C) and `detail.bridges` (Stream D);
+  // JTBD-Tasks and Reverse render Phase-3 placeholders. The tab
+  // bodies are all rendered inline; click toggles the `is-active`
+  // class on the body + tab. Empty Reasoning falls back to the
+  // existing legacy "no structured trace yet" message instead of
+  // a blank tab, so old predictions don't show a confusing void.
+  function renderPredictionTabs(detail) {
+    const reasoning = (detail && detail.reasoning) || {};
+    const hasReasoning =
+      reasoning.because || reasoning.given || reasoning.so_that
+      || reasoning.landing || reasoning.eli14;
+    const bridges = (detail && detail.bridges) || [];
+    const hasBridges = bridges.length > 0;
+
+    const reasoningBody = hasReasoning
+      ? renderReasoningTabBody(reasoning)
+      : `<p class="muted">No structured reasoning trace recorded for this prediction yet (legacy entry; Phase 2 backfill will populate it on the next backfill pass).</p>`;
+    const bridgeBody = hasBridges
+      ? renderBridgesTabBody(bridges)
+      : `<p class="muted">No validation-time bridge paragraph recorded yet. Bridges land via the next 2_future_prediction run after the prediction is re-cited.</p>`;
+
+    return `
+      <div class="prediction-tabs" role="tablist" aria-label="Prediction details">
+        <button class="ptab is-active" data-tab="reasoning" role="tab" aria-selected="true">Reasoning</button>
+        <button class="ptab" data-tab="bridge"   role="tab" aria-selected="false">Bridge${hasBridges ? ` <span class="ptab-count">(${bridges.length})</span>` : ""}</button>
+        <button class="ptab" data-tab="jtbd"     role="tab" aria-selected="false">JTBD-Tasks</button>
+        <button class="ptab" data-tab="reverse"  role="tab" aria-selected="false">Reverse</button>
+      </div>
+      <div class="prediction-tab-bodies">
+        <div class="ptab-body is-active" data-tab-body="reasoning" role="tabpanel">${reasoningBody}</div>
+        <div class="ptab-body" data-tab-body="bridge" role="tabpanel" hidden>${bridgeBody}</div>
+        <div class="ptab-body" data-tab-body="jtbd" role="tabpanel" hidden>
+          <p class="muted">JTBD → 5W1H tasks land in Phase 3 (Stream E). The schema is ready; the writer side is not yet emitting <code>prediction_jtbd</code> rows.</p>
+        </div>
+        <div class="ptab-body" data-tab-body="reverse" role="tabpanel" hidden>
+          <p class="muted">Reverse view (this prediction shares evidence with…) lands in Phase 3 (Stream F). Today's evidence list is rendered below as a stop-gap.</p>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderReasoningTabBody(r) {
+    const row = (k, v, label) => v
+      ? `<div class="reasoning-row"><span class="reasoning-key">${escapeHTML(label)}</span><span class="reasoning-val">${escapeHTML(v)}</span></div>`
+      : "";
+    return `
+      <div class="reasoning-trace">
+        ${row("eli14", r.eli14, "ELI14")}
+        ${row("because", r.because, "Because")}
+        ${row("given", r.given, "Given")}
+        ${row("so_that", r.so_that, "So that")}
+        ${row("landing", r.landing, "Landing")}
+      </div>
+    `;
+  }
+
+  function renderBridgesTabBody(bridges) {
+    return `
+      <ul class="bridges-list">
+        ${bridges.map((b) => `
+          <li class="bridge-item">
+            <div class="bridge-meta">
+              <span class="bridge-date">${escapeHTML(b.date || "—")}</span>
+              ${b.dimension && b.dimension !== "none"
+                ? `<span class="bridge-dim">supports <code>${escapeHTML(b.dimension)}</code></span>`
+                : ""}
+            </div>
+            <div class="bridge-text md-body">${renderMarkdown(b.text || "")}</div>
+          </li>`).join("")}
+      </ul>
+    `;
+  }
+
+  // Wire tab clicks. Called once at panel open after innerHTML assignment.
+  function attachPredictionTabHandlers(panelBody) {
+    const tabs = panelBody.querySelectorAll(".ptab");
+    const bodies = panelBody.querySelectorAll(".ptab-body");
+    if (!tabs.length || !bodies.length) return;
+    tabs.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = btn.dataset.tab;
+        tabs.forEach((b) => {
+          const on = b.dataset.tab === id;
+          b.classList.toggle("is-active", on);
+          b.setAttribute("aria-selected", on ? "true" : "false");
+        });
+        bodies.forEach((body) => {
+          const on = body.dataset.tabBody === id;
+          body.classList.toggle("is-active", on);
+          body.hidden = !on;
+        });
+      });
+    });
   }
 
   function metricTile(k, v, override, tooltip) {
