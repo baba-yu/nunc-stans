@@ -2767,6 +2767,200 @@
     return paras.filter(Boolean).join("");
   }
 
+  /* ---------------- Stream F + G: alt views ---------------- */
+
+  // Stream G: render the flat LIST view from the current scope's
+  // graph data + active filters. Stream F: render the EVIDENCE view
+  // from docs/data/evidence-reverse.json.
+  //
+  // Both views overlay the graph canvas — the menu-btn.view click
+  // hides the canvas and shows the appropriate panel, then refreshes
+  // the body. Switching back to GRAPH undoes both.
+
+  let _evidenceReverseCache = null;
+
+  async function loadEvidenceReverse() {
+    if (_evidenceReverseCache) return _evidenceReverseCache;
+    try {
+      const r = await fetch(`${LIVE_DATA_DIR}/evidence-reverse.json`, { cache: "no-store" });
+      if (!r.ok) throw new Error(r.statusText);
+      _evidenceReverseCache = await r.json();
+    } catch (e) {
+      _evidenceReverseCache = { evidence: [], evidence_count: 0 };
+    }
+    return _evidenceReverseCache;
+  }
+
+  function setView(view) {
+    state.view = view;
+    document.querySelectorAll(".menu-btn.view").forEach((b) => {
+      const on = b.dataset.view === view;
+      b.classList.toggle("is-active", on);
+      b.setAttribute("aria-checked", on ? "true" : "false");
+    });
+    const canvas = document.getElementById("graph-canvas");
+    const labels = document.getElementById("label-layer");
+    const list = document.getElementById("list-view");
+    const evid = document.getElementById("evidence-view");
+    const isGraph = view === "graph";
+    if (canvas) canvas.style.display = isGraph ? "" : "none";
+    if (labels) labels.style.display = isGraph ? "" : "none";
+    if (list) list.hidden = view !== "list";
+    if (evid) evid.hidden = view !== "evidence";
+    if (view === "list") renderListView();
+    if (view === "evidence") renderEvidenceView();
+  }
+
+  function renderListView() {
+    const body = document.getElementById("list-body");
+    if (!body || !state.graph) return;
+    const statusFilter = document.getElementById("list-status").value;
+    const windowFilter = document.getElementById("list-window").value || state.windowId;
+    const hasBridge = document.getElementById("list-has-bridge").checked;
+    const preds = (state.graph.nodes || []).filter((n) => n.type === "prediction");
+    const filtered = preds.filter((n) => {
+      const m = (n.metrics_by_window && n.metrics_by_window[windowFilter]) || {};
+      if (statusFilter && m.status !== statusFilter) return false;
+      const bridges = (n.detail && n.detail.bridges) || [];
+      if (hasBridge && bridges.length === 0) return false;
+      return true;
+    });
+    filtered.sort((a, b) => {
+      const aS = (a.scope_id || "") + (a.category_id || "") + (a.theme_id || "");
+      const bS = (b.scope_id || "") + (b.category_id || "") + (b.theme_id || "");
+      if (aS !== bS) return aS.localeCompare(bS);
+      const ar = (a.metrics_by_window && a.metrics_by_window[windowFilter] && a.metrics_by_window[windowFilter].realization_score) || 0;
+      const br = (b.metrics_by_window && b.metrics_by_window[windowFilter] && b.metrics_by_window[windowFilter].realization_score) || 0;
+      return br - ar;
+    });
+    if (!filtered.length) {
+      body.innerHTML = `<p class="muted">No predictions match the current filters.</p>`;
+      return;
+    }
+    body.innerHTML = `
+      <table class="list-table">
+        <thead>
+          <tr>
+            <th>Scope</th>
+            <th>Category</th>
+            <th>Title</th>
+            <th>ELI14</th>
+            <th>Status</th>
+            <th>Realization</th>
+            <th>Bridge?</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${filtered.slice(0, 200).map((n) => {
+            const detail = n.detail || {};
+            const m = (n.metrics_by_window && n.metrics_by_window[windowFilter]) || {};
+            const title = cleanPredictionTitle(
+              nodeLabel(n, "title") || detail.title_clean || nodeLabel(n, "label"),
+              detail.prediction_summary || "",
+            );
+            const eli = (detail.reasoning && detail.reasoning.eli14) || "";
+            const bridges = (detail.bridges || []).length;
+            return `<tr data-goto="${escapeHTML(n.id)}">
+              <td>${escapeHTML(n.scope_id || "—")}</td>
+              <td>${escapeHTML((n.category_id || "—").split(".").pop())}</td>
+              <td>${escapeHTML(title)}</td>
+              <td class="eli">${escapeHTML(eli)}</td>
+              <td>${escapeHTML(m.status || "no_signal")}</td>
+              <td>${typeof m.realization_score === "number" ? m.realization_score.toFixed(2) : "—"}</td>
+              <td>${bridges > 0 ? `✓ (${bridges})` : ""}</td>
+            </tr>`;
+          }).join("")}
+        </tbody>
+      </table>
+      <p class="muted">${filtered.length} predictions match (showing first 200).</p>
+    `;
+    body.querySelectorAll("tr[data-goto]").forEach((row) => {
+      row.addEventListener("click", () => {
+        const id = row.dataset.goto;
+        const target = nodeById(id);
+        if (target) {
+          setView("graph");
+          handleNodeClick(target);
+        }
+      });
+    });
+  }
+
+  async function renderEvidenceView() {
+    const body = document.getElementById("evidence-body");
+    if (!body) return;
+    body.innerHTML = `<p class="muted">Loading evidence-reverse.json…</p>`;
+    const data = await loadEvidenceReverse();
+    if (!data.evidence || !data.evidence.length) {
+      body.innerHTML = `<p class="muted">evidence-reverse.json not yet generated. Run <code>app/skills/build_evidence_reverse.py</code>.</p>`;
+      return;
+    }
+    body.innerHTML = `
+      <table class="list-table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Source</th>
+            <th>Predictions</th>
+            <th>Total score</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${data.evidence.slice(0, 100).map((e) => `
+            <tr class="ev-row">
+              <td>${e.url ? `<a href="${escapeHTML(e.url)}" target="_blank" rel="noreferrer noopener">${escapeHTML(e.title || e.url)}</a>` : escapeHTML(e.title || "(untitled)")}</td>
+              <td>${escapeHTML(e.source_type || "—")}</td>
+              <td>${e.linked_predictions.length}</td>
+              <td>${e.total_score.toFixed(2)}</td>
+            </tr>
+            <tr class="ev-detail" hidden>
+              <td colspan="4">
+                <ul class="ev-pred-list">
+                  ${e.linked_predictions.slice(0, 12).map((p) => `
+                    <li>
+                      <span class="ev-dir ${escapeHTML(p.support_direction)}">${escapeHTML(p.support_direction)}</span>
+                      <span class="ev-pred-title" data-goto="${escapeHTML(p.prediction_id)}">${escapeHTML(p.prediction_short_label || p.prediction_summary || p.prediction_id)}</span>
+                      <span class="ev-score">${p.score.toFixed(2)}</span>
+                    </li>`).join("")}
+                </ul>
+              </td>
+            </tr>`).join("")}
+        </tbody>
+      </table>
+    `;
+    body.querySelectorAll(".ev-row").forEach((row) => {
+      row.addEventListener("click", () => {
+        const next = row.nextElementSibling;
+        if (next && next.classList.contains("ev-detail")) {
+          next.hidden = !next.hidden;
+        }
+      });
+    });
+    body.querySelectorAll("[data-goto]").forEach((el) => {
+      el.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        const id = el.dataset.goto;
+        const target = nodeById(id);
+        if (target) {
+          setView("graph");
+          handleNodeClick(target);
+        }
+      });
+    });
+  }
+
+  function attachAltViewHandlers() {
+    document.querySelectorAll(".menu-btn.view").forEach((btn) => {
+      btn.addEventListener("click", () => setView(btn.dataset.view));
+    });
+    ["list-status", "list-window", "list-has-bridge"].forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener("change", () => {
+        if (state.view === "list") renderListView();
+      });
+    });
+  }
+
   /* ---------------- Boot ---------------- */
 
   async function boot() {
@@ -2823,6 +3017,11 @@
       rebuildSimulation();
       setStatus("");
       installEventHandlers();
+      // Stream F + G (Phase 3): wire LIST/EVIDENCE view toggle.
+      // GRAPH stays the default; clicking LIST/EVIDENCE swaps the canvas.
+      state.view = state.view || "graph";
+      attachAltViewHandlers();
+      setView(state.view);
       // Populate the snapshot dropdown (gracefully no-ops if 404).
       loadSnapshotIndex();
       // Apply snap-mode styling if we restored a snapshot view from

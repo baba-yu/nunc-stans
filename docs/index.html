@@ -13,6 +13,46 @@
   <!-- HTML label overlay (positioned absolutely) -->
   <div id="label-layer" aria-hidden="true"></div>
 
+  <!-- Stream G (Phase 3): flat LIST view of predictions, hidden by default. -->
+  <section id="list-view" class="alt-view" hidden aria-label="Predictions list">
+    <header class="alt-view-head">
+      <h2>Predictions list</h2>
+      <div class="list-filters">
+        <label>Status
+          <select id="list-status">
+            <option value="">all</option>
+            <option value="supported">supported</option>
+            <option value="weakly_supported">weakly_supported</option>
+            <option value="no_signal">no_signal</option>
+            <option value="contradicted">contradicted</option>
+          </select>
+        </label>
+        <label>Window
+          <select id="list-window">
+            <option value="7d">7D</option>
+            <option value="30d" selected>30D</option>
+            <option value="90d">90D</option>
+          </select>
+        </label>
+        <label class="cb"><input type="checkbox" id="list-has-bridge"> Has bridge</label>
+      </div>
+    </header>
+    <div class="list-body" id="list-body">
+      <p class="muted">Loading…</p>
+    </div>
+  </section>
+
+  <!-- Stream F (Phase 3): EVIDENCE reverse-view, hidden by default. -->
+  <section id="evidence-view" class="alt-view" hidden aria-label="Evidence reverse view">
+    <header class="alt-view-head">
+      <h2>Evidence reverse view</h2>
+      <p class="muted">Click an evidence row to highlight predictions it has contributed to in the past 90 days.</p>
+    </header>
+    <div class="evidence-body" id="evidence-body">
+      <p class="muted">Loading…</p>
+    </div>
+  </section>
+
   <!-- Top-right menu stack. Top-menu + category-menu share a flex
        column so category-menu auto-positions below top-menu
        regardless of how many rows top-menu has, without overlap. -->
@@ -28,6 +68,14 @@
       <button class="menu-btn tab" data-scope="mix" role="tab" aria-selected="true">MIX</button>
       <button class="menu-btn tab" data-scope="tech" role="tab" aria-selected="false">TECH</button>
       <button class="menu-btn tab" data-scope="business" role="tab" aria-selected="false">BIZ</button>
+    </div>
+    <!-- Stream G + F (Phase 3): swap the graph canvas for a flat
+         predictions list (LIST) or evidence-reverse browser (EVIDENCE).
+         GRAPH is the default and matches the legacy single-view layout. -->
+    <div class="menu-group" role="radiogroup" aria-label="View">
+      <button class="menu-btn view" data-view="graph"    role="radio" aria-checked="true">GRAPH</button>
+      <button class="menu-btn view" data-view="list"     role="radio" aria-checked="false">LIST</button>
+      <button class="menu-btn view" data-view="evidence" role="radio" aria-checked="false">EVIDENCE</button>
     </div>
     <div class="menu-group" role="radiogroup" aria-label="Window">
       <button class="menu-btn win" data-window="7d" role="radio" aria-checked="false">7D</button>
