@@ -970,6 +970,27 @@ details.full-prediction[open] > summary {
   margin-bottom: 6px;
 }
 
+/* Stream K (Phase B): mid-tier summary in the prediction detail panel.
+   Sits between the title (above the metrics tiles) and the prediction
+   tabs. Default-visible. The full prediction text below collapses
+   into <details> when this mid-tier is present. */
+.prediction-summary-mid {
+  margin: 12px 0 4px;
+  padding: 10px 12px;
+  background: rgba(24, 199, 216, 0.04);
+  border-left: 2px solid var(--menu-active);
+  border-radius: 0 3px 3px 0;
+  color: var(--text-main);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.prediction-summary-mid p {
+  margin: 0 0 8px;
+}
+.prediction-summary-mid p:last-child {
+  margin-bottom: 0;
+}
+
 /* Stream F + G (Phase 3): VIEW toggle in the top menu + the LIST and
    EVIDENCE alternate views that overlay the graph canvas when active. */
 .menu-btn.view {

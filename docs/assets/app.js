@@ -2244,6 +2244,15 @@
         || detail.summary
         || nodeLabel(n, "summary")
         || "";
+      // Stream K: mid-tier summary (locale-aware). Sits between the
+      // title + tabs and the collapsed full text. NULL on legacy /
+      // un-backfilled predictions — in that case we keep the old
+      // 2-tier layout (title + collapsed full text only).
+      const midByLocale = (detail && detail.summary_short_locales) || {};
+      const midSummary = midByLocale[state.locale]
+        || midByLocale.en
+        || detail.summary_short
+        || "";
       // Stream I (Phase 2): four-tab right pane
       //   Reasoning  — Stream C reasoning_* + eli14
       //   Bridge     — Stream D validation-time bridge paragraphs
@@ -2255,6 +2264,9 @@
       // clicks don't have to re-render the whole panel.
       const tabsHtml = renderPredictionTabs(detail);
       extras = `
+        ${midSummary ? `
+          <div class="prediction-summary-mid md-body">${renderMarkdown(midSummary)}</div>
+        ` : ""}
         ${tabsHtml}
         ${detail.prediction_date ? `<p class="muted">prediction date: ${detail.prediction_date}</p>` : ""}
         ${lineageRows ? `<h3>Lineage</h3>
@@ -2263,7 +2275,7 @@
         ${renderValidationReports(detail)}
         ${renderEvidenceLinks(detail.evidence || detail.evidence_links)}
         ${fullSummary ? `
-          <details class="full-prediction" style="margin-top:14px">
+          <details class="full-prediction" style="margin-top:14px"${midSummary ? "" : " open"}>
             <summary>Full prediction text</summary>
             <div class="md-body" style="margin-top:8px">${renderMarkdown(fullSummary)}</div>
           </details>` : ""}
