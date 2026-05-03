@@ -1724,9 +1724,19 @@
     saveState();
     updateMetaHeader();
 
-    // UI §4.2: window change must NOT re-fetch graph file.
-    // Just re-draw + refresh panel metrics.
-    scheduleDraw();
+    // UI §4.2: window change must NOT re-fetch graph file. But it DOES
+    // change the visibility set:
+    //   - predictions whose origin date falls outside the new window
+    //     drop out (or back in)
+    //   - themes / categories whose only in-window predictions just
+    //     drop out cascade to hidden too (Phase D rule)
+    // scheduleDraw alone wouldn't re-evaluate isVisibleAtZoom for the
+    // simulation's render-node list — that needed wheel/zoom or any
+    // other rebuild trigger to pick up. Always rebuild on window
+    // switch so the canvas matches the filter immediately.
+    rebuildSimulation({ preservePriorPositions: true });
+    if (state.view === "list")     renderListView();
+    if (state.view === "evidence") renderEvidenceView();
     if (state.selectedNodeId) {
       const n = nodeById(state.selectedNodeId);
       if (n) openDetailPanel(n);
