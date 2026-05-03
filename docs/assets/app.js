@@ -518,6 +518,49 @@
 
   /* ---------------- Visibility by zoom ---------------- */
 
+  // Window-origin check for a single prediction. A 7d view shows only
+  // predictions authored within the last 7 days; same shape for 30d / 90d.
+  // Three orthogonal concepts kept separate by the spec:
+  //   - Window filter (here): origin in window range, client-side.
+  //   - Hot / Lukewarm: relevance encoded in metrics_by_window[w].status.
+  //   - Dormant: pool membership in node.detail.dormant, applied across
+  //     all windows (a separate visual signal, not a filter).
+  function predictionInWindow(node) {
+    if (node.type !== "prediction") return true;
+    if (!node.detail || !node.detail.prediction_date) return true;
+    if (!state.manifest || !state.manifest.latest_report_date) return true;
+    const days = windowDays(state.windowId);
+    if (!days) return true;
+    const latest = new Date(state.manifest.latest_report_date + "T00:00:00Z");
+    const origin = new Date(node.detail.prediction_date + "T00:00:00Z");
+    const diff = Math.floor((latest - origin) / (1000 * 60 * 60 * 24));
+    return diff < days;
+  }
+
+  // Cascade the prediction window filter up through the theme + category
+  // tree: a parent that has zero in-window prediction descendants is
+  // empty for this window, and showing it without any descendant nodes
+  // looks like a stray label. Walk descendants once, return true on
+  // first in-window prediction.
+  function hasInWindowDescendantPrediction(node) {
+    if (!node || !node.child_ids || !node.child_ids.length) return false;
+    const stack = [...node.child_ids];
+    const seen = new Set();
+    while (stack.length) {
+      const id = stack.pop();
+      if (seen.has(id)) continue;
+      seen.add(id);
+      const c = nodeById(id);
+      if (!c) continue;
+      if (c.type === "prediction") {
+        if (predictionInWindow(c)) return true;
+      } else if (c.child_ids && c.child_ids.length) {
+        for (const cc of c.child_ids) stack.push(cc);
+      }
+    }
+    return false;
+  }
+
   function isVisibleAtZoom(node, zoom) {
     // Category filter overrides everything else.
     if (nodeIsHidden(node)) return false;
@@ -529,20 +572,15 @@
     if (minZ !== null && zoom < minZ) return false;
     if (maxZ !== null && zoom > maxZ) return false;
 
-    // Window-origin filter for predictions. A 7d view should only show
-    // predictions authored in the last 7 days; same shape for 30d / 90d.
-    // Three orthogonal concepts that are deliberately separate:
-    //   - Window filter (here): origin in window range, applied client-side.
-    //   - Hot / Lukewarm: relevance encoded in metrics_by_window[w].status.
-    //   - Dormant: pool membership in node.detail.dormant, applied across
-    //     all windows (a separate visual signal, not a filter).
-    if (node.type === "prediction" && node.detail && node.detail.prediction_date
-        && state.manifest && state.manifest.latest_report_date) {
-      const days = windowDays(state.windowId);
-      const latest = new Date(state.manifest.latest_report_date + "T00:00:00Z");
-      const origin = new Date(node.detail.prediction_date + "T00:00:00Z");
-      const diff = Math.floor((latest - origin) / (1000 * 60 * 60 * 24));
-      if (diff >= days) return false;  // origin older than the window
+    // Window filter: predictions by origin date, themes/categories by
+    // whether they have any in-window prediction descendant. This is the
+    // aggregation rule — empty themes / empty categories drop out of
+    // the view together with their predictions, instead of leaving a
+    // stray label hovering with no node behind it.
+    if (node.type === "prediction" && !predictionInWindow(node)) return false;
+    if ((node.type === "theme" || node.type === "subtheme" || node.type === "category")
+        && !hasInWindowDescendantPrediction(node)) {
+      return false;
     }
 
     // Fallback: generic zoom thresholds by type
