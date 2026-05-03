@@ -2196,7 +2196,18 @@
     // / FIL sessions read in their language. detail.description is
     // EN-only on the export side; only fall back to it when nodeLabel
     // has nothing for the active locale.
-    const desc = nodeLabel(n, "description") || detail.description || "";
+    // For category / theme / subtheme nodes, `description` is a useful
+    // standalone block (the theme's editorial description) and is
+    // rendered right below the title. For *prediction* nodes,
+    // `description` is the full long-form body, which is already
+    // surfaced twice elsewhere — once via the Stream K mid-tier
+    // summary (visible by default) and once via the collapsed
+    // <details> full prediction text. Repeating it here would be a
+    // third copy. Suppress for predictions so the panel reads:
+    // title → mid-tier summary → tabs → meta → collapsed full body.
+    const desc = (n.type === "prediction")
+      ? ""
+      : (nodeLabel(n, "description") || detail.description || "");
     const statusPills = renderStatusPills(m, n);
 
     // Metrics block. Order: Hit rate (left, primary "did the prediction
@@ -2292,29 +2303,64 @@
         || detail.summary
         || nodeLabel(n, "summary")
         || "";
-      // Stream K: mid-tier summary (locale-aware). Sits between the
-      // title + tabs and the collapsed full text. NULL on legacy /
-      // un-backfilled predictions — in that case we keep the old
-      // 2-tier layout (title + collapsed full text only).
+      // 3-tier prediction pane: title → ELI14 (default visible,
+      // 14-year-old level, ≤25 words) → collapsed full body.
+      //
+      //   Tier 1 (ELI14): the writer's plain-language one-sentence
+      //     summary. Lives in `predictions.eli14` (Stream C). EN-only
+      //     today; locale fan-out is a Phase X follow-up. This is
+      //     the "what is this prediction in one breath" slot.
+      //
+      //   Tier 2 (Stream K Summary, optional secondary): a longer
+      //     technical synopsis (≤ 300 chars). When present, rendered
+      //     under the ELI14 in smaller text — the audience is the
+      //     technical reader who wants more than ELI14 but doesn't
+      //     want to expand the full body. Locale-aware.
+      //
+      //   Tier 3 (Full body): the long-form prose, collapsed in a
+      //     <details>. Locale-aware. Auto-opens when neither ELI14
+      //     nor Stream K is present (legacy items).
+      //
+      // Mid-tier slot priority for the visible-by-default text:
+      //   ELI14 → Stream K Summary (locale-aware) → "" (empty).
+      const reasoningForMid = (detail && detail.reasoning) || {};
+      const eli14Text = reasoningForMid.eli14 || "";
       const midByLocale = (detail && detail.summary_short_locales) || {};
-      const midSummary = midByLocale[state.locale]
+      const streamKSummary = midByLocale[state.locale]
         || midByLocale.en
         || detail.summary_short
         || "";
+      // Whichever block has content drives the auto-open behavior of
+      // the bottom <details> (open only when there's no mid-tier
+      // content at all).
+      const midSummary = eli14Text || streamKSummary;
+      // Phase 3: prediction-level target window. Pulled from
+      // `detail.target_start_date` / `target_end_date` (backfilled
+      // from reasoning_landing). Renders below the mid-tier summary.
+      const targetWindow = formatTargetWindow(
+        detail.target_start_date, detail.target_end_date
+      );
       // Stream I (Phase 2): four-tab right pane
       //   Reasoning  — Stream C reasoning_* + eli14
       //   Bridge     — Stream D validation-time bridge paragraphs
-      //   JTBD-Tasks — Stream E (Phase 3 — placeholder for now)
-      //   Reverse    — Stream F (Phase 3 — placeholder for now)
+      //   Needs      — Stream E (driver-side actor + 5W1H task)
+      //   Readings   — Stream F (cluster + chain + counter + relations)
       // Tabs are progressive: Reasoning is selected by default; the other
       // three are clickable. We render all four tab bodies inline (each
       // wrapped in a div the click handler toggles `hidden` on) so that
       // clicks don't have to re-render the whole panel.
       const tabsHtml = renderPredictionTabs(detail);
       extras = `
-        ${midSummary ? `
-          <div class="prediction-summary-mid md-body">${renderMarkdown(midSummary)}</div>
+        ${eli14Text ? `
+          <div class="prediction-eli14">${escapeHTML(eli14Text)}</div>
         ` : ""}
+        ${streamKSummary ? `
+          <details class="prediction-summary-mid${eli14Text ? "" : " open"}" ${eli14Text ? "" : "open"}>
+            <summary class="prediction-summary-mid-toggle">${eli14Text ? "More technical summary" : "Summary"}</summary>
+            <div class="prediction-summary-mid-body md-body">${renderMarkdown(streamKSummary)}</div>
+          </details>
+        ` : ""}
+        ${targetWindow ? `<p class="prediction-target-window"><span class="prediction-target-label">lands</span> ${escapeHTML(targetWindow)}</p>` : ""}
         ${tabsHtml}
         ${detail.prediction_date ? `<p class="muted">prediction date: ${detail.prediction_date}</p>` : ""}
         ${lineageRows ? `<h3>Lineage</h3>
@@ -2343,58 +2389,250 @@
   }
 
   // Stream I: four-tab right pane for prediction details. Reads
-  // `detail.reasoning` (Stream C) and `detail.bridges` (Stream D);
-  // JTBD-Tasks and Reverse render Phase-3 placeholders. The tab
-  // bodies are all rendered inline; click toggles the `is-active`
-  // class on the body + tab. Empty Reasoning falls back to the
-  // existing legacy "no structured trace yet" message instead of
-  // a blank tab, so old predictions don't show a confusing void.
+  // `detail.reasoning` (Stream C), `detail.bridges` (Stream D),
+  // `detail.needs` (Stream E), and `detail.readings` (Stream F:
+  // cluster density + frequency + chain + counter + P↔P relations).
+  // The tab bodies are all rendered inline; click toggles the
+  // `is-active` class on the body + tab. Empty sections fall back
+  // to a contextual "no entry yet" message instead of a blank tab,
+  // so legacy predictions don't show a void.
   function renderPredictionTabs(detail) {
     const reasoning = (detail && detail.reasoning) || {};
+    // The Reasoning tab now shows because / given / so_that / landing
+    // (the structural 4). ELI14 lives in the mid-tier slot above the
+    // tabs, not here, so it doesn't count toward the tab's "has
+    // content" check.
     const hasReasoning =
       reasoning.because || reasoning.given || reasoning.so_that
-      || reasoning.landing || reasoning.eli14;
+      || reasoning.landing;
     const bridges = (detail && detail.bridges) || [];
     const hasBridges = bridges.length > 0;
+    const needs = (detail && detail.needs) || [];
+    const hasNeeds = needs.length > 0;
+    const readings = (detail && detail.readings) || {};
+    const clusters = readings.clusters || [];
+    const hasReadings = clusters.length > 0;
 
     const reasoningBody = hasReasoning
-      ? renderReasoningTabBody(reasoning)
-      : `<p class="muted">No structured reasoning trace recorded for this prediction yet (legacy entry; Phase 2 backfill will populate it on the next backfill pass).</p>`;
+      ? renderReasoningTabBody(reasoning, detail)
+      : `<p class="muted">No structured reasoning yet — the 4-field trace (because / given / so_that / landing) is recorded when a prediction is first proposed. Older predictions can be filled retroactively if their original text carries enough signal; otherwise this stays empty.</p>`;
     const bridgeBody = hasBridges
       ? renderBridgesTabBody(bridges)
-      : `<p class="muted">No validation-time bridge paragraph recorded yet. Bridges land via the next 2_future_prediction run after the prediction is re-cited.</p>`;
+      : `<p class="muted">No bridges yet — a bridge is written each day this prediction is re-cited in a validation report, linking that day's news to one of the reasoning components above. Predictions that are never re-cited stay empty here.</p>`;
+    const needsBody = hasNeeds
+      ? renderNeedsTabBody(needs)
+      : `<p class="muted">No Needs yet — Needs capture the role-abstract actors whose ongoing work drives this prediction toward landing, recorded when the prediction is first proposed. Older predictions whose driver coalition can't be cleanly inferred from the original text stay empty here.</p>`;
+    const readingsBody = hasReadings
+      ? renderReadingsTabBody(readings)
+      : `<p class="muted">No Readings yet — Readings places this prediction in the broader portfolio: clusters of similar evidence, chains to downstream predictions, structural relations to peers. They're computed automatically once enough surrounding evidence accumulates.</p>`;
 
     return `
       <div class="prediction-tabs" role="tablist" aria-label="Prediction details">
         <button class="ptab is-active" data-tab="reasoning" role="tab" aria-selected="true">Reasoning</button>
         <button class="ptab" data-tab="bridge"   role="tab" aria-selected="false">Bridge${hasBridges ? ` <span class="ptab-count">(${bridges.length})</span>` : ""}</button>
-        <button class="ptab" data-tab="jtbd"     role="tab" aria-selected="false">JTBD-Tasks</button>
-        <button class="ptab" data-tab="reverse"  role="tab" aria-selected="false">Reverse</button>
+        <button class="ptab" data-tab="needs"    role="tab" aria-selected="false">Needs${hasNeeds ? ` <span class="ptab-count">(${needs.length})</span>` : ""}</button>
+        <button class="ptab" data-tab="readings" role="tab" aria-selected="false">Readings${hasReadings ? ` <span class="ptab-count">(${clusters.length})</span>` : ""}</button>
       </div>
       <div class="prediction-tab-bodies">
         <div class="ptab-body is-active" data-tab-body="reasoning" role="tabpanel">${reasoningBody}</div>
         <div class="ptab-body" data-tab-body="bridge" role="tabpanel" hidden>${bridgeBody}</div>
-        <div class="ptab-body" data-tab-body="jtbd" role="tabpanel" hidden>
-          <p class="muted">JTBD → 5W1H tasks land in Phase 3 (Stream E). The schema is ready; the writer side is not yet emitting <code>prediction_jtbd</code> rows.</p>
-        </div>
-        <div class="ptab-body" data-tab-body="reverse" role="tabpanel" hidden>
-          <p class="muted">Reverse view (this prediction shares evidence with…) lands in Phase 3 (Stream F). Today's evidence list is rendered below as a stop-gap.</p>
-        </div>
+        <div class="ptab-body" data-tab-body="needs" role="tabpanel" hidden>${needsBody}</div>
+        <div class="ptab-body" data-tab-body="readings" role="tabpanel" hidden>${readingsBody}</div>
       </div>
     `;
   }
 
-  function renderReasoningTabBody(r) {
+  // Stream F: render `detail.readings`. Narrative-first — one-line
+  // human summaries surface before any numbers, then the underlying
+  // cluster table + chain lists let readers drill in.
+  //   Step 1: cluster density + frequency (cluster_narrative + table)
+  //   Step 2: chain effects (chain_narrative + downstream/upstream)
+  //   Step 3: counter-cluster (still pending)
+  //   Step 4: P↔P relations (still pending)
+  function renderReadingsTabBody(readings) {
+    const clusterNarrative = readings.cluster_narrative || "";
+    const clusters = readings.clusters || [];
+    const chainNarrative = readings.chain_narrative || "";
+    const downstream = readings.downstream || [];
+    const upstream = readings.upstream || [];
+    const counterNarrative = readings.counter_narrative || "";
+    const counterClusters = readings.counter_clusters || [];
+    const counterEvidence = readings.counter_evidence || [];
+    const relationNarrative = readings.relation_narrative || "";
+    const relations = readings.relations || [];
+
+    const trendBadge = (t) => {
+      if (t === "accelerating") return `<span class="readings-trend readings-trend-up">↑ accelerating</span>`;
+      if (t === "decelerating") return `<span class="readings-trend readings-trend-down">↓ fading</span>`;
+      return `<span class="readings-trend readings-trend-flat">→ steady</span>`;
+    };
+    const clusterRows = clusters.map((c) => `
+      <tr class="readings-row">
+        <td class="readings-theme">${escapeHTML(c.theme_label || "—")}</td>
+        <td class="readings-week">${escapeHTML(c.week_bucket || "—")}</td>
+        <td class="readings-density">
+          <span class="readings-pool">${c.size_in_pool}</span>
+          <span class="readings-slash">/</span>
+          <span class="readings-total">${c.cluster_total}</span>
+        </td>
+        <td class="readings-trend-cell">${trendBadge(c.trend)}</td>
+      </tr>
+    `).join("");
+
+    const chainItem = (c) => {
+      const win = formatTargetWindow(c.target_start_date, c.target_end_date);
+      return `
+      <li class="readings-chain-item">
+        <span class="readings-chain-strength" title="chain confidence">${(c.strength || 0).toFixed(2)}</span>
+        <span class="readings-chain-arrow">──►</span>
+        <span class="readings-chain-target">${escapeHTML(c.title || c.short_label || c.prediction_id || "—")}</span>
+        ${win ? `<span class="readings-chain-window" title="lands">${escapeHTML(win)}</span>` : ""}
+        ${c.notes ? `<div class="readings-chain-notes">${escapeHTML(c.notes)}</div>` : ""}
+      </li>
+    `;};
+
+    return `
+      ${clusterNarrative ? `<p class="readings-narrative">${escapeHTML(clusterNarrative)}</p>` : ""}
+      ${clusters.length ? `
+        <table class="readings-table">
+          <thead>
+            <tr>
+              <th>Theme cluster</th>
+              <th>Week</th>
+              <th title="P's evidence in cluster / cluster total">Density</th>
+              <th>Trend</th>
+            </tr>
+          </thead>
+          <tbody>${clusterRows}</tbody>
+        </table>` : ""}
+      ${chainNarrative ? `<p class="readings-narrative readings-chain-narrative">${escapeHTML(chainNarrative)}</p>` : ""}
+      ${downstream.length ? `
+        <div class="readings-chain-block">
+          <h4 class="readings-chain-h">If this prediction lands → strengthens:</h4>
+          <ul class="readings-chain-list">${downstream.map(chainItem).join("")}</ul>
+        </div>` : ""}
+      ${upstream.length ? `
+        <div class="readings-chain-block">
+          <h4 class="readings-chain-h">Strengthened by upstream landing:</h4>
+          <ul class="readings-chain-list readings-chain-list-up">${upstream.map(chainItem).join("")}</ul>
+        </div>` : ""}
+      ${counterNarrative ? `<p class="readings-narrative readings-counter-narrative">${escapeHTML(counterNarrative)}</p>` : ""}
+      ${counterClusters.length ? `
+        <table class="readings-table readings-counter-table">
+          <thead>
+            <tr>
+              <th>Counter-cluster theme</th>
+              <th>Week</th>
+              <th title="Contradicting items in pool / cluster total">Density</th>
+              <th>Trend</th>
+            </tr>
+          </thead>
+          <tbody>${counterClusters.map((c) => `
+            <tr class="readings-row">
+              <td class="readings-theme">${escapeHTML(c.theme_label || "—")}</td>
+              <td class="readings-week">${escapeHTML(c.week_bucket || "—")}</td>
+              <td class="readings-density">
+                <span class="readings-pool readings-counter-pool">${c.size_in_pool}</span>
+                <span class="readings-slash">/</span>
+                <span class="readings-total">${c.cluster_total}</span>
+              </td>
+              <td class="readings-trend-cell">${trendBadge(c.trend)}</td>
+            </tr>`).join("")}</tbody>
+        </table>` : ""}
+      ${counterEvidence.length ? `
+        <div class="readings-counter-evidence-block">
+          <h4 class="readings-chain-h">Counter-evidence items:</h4>
+          <ul class="readings-counter-list">
+            ${counterEvidence.map((e) => `
+              <li class="readings-counter-item">
+                <span class="readings-counter-week">${escapeHTML(e.week_bucket || "—")}</span>
+                <span class="readings-counter-title">${escapeHTML(e.title || e.evidence_id || "—")}</span>
+              </li>`).join("")}
+          </ul>
+        </div>` : ""}
+      ${relationNarrative ? `<p class="readings-narrative readings-relation-narrative">${escapeHTML(relationNarrative)}</p>` : ""}
+      ${relations.length ? `
+        <ul class="readings-relations-list">
+          ${relations.map((r) => {
+            const win = formatTargetWindow(r.other_target_start_date, r.other_target_end_date);
+            return `
+            <li class="readings-relation-item readings-relation-${escapeHTML(r.relation_type)}">
+              <span class="readings-relation-type">${escapeHTML(r.relation_type)}</span>
+              <span class="readings-relation-arrow">↔</span>
+              <span class="readings-relation-other">${escapeHTML(r.other_title || r.other_short_label || r.other_prediction_id || "—")}</span>
+              ${win ? `<span class="readings-relation-window" title="other prediction lands">${escapeHTML(win)}</span>` : ""}
+              ${r.family_id ? `<span class="readings-relation-family" title="exclusive variant family">${escapeHTML(r.family_id)}</span>` : ""}
+              ${r.prob_mass != null ? `<span class="readings-relation-mass" title="probability mass within family">${(r.prob_mass * 100).toFixed(0)}%</span>` : ""}
+              ${r.notes ? `<div class="readings-relation-notes">${escapeHTML(r.notes)}</div>` : ""}
+            </li>`;}).join("")}
+        </ul>` : ""}
+    `;
+  }
+
+  // Stream E: render `detail.needs[]`. Each entry is one role-abstract
+  // actor whose work drives the prediction toward landing, with a
+  // header (actor + job + outcome + motivation) and a 5W1H task grid.
+  // Tasks with `status='blocked'` (any 5W1H cell missing) get a
+  // visible badge so the weekly review can triage.
+  function renderNeedsTabBody(needs) {
+    const cell = (label, val) => val
+      ? `<div class="needs-cell"><span class="needs-cell-key">${escapeHTML(label)}</span><span class="needs-cell-val">${escapeHTML(val)}</span></div>`
+      : `<div class="needs-cell needs-cell-empty"><span class="needs-cell-key">${escapeHTML(label)}</span><span class="needs-cell-val muted">—</span></div>`;
+    const items = needs.map((n) => {
+      const t = n.task || {};
+      const blocked = t.status === "blocked";
+      const needWin = formatTargetWindow(n.target_start_date, n.target_end_date);
+      const taskWin = formatTargetWindow(t.target_start_date, t.target_end_date);
+      return `
+        <li class="needs-item${blocked ? " needs-blocked" : ""}">
+          <header class="needs-header">
+            <span class="needs-actor">${escapeHTML(n.actor || "—")}</span>
+            ${needWin ? `<span class="needs-window" title="Need deadline window">${escapeHTML(needWin)}</span>` : ""}
+            ${blocked ? `<span class="needs-status-badge" title="One or more 5W1H cells missing">blocked</span>` : ""}
+          </header>
+          ${n.job ? `<p class="needs-job"><strong>Job:</strong> ${escapeHTML(n.job)}</p>` : ""}
+          ${n.outcome ? `<p class="needs-outcome"><strong>Outcome:</strong> ${escapeHTML(n.outcome)}</p>` : ""}
+          ${n.motivation ? `<p class="needs-motivation"><strong>Motivation:</strong> ${escapeHTML(n.motivation)}</p>` : ""}
+          ${t && (t.who || t.what || t.where || t.when || t.why || t.how) ? `
+            <div class="needs-task-grid">
+              ${cell("Who", t.who)}
+              ${cell("What", t.what)}
+              ${cell("Where", t.where)}
+              ${cell("When", t.when)}
+              ${cell("Why", t.why)}
+              ${cell("How", t.how)}
+            </div>
+            ${taskWin ? `<div class="needs-task-window" title="Task runway window">runway: ${escapeHTML(taskWin)}</div>` : ""}` : ""}
+        </li>`;
+    }).join("");
+    return `<ul class="needs-list">${items}</ul>`;
+  }
+
+  function renderReasoningTabBody(r, predictionDetail) {
     const row = (k, v, label) => v
       ? `<div class="reasoning-row"><span class="reasoning-key">${escapeHTML(label)}</span><span class="reasoning-val">${escapeHTML(v)}</span></div>`
       : "";
+    // ELI14 is now promoted to the prediction pane's mid-tier
+    // (visible by default above the tabs). The Reasoning tab focuses
+    // on the structural 4 fields — because / given / so_that /
+    // landing — so we don't duplicate the simple line here.
+    // Phase 3: when the prediction has a parsed target window
+    // (predictions.target_*), surface it next to the Landing row
+    // since landing is the destination concept.
+    const win = predictionDetail
+      ? formatTargetWindow(predictionDetail.target_start_date,
+                           predictionDetail.target_end_date)
+      : "";
     return `
       <div class="reasoning-trace">
-        ${row("eli14", r.eli14, "ELI14")}
         ${row("because", r.because, "Because")}
         ${row("given", r.given, "Given")}
         ${row("so_that", r.so_that, "So that")}
         ${row("landing", r.landing, "Landing")}
+        ${win ? `<div class="reasoning-row reasoning-target-row">
+          <span class="reasoning-key">Target</span>
+          <span class="reasoning-val">${escapeHTML(win)}</span>
+        </div>` : ""}
       </div>
     `;
   }
@@ -2402,16 +2640,19 @@
   function renderBridgesTabBody(bridges) {
     return `
       <ul class="bridges-list">
-        ${bridges.map((b) => `
+        ${bridges.map((b) => {
+          const win = formatTargetWindow(b.target_start_date, b.target_end_date);
+          return `
           <li class="bridge-item">
             <div class="bridge-meta">
               <span class="bridge-date">${escapeHTML(b.date || "—")}</span>
               ${b.dimension && b.dimension !== "none"
                 ? `<span class="bridge-dim">supports <code>${escapeHTML(b.dimension)}</code></span>`
                 : ""}
+              ${win ? `<span class="bridge-target" title="Bridge target window">→ ${escapeHTML(win)}</span>` : ""}
             </div>
             <div class="bridge-text md-body">${renderMarkdown(b.text || "")}</div>
-          </li>`).join("")}
+          </li>`;}).join("")}
       </ul>
     `;
   }
@@ -2824,6 +3065,16 @@
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;")
       .replace(/'/g, "&#39;");
+  }
+
+  // Phase 3 (Reasoning/Bridge/Needs/Readings): format a (start, end)
+  // ISO date pair into a compact display. Returns "" when both null.
+  // Same start = same end → render as a single date.
+  function formatTargetWindow(start, end) {
+    if (!start && !end) return "";
+    if (start && end && start === end) return start;
+    if (start && end) return `${start} – ${end}`;
+    return start || end || "";
   }
 
   /* ---------------- Stream A: glossary hover ---------------- */

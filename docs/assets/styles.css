@@ -974,20 +974,65 @@ details.full-prediction[open] > summary {
    Sits between the title (above the metrics tiles) and the prediction
    tabs. Default-visible. The full prediction text below collapses
    into <details> when this mid-tier is present. */
-.prediction-summary-mid {
-  margin: 12px 0 4px;
-  padding: 10px 12px;
-  background: rgba(24, 199, 216, 0.04);
-  border-left: 2px solid var(--menu-active);
-  border-radius: 0 3px 3px 0;
+/* Tier 1 of the 3-tier prediction pane: ELI14 — the writer's
+   plain-language one-sentence summary. Default-visible, prominent.
+   The voice should read like "what would you tell a smart 14-year-old
+   about this prediction in one breath". */
+.prediction-eli14 {
+  margin: 14px 0 6px;
+  padding: 12px 14px;
+  background: rgba(24, 199, 216, 0.07);
+  border-left: 3px solid var(--menu-active);
+  border-radius: 0 4px 4px 0;
   color: var(--text-main);
-  font-size: 14px;
+  font-size: 15px;
+  line-height: 1.55;
+  font-weight: 400;
+}
+
+/* Tier 2 (optional, secondary): Stream K technical summary, ≤ 300
+   chars. Collapsible <details> — closed by default when ELI14 is
+   already shown above; open by default when ELI14 is missing
+   (legacy items where Stream K is the only mid-tier content). */
+.prediction-summary-mid {
+  margin: 6px 0 4px;
+  padding: 0;
+  font-size: 13px;
   line-height: 1.5;
+  color: var(--text-main);
 }
-.prediction-summary-mid p {
-  margin: 0 0 8px;
+.prediction-summary-mid > .prediction-summary-mid-toggle {
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 4px 8px;
+  list-style: none;
+  user-select: none;
 }
-.prediction-summary-mid p:last-child {
+.prediction-summary-mid > .prediction-summary-mid-toggle::-webkit-details-marker {
+  display: none;
+}
+.prediction-summary-mid > .prediction-summary-mid-toggle::before {
+  content: "▸ ";
+  display: inline-block;
+  transition: transform 120ms ease;
+}
+.prediction-summary-mid[open] > .prediction-summary-mid-toggle::before {
+  transform: rotate(90deg);
+}
+.prediction-summary-mid-body {
+  padding: 8px 12px;
+  background: rgba(24, 199, 216, 0.03);
+  border-left: 1px dashed var(--menu-active);
+  border-radius: 0 3px 3px 0;
+  margin-top: 4px;
+}
+.prediction-summary-mid-body p {
+  margin: 0 0 6px;
+}
+.prediction-summary-mid-body p:last-child {
   margin-bottom: 0;
 }
 
@@ -1220,5 +1265,412 @@ body.alt-view-mode {
 .ev-score {
   color: var(--text-muted);
   font-variant-numeric: tabular-nums;
+}
+
+/* Stream E Needs tab — one entry per role-abstract actor whose
+   work drives the prediction toward landing. Header carries
+   actor / job / outcome / motivation; below sits the 5W1H task
+   grid. */
+.needs-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.needs-list .needs-item + .needs-item {
+  border-top: 1px dashed var(--panel-border);
+  margin-top: 12px;
+  padding-top: 12px;
+}
+.needs-header {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  margin-bottom: 6px;
+}
+.needs-actor {
+  font-weight: 600;
+  color: var(--text-main);
+}
+.needs-status-badge {
+  font-size: 10px;
+  background: rgba(220, 90, 60, 0.18);
+  color: #d97759;
+  padding: 1px 6px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.needs-job, .needs-outcome, .needs-motivation {
+  font-size: 12px;
+  margin: 2px 0;
+  color: var(--text-main);
+}
+.needs-job strong, .needs-outcome strong, .needs-motivation strong {
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-right: 4px;
+}
+.needs-task-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px 12px;
+  margin-top: 8px;
+  padding: 6px 8px;
+  background: rgba(255, 255, 255, 0.02);
+  border-left: 2px solid var(--menu-active);
+  border-radius: 3px;
+  font-size: 12px;
+}
+.needs-cell {
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+  min-width: 0;
+}
+.needs-cell-key {
+  flex: 0 0 auto;
+  width: 44px;
+  color: var(--text-muted);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.needs-cell-val {
+  color: var(--text-main);
+  word-break: break-word;
+}
+.needs-blocked .needs-task-grid {
+  border-left-color: #d97759;
+  background: rgba(220, 90, 60, 0.06);
+}
+
+/* Stream F (Step 1) Readings tab — cluster density + frequency.
+   Narrative-first: the one-line summary leads, then the table
+   shows the underlying numbers for readers who want to drill in. */
+.readings-narrative {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-main);
+  margin: 4px 0 12px;
+  padding: 8px 10px;
+  background: rgba(24, 199, 216, 0.06);
+  border-left: 2px solid var(--menu-active);
+  border-radius: 3px;
+}
+.readings-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+.readings-table th {
+  text-align: left;
+  font-weight: 500;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--panel-border);
+  padding: 4px 6px;
+}
+.readings-table td {
+  padding: 6px;
+  border-bottom: 1px dashed var(--panel-border);
+}
+.readings-theme {
+  color: var(--text-main);
+  word-break: break-word;
+}
+.readings-week {
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+.readings-density {
+  font-variant-numeric: tabular-nums;
+}
+.readings-pool {
+  color: var(--text-main);
+  font-weight: 500;
+}
+.readings-slash {
+  color: var(--text-muted);
+  margin: 0 2px;
+}
+.readings-total {
+  color: var(--text-muted);
+}
+.readings-trend {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 500;
+}
+.readings-trend-up {
+  background: rgba(110, 200, 130, 0.15);
+  color: #6ec882;
+}
+.readings-trend-down {
+  background: rgba(220, 90, 60, 0.12);
+  color: #d97759;
+}
+.readings-trend-flat {
+  background: rgba(120, 120, 120, 0.12);
+  color: var(--text-muted);
+}
+
+/* Stream F (Step 2) chain blocks — downstream + upstream
+   predictions linked via prediction_chain. */
+.readings-chain-narrative {
+  margin-top: 14px;
+}
+.readings-chain-block {
+  margin-top: 10px;
+}
+.readings-chain-h {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin: 8px 0 4px;
+  letter-spacing: 0.02em;
+}
+.readings-chain-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.readings-chain-item {
+  padding: 6px 8px;
+  border-left: 2px solid var(--menu-active);
+  background: rgba(24, 199, 216, 0.04);
+  border-radius: 3px;
+  margin-bottom: 4px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px;
+  font-size: 12px;
+}
+.readings-chain-list-up .readings-chain-item {
+  border-left-color: #b48a3f;
+  background: rgba(180, 138, 63, 0.06);
+}
+.readings-chain-strength {
+  flex: 0 0 auto;
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  color: var(--text-main);
+  font-size: 11px;
+  padding: 1px 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 3px;
+}
+.readings-chain-arrow {
+  flex: 0 0 auto;
+  color: var(--text-muted);
+}
+.readings-chain-target {
+  flex: 1 1 auto;
+  color: var(--text-main);
+  word-break: break-word;
+}
+.readings-chain-notes {
+  flex: 1 1 100%;
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-left: 28px;
+  margin-top: 2px;
+  font-style: italic;
+}
+
+/* Stream F (Step 3) counter-cluster — pushback evidence + cluster
+   density. Visually orange-tinted to distinguish from the
+   support-side cluster table. */
+.readings-counter-narrative {
+  margin-top: 16px;
+  background: rgba(220, 90, 60, 0.08);
+  border-left-color: #d97759;
+  color: var(--text-main);
+}
+.readings-counter-table {
+  margin-top: 6px;
+}
+.readings-counter-pool {
+  color: #d97759;
+  font-weight: 500;
+}
+.readings-counter-evidence-block {
+  margin-top: 8px;
+}
+.readings-counter-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.readings-counter-item {
+  padding: 4px 8px;
+  border-left: 2px solid #d97759;
+  background: rgba(220, 90, 60, 0.05);
+  border-radius: 3px;
+  margin-bottom: 3px;
+  font-size: 12px;
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+}
+.readings-counter-week {
+  flex: 0 0 auto;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+.readings-counter-title {
+  color: var(--text-main);
+  word-break: break-word;
+}
+
+/* Stream F (Step 4) P↔P relations — structural relationships
+   between predictions (parallel / exclusive_variant / negation /
+   entails / equivalent). Each type is color-coded so the reader
+   can scan the kinds of relations at a glance. */
+.readings-relation-narrative {
+  margin-top: 16px;
+  background: rgba(180, 138, 63, 0.08);
+  border-left-color: #b48a3f;
+}
+.readings-relations-list {
+  list-style: none;
+  padding: 0;
+  margin: 6px 0 0 0;
+}
+.readings-relation-item {
+  padding: 6px 8px;
+  border-left: 2px solid var(--text-muted);
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 3px;
+  margin-bottom: 4px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 12px;
+}
+.readings-relation-negation {
+  border-left-color: #d97759;
+  background: rgba(220, 90, 60, 0.05);
+}
+.readings-relation-exclusive_variant {
+  border-left-color: #b48a3f;
+  background: rgba(180, 138, 63, 0.06);
+}
+.readings-relation-equivalent {
+  border-left-color: #6eb8c8;
+  background: rgba(110, 184, 200, 0.06);
+}
+.readings-relation-entails {
+  border-left-color: var(--menu-active);
+  background: rgba(24, 199, 216, 0.05);
+}
+.readings-relation-parallel {
+  border-left-color: #888;
+  background: rgba(120, 120, 120, 0.06);
+}
+.readings-relation-type {
+  flex: 0 0 auto;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  padding: 1px 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+}
+.readings-relation-arrow {
+  flex: 0 0 auto;
+  color: var(--text-muted);
+}
+.readings-relation-other {
+  flex: 1 1 auto;
+  color: var(--text-main);
+  word-break: break-word;
+}
+.readings-relation-family {
+  flex: 0 0 auto;
+  font-size: 11px;
+  font-style: italic;
+  color: var(--text-muted);
+}
+.readings-relation-mass {
+  flex: 0 0 auto;
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  color: var(--text-main);
+  font-size: 11px;
+  padding: 1px 6px;
+  background: rgba(180, 138, 63, 0.18);
+  border-radius: 3px;
+}
+.readings-relation-notes {
+  flex: 1 1 100%;
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+  font-style: italic;
+}
+
+/* Phase 3 — target-window badges. Compact tabular-nums display
+   consistent across Reasoning, Bridge, Needs, and Readings tabs. */
+.prediction-target-window {
+  margin: 6px 0 4px;
+  font-size: 12px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+.prediction-target-label {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 10px;
+  color: var(--menu-active);
+  margin-right: 4px;
+  font-weight: 500;
+}
+.reasoning-target-row {
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px dashed var(--panel-border);
+}
+.reasoning-target-row .reasoning-val {
+  font-variant-numeric: tabular-nums;
+  color: var(--menu-active);
+}
+.bridge-target {
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  color: var(--menu-active);
+  margin-left: 4px;
+}
+.needs-window {
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  color: var(--menu-active);
+  margin-left: auto;
+  padding: 1px 6px;
+  background: rgba(24, 199, 216, 0.10);
+  border-radius: 3px;
+}
+.needs-task-window {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  margin-top: 4px;
+  padding: 2px 6px;
+  border-left: 2px solid rgba(24, 199, 216, 0.3);
+  background: rgba(255, 255, 255, 0.02);
+}
+.readings-chain-window,
+.readings-relation-window {
+  flex: 0 0 auto;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+  padding: 1px 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 3px;
 }
 
