@@ -1,30 +1,39 @@
 # Stream A — auto-curated jargon glossary (seed file).
 #
-# Day-0 seed of 10 terms picked manually so the dashboard's hover
+# Day-0 seed of 11 terms picked manually so the dashboard's hover
 # tooltip works on day-1, before extract-glossary-candidates and
 # define-glossary-terms have had time to build the active set
 # from real news.
+#
+# Phase 2 update (2026-05-02): per-locale eli14 + why_it_matters
+# brought forward from the original "Phase 2" timeline so JA/ES/FIL
+# users get hover tooltips in their language. NULL on a locale
+# field falls back to the canonical EN value at render time.
 #
 # After Day 0 the daily flow (1_daily_update) runs:
 #   1. extract-glossary-candidates — adds rows with status='candidate'
 #      to the SQLite glossary_terms table.
 #   2. define-glossary-terms — promotes candidates to 'active' once
 #      they appear on >=3 distinct days in a 14-day window AND fills
-#      one_liner_eli14 + why_it_matters.
+#      one_liner_eli14 + why_it_matters (and the per-locale fan-out).
 # This YAML file is read once during DB bootstrap to insert the seed
 # rows. After bootstrap the SQLite table is the source of truth and
-# this file is reference-only (drift is allowed; only the SQLite
-# rows drive runtime behavior).
+# this file is reference-only.
 #
 # Reviewed-by-human flag stays true on these seed rows so the weekly
-# theme review (5_weekly_theme_review) doesn't surface them in its
-# "needs human eyes" queue.
+# theme review (5_weekly_theme_review) doesn't surface them.
 
 terms:
   - term: MCP
     aliases: [Model Context Protocol]
     one_liner_eli14: "A shared way for AI assistants to talk to outside tools (files, search, GitHub). Like USB for AI."
+    one_liner_eli14_ja: "AIアシスタントが外部のツール (ファイル、検索、GitHub) と話すための共通の仕組み。AI 用の USB のようなもの。"
+    one_liner_eli14_es: "Una forma común de que los asistentes de IA hablen con herramientas externas (archivos, búsqueda, GitHub). Es como un USB para IA."
+    one_liner_eli14_fil: "Karaniwang paraan para makapag-usap ang mga AI assistant sa mga external na tool (files, search, GitHub). Parang USB para sa AI."
     why_it_matters: "If MCP wins, agents become portable across vendors. Otherwise we're stuck with vendor-specific glue."
+    why_it_matters_ja: "MCP が普及すれば、エージェントはベンダー横断で動かしやすくなる。普及しなければ、ベンダー固有の繋ぎ込みに縛られる。"
+    why_it_matters_es: "Si MCP se impone, los agentes serán portables entre proveedores. Si no, seguiremos atados a integraciones específicas de cada proveedor."
+    why_it_matters_fil: "Kung manalo ang MCP, magiging portable ang mga agent sa iba't ibang vendor. Kung hindi, mako-lock-in tayo sa vendor-specific glue code."
     canonical_link: https://modelcontextprotocol.io/
     status: active
     reviewed_by_human: true
@@ -32,7 +41,13 @@ terms:
   - term: MITRE-CNA
     aliases: [CNA, CVE Numbering Authority]
     one_liner_eli14: "An organization MITRE has trusted to assign CVE IDs. Like a city issuing license plates for software bugs."
+    one_liner_eli14_ja: "MITRE が CVE ID の発行を任せている組織。市が車のナンバープレートを発行するように、ソフトウェアのバグに ID を発行する役割。"
+    one_liner_eli14_es: "Una organización en la que MITRE confía para asignar IDs CVE. Como una ciudad que emite matrículas para los bugs de software."
+    one_liner_eli14_fil: "Organisasyon na pinagkakatiwalaan ng MITRE para mag-issue ng CVE ID. Parang siyudad na nag-i-issue ng license plate para sa mga software bug."
     why_it_matters: "Once a vendor or domain (e.g. AI agents) has its own CNA, vulnerabilities get tracked formally — that gates enterprise risk transfer."
+    why_it_matters_ja: "ベンダーや領域 (例: AI エージェント) が自分の CNA を持つと、脆弱性が正式に追跡される — 企業のリスク移転の前提になる。"
+    why_it_matters_es: "Cuando un proveedor o dominio (p. ej. agentes de IA) tiene su propio CNA, las vulnerabilidades se rastrean formalmente — base para la transferencia de riesgo empresarial."
+    why_it_matters_fil: "Kapag may sariling CNA ang isang vendor o domain (hal. AI agents), pormal na nasusubaybayan ang mga vulnerability — pundasyon ng enterprise risk transfer."
     canonical_link: https://www.cve.org/ProgramOrganization/CNAs
     status: active
     reviewed_by_human: true
@@ -40,7 +55,13 @@ terms:
   - term: ATT&CK
     aliases: ["MITRE ATT&CK", "ATT&CK v19"]
     one_liner_eli14: "A list of all the tricks attackers actually use, organized like a recipe book. Defenders compare their detections against it."
+    one_liner_eli14_ja: "攻撃者が実際に使う手口の一覧をレシピ帳のように整理したもの。守る側は自分の検知をこれに照らしてチェックする。"
+    one_liner_eli14_es: "Una lista de todos los trucos que los atacantes usan en realidad, organizada como un recetario. Los defensores comparan sus detecciones con ella."
+    one_liner_eli14_fil: "Listahan ng lahat ng tricks na talagang ginagamit ng mga attacker, nakaayos parang recipe book. Iko-compare ng mga defender ang detections nila dito."
     why_it_matters: "Standard vocabulary for talking about attacker behavior. Without it, every security vendor invents their own taxonomy."
+    why_it_matters_ja: "攻撃者の挙動を語るときの共通語彙。これが無いと、各セキュリティベンダーが独自の分類を作って噛み合わない。"
+    why_it_matters_es: "Vocabulario estándar para hablar del comportamiento de los atacantes. Sin él, cada proveedor de seguridad inventa su propia taxonomía."
+    why_it_matters_fil: "Standard na bokabularyo para pag-usapan ang attacker behavior. Kung wala ito, magkakanya-kaniyang taxonomy ang bawat security vendor."
     canonical_link: https://attack.mitre.org/
     status: active
     reviewed_by_human: true
@@ -48,7 +69,13 @@ terms:
   - term: CVE
     aliases: ["Common Vulnerabilities and Exposures"]
     one_liner_eli14: "A unique ID for every known software bug that can be exploited. Lets the world refer to the same problem unambiguously."
+    one_liner_eli14_ja: "悪用可能な既知のソフトウェアバグ 1 つ 1 つに付く一意の ID。世界中で同じ問題を曖昧さなく指し示せる。"
+    one_liner_eli14_es: "Un ID único para cada bug de software conocido que puede ser explotado. Permite que el mundo se refiera al mismo problema sin ambigüedad."
+    one_liner_eli14_fil: "Natatanging ID para sa bawat kilalang software bug na pwedeng i-exploit. Para ma-refer ng mundo ang parehong problema nang walang ambiguity."
     why_it_matters: "If a bug has no CVE, it's invisible to enterprise patch programs and compliance checks."
+    why_it_matters_ja: "CVE が無いバグは企業のパッチ管理プログラムやコンプラチェックから見えなくなる。"
+    why_it_matters_es: "Si un bug no tiene CVE, es invisible para los programas de parches empresariales y los controles de cumplimiento."
+    why_it_matters_fil: "Kung walang CVE ang bug, hindi ito nakikita ng enterprise patch programs at compliance checks."
     canonical_link: https://www.cve.org/
     status: active
     reviewed_by_human: true
@@ -56,7 +83,13 @@ terms:
   - term: CVSS
     aliases: ["Common Vulnerability Scoring System"]
     one_liner_eli14: "A 0-10 score for how bad a software bug is. 9-10 means drop everything and patch."
+    one_liner_eli14_ja: "ソフトウェアバグの危険度を 0-10 で表すスコア。9-10 なら全部止めてパッチ。"
+    one_liner_eli14_es: "Una puntuación de 0 a 10 sobre la gravedad de un bug de software. 9-10 significa dejarlo todo y parchear."
+    one_liner_eli14_fil: "Score na 0-10 kung gaano kasama ang software bug. Ang 9-10 ay senyas na 'drop everything at i-patch agad'."
     why_it_matters: "Drives the cutoff for what enterprises must patch within how many days. Score >= 8.0 is the spotlight zone."
+    why_it_matters_ja: "企業が「何日以内に何をパッチするか」の境界線を決める基準。スコア 8.0 以上は要対応。"
+    why_it_matters_es: "Define el corte de qué deben parchear las empresas y en cuántos días. Una puntuación >= 8.0 es la zona de atención inmediata."
+    why_it_matters_fil: "Itinatakda nito ang cutoff kung ano ang dapat i-patch ng enterprises sa loob ng ilang araw. Score >= 8.0 ang spotlight zone."
     canonical_link: https://www.first.org/cvss/
     status: active
     reviewed_by_human: true
@@ -64,7 +97,13 @@ terms:
   - term: KV-cache
     aliases: ["key-value cache", "KV cache"]
     one_liner_eli14: "Memory the AI keeps for the words you've already said in the conversation, so it doesn't have to re-read them."
+    one_liner_eli14_ja: "AI が会話の中で既に話した単語を覚えておくメモリ。毎回読み直さなくて済むようにするため。"
+    one_liner_eli14_es: "Memoria que la IA conserva de las palabras que ya has dicho, para no tener que releerlas."
+    one_liner_eli14_fil: "Memory na pinananatili ng AI para sa mga salitang nasabi mo na, para di na kailangan basahing muli."
     why_it_matters: "KV-cache size and reuse drive most of the cost and latency in serving long-context LLMs."
+    why_it_matters_ja: "長い文脈の LLM を動かすコストとレイテンシのほとんどは、KV-cache のサイズと再利用に支配される。"
+    why_it_matters_es: "El tamaño y la reutilización del KV-cache dominan la mayor parte del coste y la latencia al servir LLMs con contexto largo."
+    why_it_matters_fil: "Pinangungunahan ng laki at reuse ng KV-cache ang karamihan ng cost at latency sa pag-serve ng long-context LLMs."
     canonical_link: null
     status: active
     reviewed_by_human: true
@@ -72,7 +111,13 @@ terms:
   - term: TurboQuant
     aliases: []
     one_liner_eli14: "A way to shrink an AI model so it runs on tiny hardware while keeping most of its smarts."
+    one_liner_eli14_ja: "AI モデルを小さくして、スマホや小さな PC でもそれなりに賢く動くようにする方法。"
+    one_liner_eli14_es: "Una forma de encoger un modelo de IA para que corra en hardware pequeño manteniendo casi toda su inteligencia."
+    one_liner_eli14_fil: "Paraan para liitan ang AI model para tumakbo sa maliit na hardware habang panatilihin ang halos buong galing."
     why_it_matters: "The latest in a long line of quantization tricks. If it sticks, more inference moves to local devices and less to cloud."
+    why_it_matters_ja: "量子化の系譜のひとつ。定着すれば、推論はクラウドからローカルデバイスへ徐々に移る。"
+    why_it_matters_es: "La última de una larga línea de trucos de cuantización. Si cuaja, más inferencia se mueve a dispositivos locales y menos a la nube."
+    why_it_matters_fil: "Pinakabago sa mahabang linya ng quantization tricks. Kung mag-stick, mas marami sa inference ang lilipat sa local devices, kaysa sa cloud."
     canonical_link: null
     status: active
     reviewed_by_human: true
@@ -80,7 +125,13 @@ terms:
   - term: CSAI
     aliases: ["CSAI Foundation", "Coalition for Secure AI"]
     one_liner_eli14: "An industry group setting rules for how AI agents are kept safe — like a homeowners' association for AI security."
+    one_liner_eli14_ja: "AI エージェントの安全運用ルールを決める業界団体。AI セキュリティの「町内会」のようなもの。"
+    one_liner_eli14_es: "Un grupo de la industria que establece las reglas para mantener seguros a los agentes de IA — como una asociación de vecinos para la seguridad de IA."
+    one_liner_eli14_fil: "Industriya group na nagtatakda ng mga panuntunan para safe ang AI agents — parang homeowners' association para sa AI security."
     why_it_matters: "If CSAI's rules become a CNA-issued standard, agentic AI risk becomes a compliance category, not just a research topic."
+    why_it_matters_ja: "CSAI のルールが CNA 発行の標準になれば、エージェント AI のリスクは研究テーマからコンプライアンス要件に変わる。"
+    why_it_matters_es: "Si las reglas de CSAI se convierten en un estándar emitido por una CNA, el riesgo de los agentes de IA pasa de tema de investigación a categoría de cumplimiento."
+    why_it_matters_fil: "Kapag naging CNA-issued standard ang mga rules ng CSAI, magiging compliance category na (hindi lang research topic) ang agentic AI risk."
     canonical_link: https://www.coalitionforsecureai.org/
     status: active
     reviewed_by_human: true
@@ -88,7 +139,13 @@ terms:
   - term: SLA
     aliases: ["Service Level Agreement"]
     one_liner_eli14: "A written promise about how often a service will be available and how fast it will respond."
+    one_liner_eli14_ja: "サービスがどのくらい使えて、どのくらい速く応えるかについての書面の約束。"
+    one_liner_eli14_es: "Una promesa escrita sobre con qué frecuencia estará disponible un servicio y con qué rapidez responderá."
+    one_liner_eli14_fil: "Nakasulat na promise tungkol sa kung gaano kadalas ma-aavailable ang isang service at kung gaano kabilis sumagot."
     why_it_matters: "Determines how much an AI vendor pays you back when their service fails. The teeth behind every cloud contract."
+    why_it_matters_ja: "AI ベンダーがサービスを止めたときに払う返金額を決める。すべてのクラウド契約の歯がここに集まる。"
+    why_it_matters_es: "Determina cuánto te devuelve un proveedor de IA cuando falla su servicio. Es el 'diente' detrás de cada contrato cloud."
+    why_it_matters_fil: "Tinutukoy nito kung magkano ang ibabalik ng AI vendor pag pumalpak ang service nila. Ito ang ngipin sa likod ng bawat cloud contract."
     canonical_link: null
     status: active
     reviewed_by_human: true
@@ -96,7 +153,13 @@ terms:
   - term: capex
     aliases: ["capital expenditure", "capital expense"]
     one_liner_eli14: "Money a company spends on big things that last (data centers, GPUs) — counted differently than monthly bills."
+    one_liner_eli14_ja: "会社が長く使う大きなもの (データセンターや GPU) に使うお金。月々の請求書とは会計上分けて扱う。"
+    one_liner_eli14_es: "Dinero que una empresa gasta en cosas grandes que duran (centros de datos, GPUs) — se contabiliza diferente que las facturas mensuales."
+    one_liner_eli14_fil: "Pera na ginagastos ng kompanya sa malalaking bagay na pangmatagalan (data centers, GPUs) — iba ang accounting kaysa sa monthly bills."
     why_it_matters: "Hyperscaler capex tells you how much compute is coming online and where the AI infrastructure bottleneck will be."
+    why_it_matters_ja: "ハイパースケーラの capex を見ると、これからどれだけの計算資源がオンラインになるか、AI インフラのボトルネックがどこに来るかが分かる。"
+    why_it_matters_es: "El capex de los hyperscalers indica cuánto cómputo entrará en línea y dónde estará el cuello de botella de la infraestructura de IA."
+    why_it_matters_fil: "Sinasabi ng hyperscaler capex kung magkano ang darating na compute online at kung saan magkakaroon ng AI infrastructure bottleneck."
     canonical_link: null
     status: active
     reviewed_by_human: true
@@ -104,7 +167,13 @@ terms:
   - term: hyperscaler
     aliases: [hyperscalers]
     one_liner_eli14: "One of the very big cloud companies (AWS, Azure, Google, Meta, Oracle) that runs millions of servers."
+    one_liner_eli14_ja: "何百万台ものサーバーを動かす超大手クラウド企業 (AWS、Azure、Google、Meta、Oracle) のひとつ。"
+    one_liner_eli14_es: "Una de las muy grandes empresas de la nube (AWS, Azure, Google, Meta, Oracle) que opera millones de servidores."
+    one_liner_eli14_fil: "Isa sa mga pinakamalalaking cloud companies (AWS, Azure, Google, Meta, Oracle) na may milyun-milyong server."
     why_it_matters: "Their capex and AI alliances steer the entire market — frontier-lab pricing, chip availability, regional datacenter buildouts."
+    why_it_matters_ja: "彼らの capex と AI 提携が市場全体を動かす — フロンティアラボの値付け、チップの供給、地域データセンターの増設。"
+    why_it_matters_es: "Su capex y sus alianzas con laboratorios de IA dirigen todo el mercado — precios de los frontier labs, disponibilidad de chips, despliegues regionales de centros de datos."
+    why_it_matters_fil: "Ang capex nila at AI alliances ang nagdidikta sa buong market — frontier-lab pricing, chip availability, regional datacenter buildouts."
     canonical_link: null
     status: active
     reviewed_by_human: true
