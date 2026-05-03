@@ -2575,6 +2575,8 @@
   // Tasks with `status='blocked'` (any 5W1H cell missing) get a
   // visible badge so the weekly review can triage.
   function renderNeedsTabBody(needs) {
+    const loc = state.locale || "en";
+    const pick = (bag, fallback) => (bag && (bag[loc] || bag.en)) || fallback || "";
     const cell = (label, val) => val
       ? `<div class="needs-cell"><span class="needs-cell-key">${escapeHTML(label)}</span><span class="needs-cell-val">${escapeHTML(val)}</span></div>`
       : `<div class="needs-cell needs-cell-empty"><span class="needs-cell-key">${escapeHTML(label)}</span><span class="needs-cell-val muted">—</span></div>`;
@@ -2583,24 +2585,34 @@
       const blocked = t.status === "blocked";
       const needWin = formatTargetWindow(n.target_start_date, n.target_end_date);
       const taskWin = formatTargetWindow(t.target_start_date, t.target_end_date);
+      const actor = pick(n.actor_locales, n.actor);
+      const job = pick(n.job_locales, n.job);
+      const outcome = pick(n.outcome_locales, n.outcome);
+      const motivation = pick(n.motivation_locales, n.motivation);
+      const tWho = pick(t.who_locales, t.who);
+      const tWhat = pick(t.what_locales, t.what);
+      const tWhere = pick(t.where_locales, t.where);
+      const tWhen = pick(t.when_locales, t.when);
+      const tWhy = pick(t.why_locales, t.why);
+      const tHow = pick(t.how_locales, t.how);
       return `
         <li class="needs-item${blocked ? " needs-blocked" : ""}">
           <header class="needs-header">
-            <span class="needs-actor">${escapeHTML(n.actor || "—")}</span>
+            <span class="needs-actor">${escapeHTML(actor || "—")}</span>
             ${needWin ? `<span class="needs-window" title="Need deadline window">${escapeHTML(needWin)}</span>` : ""}
             ${blocked ? `<span class="needs-status-badge" title="One or more 5W1H cells missing">blocked</span>` : ""}
           </header>
-          ${n.job ? `<p class="needs-job"><strong>Job:</strong> ${escapeHTML(n.job)}</p>` : ""}
-          ${n.outcome ? `<p class="needs-outcome"><strong>Outcome:</strong> ${escapeHTML(n.outcome)}</p>` : ""}
-          ${n.motivation ? `<p class="needs-motivation"><strong>Motivation:</strong> ${escapeHTML(n.motivation)}</p>` : ""}
-          ${t && (t.who || t.what || t.where || t.when || t.why || t.how) ? `
+          ${job ? `<p class="needs-job"><strong>Job:</strong> ${escapeHTML(job)}</p>` : ""}
+          ${outcome ? `<p class="needs-outcome"><strong>Outcome:</strong> ${escapeHTML(outcome)}</p>` : ""}
+          ${motivation ? `<p class="needs-motivation"><strong>Motivation:</strong> ${escapeHTML(motivation)}</p>` : ""}
+          ${t && (tWho || tWhat || tWhere || tWhen || tWhy || tHow) ? `
             <div class="needs-task-grid">
-              ${cell("Who", t.who)}
-              ${cell("What", t.what)}
-              ${cell("Where", t.where)}
-              ${cell("When", t.when)}
-              ${cell("Why", t.why)}
-              ${cell("How", t.how)}
+              ${cell("Who", tWho)}
+              ${cell("What", tWhat)}
+              ${cell("Where", tWhere)}
+              ${cell("When", tWhen)}
+              ${cell("Why", tWhy)}
+              ${cell("How", tHow)}
             </div>
             ${taskWin ? `<div class="needs-task-window" title="Task runway window">runway: ${escapeHTML(taskWin)}</div>` : ""}` : ""}
         </li>`;
@@ -2609,9 +2621,20 @@
   }
 
   function renderReasoningTabBody(r, predictionDetail) {
-    const row = (k, v, label) => v
-      ? `<div class="reasoning-row"><span class="reasoning-key">${escapeHTML(label)}</span><span class="reasoning-val">${escapeHTML(v)}</span></div>`
-      : "";
+    const loc = state.locale || "en";
+    const rl = (predictionDetail && predictionDetail.reasoning_locales) || {};
+    const pick = (key) => {
+      const bag = rl[key];
+      if (bag && bag[loc]) return bag[loc];
+      if (bag && bag.en) return bag.en;
+      return r[key] || "";
+    };
+    const row = (key, label) => {
+      const v = pick(key);
+      return v
+        ? `<div class="reasoning-row"><span class="reasoning-key">${escapeHTML(label)}</span><span class="reasoning-val">${escapeHTML(v)}</span></div>`
+        : "";
+    };
     // ELI14 is now promoted to the prediction pane's mid-tier
     // (visible by default above the tabs). The Reasoning tab focuses
     // on the structural 4 fields — because / given / so_that /
@@ -2625,10 +2648,10 @@
       : "";
     return `
       <div class="reasoning-trace">
-        ${row("because", r.because, "Because")}
-        ${row("given", r.given, "Given")}
-        ${row("so_that", r.so_that, "So that")}
-        ${row("landing", r.landing, "Landing")}
+        ${row("because", "Because")}
+        ${row("given", "Given")}
+        ${row("so_that", "So that")}
+        ${row("landing", "Landing")}
         ${win ? `<div class="reasoning-row reasoning-target-row">
           <span class="reasoning-key">Target</span>
           <span class="reasoning-val">${escapeHTML(win)}</span>
@@ -2638,6 +2661,10 @@
   }
 
   function renderBridgesTabBody(bridges) {
+    const pickText = (b) => {
+      const bag = b.text_locales || {};
+      return bag[state.locale] || bag.en || b.text || "";
+    };
     return `
       <ul class="bridges-list">
         ${bridges.map((b) => {
@@ -2651,7 +2678,7 @@
                 : ""}
               ${win ? `<span class="bridge-target" title="Bridge target window">→ ${escapeHTML(win)}</span>` : ""}
             </div>
-            <div class="bridge-text md-body">${renderMarkdown(b.text || "")}</div>
+            <div class="bridge-text md-body">${renderMarkdown(pickText(b))}</div>
           </li>`;}).join("")}
       </ul>
     `;
