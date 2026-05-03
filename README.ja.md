@@ -12,6 +12,41 @@
 
 ---
 
+## 2026-05-03
+
+### News
+
+- **NSA Project Aether (Bloomberg 4/30) — NSA が Anthropic Claude Mythos Preview を機密ソブリン・サイバー・ツーリングと比較ベンチマークし Microsoft ソフトウェア対象に投入。Pentagon CTO 5/1 声明はブラックリストと NSA Mythos 関与を分離 (「Mythos は別件」)。Mythos = 4/7 Project Glasswing 下リリース、~50 launch partners (AWS, Apple, Broadcom, Cisco, CrowdStrike, Google, JPMorgan Chase, Linux Foundation, Microsoft, NVIDIA, Palo Alto Networks + ~40 critical-software-infrastructure orgs); $100M usage credits + $4M open-source security donations** — 過去のいかなる連邦 AI 調達よりも構造的に大規模な、初の公開 US 政府 AI サイバー能力プログラム。5/1 ペンタゴン-Anthropic 対立を「凍結は調達スタック層であって能力スタック層ではない」と再フレーム — Pentagon が調達拒否したのと同じ Anthropic が NSA がソブリン・サイバー・ベンチマークで依存している研究所。
+- **国防総省 5/1-3 アップデート — 当初 7社契約 (SpaceX, OpenAI, Google, NVIDIA, Reflection, Microsoft, AWS) が数時間以内に Oracle 追加で 8社へ拡大; Anthropic は依然「サプライチェーンリスク」として除外、対ペンタゴン報復訴訟継続中; 既存 Anthropic 配備に 6か月撤去ウィンドウ** — 構造的前例拡大: 8コホート in、Anthropic は Mythos バックチャネル経由のみで out。
+- **Microsoft Agent 365 5/1 GA + マルチクラウド Registry Sync — M365 管理面 allow/block に加え、同日公開プレビューで Agent 365 Registry Sync を AWS Bedrock + Google Cloud Gemini Enterprise Agent Platform 向け出荷; Defender エージェント単位関係マップが MCP サーバー + ID + クラウドリソースを単一の運用ビューとして提示; Anthropic Claude Code + GitHub Copilot CLI が今後のローカル・エージェント統合; MCP SDK 月間DL ~9,700万 (2026年3月)** — 初の広範展開クロスクラウド・エージェント識別基本機能。MCP-Gateway テーゼを「単一ベンダー製品の波」→「レジストリ・プロトコル相互運用」へ加速。
+- **Tesla Optimus Q2 2026 Fremont 量産準備 — Tesla が Q2 に Fremont で初の大規模 Optimus ヒューマノイドロボット工場を構築開始、レガシー Model S + Model X 生産ラインを段階廃止し年100万台公称の第一世代ロボット工場へ; Optimus 3 が「2026年夏」ローンチ、本年は数百台、2027-2028 で数千・数万台、価格目標 $20K-$30K; Apptronik + Jabil Apollo 並行** — 公的1M-units/year 公称を持つ初のハイパースケーラー型 physical-AI 設備投資コミットメント。
+- **イラン緊張原油上昇 + 5/8 4月雇用統計 + 5/5 AMD — WTI 原油 ~$105 (週次 +12%、5/1 イラン執行); CBOE VIX 16.99 (+0.59%); 4月雇用統計 5/8 8:30 ET (BLS 確認済、3月ベースライン 178K + 失業率 4.3%); AMD Q1 2026 5/5 印刷 (コンセンサス EPS $1.28 / 売上 $9.88B (+33% YoY) + DA Davidson Buy $375 PT + Instinct MI400 ランプ + OpenAI 6GW H2 2026 初期配備フォーカス)** — 2025年Q1以来最も澄んだエネルギー入札脚 + 新高値株式相場で異例にボラタイルなマクロ週。
+
+[news-20260503.md](report/ja/news-20260503.md)
+
+### Predictions check
+
+- **本日 5/5 マッチ 11件; サイクル中で最密の Pentagon-Anthropic + サイバー AI テーゼ週。** NSA Project Aether による Mythos vs Microsoft のベンチマークが 5/1 ペンタゴン-Anthropic 対立を調達スタック限定と再フレーム; Microsoft Agent 365 Registry Sync (本番プレビューのクロスクラウド・エージェント識別) が 5/2 #1 テーゼを 5+か月前倒し; SGLang CVE-2026-5760 が 5/3 時点未パッチ ~14日 (2026年最長未パッチ LLM ツーリング CVE) + CERT/CC ImmutableSandboxedEnvironment 回避策。
+- **ハイパースケーラー × AI ラボ資本結合 → マルチフロンティアベンダー (4/26)** Relevance 5: 国防総省 8-vendor 機密ネットワーク (Oracle 8番目); Anthropic 6か月サンセット; NSA Project Aether Mythos 関与; Microsoft Agent 365 Registry Sync が AWS Bedrock + Google Gemini Enterprise Agent Platform へ。
+- **推論サーバーがプリミティブ供給チェーン (4/26)** Relevance 5: SGLang CVE-2026-5760 (CVSS 9.8) は 5/3 時点で未パッチ (~14日、2026年最長未パッチ LLM ツーリング CVE); CERT/CC 回避策; LiteLLM CVE-2026-42208 + Spring AI 繰り越し; UTT/IBM Langflow 5/1 波; Linux Copy Fail KEV 5/15 連邦期限。
+- **AI-Infra CVE クラスが規制プリミティブへ昇格 (4/27)** Relevance 5: CSAI Foundation MITRE-CNA carry; ATT&CK v19 名前付きテクニック; SGLang 未パッチ; Linux Copy Fail KEV; cPanel & WHM KEV; NIST CAISI agentic-AI security RFI carry。
+- **KV キャッシュ圧縮 dtype がファーストクラス・デプロイメントノブ (4/29) + 統一 KV キャッシュノブ (4/30)** Relevance 5: SGLang TurboQuant #21419/#23134; llama.cpp #20969; PolyKV; NVIDIA kvpress; 新 arxiv 波 SideQuest (2602.22603 長期エージェント推論向けモデル駆動 KV キャッシュ管理) + DepthKV (2604.24647 層依存 KV キャッシュ剪定) + KVFundaBench; vLLM v0.20.0 + Unsloth 2026.4.8。
+- **Agentic-AI CVE クラスが CNA 発行サブコーパスへ (5/1)** Relevance 5: CSAI MITRE-CNA carry; ATT&CK v19 名前付きテクニック; SGLang/LiteLLM/Spring AI carry-forward; UTT HiPER 1200GW + IBM Langflow + 5/1 波; Microsoft Agent 365 MCP allow/block; Anthropic Project Glasswing model card 4/7 公開。
+- **OpenAI-on-Bedrock + Microsoft 非排他リセット → マルチクラウド・フロンティアモデル SLA 標準化 (5/1)** Relevance 5: Anthropic Mythos Preview が AWS Bedrock Gated Research Preview SKU + Project Glasswing 50組織配布 (4/7) — Anthropic が今や Anthropic API + AWS Bedrock + Microsoft-Foundry 型ゲート付きチャネル横断で Opus 4.7 + Mythos の両方を出荷; Microsoft Agent 365 マルチクラウド Registry Sync。
+- **Mag 7 super-week + 設備投資 + AAPL 自社株買いが AI 設備投資ディスクロージャー分割 (5/1)** Relevance 5: 5/1 新高値 S&P 7,230 + ナスダック 25K; AAPL +3.24% で $280.14 + Q3 ガイダンス +14-17%; $700B 2026 設備投資; Microsoft Agent 365 $15/user; Cerebras IPO 5月中旬; AMD 5/5 印刷プレビュー — 本日の予測 #3 (SEC AI-revenue concept release Q4 2026) が運用上の規制エスカレーション。
+- **Big-3 ハイパースケーラーが MCP サーバー・ポリシー強制をデフォルト (5/2)** Relevance 5: Microsoft Agent 365 Registry Sync GA preview (5/1) が AWS Bedrock + Google Cloud Gemini Enterprise Agent Platform で — Q4 2026 テーゼが投影していたクロスクラウド・エージェント識別基本機能が本番プレビューで; Anthropic Claude Code + GitHub Copilot CLI 今後のローカル統合; MCP SDK ~9,700万 月間DL。
+- **LLM ツーリング + Linux カーネル CVE チェーンが支配的攻撃パターン (5/2)** Relevance 5: SGLang CVE 未パッチ ~14日 + CERT/CC 回避策; Linux Copy Fail KEV 5/15 連邦期限; LiteLLM CVE-2026-42208 carry; Spring AI carry; クロスサーバー・クラス拡散。
+- **Relevance 4**: Mag 7 Q1 決算が AI 設備投資 ROI ナラティブ・リセット (4/27); Mag 7 + FOMC が per-token-margin-gated capex (4/28); エージェントスキル攻撃面 ATT&CK サブマトリクス (4/29); 公開エージェントスキル脅威サブマトリクス (4/30); Powell 4/29 が金融政策市場心理を再構成 (4/30、Powell 2028 年理事 + Warsh + Apr Jobs 5/8 + WTI +12% wk); フロンティア研究所 2社が自律兵器除外条項 (5/2、Pentagon 8-vendor + 6か月サンセット + NSA Project Aether パラドックス); Cerebras IPO 5月中旬 $22-25B 超 (5/2)。
+- **Relevance 3**: 民生 GPU コーディング・エージェント ≥30% (4/26、中国オープンウェイト + Bonsai-8B + Foundry Local + Unsloth + Google Gemini 3.1 Flash-Lite $0.25/M); 自律エージェント法定アイデンティティ法 (4/27、CSA Identity + Microsoft Agent 365 Registry Sync + CSAI MITRE-CNA — 米州法はまだ); OpenAI WSJ → AI 売上ディスクロージャー (4/29 + 4/30); Powell stay-through-2028 + Apr Jobs 5/8 (5/1、5/8 へ正式再固定 + WTI +12% wk)。
+- **Relevance 1-2**: AGI 条項解消テンプレート (4/28、AWS Bedrock Mythos が Anthropic 初のクロスクラウド・チャネル — 第二の契約改定はまだ); 20260420-3「Headless Everything」(4/20、REVIVED Layer 1 'Simon Willison' — 5/2 weblog "Sightings"; Microsoft Agent 365 Registry Sync が Layer 2 Agent-Registry 隣接性; 混合方向シグナル: Sightings は軽量 HTML; honest score 2)。
+- ユーザー予測 1 (悪性ローカル LLM → ゼロトラスト): **4/29 CSAI MITRE-CNA 以来最強の単日構造的確認**。NSA Project Aether による Mythos vs Microsoft が運用ケーススタディ; Anthropic Project Glasswing 50組織ゲート付き配布 + $100M 利用クレジットが供給側アーキテクチャ (ゼロトラストを展開だけでなくモデル配布自体に適用); Microsoft Agent 365 Registry Sync がゼロトラスト・パターンをクロスクラウド・エージェント識別ガバナンスへ拡張。
+- ユーザー予測 2 (高度クラウド + 日常ローカル LLM): **本日最強の供給側確認**。Google Gemini 3.1 Flash-Lite $0.25/M + 既存 DeepSeek V4-Flash + Bonsai-8B + Foundry Local + Unsloth + GLM-5.1 (MIT) で小型モデル層トークン単価マージン圧縮確認。需要側: AMD H2 2026 OpenAI 6GW 初期配備コミットがクラウドフラッグシップ API パスの設備投資制約を示す。
+- ユーザー予測 3 (RL/LLM ベース予測): **本日最強の基板密化シグナル**。SideQuest (2602.22603) は Large Reasoning Model 自身でトークン有用性推論による KV キャッシュ圧縮 — 予測のアーキテクチャパターン。DepthKV (2604.24647) + KVFundaBench + 2026 エージェント・コンテキスト管理研究波と組み合わせて単一設計サーフェスへ収斂。Anthropic Mythos Preview の数千ゼロデイ脆弱性発見が運用上の現実世界ケーススタディ。
+
+[future-prediction-20260503.md](future-prediction/ja/future-prediction-20260503.md)
+
+---
+
 ## 2026-05-02
 
 ### News
@@ -77,40 +112,5 @@
 - ユーザー予測 3 (RL/LLM ベース予測パフォーマンス向上): **これまでで最強の基盤密度化信号**。エージェントスキル/ハーネス/プロトコル層が規制 + 名前付きテクニック面として成文化 (CSAI MITRE-CNA、ATT&CK v19、NIST CAISI RFI、Microsoft Zero Trust for AI)、RL 訓練済み予測器に最適化対象として安定したターゲットを与える。OpenAI Agents SDK 4/30 model-native harness + native sandbox + 7 サンドボックスプロバイダー; Microsoft Agent Framework 1.0 + Foundry Toolbox + Foundry Control Plane Observability; AWS Bedrock AgentCore Runtime + Managed Harness — 3 クラウド・エージェントランタイム基盤。arxiv 2604.25562 SnapGuard + 2604.01194 AgentWatcher + 2604.15368 LogJack + 2604.24026 SSL Representation + 2604.24971 PolyKV 持ち越し。Google DeepMind「Vision Banana」4/30 — 直接的なユニバーサル基盤先行例。本日 RL 訓練済み予測器の論文公表は着地せず; ハーネス基盤が 3 クラウドと 2 つの基礎モデル研究所リファレンス SDK 全体で単一設計面に密度化中。
 
 [future-prediction-20260501.md](future-prediction/ja/future-prediction-20260501.md)
-
----
-
-## 2026-04-30
-
-### News
-
-- **Mag 7 スーパーウィーク 4/29 引け後決算 — MSFT 売上 $82.9B (+18%) / Azure +40% / AI 年換算売上 $37B (+123%) / 予想設備投資 $40B 超; GOOGL $109.9B (+22%) / Cloud $20B (+63%) / AH +6%; META AH -7% (設備投資未達 + ユーザー成長失望); AMZN ビート/ミス混在; AAPL は 4/30 引け後決算** — Microsoft クラウド売上は +29% で $54.5B、AI 年換算売上は前年同期比 +123% で $37B に到達 — ハイパースケーラーが AI 事業単体の年換算売上をヘッドライン・リリースに 1 行のラインアイテムとして掲載するのは初。Alphabet の純利益は +81% で $62.6B (大半は本業ではなく $37.7B の未実現株式評価益)。Meta は Q1 設備投資が予想を下回りユーザー成長も失望し AH で 7% 下落。AAPL Q2 FY26 コンセンサス EPS $1.95 / 売上 $109.7B (iPhone 約 $56.5B、サービス約 $30B)。Tim Cook は 9/1 に Executive Chair に異動、John Ternus が後任。
-- **FOMC 4/29 — 金利は 3.50–3.75% で据え置き、ただし 8-4 の反対票 (1992年10月以来の最多): Miran は -25bp を主張、Hammack/Kashkari/Logan は声明文に緩和バイアスを盛り込むことに反対; Powell は最後の記者会見を実施したがトランプ政権の Fed 調査が「透明性と最終性をもって」完了するまで理事会に留まると表明; Warsh の指名は上院銀行委員会を通過; S&P 7,135.95 (-0.04%)、Nasdaq 24,673.24 (+0.04%)、Dow 48,861.81 (-0.57%); FOMC 声明文に中東戦争を見通しリスクとして追加** — グリーンスパン時代 1992年10月以来、4 人の反対者が出た FOMC は初。Powell の理事会残留が構造的サプライズ: Chair としての任期は 5/15 に終了するが理事の任期は 2028 年まで残っており、トランプ政権の Fed 調査への抑止として在任を継続する。
-- **CVE 波 4/28-29 — CISA KEV に CVE-2024-1708 ConnectWise ScreenConnect + CVE-2026-32202 Windows Shell を追加 (5/12 連邦期限) 4/28; CVE-2026-40967 Spring AI FilterExpressionConverter インジェクション (CVSS 8.6、4/28) は LLM ベクトル DB クエリ層を直撃; CVE-2026-3854 GitHub Enterprise Server RCE (CVSS 8.7、4/28) — 任意リポジトリへの単一 git push で任意コマンド実行; CVE-2026-34965 Cockpit CMS 認証済 RCE (CVSS 8.8、4/29); SGLang CVE-2026-5760 (9.8) は開示後 11 日以上未パッチ** — Spring AI は 2026 年初の LLM ツール供給チェーン直撃 CVE (FilterExpressionConverter がベクトルストアクエリ言語へ変換する際にキー/値をエスケープしない — RAG クエリプレーンへの直接インジェクション)。GitHub Enterprise RCE は GitHub.com と GHES の両方に緊急パッチ適用を強制した。
-- **エージェントランタイム強化 4/28-30 が継続 — Novita Sandbox 開始 (4/28: Firecracker microVM、200ms 未満コールドスタート、約 1 秒の状態チェックポイント復元、OpenClaw + Hermes + 自律エージェントランタイムをターゲット); AWS Bedrock AgentCore Runtime に Node.js 追加 4/28; Multica v0.2.19 (4/28) + v0.2.20 (4/29 09:40 UTC); MITRE ATT&CK v19 が 4/28 に登場し Defense Evasion (TA0005) を Stealth + Impair Defenses に分割; v5.4 フレームワークは AI エージェントのコンテキスト汚染 / ツール呼び出し悪用 / MCP サーバー侵害 / 悪意あるエージェントデプロイを正式テクニックとして追加** — Novita はエージェントタスクごとにシステムレベル分離した E2B 互換ランタイムを売りにし、Gartner の「AI エージェント展開の 55% がセキュリティ理由で遅延する」予測に位置付けている。ATT&CK v19 は前日レポートの Future セクションの「エージェントスキルマーケットプレイスは攻撃面」テーゼの構造的検証となった。
-- **間接プロンプトインジェクションの実環境 4/23-29 拡大 — Google オンラインセキュリティブログは 2025年11月→2026年2月で観測ペイロード中の悪意カテゴリの相対増加を +32% と報告; 研究者は金融詐欺 / データ破壊 / API キー窃取をターゲットとする 10 件の新規 IPI ペイロードを公開; Forcepoint も裏付け; arxiv 2604.24026 SSL 表現 (4/28) + arxiv 2604.23374 NeuroTaint 情報フロー追跡 (4/24) が防御側の対抗策をフレーミング** — 1 ピクセル隠しテキスト、ほぼ透明色、隠しタグ CSS、HTML コメント埋め込み、メタデータペイロードによる IPI 配信は、エージェント型ブラウザワークフロー対応で本番運用済み。NeuroTaint は LLM エージェント専用に設計された初の包括的 taint 追跡フレームワーク。
-
-[news-20260430.md](report/ja/news-20260430.md)
-
-### Predictions check
-
-- **72 時間ウィンドウで 5/5 マッチ 8 件 — 今月の検証パイプラインで最も濃密な収束。** 4/27 / 4/28 / 4/29 の Mag 7 設備投資ディスクロージャー予測トリオが揃って着地; AI セキュリティ・テーゼが過去最大の構造的検証を獲得; 推論サーバー CVE クラスのテーゼが 48 時間 4-CVE クラスタで持ち上がる; MCP 攻撃面プロダクトウェーブのテーゼが着地。
-- **Mag 7 決算 + FOMC が初のトークン単価マージン連動設備投資ディスクロージャーを誘発 (4/28)** Relevance 5: **衝突は本日発生** — MSFT $37B AI 年換算売上はハイパースケーラー初の AI 事業単体ラインアイテムで、完全なトークン単価マージン開示まであと一歩; FOMC 8-4 反対 (1992 年 10 月以来最多); Powell は 2028 年まで理事会残留; META AH -7% 設備投資未達は今サイクルで最もクリーンな Mag 7 リセット。
-- **OpenAI WSJ → AI 売上ディスクロージャー書き直し (4/29)** Relevance 5: MSFT $37B AI 年換算売上 (+123% YoY) が直接的な前例で、1 決算サイクル以内に具現化; OpenAI の $8/月プラン + 2026 年までに有料サブスクライバー 1.22 億人プロジェクション + $100M アニュアライズド広告パイロット (2026 年予測 $2.4-$2.5B) が基礎モデル研究所側の応答。ディスクロージャー書き直しはもはや予測ではなく、開始済み。
-- **エージェントスキル攻撃面が MITRE-ATT&CK 風サブマトリクスに着地 (4/29)** Relevance 5: **MITRE ATT&CK v19 (4/28) が AI エージェント・コンテキスト汚染 / ツール呼び出し悪用 / MCP サーバー侵害 / 悪意あるエージェントデプロイを正式テクニックとして追加** — 予測したサブマトリクスが予測 24 時間以内にリアルタイムで具現化; v19 は Defense Evasion (TA0005) を Stealth + Impair Defenses に分割; SuiteCloud Agent Skills (4/28、SuiteConnect SF) は基礎モデル研究所以外で最初の主要ベンダーが署名配布をセキュリティ・フレームとしてスキルをプロダクトとして公開; arxiv 2604.24026 SSL 表現 + 2604.23374 NeuroTaint + 2604.08407 Malicious Intermediary Attacks の学術的足場。
-- **推論サーバー SSTI → OWASP LLM Top-10 + CISA AI-Infra KEV サブカタログ (4/28)** Relevance 5: SGLang CVE-2026-5760 が 4/30 時点で開示後 11 日以上未パッチ; Spring AI CVE-2026-40967 (4/28) は SGLang Jinja2/SSTI プリミティブと構造的に同形 — モデルツーリング層インジェクションクラスが推論 / RAG スタック横断で広がっていることが確認された; vLLM CVE-2025-61620 + LMDeploy CVE-2026-33626 の同クラス; CISA KEV 4/28 は 5/12 連邦期限付きで 2 件追加。
-- **MCP プロトコル攻撃面 → MCP Gateway / Firewall プロダクトウェーブ (4/25)** Relevance 5: Novita Sandbox は OpenClaw + Hermes 専用に作られた初の商用エージェントランタイムサンドボックス兼 MCP-Gateway クラス商用緩和プロダクト; Okta for AI Agents は 4/30 GA で Agent Discovery & Governance + Agent Gateway + 仮想 MCP サーバーレジストリを出荷; AWS Bedrock AgentCore Runtime Node.js (4/28) は 4/22 ベースラインに重ねられた。
-- **ハイパースケーラー × AI ラボの資本結合 → マルチフロンティアベンダー戦略 (4/26)** Relevance 5: MSFT $37B AI 年換算売上ディスクロージャーは計算スタック・ロックイン開示テーゼの直接の前例; META AH -7% 設備投資未達は 3 クラウド訓練オリゴポリーの構図を鋭くする; Cerebras IPO 5 月中旬 $22B-$25B 持ち越し; Simon Willison 4/27 が今は亡き OpenAI-Microsoft AGI 条項を回顧。
-- **推論サーバーがプリミティブ供給チェーンへ (4/26)** Relevance 5: CVE-2026-40967 Spring AI + CVE-2026-3854 GitHub Enterprise + CVE-2026-34965 Cockpit CMS + SGLang 持ち越し; MITRE ATT&CK v19 名前付きテクニックが AI-Infra CVE クラステーゼを検証。
-- **Mag 7 Q1 決算が AI 設備投資 ROI ナラティブをリセット (4/27)** Relevance 5: **決算イベントは本日着地** — MSFT $82.9B (+18%) / Azure +40% / AI 年換算売上 $37B (+123%) / 設備投資ガイド $40B 超; GOOGL $109.9B (+22%) / Cloud $20B (+63%) / AH +6%; META AH -7%; AMZN 混在; AAPL は本日引け後決算。
-- **エージェント・コントロールプレーン (4/23)** Relevance 5: MITRE ATT&CK v19 + Novita Sandbox + AWS Bedrock AgentCore Runtime Node.js + Multica v0.2.19/v0.2.20 + SuiteCloud Agent Skills + Okta for AI Agents 4/30 GA がエージェント・コントロールプレーン・カテゴリーに同一 72 時間ウィンドウで積み上がる。
-- **Relevance 4**: 1M コンテキストがオープンウェイトのデフォルト時代 + ベクトル DB が長文コンテキスト・キャッシュ層へ再定義 (4/24、Spring AI CVE がベクトル DB クエリ面が推論サーバークラス攻撃面に合流したことの直接証拠); 3 クラウド訓練オリゴポリー (4/25、MSFT $37B AI 年換算売上 + GOOGL Cloud +63% + META AH -7%); KV キャッシュ圧縮 dtype がファーストクラス・デプロイメントノブ (4/29、TurboQuant + SGLang #21419/#23134 + PolyKV + NVIDIA kvpress + Foundry Local の Windows デフォルト統合点); AI-Infra CVE クラスが規制プリミティブへ (4/27、ATT&CK v19 構造的検証だが専用 AI-Infra サブカタログはまだ); 民生 GPU コーディング・エージェント ≥30% (4/26、Foundry Local GA + Bonsai-8B + Unsloth + DeepSeek V4-Flash + vLLM v0.19.0 + Multica ベンダーニュートラル・オーケストレーター)。
-- **Relevance 3**: 資本市場がエージェント置換 SaaS 評価をリセット (4/24、亀裂はチップ / 基礎モデル側に着地、レガシー SaaS 側ではない); 自律エージェント法定アイデンティティ法 (4/27、Okta GA 4/30 が基盤だが州法はまだ); AGI 条項解消テンプレート (4/28、Simon Willison 回顧 + OpenAI $8 プランだが第 2 の契約改定はまだ); 27B Dense + 1M コンテキスト (4/23、Anthropic 1M ベータが 4/30 廃止で Sonnet 4.6 / Opus 4.6 への移行を強制)。
-- **Relevance 1-2**: 第三者ベンダー + URL 命名エントロピー (4/23、コントラクター / プレビュー URL 信号なし); フィジカル AI 8h 連続稼働 (4/24); IROS-GTC リーグテーブル (4/25)。休眠エントリ 20260420-3「Headless Everything」は Layer 1 'Simon Willison' キーワードのみヒット — Willison の 4/27-29 エントリは AGI 条項回顧 + GPT-5.5 プロンプティング + LLM 0.32a0 リファクタで内容不一致; Layer 2 もマッチなし; 正直スコア 1。
-- ユーザー予測 1 (悪性ローカル LLM → マルウェア + ゼロトラストが基本的セーフガード): **これまでで最強の単日構造的検証**。MITRE ATT&CK v19 が AI エージェント・コンテキスト汚染 + ツール呼び出し悪用 + MCP サーバー侵害 + 悪意あるエージェントデプロイを明示的に名付け、ユーザーが指摘した「内部駆動の多機能挙動が侵害やデータ漏洩を誘発しうる」フレーミングが規制グレード攻撃テクニック・カタログとして成文化された。基板は現状エージェントスキル (ClawHavoc 1,184 + Cisco RSAC 36% + Google +32% IPI) だが、移行経路は端から端まで可視化済み。Okta for AI Agents 4/30 GA がゼロトラスト・パターンを出荷; Novita Sandbox は Firecracker microVM + タスク毎エフェメラル・ファイルシステムを備えた初の商用エージェントランタイムサンドボックス; arxiv 2604.23374 NeuroTaint は LLM エージェント専用初の taint 追跡フレームワーク。
-- ユーザー予測 2 (高度タスク向けクラウド API + 日常作業向けローカル LLM、SaaS 値上げが駆動): **これまでで最強の単日需要・供給両側信号**。需要側: MSFT $37B AI 年換算売上ディスクロージャーは SaaS 価格シフトの先行指標; OpenAI の $8/月プラン + 広告パイロットは WSJ 売上未達テープへの基礎モデル研究所側応答。供給側: Foundry Local GA 持ち越し (Windows デフォルト統合点); Bonsai-8B 44/131/368 tok/s; Unsloth 2026.4.8 推論 +20-30% + Gemma-4-E2B 8 GB VRAM 訓練; DeepSeek V4-Flash $0.14/$0.28; Qwen3.6-27B Apache-2.0 + Kimi K2.6 が SWE-Bench Pro で GPT-5.4 (xhigh) を破る初のオープンウェイト; TurboQuant + SGLang + PolyKV + NVIDIA kvpress。
-- ユーザー予測 3 (RL/LLM ベース予測パフォーマンス向上の普及): **これまでで最強の構造パターン信号**、MITRE ATT&CK v19 名前付きテクニック波 + arxiv 2604.24026 SSL Representation for Agent Skills + arxiv 2604.23374 NeuroTaint + arxiv 2604.08407 Malicious Intermediary Attacks + arxiv 2604.21026 MCAP デプロイ時レイヤー・プロファイリング + Externalization-in-LLM-Agents の持ち越し経由。AWS Bedrock AgentCore Runtime Node.js + Multica v0.2.19/0.2.20 + Hermes Agent v0.11.0 + Anthropic Opus 4.7 GA がプログラマブル・エージェンティック基盤を提供。本日 RL 訓練済み予測器の論文公表はないが、「予測ハーネス + エージェントスキル・カタログ上の RL」のインフラが単一の設計サーフェスへ収束中。
-
-[future-prediction-20260430.md](future-prediction/ja/future-prediction-20260430.md)
 
 ---
