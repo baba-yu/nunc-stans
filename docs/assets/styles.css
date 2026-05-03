@@ -844,6 +844,26 @@ body.panel-open #meta-header {
   font-style: italic;
 }
 
+/* Stream A (Phase 1): glossary hover. annotateGlossary() in app.js
+   wraps the first occurrence of each active term in any rendered
+   markdown body with `<abbr title="…">`. The default UA underline
+   for [title] is too subtle on the dark canvas — bump it. */
+.md-body abbr[title],
+.panel-body abbr[title],
+.alt-view abbr[title] {
+  text-decoration: underline dotted rgba(24, 199, 216, 0.55);
+  text-underline-offset: 2px;
+  cursor: help;
+  border-bottom: none;
+  transition: background 120ms ease, color 120ms ease;
+}
+.md-body abbr[title]:hover,
+.panel-body abbr[title]:hover,
+.alt-view abbr[title]:hover {
+  background: rgba(24, 199, 216, 0.14);
+  color: var(--menu-active);
+}
+
 /* Stream I (Phase 2): prediction-detail tabs.
    Tabs sit just under the metrics tiles in the prediction node panel.
    Tab buttons use the existing menu-active palette so they read as

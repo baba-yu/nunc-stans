@@ -2760,6 +2760,104 @@
       .replace(/'/g, "&#39;");
   }
 
+  /* ---------------- Stream A: glossary hover ---------------- */
+
+  // Loads docs/data/glossary.json once at boot. Active rows with a
+  // filled `one_liner_eli14` get registered into state.glossaryMap +
+  // state.glossaryPattern. annotateGlossary() then wraps the first
+  // occurrence of each term inside any rendered markdown body in
+  // `<abbr title="…">…</abbr>` so the dashboard's hover behavior
+  // works on every panel.
+  async function loadGlossary() {
+    try {
+      const r = await fetch(`${LIVE_DATA_DIR}/glossary.json`, { cache: "no-store" });
+      if (!r.ok) return;
+      const data = await r.json();
+      const terms = (data && data.terms) || [];
+      const map = new Map();
+      for (const e of terms) {
+        if (!e || !e.one_liner_eli14) continue;
+        const all = [e.term, ...(Array.isArray(e.aliases) ? e.aliases : [])];
+        for (const t of all) {
+          if (!t || typeof t !== "string") continue;
+          const key = t.toLowerCase();
+          if (!map.has(key)) map.set(key, e);
+        }
+      }
+      if (!map.size) return;
+      const tokens = [...map.keys()].sort((a, b) => b.length - a.length);
+      const escaped = tokens.map((t) => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+      state.glossaryMap = map;
+      // Lookbehind avoids matching mid-word (e.g. "MCPro" should
+      // not match the MCP term). Modern browsers only — Safari 16.3
+      // and older silently lose hover, no other regression.
+      state.glossaryPattern = new RegExp(
+        "(?<![A-Za-z0-9_])(" + escaped.join("|") + ")(?![A-Za-z0-9_])",
+        "gi"
+      );
+    } catch (_) { /* glossary is optional; never block boot */ }
+  }
+
+  // Walk a rendered HTML fragment's text nodes and wrap the first
+  // occurrence of each glossary term with an `<abbr>`. Skips text
+  // inside <a>/<abbr>/<code>/<pre>/<script>/<style> so we don't
+  // double-wrap or break URLs.
+  function annotateGlossary(html) {
+    if (!html) return html;
+    if (!state.glossaryMap || !state.glossaryPattern) return html;
+    const tmp = document.createElement("div");
+    tmp.innerHTML = html;
+    const walker = document.createTreeWalker(tmp, NodeFilter.SHOW_TEXT, null);
+    const seen = new Set();
+    const targets = [];
+    let n;
+    while ((n = walker.nextNode())) {
+      let p = n.parentNode;
+      let skip = false;
+      while (p && p !== tmp) {
+        if (p.nodeType === 1 && /^(a|abbr|code|pre|script|style)$/i.test(p.tagName)) {
+          skip = true; break;
+        }
+        p = p.parentNode;
+      }
+      if (!skip) targets.push(n);
+    }
+    for (const node of targets) {
+      const text = node.textContent;
+      // Fresh regex per node so lastIndex doesn't carry over.
+      const pattern = new RegExp(state.glossaryPattern.source, state.glossaryPattern.flags);
+      let lastIdx = 0;
+      const frag = document.createDocumentFragment();
+      let any = false;
+      let m;
+      while ((m = pattern.exec(text)) !== null) {
+        const matched = m[1] || m[0];
+        const key = matched.toLowerCase();
+        if (seen.has(key)) continue;
+        const entry = state.glossaryMap.get(key);
+        if (!entry) continue;
+        seen.add(key);
+        if (m.index > lastIdx) {
+          frag.appendChild(document.createTextNode(text.slice(lastIdx, m.index)));
+        }
+        const abbr = document.createElement("abbr");
+        const eli = entry.one_liner_eli14 || "";
+        const why = entry.why_it_matters || "";
+        abbr.title = why ? `${eli} — ${why}` : eli;
+        abbr.textContent = matched;
+        frag.appendChild(abbr);
+        lastIdx = m.index + matched.length;
+        any = true;
+      }
+      if (!any) continue;
+      if (lastIdx < text.length) {
+        frag.appendChild(document.createTextNode(text.slice(lastIdx)));
+      }
+      node.parentNode.replaceChild(frag, node);
+    }
+    return tmp.innerHTML;
+  }
+
   // Stream J quick fix (Phase 0): the prediction title slot historically
   // received the full prediction summary verbatim — so the panel showed
   // raw markdown (`**…**`), a redundant scope prefix `(Tech)` already
@@ -2820,7 +2918,7 @@
     t = t.replace(/`([^`]+?)`/g, '<code>$1</code>');
     t = t.replace(/\*\*([^*\n]+?)\*\*/g, '<strong>$1</strong>');
     t = t.replace(/(^|[\s(])\*([^*\s][^*\n]*?[^*\s]|[^*\s])\*(?=[\s).,!?:;]|$)/g, '$1<em>$2</em>');
-    return t;
+    return annotateGlossary(t);
   }
 
   // Tiny markdown -> HTML for the panel's long-form text. Escapes
@@ -2868,7 +2966,7 @@
       if (/^<(ul|ol|li|h[1-6]|blockquote)/.test(trimmed)) return trimmed;
       return `<p>${trimmed.replace(/\n/g, "<br>")}</p>`;
     });
-    return paras.filter(Boolean).join("");
+    return annotateGlossary(paras.filter(Boolean).join(""));
   }
 
   /* ---------------- Stream F + G: alt views ---------------- */
@@ -3251,6 +3349,10 @@
 
     try {
       await loadManifest();
+      // Stream A: pull the active glossary so the first markdown
+      // render already has hover tooltips wired in. Optional — fetch
+      // failures are silently ignored, hover just won't fire.
+      await loadGlossary();
       updateScopeButtons(state.scopeId);
       updateWindowButtons(state.windowId);
       updateToolButtons(state.tool);
