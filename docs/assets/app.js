@@ -2745,10 +2745,24 @@
   //   3. fall back to first sentence + ellipsis when too long
   function cleanPredictionTitle(raw, fallbackFullText) {
     let s = String(raw == null ? "" : raw).trim();
-    // Strip leading scope prefix in any of (Tech) / (Non-Tech) / (Business) / (Biz) / (Mix) shapes.
-    s = s.replace(/^\(\s*(?:tech|non[-\s]?tech|business|biz|mix)\s*\)\s*/i, "");
-    // Strip markdown bold/italic markers — they don't render in the title slot.
-    s = s.replace(/\*+/g, "");
+    // Strip markdown asterisks FIRST — they wrap the scope prefix in
+    // legacy entries (`**(Tech) …`), and the prefix-stripping regex
+    // below anchors at `^\(`, so the asterisks would otherwise hide
+    // the prefix. Order matters here.
+    s = s.replace(/\*+/g, "").trim();
+    // Strip leading scope prefix in any of
+    // (Tech) / (Non-Tech) / (Non-tech) / (Business) / (Biz) / (Mix) shapes,
+    // PLUS the half-paren shape `Tech) …` that occurs when the parser's
+    // _derive_short_label stripped the opening `(` while strip-set-cleaning
+    // edges of the prediction summary, leaving the closing paren behind.
+    // Loop in case the writer accidentally double-tagged
+    // (e.g. `(Mix) (Tech) …`) — a small number of legacy items have these.
+    let prev = null;
+    while (prev !== s) {
+      prev = s;
+      s = s.replace(/^\(\s*(?:tech|non[-\s]?tech|business|biz|mix)\s*\)\s*/i, "");
+      s = s.replace(/^(?:tech|non[-\s]?tech|business|biz|mix)\)\s*/i, "");
+    }
     // Collapse leftover whitespace.
     s = s.replace(/\s+/g, " ").trim();
     // Empty after cleaning → use fallback full text the same way.
