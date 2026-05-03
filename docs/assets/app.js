@@ -1989,6 +1989,12 @@
       const n = nodeById(state.selectedNodeId);
       if (n) openDetailPanel(n);
     }
+    // Stream A: glossary tooltips bake the locale into the rendered
+    // <abbr title="…">. Re-render LIST / EVIDENCE so the new locale's
+    // tooltip strings (and label translations) take effect without
+    // needing a page reload.
+    if (state.view === "list") renderListView();
+    if (state.view === "evidence") renderEvidenceView();
   }
 
   // ----- Snapshot navigator (feature/locale) -----
@@ -2841,8 +2847,18 @@
           frag.appendChild(document.createTextNode(text.slice(lastIdx, m.index)));
         }
         const abbr = document.createElement("abbr");
-        const eli = entry.one_liner_eli14 || "";
-        const why = entry.why_it_matters || "";
+        // Per-locale lookup with EN fallback. Export side already
+        // fans NULLs out to EN so entry.eli14[loc] / entry.why[loc]
+        // never returns null/undefined for a registered active term.
+        // Older builds that predate the fan-out fall back to the
+        // legacy flat fields.
+        const loc = state.locale || "en";
+        const eli = (entry.eli14 && (entry.eli14[loc] || entry.eli14.en))
+          || entry.one_liner_eli14
+          || "";
+        const why = (entry.why && (entry.why[loc] || entry.why.en))
+          || entry.why_it_matters
+          || "";
         abbr.title = why ? `${eli} — ${why}` : eli;
         abbr.textContent = matched;
         frag.appendChild(abbr);
