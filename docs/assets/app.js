@@ -2891,18 +2891,36 @@
     // below anchors at `^\(`, so the asterisks would otherwise hide
     // the prefix. Order matters here.
     s = s.replace(/\*+/g, "").trim();
-    // Strip leading scope prefix in any of
-    // (Tech) / (Non-Tech) / (Non-tech) / (Business) / (Biz) / (Mix) shapes,
-    // PLUS the half-paren shape `Tech) …` that occurs when the parser's
-    // _derive_short_label stripped the opening `(` while strip-set-cleaning
-    // edges of the prediction summary, leaving the closing paren behind.
-    // Loop in case the writer accidentally double-tagged
-    // (e.g. `(Mix) (Tech) …`) — a small number of legacy items have these.
+    // Multi-locale scope prefix to strip. Matches the same set the
+    // backend parser's _PREFIX_TOKENS recognises so DB-resident
+    // legacy data and freshly-rendered text both end up clean.
+    //   EN:   Tech / Non-Tech / Non-tech / Business / Biz / Mix /
+    //         Technical / Non-Technical / Technology
+    //   JA:   技術 / 非技術 / 非-技術 / テクノロジー / 非テクノロジー /
+    //         ビジネス / 非ビジネス / ビジ / ミックス
+    //   ES:   Tecnología / Tecnologia / Tec / No-Tec /
+    //         Técnico / Tecnico / Negocio
+    //   FIL:  Teknikal / Hindi-Teknikal / Negosyo / Halong
+    // Loops to clear accidental double-tags `(Mix) (Tech) …` and
+    // catches both the full-paren shape `(Tech)` and the half-paren
+    // shape `Tech)` left over by the legacy strip-set parser.
+    const PREFIX = (
+      "tech|non[-\\s]?tech|nontech|non[-\\s]?technical|nontechnical|" +
+      "technical|technology|business|biz|mix|" +
+      "技術|非技術|非[-\\s]?技術|テクノロジー|非テクノロジー|" +
+      "ビジネス|非ビジネス|ビジ|ミックス|" +
+      "tecnología|tecnologia|tec|no[-\\s]?tec|" +
+      "técnico|tecnico|no[-\\s]?técnico|no[-\\s]?tecnico|" +
+      "negocio|" +
+      "teknikal|hindi[-\\s]?teknikal|negosyo|halo|halong"
+    );
+    const fullParen = new RegExp("^\\s*\\(\\s*(?:" + PREFIX + ")\\s*\\)\\s*", "i");
+    const halfParen = new RegExp("^\\s*(?:" + PREFIX + ")\\s*\\)\\s*", "i");
     let prev = null;
     while (prev !== s) {
       prev = s;
-      s = s.replace(/^\(\s*(?:tech|non[-\s]?tech|business|biz|mix)\s*\)\s*/i, "");
-      s = s.replace(/^(?:tech|non[-\s]?tech|business|biz|mix)\)\s*/i, "");
+      s = s.replace(fullParen, "");
+      s = s.replace(halfParen, "");
     }
     // Collapse leftover whitespace.
     s = s.replace(/\s+/g, " ").trim();
