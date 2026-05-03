@@ -1233,7 +1233,21 @@
     // Locale-aware (feature/locale): pull through node.labels[loc]
     // when present, with per-field EN fallback.
     if (n.type === "prediction") {
-      const t = nodeLabel(n, "short_label") || nodeLabel(n, "label") || n.id;
+      // Prefer the dedicated Stream J title; fall back to short_label
+      // or label. Always run through cleanPredictionTitle so legacy
+      // entries with `(Tech)` / `Tech)` / markdown asterisks render
+      // clean on the graph overlay (not just the right detail panel).
+      const detail = n.detail || {};
+      const raw = nodeLabel(n, "title")
+        || detail.title_clean
+        || nodeLabel(n, "short_label")
+        || nodeLabel(n, "label")
+        || n.id;
+      const summary = (detail.prediction_summary_locales && detail.prediction_summary_locales[state.locale])
+        || (detail.prediction_summary_locales && detail.prediction_summary_locales.en)
+        || detail.prediction_summary
+        || "";
+      const t = cleanPredictionTitle(raw, summary);
       return t.length > 32 ? t.slice(0, 32) + "…" : t;
     }
     if (n.type === "category") {
@@ -2629,7 +2643,20 @@
 
   function listItem(n, opts) {
     if (!n) return "";
-    const localized = nodeLabel(n, "short_label") || nodeLabel(n, "label") || n.id;
+    let localized;
+    if (n.type === "prediction") {
+      // Same scope-prefix / markdown cleanup the graph overlay does.
+      const detail = n.detail || {};
+      const raw = nodeLabel(n, "title")
+        || detail.title_clean
+        || nodeLabel(n, "short_label")
+        || nodeLabel(n, "label")
+        || n.id;
+      const summary = detail.prediction_summary || "";
+      localized = cleanPredictionTitle(raw, summary);
+    } else {
+      localized = nodeLabel(n, "short_label") || nodeLabel(n, "label") || n.id;
+    }
     const label = escapeHTML(localized);
     const showType = !(opts && opts.bare);
     const prefix = showType ? `<span class="rtype">${n.type}</span>` : "";
