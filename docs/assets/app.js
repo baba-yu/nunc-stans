@@ -99,6 +99,11 @@
       "view.probe":            "PROBE",
       "probe.tab.predictions": "PREDICTIONS",
       "probe.tab.news":        "NEWS",
+      "timeline.back":             "← BACK",
+      "timeline.open_in_observatory": "OPEN IN OBSERVATORY",
+      "timeline.notfound":         "Prediction not found in the current scope.",
+      "timeline.detail.placeholder": "Click a point or window on the timeline to see details.",
+      "timeline.detail.open_this":   "Open this prediction's timeline →",
     },
     ja: {
       "scope.mix":      "MIX",
@@ -177,6 +182,11 @@
       "view.probe":            "探査",
       "probe.tab.predictions": "PREDICTIONS",
       "probe.tab.news":        "NEWS",
+      "timeline.back":             "← 一覧に戻る",
+      "timeline.open_in_observatory": "観測で開く",
+      "timeline.notfound":         "現在のスコープに該当する予測が見つかりません。",
+      "timeline.detail.placeholder": "タイムライン上のポイントまたは期間をクリックすると詳細が表示されます。",
+      "timeline.detail.open_this":   "この予測のタイムラインを開く →",
     },
     es: {
       "scope.mix":      "MIX",
@@ -255,6 +265,11 @@
       "view.probe":            "PROBE",
       "probe.tab.predictions": "PREDICTIONS",
       "probe.tab.news":        "NEWS",
+      "timeline.back":             "← VOLVER",
+      "timeline.open_in_observatory": "ABRIR EN OBSERVATORY",
+      "timeline.notfound":         "No se encontró la predicción en el alcance actual.",
+      "timeline.detail.placeholder": "Haz clic en un punto o ventana de la línea de tiempo para ver los detalles.",
+      "timeline.detail.open_this":   "Abrir la línea de tiempo de esta predicción →",
     },
     fil: {
       "scope.mix":      "MIX",
@@ -333,6 +348,11 @@
       "view.probe":            "PROBE",
       "probe.tab.predictions": "PREDICTIONS",
       "probe.tab.news":        "NEWS",
+      "timeline.back":             "← BUMALIK",
+      "timeline.open_in_observatory": "BUKSAN SA OBSERVATORY",
+      "timeline.notfound":         "Hindi natagpuan ang hula sa kasalukuyang saklaw.",
+      "timeline.detail.placeholder": "I-click ang isang point o window sa timeline upang makita ang mga detalye.",
+      "timeline.detail.open_this":   "Buksan ang timeline ng hulang ito →",
     },
   };
 
@@ -465,6 +485,17 @@
     // Only meaningful when state.view === "probe". Not persisted — each
     // session re-enters PROBE on PREDICTIONS by default.
     probeTab: "predictions",
+
+    // When set, PROBE/PREDICTIONS replaces the table with a timeline
+    // for this prediction id. Cleared by the timeline's Back button or
+    // by switching to NEWS. Persists across OBSERVATORY ↔ PROBE
+    // toggling so "Open in OBSERVATORY" round-trips don't lose it.
+    probeTimelinePred: null,
+
+    // Index of the timeline event currently selected (highlighted +
+    // shown in the detail strip below the canvas). null = nothing
+    // selected; cleared when a different prediction's timeline opens.
+    timelineSelectedIdx: null,
 
     // Active snapshot date (YYYYMMDD) or null when on live data.
     // Persisted in localStorage so a refresh keeps the user's history view.
@@ -3629,7 +3660,25 @@
   function setProbeTab(tab) {
     if (tab !== "predictions" && tab !== "news") return;
     state.probeTab = tab;
+    // NEWS doesn't render a timeline, so dropping back to NEWS clears
+    // any open prediction timeline. Going from NEWS to PREDICTIONS
+    // restores whatever timeline state was there before (if any).
+    if (tab === "news") state.probeTimelinePred = null;
     setView("probe");
+  }
+
+  function openProbeTimeline(predId) {
+    state.probeTimelinePred = predId;
+    if (state.view === "probe" && state.probeTab === "predictions") {
+      renderListView();
+    }
+  }
+
+  function closeProbeTimeline() {
+    state.probeTimelinePred = null;
+    if (state.view === "probe" && state.probeTab === "predictions") {
+      renderListView();
+    }
   }
 
   // Stream G LIST: full predictions list with cascading filters
@@ -3639,7 +3688,21 @@
   // of that scope's graph if it isn't already cached.
   async function renderListView() {
     const body = document.getElementById("list-body");
+    const view = document.getElementById("list-view");
     if (!body) return;
+    // Timeline mode owns the whole PROBE body when a prediction is
+    // selected. The .alt-view-head (toggle + filters) is hidden via
+    // CSS while .is-timeline is set on #list-view.
+    if (state.probeTimelinePred) {
+      if (view) view.classList.add("is-timeline");
+      renderPredictionTimeline(body, state.probeTimelinePred);
+      return;
+    }
+    if (view) view.classList.remove("is-timeline");
+    if (state._timelineResizeHandler) {
+      window.removeEventListener("resize", state._timelineResizeHandler);
+      state._timelineResizeHandler = null;
+    }
     const scopeSel = document.getElementById("list-scope");
     const catSel = document.getElementById("list-category");
     const themeSel = document.getElementById("list-theme");
@@ -3766,14 +3829,29 @@
       <p class="muted">${preds.length} predictions match${preds.length > cap ? ` (showing first ${cap})` : ""}.</p>
     `;
 
+    // Row click opens the per-prediction timeline within PROBE — the
+    // primary navigation when exploring predictions, since OBSERVATORY
+    // is for the structural graph and PROBE is for the time view. The
+    // → button on each row keeps a one-shot jump to OBSERVATORY for
+    // users who want to inspect the prediction's place in the graph.
     body.querySelectorAll("tr[data-goto]").forEach((row) => {
-      row.addEventListener("click", () => {
+      row.addEventListener("click", (ev) => {
+        if (ev.target.closest(".open-in-graph")) return; // handled below
+        const id = row.dataset.goto;
+        if (!nodeById(id)) return;
+        openProbeTimeline(id);
+      });
+    });
+    body.querySelectorAll(".open-in-graph").forEach((btn) => {
+      btn.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        const row = btn.closest("tr[data-goto]");
+        if (!row) return;
         const id = row.dataset.goto;
         const target = nodeById(id);
         if (!target) return;
-        // If the row's scope differs from the current GRAPH scope,
-        // switch the GRAPH scope first so the node actually exists in
-        // the rendered simulation when we click into it.
+        // Cross-scope row → switch graph scope first so the node
+        // exists in the rendered simulation when we click into it.
         const rowScope = target.scope_id;
         if (rowScope && rowScope !== state.scopeId) {
           state.scopeId = rowScope;
@@ -3790,6 +3868,355 @@
         setView("graph");
         handleNodeClick(target);
       });
+    });
+  }
+
+  /* ---------------- PROBE / Prediction timeline ---------------- */
+
+  // Strip markdown bold + leading/trailing decoration from a prediction's
+  // raw title so it reads cleanly as a single header.
+  function predictionTitleClean(node) {
+    const detail = (node && node.detail) || {};
+    const t =
+      detail.title_clean ||
+      detail.title ||
+      node.title ||
+      node.short_label ||
+      node.label ||
+      node.id;
+    return String(t).replace(/\*\*/g, "").replace(/^[*"\s]+|[*"\s]+$/g, "").trim();
+  }
+
+  // Track keys the timeline draws, in vertical order. Kept in English
+  // labels for v1 — these are technical row headers, not body copy.
+  const TIMELINE_TRACKS = [
+    { key: "self",       label: "This prediction" },
+    { key: "bridge",     label: "Bridges" },
+    { key: "need",       label: "Needs" },
+    { key: "downstream", label: "Downstream" },
+    { key: "upstream",   label: "Upstream" },
+  ];
+
+  // Convert a node + its readings into a flat list of plottable events.
+  // Each event is { track, kind: "point"|"window", date|start+end, label, sub? }.
+  function timelineEventsFor(node) {
+    const events = [];
+    const detail = (node && node.detail) || {};
+
+    // Track 1: self
+    if (detail.prediction_date) {
+      events.push({
+        track: "self", kind: "point",
+        date: detail.prediction_date,
+        label: "Proposed",
+        sub: predictionTitleClean(node),
+        primary: true,
+      });
+    }
+    if (detail.target_start_date && detail.target_end_date) {
+      events.push({
+        track: "self", kind: "window",
+        start: detail.target_start_date, end: detail.target_end_date,
+        label: "Target window",
+        sub: `${detail.target_start_date} → ${detail.target_end_date}`,
+        primary: true,
+      });
+    }
+
+    // Track 2: bridges (re-citation events; some carry a target window too)
+    for (const b of (detail.bridges || [])) {
+      if (b.date) {
+        events.push({
+          track: "bridge", kind: "point",
+          date: b.date,
+          label: b.dimension ? `Bridge · ${b.dimension}` : "Bridge",
+          sub: (b.text_locales && b.text_locales[state.locale]) || b.text || "",
+        });
+      }
+      if (b.target_start_date && b.target_end_date) {
+        events.push({
+          track: "bridge", kind: "window",
+          start: b.target_start_date, end: b.target_end_date,
+          label: "Bridge target",
+          sub: `${b.target_start_date} → ${b.target_end_date}`,
+        });
+      }
+    }
+
+    // Track 3: needs (target windows on the need + nested task)
+    for (const n of (detail.needs || [])) {
+      const actor = (n.actor_locales && n.actor_locales[state.locale]) || n.actor || "Need";
+      if (n.target_start_date && n.target_end_date) {
+        events.push({
+          track: "need", kind: "window",
+          start: n.target_start_date, end: n.target_end_date,
+          label: actor,
+          sub: (n.outcome_locales && n.outcome_locales[state.locale]) || n.outcome || "",
+        });
+      }
+      const task = n.task || {};
+      if (task.target_start_date && task.target_end_date) {
+        events.push({
+          track: "need", kind: "window",
+          start: task.target_start_date, end: task.target_end_date,
+          label: `Task · ${(task.what_locales && task.what_locales[state.locale]) || task.what || ""}`,
+          sub: actor,
+        });
+      }
+    }
+
+    // Tracks 4-5: downstream + upstream readings
+    const r = detail.readings || {};
+    for (const d of (r.downstream || [])) {
+      if (d.pred_date) {
+        events.push({
+          track: "downstream", kind: "point",
+          date: d.pred_date,
+          label: d.short_label || d.title || d.prediction_id,
+          sub: d.notes || "",
+          predId: d.prediction_id,
+        });
+      }
+      if (d.target_start_date && d.target_end_date) {
+        events.push({
+          track: "downstream", kind: "window",
+          start: d.target_start_date, end: d.target_end_date,
+          label: d.short_label || d.prediction_id,
+          sub: d.notes || "",
+          predId: d.prediction_id,
+        });
+      }
+    }
+    for (const u of (r.upstream || [])) {
+      if (u.pred_date) {
+        events.push({
+          track: "upstream", kind: "point",
+          date: u.pred_date,
+          label: u.short_label || u.title || u.prediction_id,
+          sub: u.notes || "",
+          predId: u.prediction_id,
+        });
+      }
+      if (u.target_start_date && u.target_end_date) {
+        events.push({
+          track: "upstream", kind: "window",
+          start: u.target_start_date, end: u.target_end_date,
+          label: u.short_label || u.prediction_id,
+          sub: u.notes || "",
+          predId: u.prediction_id,
+        });
+      }
+    }
+
+    return events;
+  }
+
+  // Render the prediction timeline into the PROBE/PREDICTIONS body.
+  // Replaces the table; CSS hides the .alt-view-head (toggle + filters)
+  // while #list-view.is-timeline is set.
+  function renderPredictionTimeline(body, predId) {
+    const node = nodeById(predId);
+    if (!node) {
+      body.innerHTML = `
+        <div class="timeline-head">
+          <button class="timeline-back" data-action="back" type="button">${escapeHTML(localeStr("timeline.back"))}</button>
+        </div>
+        <p class="muted">${escapeHTML(localeStr("timeline.notfound"))}</p>
+      `;
+      body.querySelector('[data-action="back"]').addEventListener("click", closeProbeTimeline);
+      return;
+    }
+
+    const events = timelineEventsFor(node);
+    // Reset selection when entering a (different) prediction's timeline.
+    if (state._timelineEventsPredId !== predId) {
+      state.timelineSelectedIdx = null;
+    }
+    state._timelineEventsPredId = predId;
+
+    body.innerHTML = `
+      <div class="timeline-head">
+        <button class="timeline-back" data-action="back" type="button">${escapeHTML(localeStr("timeline.back"))}</button>
+        <div class="timeline-title" title="${escapeHTML(predictionTitleClean(node))}">${escapeHTML(predictionTitleClean(node))}</div>
+        <button class="timeline-graph" data-action="graph" type="button">${escapeHTML(localeStr("timeline.open_in_observatory"))}</button>
+      </div>
+      <div class="timeline-canvas-wrap"><svg class="timeline-svg" role="img" aria-label="Prediction timeline"></svg></div>
+      <div class="timeline-detail" data-empty="true"></div>
+    `;
+
+    body.querySelector('[data-action="back"]').addEventListener("click", closeProbeTimeline);
+    body.querySelector('[data-action="graph"]').addEventListener("click", () => {
+      // Persist timeline state — when the user toggles back to PROBE,
+      // the same timeline reopens. Only the explicit Back button clears it.
+      setView("graph");
+      handleNodeClick(node);
+    });
+
+    const detailEl = body.querySelector(".timeline-detail");
+    drawTimelineSVG(body.querySelector(".timeline-canvas-wrap"), events, detailEl);
+    renderTimelineDetail(detailEl, events, state.timelineSelectedIdx);
+
+    // Re-fit on viewport resize while this timeline is open.
+    if (state._timelineResizeHandler) {
+      window.removeEventListener("resize", state._timelineResizeHandler);
+    }
+    state._timelineResizeHandler = () => {
+      const wrap = document.querySelector(".timeline-canvas-wrap");
+      const det  = document.querySelector(".timeline-detail");
+      if (wrap) drawTimelineSVG(wrap, events, det);
+    };
+    window.addEventListener("resize", state._timelineResizeHandler);
+  }
+
+  function renderTimelineDetail(detailEl, events, idx) {
+    if (!detailEl) return;
+    const event = (idx != null) ? events[idx] : null;
+    if (!event) {
+      detailEl.dataset.empty = "true";
+      detailEl.innerHTML = `<p class="muted">${escapeHTML(localeStr("timeline.detail.placeholder"))}</p>`;
+      return;
+    }
+    detailEl.dataset.empty = "false";
+    const track = TIMELINE_TRACKS.find((t) => t.key === event.track);
+    const trackLabel = track ? track.label : event.track;
+    const dateLine = event.kind === "point"
+      ? event.date
+      : `${event.start}  →  ${event.end}`;
+    const openButton = event.predId
+      ? `<button class="timeline-detail-open" data-pred="${escapeHTML(event.predId)}" type="button">${escapeHTML(localeStr("timeline.detail.open_this"))}</button>`
+      : "";
+    detailEl.innerHTML = `
+      <div class="timeline-detail-head">
+        <span class="timeline-detail-track tl-track-${escapeHTML(event.track)}">${escapeHTML(trackLabel)}</span>
+        <span class="timeline-detail-date">${escapeHTML(dateLine)}</span>
+        ${openButton}
+      </div>
+      ${event.label ? `<div class="timeline-detail-label">${escapeHTML(event.label)}</div>` : ""}
+      ${event.sub ? `<div class="timeline-detail-sub">${escapeHTML(event.sub)}</div>` : ""}
+    `;
+    const openBtn = detailEl.querySelector(".timeline-detail-open");
+    if (openBtn) {
+      openBtn.addEventListener("click", () => {
+        openProbeTimeline(openBtn.dataset.pred);
+      });
+    }
+  }
+
+  function drawTimelineSVG(wrap, events, detailEl) {
+    const svgEl = wrap.querySelector("svg");
+    if (!svgEl) return;
+    const svg = d3.select(svgEl);
+    svg.selectAll("*").remove();
+
+    const tracks = TIMELINE_TRACKS;
+    const margin = { top: 16, right: 32, bottom: 36, left: 132 };
+    const trackHeight = 56;
+    const innerHeight = tracks.length * trackHeight;
+    const width = Math.max(360, wrap.clientWidth);
+    const height = innerHeight + margin.top + margin.bottom;
+    svg.attr("width", width).attr("height", height);
+
+    // Compute time domain from all events. Pad ±5% so points don't
+    // crash into the edges. Fallback to "today" if there are no dates.
+    const dates = [];
+    for (const e of events) {
+      if (e.date) dates.push(new Date(e.date));
+      if (e.start) dates.push(new Date(e.start));
+      if (e.end) dates.push(new Date(e.end));
+    }
+    let minD, maxD;
+    if (dates.length) {
+      minD = d3.min(dates);
+      maxD = d3.max(dates);
+    } else {
+      minD = new Date(); maxD = new Date(minD.getTime() + 30 * 86400000);
+    }
+    const span = Math.max(1, maxD - minD);
+    const pad = span * 0.05;
+    const xScale = d3.scaleTime()
+      .domain([new Date(minD.getTime() - pad), new Date(maxD.getTime() + pad)])
+      .range([0, width - margin.left - margin.right]);
+
+    const yMid = (i) => i * trackHeight + trackHeight / 2;
+
+    const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+
+    // Track gridlines + labels
+    tracks.forEach((t, i) => {
+      const y = yMid(i);
+      g.append("line")
+        .attr("class", "tl-track-line")
+        .attr("x1", 0).attr("x2", width - margin.left - margin.right)
+        .attr("y1", y).attr("y2", y);
+      g.append("text")
+        .attr("class", "tl-track-label")
+        .attr("x", -12).attr("y", y)
+        .attr("text-anchor", "end")
+        .attr("dominant-baseline", "middle")
+        .text(t.label);
+    });
+
+    // X axis (dates) at the bottom
+    const xAxis = d3.axisBottom(xScale)
+      .ticks(Math.max(4, Math.floor((width - margin.left - margin.right) / 110)))
+      .tickFormat(d3.timeFormat("%Y-%m-%d"));
+    g.append("g")
+      .attr("class", "tl-x-axis")
+      .attr("transform", `translate(0,${innerHeight})`)
+      .call(xAxis);
+
+    // Today guide (vertical dashed line) when in domain
+    const today = new Date();
+    if (today >= xScale.domain()[0] && today <= xScale.domain()[1]) {
+      g.append("line")
+        .attr("class", "tl-today")
+        .attr("x1", xScale(today)).attr("x2", xScale(today))
+        .attr("y1", 0).attr("y2", innerHeight);
+    }
+
+    // Plot events. Each one is clickable: click selects it (highlight
+    // + populate the detail strip below). Pre-existing tooltips on
+    // <title> stay so hover still gives a quick preview.
+    const trackIdx = new Map(tracks.map((t, i) => [t.key, i]));
+    const selectedIdx = state.timelineSelectedIdx;
+    const onSelect = (idx) => {
+      state.timelineSelectedIdx = idx;
+      // Toggle is-selected class on every event glyph.
+      svgEl.querySelectorAll(".tl-pt, .tl-bar").forEach((el) => {
+        el.classList.toggle("is-selected", String(idx) === el.getAttribute("data-evt-idx"));
+      });
+      renderTimelineDetail(detailEl, events, idx);
+    };
+    events.forEach((e, idx) => {
+      const i = trackIdx.get(e.track);
+      if (i == null) return;
+      const y = yMid(i);
+      const isSelected = idx === selectedIdx;
+      if (e.kind === "point") {
+        const cx = xScale(new Date(e.date));
+        const r = e.primary ? 7 : 5;
+        const node = g.append("circle")
+          .attr("class", `tl-pt tl-pt-${e.track}${e.primary ? " is-primary" : ""}${isSelected ? " is-selected" : ""}`)
+          .attr("data-evt-idx", String(idx))
+          .attr("cx", cx).attr("cy", y).attr("r", r)
+          .style("cursor", "pointer")
+          .on("click", () => onSelect(idx));
+        node.append("title").text(`${e.label}\n${e.date}${e.sub ? "\n\n" + e.sub : ""}`);
+      } else if (e.kind === "window") {
+        const x1 = xScale(new Date(e.start));
+        const x2 = xScale(new Date(e.end));
+        const w = Math.max(2, x2 - x1);
+        const h = e.primary ? 14 : 10;
+        const node = g.append("rect")
+          .attr("class", `tl-bar tl-bar-${e.track}${e.primary ? " is-primary" : ""}${isSelected ? " is-selected" : ""}`)
+          .attr("data-evt-idx", String(idx))
+          .attr("x", x1).attr("y", y - h / 2)
+          .attr("width", w).attr("height", h)
+          .attr("rx", 3)
+          .style("cursor", "pointer")
+          .on("click", () => onSelect(idx));
+        node.append("title").text(`${e.label}\n${e.start} → ${e.end}${e.sub ? "\n\n" + e.sub : ""}`);
+      }
     });
   }
 

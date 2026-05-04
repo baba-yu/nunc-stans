@@ -351,40 +351,52 @@ body.panel-open #meta-header {
 .category-filters,
 .list-body,
 .evidence-body,
-.panel-body {
+.panel-body,
+.timeline-canvas-wrap,
+.timeline-detail {
   scrollbar-width: thin;
   scrollbar-color: rgba(130, 170, 210, 0.25) transparent;
 }
 .category-filters::-webkit-scrollbar,
 .list-body::-webkit-scrollbar,
 .evidence-body::-webkit-scrollbar,
-.panel-body::-webkit-scrollbar {
+.panel-body::-webkit-scrollbar,
+.timeline-canvas-wrap::-webkit-scrollbar,
+.timeline-detail::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 .category-filters::-webkit-scrollbar-track,
 .list-body::-webkit-scrollbar-track,
 .evidence-body::-webkit-scrollbar-track,
-.panel-body::-webkit-scrollbar-track {
+.panel-body::-webkit-scrollbar-track,
+.timeline-canvas-wrap::-webkit-scrollbar-track,
+.timeline-detail::-webkit-scrollbar-track {
   background: transparent;
 }
 .category-filters::-webkit-scrollbar-thumb,
 .list-body::-webkit-scrollbar-thumb,
 .evidence-body::-webkit-scrollbar-thumb,
-.panel-body::-webkit-scrollbar-thumb {
+.panel-body::-webkit-scrollbar-thumb,
+.timeline-canvas-wrap::-webkit-scrollbar-thumb,
+.timeline-detail::-webkit-scrollbar-thumb {
   background: rgba(130, 170, 210, 0.25);
   border-radius: 3px;
 }
 .category-filters::-webkit-scrollbar-thumb:hover,
 .list-body::-webkit-scrollbar-thumb:hover,
 .evidence-body::-webkit-scrollbar-thumb:hover,
-.panel-body::-webkit-scrollbar-thumb:hover {
+.panel-body::-webkit-scrollbar-thumb:hover,
+.timeline-canvas-wrap::-webkit-scrollbar-thumb:hover,
+.timeline-detail::-webkit-scrollbar-thumb:hover {
   background: rgba(24, 199, 216, 0.45);
 }
 .category-filters::-webkit-scrollbar-corner,
 .list-body::-webkit-scrollbar-corner,
 .evidence-body::-webkit-scrollbar-corner,
-.panel-body::-webkit-scrollbar-corner {
+.panel-body::-webkit-scrollbar-corner,
+.timeline-canvas-wrap::-webkit-scrollbar-corner,
+.timeline-detail::-webkit-scrollbar-corner {
   background: transparent;
 }
 .menu-btn.cat-filter {
@@ -1340,6 +1352,202 @@ body.alt-view-mode {
 .list-table .open-in-graph:hover {
   background: rgba(24, 199, 216, 0.12);
   border-color: var(--menu-active);
+}
+
+/* ---- PROBE / Prediction timeline ----
+   When #list-view.is-timeline is set the toggle + filter row hide and
+   #list-body owns the entire PROBE area: [head bar] + [SVG canvas]. */
+#list-view.is-timeline > .alt-view-head { display: none; }
+#list-view.is-timeline > .list-body {
+  display: flex;
+  flex-direction: column;
+}
+.timeline-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--panel-border);
+  margin-bottom: 14px;
+}
+.timeline-back,
+.timeline-graph {
+  background: rgba(10, 22, 38, 0.78);
+  color: var(--text-muted);
+  border: 1px solid var(--panel-border);
+  border-radius: 999px;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  padding: 5px 14px;
+  cursor: pointer;
+  transition: background 140ms ease, color 140ms ease, border-color 140ms ease;
+  flex-shrink: 0;
+}
+.timeline-back:hover,
+.timeline-graph:hover {
+  color: var(--text-main);
+  border-color: var(--menu-active);
+  background: rgba(24, 199, 216, 0.12);
+}
+.timeline-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.timeline-canvas-wrap {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+}
+.timeline-svg {
+  display: block;
+  font: inherit;
+}
+.timeline-svg .tl-track-line {
+  stroke: rgba(130, 170, 210, 0.12);
+  stroke-width: 1;
+}
+.timeline-svg .tl-track-label {
+  fill: var(--text-muted);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.timeline-svg .tl-x-axis path,
+.timeline-svg .tl-x-axis line {
+  stroke: rgba(130, 170, 210, 0.25);
+}
+.timeline-svg .tl-x-axis text {
+  fill: var(--text-muted);
+  font-size: 10.5px;
+}
+.timeline-svg .tl-today {
+  stroke: var(--menu-active);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+  opacity: 0.55;
+}
+.timeline-svg .tl-pt {
+  fill: var(--heat-2);
+  stroke: rgba(7, 17, 31, 0.9);
+  stroke-width: 1.5;
+  cursor: default;
+}
+.timeline-svg .tl-pt-self      { fill: var(--menu-active); }
+.timeline-svg .tl-pt-bridge    { fill: var(--heat-3); }
+.timeline-svg .tl-pt-need      { fill: var(--heat-2); }
+.timeline-svg .tl-pt-downstream{ fill: #6ec1ff; }
+.timeline-svg .tl-pt-upstream  { fill: #c8b6ff; }
+.timeline-svg .tl-pt.is-primary { stroke: var(--heat-core); stroke-width: 2; }
+.timeline-svg .tl-bar {
+  fill: rgba(24, 199, 216, 0.30);
+  stroke: rgba(24, 199, 216, 0.6);
+  stroke-width: 1;
+}
+.timeline-svg .tl-bar-self      { fill: rgba(24, 199, 216, 0.45); stroke: var(--menu-active); }
+.timeline-svg .tl-bar-bridge    { fill: rgba(255, 184, 77, 0.30); stroke: var(--heat-3); }
+.timeline-svg .tl-bar-need      { fill: rgba(110, 193, 255, 0.25); stroke: #6ec1ff; }
+.timeline-svg .tl-bar-downstream{ fill: rgba(110, 193, 255, 0.20); stroke: #6ec1ff; }
+.timeline-svg .tl-bar-upstream  { fill: rgba(200, 182, 255, 0.20); stroke: #c8b6ff; }
+.timeline-svg .tl-bar.is-primary { stroke-width: 1.5; }
+
+/* Selected glyph: stronger outline + halo so it's obvious which event
+   the detail strip below corresponds to. */
+.timeline-svg .tl-pt.is-selected {
+  stroke: var(--heat-core);
+  stroke-width: 3;
+  filter: drop-shadow(0 0 4px rgba(255, 243, 196, 0.55));
+}
+.timeline-svg .tl-bar.is-selected {
+  stroke: var(--heat-core);
+  stroke-width: 2;
+  filter: drop-shadow(0 0 4px rgba(255, 243, 196, 0.55));
+}
+
+/* Detail strip below the timeline canvas. Empty state is muted text;
+   when an event is selected it shows: track chip + dates + (optional)
+   "Open this prediction" button on row 1, then label + sub on rows 2-3. */
+.timeline-detail {
+  flex-shrink: 0;
+  border-top: 1px solid var(--panel-border);
+  margin-top: 12px;
+  padding: 12px 4px 4px;
+  font-size: 12.5px;
+  color: var(--text-main);
+  max-height: 220px;
+  overflow: auto;
+}
+.timeline-detail[data-empty="true"] {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+.timeline-detail p.muted {
+  margin: 0;
+}
+.timeline-detail-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+.timeline-detail-track {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  background: rgba(24, 199, 216, 0.14);
+  color: var(--menu-active);
+  border: 1px solid rgba(24, 199, 216, 0.35);
+}
+.timeline-detail-track.tl-track-bridge     { background: rgba(255, 184, 77, 0.12); color: var(--heat-3); border-color: rgba(255, 184, 77, 0.35); }
+.timeline-detail-track.tl-track-need       { background: rgba(110, 193, 255, 0.10); color: #6ec1ff; border-color: rgba(110, 193, 255, 0.35); }
+.timeline-detail-track.tl-track-downstream { background: rgba(110, 193, 255, 0.10); color: #6ec1ff; border-color: rgba(110, 193, 255, 0.35); }
+.timeline-detail-track.tl-track-upstream   { background: rgba(200, 182, 255, 0.10); color: #c8b6ff; border-color: rgba(200, 182, 255, 0.35); }
+.timeline-detail-date {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+.timeline-detail-open {
+  margin-left: auto;
+  background: transparent;
+  border: 1px solid var(--panel-border);
+  color: var(--menu-active);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 4px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 140ms ease, border-color 140ms ease;
+}
+.timeline-detail-open:hover {
+  background: rgba(24, 199, 216, 0.12);
+  border-color: var(--menu-active);
+}
+.timeline-detail-label {
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--text-main);
+}
+.timeline-detail-sub {
+  color: var(--text-muted);
+  line-height: 1.5;
+  white-space: pre-wrap;
 }
 
 /* Evidence reverse view */
