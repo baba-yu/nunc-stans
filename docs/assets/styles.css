@@ -342,15 +342,50 @@ body.panel-open #meta-header {
   border-radius: 4px;
   padding: 4px;
 }
-/* Thin cold-palette scrollbar inside menus */
-.category-filters::-webkit-scrollbar { width: 6px; }
-.category-filters::-webkit-scrollbar-track { background: transparent; }
-.category-filters::-webkit-scrollbar-thumb {
+/* Thin cold-palette scrollbar shared across every scrollable surface
+   in the app: the category filter list in the side menu, the PROBE
+   body, the EVIDENCE body, and the right-side detail panel. The
+   default OS scrollbar fights with the dark cold-temperature theme,
+   so we override both the WebKit pseudo-elements and Firefox's
+   scrollbar-* shorthand. */
+.category-filters,
+.list-body,
+.evidence-body,
+.panel-body {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(130, 170, 210, 0.25) transparent;
+}
+.category-filters::-webkit-scrollbar,
+.list-body::-webkit-scrollbar,
+.evidence-body::-webkit-scrollbar,
+.panel-body::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.category-filters::-webkit-scrollbar-track,
+.list-body::-webkit-scrollbar-track,
+.evidence-body::-webkit-scrollbar-track,
+.panel-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+.category-filters::-webkit-scrollbar-thumb,
+.list-body::-webkit-scrollbar-thumb,
+.evidence-body::-webkit-scrollbar-thumb,
+.panel-body::-webkit-scrollbar-thumb {
   background: rgba(130, 170, 210, 0.25);
   border-radius: 3px;
 }
-.category-filters::-webkit-scrollbar-thumb:hover {
+.category-filters::-webkit-scrollbar-thumb:hover,
+.list-body::-webkit-scrollbar-thumb:hover,
+.evidence-body::-webkit-scrollbar-thumb:hover,
+.panel-body::-webkit-scrollbar-thumb:hover {
   background: rgba(24, 199, 216, 0.45);
+}
+.category-filters::-webkit-scrollbar-corner,
+.list-body::-webkit-scrollbar-corner,
+.evidence-body::-webkit-scrollbar-corner,
+.panel-body::-webkit-scrollbar-corner {
+  background: transparent;
 }
 .menu-btn.cat-filter {
   padding: 5px 8px;
@@ -1126,27 +1161,46 @@ body.alt-view-mode {
      Slightly extra room so the toggle doesn't crowd content when the
      title row wraps on narrow viewports. */
   padding: 72px 22px 24px;
-  overflow: auto;
+  /* Body owns its own scroll so the head + table column header stay
+     anchored at the top while only the rows scroll past. */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
   z-index: 5;
   color: var(--text-main);
 }
 .alt-view[hidden] { display: none; }
 .alt-view-head {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
   margin-bottom: 12px;
+  flex-shrink: 0;
+}
+/* The body region scrolls independently of .alt-view-head so the
+   PREDICTIONS / NEWS toggle and filter row stay pinned. The
+   inner .list-table thead (already position:sticky; top:0) sticks
+   to the top of this scroll container. min-height:0 is the flexbox
+   incantation that lets a flex child actually shrink below content
+   size and get a scrollbar. */
+.list-body,
+.evidence-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
 }
 
 /* PREDICTIONS ⇆ NEWS sub-toggle inside PROBE. Mirrors .view-toggle styling
    but lives in the alt-view header rather than the meta-header. */
 .probe-tab-toggle {
-  align-self: flex-start;
   display: inline-flex;
   background: rgba(10, 22, 38, 0.78);
   border: 1px solid var(--panel-border);
   border-radius: 999px;
   padding: 2px;
+  flex-shrink: 0;
 }
 .probe-tab-btn {
   border: 0;
