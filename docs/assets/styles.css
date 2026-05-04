@@ -598,11 +598,23 @@ body.panel-open #meta-header {
 
 .panel-head {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 20px 20px 14px;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 20px;
   border-bottom: 1px solid var(--panel-border);
+}
+/* Top row of the panel head: action buttons. Lives above the title
+   so a multi-line prediction title never crashes into the close /
+   back / probe controls. Right-aligned so it visually anchors to
+   the same edge as the panel itself. */
+.panel-head-actions {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+  align-items: center;
+}
+.panel-head-meta {
+  min-width: 0;
 }
 .panel-type {
   font-size: 10px;
@@ -617,18 +629,12 @@ body.panel-open #meta-header {
   font-weight: 600;
   line-height: 1.25;
   color: var(--text-main);
-  max-width: 320px;
   word-break: break-word;
 }
 .panel-subtitle {
   margin-top: 6px;
   font-size: 12px;
   color: var(--text-muted);
-}
-.panel-head-btns {
-  display: flex;
-  gap: 4px;
-  align-items: center;
 }
 .panel-head-btn {
   border: 0;
@@ -649,6 +655,28 @@ body.panel-open #meta-header {
   cursor: default;
 }
 #panel-close { font-size: 24px; }
+/* Open-in-PROBE pill button. Sits between Back and Close in the
+   actions row. Hidden until a Prediction node is selected, hidden
+   on responsive breakpoints alongside the OBSERVATORY/PROBE switch. */
+.panel-head-probe {
+  border: 1px solid var(--panel-border);
+  background: rgba(10, 22, 38, 0.78);
+  color: var(--menu-active);
+  font: inherit;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  padding: 5px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 140ms ease, border-color 140ms ease, color 140ms ease;
+}
+.panel-head-probe:hover {
+  color: var(--text-main);
+  border-color: var(--menu-active);
+  background: rgba(24, 199, 216, 0.12);
+}
+.panel-head-probe[hidden] { display: none; }
 
 .panel-body {
   overflow-y: auto;
@@ -887,6 +915,9 @@ body.panel-open #meta-header {
      viewport. */
   #meta-header .view-toggle { display: none; }
   #meta-header .meta-sub    { display: none; }
+  /* PROBE itself isn't reachable from mobile, so the Open-in-PROBE
+     shortcut in the right detail panel hides too. */
+  #panel-probe              { display: none !important; }
 }
 
 /* ------------------------------------------------------------

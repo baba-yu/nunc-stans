@@ -166,14 +166,15 @@
   <!-- Right slide-in detail panel -->
   <section id="detail-panel" aria-hidden="true">
     <div class="panel-head">
-      <div>
+      <div class="panel-head-actions">
+        <button id="panel-back" class="panel-head-btn" aria-label="Back to previous node" title="Back" disabled>←</button>
+        <button id="panel-probe" class="panel-head-probe" aria-label="Open in PROBE" title="Open in PROBE" type="button" hidden>→ PROBE</button>
+        <button id="panel-close" class="panel-head-btn" aria-label="Close panel" title="Close">×</button>
+      </div>
+      <div class="panel-head-meta">
         <div id="panel-type" class="panel-type">—</div>
         <h2 id="panel-title">Select a node</h2>
         <div id="panel-subtitle" class="panel-subtitle"></div>
-      </div>
-      <div class="panel-head-btns">
-        <button id="panel-back" class="panel-head-btn" aria-label="Back to previous node" title="Back" disabled>←</button>
-        <button id="panel-close" class="panel-head-btn" aria-label="Close panel" title="Close">×</button>
       </div>
     </div>
     <div class="panel-body" id="panel-body">

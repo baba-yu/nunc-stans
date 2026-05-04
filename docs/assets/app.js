@@ -104,6 +104,8 @@
       "timeline.notfound":         "Prediction not found in the current scope.",
       "timeline.detail.placeholder": "Click a point or window on the timeline to see details.",
       "timeline.detail.open_this":   "Open this prediction's timeline →",
+      "panel.open_in_probe":     "→ PROBE",
+      "panel.open_in_probe.tip": "Open this prediction's timeline in PROBE",
     },
     ja: {
       "scope.mix":      "MIX",
@@ -187,6 +189,8 @@
       "timeline.notfound":         "現在のスコープに該当する予測が見つかりません。",
       "timeline.detail.placeholder": "タイムライン上のポイントまたは期間をクリックすると詳細が表示されます。",
       "timeline.detail.open_this":   "この予測のタイムラインを開く →",
+      "panel.open_in_probe":     "→ 探査",
+      "panel.open_in_probe.tip": "この予測のタイムラインを探査で開く",
     },
     es: {
       "scope.mix":      "MIX",
@@ -270,6 +274,8 @@
       "timeline.notfound":         "No se encontró la predicción en el alcance actual.",
       "timeline.detail.placeholder": "Haz clic en un punto o ventana de la línea de tiempo para ver los detalles.",
       "timeline.detail.open_this":   "Abrir la línea de tiempo de esta predicción →",
+      "panel.open_in_probe":     "→ PROBE",
+      "panel.open_in_probe.tip": "Abrir la línea de tiempo de esta predicción en PROBE",
     },
     fil: {
       "scope.mix":      "MIX",
@@ -353,6 +359,8 @@
       "timeline.notfound":         "Hindi natagpuan ang hula sa kasalukuyang saklaw.",
       "timeline.detail.placeholder": "I-click ang isang point o window sa timeline upang makita ang mga detalye.",
       "timeline.detail.open_this":   "Buksan ang timeline ng hulang ito →",
+      "panel.open_in_probe":     "→ PROBE",
+      "panel.open_in_probe.tip": "Buksan sa PROBE ang timeline ng hulang ito",
     },
   };
 
@@ -1858,6 +1866,19 @@
       scheduleDraw();
     });
     document.getElementById("panel-back").addEventListener("click", navigateBack);
+    // "Open in PROBE" shortcut from the OBSERVATORY detail panel.
+    // Sets the timeline target then flips to PROBE/PREDICTIONS, which
+    // dispatches into renderPredictionTimeline on next render.
+    const panelProbe = document.getElementById("panel-probe");
+    if (panelProbe) {
+      panelProbe.addEventListener("click", () => {
+        const predId = panelProbe.dataset.predId;
+        if (!predId) return;
+        state.probeTab = "predictions";
+        state.probeTimelinePred = predId;
+        setView("probe");
+      });
+    }
   }
 
   /* ---------------- Node click / focus ---------------- */
@@ -2241,6 +2262,12 @@
     if (panelBack) panelBack.title = localeStr("panel.back");
     const panelClose = document.getElementById("panel-close");
     if (panelClose) panelClose.setAttribute("aria-label", localeStr("panel.close"));
+    const panelProbe = document.getElementById("panel-probe");
+    if (panelProbe) {
+      panelProbe.textContent = localeStr("panel.open_in_probe");
+      panelProbe.title = localeStr("panel.open_in_probe.tip");
+      panelProbe.setAttribute("aria-label", localeStr("panel.open_in_probe.tip"));
+    }
     // Tool hint in current state
     const toolHint = document.getElementById("hint-tool");
     if (toolHint) {
@@ -2392,6 +2419,15 @@
 
     // Stream I: prediction-tab click wiring (no-op when n.type !== prediction)
     attachPredictionTabHandlers(body);
+
+    // Open-in-PROBE shortcut: only meaningful for prediction nodes,
+    // since PROBE/PREDICTIONS is the only PROBE tab that has a
+    // per-prediction timeline. Hidden otherwise (and on mobile via CSS).
+    const probeBtn = document.getElementById("panel-probe");
+    if (probeBtn) {
+      probeBtn.hidden = n.type !== "prediction";
+      probeBtn.dataset.predId = n.type === "prediction" ? n.id : "";
+    }
 
     el.classList.add("open");
     el.setAttribute("aria-hidden", "false");
