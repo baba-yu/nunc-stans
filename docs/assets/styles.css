@@ -1092,6 +1092,35 @@ body.panel-open #meta-header {
   border-radius: 3px;
   font-size: 11px;
 }
+.bridges-list .bridge-coh {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--panel-border);
+  color: var(--text-main);
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+.bridges-list .bridge-fields {
+  display: grid;
+  grid-template-columns: minmax(96px, max-content) 1fr;
+  gap: 6px 12px;
+  align-items: baseline;
+  margin-top: 6px;
+}
+.bridges-list .bridge-row {
+  display: contents;
+}
+.bridges-list .bridge-key {
+  color: var(--text-muted);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.bridges-list .bridge-val {
+  color: var(--text-main);
+  min-width: 0;
+}
 
 /* Full prediction text now lives in a collapsed disclosure under the
    tabs (was a top-level h3 before). */
@@ -1221,6 +1250,11 @@ body.alt-view-mode {
   gap: 10px 14px;
   margin-bottom: 12px;
   flex-shrink: 0;
+  /* Reserve room on the right edge for the global #probe-menu-toggle
+     hamburger (pinned at top:14px right:14px) so wrapping filter rows
+     never crash into the icon. 56px ≈ 36px button + 16px viewport gutter
+     + a 4px breathing margin. */
+  padding-right: 56px;
 }
 /* The body region scrolls independently of .alt-view-head so the
    PREDICTIONS / NEWS toggle and filter row stay pinned. The
@@ -1266,32 +1300,188 @@ body.alt-view-mode {
   color: var(--menu-active-text);
 }
 
+/* PROBE settings hamburger. The shared button styles below are used
+   by the global fixed-position #probe-menu-toggle (pinned at the
+   top-right of the viewport, on the same row as the page title). The
+   button is hidden by default and surfaced only in PROBE mode. */
+.probe-menu-btn {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid var(--panel-border);
+  background: var(--menu-bg);
+  color: var(--text-main);
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 140ms ease, border-color 140ms ease;
+}
+.probe-menu-btn:hover {
+  background: rgba(24, 199, 216, 0.12);
+  border-color: rgba(24, 199, 216, 0.4);
+}
+.probe-menu-btn .bars {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 16px;
+}
+.probe-menu-btn .bars span {
+  display: block;
+  height: 2px;
+  background: currentColor;
+  border-radius: 1px;
+}
+
+/* Body-level hamburger that pins to the global top-right corner.
+   Hidden by default; revealed only in PROBE mode so it sits on the
+   same row as the page title without colliding with #top-menu-stack
+   (which itself hides under body.alt-view-mode). */
+#probe-menu-toggle {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  z-index: 10;
+  display: none;
+  box-shadow: var(--shadow-deep);
+  backdrop-filter: blur(6px);
+}
+body.alt-view-mode #probe-menu-toggle {
+  display: inline-flex;
+}
+
+/* Slide-in panel from the right. Mirrors #detail-panel motion so the
+   transition feels native to the rest of the app, but lives at z=25
+   to sit above the alt-view (z=5). Hidden by default; opened by
+   adding .open after un-hiding so the transform animation runs. */
+#probe-menu-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(280px, 100vw);
+  background: var(--panel-bg);
+  border-left: 1px solid var(--panel-border);
+  box-shadow: -12px 0 40px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  transform: translateX(105%);
+  transition: transform 220ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  z-index: 25;
+  display: flex;
+  flex-direction: column;
+  color: var(--text-main);
+}
+#probe-menu-panel[hidden] { display: none; }
+#probe-menu-panel.open { transform: translateX(0); }
+
+.probe-menu-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--panel-border);
+}
+.probe-menu-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+.probe-menu-close {
+  border: 1px solid var(--panel-border);
+  background: var(--menu-bg);
+  color: var(--text-main);
+  border-radius: 4px;
+  width: 28px;
+  height: 28px;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.probe-menu-close:hover {
+  border-color: rgba(24, 199, 216, 0.4);
+  background: rgba(24, 199, 216, 0.12);
+}
+.probe-menu-body {
+  flex: 1 1 auto;
+  overflow: auto;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+.probe-menu-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.probe-menu-section .menu-lbl {
+  font-size: 10px;
+  letter-spacing: 0.16em;
+}
+.probe-menu-langs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  border: 1px solid var(--panel-border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.probe-menu-langs .menu-btn.lang {
+  border-radius: 0;
+  min-width: 0;
+}
+.probe-menu-section.probe-snap-section .menu-select {
+  width: 100%;
+}
+.probe-menu-section.probe-snap-section[hidden] {
+  display: none;
+}
+
 .alt-view-head > p.muted {
   margin: 0;
 }
+/* Compact filter row. Sized so the PREDICTIONS / NEWS toggle and the
+   six filter widgets stay on a single line at typical desktop widths
+   instead of wrapping into a second row. The flex-wrap: wrap fallback
+   still kicks in below ~720px viewport so genuinely narrow screens
+   don't get clipped. */
 .list-filters {
   display: flex;
-  gap: 14px;
+  gap: 6px 10px;
   align-items: center;
   margin: 0;
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-muted);
   flex-wrap: wrap;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 .list-filters label {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
+  min-width: 0;
+  flex-shrink: 1;
 }
 .list-filters select {
   background: rgba(10, 22, 38, 0.7);
   color: var(--text-main);
   border: 1px solid var(--panel-border);
   border-radius: 3px;
-  padding: 3px 6px;
+  padding: 2px 4px;
   font-family: inherit;
-  font-size: 12px;
-  max-width: 240px;
+  font-size: 11px;
+  max-width: 140px;
+  min-width: 0;
+  flex-shrink: 1;
 }
 .list-filters input[type="checkbox"] {
   accent-color: var(--menu-active);
@@ -1300,6 +1490,7 @@ body.alt-view-mode {
   display: inline-flex;
   align-items: center;
   gap: 4px;
+  white-space: nowrap;
 }
 
 .list-table {
@@ -1323,24 +1514,22 @@ body.alt-view-mode {
   text-transform: uppercase;
   color: var(--text-muted);
 }
+.list-table thead th.sortable {
+  cursor: pointer;
+  user-select: none;
+}
+.list-table thead th.sortable:hover {
+  color: var(--menu-active);
+}
+.list-table thead th[title] {
+  text-decoration: underline dotted rgba(143, 168, 194, 0.45);
+  text-underline-offset: 3px;
+}
 .list-table tbody tr {
   cursor: pointer;
 }
 .list-table tbody tr:hover {
   background: rgba(24, 199, 216, 0.06);
-}
-.list-table .eli,
-.list-table .cell-eli {
-  color: var(--text-muted);
-  font-style: italic;
-  max-width: 320px;
-  /* Soft 2-line clamp + ellipsis. Stored data is now full-length, the
-     UI clips visually. Hover over the cell to read the full text via
-     the title attribute the renderer attaches. */
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
 }
 .list-table .cell-scope,
 .list-table .cell-category,
@@ -1349,11 +1538,20 @@ body.alt-view-mode {
   font-size: 12px;
   color: var(--text-muted);
 }
-.list-table .cell-title {
-  max-width: 360px;
+/* PREDICTION column. Shows the locale-aware ELI14 explanation when a
+   prediction has one, otherwise the title — both rendered identically
+   so the reader sees a uniform body text per row regardless of source. */
+.list-table .cell-prediction {
+  max-width: 480px;
+  min-width: 220px;
   font-weight: 500;
-  /* Two-line clamp keeps long predictions readable without making the
-     row absurdly tall. */
+  color: var(--text-main);
+}
+/* Line-clamp lives on this child wrapper rather than the <td>
+   itself. Setting display:-webkit-box directly on a table cell
+   removes its table-cell layout role in some browsers, collapsing
+   adjacent columns to zero width. */
+.list-table .clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -1373,29 +1571,6 @@ body.alt-view-mode {
 .list-table .cell-last-ev {
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
-}
-.list-table .cell-contradicts {
-  text-align: center;
-  color: var(--contradict);
-  font-weight: 600;
-}
-.list-table .cell-open {
-  text-align: center;
-}
-.list-table .open-in-graph {
-  background: transparent;
-  color: var(--menu-active);
-  border: 1px solid var(--panel-border);
-  border-radius: 3px;
-  padding: 2px 8px;
-  cursor: pointer;
-  font-family: inherit;
-  font-size: 13px;
-  line-height: 1;
-}
-.list-table .open-in-graph:hover {
-  background: rgba(24, 199, 216, 0.12);
-  border-color: var(--menu-active);
 }
 
 /* ---- PROBE / Prediction timeline ----
@@ -1595,6 +1770,19 @@ body.alt-view-mode {
 }
 
 /* Evidence reverse view */
+/* Lock column widths so a long expanded detail row (colspan=4) can't
+   stretch the parent table — auto layout otherwise rebalances columns
+   when any row expands and the header visibly jumps. */
+#evidence-body .list-table { table-layout: fixed; }
+#evidence-body .list-table th:nth-child(2),
+#evidence-body .list-table tbody tr:not(.ev-detail) td:nth-child(2) { width: 130px; }
+#evidence-body .list-table th:nth-child(3),
+#evidence-body .list-table tbody tr:not(.ev-detail) td:nth-child(3) { width: 160px; }
+#evidence-body .list-table th:nth-child(4),
+#evidence-body .list-table tbody tr:not(.ev-detail) td:nth-child(4) { width: 110px; }
+#evidence-body .list-table tbody tr:not(.ev-detail) td:nth-child(1) {
+  overflow-wrap: anywhere;
+}
 .ev-row { background: rgba(24, 199, 216, 0.02); }
 .ev-detail .ev-pred-list {
   list-style: none;
@@ -1608,19 +1796,16 @@ body.alt-view-mode {
   padding: 3px 0;
   font-size: 12.5px;
 }
-.ev-dir {
-  font-size: 10px;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  padding: 1px 6px;
-  border-radius: 3px;
-  color: var(--menu-active-text);
+.ev-pred-date {
+  flex: 0 0 auto;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+  font-size: 11px;
 }
-.ev-dir.support    { background: rgba(82, 199, 152, 0.85); }
-.ev-dir.contradict { background: rgba(199, 75, 216, 0.85); }
-.ev-dir.neutral    { background: rgba(143, 168, 194, 0.55); }
 .ev-pred-title {
-  flex: 1;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-wrap: anywhere;
   cursor: pointer;
   text-decoration: underline dotted rgba(143, 168, 194, 0.5);
 }
@@ -1840,52 +2025,6 @@ body.alt-view-mode {
   margin-left: 28px;
   margin-top: 2px;
   font-style: italic;
-}
-
-/* Stream F (Step 3) counter-cluster — pushback evidence + cluster
-   density. Visually orange-tinted to distinguish from the
-   support-side cluster table. */
-.readings-counter-narrative {
-  margin-top: 16px;
-  background: rgba(220, 90, 60, 0.08);
-  border-left-color: #d97759;
-  color: var(--text-main);
-}
-.readings-counter-table {
-  margin-top: 6px;
-}
-.readings-counter-pool {
-  color: #d97759;
-  font-weight: 500;
-}
-.readings-counter-evidence-block {
-  margin-top: 8px;
-}
-.readings-counter-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-.readings-counter-item {
-  padding: 4px 8px;
-  border-left: 2px solid #d97759;
-  background: rgba(220, 90, 60, 0.05);
-  border-radius: 3px;
-  margin-bottom: 3px;
-  font-size: 12px;
-  display: flex;
-  gap: 8px;
-  align-items: baseline;
-}
-.readings-counter-week {
-  flex: 0 0 auto;
-  font-variant-numeric: tabular-nums;
-  color: var(--text-muted);
-  font-size: 11px;
-}
-.readings-counter-title {
-  color: var(--text-main);
-  word-break: break-word;
 }
 
 /* Stream F (Step 4) P↔P relations — structural relationships

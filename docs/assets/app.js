@@ -86,6 +86,10 @@
       "panel.reasoning.so_that":  "So that",
       "panel.reasoning.landing":  "Landing",
       "panel.reasoning.target":   "Target",
+      "panel.bridge.supports": "supports",
+      "panel.bridge.signal":   "Signal",
+      "panel.bridge.reason":   "Reason",
+      "panel.bridge.gap":      "Remaining gap",
       "panel.5w1h.who":    "Who",
       "panel.5w1h.what":   "What",
       "panel.5w1h.where":  "Where",
@@ -171,6 +175,10 @@
       "panel.reasoning.so_that":  "着地",
       "panel.reasoning.landing":  "着地点",
       "panel.reasoning.target":   "目標期間",
+      "panel.bridge.supports": "支持",
+      "panel.bridge.signal":   "シグナル",
+      "panel.bridge.reason":   "理由",
+      "panel.bridge.gap":      "残るギャップ",
       "panel.5w1h.who":    "誰が",
       "panel.5w1h.what":   "何を",
       "panel.5w1h.where":  "どこで",
@@ -256,6 +264,10 @@
       "panel.reasoning.so_that":  "Para que",
       "panel.reasoning.landing":  "Aterrizaje",
       "panel.reasoning.target":   "Ventana objetivo",
+      "panel.bridge.supports": "apoya",
+      "panel.bridge.signal":   "Señal",
+      "panel.bridge.reason":   "Razón",
+      "panel.bridge.gap":      "Brecha restante",
       "panel.5w1h.who":    "Quién",
       "panel.5w1h.what":   "Qué",
       "panel.5w1h.where":  "Dónde",
@@ -341,6 +353,10 @@
       "panel.reasoning.so_that":  "Upang",
       "panel.reasoning.landing":  "Landing",
       "panel.reasoning.target":   "Target na window",
+      "panel.bridge.supports": "sumusuporta sa",
+      "panel.bridge.signal":   "Senyales",
+      "panel.bridge.reason":   "Dahilan",
+      "panel.bridge.gap":      "Natitirang puwang",
       "panel.5w1h.who":    "Sino",
       "panel.5w1h.what":   "Ano",
       "panel.5w1h.where":  "Saan",
@@ -1816,6 +1832,22 @@
     if (snapSel) {
       snapSel.addEventListener("change", () => selectSnapshot(snapSel.value));
     }
+    // PROBE per-section settings menu — hamburger toggle, close button,
+    // mirrored snapshot select, Esc to close, click-on-backdrop to close.
+    const probeSnap = document.getElementById("probe-snap-select");
+    if (probeSnap) {
+      probeSnap.addEventListener("change", () => selectSnapshot(probeSnap.value));
+    }
+    document.querySelectorAll(".probe-menu-btn").forEach((btn) => {
+      btn.addEventListener("click", () => toggleProbeMenu());
+    });
+    const probeMenuClose = document.querySelector(".probe-menu-close");
+    if (probeMenuClose) probeMenuClose.addEventListener("click", () => toggleProbeMenu(false));
+    document.addEventListener("keydown", (e) => {
+      if (e.key !== "Escape") return;
+      const panel = document.getElementById("probe-menu-panel");
+      if (panel && !panel.hidden) toggleProbeMenu(false);
+    });
     const catAll   = document.getElementById("cat-all");
     const catNone  = document.getElementById("cat-none");
     const catFocus = document.getElementById("cat-focus");
@@ -2237,11 +2269,16 @@
     if (catAll) catAll.textContent = localeStr("cat.all");
     const catNone = document.getElementById("cat-none");
     if (catNone) catNone.textContent = localeStr("cat.none");
-    // Snap label + LIVE option
+    // Snap label + LIVE option (top-menu copy + probe-menu copy)
     const snapLbl = document.querySelector('.snap-group .menu-lbl');
     if (snapLbl) snapLbl.textContent = localeStr("snap.label");
-    const liveOpt = document.querySelector('#snap-select option[value="live"]');
-    if (liveOpt) liveOpt.textContent = localeStr("snap.live");
+    const probeSnapLbl = document.querySelector('.probe-menu-snap-lbl');
+    if (probeSnapLbl) probeSnapLbl.textContent = localeStr("snap.label");
+    const probeLangLbl = document.querySelector('.probe-menu-lang-lbl');
+    if (probeLangLbl) probeLangLbl.textContent = localeStr("lang.label");
+    document.querySelectorAll('select.menu-select option[value="live"]').forEach((opt) => {
+      opt.textContent = localeStr("snap.live");
+    });
     // Hint strip
     const hints = document.querySelectorAll("#hint-strip span");
     if (hints.length >= 5) {
@@ -2308,13 +2345,19 @@
   async function loadSnapshotIndex() {
     const group = document.querySelector(".snap-group");
     const sel = document.getElementById("snap-select");
+    const probeSel = document.getElementById("probe-snap-select");
+    const probeSection = document.querySelector(".probe-snap-section");
     if (!group || !sel) return;
+    const setHidden = (hidden) => {
+      group.hidden = hidden;
+      if (probeSection) probeSection.hidden = hidden;
+    };
     try {
       const r = await fetch(`${LIVE_DATA_DIR}/snapshots/index.json`, { cache: "no-store" });
       if (!r.ok) throw new Error("no snapshots");
       const data = await r.json();
       const list = Array.isArray(data) ? data : (data.snapshots || []);
-      if (!list.length) { group.hidden = true; return; }
+      if (!list.length) { setHidden(true); return; }
       // Append options (newest first if array of strings sorts that way).
       for (const entry of list) {
         const date = (typeof entry === "string") ? entry : (entry.date || entry.id);
@@ -2323,23 +2366,35 @@
         opt.value = String(date);
         opt.textContent = String(date);
         sel.appendChild(opt);
+        if (probeSel) {
+          const opt2 = document.createElement("option");
+          opt2.value = String(date);
+          opt2.textContent = String(date);
+          probeSel.appendChild(opt2);
+        }
       }
-      group.hidden = false;
+      setHidden(false);
       // Restore the persisted snapshot selection if present.
       if (state.snapshotDate) {
         sel.value = state.snapshotDate;
+        if (probeSel) probeSel.value = state.snapshotDate;
       }
     } catch (_) {
       // No snapshots manifest — hide the group entirely.
-      group.hidden = true;
+      setHidden(true);
     }
   }
 
   async function selectSnapshot(value) {
     const sel = document.getElementById("snap-select");
+    const probeSel = document.getElementById("probe-snap-select");
     const isLive = !value || value === "live";
     state.snapshotDate = isLive ? null : value;
     DATA_DIR = isLive ? LIVE_DATA_DIR : `${LIVE_DATA_DIR}/snapshots/${value}`;
+    // Sync the two snapshot selects so changing one mirrors into the other.
+    const synced = isLive ? "live" : value;
+    if (sel && sel.value !== synced) sel.value = synced;
+    if (probeSel && probeSel.value !== synced) probeSel.value = synced;
     saveState();
     // Update meta-sub style hint.
     const sub = document.getElementById("meta-sub");
@@ -2354,9 +2409,46 @@
       rebuildSimulation();
       updateMetaHeader();
       setStatus("");
+      // Re-render whichever PROBE sub-tab is active so its data
+      // reflects the new snapshot. Without this, snapshot changes
+      // updated DATA_DIR + the GRAPH but PROBE views kept showing
+      // pre-change rows (filters and prediction lookups still pointed
+      // at the previous graph cache).
+      if (state.view === "probe") {
+        if (state.probeTab === "predictions") await renderListView();
+        else if (state.probeTab === "news")   await renderEvidenceView();
+      }
     } catch (e) {
       setStatus("snapshot load failed: " + (e && e.message ? e.message : e), true);
     }
+  }
+
+  // ----- PROBE settings slide-in panel (hamburger menu in alt-view-head) -----
+
+  // Open / close the slide-in panel that hosts the locale + snapshot
+  // controls inside PROBE. Defers the .open class one frame so the
+  // CSS transform transition has a frame to interpolate from.
+  function toggleProbeMenu(force) {
+    const panel = document.getElementById("probe-menu-panel");
+    if (!panel) return;
+    const isOpen = !panel.hidden && panel.classList.contains("open");
+    const willOpen = (typeof force === "boolean") ? force : !isOpen;
+    if (willOpen) {
+      panel.hidden = false;
+      panel.setAttribute("aria-hidden", "false");
+      requestAnimationFrame(() => panel.classList.add("open"));
+    } else {
+      panel.classList.remove("open");
+      panel.setAttribute("aria-hidden", "true");
+      // Match the CSS transition duration so the panel fully slides
+      // off-screen before [hidden] removes it from the layout.
+      setTimeout(() => {
+        if (!panel.classList.contains("open")) panel.hidden = true;
+      }, 240);
+    }
+    document.querySelectorAll(".probe-menu-btn").forEach((b) => {
+      b.setAttribute("aria-expanded", String(willOpen));
+    });
   }
 
   function selectHeatMetric(metric) {
@@ -2672,7 +2764,7 @@
     const hasReasoning =
       reasoning.because || reasoning.given || reasoning.so_that
       || reasoning.landing;
-    const bridges = (detail && detail.bridges) || [];
+    const bridges = filterDisplayBridges((detail && detail.bridges) || []);
     const hasBridges = bridges.length > 0;
     const needs = (detail && detail.needs) || [];
     const hasNeeds = needs.length > 0;
@@ -2722,9 +2814,6 @@
     const chainNarrative = readings.chain_narrative || "";
     const downstream = readings.downstream || [];
     const upstream = readings.upstream || [];
-    const counterNarrative = readings.counter_narrative || "";
-    const counterClusters = readings.counter_clusters || [];
-    const counterEvidence = readings.counter_evidence || [];
     const relationNarrative = readings.relation_narrative || "";
     const relations = readings.relations || [];
 
@@ -2782,40 +2871,6 @@
         <div class="readings-chain-block">
           <h4 class="readings-chain-h">Strengthened by upstream landing:</h4>
           <ul class="readings-chain-list readings-chain-list-up">${upstream.map(chainItem).join("")}</ul>
-        </div>` : ""}
-      ${counterNarrative ? `<p class="readings-narrative readings-counter-narrative">${escapeHTML(counterNarrative)}</p>` : ""}
-      ${counterClusters.length ? `
-        <table class="readings-table readings-counter-table">
-          <thead>
-            <tr>
-              <th>Counter-cluster theme</th>
-              <th>Week</th>
-              <th title="Contradicting items in pool / cluster total">Density</th>
-              <th>Trend</th>
-            </tr>
-          </thead>
-          <tbody>${counterClusters.map((c) => `
-            <tr class="readings-row">
-              <td class="readings-theme">${escapeHTML(c.theme_label || "—")}</td>
-              <td class="readings-week">${escapeHTML(c.week_bucket || "—")}</td>
-              <td class="readings-density">
-                <span class="readings-pool readings-counter-pool">${c.size_in_pool}</span>
-                <span class="readings-slash">/</span>
-                <span class="readings-total">${c.cluster_total}</span>
-              </td>
-              <td class="readings-trend-cell">${trendBadge(c.trend)}</td>
-            </tr>`).join("")}</tbody>
-        </table>` : ""}
-      ${counterEvidence.length ? `
-        <div class="readings-counter-evidence-block">
-          <h4 class="readings-chain-h">Counter-evidence items:</h4>
-          <ul class="readings-counter-list">
-            ${counterEvidence.map((e) => `
-              <li class="readings-counter-item">
-                <span class="readings-counter-week">${escapeHTML(e.week_bucket || "—")}</span>
-                <span class="readings-counter-title">${escapeHTML(e.title || e.evidence_id || "—")}</span>
-              </li>`).join("")}
-          </ul>
         </div>` : ""}
       ${relationNarrative ? `<p class="readings-narrative readings-relation-narrative">${escapeHTML(relationNarrative)}</p>` : ""}
       ${relations.length ? `
@@ -2927,25 +2982,97 @@
     `;
   }
 
+  // Bridge text is a writer-enforced single paragraph in the form:
+  //   "<lead>. Reason: <reason>. Coherence N/5. Remaining gap: <gap>."
+  // The "Reason:" marker is locale-dependent (Reason | Razón | 理由),
+  // "Coherence N/5" and "Remaining gap:" stay in English across locales.
+  // We split each bridge into structured fields for rendering instead
+  // of dumping the whole paragraph as markdown.
+  function parseBridgeText(raw) {
+    const out = { lead: "", reason: "", coherence: null, remainingGap: "" };
+    if (!raw) return out;
+    const text = String(raw).trim();
+    const stripTail = (s) => s.replace(/[.。]\s*$/, "").trim();
+
+    const cohRe = /\s*Coherence\s+(\d+)\s*\/\s*5\s*[.。]?\s*/i;
+    const cm = text.match(cohRe);
+    let head = text;
+    let tail = "";
+    if (cm) {
+      out.coherence = parseInt(cm[1], 10);
+      head = text.slice(0, cm.index);
+      tail = text.slice(cm.index + cm[0].length);
+    }
+
+    const reasonRe = /(?:Reason|Razón|理由)\s*[:：]\s*/;
+    const rm = head.match(reasonRe);
+    if (rm) {
+      out.lead = stripTail(head.slice(0, rm.index));
+      out.reason = stripTail(head.slice(rm.index + rm[0].length));
+    } else {
+      out.lead = stripTail(head);
+    }
+
+    const gapRe = /(?:Remaining\s+gap)\s*[:：]\s*/i;
+    const gm = tail.match(gapRe);
+    if (gm) {
+      out.remainingGap = stripTail(tail.slice(gm.index + gm[0].length));
+    }
+    return out;
+  }
+
+  function pickBridgeLocaleText(b) {
+    const bag = (b && b.text_locales) || {};
+    return bag[state.locale] || bag.en || (b && b.text) || "";
+  }
+
+  // Bridges with no real link to the prediction's reasoning components
+  // (dimension `none` AND coherence ≤ 1) are noise from days the writer
+  // looked at the prediction but found nothing to attach. Hide them
+  // from the Bridge tab and the "has bridges" list filter — the
+  // timeline still shows them as a re-citation log.
+  function filterDisplayBridges(bridges) {
+    return (bridges || []).filter((b) => {
+      const dim = b && b.dimension;
+      if (dim && dim !== "none") return true;
+      const parsed = parseBridgeText(pickBridgeLocaleText(b));
+      return typeof parsed.coherence === "number" && parsed.coherence >= 2;
+    });
+  }
+
   function renderBridgesTabBody(bridges) {
-    const pickText = (b) => {
-      const bag = b.text_locales || {};
-      return bag[state.locale] || bag.en || b.text || "";
-    };
     return `
       <ul class="bridges-list">
         ${bridges.map((b) => {
           const win = formatTargetWindow(b.target_start_date, b.target_end_date);
+          const parsed = parseBridgeText(pickBridgeLocaleText(b));
+          const hasParse = parsed.reason || parsed.remainingGap || typeof parsed.coherence === "number";
+          const fieldRow = (label, val) => val
+            ? `<div class="bridge-row">
+                 <span class="bridge-key">${label}</span>
+                 <span class="bridge-val md-body">${renderMarkdown(val)}</span>
+               </div>`
+            : "";
+          const body = hasParse
+            ? `<div class="bridge-fields">
+                 ${fieldRow(localeStr("panel.bridge.signal"), parsed.lead)}
+                 ${fieldRow(localeStr("panel.bridge.reason"), parsed.reason)}
+                 ${fieldRow(localeStr("panel.bridge.gap"), parsed.remainingGap)}
+               </div>`
+            : `<div class="bridge-text md-body">${renderMarkdown(pickBridgeLocaleText(b))}</div>`;
           return `
           <li class="bridge-item">
             <div class="bridge-meta">
               <span class="bridge-date">${escapeHTML(b.date || "—")}</span>
               ${b.dimension && b.dimension !== "none"
-                ? `<span class="bridge-dim">supports <code>${escapeHTML(b.dimension)}</code></span>`
+                ? `<span class="bridge-dim">${localeStr("panel.bridge.supports")} <code>${escapeHTML(b.dimension)}</code></span>`
+                : ""}
+              ${typeof parsed.coherence === "number"
+                ? `<span class="bridge-coh">Coherence ${parsed.coherence}/5</span>`
                 : ""}
               ${win ? `<span class="bridge-target" title="${localeStr("tooltip.bridge_target")}">→ ${escapeHTML(win)}</span>` : ""}
             </div>
-            <div class="bridge-text md-body">${renderMarkdown(pickText(b))}</div>
+            ${body}
           </li>`;}).join("")}
       </ul>
     `;
@@ -3235,8 +3362,7 @@
         ${list.map((e) => {
           const title = escapeHTML(e.title || e.source_name || e.url || "(untitled)");
           const url   = e.url ? escapeHTML(e.url) : "";
-          const dir   = e.support_direction ? `<span class="rtype">${escapeHTML(e.support_direction)}</span>` : "";
-          return `<li>${dir}${url ? `<a href="${url}" target="_blank" rel="noreferrer noopener">${title}</a>` : title}</li>`;
+          return `<li>${url ? `<a href="${url}" target="_blank" rel="noreferrer noopener">${title}</a>` : title}</li>`;
         }).join("")}
       </ul>
     `;
@@ -3678,6 +3804,12 @@
         dp.setAttribute("aria-hidden", "true");
         document.body.classList.remove("panel-open");
       }
+    } else {
+      // Close the PROBE settings panel when leaving PROBE — it has no
+      // anchor in OBSERVATORY (no hamburger visible) and would otherwise
+      // float orphaned over the canvas.
+      const pmp = document.getElementById("probe-menu-panel");
+      if (pmp && !pmp.hidden) toggleProbeMenu(false);
     }
     updateProbeTabButtons();
     if (showPredictions) renderListView();
@@ -3785,20 +3917,77 @@
       });
     }
     if (hasBridge) {
-      preds = preds.filter((n) => ((n.detail && n.detail.bridges) || []).length > 0);
+      preds = preds.filter((n) => filterDisplayBridges((n.detail && n.detail.bridges) || []).length > 0);
     }
 
-    preds.sort((a, b) => {
-      const ac = a.category_id || "";
-      const bc = b.category_id || "";
-      if (ac !== bc) return ac.localeCompare(bc);
-      const at = a.theme_id || "";
-      const bt = b.theme_id || "";
-      if (at !== bt) return at.localeCompare(bt);
-      const ar = (a.metrics_by_window && a.metrics_by_window[windowFilter] && a.metrics_by_window[windowFilter].realization_score) || 0;
-      const br = (b.metrics_by_window && b.metrics_by_window[windowFilter] && b.metrics_by_window[windowFilter].realization_score) || 0;
-      return br - ar;
-    });
+    // Pull a locale-aware ELI14 string from a prediction's detail block.
+    // The graph's reasoning_locales fan-out is keyed by reasoning field
+    // first (because/given/so_that/landing/eli14) then by locale, e.g.
+    //   detail.reasoning_locales.eli14.ja
+    // Falls back to the EN locale, then the legacy non-locale field.
+    const localizedEli14 = (detail) => {
+      const loc = state.locale || "en";
+      const rl = detail && detail.reasoning_locales;
+      if (rl && rl.eli14) {
+        if (rl.eli14[loc]) return rl.eli14[loc];
+        if (rl.eli14.en)   return rl.eli14.en;
+      }
+      return (detail && detail.reasoning && detail.reasoning.eli14) || "";
+    };
+
+    if (!state.listSort) state.listSort = { col: "default", dir: "desc" };
+    const sort = state.listSort;
+    const lastEvOf = (n) => {
+      const ev = (n.detail && n.detail.evidence) || [];
+      return ev.length ? (ev[0].validation_date || "") : "";
+    };
+    const STATUS_RANK = {
+      supported: 4, weakly_supported: 3, mixed: 2, no_signal: 1, contradicted: 0,
+    };
+    const valOf = (n) => {
+      const m = (n.metrics_by_window && n.metrics_by_window[windowFilter]) || {};
+      switch (sort.col) {
+        case "scope":    return (n.scope_id || "").toLowerCase();
+        case "category": {
+          const c = nodeById(n.category_id);
+          return ((c && (nodeLabel(c, "short_label") || nodeLabel(c, "label"))) || n.category_id || "").toLowerCase();
+        }
+        case "theme": {
+          const t = nodeById(n.theme_id);
+          return ((t && (nodeLabel(t, "short_label") || nodeLabel(t, "label"))) || n.theme_id || "").toLowerCase();
+        }
+        case "status":   return STATUS_RANK[m.status] != null ? STATUS_RANK[m.status] : -1;
+        case "realiz":   return typeof m.realization_score === "number" ? m.realization_score : -Infinity;
+        case "last_ev":  return lastEvOf(n);
+        default:         return null;
+      }
+    };
+    if (sort.col === "default") {
+      preds.sort((a, b) => {
+        const ac = a.category_id || "";
+        const bc = b.category_id || "";
+        if (ac !== bc) return ac.localeCompare(bc);
+        const at = a.theme_id || "";
+        const bt = b.theme_id || "";
+        if (at !== bt) return at.localeCompare(bt);
+        const ar = (a.metrics_by_window && a.metrics_by_window[windowFilter] && a.metrics_by_window[windowFilter].realization_score) || 0;
+        const br = (b.metrics_by_window && b.metrics_by_window[windowFilter] && b.metrics_by_window[windowFilter].realization_score) || 0;
+        return br - ar;
+      });
+    } else {
+      preds.sort((a, b) => {
+        const av = valOf(a), bv = valOf(b);
+        const aMissing = av == null || av === "" || av === -Infinity;
+        const bMissing = bv == null || bv === "" || bv === -Infinity;
+        if (aMissing && bMissing) return 0;
+        if (aMissing) return 1;
+        if (bMissing) return -1;
+        let r;
+        if (typeof av === "string") r = av.localeCompare(bv);
+        else r = av < bv ? -1 : av > bv ? 1 : 0;
+        return sort.dir === "desc" ? -r : r;
+      });
+    }
 
     if (!preds.length) {
       body.innerHTML = `<p class="muted">No predictions match the current filters.</p>`;
@@ -3819,45 +4008,39 @@
         nodeLabel(n, "title") || detail.title_clean || nodeLabel(n, "label"),
         detail.prediction_summary || "",
       );
-      const eli = (detail.reasoning && detail.reasoning.eli14) || "";
+      // PREDICTION column: prefer the locale-aware ELI14 explanation
+      // when present, fall back to the prediction title. Both render
+      // with identical typography so rows look uniform regardless of
+      // which source supplied the text.
+      const predText = localizedEli14(detail) || title;
       const status = m.status || "no_signal";
       const real = (typeof m.realization_score === "number")
         ? m.realization_score.toFixed(2) : "—";
-      const contradiction =
-        (typeof m.contradiction_signal === "number" && m.contradiction_signal) ||
-        (typeof detail.latest_contradiction_score === "number" && detail.latest_contradiction_score) ||
-        0;
-      const isContradicted = status === "contradicted" || contradiction >= 0.60;
       const evidence = (detail.evidence || []);
       const lastEv = evidence.length ? (evidence[0].validation_date || "") : "";
       return `<tr data-goto="${escapeHTML(n.id)}">
         <td class="cell-scope">${escapeHTML(n.scope_id || targetScope)}</td>
         <td class="cell-category">${escapeHTML(catLabel)}</td>
         <td class="cell-theme">${escapeHTML(themeLabel)}</td>
-        <td class="cell-title" title="${escapeHTML(title)}">${escapeHTML(title)}</td>
-        <td class="cell-eli" title="${escapeHTML(eli)}">${escapeHTML(eli)}</td>
+        <td class="cell-prediction" title="${escapeHTML(predText)}"><span class="clamp-2">${escapeHTML(predText)}</span></td>
         <td class="cell-status status-${escapeHTML(status)}">${escapeHTML(status)}</td>
         <td class="cell-real">${real}</td>
-        <td class="cell-contradicts">${isContradicted ? "✗" : ""}</td>
         <td class="cell-last-ev">${escapeHTML(lastEv)}</td>
-        <td class="cell-open"><button type="button" class="open-in-graph" title="Open in graph">&rarr;</button></td>
       </tr>`;
     }).join("");
 
+    const arrow = (col) => sort.col === col ? (sort.dir === "asc" ? " ↑" : " ↓") : "";
     body.innerHTML = `
       <table class="list-table">
         <thead>
           <tr>
-            <th>Scope</th>
-            <th>Category</th>
-            <th>Theme</th>
-            <th>Title</th>
-            <th>ELI14</th>
-            <th>Status</th>
-            <th>Realiz.</th>
-            <th>×</th>
-            <th>Last evidence</th>
-            <th></th>
+            <th class="sortable" data-list-sort="scope">Scope${arrow("scope")}</th>
+            <th class="sortable" data-list-sort="category">Category${arrow("category")}</th>
+            <th class="sortable" data-list-sort="theme">Theme${arrow("theme")}</th>
+            <th>Prediction</th>
+            <th class="sortable" data-list-sort="status">Status${arrow("status")}</th>
+            <th class="sortable" data-list-sort="realiz">Realiz.${arrow("realiz")}</th>
+            <th class="sortable" data-list-sort="last_ev">Last evidence${arrow("last_ev")}</th>
           </tr>
         </thead>
         <tbody>${rows}</tbody>
@@ -3865,44 +4048,32 @@
       <p class="muted">${preds.length} predictions match${preds.length > cap ? ` (showing first ${cap})` : ""}.</p>
     `;
 
-    // Row click opens the per-prediction timeline within PROBE — the
-    // primary navigation when exploring predictions, since OBSERVATORY
-    // is for the structural graph and PROBE is for the time view. The
-    // → button on each row keeps a one-shot jump to OBSERVATORY for
-    // users who want to inspect the prediction's place in the graph.
+    // Row click opens the per-prediction timeline within PROBE —
+    // primary navigation for predictions. OBSERVATORY is for the
+    // structural graph; PROBE is for the time view.
     body.querySelectorAll("tr[data-goto]").forEach((row) => {
-      row.addEventListener("click", (ev) => {
-        if (ev.target.closest(".open-in-graph")) return; // handled below
+      row.addEventListener("click", () => {
         const id = row.dataset.goto;
         if (!nodeById(id)) return;
         openProbeTimeline(id);
       });
     });
-    body.querySelectorAll(".open-in-graph").forEach((btn) => {
-      btn.addEventListener("click", (ev) => {
-        ev.stopPropagation();
-        const row = btn.closest("tr[data-goto]");
-        if (!row) return;
-        const id = row.dataset.goto;
-        const target = nodeById(id);
-        if (!target) return;
-        // Cross-scope row → switch graph scope first so the node
-        // exists in the rendered simulation when we click into it.
-        const rowScope = target.scope_id;
-        if (rowScope && rowScope !== state.scopeId) {
-          state.scopeId = rowScope;
-          updateScopeButtons(state.scopeId);
-          loadScopeGraph(state.scopeId).then(() => {
-            rebuildCategoryFilters();
-            rebuildSimulation();
-            setView("graph");
-            const t2 = nodeById(id);
-            if (t2) handleNodeClick(t2);
-          });
-          return;
+
+    // Header click cycles sort. Same column flips direction; a
+    // different column starts at its useful default — alpha cols
+    // start asc (A→Z), numeric / score / status / date cols start
+    // desc (latest first / strongest first).
+    body.querySelectorAll("th.sortable").forEach((th) => {
+      th.addEventListener("click", () => {
+        const col = th.dataset.listSort;
+        if (state.listSort.col === col) {
+          state.listSort.dir = state.listSort.dir === "asc" ? "desc" : "asc";
+        } else {
+          state.listSort.col = col;
+          const ascDefault = ["scope", "category", "theme"].includes(col);
+          state.listSort.dir = ascDefault ? "asc" : "desc";
         }
-        setView("graph");
-        handleNodeClick(target);
+        renderListView();
       });
     });
   }
@@ -4256,67 +4427,247 @@
     });
   }
 
+  // Populate both #list-category and #news-category. PREDICTIONS and
+  // NEWS share filter state through synced widgets, so the option set
+  // must match in both selects (otherwise switching tabs would orphan
+  // a chosen category that doesn't exist on the other side).
   function populateListCategoryOptions(g, currentValue) {
-    const sel = document.getElementById("list-category");
-    if (!sel) return;
+    const sels = [
+      document.getElementById("list-category"),
+      document.getElementById("news-category"),
+    ].filter(Boolean);
+    if (!sels.length) return;
     const cats = (g.nodes || []).filter((n) => n.type === "category");
     cats.sort((a, b) => (nodeLabel(a, "label") || a.id).localeCompare(nodeLabel(b, "label") || b.id));
-    const prev = currentValue || sel.value;
-    sel.innerHTML = `<option value="">all</option>` + cats.map((c) =>
+    const html = `<option value="">all</option>` + cats.map((c) =>
       `<option value="${escapeHTML(c.id)}">${escapeHTML(nodeLabel(c, "label") || c.id)}</option>`
     ).join("");
-    if (prev && cats.some((c) => c.id === prev)) sel.value = prev;
+    for (const sel of sels) {
+      const prev = currentValue || sel.value;
+      sel.innerHTML = html;
+      if (prev && cats.some((c) => c.id === prev)) sel.value = prev;
+    }
   }
 
   function populateListThemeOptions(g, categoryFilter, currentValue) {
-    const sel = document.getElementById("list-theme");
-    if (!sel) return;
+    const sels = [
+      document.getElementById("list-theme"),
+      document.getElementById("news-theme"),
+    ].filter(Boolean);
+    if (!sels.length) return;
     let themes = (g.nodes || []).filter((n) => n.type === "theme");
     if (categoryFilter) {
       themes = themes.filter((t) => (t.parent_ids || []).includes(categoryFilter));
     }
     themes.sort((a, b) => (nodeLabel(a, "label") || a.id).localeCompare(nodeLabel(b, "label") || b.id));
-    const prev = currentValue || sel.value;
-    sel.innerHTML = `<option value="">all</option>` + themes.map((t) =>
+    const html = `<option value="">all</option>` + themes.map((t) =>
       `<option value="${escapeHTML(t.id)}">${escapeHTML(nodeLabel(t, "label") || t.id)}</option>`
     ).join("");
-    if (prev && themes.some((t) => t.id === prev)) sel.value = prev;
+    for (const sel of sels) {
+      const prev = currentValue || sel.value;
+      sel.innerHTML = html;
+      if (prev && themes.some((t) => t.id === prev)) sel.value = prev;
+    }
   }
 
   async function renderEvidenceView() {
     const body = document.getElementById("evidence-body");
     if (!body) return;
+
+    // Read the news-side filter widgets — these mirror the PREDICTIONS
+    // filters via attachAltViewHandlers, so the values are equivalent
+    // regardless of which side the user just changed.
+    const newsScopeSel = document.getElementById("news-scope");
+    const newsCatSel   = document.getElementById("news-category");
+    const newsThemeSel = document.getElementById("news-theme");
+    const newsStatusSel= document.getElementById("news-status");
+    const newsWinSel   = document.getElementById("news-window");
+    const newsBridgeChk= document.getElementById("news-has-bridge");
+
+    // First open: align scope with whatever GRAPH/PREDICTIONS is using.
+    if (newsScopeSel && !newsScopeSel.value) newsScopeSel.value = state.scopeId || "mix";
+
+    const targetScope = (newsScopeSel && newsScopeSel.value) || state.scopeId || "mix";
+
+    // Make sure the scope graph is loaded — needed both for filter
+    // option population and for locale-aware prediction labels in the
+    // expanded detail rows below.
+    if (!state.graphsByScope.has(targetScope)) {
+      body.innerHTML = `<p class="muted">Loading ${escapeHTML(targetScope)}…</p>`;
+      try {
+        await loadScopeGraph(targetScope);
+      } catch (e) {
+        body.innerHTML = `<p class="muted">failed to load scope: ${escapeHTML(targetScope)}</p>`;
+        return;
+      }
+    }
+    const g = state.graphsByScope.get(targetScope);
+    if (g) {
+      // currentGraph() reads state.scopeId, so flip it briefly to the
+      // news-side scope when populating + during prediction lookups
+      // (otherwise nodeById would miss preds that live in another
+      // scope graph the user happens to have open in OBSERVATORY).
+      // We do not mutate state.scopeId here to avoid disturbing the
+      // GRAPH render; instead we use this graph directly.
+      populateListCategoryOptions(g, newsCatSel ? newsCatSel.value : "");
+      populateListThemeOptions(g,
+        newsCatSel ? newsCatSel.value : "",
+        newsThemeSel ? newsThemeSel.value : "");
+    }
+
     body.innerHTML = `<p class="muted">Loading evidence-reverse.json…</p>`;
     const data = await loadEvidenceReverse();
     if (!data.evidence || !data.evidence.length) {
       body.innerHTML = `<p class="muted">evidence-reverse.json not yet generated. Run <code>app/skills/build_evidence_reverse.py</code>.</p>`;
       return;
     }
+
+    const catFilter    = newsCatSel    ? newsCatSel.value    : "";
+    const themeFilter  = newsThemeSel  ? newsThemeSel.value  : "";
+    const statusFilter = newsStatusSel ? newsStatusSel.value : "";
+    const windowFilter = (newsWinSel && newsWinSel.value) || state.windowId || "30d";
+    const hasBridge    = !!(newsBridgeChk && newsBridgeChk.checked);
+
+    // Look up a prediction by ID inside the news-side scope graph
+    // ONLY. Membership in g IS the scope filter — graph-mix.json keeps
+    // each prediction's original scope_id (e.g. "tech"), so checking
+    // n.scope_id === targetScope would wrongly reject every mix-scope
+    // row. Falling back to other loaded graphs is also wrong here:
+    // it would leak tech / business preds into a "mix" filter.
+    const scopedPred = (id) => {
+      if (g && g._index) return g._index.get(id) || null;
+      return null;
+    };
+
+    // Cross-scope lookup used solely for rendering the localised label
+    // when a prediction is not in the active scope graph (e.g. the
+    // user has cycled scopes and the graph cache still holds a copy).
+    // Never used for filter decisions — just label fallback so we
+    // don't show a raw ID in the expanded detail row.
+    const predAnywhere = (id) => {
+      const inScope = scopedPred(id);
+      if (inScope) return inScope;
+      for (const [, g2] of state.graphsByScope) {
+        if (g2 === g) continue;
+        if (g2._index) {
+          const found = g2._index.get(id);
+          if (found) return found;
+        }
+      }
+      return null;
+    };
+
+    // Apply all filters to a prediction node. Mirrors the predicate
+    // used by renderListView — same field checks, no scope_id check
+    // (scope membership is enforced by scopedPred above).
+    const predMatches = (n) => {
+      if (!n || n.type !== "prediction") return false;
+      if (catFilter   && n.category_id !== catFilter)   return false;
+      if (themeFilter && n.theme_id    !== themeFilter) return false;
+      if (statusFilter) {
+        const m = (n.metrics_by_window && n.metrics_by_window[windowFilter]) || {};
+        if (m.status !== statusFilter) return false;
+      }
+      if (hasBridge) {
+        if (filterDisplayBridges((n.detail && n.detail.bridges) || []).length === 0) return false;
+      }
+      return true;
+    };
+
+    // Tag each evidence with its filtered linked-prediction set, drop
+    // rows where nothing matches. Pre-compute the matched score sum so
+    // sort callers don't recompute each time.
+    const filtered = [];
+    for (const e of data.evidence) {
+      const matched = (e.linked_predictions || []).filter((p) => predMatches(scopedPred(p.prediction_id)));
+      if (!matched.length) continue;
+      const matchedScore = matched.reduce((acc, p) => acc + (p.score || 0), 0);
+      filtered.push({ ...e, _matched: matched, _matched_score: matchedScore });
+    }
+
+    if (!filtered.length) {
+      body.innerHTML = `<p class="muted">No news matches the current filters.</p>`;
+      return;
+    }
+
+    if (!state.newsSort) state.newsSort = { col: "total_score", dir: "desc" };
+    const sort = state.newsSort;
+
+    // Sort within the top-100-by-(matched)influence slice rather than across all 200,
+    // so picking "title A→Z" doesn't drag low-influence rows up over the cap.
+    filtered.sort((a, b) => (b._matched_score - a._matched_score));
+    const rows = filtered.slice(0, 100);
+    const valOf = (e) => {
+      switch (sort.col) {
+        case "title":             return (e.title || "").toLowerCase();
+        case "reported_at":       return e.reported_at || "";
+        case "predictions_count": return e._matched.length;
+        case "total_score":       return e._matched_score;
+        default:                  return 0;
+      }
+    };
+    rows.sort((a, b) => {
+      const av = valOf(a), bv = valOf(b);
+      const aMissing = av == null || av === "";
+      const bMissing = bv == null || bv === "";
+      if (aMissing && bMissing) return 0;
+      if (aMissing) return 1;
+      if (bMissing) return -1;
+      let r;
+      if (typeof av === "string") r = av.localeCompare(bv);
+      else r = av < bv ? -1 : av > bv ? 1 : 0;
+      return sort.dir === "desc" ? -r : r;
+    });
+
+    const arrow = (col) => sort.col === col ? (sort.dir === "asc" ? " ↑" : " ↓") : "";
+    const PRED_TIP =
+      "Number of unique predictions matching the current filters that this news has been cited by " +
+      "in the last 90 days. All citations are 'support' — the contradict axis is retired in this pipeline.";
+    const TOTAL_TIP =
+      "Sum of time-decayed relevance across the matching predictions linked to this news " +
+      "(relatedness × exp(-age/τ_source), summed). Higher = more influential evidence right now. " +
+      "Different from a prediction's hit rate.";
+
+    // Build the localised label for a single linked prediction. Falls
+    // back to the snapshot-time label baked into evidence-reverse.json
+    // when the prediction is missing from any loaded scope graph.
+    const predLabel = (p) => {
+      const n = predAnywhere(p.prediction_id);
+      if (!n) return p.prediction_short_label || p.prediction_summary || p.prediction_id;
+      const dedicated = nodeLabel(n, "title") || (n.detail && n.detail.title_clean) || "";
+      const fullText  = nodeLabel(n, "summary") || (n.detail && n.detail.prediction_summary) || nodeLabel(n, "label") || "";
+      const base = dedicated || nodeLabel(n, "label") || p.prediction_short_label || p.prediction_summary || p.prediction_id;
+      return cleanPredictionTitle(base, fullText);
+    };
+
     body.innerHTML = `
       <table class="list-table">
         <thead>
           <tr>
-            <th>Title</th>
-            <th>Source</th>
-            <th>Predictions</th>
-            <th>Total score</th>
+            <th class="sortable" data-news-sort="title">Title${arrow("title")}</th>
+            <th class="sortable" data-news-sort="reported_at">Reported${arrow("reported_at")}</th>
+            <th class="sortable" data-news-sort="predictions_count" title="${escapeHTML(PRED_TIP)}">Prediction reach${arrow("predictions_count")}</th>
+            <th class="sortable" data-news-sort="total_score" title="${escapeHTML(TOTAL_TIP)}">Influence${arrow("total_score")}</th>
           </tr>
         </thead>
         <tbody>
-          ${data.evidence.slice(0, 100).map((e) => `
+          ${rows.map((e) => `
             <tr class="ev-row">
               <td>${e.url ? `<a href="${escapeHTML(e.url)}" target="_blank" rel="noreferrer noopener">${escapeHTML(e.title || e.url)}</a>` : escapeHTML(e.title || "(untitled)")}</td>
-              <td>${escapeHTML(e.source_type || "—")}</td>
-              <td>${e.linked_predictions.length}</td>
-              <td>${e.total_score.toFixed(2)}</td>
+              <td>${escapeHTML(e.reported_at || "—")}</td>
+              <td>${e._matched.length}</td>
+              <td>${e._matched_score.toFixed(2)}</td>
             </tr>
             <tr class="ev-detail" hidden>
               <td colspan="4">
                 <ul class="ev-pred-list">
-                  ${e.linked_predictions.slice(0, 12).map((p) => `
+                  ${e._matched.slice()
+                    .sort((a, b) => (b.prediction_date || "").localeCompare(a.prediction_date || ""))
+                    .slice(0, 12)
+                    .map((p) => `
                     <li>
-                      <span class="ev-dir ${escapeHTML(p.support_direction)}">${escapeHTML(p.support_direction)}</span>
-                      <span class="ev-pred-title" data-goto="${escapeHTML(p.prediction_id)}">${escapeHTML(p.prediction_short_label || p.prediction_summary || p.prediction_id)}</span>
+                      <span class="ev-pred-date">${escapeHTML(p.prediction_date || "—")}</span>
+                      <span class="ev-pred-title" data-goto="${escapeHTML(p.prediction_id)}">${escapeHTML(predLabel(p))}</span>
                       <span class="ev-score">${p.score.toFixed(2)}</span>
                     </li>`).join("")}
                 </ul>
@@ -4325,6 +4676,20 @@
         </tbody>
       </table>
     `;
+    // Header click cycles sort. Same column flips direction; a different
+    // column starts at its useful default (titles A→Z, others high-first).
+    body.querySelectorAll("th.sortable").forEach((th) => {
+      th.addEventListener("click", () => {
+        const col = th.dataset.newsSort;
+        if (state.newsSort.col === col) {
+          state.newsSort.dir = state.newsSort.dir === "asc" ? "desc" : "asc";
+        } else {
+          state.newsSort.col = col;
+          state.newsSort.dir = col === "title" ? "asc" : "desc";
+        }
+        renderEvidenceView();
+      });
+    });
     body.querySelectorAll(".ev-row").forEach((row) => {
       row.addEventListener("click", () => {
         const next = row.nextElementSibling;
@@ -4337,11 +4702,12 @@
       el.addEventListener("click", (ev) => {
         ev.stopPropagation();
         const id = el.dataset.goto;
-        const target = nodeById(id);
-        if (target) {
-          setView("graph");
-          handleNodeClick(target);
-        }
+        if (!id || !nodeById(id)) return;
+        // Open this prediction's PROBE timeline (mirrors the panel
+        // "→ PROBE" button), not the OBSERVATORY graph view.
+        state.probeTab = "predictions";
+        state.probeTimelinePred = id;
+        setView("probe");
       });
     });
   }
@@ -4355,31 +4721,65 @@
     document.querySelectorAll(".probe-tab-btn").forEach((btn) => {
       btn.addEventListener("click", () => setProbeTab(btn.dataset.probeTab));
     });
-    // Re-render PREDICTIONS when any of its filters change. Scope and Category
-    // changes also clear downstream selections so cascading stays sane.
+
+    // Re-render whichever PROBE sub-tab is currently active. PREDICTIONS
+    // and NEWS share filter widget values, so a change in either side
+    // affects the visible view immediately.
     const reRender = () => {
-      if (state.view === "probe" && state.probeTab === "predictions") renderListView();
+      if (state.view !== "probe") return;
+      if (state.probeTab === "predictions") renderListView();
+      else if (state.probeTab === "news")   renderEvidenceView();
     };
-    const onChange = (id, fn) => {
-      const el = document.getElementById(id);
-      if (el) el.addEventListener("change", fn);
+
+    // Mirror a single field's value across the two filter sets. Used
+    // after any change so the inactive view's widget already reflects
+    // the new state when the user flips to it.
+    const FIELDS = ["scope", "category", "theme", "status", "window"];
+    const syncFromPrefix = (srcPrefix) => {
+      const dstPrefix = srcPrefix === "list" ? "news" : "list";
+      for (const f of FIELDS) {
+        const src = document.getElementById(`${srcPrefix}-${f}`);
+        const dst = document.getElementById(`${dstPrefix}-${f}`);
+        if (src && dst && dst.value !== src.value) dst.value = src.value;
+      }
+      const sChk = document.getElementById(`${srcPrefix}-has-bridge`);
+      const dChk = document.getElementById(`${dstPrefix}-has-bridge`);
+      if (sChk && dChk && dChk.checked !== sChk.checked) dChk.checked = sChk.checked;
     };
-    onChange("list-scope", () => {
-      const cat = document.getElementById("list-category");
-      const theme = document.getElementById("list-theme");
-      if (cat) cat.value = "";
-      if (theme) theme.value = "";
-      reRender();
-    });
-    onChange("list-category", () => {
-      const theme = document.getElementById("list-theme");
-      if (theme) theme.value = "";
-      reRender();
-    });
-    onChange("list-theme",     reRender);
-    onChange("list-status",    reRender);
-    onChange("list-window",    reRender);
-    onChange("list-has-bridge", reRender);
+
+    // Reset cascading children on both sides at once so a scope change
+    // can't leave the inactive view holding a category that no longer
+    // exists in the new scope's graph.
+    const clearOnBothSides = (...keys) => {
+      for (const prefix of ["list", "news"]) {
+        for (const k of keys) {
+          const el = document.getElementById(`${prefix}-${k}`);
+          if (!el) continue;
+          if (el.type === "checkbox") el.checked = false;
+          else el.value = "";
+        }
+      }
+    };
+
+    const bindPair = (field, onChangeExtra) => {
+      for (const prefix of ["list", "news"]) {
+        const id = `${prefix}-${field}`;
+        const el = document.getElementById(id);
+        if (!el) continue;
+        el.addEventListener("change", () => {
+          if (onChangeExtra) onChangeExtra();
+          syncFromPrefix(prefix);
+          reRender();
+        });
+      }
+    };
+
+    bindPair("scope",      () => clearOnBothSides("category", "theme"));
+    bindPair("category",   () => clearOnBothSides("theme"));
+    bindPair("theme");
+    bindPair("status");
+    bindPair("window");
+    bindPair("has-bridge");
   }
 
   /* ---------------- Boot ---------------- */
