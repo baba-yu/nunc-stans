@@ -177,3 +177,773 @@ terms:
     canonical_link: null
     status: active
     reviewed_by_human: true
+
+  - term: "agentic AI"
+    aliases: ["AI agent", "agentic system"]
+    one_liner_eli14: "AI that takes its own actions in a loop — read a webpage, decide to call a tool, check the result, try again — instead of just answering one question at a time."
+    one_liner_eli14_ja: "AI が自分で動作を繰り返す形 — Web ページを読み、ツールを呼ぶか判断し、結果を確認し、もう一度試す — 単発の質問応答ではない使い方。"
+    one_liner_eli14_es: "IA que toma sus propias acciones en bucle — leer una página, decidir llamar a una herramienta, comprobar el resultado, reintentar — en lugar de solo responder una pregunta a la vez."
+    one_liner_eli14_fil: "AI na nakakagawa ng sariling actions sa loop — magbasa ng webpage, magdesisyon kung tatawag ng tool, susuriin ang resulta, susubukan ulit — hindi lang basta sumagot ng isang tanong."
+    why_it_matters: "Agentic systems multiply blast radius and value at the same time. Every prediction in the security and capex categories assumes this loop is the next mainstream interface."
+    why_it_matters_ja: "エージェント型は被害範囲も価値も同時に大きくする。セキュリティと capex 系の予測はすべて、このループが次のメイン UI になることを前提にしている。"
+    why_it_matters_es: "Los sistemas agénticos amplifican el radio de impacto y el valor a la vez. Cada predicción en seguridad y capex asume que este bucle será la próxima interfaz dominante."
+    why_it_matters_fil: "Pinapalaki ng agentic systems ang blast radius at value sabay. Lahat ng predictions sa security at capex assume na ang loop na ito ang susunod na mainstream interface."
+    canonical_link: null
+    status: active
+    reviewed_by_human: true
+
+  - term: "frontier lab"
+    aliases: ["frontier AI lab", "frontier model"]
+    one_liner_eli14: "The handful of AI companies training the biggest, most capable models — currently Anthropic, OpenAI, Google DeepMind, and a few challengers."
+    one_liner_eli14_ja: "最大級で最も性能が高いモデルを訓練している少数の AI 企業 — 現在は Anthropic、OpenAI、Google DeepMind と少数の挑戦者。"
+    one_liner_eli14_es: "El puñado de empresas de IA que entrenan los modelos más grandes y capaces — actualmente Anthropic, OpenAI, Google DeepMind y unos pocos retadores."
+    one_liner_eli14_fil: "Iilang AI companies na nag-train ng pinakamalalaki at pinakamatatalinong models — kasalukuyan ay Anthropic, OpenAI, Google DeepMind, at ilang challengers."
+    why_it_matters: "Frontier-lab pricing, model availability, and DoD posture set the terms every other lab and hyperscaler reacts to."
+    why_it_matters_ja: "フロンティアラボの値付け・モデル供給・国防省への姿勢が、他のラボやハイパースケーラの行動を規定する。"
+    why_it_matters_es: "Los precios, la disponibilidad de modelos y la postura ante el DoD de los frontier labs marcan las condiciones a las que reaccionan el resto de laboratorios e hyperscalers."
+    why_it_matters_fil: "Pinapatakbo ng frontier-lab pricing, model availability, at DoD posture ang mga terms na sinusunod ng ibang labs at hyperscalers."
+    canonical_link: null
+    status: active
+    reviewed_by_human: true
+
+  - term: "agent harness"
+    aliases: [harness, "agent runtime"]
+    one_liner_eli14: "The scaffolding around an LLM that lets it do real work — the part that handles tool calls, memory, retries, and sandboxing. The model is the engine; the harness is the car."
+    one_liner_eli14_ja: "LLM が実作業をするために周りに用意する足場 — ツール呼び出し、メモリ、再試行、サンドボックスを処理する部分。モデルがエンジンなら、ハーネスは車そのもの。"
+    one_liner_eli14_es: "El armazón alrededor de un LLM que le permite hacer trabajo real — la parte que gestiona llamadas a herramientas, memoria, reintentos y sandboxing. El modelo es el motor; el harness es el coche."
+    one_liner_eli14_fil: "Ang scaffolding sa paligid ng LLM para makapag-trabaho talaga — yung parte na humahawak sa tool calls, memory, retries, at sandboxing. Engine ang model; ang harness ang kotse mismo."
+    why_it_matters: "Most production agent failures live in the harness, not the model. Whoever owns the harness owns the agent's behavior surface — and its CVE surface."
+    why_it_matters_ja: "本番のエージェント障害の大半はモデルではなくハーネスで起きる。ハーネスを握る者がエージェントの挙動と CVE の表面を握る。"
+    why_it_matters_es: "La mayoría de los fallos de agentes en producción están en el harness, no en el modelo. Quien controla el harness controla la superficie de comportamiento — y la superficie CVE — del agente."
+    why_it_matters_fil: "Karamihan ng production agent failures ay nasa harness, hindi sa model. Sinumang may control sa harness ang may control sa behavior surface — at CVE surface — ng agent."
+    canonical_link: null
+    status: active
+    reviewed_by_human: true
+
+  - term: KEV
+    aliases: ["CISA KEV", "Known Exploited Vulnerabilities"]
+    one_liner_eli14: "CISA's catalog of bugs that attackers are using right now. If your bug is on the list, US federal agencies have a hard deadline to patch."
+    one_liner_eli14_ja: "CISA が運営する、今まさに攻撃に使われているバグの一覧。リストに載ったバグは米連邦機関に厳しい修正期限が課される。"
+    one_liner_eli14_es: "Catálogo de la CISA con los bugs que los atacantes están usando ahora. Si un bug aparece, las agencias federales de EE. UU. tienen un plazo estricto para parchear."
+    one_liner_eli14_fil: "Catalog ng CISA ng mga bug na ginagamit ng attackers ngayon. Pag nasa list ang bug, may mahigpit na deadline para i-patch ang US federal agencies."
+    why_it_matters: "Adds-to-KEV is the moment a CVE becomes a deadline-driven enterprise problem, not just a score on a list."
+    why_it_matters_ja: "KEV に追加された瞬間、CVE は単なるスコアから企業の対応期限を伴う問題に変わる。"
+    why_it_matters_es: "El momento en que un CVE entra en KEV es cuando deja de ser una puntuación en una lista para convertirse en un problema empresarial con plazo."
+    why_it_matters_fil: "Pag pumasok sa KEV ang isang CVE, hindi na lang ito score sa list — nagiging deadline-driven na enterprise problem."
+    canonical_link: https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+    status: active
+    reviewed_by_human: true
+
+  - term: RCE
+    aliases: ["Remote Code Execution"]
+    one_liner_eli14: "A bug class where an attacker can run their own code on someone else's server over the network. The worst kind of bug for everyone except the attacker."
+    one_liner_eli14_ja: "攻撃者がネットワーク越しに他人のサーバーで自分のコードを実行できてしまうバグの種類。攻撃者以外の全員にとって最悪のバグ。"
+    one_liner_eli14_es: "Una clase de bug en la que un atacante puede ejecutar su propio código en el servidor de otra persona a través de la red. El peor tipo de bug para todos menos el atacante."
+    one_liner_eli14_fil: "Klase ng bug kung saan kayang patakbuhin ng attacker ang sariling code sa server ng iba sa network. Pinakamasamang klase ng bug para sa lahat maliban sa attacker."
+    why_it_matters: "RCE is the structural ceiling for severity — most CVSS 9-10 scores live here. AI-stack RCEs (LiteLLM, SGLang, vLLM) are why inference-server CVEs draw enterprise attention this cycle."
+    why_it_matters_ja: "RCE は深刻度の構造的な天井 — CVSS 9-10 のほとんどはここに集まる。AI スタックの RCE (LiteLLM、SGLang、vLLM) があるから、推論サーバーの CVE が今期企業の注目を集めている。"
+    why_it_matters_es: "RCE es el techo estructural de la severidad — la mayoría de las puntuaciones CVSS 9-10 viven aquí. Los RCE en la pila de IA (LiteLLM, SGLang, vLLM) explican por qué los CVE de servidores de inferencia atraen la atención empresarial este ciclo."
+    why_it_matters_fil: "Ang RCE ang structural ceiling ng severity — karamihan ng CVSS 9-10 scores ay narito. Ang AI-stack RCEs (LiteLLM, SGLang, vLLM) ang dahilan kung bakit nakakakuha ng enterprise attention ang inference-server CVEs ngayong cycle."
+    canonical_link: null
+    status: active
+    reviewed_by_human: true
+
+  - term: "Zero Trust"
+    aliases: ["zero-trust architecture", "ZTA"]
+    one_liner_eli14: "A security model that assumes no user, device, or service is automatically trusted — every action is verified, even from inside the network. Never trust, always verify."
+    one_liner_eli14_ja: "ユーザー・端末・サービスを自動的には信用しないセキュリティモデル — ネットワーク内部からのアクセスでも毎回検証する。「信用するな、常に検証せよ」。"
+    one_liner_eli14_es: "Un modelo de seguridad que asume que ningún usuario, dispositivo o servicio es automáticamente de confianza — cada acción se verifica, incluso desde dentro de la red. Nunca confíes, siempre verifica."
+    one_liner_eli14_fil: "Security model na walang user, device, o service na automatic na pinagkakatiwalaan — bawat action ay vine-verify, kahit galing sa loob ng network. 'Wag magtiwala, laging i-verify."
+    why_it_matters: "Zero-trust applied to AI agents is the User Prediction 1 thesis. Microsoft Agent 365 and CSA's Identity-as-first-pillar are the operative deployment surface."
+    why_it_matters_ja: "AI エージェントへの Zero Trust 適用は User Prediction 1 の主張そのもの。Microsoft Agent 365 と CSA の「Identity を Zero Trust の第一の柱に」が実運用の場。"
+    why_it_matters_es: "El zero-trust aplicado a agentes de IA es la tesis de la User Prediction 1. Microsoft Agent 365 y la postura Identity-como-primer-pilar de CSA son la superficie operativa."
+    why_it_matters_fil: "Ang zero-trust applied sa AI agents ang User Prediction 1 thesis. Microsoft Agent 365 at Identity-as-first-pillar ng CSA ang operative deployment surface."
+    canonical_link: https://www.nist.gov/publications/zero-trust-architecture
+    status: active
+    reviewed_by_human: true
+
+  - term: "Mag 7"
+    aliases: ["Magnificent Seven", "Magnificent 7"]
+    one_liner_eli14: "Wall Street nickname for the seven mega-cap tech stocks (Apple, Microsoft, Alphabet, Amazon, Meta, NVIDIA, Tesla) that have outsized weight in market indexes."
+    one_liner_eli14_ja: "ウォール街での呼称。市場指数に過大な比重を持つ大手テック 7 社 (Apple、Microsoft、Alphabet、Amazon、Meta、NVIDIA、Tesla) の総称。"
+    one_liner_eli14_es: "Apodo de Wall Street para las siete megacapitalizadas tecnológicas (Apple, Microsoft, Alphabet, Amazon, Meta, NVIDIA, Tesla) con peso desproporcionado en los índices."
+    one_liner_eli14_fil: "Wall Street nickname para sa pitong mega-cap tech stocks (Apple, Microsoft, Alphabet, Amazon, Meta, NVIDIA, Tesla) na sobrang laki ng weight sa market indexes."
+    why_it_matters: "Their quarterly capex, AI-revenue disclosures, and buyback patterns drive the AI-infrastructure narrative end to end."
+    why_it_matters_ja: "彼らの四半期 capex、AI 売上の開示、自社株買いの動向が AI インフラの物語全体を動かす。"
+    why_it_matters_es: "Su capex trimestral, la divulgación de ingresos de IA y los patrones de recompra impulsan toda la narrativa de la infraestructura de IA."
+    why_it_matters_fil: "Ang quarterly capex, AI-revenue disclosures, at buyback patterns nila ang nagtutulak sa buong AI infrastructure narrative."
+    canonical_link: null
+    status: active
+    reviewed_by_human: true
+
+  - term: EPS
+    aliases: ["Earnings Per Share", "diluted EPS"]
+    one_liner_eli14: "How much profit a company made per share of stock. Quarterly earnings reports lead with this number; 'beating EPS' is the headline win."
+    one_liner_eli14_ja: "1 株あたりの利益。四半期決算はまずこの数字から始まり、「EPS をビートした」が見出しになる。"
+    one_liner_eli14_es: "Cuánto beneficio generó una empresa por cada acción. Los informes trimestrales abren con esta cifra; 'batir el EPS' es el titular ganador."
+    one_liner_eli14_fil: "Kita ng kompanya bawat share ng stock. Tinatanghal ng quarterly earnings reports ang numerong ito; 'beating EPS' ang headline win."
+    why_it_matters: "Mag 7 EPS prints anchor the AI-capex ROI debate. Estimate-vs-actual gap is the buy-side's cleanest signal of whether AI spend is paying off this quarter."
+    why_it_matters_ja: "Mag 7 の EPS 結果が AI capex の ROI 議論の起点。予想と実績の差が、AI 投資が今期回収できているかを示すバイサイド最大の合図。"
+    why_it_matters_es: "Las cifras de EPS de los Mag 7 anclan el debate sobre el ROI del capex de IA. La brecha entre estimación y realidad es la señal más clara del buy-side sobre si el gasto en IA está rindiendo este trimestre."
+    why_it_matters_fil: "Ang Mag 7 EPS prints ang nag-aanchor sa AI-capex ROI debate. Ang gap sa pagitan ng estimate at actual ang pinakamalinaw na signal ng buy-side kung kumikita na ang AI spend ngayong quarter."
+    canonical_link: null
+    status: active
+    reviewed_by_human: true
+
+  - term: buyback
+    aliases: ["share buyback", "stock buyback", "share repurchase"]
+    one_liner_eli14: "When a company uses its cash to buy back its own shares, removing them from circulation. Each remaining share represents a slightly bigger slice of the company."
+    one_liner_eli14_ja: "会社が自社の現金で自社株を買い戻し、市場から減らすこと。残った 1 株あたりの会社の取り分が少しずつ大きくなる。"
+    one_liner_eli14_es: "Cuando una empresa usa su efectivo para recomprar sus propias acciones, retirándolas de circulación. Cada acción restante representa una porción ligeramente mayor de la empresa."
+    one_liner_eli14_fil: "Pag ginagamit ng kompanya ang sariling cash para bilhin pabalik ang sariling shares, inaalis sa circulation. Bawat natitirang share ay kaunting mas malaking parte ng kompanya."
+    why_it_matters: "Buyback authorizations signal management's confidence in cash flow. AAPL's $100B buyback alongside $700B Big-Tech AI capex is the cohort signal that capex is underwritten by capital-return capacity."
+    why_it_matters_ja: "自社株買いの枠は経営陣の現金創出力への自信を示す。AAPL の 1000 億ドル枠と Big Tech 7000 億ドル AI capex の並びは、capex が資本還元能力で裏打ちされているというコホート信号。"
+    why_it_matters_es: "Las autorizaciones de recompra señalan la confianza de la dirección en el flujo de caja. La recompra de $100B de AAPL junto al capex de IA de $700B de Big Tech es la señal de cohorte de que el capex está respaldado por la capacidad de retorno de capital."
+    why_it_matters_fil: "Pinapakita ng buyback authorizations ang confidence ng management sa cash flow. Ang $100B buyback ng AAPL kasabay ng $700B Big-Tech AI capex ay cohort signal na ang capex ay backed ng capital-return capacity."
+    canonical_link: null
+    status: active
+    reviewed_by_human: true
+
+  - term: FOMC
+    aliases: ["Federal Open Market Committee"]
+    one_liner_eli14: "The committee inside the US Federal Reserve that decides interest rates. When they raise rates, borrowing gets more expensive everywhere."
+    one_liner_eli14_ja: "米連邦準備制度の委員会で、政策金利を決める。金利を上げれば、世界中で借入コストが上昇する。"
+    one_liner_eli14_es: "El comité dentro de la Reserva Federal de EE. UU. que decide los tipos de interés. Cuando suben los tipos, los préstamos se encarecen en todas partes."
+    one_liner_eli14_fil: "Komiteng nasa loob ng US Federal Reserve na nagdedesisyon sa interest rates. Pag itinaas nila ang rates, mas mahal ang paghiram saan man."
+    why_it_matters: "FOMC posture sets the discount rate every AI-capex story is priced against. Powell-staying-on-Board reshapes 2026 monetary-policy market psychology."
+    why_it_matters_ja: "FOMC の姿勢が、すべての AI capex ストーリーの割引率の前提になる。Powell の理事残留が 2026 年の金融政策市場心理を再構築している。"
+    why_it_matters_es: "La postura del FOMC fija el tipo de descuento contra el que se valoran todas las historias de capex de IA. Que Powell siga en la Junta reconfigura la psicología de mercado de política monetaria de 2026."
+    why_it_matters_fil: "Ang posture ng FOMC ang nagse-set sa discount rate na pinagba-base sa AI-capex stories. Ang pananatili ni Powell sa Board ang bumabago sa 2026 monetary-policy market psychology."
+    canonical_link: https://www.federalreserve.gov/monetarypolicy/fomc.htm
+    status: active
+    reviewed_by_human: true
+
+  - term: LLM
+    aliases: ["Large Language Model", "LLMs"]
+    one_liner_eli14: "A neural network trained on huge amounts of text that can read, write, and reason about language. ChatGPT, Claude, and Gemini are all LLMs."
+    one_liner_eli14_ja: "膨大なテキストで訓練され、言語を読み・書き・考えることができるニューラルネットワーク。ChatGPT、Claude、Gemini はいずれも LLM。"
+    one_liner_eli14_es: "Una red neuronal entrenada con cantidades enormes de texto que puede leer, escribir y razonar sobre lenguaje. ChatGPT, Claude y Gemini son todos LLMs."
+    one_liner_eli14_fil: "Neural network na trained sa napakaraming text na kayang magbasa, magsulat, at mag-reason sa wika. LLMs ang ChatGPT, Claude, at Gemini."
+    why_it_matters: "Every prediction in this dashboard is downstream of LLM capability, cost, and security. The cost-curve and capability-curve drive the entire 2026 thesis."
+    why_it_matters_ja: "このダッシュボードの予測はすべて LLM の性能・コスト・セキュリティの下流にある。コスト曲線と性能曲線こそが 2026 年のテーゼ全体を駆動する。"
+    why_it_matters_es: "Cada predicción en este panel es aguas abajo de la capacidad, el coste y la seguridad de los LLM. Las curvas de coste y capacidad impulsan toda la tesis de 2026."
+    why_it_matters_fil: "Lahat ng predictions sa dashboard na ito ay downstream ng LLM capability, cost, at security. Ang cost-curve at capability-curve ang nagtutulak sa buong 2026 thesis."
+    canonical_link: null
+    status: active
+    reviewed_by_human: true
+
+  - term: vLLM
+    aliases: []
+    one_liner_eli14: "An open-source server that runs large language models efficiently — does the heavy lifting between an app and the GPU. Widely used by enterprises self-hosting LLMs."
+    one_liner_eli14_ja: "大規模言語モデルを効率よく実行するオープンソースサーバー。アプリと GPU の間の重い処理を引き受ける。LLM を自社運用する企業に広く使われている。"
+    one_liner_eli14_es: "Un servidor de código abierto que ejecuta modelos de lenguaje grandes de forma eficiente — hace el trabajo pesado entre una aplicación y la GPU. Muy usado por empresas que se autoalojan los LLMs."
+    one_liner_eli14_fil: "Open-source server na efficient na nagpapatakbo ng large language models — siya ang gumagawa ng heavy work sa pagitan ng app at GPU. Ginagamit ng maraming enterprises na self-hosting ng LLMs."
+    why_it_matters: "Inference-server-as-primitive-supply-chain thesis: vLLM CVEs propagate to every enterprise running it. The control plane for cost and latency on private deployments."
+    why_it_matters_ja: "「推論サーバーがプリミティブなサプライチェーン」というテーゼの中心。vLLM の CVE は使っている全企業に波及する。プライベート配備でのコストとレイテンシの操縦盤。"
+    why_it_matters_es: "Tesis del servidor de inferencia como cadena de suministro primitiva: los CVE de vLLM se propagan a cada empresa que lo ejecuta. El plano de control de coste y latencia en despliegues privados."
+    why_it_matters_fil: "Inference-server-as-primitive-supply-chain thesis: pagdating ng vLLM CVE, kumakalat ito sa lahat ng enterprise na gumagamit. Ito ang control plane para sa cost at latency sa private deployments."
+    canonical_link: https://github.com/vllm-project/vllm
+    status: active
+    reviewed_by_human: true
+
+  - term: SGLang
+    aliases: []
+    one_liner_eli14: "Another open-source inference server, sibling to vLLM, focused on structured generation and high-throughput serving. Source of multiple high-severity 2026 CVEs."
+    one_liner_eli14_ja: "vLLM の同系統オープンソース推論サーバー。構造化生成と高スループット配信に注力。2026 年の複数の高深刻度 CVE の発生源。"
+    one_liner_eli14_es: "Otro servidor de inferencia de código abierto, hermano de vLLM, enfocado en generación estructurada y servicio de alto rendimiento. Origen de varios CVE de alta severidad en 2026."
+    one_liner_eli14_fil: "Isa pang open-source inference server, kapatid ng vLLM, naka-focus sa structured generation at high-throughput serving. Pinanggagalingan ng ilang high-severity 2026 CVE."
+    why_it_matters: "SGLang CVE-2026-5760 unpatched into May 3 was the longest-running 2026 LLM-tooling CVE — exemplar of the inference-server CVE-class thesis."
+    why_it_matters_ja: "SGLang CVE-2026-5760 が 5/3 まで未修正だったのは 2026 年最長の LLM ツール系 CVE — 推論サーバー CVE クラステーゼの代表例。"
+    why_it_matters_es: "El CVE-2026-5760 de SGLang sin parchear hasta el 3 de mayo fue el CVE de herramienta LLM más duradero de 2026 — ejemplar de la tesis de la clase CVE de servidor de inferencia."
+    why_it_matters_fil: "Ang SGLang CVE-2026-5760 na unpatched hanggang May 3 ang pinakamatagal na 2026 LLM-tooling CVE — exemplar ng inference-server CVE-class thesis."
+    canonical_link: https://github.com/sgl-project/sglang
+    status: active
+    reviewed_by_human: true
+
+  - term: Bedrock
+    aliases: ["AWS Bedrock"]
+    one_liner_eli14: "AWS's marketplace for hosted AI models — you call OpenAI, Anthropic, Meta, etc. through one Amazon API instead of each vendor's. The 'every model on every cloud' surface."
+    one_liner_eli14_ja: "AWS のホスト AI モデルマーケット。OpenAI、Anthropic、Meta などを Amazon の単一 API 経由で呼べる。「すべてのモデルがすべてのクラウドに」を体現する場。"
+    one_liner_eli14_es: "Mercado de AWS para modelos de IA alojados — llamas a OpenAI, Anthropic, Meta, etc. a través de una sola API de Amazon en lugar de la de cada proveedor. La superficie de 'cada modelo en cada nube'."
+    one_liner_eli14_fil: "Marketplace ng AWS para sa hosted AI models — tumatawag ka sa OpenAI, Anthropic, Meta, atbp. via isang Amazon API kaysa sa bawat vendor. Ang surface ng 'every model on every cloud'."
+    why_it_matters: "Bedrock + Vertex AI + Microsoft Foundry is the multi-cloud frontier-model SLA standardization substrate. OpenAI-on-Bedrock (Apr 28) ended the model-portability promise of 2024-2025."
+    why_it_matters_ja: "Bedrock + Vertex AI + Microsoft Foundry がマルチクラウド・フロンティアモデル SLA 標準化の基盤。OpenAI-on-Bedrock (4/28) が 2024-2025 年の「モデル移植性」の約束に決着をつけた。"
+    why_it_matters_es: "Bedrock + Vertex AI + Microsoft Foundry es el sustrato de estandarización de SLA para modelos frontera multinube. OpenAI-on-Bedrock (28 abr) cerró la promesa de portabilidad de modelos de 2024-2025."
+    why_it_matters_fil: "Ang Bedrock + Vertex AI + Microsoft Foundry ang substrate ng multi-cloud frontier-model SLA standardization. Ang OpenAI-on-Bedrock (Apr 28) ang nag-tapos sa model-portability promise ng 2024-2025."
+    canonical_link: https://aws.amazon.com/bedrock/
+    status: active
+    reviewed_by_human: true
+
+  - term: Foundry
+    aliases: ["Microsoft Foundry", "Foundry Local", "Azure AI Foundry"]
+    one_liner_eli14: "Microsoft's umbrella for AI-app building blocks — model serving, agent runtime, observability. Foundry Local is the on-device variant that ships with Windows."
+    one_liner_eli14_ja: "AI アプリ構築のための Microsoft の総合ブランド — モデル配信、エージェントランタイム、可観測性を束ねる。Foundry Local は Windows 同梱のオンデバイス版。"
+    one_liner_eli14_es: "Paraguas de Microsoft para los bloques de construcción de aplicaciones de IA — serving de modelos, runtime de agentes, observabilidad. Foundry Local es la variante on-device que viene con Windows."
+    one_liner_eli14_fil: "Umbrella ng Microsoft para sa AI-app building blocks — model serving, agent runtime, observability. Ang Foundry Local ang on-device variant na kasama sa Windows."
+    why_it_matters: "Foundry Agent Framework 1.0 GA + Foundry Local form the Microsoft side of the agent-control-plane thesis. Counterpart to AWS Bedrock AgentCore on the cloud side."
+    why_it_matters_ja: "Foundry Agent Framework 1.0 GA と Foundry Local は、エージェント制御プレーンテーゼの Microsoft 側を構成する。クラウド側の AWS Bedrock AgentCore に対応する位置づけ。"
+    why_it_matters_es: "Foundry Agent Framework 1.0 GA + Foundry Local conforman el lado Microsoft de la tesis del plano de control de agentes. Contrapartida del AWS Bedrock AgentCore en el lado cloud."
+    why_it_matters_fil: "Ang Foundry Agent Framework 1.0 GA + Foundry Local ang Microsoft side ng agent-control-plane thesis. Counterpart ng AWS Bedrock AgentCore sa cloud side."
+    canonical_link: https://azure.microsoft.com/en-us/products/ai-foundry
+    status: active
+    reviewed_by_human: true
+
+  - term: quantization
+    aliases: [quantize, quant]
+    one_liner_eli14: "Shrinking an AI model by storing each number with fewer bits — like saving a photo as JPEG instead of raw RAW. Loses a tiny bit of accuracy, gains a lot of speed and memory."
+    one_liner_eli14_ja: "AI モデルの各数値をより少ないビット数で保持してサイズを縮める手法 — 写真を RAW でなく JPEG で保存するイメージ。少しの精度損失と引き換えに大きな速度・メモリ改善が得られる。"
+    one_liner_eli14_es: "Encoger un modelo de IA almacenando cada número con menos bits — como guardar una foto en JPEG en vez de RAW. Pierdes un poco de precisión, ganas mucha velocidad y memoria."
+    one_liner_eli14_fil: "Pagliit sa AI model sa pamamagitan ng pag-store sa bawat numero gamit ang mas kaunting bits — parang pag-save ng photo bilang JPEG sa halip na RAW. Konting accuracy ang nawawala, malaking speed at memory ang napapala."
+    why_it_matters: "Quantization (TurboQuant, GPTQ, AWQ, FP8, 1-bit) is what makes local LLMs viable on consumer hardware. Where the inference-cost curve actually moves."
+    why_it_matters_ja: "量子化 (TurboQuant、GPTQ、AWQ、FP8、1-bit) こそがローカル LLM をコンシューマ向けハードで成立させる鍵。推論コスト曲線が実際に動く場所。"
+    why_it_matters_es: "La cuantización (TurboQuant, GPTQ, AWQ, FP8, 1-bit) es lo que hace viables los LLMs locales en hardware de consumo. Donde la curva de coste de inferencia se mueve realmente."
+    why_it_matters_fil: "Ang quantization (TurboQuant, GPTQ, AWQ, FP8, 1-bit) ang nagpapaposible sa local LLMs sa consumer hardware. Dito talaga gumagalaw ang inference-cost curve."
+    canonical_link: null
+    status: active
+    reviewed_by_human: true
+
+  - term: fine-tuning
+    aliases: [finetuning, "fine-tune"]
+    one_liner_eli14: "Taking an already-trained AI model and giving it extra training on a smaller, focused dataset — so it picks up your task or style without re-training from scratch."
+    one_liner_eli14_ja: "学習済みの AI モデルに、より小さく的を絞ったデータで追加学習をさせる手法 — ゼロから再学習せずに、自分の課題やスタイルを覚えさせる。"
+    one_liner_eli14_es: "Tomar un modelo de IA ya entrenado y darle entrenamiento extra con un conjunto de datos más pequeño y específico — para que aprenda tu tarea o estilo sin reentrenar desde cero."
+    one_liner_eli14_fil: "Pagkuha ng AI model na trained na at bigyan pa ng dagdag na training gamit ang mas maliit at focused na dataset — para matuto ito ng task o style mo nang hindi kailangang i-train muli mula sa simula."
+    why_it_matters: "Fine-tuning + quantization + 1M-context defaults are the trio that drives the local-LLM-for-daily-use leg of User Prediction 2."
+    why_it_matters_ja: "ファインチューニング + 量子化 + 1M コンテクストの三つ巴が、User Prediction 2 の「日常用途はローカル LLM」軸を駆動する。"
+    why_it_matters_es: "Fine-tuning + cuantización + contexto por defecto de 1M son el trío que impulsa la pata de 'LLM local para uso diario' de la User Prediction 2."
+    why_it_matters_fil: "Ang fine-tuning + quantization + 1M-context defaults ang trio na nagtutulak sa local-LLM-for-daily-use leg ng User Prediction 2."
+    canonical_link: null
+    status: active
+    reviewed_by_human: true
+
+  - term: RAG
+    aliases: ["Retrieval Augmented Generation", "Retrieval-Augmented Generation"]
+    one_liner_eli14: "An AI pattern where the model looks up relevant documents before answering, instead of relying only on what it memorized during training. Lets it cite fresh, specific facts."
+    one_liner_eli14_ja: "回答前にモデルが関連文書を検索し、訓練時の記憶だけに頼らず答える AI パターン。新鮮で具体的な事実を引用させられる。"
+    one_liner_eli14_es: "Un patrón de IA en el que el modelo busca documentos relevantes antes de responder, en vez de depender solo de lo que memorizó durante el entrenamiento. Permite citar hechos frescos y específicos."
+    one_liner_eli14_fil: "AI pattern kung saan tumitingin ang model sa relevant na documents bago sumagot, sa halip na umasa lang sa nakabaong sa training. Para makapag-cite ng fresh at specific na facts."
+    why_it_matters: "RAG is how enterprise AI gets to use private data without retraining. Q-RAG (ICLR 2026) extending it with RL-trained retrievers is operative research-side evidence for User Prediction 3."
+    why_it_matters_ja: "RAG は企業の AI が再訓練なしに自社データを使うための手段。Q-RAG (ICLR 2026) が RL 訓練済みリトリーバーで RAG を拡張したのは、User Prediction 3 の研究側エビデンス。"
+    why_it_matters_es: "RAG es la forma en que la IA empresarial usa datos privados sin reentrenar. Q-RAG (ICLR 2026) extendiéndolo con retrievers entrenados por RL es evidencia operativa del lado investigación para la User Prediction 3."
+    why_it_matters_fil: "Ang RAG ang paraan ng enterprise AI para magamit ang private data nang hindi nagre-retrain. Ang Q-RAG (ICLR 2026) na nag-extend nito gamit ang RL-trained retrievers ay operative research-side evidence para sa User Prediction 3."
+    canonical_link: null
+    status: active
+    reviewed_by_human: true
+
+  - term: SSTI
+    aliases: ["Server-Side Template Injection"]
+    one_liner_eli14: "A bug class where user input gets evaluated as code by a server-side template engine — so 'hello' isn't shown as text, it gets executed. The bridge from web bug to RCE."
+    one_liner_eli14_ja: "ユーザー入力がサーバ側テンプレートエンジンによってコードとして評価されてしまうバグの種類 — 入力が文字列ではなくコードとして実行される。Web バグから RCE への橋渡し。"
+    one_liner_eli14_es: "Una clase de bug en la que la entrada del usuario se evalúa como código por un motor de plantillas del lado del servidor — así 'hello' no se muestra como texto, se ejecuta. El puente del bug web al RCE."
+    one_liner_eli14_fil: "Klase ng bug kung saan ang user input ay ina-evaluate bilang code ng server-side template engine — kaya hindi text na 'hello' ang lumalabas, ie-execute ito. Tulay mula sa web bug papunta sa RCE."
+    why_it_matters: "Inference-server SSTI (LiteLLM, vLLM, SGLang) is the named 2026 attack pattern: model-tooling-layer template injection bridging from prompt path into RCE / token theft."
+    why_it_matters_ja: "推論サーバの SSTI (LiteLLM、vLLM、SGLang) こそが 2026 年に名前のついた攻撃パターン — モデルツール層のテンプレートインジェクションがプロンプト経路から RCE / トークン窃取へ橋渡しする。"
+    why_it_matters_es: "El SSTI en servidores de inferencia (LiteLLM, vLLM, SGLang) es el patrón de ataque nombrado de 2026: inyección de plantilla en la capa de herramientas del modelo, puente desde la ruta de prompt hasta RCE / robo de tokens."
+    why_it_matters_fil: "Ang inference-server SSTI (LiteLLM, vLLM, SGLang) ang pinangalanang 2026 attack pattern: template injection sa model-tooling-layer, tulay mula prompt path papuntang RCE / token theft."
+    canonical_link: null
+    status: active
+    reviewed_by_human: true
+
+  - term: SBOM
+    aliases: ["Software Bill of Materials"]
+    one_liner_eli14: "An ingredients list for software — every library, version, and dependency it uses. Lets you ask 'is the bad component anywhere in our stack?' in seconds, not weeks."
+    one_liner_eli14_ja: "ソフトウェアの「成分表」— 使われているすべてのライブラリ・バージョン・依存関係を列挙したもの。「あの脆弱な部品はうちのスタックのどこに入っている?」を週単位ではなく秒単位で答えられる。"
+    one_liner_eli14_es: "Una lista de ingredientes del software — cada biblioteca, versión y dependencia que usa. Permite preguntar '¿está el componente malo en algún lugar de nuestra pila?' en segundos, no semanas."
+    one_liner_eli14_fil: "Listahan ng sangkap ng software — bawat library, version, at dependency na gamit nito. Nagbibigay-daan na itanong ang 'nasaan kaya sa stack natin yung masamang component?' sa loob ng segundo, hindi linggo."
+    why_it_matters: "SBOM-style provenance is the substrate every CNA-issued AI-agent compliance regime ends up requiring. Without it, agentic-AI risk transfer is impossible at enterprise scale."
+    why_it_matters_ja: "SBOM 型の出所追跡は、CNA 発行の AI エージェント・コンプライアンス体制が結局必ず要求する基盤。これが無いと、エージェント AI のリスク移転は企業規模では成立しない。"
+    why_it_matters_es: "La trazabilidad estilo SBOM es el sustrato que todo régimen de cumplimiento para agentes de IA emitido por una CNA termina exigiendo. Sin él, la transferencia de riesgo de IA agéntica es imposible a escala empresarial."
+    why_it_matters_fil: "Ang SBOM-style provenance ang substrate na hinihingi sa huli ng bawat CNA-issued AI-agent compliance regime. Kung wala ito, imposibleng ma-transfer sa enterprise scale ang agentic-AI risk."
+    canonical_link: https://www.cisa.gov/sbom
+    status: active
+    reviewed_by_human: true
+
+  - term: IPO
+    aliases: ["Initial Public Offering"]
+    one_liner_eli14: "When a private company sells shares to the public for the first time and starts trading on a stock exchange. The big-bang fundraising event."
+    one_liner_eli14_ja: "未上場企業が初めて公衆に株式を売り出し、証券取引所で取引が始まる瞬間。大型資金調達のビッグバン。"
+    one_liner_eli14_es: "Cuando una empresa privada vende acciones al público por primera vez y empieza a cotizar en una bolsa. El evento de captación de capital tipo big bang."
+    one_liner_eli14_fil: "Kapag ipinagbibili ng pribadong kompanya ang shares sa publiko sa unang pagkakataon at nag-uumpisang mag-trade sa stock exchange. Ang big-bang fundraising event."
+    why_it_matters: "Cerebras IPO mid-May is the cycle's marker for AI-infrastructure capital-markets validation. Pricing tells you whether the buy-side believes the $700B 2026 capex tape."
+    why_it_matters_ja: "Cerebras の 5 月中旬 IPO は今期の AI インフラへの資本市場の信任を示すマーカー。値付けが、バイサイドが 7000 億ドルの 2026 年 capex を信じているかどうかを語る。"
+    why_it_matters_es: "La IPO de Cerebras a mediados de mayo es la marca del ciclo para la validación del capital-markets a la infraestructura de IA. El precio te dice si el buy-side cree el capex de $700B de 2026."
+    why_it_matters_fil: "Ang Cerebras IPO sa mid-May ang marker ng cycle para sa AI-infrastructure capital-markets validation. Sinasabi ng pricing kung naniniwala ang buy-side sa $700B 2026 capex tape."
+    canonical_link: null
+    status: active
+    reviewed_by_human: true
+
+  - term: VIX
+    aliases: ["CBOE Volatility Index", "fear index"]
+    one_liner_eli14: "A live measure of how much the market expects stocks to swing over the next 30 days, derived from S&P 500 option prices. Low VIX = calm; high VIX = panic."
+    one_liner_eli14_ja: "S&P 500 オプション価格から導く、向こう 30 日の株価変動への市場期待値の指標。低い VIX は平穏、高い VIX はパニック。"
+    one_liner_eli14_es: "Una medida en vivo de cuánto espera el mercado que oscilen las acciones en los próximos 30 días, derivada de los precios de opciones del S&P 500. VIX bajo = calma; VIX alto = pánico."
+    one_liner_eli14_fil: "Live na sukat kung gaano umasa ang market na maglulundag-lundag ang mga stock sa susunod na 30 araw, kinukuha sa option prices ng S&P 500. Mababang VIX = kalmado; mataas na VIX = panic."
+    why_it_matters: "VIX paired with WTI and earnings tape is how the dashboard reads macro stress on the AI-capex thesis. VIX 16.99 with WTI +12% week is the 'volatile macro week' marker."
+    why_it_matters_ja: "VIX、WTI、決算テープを組み合わせて、ダッシュボードは AI capex テーゼへのマクロ・ストレスを読む。VIX 16.99 + WTI 週 +12% は「マクロ波乱週」のマーカー。"
+    why_it_matters_es: "Combinar VIX con WTI y la cinta de resultados es como el panel lee el estrés macro sobre la tesis de capex de IA. VIX 16.99 con WTI +12% semanal es el marcador de 'semana macro volátil'."
+    why_it_matters_fil: "Ang pagpa-pares ng VIX sa WTI at earnings tape ang paraan ng dashboard para basahin ang macro stress sa AI-capex thesis. Ang VIX 16.99 + WTI +12% per week ay marker ng 'volatile macro week'."
+    canonical_link: null
+    status: active
+    reviewed_by_human: true
+
+  - term: token
+    aliases: ["LLM token", tokens]
+    one_liner_eli14: "The smallest unit an LLM reads and writes — usually 3-4 characters or part of a word. 'unbelievable' might be 3 tokens. Pricing and context limits are counted in tokens."
+    one_liner_eli14_ja: "LLM が読み書きする最小単位 — 通常 3-4 文字または単語の一部。「unbelievable」が 3 トークンになるイメージ。料金とコンテキスト上限はトークン単位で数える。"
+    one_liner_eli14_es: "La unidad más pequeña que un LLM lee y escribe — generalmente de 3 a 4 caracteres o parte de una palabra. 'unbelievable' podría ser 3 tokens. El precio y los límites de contexto se cuentan en tokens."
+    one_liner_eli14_fil: "Pinakamaliit na unit na binabasa at sinusulat ng LLM — kadalasan 3-4 characters o bahagi ng salita. Maaaring 3 tokens ang 'unbelievable'. Sa tokens binibilang ang pricing at context limits."
+    why_it_matters: "Per-token pricing is the unit that frontier labs and hyperscalers compete on. The capex-vs-margin debate translates to per-token economics."
+    why_it_matters_ja: "トークン単価こそがフロンティアラボとハイパースケーラの競争軸。capex vs マージン議論はトークン単価の経済に翻訳される。"
+    why_it_matters_es: "El precio por token es la unidad sobre la que compiten frontier labs e hyperscalers. El debate capex-vs-margen se traduce en economía por token."
+    why_it_matters_fil: "Per-token pricing ang unit na pinaglalabanan ng frontier labs at hyperscalers. Ang capex-vs-margin debate ay nagiging per-token economics."
+    canonical_link: null
+    status: active
+    reviewed_by_human: true
+
+  - term: prompt
+    aliases: ["system prompt", "user prompt"]
+    one_liner_eli14: "The text you give an LLM to set the task — instructions, examples, the actual question. The 'system prompt' is the hidden instructions a product layers on top of yours."
+    one_liner_eli14_ja: "LLM に課題を伝えるために与えるテキスト — 指示、例、実際の質問。「システムプロンプト」は、製品があなたの入力の上に重ねる隠れた指示文。"
+    one_liner_eli14_es: "El texto que le das a un LLM para fijar la tarea — instrucciones, ejemplos, la pregunta real. El 'system prompt' son las instrucciones ocultas que un producto pone sobre las tuyas."
+    one_liner_eli14_fil: "Ang text na binibigay mo sa LLM para i-set ang task — instructions, examples, mismong tanong. Ang 'system prompt' ay yung nakatagong instructions na nilalapatan ng product sa ibabaw ng sa'yo."
+    why_it_matters: "Prompts are the new programming surface — and the new attack surface. Both User Prediction 1's threat model and the Mythos red-team success story live here."
+    why_it_matters_ja: "プロンプトは新たなプログラミング面 — そして新たな攻撃面。User Prediction 1 の脅威モデルも Mythos のレッドチーム成功例も、ここで起きている。"
+    why_it_matters_es: "Los prompts son la nueva superficie de programación — y la nueva superficie de ataque. Tanto el modelo de amenaza de la User Prediction 1 como el éxito de red-team de Mythos viven aquí."
+    why_it_matters_fil: "Ang prompts ang bagong programming surface — at bagong attack surface. Dito nakatira ang threat model ng User Prediction 1 at ang Mythos red-team success story."
+    canonical_link: null
+    status: active
+    reviewed_by_human: true
+
+  - term: "prompt injection"
+    aliases: ["prompt-injection", "indirect prompt injection"]
+    one_liner_eli14: "An attack where text from a webpage, email, or document tricks an AI into ignoring its real instructions and following the attacker's instead. The XSS of the LLM era."
+    one_liner_eli14_ja: "Web ページ・メール・文書中のテキストが AI を騙して、本来の指示を無視し攻撃者の指示に従わせる攻撃。LLM 時代の XSS。"
+    one_liner_eli14_es: "Un ataque en el que el texto de una página web, correo o documento engaña a una IA para que ignore sus instrucciones reales y siga las del atacante. El XSS de la era LLM."
+    one_liner_eli14_fil: "Atake kung saan dinadaya ng text mula sa webpage, email, o document ang AI para hindi sundin ang totoong instructions nito at sundin yung sa attacker. Ang XSS ng LLM era."
+    why_it_matters: "Prompt injection is named in ATT&CK v19 as 'context poisoning' — the technique that elevated the agentic-AI threat class into a CNA-issued sub-corpus."
+    why_it_matters_ja: "プロンプトインジェクションは ATT&CK v19 で「context poisoning」として命名され、エージェント AI の脅威クラスを CNA 発行のサブコーパスに引き上げた手法。"
+    why_it_matters_es: "La inyección de prompts está nombrada en ATT&CK v19 como 'context poisoning' — la técnica que elevó la clase de amenaza de IA agéntica a un subcorpus emitido por una CNA."
+    why_it_matters_fil: "Ang prompt injection ay pinangalanan sa ATT&CK v19 na 'context poisoning' — ang technique na nagpaakyat sa agentic-AI threat class para maging CNA-issued sub-corpus."
+    canonical_link: null
+    status: active
+    reviewed_by_human: true
+
+  - term: "prompt caching"
+    aliases: ["KV cache reuse", "prefix caching"]
+    one_liner_eli14: "When an LLM stores the work it did on a long shared instructions block, so the next call reuses it instead of re-computing — way cheaper and faster."
+    one_liner_eli14_ja: "LLM が長い共有指示ブロックの計算結果を保存し、次の呼び出しで再計算せず再利用する仕組み — 大幅に安く・速くなる。"
+    one_liner_eli14_es: "Cuando un LLM guarda el trabajo hecho sobre un bloque largo de instrucciones compartidas, para que la siguiente llamada lo reutilice en lugar de recalcularlo — mucho más barato y rápido."
+    one_liner_eli14_fil: "Pag ini-store ng LLM ang ginawang computation sa mahabang shared instructions block, para gamitin muli ng susunod na call sa halip na i-compute ulit — mas mura at mabilis."
+    why_it_matters: "Prompt caching turns 'long context' from a cost problem into a cost advantage. Anthropic, Google, and OpenAI all expose it; per-token-margin disclosures will hinge on it."
+    why_it_matters_ja: "プロンプトキャッシュは「長文コンテクスト」をコスト負担からコスト優位に変える。Anthropic、Google、OpenAI のいずれも提供しており、トークン単価マージンの開示はこれに左右される。"
+    why_it_matters_es: "El prompt caching convierte el 'contexto largo' de problema de coste en ventaja de coste. Anthropic, Google y OpenAI lo exponen; la divulgación de margen por token dependerá de esto."
+    why_it_matters_fil: "Pinapaging cost-advantage ng prompt caching ang dating cost-problem na 'long context'. Inalok ito ng Anthropic, Google, at OpenAI; ang per-token-margin disclosures ay nakasalalay dito."
+    canonical_link: null
+    status: active
+    reviewed_by_human: true
+
+  - term: inference
+    aliases: ["LLM inference", serving]
+    one_liner_eli14: "Running a trained AI model to get answers — as opposed to training, which builds the model. Inference is what costs money every time someone uses your AI app."
+    one_liner_eli14_ja: "学習済み AI モデルを動かして回答を得る処理 — モデルを作る「訓練」と対をなす。AI アプリが使われるたびにコストが発生するのは推論側。"
+    one_liner_eli14_es: "Ejecutar un modelo de IA ya entrenado para obtener respuestas — frente al entrenamiento, que construye el modelo. La inferencia es lo que cuesta dinero cada vez que alguien usa tu aplicación de IA."
+    one_liner_eli14_fil: "Pagpapatakbo ng trained AI model para makakuha ng sagot — kabaligtaran ng training, na nagbu-build ng model. Ang inference ang gumagastos tuwing may gumagamit ng AI app mo."
+    why_it_matters: "Inference is where 80%+ of AI compute spend lives long-term. Inference-server CVEs, KV-cache compression, and quantization all live downstream of this distinction."
+    why_it_matters_ja: "推論こそ AI 計算費用の長期的な 80% 以上が集中する場所。推論サーバーの CVE、KV-cache 圧縮、量子化はすべてこの区別の下流。"
+    why_it_matters_es: "La inferencia es donde a largo plazo vive más del 80% del gasto en cómputo de IA. Los CVE de servidores de inferencia, la compresión de KV-cache y la cuantización viven aguas abajo de esta distinción."
+    why_it_matters_fil: "Sa inference nakatira ang 80%+ ng long-term AI compute spend. Ang inference-server CVEs, KV-cache compression, at quantization ay lahat downstream ng distinction na ito."
+    canonical_link: null
+    status: active
+    reviewed_by_human: true
+
+  - term: transformer
+    aliases: ["Transformer architecture"]
+    one_liner_eli14: "The neural-network design behind every modern LLM — invented by Google in 2017 and now powering GPT, Claude, Gemini, and friends. The 'T' in 'GPT'."
+    one_liner_eli14_ja: "現代の LLM すべての土台となるニューラルネット設計 — 2017 年に Google が発表し、GPT、Claude、Gemini などを動かしている。「GPT」の「T」。"
+    one_liner_eli14_es: "El diseño de red neuronal detrás de todo LLM moderno — inventado por Google en 2017 y hoy impulsa GPT, Claude, Gemini y compañía. La 'T' de 'GPT'."
+    one_liner_eli14_fil: "Ang neural-network design sa likod ng bawat modernong LLM — inimbento ng Google noong 2017 at ngayon ay nagpapagana sa GPT, Claude, Gemini, atbp. Ang 'T' sa 'GPT'."
+    why_it_matters: "Every assumption in the AI capex thesis — KV-cache compression, attention scaling, quantization — is downstream of how transformers compute. New architectures (Mamba, RWKV) remain niche."
+    why_it_matters_ja: "AI capex テーゼのすべての前提 — KV-cache 圧縮、アテンション・スケーリング、量子化 — はトランスフォーマーがどう計算するかの下流。新アーキテクチャ (Mamba、RWKV) はニッチに留まる。"
+    why_it_matters_es: "Cada supuesto de la tesis del capex de IA — compresión de KV-cache, escalado de atención, cuantización — vive aguas abajo de cómo computa el transformer. Las nuevas arquitecturas (Mamba, RWKV) siguen siendo nicho."
+    why_it_matters_fil: "Lahat ng assumption sa AI capex thesis — KV-cache compression, attention scaling, quantization — ay downstream ng kung paano nagkalkula ang transformers. Niche pa rin ang bagong architectures (Mamba, RWKV)."
+    canonical_link: null
+    status: active
+    reviewed_by_human: true
+
+  - term: embeddings
+    aliases: [embedding, "vector embeddings"]
+    one_liner_eli14: "Turning words, sentences, or images into long lists of numbers so you can ask 'which of these are most similar?' — math instead of keyword matching. The fuel of vector search and RAG."
+    one_liner_eli14_ja: "単語・文・画像を長い数値ベクトルに変換し、「どれが最も似ているか」を計算で問えるようにする手法 — キーワード一致ではなく数学。ベクトル検索と RAG の燃料。"
+    one_liner_eli14_es: "Convertir palabras, frases o imágenes en largas listas de números para poder preguntar '¿cuáles son los más parecidos?' — matemáticas en vez de coincidencia por palabra clave. El combustible de la búsqueda vectorial y de RAG."
+    one_liner_eli14_fil: "Pagsasalin ng salita, pangungusap, o imahe sa mahabang listahan ng numero para makapagtanong ng 'alin ang pinakamagkakatulad?' — matematika sa halip na keyword matching. Ang gasolina ng vector search at RAG."
+    why_it_matters: "Embeddings are the bridge between LLMs and your data. Vector DBs as long-context cache layers (4/24 prediction) hinges on embeddings staying cheap and high-quality."
+    why_it_matters_ja: "エンベディングは LLM と自社データを繋ぐ橋渡し。「長文コンテクストキャッシュ層としてのベクトル DB」(4/24 予測) はエンベディングが安く高品質であり続けることに依存する。"
+    why_it_matters_es: "Los embeddings son el puente entre los LLM y tus datos. La predicción del 4/24 (DBs vectoriales como capas de caché de contexto largo) depende de que los embeddings sigan siendo baratos y de alta calidad."
+    why_it_matters_fil: "Ang embeddings ang tulay sa pagitan ng LLMs at data mo. Nakasalalay sa pananatiling mura at high-quality ng embeddings ang prediction ng 4/24 (vector DBs bilang long-context cache layers)."
+    canonical_link: null
+    status: active
+    reviewed_by_human: true
+
+  - term: "tool use"
+    aliases: ["function calling", "tool calling"]
+    one_liner_eli14: "When an LLM, instead of answering with text, calls a function — search the web, run code, query a database — and feeds the result back into its reasoning."
+    one_liner_eli14_ja: "LLM が回答をテキストで返す代わりに、関数を呼び出し — Web 検索、コード実行、DB クエリ — その結果を自分の推論に取り込む仕組み。"
+    one_liner_eli14_es: "Cuando un LLM, en vez de responder con texto, llama a una función — buscar en la web, ejecutar código, consultar una base de datos — y vuelve a meter el resultado en su razonamiento."
+    one_liner_eli14_fil: "Pag tumatawag ng function ang LLM (search sa web, mag-run ng code, mag-query ng database) sa halip na sumagot ng text, at ibabalik ang resulta sa sariling reasoning niya."
+    why_it_matters: "Tool use is the primitive that turns an LLM into an agent. Tool-call audit logs are the operative observability surface that Microsoft Agent 365 ships."
+    why_it_matters_ja: "ツール使用は LLM をエージェントに変えるプリミティブ。ツール呼び出しの監査ログこそが、Microsoft Agent 365 が出荷する可観測性の場。"
+    why_it_matters_es: "El uso de herramientas es la primitiva que convierte un LLM en un agente. Los logs de auditoría de tool-calls son la superficie de observabilidad operativa que entrega Microsoft Agent 365."
+    why_it_matters_fil: "Ang tool use ang primitive na nagpapagiging agent sa LLM. Ang tool-call audit logs ang operative observability surface na ipinapadala ng Microsoft Agent 365."
+    canonical_link: null
+    status: active
+    reviewed_by_human: true
+
+  - term: AgentCore
+    aliases: ["AWS Bedrock AgentCore", "AgentCore Runtime"]
+    one_liner_eli14: "AWS Bedrock's hosted runtime for agents — managed harness, sandbox, identity, and observability. Amazon's answer to Microsoft's Foundry Agent Framework."
+    one_liner_eli14_ja: "AWS Bedrock 上のエージェント専用ホストランタイム — マネージドハーネス、サンドボックス、アイデンティティ、可観測性を提供。Microsoft Foundry Agent Framework に対する Amazon の回答。"
+    one_liner_eli14_es: "El runtime alojado para agentes de AWS Bedrock — harness gestionado, sandbox, identidad y observabilidad. Respuesta de Amazon al Foundry Agent Framework de Microsoft."
+    one_liner_eli14_fil: "Hosted runtime para sa agents ng AWS Bedrock — managed harness, sandbox, identity, at observability. Sagot ng Amazon sa Foundry Agent Framework ng Microsoft."
+    why_it_matters: "AgentCore + Foundry + Vertex AI Agent Builder is the three-cloud agent-runtime substrate. Where the agent-control-plane thesis becomes infra you can buy."
+    why_it_matters_ja: "AgentCore + Foundry + Vertex AI Agent Builder の三クラウドが、エージェント・ランタイムの基盤を構成する。エージェント制御プレーンテーゼが「買えるインフラ」になる場所。"
+    why_it_matters_es: "AgentCore + Foundry + Vertex AI Agent Builder es el sustrato de runtime de agentes en tres nubes. Donde la tesis del plano de control de agentes se convierte en infra que puedes comprar."
+    why_it_matters_fil: "Ang AgentCore + Foundry + Vertex AI Agent Builder ang three-cloud agent-runtime substrate. Dito nagiging infra na pwedeng bilhin ang agent-control-plane thesis."
+    canonical_link: https://aws.amazon.com/bedrock/agentcore/
+    status: active
+    reviewed_by_human: true
+
+  - term: "Vertex AI"
+    aliases: ["Google Vertex AI"]
+    one_liner_eli14: "Google Cloud's managed platform for AI models and agents — the place to call Gemini, host your own model, or build agents on top of Google infrastructure."
+    one_liner_eli14_ja: "Google Cloud の AI モデル・エージェント向けマネージド基盤 — Gemini の呼び出し、自前モデルのホスト、Google インフラ上のエージェント構築の窓口。"
+    one_liner_eli14_es: "Plataforma gestionada de Google Cloud para modelos y agentes de IA — el lugar para llamar a Gemini, alojar tu propio modelo o construir agentes sobre la infraestructura de Google."
+    one_liner_eli14_fil: "Managed platform ng Google Cloud para sa AI models at agents — ang lugar para tumawag sa Gemini, mag-host ng sariling model, o mag-build ng agents sa Google infrastructure."
+    why_it_matters: "Anthropic shipping Opus 4.7 across API + Bedrock + Vertex AI + Foundry is the canonical 'frontier on every cloud' pattern. Vertex AI is Google's leg of that triangle."
+    why_it_matters_ja: "Anthropic が Opus 4.7 を API + Bedrock + Vertex AI + Foundry で展開しているのが「すべてのクラウドにフロンティア」の定番パターン。Vertex AI はその三角形の Google 側の脚。"
+    why_it_matters_es: "Anthropic publicando Opus 4.7 a través de API + Bedrock + Vertex AI + Foundry es el patrón canónico de 'frontier en cada nube'. Vertex AI es la pata de Google en ese triángulo."
+    why_it_matters_fil: "Ang pag-deploy ng Anthropic ng Opus 4.7 sa API + Bedrock + Vertex AI + Foundry ang canonical 'frontier on every cloud' pattern. Ang Vertex AI ang Google leg ng triangle na yan."
+    canonical_link: https://cloud.google.com/vertex-ai
+    status: active
+    reviewed_by_human: true
+
+  - term: Unsloth
+    aliases: []
+    one_liner_eli14: "An open-source library that makes fine-tuning LLMs much faster and cheaper, especially on a single GPU. The default fine-tuning toolkit for the local-LLM crowd."
+    one_liner_eli14_ja: "LLM のファインチューニングを (特に単一 GPU 環境で) 大幅に高速化・低コスト化するオープンソースライブラリ。ローカル LLM コミュニティの標準ファインチューニングツール。"
+    one_liner_eli14_es: "Una biblioteca de código abierto que hace el fine-tuning de LLMs mucho más rápido y barato, especialmente en una sola GPU. El kit de fine-tuning por defecto para la comunidad de LLMs locales."
+    one_liner_eli14_fil: "Open-source library na ginagawang mas mabilis at mas mura ang fine-tuning ng LLMs, lalo na sa single GPU. Ang default na fine-tuning toolkit para sa local-LLM community."
+    why_it_matters: "Unsloth is a constant-coverage daily-update topic — its release cadence is the operative pulse of the local-LLM-for-daily-use leg of User Prediction 2."
+    why_it_matters_ja: "Unsloth はデイリーアップデートの常時カバー対象 — そのリリース頻度が User Prediction 2「日常用途はローカル LLM」軸の実運用上の脈拍。"
+    why_it_matters_es: "Unsloth es un tema de cobertura constante en la actualización diaria — su cadencia de lanzamientos es el pulso operativo de la pata 'LLM local para uso diario' de la User Prediction 2."
+    why_it_matters_fil: "Constant-coverage topic ang Unsloth sa daily update — ang release cadence nito ay operative pulse ng local-LLM-for-daily-use leg ng User Prediction 2."
+    canonical_link: https://github.com/unslothai/unsloth
+    status: active
+    reviewed_by_human: true
+
+  - term: open-weight
+    aliases: ["open-source model", "open weights"]
+    one_liner_eli14: "An AI model whose trained parameters can be downloaded and run yourself — versus closed models you only access via someone else's API. Llama, DeepSeek, Qwen, GLM are open-weight."
+    one_liner_eli14_ja: "学習済みパラメータをダウンロードして自分で動かせる AI モデル — 他社 API 経由でしか触れない非公開モデルの対義語。Llama、DeepSeek、Qwen、GLM がオープンウェイト。"
+    one_liner_eli14_es: "Un modelo de IA cuyos parámetros entrenados se pueden descargar y ejecutar uno mismo — frente a modelos cerrados a los que solo se accede vía la API de otra persona. Llama, DeepSeek, Qwen y GLM son open-weight."
+    one_liner_eli14_fil: "AI model kung saan pwede mong i-download at patakbuhin mismo ang trained parameters — kabaligtaran ng closed models na via API lang ng iba. Open-weight ang Llama, DeepSeek, Qwen, at GLM."
+    why_it_matters: "Open-weight model quality has caught up enough that User Prediction 2's 'local LLMs for daily use' leg has cohort-scale supply: DeepSeek V4, Qwen 3.6, Kimi K2.6, GLM-5.1."
+    why_it_matters_ja: "オープンウェイトモデルの品質が追いついた結果、User Prediction 2 の「日常用途はローカル LLM」軸はコホート規模の供給を得た: DeepSeek V4、Qwen 3.6、Kimi K2.6、GLM-5.1。"
+    why_it_matters_es: "La calidad de los modelos open-weight ha alcanzado lo suficiente para que la pata 'LLM local para uso diario' de la User Prediction 2 tenga oferta a escala de cohorte: DeepSeek V4, Qwen 3.6, Kimi K2.6, GLM-5.1."
+    why_it_matters_fil: "Sapat na nahabol ng open-weight model quality kaya may cohort-scale supply na ang 'local LLMs for daily use' leg ng User Prediction 2: DeepSeek V4, Qwen 3.6, Kimi K2.6, GLM-5.1."
+    canonical_link: null
+    status: active
+    reviewed_by_human: true
+
+  - term: zero-day
+    aliases: ["0day", "0-day", "zero day"]
+    one_liner_eli14: "A bug attackers know about and exploit before the vendor has had a chance to fix it — patch is on day zero of public knowledge. The most expensive bug class on the underground market."
+    one_liner_eli14_ja: "ベンダーが修正できる前から攻撃者が知り悪用しているバグ — 公開初日 (day 0) には既にパッチが無い状態。地下市場で最も高値のバグ種類。"
+    one_liner_eli14_es: "Un bug que los atacantes conocen y explotan antes de que el proveedor haya tenido oportunidad de parchearlo — el parche está en el día cero del conocimiento público. La clase de bug más cara en el mercado clandestino."
+    one_liner_eli14_fil: "Bug na alam at ginagamit na ng attackers bago pa nagagawa ng vendor ang patch — wala pang patch sa unang araw (day zero) na nalalaman ito. Pinakamahal na klase ng bug sa underground market."
+    why_it_matters: "Anthropic Mythos Preview's 'thousands of zero-day vulnerabilities' discovered via autonomous red-teaming reframes the zero-day economy itself — supply now produced at industrial scale."
+    why_it_matters_ja: "Anthropic Mythos Preview が自律レッドチームで発見した「数千件のゼロデイ」は、ゼロデイ経済そのものを再定義する — 供給が産業規模で生産されるようになった。"
+    why_it_matters_es: "Los 'miles de vulnerabilidades zero-day' descubiertas por el red-team autónomo de Anthropic Mythos Preview reformulan la propia economía del zero-day — la oferta ahora se produce a escala industrial."
+    why_it_matters_fil: "Binabago ng 'thousands of zero-day vulnerabilities' na natuklasan ng autonomous red-teaming ng Anthropic Mythos Preview ang mismong zero-day economy — sa industrial scale na ang supply."
+    canonical_link: null
+    status: active
+    reviewed_by_human: true
+
+  - term: jailbreak
+    aliases: ["LLM jailbreak", "model jailbreak"]
+    one_liner_eli14: "A prompt that talks an LLM out of its safety rules — getting it to produce content the model is supposed to refuse. The LLM cousin of social engineering."
+    one_liner_eli14_ja: "LLM を安全規則から外れるよう説得するプロンプト — モデルが本来拒否すべき内容を出させる手口。LLM 版のソーシャルエンジニアリング。"
+    one_liner_eli14_es: "Un prompt que convence a un LLM de saltarse sus reglas de seguridad — logrando que produzca contenido que el modelo debería rechazar. El primo LLM de la ingeniería social."
+    one_liner_eli14_fil: "Prompt na hinihikayat ang LLM na lampasan ang safety rules nito — para magproduce ng content na dapat sana'y i-refuse. LLM cousin ng social engineering."
+    why_it_matters: "Jailbreak resistance + sandboxing + zero-trust together is what enterprises pay for. Anthropic's Project Glasswing 50-org gated channel exists because raw API access has insufficient containment."
+    why_it_matters_ja: "脱獄耐性 + サンドボックス + Zero Trust の三点こそが企業が対価を払う対象。Anthropic Project Glasswing の 50 組織ゲート付きチャネルは、生 API アクセスでは封じ込めが不十分だから存在する。"
+    why_it_matters_es: "La resistencia al jailbreak + sandboxing + zero-trust juntos es lo que pagan las empresas. El canal con barrera de 50 organizaciones de Project Glasswing de Anthropic existe porque el acceso API en bruto no contiene lo suficiente."
+    why_it_matters_fil: "Ang jailbreak resistance + sandboxing + zero-trust ang sama-samang binabayaran ng enterprises. Umiiral ang 50-org gated channel ng Project Glasswing ng Anthropic dahil hindi sapat ang containment ng raw API access."
+    canonical_link: null
+    status: active
+    reviewed_by_human: true
+
+  - term: "red team"
+    aliases: ["red-teaming", "red-team"]
+    one_liner_eli14: "A security team whose job is to attack their own systems before real attackers do. AI red teams use LLMs to find bugs, jailbreaks, and unsafe outputs at scale."
+    one_liner_eli14_ja: "実際の攻撃者より先に自社システムを攻撃するのが仕事のセキュリティチーム。AI レッドチームは LLM を使ってバグ・脱獄・安全でない出力を大規模に発見する。"
+    one_liner_eli14_es: "Un equipo de seguridad cuya misión es atacar sus propios sistemas antes que los atacantes reales. Los red teams de IA usan LLMs para encontrar bugs, jailbreaks y salidas inseguras a escala."
+    one_liner_eli14_fil: "Security team na ang trabaho ay atakihin ang sariling system nila bago gawin ng totoong attackers. Ang AI red teams ay gumagamit ng LLMs para makahanap ng bugs, jailbreaks, at unsafe outputs sa scale."
+    why_it_matters: "Autonomous red-teaming is the operative case-study for User Prediction 1 (zero-trust era) and User Prediction 3 (RL-trained agents) — Mythos Preview is the visible example."
+    why_it_matters_ja: "自律レッドチームは User Prediction 1 (Zero Trust 時代) と User Prediction 3 (RL 訓練エージェント) 双方の運用ケーススタディ — Mythos Preview がその可視例。"
+    why_it_matters_es: "El red-teaming autónomo es el caso operativo de la User Prediction 1 (era zero-trust) y de la User Prediction 3 (agentes entrenados por RL) — Mythos Preview es el ejemplo visible."
+    why_it_matters_fil: "Ang autonomous red-teaming ang operative case-study para sa User Prediction 1 (zero-trust era) at User Prediction 3 (RL-trained agents) — Mythos Preview ang visible example."
+    canonical_link: null
+    status: active
+    reviewed_by_human: true
+
+  - term: CISA
+    aliases: ["Cybersecurity and Infrastructure Security Agency"]
+    one_liner_eli14: "The US federal agency that runs national cybersecurity defense — issues KEV catalog, BOD-22-01 deadlines, and coordinates incident response across critical infrastructure."
+    one_liner_eli14_ja: "米連邦のサイバーセキュリティ防衛を担う機関 — KEV カタログ発行、BOD-22-01 期限の運用、重要インフラのインシデント対応調整を行う。"
+    one_liner_eli14_es: "La agencia federal de EE. UU. que dirige la defensa nacional de ciberseguridad — emite el catálogo KEV, los plazos de la BOD-22-01 y coordina la respuesta a incidentes en infraestructuras críticas."
+    one_liner_eli14_fil: "US federal agency na nangangasiwa ng national cybersecurity defense — naglalabas ng KEV catalog, BOD-22-01 deadlines, at nag-coordinate ng incident response sa critical infrastructure."
+    why_it_matters: "CISA's KEV adds + AI-Infra KEV sub-catalog hypothesis is the regulatory pivot of the AI-Infra-CVE-class thesis. Federal patch deadlines turn CVE scores into enterprise calendar events."
+    why_it_matters_ja: "CISA の KEV 追加と「AI インフラ KEV サブカタログ」仮説は AI インフラ CVE クラステーゼの規制軸。連邦のパッチ期限が CVE スコアを企業カレンダーの予定に変える。"
+    why_it_matters_es: "Las altas en KEV de CISA + la hipótesis del subcatálogo KEV de AI-Infra son el pivote regulatorio de la tesis de la clase CVE de AI-Infra. Los plazos federales de parcheo convierten las puntuaciones CVE en eventos del calendario empresarial."
+    why_it_matters_fil: "Ang KEV adds ng CISA + AI-Infra KEV sub-catalog hypothesis ang regulatory pivot ng AI-Infra-CVE-class thesis. Pinapatutuyo ng federal patch deadlines ang CVE scores bilang enterprise calendar events."
+    canonical_link: https://www.cisa.gov/
+    status: active
+    reviewed_by_human: true
+
+  - term: SQLi
+    aliases: ["SQL injection", "SQL Injection"]
+    one_liner_eli14: "A bug class where user input gets concatenated into a database query, letting an attacker rewrite the query and steal or modify data. The web's oldest never-fully-fixed bug class."
+    one_liner_eli14_ja: "ユーザー入力がそのまま DB クエリに連結され、攻撃者がクエリを書き換えてデータを盗んだり改変したりできるバグの種類。Web で最も古く、未だに完全に消えないバグ種類。"
+    one_liner_eli14_es: "Una clase de bug en la que la entrada del usuario se concatena en una consulta de base de datos, permitiendo al atacante reescribir la consulta y robar o modificar datos. La clase de bug más antigua de la web nunca del todo arreglada."
+    one_liner_eli14_fil: "Klase ng bug kung saan dinurugtong ang user input sa database query, kaya kayang i-rewrite ng attacker ang query at magnakaw o magbago ng data. Pinakamatandang web bug class na hindi pa fully naayos."
+    why_it_matters: "LiteLLM CVE-2026-42208 (CVSS 9.3) is pre-auth SQLi against the Authorization header — one row leaks OpenAI org keys + Anthropic admin tokens + AWS Bedrock IAM. Single AI-stack SQLi = pan-vendor blast radius."
+    why_it_matters_ja: "LiteLLM CVE-2026-42208 (CVSS 9.3) は Authorization ヘッダに対する事前認証 SQLi — 1 行で OpenAI 組織キー + Anthropic 管理トークン + AWS Bedrock IAM が漏れる。AI スタックの単一 SQLi = 全ベンダー横断の被害範囲。"
+    why_it_matters_es: "El CVE-2026-42208 de LiteLLM (CVSS 9.3) es un SQLi preautenticación contra la cabecera Authorization — una sola fila filtra claves de organización de OpenAI + tokens admin de Anthropic + IAM de AWS Bedrock. Un único SQLi en la pila de IA = radio de impacto multi-proveedor."
+    why_it_matters_fil: "Ang LiteLLM CVE-2026-42208 (CVSS 9.3) ay pre-auth SQLi laban sa Authorization header — isang row lang, leaked na ang OpenAI org keys + Anthropic admin tokens + AWS Bedrock IAM. Single AI-stack SQLi = pan-vendor blast radius."
+    canonical_link: null
+    status: active
+    reviewed_by_human: true
+
+  - term: BOD-22-01
+    aliases: ["Binding Operational Directive 22-01"]
+    one_liner_eli14: "The CISA directive that turns the KEV catalog into a hard rule for US federal agencies: if a CVE lands on KEV, you have a fixed number of days to patch it. The teeth behind KEV."
+    one_liner_eli14_ja: "KEV カタログを米連邦機関にとっての強制ルールに変える CISA 指令 — KEV 入りした CVE は決められた日数以内に修正必須。KEV の歯。"
+    one_liner_eli14_es: "La directiva de CISA que convierte el catálogo KEV en una regla firme para las agencias federales de EE. UU.: si un CVE entra en KEV, hay un número fijo de días para parchearlo. Los dientes detrás de KEV."
+    one_liner_eli14_fil: "Direktiba ng CISA na ginagawang mahigpit na panuntunan ang KEV catalog para sa US federal agencies: pagkasok ng CVE sa KEV, may takdang araw para mai-patch. Ang ngipin ng KEV."
+    why_it_matters: "BOD-22-01 is what turns 'high CVSS' into 'enterprise calendar event' — the May 15 federal deadline on Linux Copy Fail KEV is the single largest install-base 14-day-deadline of 2026."
+    why_it_matters_ja: "BOD-22-01 こそが「高い CVSS」を「企業カレンダーの予定」に変える機構 — Linux Copy Fail KEV の 5/15 連邦期限は 2026 年最大インストールベースの 14 日期限。"
+    why_it_matters_es: "BOD-22-01 es lo que convierte 'CVSS alto' en 'evento del calendario empresarial' — el plazo federal del 15 de mayo sobre el KEV de Linux Copy Fail es el plazo de 14 días con mayor base instalada de 2026."
+    why_it_matters_fil: "Ang BOD-22-01 ang nagpapatuloy sa 'mataas na CVSS' patungo sa 'enterprise calendar event' — ang May 15 federal deadline para sa Linux Copy Fail KEV ang pinakamalaking install-base 14-day-deadline ng 2026."
+    canonical_link: https://www.cisa.gov/news-events/directives/bod-22-01-reducing-significant-risk-known-exploited-vulnerabilities
+    status: active
+    reviewed_by_human: true
+
+  - term: "NIST AI RMF"
+    aliases: ["AI RMF", "NIST AI Risk Management Framework"]
+    one_liner_eli14: "NIST's playbook for managing AI system risk — voluntary, but it's the document US federal agencies and many enterprises align procurement and audits to."
+    one_liner_eli14_ja: "AI システムリスク管理に関する NIST のプレイブック — 任意だが、米連邦機関と多くの企業が調達と監査を整合させる文書。"
+    one_liner_eli14_es: "El manual de NIST para gestionar el riesgo de los sistemas de IA — voluntario, pero es el documento al que las agencias federales de EE. UU. y muchas empresas alinean adquisiciones y auditorías."
+    one_liner_eli14_fil: "Playbook ng NIST para sa pag-manage ng AI system risk — voluntary, pero ito ang dokumentong sinusunod ng US federal agencies at maraming enterprises sa procurement at audits."
+    why_it_matters: "NIST AI RMF + EU AI Act + ISO/IEC 42001 are the three reference frames CSAI's STAR for AI Catastrophic Risk Annex aligns to — the regulatory triad agentic-AI compliance ends up triangulating against."
+    why_it_matters_ja: "NIST AI RMF + EU AI Act + ISO/IEC 42001 が CSAI STAR for AI Catastrophic Risk Annex の参照する三つの枠組み — エージェント AI のコンプライアンスが結局は三角測量する規制トライアド。"
+    why_it_matters_es: "NIST AI RMF + EU AI Act + ISO/IEC 42001 son los tres marcos de referencia con los que se alinea el Annex STAR for AI Catastrophic Risk de CSAI — la tríada regulatoria contra la que la conformidad de IA agéntica acaba triangulando."
+    why_it_matters_fil: "Ang NIST AI RMF + EU AI Act + ISO/IEC 42001 ang tatlong reference frames na inaayon ng CSAI STAR for AI Catastrophic Risk Annex — ang regulatory triad na kinikilala ng agentic-AI compliance."
+    canonical_link: https://www.nist.gov/itl/ai-risk-management-framework
+    status: active
+    reviewed_by_human: true
+
+  - term: "EU AI Act"
+    aliases: ["AI Act", "European AI Act"]
+    one_liner_eli14: "The European Union's AI law — categorizes AI systems by risk level and sets rules for each category, with the heaviest rules on biometric ID, education, hiring, and law enforcement."
+    one_liner_eli14_ja: "欧州連合の AI 法 — AI システムをリスクレベルで分類し、カテゴリごとにルールを定める。最も重い規制は生体認証 ID、教育、採用、法執行に課される。"
+    one_liner_eli14_es: "La ley de IA de la Unión Europea — clasifica los sistemas de IA por nivel de riesgo y fija reglas para cada categoría, con las normas más estrictas en identificación biométrica, educación, contratación y aplicación de la ley."
+    one_liner_eli14_fil: "Batas ng European Union sa AI — kine-classify ang AI systems ayon sa risk level at nagtatakda ng rules per category, pinakamabigat sa biometric ID, education, hiring, at law enforcement."
+    why_it_matters: "EU AI Act compliance phases through 2026-2027 are the operative deadline structure non-EU AI vendors trade against. CSAI / NIST / EU triangulation defines what 'compliant' means in cross-border procurement."
+    why_it_matters_ja: "2026-2027 年に段階適用される EU AI Act が、EU 域外 AI ベンダーにとっての運用上の期限構造。CSAI / NIST / EU の三角測量が国境横断調達における「適合」の定義を決める。"
+    why_it_matters_es: "Las fases de cumplimiento de la EU AI Act durante 2026-2027 son la estructura de plazos operativa contra la que los proveedores de IA no UE negocian. La triangulación CSAI / NIST / UE define qué significa 'cumplir' en compras transfronterizas."
+    why_it_matters_fil: "Ang compliance phases ng EU AI Act sa 2026-2027 ang operative deadline structure na pinagba-base ng non-EU AI vendors. Ang CSAI / NIST / EU triangulation ang nagde-define kung ano ang 'compliant' sa cross-border procurement."
+    canonical_link: https://artificialintelligenceact.eu/
+    status: active
+    reviewed_by_human: true
+
+  - term: WTI
+    aliases: ["West Texas Intermediate", "WTI crude"]
+    one_liner_eli14: "The benchmark price for US crude oil — the headline number in 'oil up 12% this week' stories. Set in financial markets, watched globally."
+    one_liner_eli14_ja: "米国産原油のベンチマーク価格 — 「今週原油 12% 高」といった見出しの数字。金融市場で形成され、世界中が注目する。"
+    one_liner_eli14_es: "El precio de referencia del crudo estadounidense — la cifra titular en historias de 'petróleo +12% esta semana'. Se fija en los mercados financieros y se sigue globalmente."
+    one_liner_eli14_fil: "Benchmark price para sa US crude oil — ang headline number sa mga storyang 'oil up 12% this week'. Itinatakda sa financial markets at minamatyagan ng buong mundo."
+    why_it_matters: "WTI + Iran-China sanctions + April Jobs print is the macro stress-test the AI-capex tape weathers each week. WTI ~$105 (+12% wk) is the cleanest single-week energy bid since Q1 2025."
+    why_it_matters_ja: "WTI + イラン・中国制裁 + 4 月雇用統計が AI capex テープが毎週受けるマクロ・ストレステスト。WTI 約 105 ドル (週 +12%) は 2025 年 Q1 以来最もきれいな単週エネルギー高。"
+    why_it_matters_es: "WTI + sanciones Irán-China + cifras de empleo de abril es la prueba de estrés macro que la cinta de capex de IA aguanta cada semana. WTI ~$105 (+12% sem) es la apuesta energética semanal más limpia desde Q1 2025."
+    why_it_matters_fil: "Ang WTI + Iran-China sanctions + April Jobs print ang macro stress-test na pinagdadaanan ng AI-capex tape kada linggo. Ang WTI ~$105 (+12% wk) ang pinakamalinis na single-week energy bid mula Q1 2025."
+    canonical_link: null
+    status: active
+    reviewed_by_human: true
+
+  - term: YoY
+    aliases: ["year over year", "year-over-year"]
+    one_liner_eli14: "Comparing this period to the same period one year ago — Q1 2026 vs Q1 2025. Strips out seasonal effects so you see real growth."
+    one_liner_eli14_ja: "今期と 1 年前の同期を比較する手法 — 2026 年 Q1 と 2025 年 Q1 を比べる、など。季節要因を除き、真の成長を見せる。"
+    one_liner_eli14_es: "Comparar este periodo con el mismo periodo de hace un año — Q1 2026 vs Q1 2025. Elimina los efectos estacionales para ver el crecimiento real."
+    one_liner_eli14_fil: "Pagkumpara ng kasalukuyang period sa parehong period isang taon nakaraan — Q1 2026 vs Q1 2025. Tinatanggal ang seasonal effects para makita ang totoong growth."
+    why_it_matters: "Earnings prints headline YoY revenue and EPS — 'AAPL Q2 +17% YoY' is the comparable that priced the iPhone-17 super-cycle into the May tape."
+    why_it_matters_ja: "決算発表は YoY の売上と EPS が見出しになる — 「AAPL Q2 売上 YoY +17%」が iPhone 17 スーパーサイクルを 5 月相場に織り込ませた指標。"
+    why_it_matters_es: "Los informes de resultados encabezan con ingresos y EPS YoY — 'AAPL Q2 +17% YoY' es la cifra comparable que metió el supercicilo del iPhone-17 en la cinta de mayo."
+    why_it_matters_fil: "Sa earnings prints, headline ang YoY revenue at EPS — ang 'AAPL Q2 +17% YoY' ang comparable na nag-pricing sa iPhone-17 super-cycle papasok sa May tape."
+    canonical_link: null
+    status: active
+    reviewed_by_human: true
+
+  - term: ARR
+    aliases: ["Annual Recurring Revenue"]
+    one_liner_eli14: "For subscription businesses, the predictable yearly revenue you'd get if everyone kept paying their current plan. The number SaaS investors care about most."
+    one_liner_eli14_ja: "サブスク事業で、現状の契約者全員が同じプランを払い続けた場合に得られる、予測可能な年間売上。SaaS 投資家が最も重視する数字。"
+    one_liner_eli14_es: "Para negocios de suscripción, los ingresos anuales predecibles que tendrías si todos siguieran pagando su plan actual. El número que más importa a los inversores SaaS."
+    one_liner_eli14_fil: "Para sa subscription businesses, ang predictable yearly revenue kung lahat ay magpapatuloy sa current plan nila. Ang numerong pinakaiintindihan ng SaaS investors."
+    why_it_matters: "OpenAI's $25B annualized revenue (Sacra) and MSFT's $37B AI run-rate are the disclosed ARR-class numbers anchoring the AI-revenue-disclosure-rewrite thesis."
+    why_it_matters_ja: "OpenAI の年率 250 億ドル売上 (Sacra) と MSFT の AI ラン・レート 370 億ドルが、開示済みの ARR 級数値で、AI 売上開示書き換えテーゼの基準点。"
+    why_it_matters_es: "Los $25B anualizados de ingresos de OpenAI (Sacra) y los $37B de run-rate de IA de MSFT son las cifras tipo ARR divulgadas que anclan la tesis de la reescritura de la divulgación de ingresos de IA."
+    why_it_matters_fil: "Ang $25B annualized revenue ng OpenAI (Sacra) at $37B AI run-rate ng MSFT ang disclosed ARR-class numbers na nag-aanchor sa AI-revenue-disclosure-rewrite thesis."
+    canonical_link: null
+    status: active
+    reviewed_by_human: true
+
+  - term: SEC
+    aliases: ["Securities and Exchange Commission"]
+    one_liner_eli14: "The US regulator that oversees public stock markets — sets disclosure rules, polices fraud, and enforces what companies must report in 10-Q and 10-K filings."
+    one_liner_eli14_ja: "米国の公開株式市場を監督する規制当局 — 開示ルールを定め、不正を取り締まり、10-Q や 10-K で企業が何を報告すべきかを執行する。"
+    one_liner_eli14_es: "El regulador estadounidense que supervisa los mercados de acciones cotizadas — fija reglas de divulgación, persigue el fraude y exige lo que las empresas deben reportar en los informes 10-Q y 10-K."
+    one_liner_eli14_fil: "US regulator na nagba-bantay sa public stock markets — nagtatakda ng disclosure rules, humuhuli ng fraud, at nagpapatupad sa kung ano ang kailangang i-report ng companies sa 10-Q at 10-K filings."
+    why_it_matters: "SEC AI-revenue concept release Q4 2026 (Pred #3) is the operative regulatory escalation that turns the disclosure-rewrite thesis from buy-side pressure into a rule-text deadline."
+    why_it_matters_ja: "SEC の Q4 2026 「AI 売上コンセプトリリース」(予測 #3) が、開示書き換えテーゼをバイサイド圧力から規制文言の期限に変える運用上の規制エスカレーション。"
+    why_it_matters_es: "El concept release del SEC sobre ingresos de IA en Q4 2026 (Pred #3) es la escalada regulatoria operativa que convierte la tesis de reescritura de divulgación de presión del buy-side a un plazo de texto regulatorio."
+    why_it_matters_fil: "Ang SEC AI-revenue concept release Q4 2026 (Pred #3) ang operative regulatory escalation na ginagawang disclosure-rewrite thesis mula buy-side pressure papasok sa rule-text deadline."
+    canonical_link: https://www.sec.gov/
+    status: active
+    reviewed_by_human: true
+
+  - term: DoD
+    aliases: ["Department of Defense", "Pentagon"]
+    one_liner_eli14: "The US military's procurement and operations command — runs the world's largest classified-network IT estate. AI-procurement decisions ripple from DoD outward to allied governments."
+    one_liner_eli14_ja: "米軍の調達・運用司令部 — 世界最大の機密ネットワーク IT 環境を運営する。AI 調達の決定は DoD から同盟国政府へ波及する。"
+    one_liner_eli14_es: "El mando de adquisiciones y operaciones del ejército estadounidense — opera el mayor patrimonio TI de redes clasificadas del mundo. Las decisiones de adquisición de IA se propagan desde el DoD hacia los gobiernos aliados."
+    one_liner_eli14_fil: "Procurement at operations command ng US military — pinapatakbo ang pinakamalaking classified-network IT estate sa mundo. Mula sa DoD lumalaganap ang AI-procurement decisions papuntang allied governments."
+    why_it_matters: "Pentagon's 8-vendor classified-network list with Anthropic excluded as 'supply chain risk' is the first publicly-disclosed presidential-administration vs frontier-AI-lab autonomous-weapons-use stand-off — and the canonical 2026 procurement-precedent."
+    why_it_matters_ja: "国防総省の 8 社機密ネットワーク調達リストから Anthropic が「サプライチェーンリスク」として除外された件は、公表された大統領府 vs フロンティア AI ラボの自律兵器利用初対決 — 2026 年の調達前例の代表。"
+    why_it_matters_es: "La lista de 8 proveedores de redes clasificadas del Pentágono con Anthropic excluido como 'riesgo de cadena de suministro' es el primer enfrentamiento administración-presidencial vs laboratorio de IA frontera sobre uso de armas autónomas divulgado públicamente — y el precedente canónico de adquisiciones de 2026."
+    why_it_matters_fil: "Ang 8-vendor classified-network list ng Pentagon kung saan na-exclude ang Anthropic bilang 'supply chain risk' ang first publicly-disclosed presidential-administration vs frontier-AI-lab autonomous-weapons-use stand-off — at ang canonical 2026 procurement-precedent."
+    canonical_link: null
+    status: active
+    reviewed_by_human: true
+
+  - term: arxiv
+    aliases: ["arXiv", "arxiv preprint"]
+    one_liner_eli14: "An open-access preprint server where researchers publish papers before — or instead of — formal peer review. The default frontline for AI research; cited as 'arxiv 2604.XXXXX'."
+    one_liner_eli14_ja: "正式なピアレビュー前 (または代わり) に研究者が論文を公開するオープンアクセスのプレプリントサーバー。AI 研究の標準的な最前線で、「arxiv 2604.XXXXX」と引用される。"
+    one_liner_eli14_es: "Un servidor de preprints de acceso abierto donde los investigadores publican artículos antes — o en lugar — de la revisión por pares formal. El frente predeterminado de la investigación en IA; citado como 'arxiv 2604.XXXXX'."
+    one_liner_eli14_fil: "Open-access preprint server kung saan inilalathala ng mga researcher ang papers bago — o sa halip na — formal peer review. Default na frontline ng AI research; sinasanggunian bilang 'arxiv 2604.XXXXX'."
+    why_it_matters: "Most LLM/agent research lands on arxiv first; the substrate-densification signal in User Prediction 3 reads as 'cluster of arxiv ids in one design surface in one week'."
+    why_it_matters_ja: "LLM/エージェント研究の多くはまず arxiv に投稿される。User Prediction 3 の基盤密度信号は「同じ設計領域に 1 週間で arxiv ID が群がる」現象として読まれる。"
+    why_it_matters_es: "La mayoría de la investigación sobre LLM/agentes aterriza primero en arxiv; la señal de densificación del sustrato en la User Prediction 3 se lee como 'racimo de IDs de arxiv en una sola superficie de diseño en una sola semana'."
+    why_it_matters_fil: "Karamihan sa LLM/agent research ay naka-arxiv muna; ang substrate-densification signal sa User Prediction 3 ay binabasa bilang 'cluster ng arxiv ids sa isang design surface sa isang linggo'."
+    canonical_link: https://arxiv.org/
+    status: active
+    reviewed_by_human: true
+
+  - term: GPU
+    aliases: ["Graphics Processing Unit", "GPUs"]
+    one_liner_eli14: "A chip originally built for video graphics that turned out to be perfect for the math behind AI — thousands of small calculations in parallel. Currently the bottleneck for training and inference."
+    one_liner_eli14_ja: "もともと映像描画用に作られたチップで、AI の数学処理 (大量の小計算を並列実行) に最適だと判明したもの。現状、訓練と推論のボトルネック。"
+    one_liner_eli14_es: "Un chip originalmente creado para gráficos de vídeo que resultó perfecto para la matemática detrás de la IA — miles de pequeños cálculos en paralelo. Actualmente el cuello de botella para entrenamiento e inferencia."
+    one_liner_eli14_fil: "Chip na orihinal na ginawa para sa video graphics na napag-alamang perfect para sa math sa likod ng AI — libu-libong maliliit na calculation parallel. Sa ngayon, ito ang bottleneck para sa training at inference."
+    why_it_matters: "GPU supply (especially NVIDIA H/B-series + AMD MI400) gates the entire AI-capex story. AMD's OpenAI 6GW first-deployment H2 2026 is the sharpest single read on chip-availability timing."
+    why_it_matters_ja: "GPU 供給 (特に NVIDIA H/B シリーズと AMD MI400) が AI capex ストーリー全体の門番。AMD の OpenAI 6GW H2 2026 初配備は、チップ供給タイミングを最も鋭く読める指標。"
+    why_it_matters_es: "El suministro de GPUs (especialmente NVIDIA H/B-series + AMD MI400) limita toda la historia de capex de IA. El primer despliegue de 6GW para OpenAI de AMD en H2 2026 es la lectura más nítida del timing de disponibilidad de chips."
+    why_it_matters_fil: "Ang GPU supply (lalo na ang NVIDIA H/B-series + AMD MI400) ang gate ng buong AI-capex story. Ang AMD OpenAI 6GW first-deployment H2 2026 ang pinaka-malinaw na single read sa chip-availability timing."
+    canonical_link: null
+    status: active
+    reviewed_by_human: true
+
+  - term: OpenClaw
+    aliases: []
+    one_liner_eli14: "An open-source AI agent harness — the scaffold around an LLM that runs tools, manages memory, and handles plans. Treats every problem as new (no built-in skill-learning layer). 346K+ GitHub stars."
+    one_liner_eli14_ja: "オープンソースの AI エージェントハーネス — LLM の周りでツール実行・メモリ管理・計画処理を担う足場。問題を毎回ゼロから扱う方針 (スキル学習層は持たない)。GitHub スター 34.6 万超。"
+    one_liner_eli14_es: "Un harness de agente IA de código abierto — el armazón alrededor de un LLM que ejecuta herramientas, gestiona memoria y planes. Trata cada problema como nuevo (sin capa de aprendizaje de skills). 346K+ stars en GitHub."
+    one_liner_eli14_fil: "Open-source AI agent harness — ang scaffold sa paligid ng LLM na nag-rurun ng tools, nag-mamanage ng memory, at humahawak ng plans. Tinuturing na bago ang bawat problema (walang built-in na skill-learning layer). 346K+ stars sa GitHub."
+    why_it_matters: "OpenClaw is the breadth-of-integration reference point in the Agent Harness topic — Claude Code + GitHub Copilot CLI + ollama launch all hook into it. Microsoft Agent 365 names it as a local-agent integration path."
+    why_it_matters_ja: "OpenClaw は Agent Harness トピックにおける「統合幅」の基準点 — Claude Code + GitHub Copilot CLI + ollama launch がいずれも統合する先。Microsoft Agent 365 はローカルエージェント統合経路として名指しする。"
+    why_it_matters_es: "OpenClaw es el punto de referencia de 'amplitud de integración' en el tema Agent Harness — Claude Code + GitHub Copilot CLI + ollama launch se conectan a él. Microsoft Agent 365 lo nombra como vía de integración de agentes locales."
+    why_it_matters_fil: "Ang OpenClaw ang breadth-of-integration reference point sa Agent Harness topic — Claude Code + GitHub Copilot CLI + ollama launch ay nag-a-attach dito. Pinapangalanan ito ng Microsoft Agent 365 bilang local-agent integration path."
+    canonical_link: https://github.com/openclaw/openclaw
+    status: active
+    reviewed_by_human: true
+
+  - term: NemoClaw
+    aliases: ["NVIDIA NemoClaw"]
+    one_liner_eli14: "NVIDIA's enterprise-wrapped version of OpenClaw — adds audit logging, access control, and guardrails on top, plus NIM-based GPU-locked configuration. Announced at GTC 2026."
+    one_liner_eli14_ja: "NVIDIA が OpenClaw を企業向けにラップした版 — 監査ログ、アクセス制御、ガードレールを追加し、NIM ベースの GPU 専有構成を持つ。GTC 2026 で発表。"
+    one_liner_eli14_es: "La versión de OpenClaw envuelta para empresas por NVIDIA — añade registro de auditoría, control de acceso y guardrails encima, más configuración GPU bloqueada basada en NIM. Anunciada en GTC 2026."
+    one_liner_eli14_fil: "Enterprise-wrapped na bersyon ng OpenClaw ng NVIDIA — nagdagdag ng audit logging, access control, at guardrails, plus NIM-based GPU-locked configuration. Inanunsyo sa GTC 2026."
+    why_it_matters: "NemoClaw normalizes OpenClaw's ecosystem for enterprise procurement. The 'breadth-with-guardrails' configuration the agent-control-plane thesis predicts becomes default in regulated buyers."
+    why_it_matters_ja: "NemoClaw は OpenClaw のエコシステムを企業調達向けに整合させる。エージェント制御プレーンテーゼが予測する「ガードレール付き統合幅」構成が、規制対象バイヤーの既定値になる経路。"
+    why_it_matters_es: "NemoClaw normaliza el ecosistema OpenClaw para la compra empresarial. La configuración 'amplitud con guardrails' que la tesis del plano de control de agentes predice se vuelve por defecto en compradores regulados."
+    why_it_matters_fil: "Pinapatatag ng NemoClaw ang ecosystem ng OpenClaw para sa enterprise procurement. Ang 'breadth-with-guardrails' configuration na hinuhulaan ng agent-control-plane thesis ay nagiging default sa regulated buyers."
+    canonical_link: https://nvidianews.nvidia.com/news/nvidia-announces-nemoclaw
+    status: active
+    reviewed_by_human: true
+
+  - term: "Hermes Agents"
+    aliases: ["Hermes Agent", Hermes]
+    one_liner_eli14: "An agent harness with a self-learned skills layer at its core — emphasizes 'depth of learning' over OpenClaw's 'breadth of integration.' Skills accumulate across runs instead of starting from scratch."
+    one_liner_eli14_ja: "中核に自己学習スキル層を持つエージェントハーネス — OpenClaw の「統合幅」に対し「学習深度」を重視する設計。スキルは毎回ゼロから始めるのではなく、実行を跨いで蓄積される。"
+    one_liner_eli14_es: "Un harness de agente con una capa de skills aprendidas por sí mismas en su núcleo — enfatiza 'profundidad de aprendizaje' frente a la 'amplitud de integración' de OpenClaw. Las skills se acumulan a través de ejecuciones en vez de empezar desde cero."
+    one_liner_eli14_fil: "Agent harness na may self-learned skills layer sa core — binibigyang-diin ang 'depth of learning' sa halip na 'breadth of integration' ng OpenClaw. Naka-aaccumulate ang skills sa kabuuan ng runs, hindi nagsisimulang muli sa simula."
+    why_it_matters: "Hermes operationalizes the User Prediction 3 thesis (RL-trained agents that improve via feedback). The 'breadth vs depth' axis — OpenClaw vs Hermes — is the operative design choice for 2026 agent procurement."
+    why_it_matters_ja: "Hermes は User Prediction 3 (フィードバックで成長する RL 訓練エージェント) を運用形に落とす存在。「統合幅 vs 学習深度」軸 — OpenClaw vs Hermes — は 2026 年のエージェント調達における運用上の設計選択。"
+    why_it_matters_es: "Hermes operativiza la tesis de la User Prediction 3 (agentes entrenados por RL que mejoran vía feedback). El eje 'amplitud vs profundidad' — OpenClaw vs Hermes — es la elección de diseño operativa para la adquisición de agentes de 2026."
+    why_it_matters_fil: "Ino-operationalize ng Hermes ang thesis ng User Prediction 3 (RL-trained agents na umuunlad sa feedback). Ang 'breadth vs depth' axis — OpenClaw vs Hermes — ang operative design choice para sa 2026 agent procurement."
+    canonical_link: null
+    status: active
+    reviewed_by_human: true
+
+  - term: Multica
+    aliases: [multica, "multi-profiling for Local LLM"]
+    one_liner_eli14: "An open-source vendor-neutral self-hosted orchestrator for running multiple LLM profiles — different models, settings, and routes — from one place. The reference 'multi-profiling' tool for local LLMs."
+    one_liner_eli14_ja: "ベンダ中立・自前ホスト型のオープンソース・オーケストレータで、複数の LLM プロファイル (モデル・設定・経路) を一箇所から運用するためのもの。ローカル LLM 向け「マルチプロファイリング」の標準実装。"
+    one_liner_eli14_es: "Un orquestador de código abierto, neutral en proveedores y autoalojado para ejecutar múltiples perfiles de LLM — diferentes modelos, ajustes y rutas — desde un solo lugar. La herramienta de referencia de 'multi-profiling' para LLMs locales."
+    one_liner_eli14_fil: "Open-source, vendor-neutral, self-hosted orchestrator para mag-run ng multiple LLM profiles — iba't ibang models, settings, at routes — mula sa iisang lugar. Reference na 'multi-profiling' tool para sa local LLMs."
+    why_it_matters: "Multi-profiling matters when User Prediction 2's 'cloud APIs for advanced + local LLMs for daily' split goes mainstream — Multica is the canonical open-source orchestrator pattern that split runs through. Project flag: news-driven coverage only."
+    why_it_matters_ja: "User Prediction 2 の「高度処理はクラウド API、日常はローカル LLM」分業が主流化する際、マルチプロファイリングが意味を持つ。Multica はその分業を実装する代表的なオープンソース・オーケストレータ。プロジェクト規定はニュース駆動カバーのみ。"
+    why_it_matters_es: "El multi-profiling importa cuando la división 'APIs cloud para avanzado + LLMs locales para diario' de la User Prediction 2 se vuelve mainstream — Multica es el patrón canónico de orquestador de código abierto a través del cual se ejecuta esa división. Marca del proyecto: cobertura solo guiada por noticias."
+    why_it_matters_fil: "Mahalaga ang multi-profiling pagdating ng split ng User Prediction 2 ('cloud APIs for advanced + local LLMs for daily') sa mainstream — Multica ang canonical open-source orchestrator pattern para sa split na yan. Project flag: news-driven coverage lang."
+    canonical_link: https://github.com/multica-ai/multica
+    status: active
+    reviewed_by_human: true
+
+  - term: "Physical AI"
+    aliases: ["physical AI", "embodied AI", robotics]
+    one_liner_eli14: "AI that lives in physical machines — humanoid robots, factory arms, autonomous construction robots. Tesla Optimus, Apptronik Apollo, Figure 03, and Atlas are the marquee 2026 examples."
+    one_liner_eli14_ja: "物理的な機械に宿る AI — ヒューマノイドロボット、工場アーム、自律建設ロボットなど。2026 年の代表例は Tesla Optimus、Apptronik Apollo、Figure 03、Atlas。"
+    one_liner_eli14_es: "IA que vive en máquinas físicas — robots humanoides, brazos de fábrica, robots de construcción autónomos. Tesla Optimus, Apptronik Apollo, Figure 03 y Atlas son los ejemplos estelares de 2026."
+    one_liner_eli14_fil: "AI na nakatira sa pisikal na mga makina — humanoid robots, factory arms, autonomous construction robots. Tesla Optimus, Apptronik Apollo, Figure 03, at Atlas ang marquee examples ng 2026."
+    why_it_matters: "Physical AI is the cycle's first hyperscaler-style physical-AI capex commitment surface — Tesla Optimus 1M-units/year nameplate at Fremont and SoftBank Roze AI datacenter-construction robots are the structural markers."
+    why_it_matters_ja: "Physical AI は今期、ハイパースケーラ型の物理 AI 設備投資コミットが初めて可視化された面 — Tesla Optimus の Fremont 100 万台/年スレートと SoftBank Roze AI のデータセンター建設ロボットが構造的マーカー。"
+    why_it_matters_es: "Physical AI es la primera superficie del ciclo con compromisos de capex de IA física estilo hyperscaler — la placa de 1M unidades/año de Tesla Optimus en Fremont y los robots de construcción de centros de datos de SoftBank Roze AI son los marcadores estructurales."
+    why_it_matters_fil: "Ang Physical AI ang first surface ng cycle para sa hyperscaler-style physical-AI capex commitment — ang 1M-units/year nameplate ng Tesla Optimus sa Fremont at ang datacenter-construction robots ng SoftBank Roze AI ang structural markers."
+    canonical_link: null
+    status: active
+    reviewed_by_human: true
+
+  - term: "local LLM"
+    aliases: ["on-device LLM", "self-hosted LLM"]
+    one_liner_eli14: "An LLM that runs on your own hardware — laptop, phone, on-prem server — instead of being called via someone else's cloud API. Privacy, cost, and offline capability are the typical drivers."
+    one_liner_eli14_ja: "自分のハードウェア (ノート PC、スマホ、社内サーバ) で動く LLM — 他社クラウド API を経由しない使い方。プライバシー、コスト、オフライン対応が主な動機。"
+    one_liner_eli14_es: "Un LLM que se ejecuta en tu propio hardware — portátil, móvil, servidor on-prem — en vez de llamarse vía la API cloud de otra persona. Privacidad, coste y capacidad offline son los motores típicos."
+    one_liner_eli14_fil: "LLM na tumatakbo sa sarili mong hardware — laptop, phone, on-prem server — sa halip na tawagin via cloud API ng iba. Privacy, cost, at offline capability ang typical drivers."
+    why_it_matters: "Local LLM is the 'daily use' leg of User Prediction 2 — and the topic-coverage spine of news-topics.md (Platform / Embedded / Models / Optimization all key off it). Bonsai-8B at 44 tok/s on iPhone 17 Pro Max is the canonical 2026 viability marker."
+    why_it_matters_ja: "ローカル LLM は User Prediction 2 の「日常用途」軸であり、news-topics.md のトピック構成の背骨 (プラットフォーム / 組み込み / モデル / 最適化はすべてこの軸でぶら下がる)。Bonsai-8B が iPhone 17 Pro Max で 44 tok/s 動作するのが 2026 年の実用性マーカー。"
+    why_it_matters_es: "El LLM local es la pata de 'uso diario' de la User Prediction 2 — y la columna vertebral temática de news-topics.md (Plataforma / Embebido / Modelos / Optimización dependen de él). Bonsai-8B a 44 tok/s en iPhone 17 Pro Max es el marcador canónico de viabilidad en 2026."
+    why_it_matters_fil: "Ang local LLM ang 'daily use' leg ng User Prediction 2 — at backbone ng topic coverage sa news-topics.md (Platform / Embedded / Models / Optimization ay lahat naka-key dito). Ang Bonsai-8B sa 44 tok/s sa iPhone 17 Pro Max ang canonical 2026 viability marker."
+    canonical_link: null
+    status: active
+    reviewed_by_human: true
