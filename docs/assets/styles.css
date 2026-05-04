@@ -1,5 +1,5 @@
 /* ============================================================
-   Future Prediction Theme Intelligence Dashboard
+   Future Prediction Intelligence Dashboard
    Cold low-temperature palette per UI (1).md §8.1
    ============================================================ */
 
@@ -164,10 +164,12 @@ body[data-tool="pan"]    #graph-canvas { cursor: move; }
 body.panel-open #top-menu-stack {
   transform: translateX(calc(-100vw + 100% + 32px));
 }
+/* Slide the title row to the right of the relocated menu instead of
+   fading it out — keeps OBSERVATORY ⇆ PROBE reachable while a node's
+   detail is open. The 260px shift covers the widest the menu stack
+   typically renders (~220-240px) plus a small gap. */
 body.panel-open #meta-header {
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 200ms ease;
+  transform: translateX(260px);
 }
 /* Mobile-only utility: hidden by default, surfaced under media query. */
 .mobile-only { display: none; }
@@ -251,6 +253,13 @@ body.panel-open #meta-header {
   /* On narrow screens the panel covers the full width, so don't bother. */
   body.panel-open #top-menu-stack {
     transform: none;
+  }
+  /* Detail panel covers the whole viewport on narrow screens, so the
+     slide has nowhere to go — fall back to fading the meta-header. */
+  body.panel-open #meta-header {
+    transform: none;
+    opacity: 0;
+    pointer-events: none;
   }
   #top-menu-stack {
     /* Give more room on narrow screens — scrollbar lives inside. */
@@ -433,6 +442,10 @@ body.panel-open #meta-header {
   z-index: 9;
   pointer-events: none;
   color: var(--text-main);
+  /* Mirror the menu-stack transition so the title row slides in sync
+     with the menu when the detail panel opens. */
+  transition: transform 260ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  will-change: transform;
 }
 #meta-header .meta-title-row {
   display: flex;
@@ -821,6 +834,12 @@ body.panel-open #meta-header {
   #hint-strip { display: none; }
   #meta-header { max-width: 55vw; }
   #detail-panel { width: 100vw; }
+  /* On phones the OBSERVATORY ⇆ PROBE switch and the scope/window/build
+     subtitle compete with the canvas for room. Drop both. The AI-notice
+     line stays — generative-AI disclosure is not negotiable on any
+     viewport. */
+  #meta-header .view-toggle { display: none; }
+  #meta-header .meta-sub    { display: none; }
 }
 
 /* ------------------------------------------------------------
