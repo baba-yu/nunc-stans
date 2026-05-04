@@ -95,6 +95,10 @@
       "tooltip.need_window":   "Need deadline window",
       "tooltip.task_runway":   "Task runway window",
       "tooltip.bridge_target": "Bridge target window",
+      "view.observatory":      "OBSERVATORY",
+      "view.probe":            "PROBE",
+      "probe.tab.predictions": "PREDICTIONS",
+      "probe.tab.news":        "NEWS",
     },
     ja: {
       "scope.mix":      "MIX",
@@ -169,6 +173,10 @@
       "tooltip.need_window":   "Need の期限ウィンドウ",
       "tooltip.task_runway":   "タスク実行ウィンドウ",
       "tooltip.bridge_target": "Bridge の目標ウィンドウ",
+      "view.observatory":      "観測",
+      "view.probe":            "探査",
+      "probe.tab.predictions": "PREDICTIONS",
+      "probe.tab.news":        "NEWS",
     },
     es: {
       "scope.mix":      "MIX",
@@ -243,6 +251,10 @@
       "tooltip.need_window":   "Ventana de plazo de la necesidad",
       "tooltip.task_runway":   "Ventana de plazo de la tarea",
       "tooltip.bridge_target": "Ventana objetivo del bridge",
+      "view.observatory":      "OBSERVATORY",
+      "view.probe":            "PROBE",
+      "probe.tab.predictions": "PREDICTIONS",
+      "probe.tab.news":        "NEWS",
     },
     fil: {
       "scope.mix":      "MIX",
@@ -317,6 +329,10 @@
       "tooltip.need_window":   "Deadline window ng Pangangailangan",
       "tooltip.task_runway":   "Runway window ng gawain",
       "tooltip.bridge_target": "Target window ng bridge",
+      "view.observatory":      "OBSERVATORY",
+      "view.probe":            "PROBE",
+      "probe.tab.predictions": "PREDICTIONS",
+      "probe.tab.news":        "NEWS",
     },
   };
 
@@ -423,7 +439,10 @@
     // Viewport
     zoom: 1.0,
     pan: { x: 0, y: 0 },
-    rotation: { x: 0, y: 0 },
+    // Slight default tilt so the depth axis is immediately legible —
+    // important in MIX where BIZ is laid on the YZ plane and a flat
+    // (rotation = 0,0) projection would collapse its z-spread to a line.
+    rotation: { x: 0.3, y: 0.55 },
 
     // Tool: "rotate" or "pan" — primary empty-space drag behavior.
     // shift/space temporarily flips to the other tool regardless of setting.
@@ -441,6 +460,11 @@
 
     // Active locale code (en|ja|es|fil). Persisted alongside scope/window.
     locale: "en",
+
+    // Active sub-tab inside the PROBE view ("predictions" | "news").
+    // Only meaningful when state.view === "probe". Not persisted — each
+    // session re-enters PROBE on PREDICTIONS by default.
+    probeTab: "predictions",
 
     // Active snapshot date (YYYYMMDD) or null when on live data.
     // Persisted in localStorage so a refresh keeps the user's history view.
@@ -597,7 +621,19 @@
   }
 
   function zFor(node) {
-    const range = Z_RANGE_BY_TYPE[node.type] || 40;
+    let range = Z_RANGE_BY_TYPE[node.type] || 40;
+    // In MIX, force the two scopes onto orthogonal slabs:
+    //   - TECH on the XY plane → squash z near 0
+    //   - BIZ on the YZ plane → fan z out far so depth carries the spread
+    // In single-scope views the per-type Z range stays as the natural
+    // wobble that gives rotation something to reveal.
+    if (state.scopeId === "mix" && node && node.scope_id) {
+      if (node.scope_id === "tech") {
+        range = Math.min(range, 18);
+      } else if (node.scope_id === "business") {
+        range = Math.max(range, 220);
+      }
+    }
     const t = hashUnit(node.id) * 2 - 1; // -1..1
     return t * range;
   }
@@ -772,6 +808,32 @@
 
   /* ---------------- Simulation ---------------- */
 
+  // In MIX scope, lay TECH and BIZ on orthogonal planes so they read as
+  // two distinct slabs in 3D rather than one collapsed line:
+  //   - TECH on the XY plane: free to spread in x and y, z compressed
+  //     near 0 (handled in zFor).
+  //   - BIZ on the YZ plane: x clamped tight to center via a strong forceX
+  //     pull, z spread wide (handled in zFor), y free.
+  // In single-scope views every node shares the scope so we degenerate
+  // back to a uniformly-weighted forceX centered on cx.
+  function scopeAwareForceX(cx, k) {
+    const km = (typeof k === "number") ? k : 1;
+    const force = d3.forceX(cx);
+    if (state.scopeId !== "mix") {
+      return force.strength(0.10 * km);
+    }
+    return force.strength((d) => {
+      // BIZ nodes get a much stronger pull toward cx so they collapse to
+      // a thin x-slice. TECH nodes get the standard gentle pull so they
+      // can fan out in xy.
+      let s;
+      if (d && d.scope_id === "business")    s = 0.55;
+      else if (d && d.scope_id === "tech")   s = 0.04;
+      else                                    s = 0.10;
+      return s * km;
+    });
+  }
+
   function rebuildSimulation(opts) {
     const { preservePriorPositions = false } = opts || {};
     const g = currentGraph();
@@ -844,7 +906,10 @@
     });
 
     const cx = state.width / 2, cy = state.height / 2;
-    const pullX = d3.forceX(cx).strength(0.08 * k);
+    // scopeAwareForceX bakes the per-node strength schedule (BIZ tight,
+    // TECH loose in MIX; uniform 0.10 elsewhere). k folds in the
+    // scope-switch dampening multiplier.
+    const pullX = scopeAwareForceX(cx, k);
     const pullY = d3.forceY(cy).strength(0.08 * k);
     const collide = d3.forceCollide().radius((d) => radiusFor(d) + 6).strength(0.85);
 
@@ -1682,7 +1747,8 @@
       resizeCanvas();
       if (state.simulation) {
         const cx = state.width / 2, cy = state.height / 2;
-        state.simulation.force("x", d3.forceX(cx).strength(0.08));
+        // scopeAwareForceX already bakes its own per-node strength.
+        state.simulation.force("x", scopeAwareForceX(cx, 1));
         state.simulation.force("y", d3.forceY(cy).strength(0.08));
         state.simulation.alpha(0.3).restart();
       }
@@ -1855,8 +1921,8 @@
     // other rebuild trigger to pick up. Always rebuild on window
     // switch so the canvas matches the filter immediately.
     rebuildSimulation({ preservePriorPositions: true });
-    if (state.view === "list")     renderListView();
-    if (state.view === "evidence") renderEvidenceView();
+    if (state.view === "probe" && state.probeTab === "predictions") renderListView();
+    if (state.view === "probe" && state.probeTab === "news")        renderEvidenceView();
     if (state.selectedNodeId) {
       const n = nodeById(state.selectedNodeId);
       if (n) openDetailPanel(n);
@@ -2083,6 +2149,17 @@
       const el = document.querySelector(sel);
       if (el) el.textContent = localeStr(key);
     };
+    const mAll = (sel, key) => {
+      document.querySelectorAll(sel).forEach((el) => {
+        el.textContent = localeStr(key);
+      });
+    };
+    m('.view-toggle-btn[data-view="graph"]', "view.observatory");
+    m('.view-toggle-btn[data-view="probe"]', "view.probe");
+    // PREDICTIONS / NEWS sub-toggle exists once in #list-view and once in
+    // #evidence-view, so retranslate both copies on locale change.
+    mAll('.probe-tab-btn[data-probe-tab="predictions"]', "probe.tab.predictions");
+    mAll('.probe-tab-btn[data-probe-tab="news"]',        "probe.tab.news");
     m('.menu-btn.tab[data-scope="mix"]',      "scope.mix");
     m('.menu-btn.tab[data-scope="tech"]',     "scope.tech");
     m('.menu-btn.tab[data-scope="business"]', "scope.business");
@@ -2158,11 +2235,11 @@
       if (n) openDetailPanel(n);
     }
     // Stream A: glossary tooltips bake the locale into the rendered
-    // <abbr title="…">. Re-render LIST / EVIDENCE so the new locale's
-    // tooltip strings (and label translations) take effect without
-    // needing a page reload.
-    if (state.view === "list") renderListView();
-    if (state.view === "evidence") renderEvidenceView();
+    // <abbr title="…">. Re-render the active PROBE sub-tab so the new
+    // locale's tooltip strings (and label translations) take effect
+    // without needing a page reload.
+    if (state.view === "probe" && state.probeTab === "predictions") renderListView();
+    if (state.view === "probe" && state.probeTab === "news")        renderEvidenceView();
   }
 
   // ----- Snapshot navigator (feature/locale) -----
@@ -3466,13 +3543,14 @@
 
   /* ---------------- Stream F + G: alt views ---------------- */
 
-  // Stream G: render the flat LIST view from the current scope's
-  // graph data + active filters. Stream F: render the EVIDENCE view
-  // from docs/data/evidence-reverse.json.
+  // PROBE/PREDICTIONS: flat list of predictions for the current scope,
+  // built from the same graph JSON as OBSERVATORY plus the on-screen
+  // filters. PROBE/NEWS: evidence reverse-view from
+  // docs/data/evidence-reverse.json, click-to-highlight in OBSERVATORY.
   //
-  // Both views overlay the graph canvas — the menu-btn.view click
-  // hides the canvas and shows the appropriate panel, then refreshes
-  // the body. Switching back to GRAPH undoes both.
+  // Both alt-view sections overlay the graph canvas — the OBSERVATORY ⇆
+  // PROBE switch in #meta-header hides the canvas and shows whichever
+  // PROBE sub-tab is active, then refreshes the body.
 
   let _evidenceReverseCache = null;
 
@@ -3488,9 +3566,22 @@
     return _evidenceReverseCache;
   }
 
+  // Top-level view is "graph" (OBSERVATORY) or "probe" (PROBE). The PROBE
+  // view has a sub-tab — state.probeTab ∈ {"predictions","news"} — driving
+  // which alt-view section (#list-view vs #evidence-view) is shown.
+  //
+  // Back-compat: callers that pass "list" / "evidence" are translated to
+  // ("probe", probeTab) so existing internal jumps keep working.
   function setView(view) {
+    if (view === "list") {
+      state.probeTab = "predictions";
+      view = "probe";
+    } else if (view === "evidence") {
+      state.probeTab = "news";
+      view = "probe";
+    }
     state.view = view;
-    document.querySelectorAll(".menu-btn.view").forEach((b) => {
+    document.querySelectorAll(".view-toggle-btn").forEach((b) => {
       const on = b.dataset.view === view;
       b.classList.toggle("is-active", on);
       b.setAttribute("aria-checked", on ? "true" : "false");
@@ -3500,17 +3591,20 @@
     const list = document.getElementById("list-view");
     const evid = document.getElementById("evidence-view");
     const isGraph = view === "graph";
+    const probeTab = state.probeTab || "predictions";
+    const showPredictions = view === "probe" && probeTab === "predictions";
+    const showNews        = view === "probe" && probeTab === "news";
     if (canvas) canvas.style.display = isGraph ? "" : "none";
     if (labels) labels.style.display = isGraph ? "" : "none";
-    if (list) list.hidden = view !== "list";
-    if (evid) evid.hidden = view !== "evidence";
-    // Toggle body class so CSS can hide top-menu / category-menu /
-    // meta-header / detail-panel / hint-strip when the user is on
-    // LIST or EVIDENCE — the alt-views own the full viewport.
+    if (list) list.hidden = !showPredictions;
+    if (evid) evid.hidden = !showNews;
+    // Toggle body class so CSS can swap GRAPH-only chrome for the
+    // PROBE-mode layout (top-menu / hint-strip / detail-panel hidden,
+    // meta-header trimmed but kept so the OBSERVATORY toggle stays).
     document.body.classList.toggle("alt-view-mode", !isGraph);
     if (!isGraph) {
       // Close the right slide-in panel when leaving GRAPH so an
-      // open node detail doesn't bleed into the alt-view.
+      // open node detail doesn't bleed into the PROBE view.
       const dp = document.getElementById("detail-panel");
       if (dp) {
         dp.classList.remove("open");
@@ -3518,8 +3612,24 @@
         document.body.classList.remove("panel-open");
       }
     }
-    if (view === "list") renderListView();
-    if (view === "evidence") renderEvidenceView();
+    updateProbeTabButtons();
+    if (showPredictions) renderListView();
+    if (showNews) renderEvidenceView();
+  }
+
+  function updateProbeTabButtons() {
+    const tab = state.probeTab || "predictions";
+    document.querySelectorAll(".probe-tab-btn").forEach((b) => {
+      const on = b.dataset.probeTab === tab;
+      b.classList.toggle("is-active", on);
+      b.setAttribute("aria-checked", on ? "true" : "false");
+    });
+  }
+
+  function setProbeTab(tab) {
+    if (tab !== "predictions" && tab !== "news") return;
+    state.probeTab = tab;
+    setView("probe");
   }
 
   // Stream G LIST: full predictions list with cascading filters
@@ -3774,15 +3884,19 @@
   }
 
   function attachAltViewHandlers() {
-    document.querySelectorAll(".menu-btn.view").forEach((btn) => {
+    // OBSERVATORY ⇆ PROBE switch in #meta-header.
+    document.querySelectorAll(".view-toggle-btn").forEach((btn) => {
       btn.addEventListener("click", () => setView(btn.dataset.view));
     });
-    document.querySelectorAll("[data-view-back]").forEach((btn) => {
-      btn.addEventListener("click", () => setView("graph"));
+    // PREDICTIONS ⇆ NEWS sub-toggle inside PROBE (one set in each alt-view).
+    document.querySelectorAll(".probe-tab-btn").forEach((btn) => {
+      btn.addEventListener("click", () => setProbeTab(btn.dataset.probeTab));
     });
-    // Re-render LIST when any of its filters change. Scope and Category
+    // Re-render PREDICTIONS when any of its filters change. Scope and Category
     // changes also clear downstream selections so cascading stays sane.
-    const reRender = () => { if (state.view === "list") renderListView(); };
+    const reRender = () => {
+      if (state.view === "probe" && state.probeTab === "predictions") renderListView();
+    };
     const onChange = (id, fn) => {
       const el = document.getElementById(id);
       if (el) el.addEventListener("change", fn);

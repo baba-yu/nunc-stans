@@ -434,11 +434,51 @@ body.panel-open #meta-header {
   pointer-events: none;
   color: var(--text-main);
 }
+#meta-header .meta-title-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
 #meta-header .title {
   font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.04em;
   text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+}
+
+/* OBSERVATORY ⇆ PROBE segmented switch — sits next to the page title.
+   Container is interactive; meta-header itself is pointer-events:none so the
+   ambient label / notice text stays click-through over the canvas. */
+.view-toggle {
+  display: inline-flex;
+  align-items: stretch;
+  pointer-events: auto;
+  background: rgba(10, 22, 38, 0.78);
+  border: 1px solid var(--panel-border);
+  border-radius: 999px;
+  padding: 2px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+}
+.view-toggle-btn {
+  border: 0;
+  background: transparent;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  padding: 4px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 140ms ease, color 140ms ease;
+}
+.view-toggle-btn:hover {
+  color: var(--text-main);
+}
+.view-toggle-btn.is-active {
+  background: var(--menu-active);
+  color: var(--menu-active-text);
 }
 #meta-header .meta-sub {
   font-size: 11px;
@@ -1036,29 +1076,22 @@ details.full-prediction[open] > summary {
   margin-bottom: 0;
 }
 
-/* Stream F + G (Phase 3): VIEW toggle in the top menu + the LIST and
-   EVIDENCE alternate views that overlay the graph canvas when active. */
-.menu-btn.view {
-  /* Reuses .menu-btn / .menu-btn.tab styling defined elsewhere — only
-     the active state needs the same accent treatment as scope tabs. */
-}
-.menu-btn.view.is-active {
-  color: var(--menu-active-text);
-  background: var(--menu-active);
-  border-color: var(--menu-active);
-}
+/* PROBE alternate views (predictions / news) overlay the graph canvas when
+   the OBSERVATORY ⇆ PROBE switch in the meta-header flips to PROBE. */
 
-/* When a non-GRAPH view is active, hide all the GRAPH-only chrome
-   (top menu, category menu, meta header, hint strip, mobile tool
-   toggle, right detail panel) so the alt-view owns the whole
-   viewport. The user explicitly requested this — having the menu +
-   detail panel hovering over LIST/EVIDENCE was distracting. */
+/* In PROBE mode, hide GRAPH-only chrome (top menu, category menu, hint strip,
+   mobile tool toggle, right detail panel). Keep #meta-header so the
+   OBSERVATORY ⇆ PROBE switch and the page title stay visible — but trim its
+   ambient subtitle / AI notice so the alt-view body has room. */
 body.alt-view-mode #top-menu-stack,
-body.alt-view-mode #meta-header,
 body.alt-view-mode #hint-strip,
 body.alt-view-mode #tool-toggle,
 body.alt-view-mode #detail-panel,
 body.alt-view-mode #app-status {
+  display: none !important;
+}
+body.alt-view-mode #meta-header .meta-sub,
+body.alt-view-mode #meta-header .meta-ai-notice {
   display: none !important;
 }
 body.alt-view-mode {
@@ -1070,56 +1103,61 @@ body.alt-view-mode {
   position: fixed;
   inset: 0;
   background: var(--bg-0);
-  padding: 18px 22px 24px;
+  /* Top padding clears the now-always-visible #meta-header (title row).
+     Slightly extra room so the toggle doesn't crowd content when the
+     title row wraps on narrow viewports. */
+  padding: 72px 22px 24px;
   overflow: auto;
   z-index: 5;
   color: var(--text-main);
 }
 .alt-view[hidden] { display: none; }
 .alt-view-head {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  grid-template-areas: "back title" "filters filters";
-  column-gap: 14px;
-  row-gap: 6px;
-  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   margin-bottom: 12px;
 }
-.alt-view-back {
-  grid-area: back;
+
+/* PREDICTIONS ⇆ NEWS sub-toggle inside PROBE. Mirrors .view-toggle styling
+   but lives in the alt-view header rather than the meta-header. */
+.probe-tab-toggle {
+  align-self: flex-start;
+  display: inline-flex;
+  background: rgba(10, 22, 38, 0.78);
+  border: 1px solid var(--panel-border);
+  border-radius: 999px;
+  padding: 2px;
+}
+.probe-tab-btn {
+  border: 0;
   background: transparent;
   color: var(--text-muted);
-  border: 1px solid var(--panel-border);
-  border-radius: 4px;
-  font-size: 12px;
-  letter-spacing: 0.05em;
-  padding: 5px 10px;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  padding: 5px 14px;
+  border-radius: 999px;
   cursor: pointer;
-  font-family: inherit;
-  transition: color 120ms ease, border-color 120ms ease, background 120ms ease;
+  transition: background 140ms ease, color 140ms ease;
 }
-.alt-view-back:hover {
+.probe-tab-btn:hover {
   color: var(--text-main);
-  border-color: var(--menu-active);
-  background: rgba(24, 199, 216, 0.08);
 }
-.alt-view-head h2 {
-  grid-area: title;
-  margin: 0;
-  font-size: 16px;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+.probe-tab-btn.is-active {
+  background: var(--menu-active);
+  color: var(--menu-active-text);
 }
+
 .alt-view-head > p.muted {
-  grid-column: 1 / -1;
   margin: 0;
 }
 .list-filters {
-  grid-area: filters;
   display: flex;
   gap: 14px;
   align-items: center;
-  margin: 4px 0 6px;
+  margin: 0;
   font-size: 12px;
   color: var(--text-muted);
   flex-wrap: wrap;
