@@ -398,6 +398,105 @@
     }
     return (node && node[field]) || "";
   }
+  // Pull a locale-aware ELI14 string from a prediction's detail block.
+  // The graph's reasoning_locales fan-out is keyed by reasoning field
+  // first (because/given/so_that/landing/eli14) then by locale, e.g.
+  //   detail.reasoning_locales.eli14.ja
+  // Falls back to the EN locale, then the legacy non-locale field.
+  function localizedEli14(detail) {
+    const loc = state.locale || "en";
+    const rl = detail && detail.reasoning_locales;
+    if (rl && rl.eli14) {
+      if (rl.eli14[loc]) return rl.eli14[loc];
+      if (rl.eli14.en)   return rl.eli14.en;
+    }
+    return (detail && detail.reasoning && detail.reasoning.eli14) || "";
+  }
+
+  // Parse common freeform "when" strings (task.when on a need's task)
+  // into a [start, end] date range. The data pipeline currently
+  // doesn't backfill structured task.target_start_date /
+  // target_end_date fields, so this is a pragmatic stopgap until
+  // those land — see design/FIXME.md.
+  // Recognised patterns:
+  //   "Q[1-4] YYYY"         → that quarter's calendar range
+  //   "H[1-2] YYYY"         → that half's calendar range
+  //   "YYYY-MM-DD"          → that single day (zero-width window)
+  //   "YYYY"                → that whole calendar year
+  // Returns null when nothing parses, so the caller can fall back.
+  function parseFreeformWhen(text) {
+    if (!text) return null;
+    const s = String(text);
+    const fmt = (y, m, d) => {
+      const date = new Date(Date.UTC(y, m, d));
+      return date.toISOString().slice(0, 10);
+    };
+    // Q-style quarter
+    const qm = s.match(/Q([1-4])\s+(\d{4})/i);
+    if (qm) {
+      const q = parseInt(qm[1], 10);
+      const y = parseInt(qm[2], 10);
+      const startMonth = (q - 1) * 3;
+      return { start: fmt(y, startMonth, 1), end: fmt(y, startMonth + 3, 0) };
+    }
+    // Half-year
+    const hm = s.match(/H([12])\s+(\d{4})/i);
+    if (hm) {
+      const h = parseInt(hm[1], 10);
+      const y = parseInt(hm[2], 10);
+      const startMonth = (h - 1) * 6;
+      return { start: fmt(y, startMonth, 1), end: fmt(y, startMonth + 6, 0) };
+    }
+    // YYYY-MM-DD
+    const dm = s.match(/(\d{4})-(\d{2})-(\d{2})/);
+    if (dm) {
+      const date = `${dm[1]}-${dm[2]}-${dm[3]}`;
+      return { start: date, end: date };
+    }
+    // Bare 4-digit year (within plausible range)
+    const ym = s.match(/(?<!\d)(\d{4})(?!\d)/);
+    if (ym) {
+      const y = parseInt(ym[1], 10);
+      if (y >= 2000 && y <= 2100) {
+        return { start: fmt(y, 0, 1), end: fmt(y, 12, 0) };
+      }
+    }
+    return null;
+  }
+  // Build a CATEGORY → THEME breadcrumb list for the timeline meta
+  // section. Mirrors the OBSERVATORY panel's lineage rows but produces
+  // a flat <ul> string (no fancy layout) suitable for inline meta.
+  function renderTimelineLineage(node) {
+    if (!node || node.type !== "prediction") return "";
+    const parents = (node.parent_ids || []).map(nodeById).filter(Boolean);
+    if (!parents.length) return "";
+    const seenTheme = new Set();
+    const rows = parents.map((p) => {
+      const theme = p.type === "theme"
+        ? p
+        : ((p.parent_ids || []).map(nodeById).find((x) => x && x.type === "theme") || null);
+      const cat = theme
+        ? ((theme.parent_ids || []).map(nodeById).find((x) => x && x.type === "category") || null)
+        : null;
+      const themeKey = theme ? theme.id : `__no_theme__${p.id}`;
+      if (seenTheme.has(themeKey)) return "";
+      seenTheme.add(themeKey);
+      const catLabel = cat
+        ? (nodeLabel(cat, "short_label") || nodeLabel(cat, "label") || cat.id)
+        : "—";
+      const themeLabel = theme
+        ? (nodeLabel(theme, "short_label") || nodeLabel(theme, "label") || theme.id)
+        : "—";
+      const targetId = (theme && theme.id) || p.id;
+      return `<li class="tl-lineage-row" data-goto="${escapeHTML(targetId)}">
+        <span class="tl-lineage-cat">${escapeHTML(catLabel)}</span>
+        <span class="tl-lineage-sep" aria-hidden="true">→</span>
+        <span class="tl-lineage-theme">${escapeHTML(themeLabel)}</span>
+      </li>`;
+    }).filter(Boolean).join("");
+    if (!rows) return "";
+    return `<ul class="tl-lineage-list">${rows}</ul>`;
+  }
   // Base URL used to turn report/validation paths into GitHub article links.
   // Change this if you fork the repo.
   const REPO_BLOB_URL = "https://github.com/baba-yu/news/blob/main/";
@@ -2247,9 +2346,11 @@
     m('.menu-btn.tab[data-scope="mix"]',      "scope.mix");
     m('.menu-btn.tab[data-scope="tech"]',     "scope.tech");
     m('.menu-btn.tab[data-scope="business"]', "scope.business");
-    m('.menu-btn.win[data-window="7d"]',  "window.7d");
-    m('.menu-btn.win[data-window="30d"]', "window.30d");
-    m('.menu-btn.win[data-window="90d"]', "window.90d");
+    // Window buttons exist in both #top-menu and #probe-menu-panel,
+    // so retranslate every copy on locale change.
+    mAll('.menu-btn.win[data-window="7d"]',  "window.7d");
+    mAll('.menu-btn.win[data-window="30d"]', "window.30d");
+    mAll('.menu-btn.win[data-window="90d"]', "window.90d");
     m('.menu-btn.heat[data-heat="attention"]',   "heat.attention");
     m('.menu-btn.heat[data-heat="realization"]', "heat.realization");
     m('.menu-btn.heat[data-heat="grass"]',       "heat.grass");
@@ -2837,11 +2938,18 @@
 
     const chainItem = (c) => {
       const win = formatTargetWindow(c.target_start_date, c.target_end_date);
+      const title = c.title || c.short_label || c.prediction_id || "—";
+      // The title carries data-goto so click → openProbeTimeline in
+      // the timeline view, or → handleNodeClick (OBSERVATORY panel)
+      // when this same body is rendered in the right slide-in panel.
+      const titleHtml = c.prediction_id
+        ? `<span class="readings-chain-target is-link" data-goto="${escapeHTML(c.prediction_id)}" title="Open this prediction">${escapeHTML(title)}</span>`
+        : `<span class="readings-chain-target">${escapeHTML(title)}</span>`;
       return `
       <li class="readings-chain-item">
         <span class="readings-chain-strength" title="chain confidence">${(c.strength || 0).toFixed(2)}</span>
         <span class="readings-chain-arrow">──►</span>
-        <span class="readings-chain-target">${escapeHTML(c.title || c.short_label || c.prediction_id || "—")}</span>
+        ${titleHtml}
         ${win ? `<span class="readings-chain-window" title="lands">${escapeHTML(win)}</span>` : ""}
         ${c.notes ? `<div class="readings-chain-notes">${escapeHTML(c.notes)}</div>` : ""}
       </li>
@@ -3875,7 +3983,6 @@
     const catSel = document.getElementById("list-category");
     const themeSel = document.getElementById("list-theme");
     const statusSel = document.getElementById("list-status");
-    const winSel = document.getElementById("list-window");
     const bridgeChk = document.getElementById("list-has-bridge");
     if (!scopeSel) return;
 
@@ -3904,7 +4011,11 @@
     const catFilter = catSel.value;
     const themeFilter = themeSel.value;
     const statusFilter = statusSel.value;
-    const windowFilter = winSel.value || state.windowId;
+    // Window now lives in the PROBE settings hamburger and writes
+    // straight to state.windowId — same value the OBSERVATORY graph
+    // reads, so toggling 7d/30d/90d in PROBE flows through to every
+    // metric-by-window reader without a parallel filter.
+    const windowFilter = state.windowId || "30d";
     const hasBridge = !!bridgeChk.checked;
 
     let preds = (g.nodes || []).filter((n) => n.type === "prediction");
@@ -3919,21 +4030,6 @@
     if (hasBridge) {
       preds = preds.filter((n) => filterDisplayBridges((n.detail && n.detail.bridges) || []).length > 0);
     }
-
-    // Pull a locale-aware ELI14 string from a prediction's detail block.
-    // The graph's reasoning_locales fan-out is keyed by reasoning field
-    // first (because/given/so_that/landing/eli14) then by locale, e.g.
-    //   detail.reasoning_locales.eli14.ja
-    // Falls back to the EN locale, then the legacy non-locale field.
-    const localizedEli14 = (detail) => {
-      const loc = state.locale || "en";
-      const rl = detail && detail.reasoning_locales;
-      if (rl && rl.eli14) {
-        if (rl.eli14[loc]) return rl.eli14[loc];
-        if (rl.eli14.en)   return rl.eli14.en;
-      }
-      return (detail && detail.reasoning && detail.reasoning.eli14) || "";
-    };
 
     if (!state.listSort) state.listSort = { col: "default", dir: "desc" };
     const sort = state.listSort;
@@ -4096,8 +4192,10 @@
 
   // Track keys the timeline draws, in vertical order. Kept in English
   // labels for v1 — these are technical row headers, not body copy.
+  // The self/start/target info now lives in the timeline header text
+  // instead of its own track row, so the rendered timeline is reserved
+  // for downstream context (bridges/needs/downstream/upstream).
   const TIMELINE_TRACKS = [
-    { key: "self",       label: "This prediction" },
     { key: "bridge",     label: "Bridges" },
     { key: "need",       label: "Needs" },
     { key: "downstream", label: "Downstream" },
@@ -4105,39 +4203,23 @@
   ];
 
   // Convert a node + its readings into a flat list of plottable events.
-  // Each event is { track, kind: "point"|"window", date|start+end, label, sub? }.
+  // Each event is { track, kind: "point"|"window", date|start+end,
+  // label, sub?, anchor }. The anchor maps the event to a section of
+  // the inline panel body so click→scroll lands on the matching item.
   function timelineEventsFor(node) {
     const events = [];
     const detail = (node && node.detail) || {};
 
-    // Track 1: self
-    if (detail.prediction_date) {
-      events.push({
-        track: "self", kind: "point",
-        date: detail.prediction_date,
-        label: "Proposed",
-        sub: predictionTitleClean(node),
-        primary: true,
-      });
-    }
-    if (detail.target_start_date && detail.target_end_date) {
-      events.push({
-        track: "self", kind: "window",
-        start: detail.target_start_date, end: detail.target_end_date,
-        label: "Target window",
-        sub: `${detail.target_start_date} → ${detail.target_end_date}`,
-        primary: true,
-      });
-    }
-
-    // Track 2: bridges (re-citation events; some carry a target window too)
-    for (const b of (detail.bridges || [])) {
+    // Track: bridges (re-citation events; some carry a target window too)
+    (detail.bridges || []).forEach((b, bIdx) => {
+      const anchor = `bridge-${bIdx}`;
       if (b.date) {
         events.push({
           track: "bridge", kind: "point",
           date: b.date,
           label: b.dimension ? `Bridge · ${b.dimension}` : "Bridge",
           sub: (b.text_locales && b.text_locales[state.locale]) || b.text || "",
+          anchor,
         });
       }
       if (b.target_start_date && b.target_end_date) {
@@ -4146,35 +4228,77 @@
           start: b.target_start_date, end: b.target_end_date,
           label: "Bridge target",
           sub: `${b.target_start_date} → ${b.target_end_date}`,
+          anchor,
         });
       }
-    }
+    });
 
-    // Track 3: needs (target windows on the need + nested task)
-    for (const n of (detail.needs || [])) {
+    // Track: needs (target windows on the need + nested task)
+    (detail.needs || []).forEach((n, nIdx) => {
       const actor = (n.actor_locales && n.actor_locales[state.locale]) || n.actor || "Need";
-      if (n.target_start_date && n.target_end_date) {
+      const anchor = `need-${nIdx}`;
+      const hasNeedWindow = n.target_start_date && n.target_end_date;
+      const task = n.task || {};
+      const hasTaskWindow = task.target_start_date && task.target_end_date;
+      if (hasNeedWindow) {
         events.push({
           track: "need", kind: "window",
           start: n.target_start_date, end: n.target_end_date,
           label: actor,
           sub: (n.outcome_locales && n.outcome_locales[state.locale]) || n.outcome || "",
+          anchor,
         });
       }
-      const task = n.task || {};
-      if (task.target_start_date && task.target_end_date) {
+      if (hasTaskWindow) {
         events.push({
           track: "need", kind: "window",
           start: task.target_start_date, end: task.target_end_date,
           label: `Task · ${(task.what_locales && task.what_locales[state.locale]) || task.what || ""}`,
           sub: actor,
+          anchor,
         });
       }
-    }
+      // No structured target window? Fall back to parsing the freeform
+      // task.when string ("Q2 2026 contract cycles", "by Q3 2026",
+      // "2026-09-30") into a date range. The schema *has* the
+      // target_start_date / target_end_date fields, but the data
+      // pipeline today leaves them null and parks the timing in
+      // task.when as natural language — see design/FIXME.md for the
+      // backfill task.
+      if (!hasNeedWindow && !hasTaskWindow) {
+        const whenText = (task.when_locales && task.when_locales.en) || task.when || "";
+        const parsed = parseFreeformWhen(whenText);
+        const taskWhat = (task.what_locales && task.what_locales[state.locale]) || task.what || "";
+        const sub = taskWhat
+          || (n.outcome_locales && n.outcome_locales[state.locale])
+          || n.outcome
+          || "";
+        if (parsed) {
+          events.push({
+            track: "need", kind: "window",
+            start: parsed.start, end: parsed.end,
+            label: actor,
+            sub: sub ? `${sub} · ${whenText}` : whenText,
+            anchor,
+          });
+        } else if (detail.prediction_date) {
+          // Last-ditch fallback: anchor a point at the prediction's
+          // own proposal date so the NEEDS row still surfaces.
+          events.push({
+            track: "need", kind: "point",
+            date: detail.prediction_date,
+            label: actor,
+            sub,
+            anchor,
+          });
+        }
+      }
+    });
 
-    // Tracks 4-5: downstream + upstream readings
+    // Tracks: downstream + upstream readings
     const r = detail.readings || {};
-    for (const d of (r.downstream || [])) {
+    (r.downstream || []).forEach((d, dIdx) => {
+      const anchor = `downstream-${dIdx}`;
       if (d.pred_date) {
         events.push({
           track: "downstream", kind: "point",
@@ -4182,6 +4306,7 @@
           label: d.short_label || d.title || d.prediction_id,
           sub: d.notes || "",
           predId: d.prediction_id,
+          anchor,
         });
       }
       if (d.target_start_date && d.target_end_date) {
@@ -4191,10 +4316,12 @@
           label: d.short_label || d.prediction_id,
           sub: d.notes || "",
           predId: d.prediction_id,
+          anchor,
         });
       }
-    }
-    for (const u of (r.upstream || [])) {
+    });
+    (r.upstream || []).forEach((u, uIdx) => {
+      const anchor = `upstream-${uIdx}`;
       if (u.pred_date) {
         events.push({
           track: "upstream", kind: "point",
@@ -4202,6 +4329,7 @@
           label: u.short_label || u.title || u.prediction_id,
           sub: u.notes || "",
           predId: u.prediction_id,
+          anchor,
         });
       }
       if (u.target_start_date && u.target_end_date) {
@@ -4211,11 +4339,37 @@
           label: u.short_label || u.prediction_id,
           sub: u.notes || "",
           predId: u.prediction_id,
+          anchor,
         });
       }
-    }
+    });
 
     return events;
+  }
+
+  // Smooth-scroll the inline panel body to the item matching a
+  // timeline event's anchor. No-ops when the anchor isn't found
+  // (e.g. an event whose underlying entry was filtered out by the
+  // panel's display rules).
+  function scrollToTimelineAnchor(anchorKey) {
+    const target = document.querySelector(`[data-tl-anchor="${anchorKey}"]`);
+    if (!target) return;
+    const scroller = document.querySelector("#list-view.is-timeline > .list-body");
+    if (scroller) {
+      // Compute target position relative to the scroller, account for
+      // the sticky timeline-head pinned at top:0 of the scroller.
+      const stickyHead = scroller.querySelector(".timeline-head");
+      const stickyOffset = stickyHead ? stickyHead.offsetHeight : 0;
+      const r = target.getBoundingClientRect();
+      const sR = scroller.getBoundingClientRect();
+      const top = scroller.scrollTop + (r.top - sR.top) - stickyOffset - 12;
+      scroller.scrollTo({ top, behavior: "smooth" });
+    } else {
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+    // Brief highlight pulse so the user sees where they landed.
+    target.classList.add("tl-anchor-flash");
+    setTimeout(() => target.classList.remove("tl-anchor-flash"), 1200);
   }
 
   // Render the prediction timeline into the PROBE/PREDICTIONS body.
@@ -4241,15 +4395,185 @@
     }
     state._timelineEventsPredId = predId;
 
+    // The timeline page is now structured top-down by user attention:
+    //   1. Claim — the prediction in plain language (ELI14 if present)
+    //   2. Timeline — the visualisation
+    //   3. Metrics — Hit rate / Attention tiles + daily-precision chart
+    //   4. Technical summary — Stream K body, expanded
+    //   5+. Reasoning / Needs / Bridge / Readings / meta — drill-down
+    //
+    // Each detail-section reuses the OBSERVATORY tab body renderer so
+    // locale fan-out + markdown formatting stay in one place; the
+    // surrounding chrome (header, ordering) is bespoke for this view.
+    const detail = node.detail || {};
+    const m = metricsFor(node, state.windowId);
+    const claimText = localizedEli14(detail) || predictionTitleClean(node);
+    const reasoning = (detail && detail.reasoning) || {};
+    const hasReasoning =
+      reasoning.because || reasoning.given || reasoning.so_that || reasoning.landing;
+    const bridges = filterDisplayBridges((detail && detail.bridges) || []);
+    const needs = (detail && detail.needs) || [];
+    const readings = (detail && detail.readings) || {};
+    const hasReadings = (readings.clusters || []).length > 0
+      || (readings.downstream || []).length > 0
+      || (readings.upstream   || []).length > 0;
+
+    const reasoningHTML = hasReasoning
+      ? renderReasoningTabBody(reasoning, detail)
+      : `<p class="muted">${localeStr("panel.tab.reasoning.empty")}</p>`;
+    const bridgesHTML = bridges.length
+      ? renderBridgesTabBody(bridges)
+      : `<p class="muted">${localeStr("panel.tab.bridge.empty")}</p>`;
+    const needsHTML = needs.length
+      ? renderNeedsTabBody(needs)
+      : `<p class="muted">${localeStr("panel.tab.needs.empty")}</p>`;
+    const readingsHTML = hasReadings
+      ? renderReadingsTabBody(readings)
+      : `<p class="muted">${localeStr("panel.tab.readings.empty")}</p>`;
+
+    // Technical summary — short-form synopsis. Prefers the Stream K
+    // summary; falls back to the long body for predictions that
+    // predate Stream K so the section is never empty when there's
+    // any descriptive text to show.
+    const summaryByLocale = (detail && detail.summary_short_locales) || {};
+    const streamK = summaryByLocale[state.locale]
+      || summaryByLocale.en
+      || detail.summary_short
+      || "";
+    const fullDescription = nodeLabel(node, "description") || detail.description || "";
+    const technicalText = streamK || fullDescription;
+    // FULL PREDICTION is the long-form body in its own collapsed slot.
+    // Suppress when the technical summary already IS the full body —
+    // no point duplicating the same paragraph behind a toggle.
+    const showFullPrediction = !!fullDescription
+      && fullDescription.trim() !== technicalText.trim();
+
+    // Metric tiles
+    const attTip  = "How often this topic was cited (frequency × relevance) in the window";
+    const realTip = "Weighted mean observed relevance (0.65 * new + 0.35 * continuing)";
+    const hitTile = metricTile(localeStr("panel.realization"), m.realization_score, undefined, realTip);
+    const attTile = metricTile(localeStr("panel.attention"),   m.attention_score,   undefined, attTip);
+    const activityChart = renderActivityChart(m);
+    const activityHeader = renderGrassStripHeader(m);
+
+    // Bottom meta block — date, source/validation reports, lineage.
+    const lineageRows = renderTimelineLineage(node);
+    const metaBits = [];
+    if (detail.prediction_date) {
+      metaBits.push(`<p class="muted">prediction date: ${escapeHTML(detail.prediction_date)}</p>`);
+    }
+    if (detail.source_report_path) {
+      const url = REPO_BLOB_URL + detail.source_report_path;
+      metaBits.push(`<p class="muted">${localeStr("panel.source_report")}: <a href="${escapeHTML(url)}" target="_blank" rel="noreferrer noopener">${escapeHTML(detail.source_report_path)}</a></p>`);
+    }
+
     body.innerHTML = `
       <div class="timeline-head">
+        <div class="timeline-title-block">
+          <div class="timeline-title" title="${escapeHTML(predictionTitleClean(node))}">${escapeHTML(predictionTitleClean(node))}</div>
+          ${detail.prediction_date ? `<div class="timeline-dates">Proposed ${escapeHTML(detail.prediction_date)}${detail.target_start_date && detail.target_end_date ? ` · Target ${escapeHTML(detail.target_start_date)} → ${escapeHTML(detail.target_end_date)}` : ""}</div>` : ""}
+        </div>
         <button class="timeline-back" data-action="back" type="button">${escapeHTML(localeStr("timeline.back"))}</button>
-        <div class="timeline-title" title="${escapeHTML(predictionTitleClean(node))}">${escapeHTML(predictionTitleClean(node))}</div>
         <button class="timeline-graph" data-action="graph" type="button">${escapeHTML(localeStr("timeline.open_in_observatory"))}</button>
       </div>
-      <div class="timeline-canvas-wrap"><svg class="timeline-svg" role="img" aria-label="Prediction timeline"></svg></div>
-      <div class="timeline-detail" data-empty="true"></div>
+
+      <p class="tl-claim">${escapeHTML(claimText)}</p>
+
+      <section class="tl-section tl-mt-section">
+        <h3 class="tl-section-h">Metrics and Timeline</h3>
+        <div class="mt-block">
+          <div class="mt-metrics">
+            ${hitTile}
+            ${attTile}
+            <div class="mt-precision">
+              <div class="mt-precision-head">${escapeHTML(activityHeader)}</div>
+              ${activityChart}
+            </div>
+          </div>
+          <div class="mt-timeline">
+            <div class="timeline-canvas-wrap"><svg class="timeline-svg" role="img" aria-label="Prediction timeline"></svg></div>
+          </div>
+        </div>
+      </section>
+
+      ${technicalText ? `
+        <section class="tl-section">
+          <h3 class="tl-section-h">Technical summary</h3>
+          <div class="md-body">${renderMarkdown(technicalText)}</div>
+        </section>
+      ` : ""}
+
+      ${showFullPrediction ? `
+        <section class="tl-section tl-fullpred-section">
+          <details class="tl-fullpred">
+            <summary class="tl-section-h tl-fullpred-summary">Full prediction</summary>
+            <div class="md-body tl-fullpred-body">${renderMarkdown(fullDescription)}</div>
+          </details>
+        </section>
+      ` : ""}
+
+      <section class="tl-section" data-tab-body="reasoning">
+        <h3 class="tl-section-h">${escapeHTML(localeStr("panel.tab.reasoning"))}</h3>
+        ${reasoningHTML}
+      </section>
+
+      <section class="tl-section" data-tab-body="needs">
+        <h3 class="tl-section-h">${escapeHTML(localeStr("panel.tab.needs"))}</h3>
+        ${needsHTML}
+      </section>
+
+      <section class="tl-section" data-tab-body="bridge">
+        <h3 class="tl-section-h">${escapeHTML(localeStr("panel.tab.bridge"))}</h3>
+        ${bridgesHTML}
+      </section>
+
+      <section class="tl-section" data-tab-body="readings">
+        <h3 class="tl-section-h">${escapeHTML(localeStr("panel.tab.readings"))}</h3>
+        ${readingsHTML}
+      </section>
+
+      ${(lineageRows || metaBits.length) ? `
+        <section class="tl-section tl-meta-section">
+          ${lineageRows}
+          ${metaBits.join("")}
+        </section>
+      ` : ""}
     `;
+
+    // Forward [data-goto] clicks. For prediction nodes (the title of
+    // an upstream / downstream chain item) we stay in PROBE and open
+    // that prediction's own timeline. Other targets — typically theme
+    // / category lineage breadcrumbs — bounce out to OBSERVATORY's
+    // detail panel via handleNodeClick.
+    body.querySelectorAll(".tl-section [data-goto]").forEach((el) => {
+      el.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        const id = el.dataset.goto;
+        if (!id) return;
+        const target = nodeById(id);
+        if (!target) return;
+        if (target.type === "prediction") {
+          openProbeTimeline(id);
+        } else {
+          handleNodeClick(target);
+        }
+      });
+    });
+
+    // Tag bridges / needs / downstream / upstream items with their
+    // data-tl-anchor so timeline event clicks can scroll-into-view.
+    body.querySelectorAll(".bridges-list > li").forEach((li, i) => {
+      li.dataset.tlAnchor = `bridge-${i}`;
+    });
+    body.querySelectorAll(".needs-list > li").forEach((li, i) => {
+      li.dataset.tlAnchor = `need-${i}`;
+    });
+    body.querySelectorAll(".readings-chain-list:not(.readings-chain-list-up) > li").forEach((li, i) => {
+      li.dataset.tlAnchor = `downstream-${i}`;
+    });
+    body.querySelectorAll(".readings-chain-list-up > li").forEach((li, i) => {
+      li.dataset.tlAnchor = `upstream-${i}`;
+    });
 
     body.querySelector('[data-action="back"]').addEventListener("click", closeProbeTimeline);
     body.querySelector('[data-action="graph"]').addEventListener("click", () => {
@@ -4259,9 +4583,7 @@
       handleNodeClick(node);
     });
 
-    const detailEl = body.querySelector(".timeline-detail");
-    drawTimelineSVG(body.querySelector(".timeline-canvas-wrap"), events, detailEl);
-    renderTimelineDetail(detailEl, events, state.timelineSelectedIdx);
+    drawTimelineSVG(body.querySelector(".timeline-canvas-wrap"), events, node);
 
     // Re-fit on viewport resize while this timeline is open.
     if (state._timelineResizeHandler) {
@@ -4269,74 +4591,160 @@
     }
     state._timelineResizeHandler = () => {
       const wrap = document.querySelector(".timeline-canvas-wrap");
-      const det  = document.querySelector(".timeline-detail");
-      if (wrap) drawTimelineSVG(wrap, events, det);
+      if (wrap) drawTimelineSVG(wrap, events, node);
     };
     window.addEventListener("resize", state._timelineResizeHandler);
   }
 
-  function renderTimelineDetail(detailEl, events, idx) {
-    if (!detailEl) return;
-    const event = (idx != null) ? events[idx] : null;
-    if (!event) {
-      detailEl.dataset.empty = "true";
-      detailEl.innerHTML = `<p class="muted">${escapeHTML(localeStr("timeline.detail.placeholder"))}</p>`;
-      return;
+  // Compute the effective time-span for an event: zero-width for
+  // points, [start, end] for windows. Used by the lane packer.
+  function _eventSpan(e) {
+    if (e.kind === "window") {
+      return [new Date(e.start).getTime(), new Date(e.end).getTime()];
     }
-    detailEl.dataset.empty = "false";
-    const track = TIMELINE_TRACKS.find((t) => t.key === event.track);
-    const trackLabel = track ? track.label : event.track;
-    const dateLine = event.kind === "point"
-      ? event.date
-      : `${event.start}  →  ${event.end}`;
-    const openButton = event.predId
-      ? `<button class="timeline-detail-open" data-pred="${escapeHTML(event.predId)}" type="button">${escapeHTML(localeStr("timeline.detail.open_this"))}</button>`
-      : "";
-    detailEl.innerHTML = `
-      <div class="timeline-detail-head">
-        <span class="timeline-detail-track tl-track-${escapeHTML(event.track)}">${escapeHTML(trackLabel)}</span>
-        <span class="timeline-detail-date">${escapeHTML(dateLine)}</span>
-        ${openButton}
-      </div>
-      ${event.label ? `<div class="timeline-detail-label">${escapeHTML(event.label)}</div>` : ""}
-      ${event.sub ? `<div class="timeline-detail-sub">${escapeHTML(event.sub)}</div>` : ""}
-    `;
-    const openBtn = detailEl.querySelector(".timeline-detail-open");
-    if (openBtn) {
-      openBtn.addEventListener("click", () => {
-        openProbeTimeline(openBtn.dataset.pred);
-      });
-    }
+    const t = new Date(e.date).getTime();
+    return [t, t];
+  }
+  // "Reference date" used to rank events when a cluster overflows the
+  // 3-lane budget — newer events keep their lane, older ones get folded
+  // into a +N badge. End of the span is "newest" for a window; the
+  // event's own date for a point.
+  function _eventRefDate(e) {
+    if (e.kind === "window") return new Date(e.end).getTime();
+    return new Date(e.date).getTime();
   }
 
-  function drawTimelineSVG(wrap, events, detailEl) {
+  // Per-track lane assignment. Builds clusters of overlapping events,
+  // gives each cluster's three newest entries lane 0/1/2, folds the
+  // rest into overflow groups anchored at each cluster's mid-point.
+  // Mutates events with .lane (0..2) or .overflow=true; returns the
+  // overflow groups for badge rendering.
+  function packTimelineLanes(events, tracks, maxLanes) {
+    const overflowGroups = [];
+    const trackMaxLane = new Map();
+    for (const t of tracks) {
+      const trackEvents = events.filter((e) => e.track === t.key);
+      if (!trackEvents.length) {
+        trackMaxLane.set(t.key, 0);
+        continue;
+      }
+      // Annotate spans + ref dates once.
+      for (const e of trackEvents) {
+        const sp = _eventSpan(e);
+        e._spanStart = sp[0];
+        e._spanEnd   = sp[1];
+        e._refTime   = _eventRefDate(e);
+        e.lane       = undefined;
+        e.overflow   = false;
+      }
+      // Cluster by overlap (sweep over span starts).
+      const sorted = trackEvents.slice().sort((a, b) => a._spanStart - b._spanStart);
+      const clusters = [];
+      let cur = null;
+      for (const e of sorted) {
+        if (!cur || e._spanStart > cur.maxEnd) {
+          cur = { events: [e], maxEnd: e._spanEnd, minStart: e._spanStart };
+          clusters.push(cur);
+        } else {
+          cur.events.push(e);
+          cur.maxEnd = Math.max(cur.maxEnd, e._spanEnd);
+        }
+      }
+      // Assign lanes per-cluster: 3 newest by ref date go to 0/1/2,
+      // rest spill into overflow.
+      let maxLaneUsed = 0;
+      for (const c of clusters) {
+        const byRef = c.events.slice().sort((a, b) => b._refTime - a._refTime);
+        byRef.forEach((e, i) => {
+          if (i < maxLanes) {
+            e.lane = i;
+            if (i > maxLaneUsed) maxLaneUsed = i;
+          } else {
+            e.overflow = true;
+          }
+        });
+        const overflow = byRef.slice(maxLanes);
+        if (overflow.length) {
+          overflowGroups.push({
+            track: t.key,
+            anchorTime: (c.minStart + c.maxEnd) / 2,
+            events: overflow,
+          });
+        }
+      }
+      trackMaxLane.set(t.key, maxLaneUsed);
+    }
+    return { overflowGroups, trackMaxLane };
+  }
+
+  function drawTimelineSVG(wrap, events, node) {
     const svgEl = wrap.querySelector("svg");
     if (!svgEl) return;
     const svg = d3.select(svgEl);
     svg.selectAll("*").remove();
 
     const tracks = TIMELINE_TRACKS;
-    const margin = { top: 16, right: 32, bottom: 36, left: 132 };
-    const trackHeight = 56;
-    const innerHeight = tracks.length * trackHeight;
+    const LANE_GAP = 10;
+    const margin = { top: 12, right: 32, bottom: 30, left: 132 };
+    const MAX_LANES = 3;
+    // Buffer below the last track's centerline so lane 2 (+LANE_GAP)
+    // doesn't crash into the date axis on a 3-lane upstream cluster.
+    const bottomLaneBuffer = LANE_GAP + 4;
+    // Stretch trackHeight to fill the wrap (which itself stretches to
+    // match the metrics column on the left via grid align-items:
+    // stretch). 36px is the natural minimum — anything taller is just
+    // bonus breathing room when the metrics stack happens to be tall.
+    const NATURAL_TRACK_HEIGHT = 36;
+    const wrapHeight = wrap.clientHeight || 0;
+    const availableInner = wrapHeight - margin.top - margin.bottom - bottomLaneBuffer;
+    const trackHeight = Math.max(
+      NATURAL_TRACK_HEIGHT,
+      Math.floor(availableInner / tracks.length)
+    );
+    const innerHeight = tracks.length * trackHeight + bottomLaneBuffer;
     const width = Math.max(360, wrap.clientWidth);
     const height = innerHeight + margin.top + margin.bottom;
     svg.attr("width", width).attr("height", height);
 
-    // Compute time domain from all events. Pad ±5% so points don't
-    // crash into the edges. Fallback to "today" if there are no dates.
+    // Lane assignment (mutates events with .lane / .overflow).
+    const { overflowGroups, trackMaxLane } = packTimelineLanes(events, tracks, MAX_LANES);
+
+    // Pull the prediction's own target window so we can highlight
+    // when it's supposed to land. Drawn as a tinted background
+    // rectangle behind the tracks, with a "Target" label on the
+    // top-right of the rectangle.
+    const targetStart = node && node.detail && node.detail.target_start_date;
+    const targetEnd   = node && node.detail && node.detail.target_end_date;
+    const hasTarget   = !!(targetStart && targetEnd);
+
+    // Compute time domain. Always extend the right edge to "today" so
+    // the dashed today guide has somewhere to live even when the
+    // prediction has no future events. Fall back to a 30-day window
+    // around today when the prediction has no dates at all.
+    const today = new Date();
     const dates = [];
     for (const e of events) {
-      if (e.date) dates.push(new Date(e.date));
+      if (e.date)  dates.push(new Date(e.date));
       if (e.start) dates.push(new Date(e.start));
-      if (e.end) dates.push(new Date(e.end));
+      if (e.end)   dates.push(new Date(e.end));
+    }
+    if (hasTarget) {
+      dates.push(new Date(targetStart));
+      dates.push(new Date(targetEnd));
     }
     let minD, maxD;
     if (dates.length) {
       minD = d3.min(dates);
       maxD = d3.max(dates);
     } else {
-      minD = new Date(); maxD = new Date(minD.getTime() + 30 * 86400000);
+      minD = new Date(today.getTime() - 14 * 86400000);
+      maxD = today;
+    }
+    if (maxD < today) maxD = today;
+    if (minD.getTime() === maxD.getTime()) {
+      // Zero-width domain: pad ±7d so the single event isn't pinned to the edge.
+      minD = new Date(minD.getTime() - 7 * 86400000);
+      maxD = new Date(maxD.getTime() + 7 * 86400000);
     }
     const span = Math.max(1, maxD - minD);
     const pad = span * 0.05;
@@ -4345,8 +4753,58 @@
       .range([0, width - margin.left - margin.right]);
 
     const yMid = (i) => i * trackHeight + trackHeight / 2;
+    // Lane Y offsets within a track. The spread depends on how many
+    // lanes are *actually used* in that track — a track with a single
+    // event sits on the centerline (no offset), 2-event clusters
+    // straddle the line, only 3-event clusters fan out to the full
+    // ±LANE_GAP. This keeps the rare overflow case readable without
+    // floating single events above the line.
+    const laneY = (mid, lane, maxLaneInTrack) => {
+      if (lane == null || !maxLaneInTrack) return mid;
+      if (maxLaneInTrack === 1) {
+        return mid + (lane - 0.5) * LANE_GAP;
+      }
+      // maxLaneInTrack >= 2 → full 3-lane spread
+      return mid + (lane - 1) * LANE_GAP;
+    };
 
     const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+
+    // Target-window highlight. A full-height tinted rect spanning the
+    // prediction's target_start_date → target_end_date, with a small
+    // "Target" tag at the top-right corner. Drawn before the track
+    // lines so the lines stay visible across the rect; before events
+    // so glyphs sit on top.
+    if (hasTarget) {
+      const tx1 = xScale(new Date(targetStart));
+      const tx2 = xScale(new Date(targetEnd));
+      const tw = Math.max(2, tx2 - tx1);
+      g.append("rect")
+        .attr("class", "tl-target-band")
+        .attr("x", tx1).attr("y", 0)
+        .attr("width", tw).attr("height", innerHeight);
+      // Label
+      const labelText = "Target";
+      const labelPadX = 6, labelPadY = 2;
+      const labelGroup = g.append("g").attr("class", "tl-target-label");
+      const labelTxt = labelGroup.append("text")
+        .attr("class", "tl-target-label-text")
+        .attr("text-anchor", "end")
+        .attr("dominant-baseline", "hanging")
+        .text(labelText);
+      let lbbox = { width: 36, height: 12 };
+      try { lbbox = labelTxt.node().getBBox(); } catch (_) { /* SSR */ }
+      labelGroup.insert("rect", "text")
+        .attr("class", "tl-target-label-bg")
+        .attr("x", tx2 - lbbox.width - labelPadX * 2)
+        .attr("y", 2)
+        .attr("width", lbbox.width + labelPadX * 2)
+        .attr("height", lbbox.height + labelPadY * 2)
+        .attr("rx", 3);
+      labelTxt
+        .attr("x", tx2 - labelPadX)
+        .attr("y", 2 + labelPadY);
+    }
 
     // Track gridlines + labels
     tracks.forEach((t, i) => {
@@ -4373,7 +4831,6 @@
       .call(xAxis);
 
     // Today guide (vertical dashed line) when in domain
-    const today = new Date();
     if (today >= xScale.domain()[0] && today <= xScale.domain()[1]) {
       g.append("line")
         .attr("class", "tl-today")
@@ -4382,26 +4839,33 @@
     }
 
     // Plot events. Each one is clickable: click selects it (highlight
-    // + populate the detail strip below). Pre-existing tooltips on
-    // <title> stay so hover still gives a quick preview.
+    // + scroll the inline panel body to the matching anchor). Pre-existing
+    // tooltips on <title> stay so hover still gives a quick preview.
+    // Overflow events are skipped here — they render as +N badges below.
     const trackIdx = new Map(tracks.map((t, i) => [t.key, i]));
     const selectedIdx = state.timelineSelectedIdx;
     const onSelect = (idx) => {
       state.timelineSelectedIdx = idx;
-      // Toggle is-selected class on every event glyph.
       svgEl.querySelectorAll(".tl-pt, .tl-bar").forEach((el) => {
         el.classList.toggle("is-selected", String(idx) === el.getAttribute("data-evt-idx"));
       });
-      renderTimelineDetail(detailEl, events, idx);
+      // Scroll the inline panel body to the matching anchor (set by
+      // post-processing in renderPredictionTimeline). Falls back to
+      // a no-op when the anchor isn't present (e.g. an event whose
+      // entry was filtered out of the panel — shouldn't happen but
+      // shouldn't throw either).
+      const e = events[idx];
+      if (e && e.anchor) scrollToTimelineAnchor(e.anchor);
     };
     events.forEach((e, idx) => {
+      if (e.overflow) return;
       const i = trackIdx.get(e.track);
       if (i == null) return;
-      const y = yMid(i);
+      const y = laneY(yMid(i), e.lane, trackMaxLane.get(e.track) || 0);
       const isSelected = idx === selectedIdx;
       if (e.kind === "point") {
         const cx = xScale(new Date(e.date));
-        const r = e.primary ? 7 : 5;
+        const r = e.primary ? 6 : 4;
         const node = g.append("circle")
           .attr("class", `tl-pt tl-pt-${e.track}${e.primary ? " is-primary" : ""}${isSelected ? " is-selected" : ""}`)
           .attr("data-evt-idx", String(idx))
@@ -4413,7 +4877,7 @@
         const x1 = xScale(new Date(e.start));
         const x2 = xScale(new Date(e.end));
         const w = Math.max(2, x2 - x1);
-        const h = e.primary ? 14 : 10;
+        const h = e.primary ? 12 : 8;
         const node = g.append("rect")
           .attr("class", `tl-bar tl-bar-${e.track}${e.primary ? " is-primary" : ""}${isSelected ? " is-selected" : ""}`)
           .attr("data-evt-idx", String(idx))
@@ -4425,6 +4889,94 @@
         node.append("title").text(`${e.label}\n${e.start} → ${e.end}${e.sub ? "\n\n" + e.sub : ""}`);
       }
     });
+
+    // +N overflow badges. One per overflow group, anchored at the
+    // group's mid-time and the track's lane-2 row. Click opens a
+    // modal listing all events in the group. We force maxLaneInTrack
+    // to MAX_LANES-1 here so the badge always sits on the bottom row
+    // — the very fact that we're rendering overflow proves the cluster
+    // filled all 3 lanes.
+    for (const og of overflowGroups) {
+      const i = trackIdx.get(og.track);
+      if (i == null) continue;
+      const y = laneY(yMid(i), MAX_LANES - 1, MAX_LANES - 1);
+      const cx = xScale(new Date(og.anchorTime));
+      const label = "+" + og.events.length;
+      const padX = 4, padY = 2;
+      const badge = g.append("g")
+        .attr("class", `tl-overflow tl-overflow-${og.track}`)
+        .style("cursor", "pointer")
+        .on("click", () => openTimelineOverflowModal(og, events, onSelect));
+      const rect = badge.append("rect").attr("rx", 8);
+      const text = badge.append("text")
+        .attr("class", "tl-overflow-text")
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "middle")
+        .text(label);
+      // Size the rect around the rendered text width. Browser must
+      // measure text first; fall back to a heuristic in headless tests.
+      let bbox = { width: 18, height: 12 };
+      try { bbox = text.node().getBBox(); } catch (_) { /* SSR / jsdom */ }
+      rect
+        .attr("x", cx - bbox.width / 2 - padX)
+        .attr("y", y - bbox.height / 2 - padY)
+        .attr("width", bbox.width + padX * 2)
+        .attr("height", bbox.height + padY * 2);
+      text.attr("x", cx).attr("y", y);
+      badge.append("title").text(`${og.events.length} more event${og.events.length === 1 ? "" : "s"} — click to choose`);
+    }
+  }
+
+  // Modal popup listing a track's overflow events. Click an entry to
+  // select it (same handler as a glyph click). Closes on outside click
+  // or Esc. Lives at body level so it overlays the timeline body.
+  function openTimelineOverflowModal(group, events, onSelect) {
+    closeTimelineOverflowModal(); // dismiss any previous instance
+    const overlay = document.createElement("div");
+    overlay.className = "tl-overflow-overlay";
+    overlay.id = "tl-overflow-overlay";
+    const trackLabel = (TIMELINE_TRACKS.find((t) => t.key === group.track) || {}).label || group.track;
+    const itemHTML = group.events.map((e) => {
+      const idx = events.indexOf(e);
+      const dateLine = e.kind === "point" ? e.date : `${e.start} → ${e.end}`;
+      return `<button class="tl-overflow-item" type="button" data-evt-idx="${idx}">
+        <span class="tl-overflow-item-date">${escapeHTML(dateLine)}</span>
+        <span class="tl-overflow-item-label">${escapeHTML(e.label || "")}</span>
+      </button>`;
+    }).join("");
+    overlay.innerHTML = `
+      <div class="tl-overflow-modal" role="dialog" aria-label="Timeline overflow">
+        <div class="tl-overflow-head">
+          <span class="tl-overflow-track tl-track-${escapeHTML(group.track)}">${escapeHTML(trackLabel)}</span>
+          <span class="tl-overflow-count">${group.events.length} event${group.events.length === 1 ? "" : "s"}</span>
+          <button class="tl-overflow-close" type="button" aria-label="Close">&times;</button>
+        </div>
+        <div class="tl-overflow-list">${itemHTML}</div>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+    overlay.addEventListener("click", (ev) => {
+      if (ev.target === overlay) closeTimelineOverflowModal();
+    });
+    overlay.querySelector(".tl-overflow-close").addEventListener("click", closeTimelineOverflowModal);
+    overlay.querySelectorAll(".tl-overflow-item").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const idx = parseInt(btn.dataset.evtIdx, 10);
+        if (!Number.isNaN(idx)) {
+          onSelect(idx);
+        }
+        closeTimelineOverflowModal();
+      });
+    });
+    document.addEventListener("keydown", _timelineOverflowEscHandler);
+  }
+  function _timelineOverflowEscHandler(ev) {
+    if (ev.key === "Escape") closeTimelineOverflowModal();
+  }
+  function closeTimelineOverflowModal() {
+    const el = document.getElementById("tl-overflow-overlay");
+    if (el) el.remove();
+    document.removeEventListener("keydown", _timelineOverflowEscHandler);
   }
 
   // Populate both #list-category and #news-category. PREDICTIONS and
@@ -4481,7 +5033,6 @@
     const newsCatSel   = document.getElementById("news-category");
     const newsThemeSel = document.getElementById("news-theme");
     const newsStatusSel= document.getElementById("news-status");
-    const newsWinSel   = document.getElementById("news-window");
     const newsBridgeChk= document.getElementById("news-has-bridge");
 
     // First open: align scope with whatever GRAPH/PREDICTIONS is using.
@@ -4525,7 +5076,10 @@
     const catFilter    = newsCatSel    ? newsCatSel.value    : "";
     const themeFilter  = newsThemeSel  ? newsThemeSel.value  : "";
     const statusFilter = newsStatusSel ? newsStatusSel.value : "";
-    const windowFilter = (newsWinSel && newsWinSel.value) || state.windowId || "30d";
+    // Window comes from state.windowId (driven by the PROBE settings
+    // hamburger) so it stays consistent with the inline panel body's
+    // metricsFor lookup and the OBSERVATORY graph.
+    const windowFilter = state.windowId || "30d";
     const hasBridge    = !!(newsBridgeChk && newsBridgeChk.checked);
 
     // Look up a prediction by ID inside the news-side scope graph
@@ -4734,7 +5288,7 @@
     // Mirror a single field's value across the two filter sets. Used
     // after any change so the inactive view's widget already reflects
     // the new state when the user flips to it.
-    const FIELDS = ["scope", "category", "theme", "status", "window"];
+    const FIELDS = ["scope", "category", "theme", "status"];
     const syncFromPrefix = (srcPrefix) => {
       const dstPrefix = srcPrefix === "list" ? "news" : "list";
       for (const f of FIELDS) {
@@ -4778,8 +5332,11 @@
     bindPair("category",   () => clearOnBothSides("theme"));
     bindPair("theme");
     bindPair("status");
-    bindPair("window");
     bindPair("has-bridge");
+    // "window" is no longer in the filter row — it lives in the PROBE
+    // settings hamburger and writes directly to state.windowId via
+    // selectWindow(), which itself triggers the relevant PROBE
+    // sub-tab re-render.
   }
 
   /* ---------------- Boot ---------------- */

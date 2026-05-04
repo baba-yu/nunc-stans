@@ -44,13 +44,6 @@
             <option value="contradicted">contradicted</option>
           </select>
         </label>
-        <label>Window
-          <select id="list-window">
-            <option value="7d">7D</option>
-            <option value="30d" selected>30D</option>
-            <option value="90d">90D</option>
-          </select>
-        </label>
         <label class="cb"><input type="checkbox" id="list-has-bridge"> Has bridge</label>
       </div>
     </header>
@@ -93,13 +86,6 @@
             <option value="contradicted">contradicted</option>
           </select>
         </label>
-        <label>Window
-          <select id="news-window">
-            <option value="7d">7D</option>
-            <option value="30d" selected>30D</option>
-            <option value="90d">90D</option>
-          </select>
-        </label>
         <label class="cb"><input type="checkbox" id="news-has-bridge"> Has bridge</label>
       </div>
     </header>
@@ -125,6 +111,14 @@
           <button class="menu-btn lang" data-locale="ja"  role="radio" aria-checked="false" type="button">JA</button>
           <button class="menu-btn lang" data-locale="es"  role="radio" aria-checked="false" type="button">ES</button>
           <button class="menu-btn lang" data-locale="fil" role="radio" aria-checked="false" type="button">FIL</button>
+        </div>
+      </div>
+      <div class="probe-menu-section" role="radiogroup" aria-label="Window">
+        <span class="menu-lbl probe-menu-window-lbl">WINDOW</span>
+        <div class="probe-menu-windows">
+          <button class="menu-btn win" data-window="7d"  role="radio" aria-checked="false" type="button">7D</button>
+          <button class="menu-btn win" data-window="30d" role="radio" aria-checked="true"  type="button">30D</button>
+          <button class="menu-btn win" data-window="90d" role="radio" aria-checked="false" type="button">90D</button>
         </div>
       </div>
       <div class="probe-menu-section probe-snap-section" role="group" aria-label="Snapshot">

@@ -1046,11 +1046,20 @@ body.panel-open #meta-header {
   display: none;
 }
 
-/* Stream C reasoning trace — labelled rows under the Reasoning tab. */
+/* Stream C reasoning trace — labelled rows under the Reasoning tab.
+   Each row is its own grid (key on the left, value on the right) so
+   the four reasoning fields (because / given / so_that / landing)
+   stack vertically rather than collapsing into a 2-up grid where the
+   long bodies steal each other's column width. */
 .reasoning-trace {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.reasoning-row {
   display: grid;
   grid-template-columns: minmax(72px, max-content) 1fr;
-  gap: 6px 12px;
+  gap: 12px;
   align-items: baseline;
 }
 .reasoning-trace .reasoning-key {
@@ -1438,6 +1447,18 @@ body.alt-view-mode #probe-menu-toggle {
   border-radius: 0;
   min-width: 0;
 }
+.probe-menu-windows {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  border: 1px solid var(--panel-border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.probe-menu-windows .menu-btn.win {
+  border-radius: 0;
+  min-width: 0;
+}
 .probe-menu-section.probe-snap-section .menu-select {
   width: 100%;
 }
@@ -1581,12 +1602,22 @@ body.alt-view-mode #probe-menu-toggle {
   display: flex;
   flex-direction: column;
 }
+/* Timeline page = scrollable column. Head sticks to the top of the
+   scroller so the title + back/observatory buttons stay reachable
+   while the user is deep in the inline detail body. */
+#list-view.is-timeline > .list-body {
+  overflow: auto;
+}
 .timeline-head {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--bg-0);
   display: flex;
   align-items: center;
   gap: 14px;
   flex-shrink: 0;
-  padding-bottom: 12px;
+  padding: 8px 0 12px;
   border-bottom: 1px solid var(--panel-border);
   margin-bottom: 14px;
 }
@@ -1611,9 +1642,14 @@ body.alt-view-mode #probe-menu-toggle {
   border-color: var(--menu-active);
   background: rgba(24, 199, 216, 0.12);
 }
-.timeline-title {
+.timeline-title-block {
   flex: 1 1 auto;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.timeline-title {
   font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.02em;
@@ -1622,10 +1658,206 @@ body.alt-view-mode #probe-menu-toggle {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.timeline-dates {
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Timeline canvas takes its natural height (SVG height set per
+   render). The whole .list-body is the single scroll container, so
+   the canvas just lives inline above the inline panel body. */
 .timeline-canvas-wrap {
+  flex: 0 0 auto;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* Claim — the prediction in plain language, sits right under the
+   header. Larger than body copy so the reader's eye lands here first. */
+.tl-claim {
+  margin: 4px 0 22px;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--text-main);
+  letter-spacing: 0.01em;
+}
+
+/* Bespoke section block used by every detail-section in the timeline
+   view (Timeline / Metrics / Technical summary / Reasoning / Needs /
+   Bridge / Readings / meta). */
+.tl-section {
+  margin-bottom: 28px;
+}
+.tl-meta-section {
+  margin-top: 12px;
+  padding-top: 14px;
+  border-top: 1px solid var(--panel-border);
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+/* "Metrics and Timeline" block: vertical metric stack on the left
+   (Hit Rate / Attention / Daily precision), big timeline canvas on
+   the right. The timeline column is given the larger fr so the
+   prediction-time visualisation always dominates. Collapses to a
+   single stacked column on narrow viewports. */
+.mt-block {
+  display: grid;
+  grid-template-columns: minmax(220px, 320px) minmax(0, 2fr);
+  gap: 18px;
+  /* Default grid behaviour (align-items: stretch) is what we want —
+     the timeline cell stretches to match the metrics stack on the
+     left, and drawTimelineSVG then scales trackHeight so the SVG
+     fills that stretched cell instead of leaving empty space below. */
+}
+.mt-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.mt-metrics .metric {
+  margin: 0;
+}
+/* Daily precision tile: chart wrapped with its own labelled head so
+   the user sees what the chart represents (was an unlabeled SVG
+   block before). */
+.mt-precision {
+  background: rgba(16, 35, 58, 0.6);
+  border: 1px solid var(--panel-border);
+  border-radius: 4px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.mt-precision-head {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+.mt-precision .activity-chart {
+  margin: 0;
+}
+.mt-timeline {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.mt-timeline .timeline-canvas-wrap {
   flex: 1 1 auto;
-  min-height: 0;
-  overflow: auto;
+  width: 100%;
+  min-height: 200px;
+}
+.mt-timeline .timeline-svg {
+  width: 100%;
+  height: 100%;
+}
+@media (max-width: 720px) {
+  .mt-block {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* FULL PREDICTION block — collapsed by default. <summary> reuses the
+   .tl-section-h type styling so the heading reads consistently with
+   every other section header; a small ▸ caret hints expandability. */
+.tl-fullpred {
+  margin: 0;
+}
+.tl-fullpred-summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  user-select: none;
+}
+.tl-fullpred-summary::-webkit-details-marker { display: none; }
+.tl-fullpred-summary::before {
+  content: "▸";
+  font-size: 10px;
+  color: var(--text-muted);
+  transition: transform 140ms ease;
+  display: inline-block;
+}
+.tl-fullpred[open] .tl-fullpred-summary::before {
+  transform: rotate(90deg);
+}
+.tl-fullpred-summary:hover {
+  color: var(--menu-active);
+}
+.tl-fullpred-body {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--panel-border);
+}
+
+/* CATEGORY → THEME breadcrumb list shown in the meta section. */
+.tl-lineage-list {
+  list-style: none;
+  margin: 0 0 8px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.tl-lineage-row {
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.tl-lineage-row:hover {
+  color: var(--menu-active);
+}
+.tl-lineage-cat,
+.tl-lineage-theme {
+  white-space: nowrap;
+}
+.tl-lineage-sep {
+  opacity: 0.6;
+}
+.tl-section-h {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin: 0 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--panel-border);
+}
+
+/* Anchor flash: brief highlight when a timeline event scrolls a panel
+   item into view, so the user sees where they landed. */
+.tl-anchor-flash {
+  animation: tl-anchor-pulse 1100ms ease-out;
+}
+@keyframes tl-anchor-pulse {
+  0%   { background: rgba(24, 199, 216, 0.30); box-shadow: 0 0 0 4px rgba(24, 199, 216, 0.20); }
+  100% { background: transparent; box-shadow: 0 0 0 0 transparent; }
+}
+
+/* In PROBE / alt-view mode the OBSERVATORY detail-panel-open transform
+   on #meta-header / #top-menu-stack is irrelevant — the meta-header
+   should stay anchored top-left and the menu stack is hidden anyway.
+   Force these to neutral so opening the PROBE settings hamburger
+   doesn't trigger the OBSERVATORY's title-slide animation. */
+body.alt-view-mode #meta-header {
+  transform: none !important;
+  transition: none;
+}
+body.alt-view-mode #top-menu-stack {
+  transform: none !important;
+  transition: none;
 }
 .timeline-svg {
   display: block;
@@ -1655,13 +1887,32 @@ body.alt-view-mode #probe-menu-toggle {
   stroke-dasharray: 3 3;
   opacity: 0.55;
 }
+/* Target window highlight: tinted band across the timeline tracks
+   marking when the prediction is supposed to land. */
+.timeline-svg .tl-target-band {
+  fill: rgba(255, 184, 77, 0.10);
+  stroke: rgba(255, 184, 77, 0.45);
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
+}
+.timeline-svg .tl-target-label-bg {
+  fill: rgba(255, 184, 77, 0.85);
+  stroke: var(--heat-3);
+  stroke-width: 1;
+}
+.timeline-svg .tl-target-label-text {
+  fill: rgba(7, 17, 31, 0.95);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+}
 .timeline-svg .tl-pt {
   fill: var(--heat-2);
   stroke: rgba(7, 17, 31, 0.9);
   stroke-width: 1.5;
   cursor: default;
 }
-.timeline-svg .tl-pt-self      { fill: var(--menu-active); }
 .timeline-svg .tl-pt-bridge    { fill: var(--heat-3); }
 .timeline-svg .tl-pt-need      { fill: var(--heat-2); }
 .timeline-svg .tl-pt-downstream{ fill: #6ec1ff; }
@@ -1672,12 +1923,36 @@ body.alt-view-mode #probe-menu-toggle {
   stroke: rgba(24, 199, 216, 0.6);
   stroke-width: 1;
 }
-.timeline-svg .tl-bar-self      { fill: rgba(24, 199, 216, 0.45); stroke: var(--menu-active); }
 .timeline-svg .tl-bar-bridge    { fill: rgba(255, 184, 77, 0.30); stroke: var(--heat-3); }
 .timeline-svg .tl-bar-need      { fill: rgba(110, 193, 255, 0.25); stroke: #6ec1ff; }
 .timeline-svg .tl-bar-downstream{ fill: rgba(110, 193, 255, 0.20); stroke: #6ec1ff; }
 .timeline-svg .tl-bar-upstream  { fill: rgba(200, 182, 255, 0.20); stroke: #c8b6ff; }
 .timeline-svg .tl-bar.is-primary { stroke-width: 1.5; }
+
+/* +N overflow badges. One per cluster of >3 overlapping events on a
+   given track. Pill styling so they read as "click to expand" rather
+   than as a regular event glyph. Track-tinted to keep the cluster's
+   identity. */
+.timeline-svg .tl-overflow rect {
+  fill: rgba(10, 22, 38, 0.92);
+  stroke: rgba(130, 170, 210, 0.55);
+  stroke-width: 1;
+}
+.timeline-svg .tl-overflow:hover rect {
+  fill: rgba(24, 199, 216, 0.18);
+  stroke: var(--menu-active);
+}
+.timeline-svg .tl-overflow-text {
+  fill: var(--text-main);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  pointer-events: none;
+}
+.timeline-svg .tl-overflow-bridge     rect { stroke: var(--heat-3); }
+.timeline-svg .tl-overflow-need       rect { stroke: #6ec1ff; }
+.timeline-svg .tl-overflow-downstream rect { stroke: #6ec1ff; }
+.timeline-svg .tl-overflow-upstream   rect { stroke: #c8b6ff; }
 
 /* Selected glyph: stronger outline + halo so it's obvious which event
    the detail strip below corresponds to. */
@@ -1767,6 +2042,129 @@ body.alt-view-mode #probe-menu-toggle {
   color: var(--text-muted);
   line-height: 1.5;
   white-space: pre-wrap;
+}
+
+/* Description / reasoning area below the detail strip. Takes whatever
+   vertical space the canvas + detail haven't claimed; scrolls
+   internally when the content is taller. Currently a placeholder —
+   wire up locale-aware reasoning blocks here. */
+.timeline-description {
+  flex: 1 1 auto;
+  min-height: 0;
+  margin-top: 14px;
+  padding: 14px 4px 6px;
+  border-top: 1px solid var(--panel-border);
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--text-main);
+  overflow: auto;
+}
+.timeline-description p.muted {
+  margin: 0;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* +N overflow modal. Centered overlay listing every event a cluster's
+   3-lane budget couldn't display. Click an entry → it becomes the
+   selected timeline event (same handler as a glyph click). */
+.tl-overflow-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(7, 17, 31, 0.55);
+  backdrop-filter: blur(2px);
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: tl-overflow-fade 140ms ease-out;
+}
+@keyframes tl-overflow-fade { from { opacity: 0; } to { opacity: 1; } }
+.tl-overflow-modal {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  box-shadow: var(--shadow-deep);
+  width: min(520px, 92vw);
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.tl-overflow-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--panel-border);
+}
+.tl-overflow-track {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  background: rgba(24, 199, 216, 0.14);
+  color: var(--menu-active);
+  border: 1px solid rgba(24, 199, 216, 0.35);
+}
+.tl-overflow-track.tl-track-bridge     { background: rgba(255, 184, 77, 0.12); color: var(--heat-3); border-color: rgba(255, 184, 77, 0.35); }
+.tl-overflow-track.tl-track-need       { background: rgba(110, 193, 255, 0.10); color: #6ec1ff; border-color: rgba(110, 193, 255, 0.35); }
+.tl-overflow-track.tl-track-downstream { background: rgba(110, 193, 255, 0.10); color: #6ec1ff; border-color: rgba(110, 193, 255, 0.35); }
+.tl-overflow-track.tl-track-upstream   { background: rgba(200, 182, 255, 0.10); color: #c8b6ff; border-color: rgba(200, 182, 255, 0.35); }
+.tl-overflow-count {
+  flex: 1 1 auto;
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+.tl-overflow-close {
+  border: 1px solid var(--panel-border);
+  background: var(--menu-bg);
+  color: var(--text-main);
+  border-radius: 4px;
+  width: 28px;
+  height: 28px;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+}
+.tl-overflow-close:hover {
+  border-color: rgba(24, 199, 216, 0.4);
+  background: rgba(24, 199, 216, 0.12);
+}
+.tl-overflow-list {
+  overflow: auto;
+  padding: 6px 0;
+}
+.tl-overflow-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--panel-border);
+  padding: 10px 16px;
+  cursor: pointer;
+  font: inherit;
+  color: var(--text-main);
+  transition: background 120ms ease;
+}
+.tl-overflow-item:last-child { border-bottom: 0; }
+.tl-overflow-item:hover {
+  background: rgba(24, 199, 216, 0.08);
+}
+.tl-overflow-item-date {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.tl-overflow-item-label {
+  font-size: 12.5px;
+  color: var(--text-main);
 }
 
 /* Evidence reverse view */
@@ -2017,6 +2415,17 @@ body.alt-view-mode #probe-menu-toggle {
   flex: 1 1 auto;
   color: var(--text-main);
   word-break: break-word;
+}
+/* Clickable variant — prediction title links to the target's own
+   PROBE timeline (or OBSERVATORY panel from the right slide-in). */
+.readings-chain-target.is-link {
+  cursor: pointer;
+  color: var(--menu-active);
+  border-bottom: 1px dashed transparent;
+  transition: color 120ms ease, border-color 120ms ease;
+}
+.readings-chain-target.is-link:hover {
+  border-bottom-color: var(--menu-active);
 }
 .readings-chain-notes {
   flex: 1 1 100%;
