@@ -3834,8 +3834,8 @@
         <td class="cell-scope">${escapeHTML(n.scope_id || targetScope)}</td>
         <td class="cell-category">${escapeHTML(catLabel)}</td>
         <td class="cell-theme">${escapeHTML(themeLabel)}</td>
-        <td class="cell-title">${escapeHTML(title)}</td>
-        <td class="cell-eli">${escapeHTML(eli)}</td>
+        <td class="cell-title" title="${escapeHTML(title)}">${escapeHTML(title)}</td>
+        <td class="cell-eli" title="${escapeHTML(eli)}">${escapeHTML(eli)}</td>
         <td class="cell-status status-${escapeHTML(status)}">${escapeHTML(status)}</td>
         <td class="cell-real">${real}</td>
         <td class="cell-contradicts">${isContradicted ? "✗" : ""}</td>

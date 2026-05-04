@@ -1334,6 +1334,13 @@ body.alt-view-mode {
   color: var(--text-muted);
   font-style: italic;
   max-width: 320px;
+  /* Soft 2-line clamp + ellipsis. Stored data is now full-length, the
+     UI clips visually. Hover over the cell to read the full text via
+     the title attribute the renderer attaches. */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 .list-table .cell-scope,
 .list-table .cell-category,
@@ -1345,6 +1352,12 @@ body.alt-view-mode {
 .list-table .cell-title {
   max-width: 360px;
   font-weight: 500;
+  /* Two-line clamp keeps long predictions readable without making the
+     row absurdly tall. */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 .list-table .cell-status {
   font-size: 11px;
