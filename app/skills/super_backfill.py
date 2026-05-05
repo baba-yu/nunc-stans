@@ -400,3 +400,107 @@ def commit_day(conn, repo_root: Path, date_iso: str) -> dict:
     summary = _isd.ingest_day(conn, Path(repo_root), date_iso)
     loc_summary = _isd.ingest_day_locales(conn, Path(repo_root), date_iso)
     return {**summary, "locales": {k: v for k, v in loc_summary.items() if k != "date"}}
+
+
+# ---------------------------------------------------------------------------
+# CLI
+# ---------------------------------------------------------------------------
+
+
+def main(argv: list[str] | None = None) -> int:
+    """Argparse entry point for ``python -m app.skills.super_backfill``.
+
+    Subcommands:
+
+      * ``scan`` — print ``[(date, has_news, has_fp), ...]`` JSON.
+      * ``prepare --date <D>`` — print per-day context bundle JSON.
+      * ``apply --date <D> --stream <s> [--locale <L>] --json-file <p>`` —
+        validate and atomically write a stream JSON.
+      * ``commit-day --date <D>`` — ingest the date's sourcedata into the
+        analytics DB. Opens a connection via ``app.src.db.connect``.
+    """
+    import argparse
+
+    parser = argparse.ArgumentParser(prog="python -m app.skills.super_backfill")
+    parser.add_argument(
+        "--repo-root",
+        default=".",
+        help="Repo root (default: cwd)",
+    )
+    sub = parser.add_subparsers(dest="cmd", required=True)
+
+    sub.add_parser("scan", help="List dates with EN news/FP markdown")
+
+    pp = sub.add_parser("prepare", help="Print context bundle for one date")
+    pp.add_argument("--date", required=True)
+
+    ap = sub.add_parser(
+        "apply", help="Validate + write a stream JSON for one date"
+    )
+    ap.add_argument("--date", required=True)
+    ap.add_argument(
+        "--stream",
+        required=True,
+        choices=("predictions", "bridges", "needs"),
+    )
+    ap.add_argument(
+        "--locale",
+        default=None,
+        help="Set for locale fan-in (ja/es/fil)",
+    )
+    ap.add_argument("--json-file", required=True)
+
+    cp = sub.add_parser(
+        "commit-day", help="Ingest the date's sourcedata into the DB"
+    )
+    cp.add_argument("--date", required=True)
+
+    args = parser.parse_args(argv)
+    repo_root = Path(args.repo_root).resolve()
+
+    if args.cmd == "scan":
+        print(
+            json.dumps(scan_markdown_dates(repo_root), ensure_ascii=False)
+        )
+        return 0
+    if args.cmd == "prepare":
+        print(
+            json.dumps(
+                prepare_context(repo_root, args.date),
+                ensure_ascii=False,
+                indent=2,
+            )
+        )
+        return 0
+    if args.cmd == "apply":
+        payload = json.loads(
+            Path(args.json_file).read_text(encoding="utf-8")
+        )
+        if args.locale:
+            out = apply_locale(
+                repo_root, args.date, args.locale, args.stream, payload
+            )
+        else:
+            apply_fn = {
+                "predictions": apply_predictions,
+                "bridges": apply_bridges,
+                "needs": apply_needs,
+            }[args.stream]
+            out = apply_fn(repo_root, args.date, payload)
+        print(f"OK {out}")
+        return 0
+    if args.cmd == "commit-day":
+        from app.src import db as _db
+
+        conn = _db.connect()
+        try:
+            summary = commit_day(conn, repo_root, args.date)
+        finally:
+            conn.close()
+        print(json.dumps(summary, ensure_ascii=False, indent=2))
+        return 0
+    return 2
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

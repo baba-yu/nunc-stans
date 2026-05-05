@@ -489,3 +489,129 @@ def test_commit_day_includes_locale_summary(fake_repo, conn):
     assert "locales" in summary
     ja = summary["locales"].get("ja", {})
     assert ja.get("predictions", 0) == 1
+
+
+# ---------------------------------------------------------------------------
+# Task 9: CLI surface (scan / prepare / apply)
+# ---------------------------------------------------------------------------
+
+
+def test_cli_scan_outputs_json(tmp_path):
+    import subprocess
+    import sys
+
+    (tmp_path / "report/en").mkdir(parents=True)
+    (tmp_path / "report/en/news-20260419.md").write_text("x", encoding="utf-8")
+    proc = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "app.skills.super_backfill",
+            "--repo-root",
+            str(tmp_path),
+            "scan",
+        ],
+        cwd=str(REPO_ROOT_REAL),
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    out = json.loads(proc.stdout)
+    assert out == [["2026-04-19", True, False]]
+
+
+def test_cli_prepare_outputs_context_bundle(tmp_path):
+    import subprocess
+    import sys
+
+    (tmp_path / "report/en").mkdir(parents=True)
+    (tmp_path / "report/en/news-20260419.md").write_text(
+        "## Future\n\n1. Title One\n\n   Body content.\n\n## Change Log\n",
+        encoding="utf-8",
+    )
+    proc = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "app.skills.super_backfill",
+            "--repo-root",
+            str(tmp_path),
+            "prepare",
+            "--date",
+            "2026-04-19",
+        ],
+        cwd=str(REPO_ROOT_REAL),
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    bundle = json.loads(proc.stdout)
+    assert bundle["date"] == "2026-04-19"
+    assert len(bundle["predictions_to_compose"]) == 1
+    assert bundle["predictions_to_compose"][0]["title"] == "Title One"
+
+
+def test_cli_apply_predictions_writes_file(tmp_path):
+    import subprocess
+    import sys
+
+    payload = _valid_predictions_payload(date_iso="2026-04-22")
+    json_in = tmp_path / "preds.json"
+    json_in.write_text(json.dumps(payload), encoding="utf-8")
+    proc = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "app.skills.super_backfill",
+            "--repo-root",
+            str(tmp_path),
+            "apply",
+            "--date",
+            "2026-04-22",
+            "--stream",
+            "predictions",
+            "--json-file",
+            str(json_in),
+        ],
+        cwd=str(REPO_ROOT_REAL),
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    assert proc.stdout.startswith("OK ")
+    out_path = tmp_path / "app/sourcedata/2026-04-22/predictions.json"
+    assert out_path.is_file()
+    assert json.loads(out_path.read_text(encoding="utf-8")) == payload
+
+
+def test_cli_apply_locale_writes_to_locales_subdir(tmp_path):
+    import subprocess
+    import sys
+
+    payload = _valid_predictions_payload(date_iso="2026-04-22")
+    json_in = tmp_path / "preds.ja.json"
+    json_in.write_text(json.dumps(payload), encoding="utf-8")
+    proc = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "app.skills.super_backfill",
+            "--repo-root",
+            str(tmp_path),
+            "apply",
+            "--date",
+            "2026-04-22",
+            "--stream",
+            "predictions",
+            "--locale",
+            "ja",
+            "--json-file",
+            str(json_in),
+        ],
+        cwd=str(REPO_ROOT_REAL),
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    out_path = tmp_path / "app/sourcedata/locales/2026-04-22/ja/predictions.json"
+    assert out_path.is_file()
