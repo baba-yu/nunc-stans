@@ -213,6 +213,14 @@ LOCALE TRANSLATION RULES (from design/skills/locale-fanout.md):
   for technical terms is fine.
 - No scope prefix in any locale ((技術), (Tecnología), (Teknikal) all forbidden).
 - Translate ONLY the title strings. Do not modify any other field.
+- **Preserve the EN title's subject-leading + trailing-time shape.** Do NOT
+  move the `by Q3 2026` / `by H2 2026` / `Q4 2026` time anchor to the front
+  of the locale translation even if it is grammatically natural in the locale
+  (e.g. Japanese "2026年Q4までに、" or Spanish "Para Q3 2026,"). The locale
+  title MUST start with the same subject as the EN canonical; the time anchor
+  goes mid-sentence or at the end.
+  - GOOD JA: `KVキャッシュ圧縮dtypeが推論スタックのデプロイメント・ノブとして2026年Q4までに出荷される`
+  - BAD JA:  `2026年Q4までに、KVキャッシュ圧縮dtypeが…` (date leads — violates rule)
 
 REPLY CONTRACT:
 - Success: a single JSON object in a fenced ```json``` block:
