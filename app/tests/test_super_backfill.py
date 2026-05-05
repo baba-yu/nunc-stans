@@ -615,3 +615,162 @@ def test_cli_apply_locale_writes_to_locales_subdir(tmp_path):
     )
     out_path = tmp_path / "app/sourcedata/locales/2026-04-22/ja/predictions.json"
     assert out_path.is_file()
+
+
+# ---------------------------------------------------------------------------
+# Task 10: End-to-end 2-day chronological walk
+#
+# Drives a synthetic 2-day corpus through the full chronology with mocked
+# sub-agent outputs (we directly call apply_* with synthesized payloads
+# in lieu of dispatching real sub-agents) and verifies final DB state.
+# ---------------------------------------------------------------------------
+
+
+def test_e2e_two_day_chronological_walk(fake_repo, conn):
+    """Day 1: news only, 1 prediction. Day 2: news (1 pred) + FP referencing day 1.
+
+    Walk through the full apply → commit_day chain for both days and
+    confirm the DB ends up with the expected counts and that day 2's
+    prepare_context sees day 1's just-applied predictions in
+    prior_predictions.
+    """
+    # Synthetic markdown corpus.
+    (fake_repo / "report/en").mkdir(parents=True)
+    (fake_repo / "future-prediction/en").mkdir(parents=True)
+    (fake_repo / "report/en/news-20260422.md").write_text(
+        "## Future\n\n1. D1 prediction\n\n   Day 1 body content.\n\n## Change Log\n",
+        encoding="utf-8",
+    )
+    (fake_repo / "report/en/news-20260423.md").write_text(
+        "## Future\n\n1. D2 prediction\n\n   Day 2 body content.\n\n## Change Log\n",
+        encoding="utf-8",
+    )
+    (fake_repo / "future-prediction/en/future-prediction-20260423.md").write_text(
+        "## Validation findings\n\n"
+        "| Prediction (summary) | Prediction date | Today's relevance | "
+        "Evidence summary | Reference link(s) |\n"
+        "|---|---|---|---|---|\n"
+        "| D1 prediction | 2026-04-22 | 4 | 3 | [a](https://x) |\n",
+        encoding="utf-8",
+    )
+
+    # ----- DAY 1 -----
+    bundle1 = sb.prepare_context(fake_repo, "2026-04-22")
+    assert len(bundle1["predictions_to_compose"]) == 1
+    assert bundle1["predictions_to_compose"][0]["title"] == "D1 prediction"
+    assert bundle1["validation_rows_to_bridge"] == []
+    assert bundle1["prior_predictions"] == []
+
+    pid1 = "prediction.aaaaaaaaaaaaaaaa"
+    sb.apply_predictions(
+        fake_repo,
+        "2026-04-22",
+        {
+            "date": "2026-04-22",
+            "predictions": [
+                {
+                    "id": pid1,
+                    "title": "D1 prediction",
+                    "body": "Day 1 body content.",
+                    "reasoning": {
+                        "because": "x",
+                        "given": "y",
+                        "so_that": "z",
+                        "landing": "by 2026-Q4",
+                        "plain_language": "kid version",
+                    },
+                    "summary": "Short day-1 summary.",
+                }
+            ],
+        },
+    )
+    sb.commit_day(conn, fake_repo, "2026-04-22")
+
+    # Look up the real DB prediction_id (hashed from date + body) so the
+    # day-2 bridge can reference it without forcing
+    # `_match_or_create_prediction` to invent a phantom row.
+    pid1_db = conn.execute(
+        "SELECT prediction_id FROM predictions WHERE prediction_date = ?",
+        ("2026-04-22",),
+    ).fetchone()["prediction_id"]
+
+    # ----- DAY 2 -----
+    bundle2 = sb.prepare_context(fake_repo, "2026-04-23")
+    # Day 2's prior_predictions must now include day 1's just-applied entry.
+    assert len(bundle2["prior_predictions"]) == 1
+    assert bundle2["prior_predictions"][0]["id"] == pid1
+    assert bundle2["prior_predictions"][0]["prediction_date"] == "2026-04-22"
+    assert len(bundle2["predictions_to_compose"]) == 1
+    assert len(bundle2["validation_rows_to_bridge"]) == 1
+    assert (
+        bundle2["validation_rows_to_bridge"][0]["prediction_ref"]["short_label"]
+        == "D1 prediction"
+    )
+
+    pid2 = "prediction.bbbbbbbbbbbbbbbb"
+    sb.apply_predictions(
+        fake_repo,
+        "2026-04-23",
+        {
+            "date": "2026-04-23",
+            "predictions": [
+                {
+                    "id": pid2,
+                    "title": "D2 prediction",
+                    "body": "Day 2 body content.",
+                    "reasoning": {
+                        "because": "x",
+                        "given": "y",
+                        "so_that": "z",
+                        "landing": "by 2026-Q4",
+                        "plain_language": "kid version",
+                    },
+                    "summary": "Short day-2 summary.",
+                }
+            ],
+        },
+    )
+    sb.apply_bridges(
+        fake_repo,
+        "2026-04-23",
+        {
+            "date": "2026-04-23",
+            "validation_rows": [
+                {
+                    "prediction_ref": {
+                        "id": pid1_db,
+                        "short_label": "D1 prediction",
+                        "prediction_date": "2026-04-22",
+                    },
+                    "today_relevance": 4,
+                    "evidence_summary": "ev",
+                    "reference_links": [{"label": "a", "url": "https://x"}],
+                    "bridge": {
+                        "support_dimension": "given",
+                        "narrative": "Today supports the given premise.",
+                        "coherence": 4,
+                        "remaining_gap": "Need confirming filing.",
+                    },
+                }
+            ],
+        },
+    )
+    sb.commit_day(conn, fake_repo, "2026-04-23")
+
+    # ----- ASSERT FINAL DB STATE -----
+    n_pred = conn.execute(
+        "SELECT COUNT(*) AS n FROM predictions"
+    ).fetchone()["n"]
+    assert n_pred == 2
+    n_val = conn.execute(
+        "SELECT COUNT(*) AS n FROM validation_rows"
+    ).fetchone()["n"]
+    assert n_val == 1
+    # The bridge narrative landed.
+    bridge = conn.execute(
+        "SELECT bridge_text, support_dimension FROM validation_rows "
+        "WHERE validation_date = ?",
+        ("2026-04-23",),
+    ).fetchone()
+    assert bridge["bridge_text"] == "Today supports the given premise."
+    assert bridge["support_dimension"] == "given"
