@@ -119,3 +119,81 @@ def test_extract_predictions_strips_leading_indent_from_body(tmp_path):
     for line in body.splitlines():
         if line:
             assert not line.startswith(" "), f"unstripped indent: {line!r}"
+
+
+# ---------------------------------------------------------------------------
+# Task 4: extract_validation_rows_from_fp
+#
+# Real markdown shape:
+#
+#   ## Validation findings
+#
+#   | Prediction (summary) | Prediction date | Today's relevance | Evidence summary | Reference link(s) |
+#   |---|---|---|---|---|
+#   | <prose label> | YYYY-MM-DD | <int> | <int or prose> | [label1](url1), [label2](url2) |
+#   ...
+#
+#   ## Bridge
+#
+# Col 4 ("Evidence summary") in the legacy markdown is often an integer
+# count rather than a prose string — the sub-agent regenerates this
+# field fresh, so the extractor stores whatever's in the cell verbatim.
+# ---------------------------------------------------------------------------
+
+
+def test_extract_validation_rows_from_fp_real_format(tmp_path):
+    md = (
+        "# Future Prediction Validation Report 2026-05-04\n\n"
+        "Coverage window: predictions from 2026-04-27 through 2026-05-03.\n\n"
+        "## Validation findings\n\n"
+        "| Prediction (summary) | Prediction date | Today's relevance | "
+        "Evidence summary | Reference link(s) |\n"
+        "|---|---|---|---|---|\n"
+        "| Mag 7 Q1 earnings reset AI-capex narrative | 2026-04-27 | 5 | 4 | "
+        "[Computing.net - AMD Q1](https://computing.net/x), "
+        "[TipRanks AMD](https://tipranks.com/y) |\n"
+        "| AI-Infra CVE class graduates | 2026-04-27 | 3 | 4 | "
+        "[Stellar Cyber](https://stellarcyber.ai/learn) |\n\n"
+        "## Bridge\n\n"
+        "(prose follows...)\n"
+    )
+    p = tmp_path / "future-prediction-20260504.md"
+    p.write_text(md, encoding="utf-8")
+    out = sb.extract_validation_rows_from_fp(p)
+    assert len(out) == 2
+    r0 = out[0]
+    assert (
+        r0["prediction_ref"]["short_label"]
+        == "Mag 7 Q1 earnings reset AI-capex narrative"
+    )
+    assert r0["prediction_ref"]["prediction_date"] == "2026-04-27"
+    assert r0["today_relevance"] == 5
+    assert len(r0["reference_links"]) == 2
+    assert r0["reference_links"][0]["label"] == "Computing.net - AMD Q1"
+    assert r0["reference_links"][0]["url"] == "https://computing.net/x"
+    assert r0["reference_links"][1]["url"] == "https://tipranks.com/y"
+    # Second row, single reference link.
+    assert out[1]["today_relevance"] == 3
+    assert len(out[1]["reference_links"]) == 1
+
+
+def test_extract_validation_rows_no_section(tmp_path):
+    p = tmp_path / "future-prediction-20260419.md"
+    p.write_text("# FP report\n\nNo validation findings section.\n", encoding="utf-8")
+    assert sb.extract_validation_rows_from_fp(p) == []
+
+
+def test_extract_validation_rows_skips_malformed_rows(tmp_path):
+    md = (
+        "## Validation findings\n\n"
+        "| Prediction | Date | Relevance | Summary | Links |\n"
+        "|---|---|---|---|---|\n"
+        "| Good row | 2026-04-27 | 4 | x | [a](https://x) |\n"
+        "| Too few cells | 2026-04-27 | 5 |\n"
+        "## Bridge\n"
+    )
+    p = tmp_path / "future-prediction-20260504.md"
+    p.write_text(md, encoding="utf-8")
+    out = sb.extract_validation_rows_from_fp(p)
+    assert len(out) == 1
+    assert out[0]["prediction_ref"]["short_label"] == "Good row"

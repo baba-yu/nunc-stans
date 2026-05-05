@@ -24,8 +24,11 @@ _NEWS_RE = re.compile(r"^news-(\d{8})\.md$")
 _FP_RE = re.compile(r"^future-prediction-(\d{8})\.md$")
 
 _FUTURE_HEADING_RE = re.compile(r"^##\s+Future\s*$", re.MULTILINE)
+_VALID_HEADING_RE = re.compile(r"^##\s+Validation findings\s*$", re.MULTILINE)
 _NEXT_H2_RE = re.compile(r"^##\s+\S", re.MULTILINE)
 _PRED_HEADER_RE = re.compile(r"^(\d+)\.\s+(.+?)\s*$", re.MULTILINE)
+_TABLE_ROW_RE = re.compile(r"^\|(.+)\|\s*$", re.MULTILINE)
+_LINK_RE = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
 
 
 def _yyyymmdd_to_iso(s: str) -> str:
@@ -119,4 +122,63 @@ def extract_predictions_from_news(path: Path) -> list[dict]:
         raw_body = section[body_start:body_end]
         body = _strip_indent(raw_body)
         out.append({"title": title, "body": body})
+    return out
+
+
+def extract_validation_rows_from_fp(path: Path) -> list[dict]:
+    """Return validation-row dicts from a future-prediction markdown.
+
+    Each dict is shaped for super-backfill's bridge-stream sub-agent
+    consumption — missing the ``bridge`` object (the sub-agent regenerates
+    it). The shape is:
+
+        {
+          "prediction_ref": {
+            "id": "",                  # filled by sub-agent / prior-day lookup
+            "short_label": "...",
+            "prediction_date": "YYYY-MM-DD"
+          },
+          "today_relevance": <int>,
+          "evidence_summary": "<raw col 4 text — sub-agent regenerates>",
+          "reference_links": [{"label": "...", "url": "..."}, ...]
+        }
+
+    Skips the table header row, the separator row, and any row with
+    fewer than 5 cells.
+    """
+    text = Path(path).read_text(encoding="utf-8")
+    m = _VALID_HEADING_RE.search(text)
+    if not m:
+        return []
+    start = m.end()
+    nxt = _NEXT_H2_RE.search(text, start)
+    section = text[start:nxt.start()] if nxt else text[start:]
+    out: list[dict] = []
+    for row_m in _TABLE_ROW_RE.finditer(section):
+        cells = [c.strip() for c in row_m.group(1).split("|")]
+        if len(cells) != 5:
+            continue
+        if cells[0].startswith("---") or cells[0].startswith(":-"):
+            continue
+        if cells[0].lower().startswith("prediction"):
+            continue
+        short_label, pred_date, relevance_raw, ev_raw, refs_cell = cells
+        try:
+            relevance_i = int(relevance_raw)
+        except ValueError:
+            relevance_i = 0
+        links = [
+            {"label": lab.strip(), "url": url.strip()}
+            for lab, url in _LINK_RE.findall(refs_cell)
+        ]
+        out.append({
+            "prediction_ref": {
+                "id": "",
+                "short_label": short_label,
+                "prediction_date": pred_date,
+            },
+            "today_relevance": relevance_i,
+            "evidence_summary": ev_raw,
+            "reference_links": links,
+        })
     return out
