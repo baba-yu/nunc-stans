@@ -136,6 +136,27 @@ TITLE RULES (from design/scheduled/1_daily_update-writer-rules.md):
   (e.g. "Local-LLM training stack", "Big-3 hyperscalers", "SEC", "Frontier
   cyber-AI models"). The verb states the predicted action / state change.
 
+- **Subject choice between `body` and `reasoning.so_that`:** the title's subject
+  MUST match the BODY's narrative center — the technology / project / institution /
+  phenomenon the prediction is ABOUT. Use `so_that` to identify the predicted
+  VERB / state change, not the subject. `so_that`'s grammatical subject is often
+  a downstream consequence-bearer (a hyperscaler that "ships X", a regulator that
+  "publishes Y", an analyst that "covers Z") — using it as the title's lead loses
+  what the prediction is *about*.
+
+  GOOD: body = "Unsloth 2026 update wave (12x faster MoE, 20% less VRAM)…";
+        so_that = "A hyperscaler ships a managed Unsloth tier"
+        → "Unsloth lands as hyperscaler-managed fine-tuning service by H2 2026"
+        (subject = Unsloth from body; verb derived from so_that)
+  BAD:  same prediction → "Hyperscalers ship managed Unsloth fine-tuning service
+        by H2 2026" (subject from so_that's grammatical actor — loses Unsloth)
+
+- **Smell test for subject specificity:** replace the title's subject with
+  placeholder `X`. Would `X does Y by Z` uniquely identify this prediction
+  from the body? If yes → subject is specific (good). If no → subject is
+  generic ("hyperscalers", "labs", "regulators", "agencies") and you should
+  swap it for the body's actual narrative center.
+
 - A trailing "by <time>" is fine; a leading time is not.
 
 - Length: <= 80 chars.
