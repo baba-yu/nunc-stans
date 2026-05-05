@@ -412,6 +412,34 @@ def _ingest_bridges_file(
             prediction_id=prediction_id,
             row=row,
         )
+        # Mirror legacy `_ingest_validation_file`'s update of the
+        # scope-assignment "latest_*" columns. Without this the dashboard
+        # falls back to NO_SIGNAL / REALIZ. 0.00 / no-color nodes after
+        # a sourcedata-first rebuild because score.py's snapshot step
+        # reads these columns to derive observation_status. UPDATE is
+        # idempotent + scope-scoped: rows for scopes the prediction is
+        # not assigned to are silent no-ops.
+        from app.src.analytics.scoring import normalize_relevance as _norm
+        new_rel = _norm(entry.today_relevance)
+        for _scope_id in ("tech", "business"):
+            conn.execute(
+                """
+                UPDATE prediction_scope_assignments
+                   SET latest_observed_relevance = ?,
+                       latest_realization_score  = ?,
+                       latest_contradiction_score = ?,
+                       updated_at = ?
+                 WHERE prediction_id = ? AND scope_id = ?
+                """,
+                (
+                    entry.today_relevance,
+                    new_rel,
+                    0.0,
+                    _ingest._now_iso(),
+                    prediction_id,
+                    _scope_id,
+                ),
+            )
         # Evidence linking — mirrors legacy `_ingest_validation_file`.
         # Without this the rebuild loses the evidence_items table and
         # docs/data/evidence-reverse.json comes back empty.
