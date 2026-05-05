@@ -367,3 +367,36 @@ def apply_locale(
         / f"{stream}.json"
     )
     return _atomic_write_json(out, payload)
+
+
+# ---------------------------------------------------------------------------
+# commit_day: ingest the day's sourcedata into the analytics DB.
+# ---------------------------------------------------------------------------
+
+
+def commit_day(conn, repo_root: Path, date_iso: str) -> dict:
+    """Ingest ``app/sourcedata/<date>/*.json`` (and locales) into the DB.
+
+    Thin wrapper around
+    :func:`app.skills.ingest_sourcedata.ingest_day` +
+    :func:`ingest_day_locales`, returning a roll-up dict::
+
+        {
+          "date": "<YYYY-MM-DD>",
+          "predictions": <int>,
+          "needs": <int>,
+          "bridges": <int>,
+          "headlines": <int>,
+          "change_log": <int>,
+          "news_section": <int>,
+          "locales": {<locale>: {"predictions": <int>, ...}, ...}
+        }
+
+    Idempotent: re-running with the same JSON files produces the same DB
+    state.
+    """
+    from app.skills import ingest_sourcedata as _isd
+
+    summary = _isd.ingest_day(conn, Path(repo_root), date_iso)
+    loc_summary = _isd.ingest_day_locales(conn, Path(repo_root), date_iso)
+    return {**summary, "locales": {k: v for k, v in loc_summary.items() if k != "date"}}

@@ -3,11 +3,35 @@
 from __future__ import annotations
 
 import json
+import sqlite3
+from pathlib import Path
 
 import pytest
 
 from app.skills import super_backfill as sb
 from app.skills.sourcedata_schemas import SourcedataValidationError
+
+
+REPO_ROOT_REAL = Path(__file__).resolve().parents[2]
+SCHEMA_SQL = (REPO_ROOT_REAL / "app" / "src" / "schema.sql").read_text(
+    encoding="utf-8"
+)
+
+
+@pytest.fixture()
+def fake_repo(tmp_path: Path) -> Path:
+    """Stand up a minimal fake repo: empty ``app/sourcedata/`` ready to fill."""
+    (tmp_path / "app" / "sourcedata").mkdir(parents=True)
+    return tmp_path
+
+
+@pytest.fixture()
+def conn() -> sqlite3.Connection:
+    c = sqlite3.connect(":memory:")
+    c.row_factory = sqlite3.Row
+    c.executescript(SCHEMA_SQL)
+    yield c
+    c.close()
 
 
 def _valid_predictions_payload(date_iso: str = "2026-04-22") -> dict:
@@ -425,3 +449,43 @@ def test_apply_locale_validates_schema(tmp_path):
     bad = {"date": "2026-04-22", "predictions": [{"id": "x"}]}
     with pytest.raises(SourcedataValidationError):
         sb.apply_locale(tmp_path, "2026-04-22", "ja", "predictions", bad)
+
+
+# ---------------------------------------------------------------------------
+# Task 8: commit_day
+# ---------------------------------------------------------------------------
+
+
+def test_commit_day_ingests_predictions_into_db(fake_repo, conn):
+    """After apply_predictions + commit_day, the DB has the row."""
+    payload = _valid_predictions_payload(date_iso="2026-04-22")
+    sb.apply_predictions(fake_repo, "2026-04-22", payload)
+    summary = sb.commit_day(conn, fake_repo, "2026-04-22")
+    assert summary["date"] == "2026-04-22"
+    assert summary["predictions"] == 1
+    n = conn.execute("SELECT COUNT(*) AS n FROM predictions").fetchone()["n"]
+    assert n == 1
+    title = conn.execute(
+        "SELECT title FROM predictions WHERE prediction_date = ?",
+        ("2026-04-22",),
+    ).fetchone()["title"]
+    assert title == "Test prediction"
+
+
+def test_commit_day_no_sourcedata_returns_zero_summary(fake_repo, conn):
+    """Calling commit_day for a date without sourcedata is a safe no-op."""
+    summary = sb.commit_day(conn, fake_repo, "2026-04-22")
+    assert summary["date"] == "2026-04-22"
+    assert summary["predictions"] == 0
+    assert summary["needs"] == 0
+    assert summary["bridges"] == 0
+
+
+def test_commit_day_includes_locale_summary(fake_repo, conn):
+    payload = _valid_predictions_payload(date_iso="2026-04-22")
+    sb.apply_predictions(fake_repo, "2026-04-22", payload)
+    sb.apply_locale(fake_repo, "2026-04-22", "ja", "predictions", payload)
+    summary = sb.commit_day(conn, fake_repo, "2026-04-22")
+    assert "locales" in summary
+    ja = summary["locales"].get("ja", {})
+    assert ja.get("predictions", 0) == 1
