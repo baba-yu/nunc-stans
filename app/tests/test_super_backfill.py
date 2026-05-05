@@ -2,7 +2,33 @@
 
 from __future__ import annotations
 
+import json
+
+import pytest
+
 from app.skills import super_backfill as sb
+from app.skills.sourcedata_schemas import SourcedataValidationError
+
+
+def _valid_predictions_payload(date_iso: str = "2026-04-22") -> dict:
+    return {
+        "date": date_iso,
+        "predictions": [
+            {
+                "id": "prediction.aaaa1111bbbb2222",
+                "title": "Test prediction",
+                "body": "A test body of multiple sentences.",
+                "reasoning": {
+                    "because": "premise A",
+                    "given": "premise B",
+                    "so_that": "predicted state",
+                    "landing": "by Q4 2026",
+                    "plain_language": "kids version of this prediction",
+                },
+                "summary": "Short summary, well under 300 chars.",
+            }
+        ],
+    }
 
 
 def test_scan_markdown_dates_returns_union_sorted(tmp_path):
@@ -272,3 +298,91 @@ def test_prepare_context_bundles_predictions_validation_rows_and_prior(tmp_path)
     assert len(b2["validation_rows_to_bridge"]) == 1
     assert b2["validation_rows_to_bridge"][0]["prediction_ref"]["short_label"] == "P1"
     assert b2["prior_predictions"] == []  # Sourcedata for day-1 not yet populated.
+
+
+# ---------------------------------------------------------------------------
+# Task 6: apply_predictions / apply_bridges / apply_needs
+# ---------------------------------------------------------------------------
+
+
+def test_apply_predictions_writes_atomically(tmp_path):
+    payload = _valid_predictions_payload()
+    out = sb.apply_predictions(tmp_path, "2026-04-22", payload)
+    assert out == tmp_path / "app/sourcedata/2026-04-22/predictions.json"
+    loaded = json.loads(out.read_text(encoding="utf-8"))
+    assert loaded == payload
+
+
+def test_apply_predictions_rejects_invalid_schema(tmp_path):
+    bad = {"date": "2026-04-22", "predictions": [{"id": "x"}]}
+    with pytest.raises(SourcedataValidationError):
+        sb.apply_predictions(tmp_path, "2026-04-22", bad)
+    # No file should be created on validation failure.
+    assert not (tmp_path / "app/sourcedata/2026-04-22/predictions.json").exists()
+
+
+def test_apply_bridges_round_trip(tmp_path):
+    payload = {
+        "date": "2026-04-23",
+        "validation_rows": [
+            {
+                "prediction_ref": {
+                    "id": "prediction.aaaa1111bbbb2222",
+                    "short_label": "Test prediction",
+                    "prediction_date": "2026-04-22",
+                },
+                "today_relevance": 4,
+                "evidence_summary": "Some evidence.",
+                "reference_links": [{"label": "src", "url": "https://x"}],
+                "bridge": {
+                    "support_dimension": "given",
+                    "narrative": "Today supports the given premise.",
+                    "coherence": 4,
+                    "remaining_gap": "Need a confirming earnings call.",
+                },
+            }
+        ],
+    }
+    out = sb.apply_bridges(tmp_path, "2026-04-23", payload)
+    assert out == tmp_path / "app/sourcedata/2026-04-23/bridges.json"
+    assert json.loads(out.read_text(encoding="utf-8")) == payload
+
+
+def test_apply_needs_round_trip(tmp_path):
+    payload = {
+        "date": "2026-04-22",
+        "by_prediction": {
+            "prediction.aaaa1111bbbb2222": [
+                {
+                    "actor": "PM",
+                    "job": "ship feature",
+                    "task": {
+                        "who": "team",
+                        "what": "build",
+                        "where": "repo",
+                        "when": "May",
+                        "why": "growth",
+                        "how": "agile",
+                    },
+                }
+            ]
+        },
+    }
+    out = sb.apply_needs(tmp_path, "2026-04-22", payload)
+    assert out == tmp_path / "app/sourcedata/2026-04-22/needs.json"
+    assert json.loads(out.read_text(encoding="utf-8")) == payload
+
+
+def test_apply_predictions_overwrites_existing_file(tmp_path):
+    """Atomic re-apply replaces a previously-written predictions.json."""
+    payload1 = _valid_predictions_payload()
+    sb.apply_predictions(tmp_path, "2026-04-22", payload1)
+    payload2 = _valid_predictions_payload()
+    payload2["predictions"][0]["title"] = "Updated title"
+    sb.apply_predictions(tmp_path, "2026-04-22", payload2)
+    loaded = json.loads(
+        (tmp_path / "app/sourcedata/2026-04-22/predictions.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert loaded["predictions"][0]["title"] == "Updated title"

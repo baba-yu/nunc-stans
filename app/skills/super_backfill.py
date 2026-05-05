@@ -18,9 +18,16 @@ per (date, stream, item) per the operator runbook in
 from __future__ import annotations
 
 import json
+import os
 import re
 from datetime import date, timedelta
 from pathlib import Path
+
+from app.skills.sourcedata_schemas import (
+    BridgesFile,
+    NeedsFile,
+    PredictionsFile,
+)
 
 _NEWS_RE = re.compile(r"^news-(\d{8})\.md$")
 _FP_RE = re.compile(r"^future-prediction-(\d{8})\.md$")
@@ -260,3 +267,60 @@ def prepare_context(repo_root: Path, date_iso: str) -> dict:
         "validation_rows_to_bridge": rows,
         "prior_predictions": prior,
     }
+
+
+# ---------------------------------------------------------------------------
+# Apply hooks: schema-validate then atomic-write a stream JSON for one date.
+# ---------------------------------------------------------------------------
+
+
+def _atomic_write_json(path: Path, payload: dict) -> Path:
+    """Write ``payload`` as JSON to ``path`` atomically.
+
+    Creates parent directories as needed. Validation MUST happen before
+    calling this — by the time the temp file lands at ``path`` it should
+    be the final, schema-valid content.
+    """
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    tmp.write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    os.replace(tmp, path)
+    return path
+
+
+def _date_dir(repo_root: Path, date_iso: str) -> Path:
+    return Path(repo_root) / "app" / "sourcedata" / date_iso
+
+
+def apply_predictions(
+    repo_root: Path, date_iso: str, payload: dict
+) -> Path:
+    """Validate + atomically write ``app/sourcedata/<date>/predictions.json``.
+
+    Raises ``SourcedataValidationError`` on schema failure. No file is
+    created when validation fails.
+    """
+    PredictionsFile.from_dict(payload)
+    return _atomic_write_json(
+        _date_dir(repo_root, date_iso) / "predictions.json", payload
+    )
+
+
+def apply_bridges(repo_root: Path, date_iso: str, payload: dict) -> Path:
+    """Validate + atomically write ``app/sourcedata/<date>/bridges.json``."""
+    BridgesFile.from_dict(payload)
+    return _atomic_write_json(
+        _date_dir(repo_root, date_iso) / "bridges.json", payload
+    )
+
+
+def apply_needs(repo_root: Path, date_iso: str, payload: dict) -> Path:
+    """Validate + atomically write ``app/sourcedata/<date>/needs.json``."""
+    NeedsFile.from_dict(payload)
+    return _atomic_write_json(
+        _date_dir(repo_root, date_iso) / "needs.json", payload
+    )
