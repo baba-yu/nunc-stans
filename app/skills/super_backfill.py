@@ -23,9 +23,38 @@ from pathlib import Path
 _NEWS_RE = re.compile(r"^news-(\d{8})\.md$")
 _FP_RE = re.compile(r"^future-prediction-(\d{8})\.md$")
 
+_FUTURE_HEADING_RE = re.compile(r"^##\s+Future\s*$", re.MULTILINE)
+_NEXT_H2_RE = re.compile(r"^##\s+\S", re.MULTILINE)
+_PRED_HEADER_RE = re.compile(r"^(\d+)\.\s+(.+?)\s*$", re.MULTILINE)
+
 
 def _yyyymmdd_to_iso(s: str) -> str:
     return f"{s[:4]}-{s[4:6]}-{s[6:8]}"
+
+
+def _strip_indent(block: str) -> str:
+    """Strip the common leading indent from each line of ``block``.
+
+    The Future-section bodies in real corpus markdown are indented 3
+    spaces. Strip the indent uniformly so callers see clean prose.
+    Empty lines are preserved as-is.
+    """
+    lines = block.splitlines()
+    indents = [
+        len(line) - len(line.lstrip(" "))
+        for line in lines
+        if line.strip()
+    ]
+    if not indents:
+        return block.strip()
+    common = min(indents)
+    out = []
+    for line in lines:
+        if line.strip():
+            out.append(line[common:])
+        else:
+            out.append("")
+    return "\n".join(out).strip()
 
 
 def scan_markdown_dates(repo_root: Path) -> list[tuple[str, bool, bool]]:
@@ -50,3 +79,44 @@ def scan_markdown_dates(repo_root: Path) -> list[tuple[str, bool, bool]]:
                 fp_dates.add(_yyyymmdd_to_iso(m.group(1)))
     all_dates = sorted(news_dates | fp_dates)
     return [(d, d in news_dates, d in fp_dates) for d in all_dates]
+
+
+def extract_predictions_from_news(path: Path) -> list[dict]:
+    """Return ``[{"title": ..., "body": ...}, ...]`` from a news markdown.
+
+    Locates the ``## Future`` section, splits it on numbered list markers
+    of the form ``^N. <title>``, and pairs each title with the prose
+    block(s) following it (up to the next numbered marker or the next
+    ``## H2`` heading).
+
+    The real corpus shape is:
+
+        ## Future
+
+
+        1. <title — NOT bolded>
+
+           **<bolded central claim>** continuing prose...
+           In plain language: <plain summary>
+
+        2. <next title>
+           ...
+        ## Change Log
+    """
+    text = Path(path).read_text(encoding="utf-8")
+    m = _FUTURE_HEADING_RE.search(text)
+    if not m:
+        return []
+    start = m.end()
+    nxt = _NEXT_H2_RE.search(text, start)
+    section = text[start:nxt.start()] if nxt else text[start:]
+    headers = list(_PRED_HEADER_RE.finditer(section))
+    out: list[dict] = []
+    for i, h in enumerate(headers):
+        title = h.group(2).strip()
+        body_start = h.end()
+        body_end = headers[i + 1].start() if i + 1 < len(headers) else len(section)
+        raw_body = section[body_start:body_end]
+        body = _strip_indent(raw_body)
+        out.append({"title": title, "body": body})
+    return out
