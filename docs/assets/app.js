@@ -3970,6 +3970,13 @@
     state.probeTimelinePred = predId;
     if (state.view === "probe" && state.probeTab === "predictions") {
       renderListView();
+      // #list-body is the scroll container shared by the list and the
+      // timeline. Without this reset, opening a row near the bottom
+      // leaves the timeline scrolled to wherever the list was. Only
+      // applied here (the user-click entry) so locale/scope re-renders
+      // inside the timeline keep their scroll position.
+      const body = document.getElementById("list-body");
+      if (body) body.scrollTop = 0;
     }
   }
 
@@ -3977,6 +3984,8 @@
     state.probeTimelinePred = null;
     if (state.view === "probe" && state.probeTab === "predictions") {
       renderListView();
+      const body = document.getElementById("list-body");
+      if (body) body.scrollTop = 0;
     }
   }
 
@@ -4077,6 +4086,7 @@
         }
         case "status":   return STATUS_RANK[m.status] != null ? STATUS_RANK[m.status] : -1;
         case "realiz":   return typeof m.realization_score === "number" ? m.realization_score : -Infinity;
+        case "predicted_at": return (n.detail && n.detail.prediction_date) || "";
         case "last_ev":  return lastEvOf(n);
         default:         return null;
       }
@@ -4137,6 +4147,7 @@
         ? m.realization_score.toFixed(2) : "—";
       const evidence = (detail.evidence || []);
       const lastEv = evidence.length ? (evidence[0].validation_date || "") : "";
+      const predDate = detail.prediction_date || "";
       return `<tr data-goto="${escapeHTML(n.id)}">
         <td class="cell-scope">${escapeHTML(n.scope_id || targetScope)}</td>
         <td class="cell-category">${escapeHTML(catLabel)}</td>
@@ -4144,6 +4155,7 @@
         <td class="cell-prediction" title="${escapeHTML(predText)}"><span class="clamp-2">${escapeHTML(predText)}</span></td>
         <td class="cell-status status-${escapeHTML(status)}">${escapeHTML(status)}</td>
         <td class="cell-real">${real}</td>
+        <td class="cell-predicted-at">${escapeHTML(predDate)}</td>
         <td class="cell-last-ev">${escapeHTML(lastEv)}</td>
       </tr>`;
     }).join("");
@@ -4159,6 +4171,7 @@
             <th>Prediction</th>
             <th class="sortable" data-list-sort="status">Status${arrow("status")}</th>
             <th class="sortable" data-list-sort="realiz">Realiz.${arrow("realiz")}</th>
+            <th class="sortable" data-list-sort="predicted_at">Predicted at${arrow("predicted_at")}</th>
             <th class="sortable" data-list-sort="last_ev">Last evidence${arrow("last_ev")}</th>
           </tr>
         </thead>

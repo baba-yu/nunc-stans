@@ -1589,6 +1589,7 @@ body.alt-view-mode #probe-menu-toggle {
 .list-table .cell-status.status-contradicted     { color: var(--contradict); }
 .list-table .cell-status.status-mixed            { color: #c8b6ff; }
 .list-table .cell-real,
+.list-table .cell-predicted-at,
 .list-table .cell-last-ev {
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
