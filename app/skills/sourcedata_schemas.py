@@ -1,0 +1,627 @@
+"""Dataclass-based JSON schema validators for ``app/sourcedata/<date>/*.json``.
+
+Spec: ``design/sourcedata-layout.md §JSON schemas (canonical)``.
+
+One dataclass per file type. Each dataclass exposes:
+
+  * ``from_dict(d) -> Self`` — strict validator. Raises
+    ``SourcedataValidationError`` with a path-qualified message when the
+    incoming dict is missing a required field, has the wrong type, or
+    contains an unknown key at a checked level.
+  * ``to_dict() -> dict`` — round-trip back to a JSON-serializable shape.
+
+We deliberately avoid the ``jsonschema`` dependency; the schemas are
+small enough that hand-rolled validators are clearer for the contributor
+debugging a malformed sourcedata file.
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass, field, asdict
+from typing import Any
+
+
+class SourcedataValidationError(ValueError):
+    """Raised when a sourcedata JSON dict does not match its schema."""
+
+
+# ---------------------------------------------------------------------------
+# Validation helpers
+# ---------------------------------------------------------------------------
+
+
+def _require(d: dict, key: str, types: tuple[type, ...], path: str) -> Any:
+    if not isinstance(d, dict):
+        raise SourcedataValidationError(
+            f"{path}: expected object, got {type(d).__name__}"
+        )
+    if key not in d:
+        raise SourcedataValidationError(f"{path}: missing required key {key!r}")
+    val = d[key]
+    if val is not None and not isinstance(val, types):
+        names = ", ".join(t.__name__ for t in types)
+        raise SourcedataValidationError(
+            f"{path}.{key}: expected {names}, got {type(val).__name__}"
+        )
+    return val
+
+
+def _optional(d: dict, key: str, types: tuple[type, ...], path: str) -> Any:
+    if key not in d:
+        return None
+    val = d[key]
+    if val is None:
+        return None
+    if not isinstance(val, types):
+        names = ", ".join(t.__name__ for t in types)
+        raise SourcedataValidationError(
+            f"{path}.{key}: expected {names}, got {type(val).__name__}"
+        )
+    return val
+
+
+def _require_list(d: dict, key: str, path: str) -> list:
+    val = _require(d, key, (list,), path)
+    if val is None:
+        raise SourcedataValidationError(f"{path}.{key}: must not be null")
+    return val
+
+
+def _require_str(d: dict, key: str, path: str) -> str:
+    val = _require(d, key, (str,), path)
+    if val is None:
+        raise SourcedataValidationError(f"{path}.{key}: must not be null")
+    return val
+
+
+# ---------------------------------------------------------------------------
+# predictions.json
+# ---------------------------------------------------------------------------
+
+
+@dataclass
+class Reasoning:
+    because: str
+    given: str
+    so_that: str
+    landing: str
+    plain_language: str  # Maps to predictions.eli14 DB column.
+
+    @classmethod
+    def from_dict(cls, d: dict, path: str = "reasoning") -> "Reasoning":
+        return cls(
+            because=_require_str(d, "because", path),
+            given=_require_str(d, "given", path),
+            so_that=_require_str(d, "so_that", path),
+            landing=_require_str(d, "landing", path),
+            plain_language=_require_str(d, "plain_language", path),
+        )
+
+    def to_dict(self) -> dict:
+        return asdict(self)
+
+
+@dataclass
+class PredictionEntry:
+    id: str
+    title: str
+    body: str
+    reasoning: Reasoning
+    summary: str
+    scope_hint: str | None = None  # Optional metadata; not persisted to DB.
+
+    @classmethod
+    def from_dict(cls, d: dict, path: str = "predictions[]") -> "PredictionEntry":
+        if not isinstance(d, dict):
+            raise SourcedataValidationError(
+                f"{path}: expected object, got {type(d).__name__}"
+            )
+        reasoning_raw = _require(d, "reasoning", (dict,), path)
+        return cls(
+            id=_require_str(d, "id", path),
+            title=_require_str(d, "title", path),
+            body=_require_str(d, "body", path),
+            reasoning=Reasoning.from_dict(reasoning_raw, path=f"{path}.reasoning"),
+            summary=_require_str(d, "summary", path),
+            scope_hint=_optional(d, "scope_hint", (str,), path),
+        )
+
+    def to_dict(self) -> dict:
+        out: dict = {
+            "id": self.id,
+            "title": self.title,
+            "body": self.body,
+            "reasoning": self.reasoning.to_dict(),
+            "summary": self.summary,
+        }
+        if self.scope_hint is not None:
+            out["scope_hint"] = self.scope_hint
+        return out
+
+
+@dataclass
+class PredictionsFile:
+    date: str
+    predictions: list[PredictionEntry]
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "PredictionsFile":
+        path = "predictions.json"
+        date = _require_str(d, "date", path)
+        preds_raw = _require_list(d, "predictions", path)
+        preds = [
+            PredictionEntry.from_dict(p, path=f"{path}.predictions[{i}]")
+            for i, p in enumerate(preds_raw)
+        ]
+        return cls(date=date, predictions=preds)
+
+    def to_dict(self) -> dict:
+        return {
+            "date": self.date,
+            "predictions": [p.to_dict() for p in self.predictions],
+        }
+
+
+# ---------------------------------------------------------------------------
+# needs.json
+# ---------------------------------------------------------------------------
+
+
+@dataclass
+class NeedTask:
+    who: str | None = None
+    what: str | None = None
+    where: str | None = None
+    when: str | None = None
+    why: str | None = None
+    how: str | None = None
+
+    @classmethod
+    def from_dict(cls, d: dict, path: str = "task") -> "NeedTask":
+        if not isinstance(d, dict):
+            raise SourcedataValidationError(
+                f"{path}: expected object, got {type(d).__name__}"
+            )
+        return cls(
+            who=_optional(d, "who", (str,), path),
+            what=_optional(d, "what", (str,), path),
+            where=_optional(d, "where", (str,), path),
+            when=_optional(d, "when", (str,), path),
+            why=_optional(d, "why", (str,), path),
+            how=_optional(d, "how", (str,), path),
+        )
+
+    def to_dict(self) -> dict:
+        return {k: v for k, v in asdict(self).items() if v is not None}
+
+
+@dataclass
+class NeedEntry:
+    actor: str
+    job: str
+    outcome: str | None = None
+    motivation: str | None = None
+    task: NeedTask | None = None
+
+    @classmethod
+    def from_dict(cls, d: dict, path: str = "needs[]") -> "NeedEntry":
+        if not isinstance(d, dict):
+            raise SourcedataValidationError(
+                f"{path}: expected object, got {type(d).__name__}"
+            )
+        task_raw = _optional(d, "task", (dict,), path)
+        return cls(
+            actor=_require_str(d, "actor", path),
+            job=_require_str(d, "job", path),
+            outcome=_optional(d, "outcome", (str,), path),
+            motivation=_optional(d, "motivation", (str,), path),
+            task=NeedTask.from_dict(task_raw, path=f"{path}.task")
+            if task_raw is not None
+            else None,
+        )
+
+    def to_dict(self) -> dict:
+        out: dict = {"actor": self.actor, "job": self.job}
+        if self.outcome is not None:
+            out["outcome"] = self.outcome
+        if self.motivation is not None:
+            out["motivation"] = self.motivation
+        if self.task is not None:
+            out["task"] = self.task.to_dict()
+        return out
+
+
+@dataclass
+class NeedsFile:
+    date: str
+    by_prediction: dict[str, list[NeedEntry]]
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "NeedsFile":
+        path = "needs.json"
+        date = _require_str(d, "date", path)
+        by_pred_raw = _require(d, "by_prediction", (dict,), path)
+        if by_pred_raw is None:
+            raise SourcedataValidationError(f"{path}.by_prediction: must not be null")
+        by_pred: dict[str, list[NeedEntry]] = {}
+        for pid, needs_list in by_pred_raw.items():
+            sub_path = f"{path}.by_prediction[{pid!r}]"
+            if not isinstance(needs_list, list):
+                raise SourcedataValidationError(
+                    f"{sub_path}: expected list, got {type(needs_list).__name__}"
+                )
+            by_pred[pid] = [
+                NeedEntry.from_dict(n, path=f"{sub_path}[{i}]")
+                for i, n in enumerate(needs_list)
+            ]
+        return cls(date=date, by_prediction=by_pred)
+
+    def to_dict(self) -> dict:
+        return {
+            "date": self.date,
+            "by_prediction": {
+                pid: [n.to_dict() for n in needs]
+                for pid, needs in self.by_prediction.items()
+            },
+        }
+
+
+# ---------------------------------------------------------------------------
+# bridges.json
+# ---------------------------------------------------------------------------
+
+
+@dataclass
+class ReferenceLink:
+    label: str
+    url: str
+
+    @classmethod
+    def from_dict(cls, d: dict, path: str = "reference_links[]") -> "ReferenceLink":
+        if not isinstance(d, dict):
+            raise SourcedataValidationError(
+                f"{path}: expected object, got {type(d).__name__}"
+            )
+        return cls(
+            label=_require_str(d, "label", path),
+            url=_require_str(d, "url", path),
+        )
+
+    def to_dict(self) -> dict:
+        return {"label": self.label, "url": self.url}
+
+
+@dataclass
+class PredictionRef:
+    id: str
+    short_label: str
+    prediction_date: str
+
+    @classmethod
+    def from_dict(cls, d: dict, path: str = "prediction_ref") -> "PredictionRef":
+        if not isinstance(d, dict):
+            raise SourcedataValidationError(
+                f"{path}: expected object, got {type(d).__name__}"
+            )
+        return cls(
+            id=_require_str(d, "id", path),
+            short_label=_require_str(d, "short_label", path),
+            prediction_date=_require_str(d, "prediction_date", path),
+        )
+
+    def to_dict(self) -> dict:
+        return asdict(self)
+
+
+@dataclass
+class Bridge:
+    support_dimension: str
+    narrative: str
+    coherence: int
+    remaining_gap: str
+
+    @classmethod
+    def from_dict(cls, d: dict, path: str = "bridge") -> "Bridge":
+        if not isinstance(d, dict):
+            raise SourcedataValidationError(
+                f"{path}: expected object, got {type(d).__name__}"
+            )
+        sd = _require_str(d, "support_dimension", path)
+        valid = ("because", "given", "so_that", "landing", "none")
+        if sd not in valid:
+            raise SourcedataValidationError(
+                f"{path}.support_dimension: must be one of {valid}, got {sd!r}"
+            )
+        coh = _require(d, "coherence", (int,), path)
+        if coh is None:
+            raise SourcedataValidationError(
+                f"{path}.coherence: must not be null"
+            )
+        return cls(
+            support_dimension=sd,
+            narrative=_require_str(d, "narrative", path),
+            coherence=coh,
+            remaining_gap=_require_str(d, "remaining_gap", path),
+        )
+
+    def to_dict(self) -> dict:
+        return asdict(self)
+
+
+@dataclass
+class ValidationRowEntry:
+    prediction_ref: PredictionRef
+    today_relevance: int
+    evidence_summary: str
+    reference_links: list[ReferenceLink]
+    bridge: Bridge
+
+    @classmethod
+    def from_dict(
+        cls, d: dict, path: str = "validation_rows[]"
+    ) -> "ValidationRowEntry":
+        if not isinstance(d, dict):
+            raise SourcedataValidationError(
+                f"{path}: expected object, got {type(d).__name__}"
+            )
+        pred_ref_raw = _require(d, "prediction_ref", (dict,), path)
+        rel = _require(d, "today_relevance", (int,), path)
+        if rel is None:
+            raise SourcedataValidationError(
+                f"{path}.today_relevance: must not be null"
+            )
+        refs_raw = _require_list(d, "reference_links", path)
+        bridge_raw = _require(d, "bridge", (dict,), path)
+        return cls(
+            prediction_ref=PredictionRef.from_dict(
+                pred_ref_raw, path=f"{path}.prediction_ref"
+            ),
+            today_relevance=rel,
+            evidence_summary=_require_str(d, "evidence_summary", path),
+            reference_links=[
+                ReferenceLink.from_dict(r, path=f"{path}.reference_links[{i}]")
+                for i, r in enumerate(refs_raw)
+            ],
+            bridge=Bridge.from_dict(bridge_raw, path=f"{path}.bridge"),
+        )
+
+    def to_dict(self) -> dict:
+        return {
+            "prediction_ref": self.prediction_ref.to_dict(),
+            "today_relevance": self.today_relevance,
+            "evidence_summary": self.evidence_summary,
+            "reference_links": [r.to_dict() for r in self.reference_links],
+            "bridge": self.bridge.to_dict(),
+        }
+
+
+@dataclass
+class BridgesFile:
+    date: str
+    validation_rows: list[ValidationRowEntry]
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "BridgesFile":
+        path = "bridges.json"
+        date = _require_str(d, "date", path)
+        rows_raw = _require_list(d, "validation_rows", path)
+        rows = [
+            ValidationRowEntry.from_dict(r, path=f"{path}.validation_rows[{i}]")
+            for i, r in enumerate(rows_raw)
+        ]
+        return cls(date=date, validation_rows=rows)
+
+    def to_dict(self) -> dict:
+        return {
+            "date": self.date,
+            "validation_rows": [r.to_dict() for r in self.validation_rows],
+        }
+
+
+# ---------------------------------------------------------------------------
+# headlines.json
+# ---------------------------------------------------------------------------
+
+
+@dataclass
+class TechnicalHeadline:
+    lead: str
+    body: str
+    citations: list[ReferenceLink] = field(default_factory=list)
+
+    @classmethod
+    def from_dict(cls, d: dict, path: str = "technical[]") -> "TechnicalHeadline":
+        if not isinstance(d, dict):
+            raise SourcedataValidationError(
+                f"{path}: expected object, got {type(d).__name__}"
+            )
+        cites_raw = _optional(d, "citations", (list,), path) or []
+        return cls(
+            lead=_require_str(d, "lead", path),
+            body=_require_str(d, "body", path),
+            citations=[
+                ReferenceLink.from_dict(c, path=f"{path}.citations[{i}]")
+                for i, c in enumerate(cites_raw)
+            ],
+        )
+
+    def to_dict(self) -> dict:
+        return {
+            "lead": self.lead,
+            "body": self.body,
+            "citations": [c.to_dict() for c in self.citations],
+        }
+
+
+@dataclass
+class HeadlinesFile:
+    date: str
+    technical: list[TechnicalHeadline]
+    plain: list[str]
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "HeadlinesFile":
+        path = "headlines.json"
+        date = _require_str(d, "date", path)
+        tech_raw = _require_list(d, "technical", path)
+        plain_raw = _require_list(d, "plain", path)
+        tech = [
+            TechnicalHeadline.from_dict(t, path=f"{path}.technical[{i}]")
+            for i, t in enumerate(tech_raw)
+        ]
+        plain: list[str] = []
+        for i, p in enumerate(plain_raw):
+            if not isinstance(p, str):
+                raise SourcedataValidationError(
+                    f"{path}.plain[{i}]: expected str, got {type(p).__name__}"
+                )
+            plain.append(p)
+        return cls(date=date, technical=tech, plain=plain)
+
+    def to_dict(self) -> dict:
+        return {
+            "date": self.date,
+            "technical": [t.to_dict() for t in self.technical],
+            "plain": list(self.plain),
+        }
+
+
+# ---------------------------------------------------------------------------
+# change_log.json
+# ---------------------------------------------------------------------------
+
+
+@dataclass
+class ChangeLogItem:
+    kind: str
+    headline: str
+    diff_narrative: str
+
+    @classmethod
+    def from_dict(cls, d: dict, path: str = "items[]") -> "ChangeLogItem":
+        if not isinstance(d, dict):
+            raise SourcedataValidationError(
+                f"{path}: expected object, got {type(d).__name__}"
+            )
+        kind = _require_str(d, "kind", path)
+        valid = ("new", "updated", "continuing")
+        if kind not in valid:
+            raise SourcedataValidationError(
+                f"{path}.kind: must be one of {valid}, got {kind!r}"
+            )
+        return cls(
+            kind=kind,
+            headline=_require_str(d, "headline", path),
+            diff_narrative=_require_str(d, "diff_narrative", path),
+        )
+
+    def to_dict(self) -> dict:
+        return asdict(self)
+
+
+@dataclass
+class ChangeLogFile:
+    date: str
+    vs_date: str
+    items: list[ChangeLogItem]
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "ChangeLogFile":
+        path = "change_log.json"
+        date = _require_str(d, "date", path)
+        vs_date = _require_str(d, "vs_date", path)
+        items_raw = _require_list(d, "items", path)
+        items = [
+            ChangeLogItem.from_dict(it, path=f"{path}.items[{i}]")
+            for i, it in enumerate(items_raw)
+        ]
+        return cls(date=date, vs_date=vs_date, items=items)
+
+    def to_dict(self) -> dict:
+        return {
+            "date": self.date,
+            "vs_date": self.vs_date,
+            "items": [it.to_dict() for it in self.items],
+        }
+
+
+# ---------------------------------------------------------------------------
+# news_section.json
+# ---------------------------------------------------------------------------
+
+
+@dataclass
+class NewsBullet:
+    body: str
+    citations: list[ReferenceLink] = field(default_factory=list)
+
+    @classmethod
+    def from_dict(cls, d: dict, path: str = "bullets[]") -> "NewsBullet":
+        if not isinstance(d, dict):
+            raise SourcedataValidationError(
+                f"{path}: expected object, got {type(d).__name__}"
+            )
+        cites_raw = _optional(d, "citations", (list,), path) or []
+        return cls(
+            body=_require_str(d, "body", path),
+            citations=[
+                ReferenceLink.from_dict(c, path=f"{path}.citations[{i}]")
+                for i, c in enumerate(cites_raw)
+            ],
+        )
+
+    def to_dict(self) -> dict:
+        return {
+            "body": self.body,
+            "citations": [c.to_dict() for c in self.citations],
+        }
+
+
+@dataclass
+class NewsSection:
+    category: str
+    bullets: list[NewsBullet]
+
+    @classmethod
+    def from_dict(cls, d: dict, path: str = "sections[]") -> "NewsSection":
+        if not isinstance(d, dict):
+            raise SourcedataValidationError(
+                f"{path}: expected object, got {type(d).__name__}"
+            )
+        bullets_raw = _require_list(d, "bullets", path)
+        return cls(
+            category=_require_str(d, "category", path),
+            bullets=[
+                NewsBullet.from_dict(b, path=f"{path}.bullets[{i}]")
+                for i, b in enumerate(bullets_raw)
+            ],
+        )
+
+    def to_dict(self) -> dict:
+        return {
+            "category": self.category,
+            "bullets": [b.to_dict() for b in self.bullets],
+        }
+
+
+@dataclass
+class NewsSectionFile:
+    date: str
+    sections: list[NewsSection]
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "NewsSectionFile":
+        path = "news_section.json"
+        date = _require_str(d, "date", path)
+        secs_raw = _require_list(d, "sections", path)
+        secs = [
+            NewsSection.from_dict(s, path=f"{path}.sections[{i}]")
+            for i, s in enumerate(secs_raw)
+        ]
+        return cls(date=date, sections=secs)
+
+    def to_dict(self) -> dict:
+        return {
+            "date": self.date,
+            "sections": [s.to_dict() for s in self.sections],
+        }
