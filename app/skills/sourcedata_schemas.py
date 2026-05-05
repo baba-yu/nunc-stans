@@ -85,7 +85,7 @@ class Reasoning:
     given: str
     so_that: str
     landing: str
-    plain_language: str  # Maps to predictions.eli14 DB column.
+    plain_language: str  # Maps to predictions.plain_language DB column.
 
     @classmethod
     def from_dict(cls, d: dict, path: str = "reasoning") -> "Reasoning":
@@ -624,4 +624,218 @@ class NewsSectionFile:
         return {
             "date": self.date,
             "sections": [s.to_dict() for s in self.sections],
+        }
+
+
+# ---------------------------------------------------------------------------
+# maintenance-candidates.json (Sunday slot 5.5 — 6_weekly_maintenance Step 0)
+# ---------------------------------------------------------------------------
+
+
+@dataclass
+class MaintenanceCandidatePrediction:
+    prediction_id: str
+    change_signals: list[str]
+    confidence_drift_score: float
+
+    @classmethod
+    def from_dict(
+        cls, d: dict, path: str = "predictions[]"
+    ) -> "MaintenanceCandidatePrediction":
+        if not isinstance(d, dict):
+            raise SourcedataValidationError(
+                f"{path}: expected object, got {type(d).__name__}"
+            )
+        signals_raw = _require_list(d, "change_signals", path)
+        for i, s in enumerate(signals_raw):
+            if not isinstance(s, str):
+                raise SourcedataValidationError(
+                    f"{path}.change_signals[{i}]: expected str, got "
+                    f"{type(s).__name__}"
+                )
+        score = _require(d, "confidence_drift_score", (int, float), path)
+        if score is None:
+            raise SourcedataValidationError(
+                f"{path}.confidence_drift_score: must not be null"
+            )
+        return cls(
+            prediction_id=_require_str(d, "prediction_id", path),
+            change_signals=list(signals_raw),
+            confidence_drift_score=float(score),
+        )
+
+    def to_dict(self) -> dict:
+        return {
+            "prediction_id": self.prediction_id,
+            "change_signals": list(self.change_signals),
+            "confidence_drift_score": self.confidence_drift_score,
+        }
+
+
+@dataclass
+class MaintenanceCandidateGlossaryTerm:
+    term_id: str
+    ttl_expired_days: int
+
+    @classmethod
+    def from_dict(
+        cls, d: dict, path: str = "glossary_terms[]"
+    ) -> "MaintenanceCandidateGlossaryTerm":
+        if not isinstance(d, dict):
+            raise SourcedataValidationError(
+                f"{path}: expected object, got {type(d).__name__}"
+            )
+        ttl = _require(d, "ttl_expired_days", (int,), path)
+        if ttl is None:
+            raise SourcedataValidationError(
+                f"{path}.ttl_expired_days: must not be null"
+            )
+        return cls(
+            term_id=_require_str(d, "term_id", path),
+            ttl_expired_days=ttl,
+        )
+
+    def to_dict(self) -> dict:
+        return {
+            "term_id": self.term_id,
+            "ttl_expired_days": self.ttl_expired_days,
+        }
+
+
+@dataclass
+class MaintenanceCandidatesFile:
+    week_ending: str
+    predictions: list[MaintenanceCandidatePrediction]
+    glossary_terms: list[MaintenanceCandidateGlossaryTerm]
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "MaintenanceCandidatesFile":
+        path = "maintenance-candidates.json"
+        week_ending = _require_str(d, "week_ending", path)
+        preds_raw = _require_list(d, "predictions", path)
+        gloss_raw = _require_list(d, "glossary_terms", path)
+        preds = [
+            MaintenanceCandidatePrediction.from_dict(
+                p, path=f"{path}.predictions[{i}]"
+            )
+            for i, p in enumerate(preds_raw)
+        ]
+        gloss = [
+            MaintenanceCandidateGlossaryTerm.from_dict(
+                g, path=f"{path}.glossary_terms[{i}]"
+            )
+            for i, g in enumerate(gloss_raw)
+        ]
+        return cls(week_ending=week_ending, predictions=preds, glossary_terms=gloss)
+
+    def to_dict(self) -> dict:
+        return {
+            "week_ending": self.week_ending,
+            "predictions": [p.to_dict() for p in self.predictions],
+            "glossary_terms": [g.to_dict() for g in self.glossary_terms],
+        }
+
+
+# ---------------------------------------------------------------------------
+# maintenance-judgements.json (Sunday slot 5.5 — 6_weekly_maintenance Step 1)
+# ---------------------------------------------------------------------------
+
+
+@dataclass
+class MaintenanceJudgement:
+    prediction_id: str
+    stream: str  # one of: reasoning|bridge|needs|readings|glossary
+    entry_id: str
+    verdict: str  # one of: fresh|stale|broken|retire
+    reason: str
+    cross_stream_evidence: list[str]
+    proposed_action: str  # one of: rewrite|retire|noop
+    confidence: float
+
+    _VALID_STREAMS = ("reasoning", "bridge", "needs", "readings", "glossary")
+    _VALID_VERDICTS = ("fresh", "stale", "broken", "retire")
+    _VALID_ACTIONS = ("rewrite", "retire", "noop")
+
+    @classmethod
+    def from_dict(
+        cls, d: dict, path: str = "judgements[]"
+    ) -> "MaintenanceJudgement":
+        if not isinstance(d, dict):
+            raise SourcedataValidationError(
+                f"{path}: expected object, got {type(d).__name__}"
+            )
+        stream = _require_str(d, "stream", path)
+        if stream not in cls._VALID_STREAMS:
+            raise SourcedataValidationError(
+                f"{path}.stream: must be one of {cls._VALID_STREAMS}, "
+                f"got {stream!r}"
+            )
+        verdict = _require_str(d, "verdict", path)
+        if verdict not in cls._VALID_VERDICTS:
+            raise SourcedataValidationError(
+                f"{path}.verdict: must be one of {cls._VALID_VERDICTS}, "
+                f"got {verdict!r}"
+            )
+        action = _require_str(d, "proposed_action", path)
+        if action not in cls._VALID_ACTIONS:
+            raise SourcedataValidationError(
+                f"{path}.proposed_action: must be one of {cls._VALID_ACTIONS}, "
+                f"got {action!r}"
+            )
+        cse_raw = _require_list(d, "cross_stream_evidence", path)
+        for i, c in enumerate(cse_raw):
+            if not isinstance(c, str):
+                raise SourcedataValidationError(
+                    f"{path}.cross_stream_evidence[{i}]: expected str, got "
+                    f"{type(c).__name__}"
+                )
+        conf = _require(d, "confidence", (int, float), path)
+        if conf is None:
+            raise SourcedataValidationError(
+                f"{path}.confidence: must not be null"
+            )
+        return cls(
+            prediction_id=_require_str(d, "prediction_id", path),
+            stream=stream,
+            entry_id=_require_str(d, "entry_id", path),
+            verdict=verdict,
+            reason=_require_str(d, "reason", path),
+            cross_stream_evidence=list(cse_raw),
+            proposed_action=action,
+            confidence=float(conf),
+        )
+
+    def to_dict(self) -> dict:
+        return {
+            "prediction_id": self.prediction_id,
+            "stream": self.stream,
+            "entry_id": self.entry_id,
+            "verdict": self.verdict,
+            "reason": self.reason,
+            "cross_stream_evidence": list(self.cross_stream_evidence),
+            "proposed_action": self.proposed_action,
+            "confidence": self.confidence,
+        }
+
+
+@dataclass
+class MaintenanceJudgementsFile:
+    week_ending: str
+    judgements: list[MaintenanceJudgement]
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "MaintenanceJudgementsFile":
+        path = "maintenance-judgements.json"
+        week_ending = _require_str(d, "week_ending", path)
+        j_raw = _require_list(d, "judgements", path)
+        judgements = [
+            MaintenanceJudgement.from_dict(j, path=f"{path}.judgements[{i}]")
+            for i, j in enumerate(j_raw)
+        ]
+        return cls(week_ending=week_ending, judgements=judgements)
+
+    def to_dict(self) -> dict:
+        return {
+            "week_ending": self.week_ending,
+            "judgements": [j.to_dict() for j in self.judgements],
         }
