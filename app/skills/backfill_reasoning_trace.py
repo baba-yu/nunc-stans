@@ -1,4 +1,4 @@
-"""Backfill Stream C reasoning trace + Stream J title for legacy predictions.
+"""Backfill reasoning-trace fields + title field title for legacy predictions.
 
 Skill spec: `design/skills/backfill-reasoning-trace.md`.
 
@@ -25,8 +25,8 @@ from pathlib import Path
 def list_candidates(conn: sqlite3.Connection, *, limit: int = 25) -> list[dict]:
     """Return up to `limit` predictions that need a backfill.
 
-    A row is a candidate when *any* of: title, the 5 Stream C reasoning
-    fields, or the Stream K mid-tier summary is NULL. The LLM extraction
+    A row is a candidate when *any* of: title, the 5 reasoning fields
+    fields, or the mid-tier summary is NULL. The LLM extraction
     pass can then fill all missing fields in one shot.
     """
     cur = conn.execute(
@@ -78,9 +78,9 @@ def commit_backfill(
     summary_fil: str | None = None,
 ) -> None:
     """Persist the LLM-extracted fields. NULL inputs leave the column
-    alone (COALESCE pattern). Stream K mid-tier `summary` and its 3
+    alone (COALESCE pattern). mid-tier `summary` and its 3
     locale fan-outs are included so a single backfill pass can cover
-    title + Stream C + Stream K all at once."""
+    title + reasoning fields + mid-tier summary all at once."""
     today = dt.date.today().isoformat()
     conn.execute(
         """
@@ -141,7 +141,7 @@ def run(db_path: Path, *, limit: int, dry_run: bool) -> dict:
 
 
 def main(argv: list[str] | None = None) -> int:
-    p = argparse.ArgumentParser(description="List backfill candidates for Stream C reasoning trace + Stream J title")
+    p = argparse.ArgumentParser(description="List backfill candidates for reasoning-trace fields + title field title")
     p.add_argument("--db", required=True, type=Path)
     p.add_argument("--limit", type=int, default=25)
     p.add_argument("--dry-run", action="store_true",

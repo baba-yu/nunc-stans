@@ -7,12 +7,12 @@ Reads the existing ``report/<L>/news-YYYYMMDD.md`` and
 legacy parsers (one last use), extracts every structured field, writes
 the canonical sourcedata JSON files, and finally regenerates each
 markdown file through the Phase 3 Jinja2 renderer so the on-disk corpus
-becomes prose-only (no Stream J/C/K bullet keys, no ``**Summary:**``
+becomes prose-only (no title / reasoning / mid-tier bullet keys, no ``**Summary:**``
 markers, no ``Pred ID #N`` references).
 
 Phase 4 scope (from the plan handoff):
 
-  * Predictions whose Stream J/C/K fields were never authored (pre-
+  * Predictions whose title / reasoning / mid-tier fields were never authored (pre-
     2026-05-02 corpus) keep ``null`` reasoning fields. The renderer
     tolerates ``null`` and skips the "In plain language: …" paragraph.
     Backfill of those fields is a future ticket — Phase 4 does NOT
@@ -432,7 +432,7 @@ def _predictions_json_for_locale(
         # in the news_section.json bullet items, not in the prediction
         # body. (Matches the spec's "body = long-form prose".)
         body = p.summary or p.raw_markdown
-        # Title fallback: legacy items predating Stream J have no
+        # Title fallback: legacy items predating title field have no
         # title — use the derived short_label.
         title = p.title or p.short_label
         # Reasoning fields are NULL on legacy items; tolerate by

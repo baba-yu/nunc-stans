@@ -33,8 +33,8 @@ _FORBIDDEN: list[tuple[str, str, int]] = [
     # Coined project terms.
     ("eli14", r"\beli14\b", re.IGNORECASE),
     ("JTBD", r"\bJTBD\b", 0),
-    # "Stream A/B/C/D/E/F/J/K" — case-insensitive, whole-word boundary.
-    ("Stream A/B/C/D/E/F/J/K", r"\bStream\s+[A-FJK]\b", 0),
+    # Legacy stream-letter labels — case-insensitive, whole-word boundary.
+    ("legacy stream-letter label", r"\bStream\s+[A-FJK]\b", 0),
     ("Reasoning trace", r"\bReasoning trace\b", re.IGNORECASE),
     # Internal IDs.
     # `Pred ID #N` (also `Prediction ID #N`).
@@ -158,7 +158,7 @@ def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(
         description=(
             "Greps user-facing markdown for forbidden internal-pipeline "
-            "tokens (Stream A-K, Pred ID #N, parser anchors, eli14, ...)."
+            "tokens (legacy stream-letter labels, Pred ID #N, parser anchors, eli14, ...)."
         )
     )
     g = p.add_mutually_exclusive_group(required=True)

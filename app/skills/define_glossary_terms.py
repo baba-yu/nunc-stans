@@ -1,4 +1,4 @@
-"""Promote glossary candidates to active (Stream A — Phase 1).
+"""Promote glossary candidates to active (glossary stream — Phase 1).
 
 Reads the SQLite `glossary_terms` table and applies the promotion rule:
 

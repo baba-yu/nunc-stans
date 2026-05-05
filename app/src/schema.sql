@@ -291,17 +291,17 @@ CREATE TABLE IF NOT EXISTS predictions (
   prediction_short_label TEXT,
   prediction_date TEXT,
 
-  -- Stream J: dedicated short title (≤ 80 chars). The writer in
+  -- title field: dedicated short title (≤ 80 chars). The writer in
   -- 1_daily_update emits this alongside the full prediction body so
   -- the dashboard can render a clean caption rather than truncating
   -- the markdown-heavy summary. Title rules: no markdown asterisks,
   -- no scope prefix `(Tech)` / `(Business)`, no trailing period;
   -- subject + verb structure. NULL during the migration window for
-  -- predictions ingested before Stream J landed; the frontend
+  -- predictions ingested before title field landed; the frontend
   -- falls back to a cleaned-up first sentence in that case.
   title TEXT,
 
-  -- Stream C: structured reasoning trace. Each Future prediction
+  -- reasoning fields: structured reasoning trace. Each Future prediction
   -- in news-YYYYMMDD.md emits these alongside the prose body so the
   -- dashboard's Reasoning tab can show *why* the writer made the
   -- call without re-parsing the markdown body. NULL on legacy
@@ -317,7 +317,7 @@ CREATE TABLE IF NOT EXISTS predictions (
   reasoning_landing TEXT,
   eli14 TEXT,
 
-  -- Phase 4a: locale fan-out for Stream J title + Stream C reasoning + eli14.
+  -- Phase 4a: locale fan-out for title field title + reasoning fields + eli14.
   -- NULL = fall back to canonical EN. Filled by ingest from sibling locale
   -- markdown files (news-YYYYMMDD.md in report/{ja,es,fil}/).
   title_ja TEXT,
@@ -348,7 +348,7 @@ CREATE TABLE IF NOT EXISTS predictions (
   target_start_date TEXT,
   target_end_date TEXT,
 
-  -- Stream K (Phase 2 forward, 2026-05-02): mid-tier summary. The
+  -- mid-tier summary (Phase 2 forward, 2026-05-02): mid-tier summary. The
   -- dashboard right pane is now 3-tier:
   --   1. title              (≤ 80 chars, the dedicated `predictions.title`)
   --   2. summary            (≤ 300 chars, this column — *what* the
@@ -357,7 +357,7 @@ CREATE TABLE IF NOT EXISTS predictions (
   --   3. prediction_summary (multi-paragraph long-form, default
   --                          collapsed in <details>; the original)
   -- Writer emits a `**Summary:**` marker block in `## Future` between
-  -- the Stream C reasoning bullets and the long-form body. NULL on
+  -- the reasoning fields bullets and the long-form body. NULL on
   -- legacy items — the frontend falls back to title + collapsed full
   -- text only (no middle tier). Backfill skill fills them later.
   summary TEXT,
@@ -537,7 +537,7 @@ CREATE TABLE IF NOT EXISTS validation_rows (
 
   observed_relevance INTEGER CHECK (observed_relevance BETWEEN 1 AND 5),
 
-  -- Stream D: narrative bridge between today's SUPPORT and the
+  -- bridge: narrative bridge between today's SUPPORT and the
   -- referenced PREDICTION. One paragraph per validation row, written
   -- by the writer in 2_future_prediction. Format (writer-enforced):
   --   "Bridge (Pred ID #N): today's news X supports the predictions
@@ -550,7 +550,7 @@ CREATE TABLE IF NOT EXISTS validation_rows (
   bridge_text_ja TEXT,
   bridge_text_es TEXT,
   bridge_text_fil TEXT,
-  -- Stream D: which predictions.reasoning_* dimension this row supports.
+  -- bridge: which predictions.reasoning_* dimension this row supports.
   -- 'because'   — supports the observed precondition
   -- 'given'     — supports the structural force
   -- 'so_that'   — supports the consequence
@@ -558,7 +558,7 @@ CREATE TABLE IF NOT EXISTS validation_rows (
   -- 'none'      — neutral / no specific dimension
   support_dimension TEXT
     CHECK (support_dimension IN ('because', 'given', 'so_that', 'landing', 'none')),
-  -- Stream E: which Needs task this validation row contributes to.
+  -- needs stream: which Needs task this validation row contributes to.
   -- NULL on rows that are SUPPORT-without-task-mapping (e.g. dormant
   -- pool revivals where the writer didn't yet attribute the support
   -- to a specific 5W1H cell). The dashboard's Needs tab uses this
@@ -833,7 +833,7 @@ CREATE TABLE IF NOT EXISTS embedding_runs (
 );
 
 -- ============================================================
--- 13.4. NEEDS + 5W1H tasks (Stream E — Phase 3)
+-- 13.4. NEEDS + 5W1H tasks (needs stream — Phase 3)
 -- ============================================================
 --
 -- For each prediction, the writer (in 1_daily_update) emits one or
@@ -1058,7 +1058,7 @@ ON prediction_relations(family_id)
 WHERE family_id IS NOT NULL;
 
 -- ============================================================
--- 13.5. Glossary (Stream A — auto-curated jargon glossary)
+-- 13.5. Glossary (glossary stream — auto-curated jargon glossary)
 -- ============================================================
 --
 -- Hover-glossary backing store. The daily flow (1_daily_update)

@@ -1,4 +1,4 @@
-"""Build docs/data/evidence-reverse.json (Stream F — Phase 3).
+"""Build docs/data/evidence-reverse.json (readings stream — Phase 3).
 
 For each high-traffic evidence item, list the predictions it has supported
 or contradicted in the past 90 days, along with a contribution score.
@@ -128,7 +128,7 @@ def build(db_path: Path, *, top_n: int = 200, today_iso: str | None = None) -> d
 
 
 def main(argv: list[str] | None = None) -> int:
-    p = argparse.ArgumentParser(description="Build docs/data/evidence-reverse.json (Stream F)")
+    p = argparse.ArgumentParser(description="Build docs/data/evidence-reverse.json (readings stream)")
     p.add_argument("--db", required=True, type=Path)
     p.add_argument("--out", default=Path("docs/data/evidence-reverse.json"), type=Path)
     p.add_argument("--top-n", type=int, default=200)

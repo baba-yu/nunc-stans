@@ -1,4 +1,4 @@
-"""Inject hover-glossary `<abbr>` markers into rendered body text (Stream A).
+"""Inject hover-glossary `<abbr>` markers into rendered body text (glossary stream).
 
 Reads the SQLite `glossary_terms` table and rewrites the input markdown
 so that every `status='active'` term becomes `<abbr title="…">term</abbr>`

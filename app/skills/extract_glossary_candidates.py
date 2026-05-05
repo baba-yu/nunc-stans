@@ -1,4 +1,4 @@
-"""Extract glossary candidates from a news file (Stream A — Phase 1).
+"""Extract glossary candidates from a news file (glossary stream — Phase 1).
 
 Scans `report/en/news-YYYYMMDD.md` (the day's canonical EN report) for
 proper nouns, acronyms, and technical terms that aren't already in

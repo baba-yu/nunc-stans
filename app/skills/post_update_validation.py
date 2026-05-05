@@ -9,7 +9,7 @@ is actually populated, in every locale, with no silent NULLs.
 Three check sets, selectable from the CLI:
 
   * ``--check news``          — after ``1_daily_update`` finishes:
-    today's ``predictions`` rows exist with full Stream J/C/K + every
+    today's ``predictions`` rows exist with full title / reasoning / mid-tier + every
     locale fan-out + target_*_date; today's ``prediction_needs`` +
     ``needs_tasks`` rows exist with full 5W1H + every locale fan-out.
 
@@ -51,7 +51,7 @@ LOCALES = ("ja", "es", "fil")
 # ---------------------------------------------------------------------------
 
 # (column-name, "must be non-empty"): canonical EN columns the writer
-# emits for every Stream J/C/K prediction. The parser silently drops
+# emits for every title / reasoning / mid-tier prediction. The parser silently drops
 # partial blocks, so a NULL here means the writer's output didn't match
 # the spec for this row.
 EN_PREDICTION_COLS = (
@@ -107,7 +107,7 @@ def _check_predictions_for_date(conn: sqlite3.Connection, date: str) -> list[str
             if v is None or (isinstance(v, str) and not v.strip()):
                 errs.append(
                     f"prediction #{idx} ({pid}): {col} is NULL/empty — "
-                    f"Stream J/C/K spec requires writer to emit this"
+                    f"title / reasoning / mid-tier spec requires writer to emit this"
                 )
         # Locale fan-out
         for col in LOCALE_PREDICTION_COLS:

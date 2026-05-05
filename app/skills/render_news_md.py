@@ -7,7 +7,7 @@ Reads the per-date sourcedata JSON files
 (``app/sourcedata/<date>/{predictions,headlines,change_log,news_section}.json``,
 plus the locale variants under ``app/sourcedata/locales/<date>/<locale>/``)
 and returns/writes the rendered markdown. The renderer is pure prose:
-no ``eli14`` keyword, no ``Stream A/B/C/D/E/F/J/K`` vocabulary, no
+no ``eli14`` keyword, no legacy stream-letter vocabulary, no
 ``- because:``/``- given:``/``- so_that:``/``- landing:`` bullet keys,
 no ``**Summary:**`` parser anchor — those internal field names live in
 the JSON, not in the rendered markdown.
@@ -161,6 +161,7 @@ def _build_env():
     env.filters["render_citations"] = _render_citations
     env.filters["indent_block"] = _indent_block
     env.filters["table_cell"] = _table_cell
+    env.filters["strip_lead_emdash"] = _strip_lead_emdash
     return env
 
 
@@ -197,6 +198,33 @@ def _table_cell(text: str) -> str:
     if text is None:
         return ""
     return str(text).replace("\n", " ").replace("|", "\\|").strip()
+
+
+def _strip_lead_emdash(text: str) -> str:
+    """Normalize em-dashes in headline body text.
+
+    Some legacy headline bodies start with ``— ``; the template now
+    inserts the em-dash itself between lead and body, so a leading dash
+    in the body would render as ``— —``. Trim it so the rendered output
+    is ``**lead** — body`` as the spec specifies.
+
+    Also collapses internal ``— —`` (and longer runs) to a single ``—``
+    — these arise when the LLM author wrote a double em-dash as a
+    section break inside the body prose; the rendered surface should
+    have at most a single em-dash between any two clauses.
+    """
+    if not text:
+        return ""
+    s = str(text).lstrip()
+    # Strip one leading em-dash + optional whitespace.
+    if s.startswith("— "):
+        s = s[2:].lstrip()
+    elif s.startswith("—"):
+        s = s[1:].lstrip()
+    # Collapse runs of em-dashes inside the body (e.g. "— —" → "—").
+    import re as _re
+    s = _re.sub(r"—(\s*—)+", "—", s)
+    return s
 
 
 # ---------------------------------------------------------------------------

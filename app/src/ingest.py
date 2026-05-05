@@ -1,4 +1,6 @@
-"""Parse every markdown report under ``report/`` and
+"""DEPRECATED in production flow (sourcedata-first ingest now canonical via cli update). Retained for legacy markdown-fallback recovery and tests.
+
+Parse every markdown report under ``report/`` and
 ``future-prediction/`` and upsert rows into the analytics DB.
 
 The ingest layer is intentionally simple: it calls the parsers, classifies
@@ -337,8 +339,8 @@ def _upsert_prediction(
         except Exception:
             pass
 
-    # Update mutable fields. Stream J `title`, Stream C reasoning_*
-    # fields, and Stream K `summary` all use COALESCE so a previously-
+    # Update mutable fields. title field `title`, reasoning fields_*
+    # fields, and mid-tier summary `summary` all use COALESCE so a previously-
     # set value is not blanked out by a re-ingest of a legacy or
     # partial news file.
     conn.execute(
@@ -1005,7 +1007,7 @@ def _update_prediction_locale_cols(
     """Fill *_<locale> columns for a sibling-locale news file.
 
     Phase 4a: extended beyond prediction_summary / short_label / summary
-    (Stream K mid-tier) to cover Stream J title + Stream C reasoning + eli14.
+    (mid-tier) to cover title field title + reasoning fields + eli14.
     Non-empty values UPDATE; None values are left untouched (COALESCE pattern)
     so a partial sibling parse never clobbers a previously-filled column.
     """

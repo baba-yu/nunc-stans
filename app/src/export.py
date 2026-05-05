@@ -726,15 +726,15 @@ def _build_scope_graph(conn: sqlite3.Connection, scope_id: str) -> dict:
                p.prediction_summary_ja, p.prediction_summary_es, p.prediction_summary_fil,
                p.prediction_short_label_ja, p.prediction_short_label_es, p.prediction_short_label_fil,
                p.huge_longshot_hit_at,
-               -- Stream J: dedicated title column. NULL for predictions
+               -- title field: dedicated title column. NULL for predictions
                -- ingested before the column was added; the dashboard's
                -- `cleanPredictionTitle` fallback handles those.
                p.title AS prediction_title,
-               -- Stream C: reasoning trace. NULL until the writer fills
+               -- reasoning fields: reasoning trace. NULL until the writer fills
                -- them in. The frontend Reasoning tab hides empty fields.
                p.reasoning_because, p.reasoning_given,
                p.reasoning_so_that, p.reasoning_landing, p.eli14,
-               -- Phase 4a: locale fan-out for Stream J/C + eli14.
+               -- Phase 4a: locale fan-out for title / reasoning + eli14.
                p.title_ja, p.title_es, p.title_fil,
                p.reasoning_because_ja, p.reasoning_because_es, p.reasoning_because_fil,
                p.reasoning_given_ja, p.reasoning_given_es, p.reasoning_given_fil,
@@ -744,7 +744,7 @@ def _build_scope_graph(conn: sqlite3.Connection, scope_id: str) -> dict:
                -- Phase 3: structured time bounds derived from
                -- reasoning_landing. Prediction's destination window.
                p.target_start_date, p.target_end_date,
-               -- Stream K: mid-tier summary + locale fan-out. NULL on
+               -- mid-tier summary: mid-tier summary + locale fan-out. NULL on
                -- legacy items; frontend falls back to title + collapsed
                -- full text only when the middle tier is missing.
                p.summary AS pred_summary,
@@ -1274,7 +1274,7 @@ def _build_scope_graph(conn: sqlite3.Connection, scope_id: str) -> dict:
             # newest first. Frontend filters by window and shows count
             # + top 3. ``validation_report_path`` kept populated with
             # the single newest path for backwards compatibility.
-            # Stream D: also pulls bridge_text + support_dimension so
+            # bridge: also pulls bridge_text + support_dimension so
             # the dashboard's Bridge tab can render the narrative
             # paragraph from the most recent validation row.
             cur = conn.execute(
@@ -1294,7 +1294,7 @@ def _build_scope_graph(conn: sqlite3.Connection, scope_id: str) -> dict:
             validation_reports = [
                 {"date": r["d"], "path": r["path"]} for r in validation_reports_rows
             ]
-            # Stream D: collect non-empty bridge paragraphs, newest first.
+            # bridge: collect non-empty bridge paragraphs, newest first.
             # Phase 3: bridges carry their own target_start/end dates
             # extracted from "Remaining gap: <time>" mentions.
             bridges = [
@@ -1483,7 +1483,7 @@ def _build_scope_graph(conn: sqlite3.Connection, scope_id: str) -> dict:
                     f"single-cluster concentration."
                 )
 
-            # Stream E: Needs + 5W1H. One prediction can carry multiple
+            # needs stream: Needs + 5W1H. One prediction can carry multiple
             # Needs (one per role-abstract actor driving the prediction
             # toward landing). Each Need carries one 5W1H task row. The
             # dashboard's Needs tab renders the actor / job / outcome /
@@ -1596,14 +1596,14 @@ def _build_scope_graph(conn: sqlite3.Connection, scope_id: str) -> dict:
                 "es":  sum_es  if sum_es  else summary,
                 "fil": sum_fil if sum_fil else summary,
             }
-            # Stream J: dedicated `title` (≤ 80 chars, no markdown, no
+            # title field: dedicated `title` (≤ 80 chars, no markdown, no
             # scope prefix). When NULL on disk we leave it out — the
             # frontend `cleanPredictionTitle` helper derives a clean
             # title from `summary` as a fallback. The locale fan-out is
             # title-only; we don't translate the title because the
             # writer emits it in EN canonical and the dashboard renders
             # the same title across all 4 locales.
-            # Phase 4a: Stream J title is now locale-translated (the writer
+            # Phase 4a: title field title is now locale-translated (the writer
             # emits a JA/ES/FIL title line in each sibling news file). The
             # frontend's `nodeLabel(n, "title")` picks the right locale via
             # `node.labels.title[state.locale]`.
@@ -1644,12 +1644,12 @@ def _build_scope_graph(conn: sqlite3.Connection, scope_id: str) -> dict:
                 "layout": layout,
                 "detail": {
                     "title": short_label,
-                    # Stream J: cleaned, dedicated title (NULL until the
+                    # title field: cleaned, dedicated title (NULL until the
                     # writer fills it in for this prediction). The
                     # frontend prefers this over the legacy `title` and
                     # over the markdown-heavy `prediction_summary`.
                     "title_clean": prediction_title,
-                    # Stream C: structured reasoning trace. The frontend
+                    # reasoning fields: structured reasoning trace. The frontend
                     # Reasoning tab renders the four `because/given/so_that/
                     # landing` fields plus the `eli14` plain-language line.
                     # All five fields are nullable; the tab hides empty rows.
@@ -1668,7 +1668,7 @@ def _build_scope_graph(conn: sqlite3.Connection, scope_id: str) -> dict:
                         "eli14":   _loc(pr["eli14"],             pr["eli14_ja"],             pr["eli14_es"],             pr["eli14_fil"]),
                     },
                     "title_locales": _loc(pr["prediction_title"], pr["title_ja"], pr["title_es"], pr["title_fil"]),
-                    # Stream K: mid-tier summary + locale fan-out.
+                    # mid-tier summary: mid-tier summary + locale fan-out.
                     # The dashboard right pane is now 3-tier:
                     #   1. title (large)
                     #   2. summary (this — default visible, ≤ 300 chars)
@@ -1683,12 +1683,12 @@ def _build_scope_graph(conn: sqlite3.Connection, scope_id: str) -> dict:
                         "es":  pr["pred_summary_es"]  or pr["pred_summary"],
                         "fil": pr["pred_summary_fil"] or pr["pred_summary"],
                     },
-                    # Stream D: validation-time bridge paragraphs that
+                    # bridge: validation-time bridge paragraphs that
                     # explain how today's SUPPORT signals back into the
                     # prediction's reasoning trace. Newest first; empty
                     # list when no validation row has bridge_text yet.
                     "bridges": bridges,
-                    # Stream E: Needs + 5W1H. One entry per actor whose
+                    # needs stream: Needs + 5W1H. One entry per actor whose
                     # work drives the prediction toward landing. Each
                     # entry has actor / job / outcome / motivation + a
                     # single 5W1H task row. Empty list until
@@ -2244,7 +2244,7 @@ def run_export(
             ),
         )
 
-        # Stream A glossary export — terms with status='active' AND a
+        # glossary stream export — terms with status='active' AND a
         # filled definition. The dashboard's app.js reads this on boot
         # and wraps the first occurrence of each term in rendered
         # markdown body text with `<abbr title="…">` for hover tooltips.

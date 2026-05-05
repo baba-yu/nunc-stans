@@ -1,6 +1,6 @@
 """Validate glossary_terms rows for form, semantic accuracy, and dedupe.
 
-Phase C — Stream A reinforcement. Spec: ``design/skills/validate-glossary-terms.md``.
+Phase C — glossary stream reinforcement. Spec: ``design/skills/validate-glossary-terms.md``.
 
 Three checks:
 

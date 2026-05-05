@@ -4,9 +4,11 @@ Locale-aware schema notes (feature/locale branch):
   The schema gained locale columns on source_files / categories / themes
   / subthemes / predictions / validation_rows / evidence_items. SQLite
   does NOT support ADD COLUMN IF NOT EXISTS, so this module does not
-  attempt a live migration. Pick up the new columns by deleting the
-  existing analytics.sqlite and re-running ``python -m src.cli update``
-  (the ingest pipeline is fully reproducible from the markdown corpus).
+  attempt a live migration. Pick up new columns by deleting
+  ``app/data/analytics.sqlite`` and re-running
+  ``python -m app.src.cli update``. The full DB is reproducible from
+  ``app/sourcedata/<date>/*.json`` files (sourcedata-first ingest path);
+  the legacy markdown corpus is the secondary fallback.
 """
 
 from __future__ import annotations

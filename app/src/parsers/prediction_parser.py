@@ -1,4 +1,6 @@
-"""Parse ``future-prediction/future-prediction-YYYYMMDD.md`` files.
+"""DEPRECATED: legacy markdown parser, retained for emergency-recovery use only. Production ingest goes through app/skills/ingest_sourcedata.py from app/sourcedata/.
+
+Parse ``future-prediction/future-prediction-YYYYMMDD.md`` files.
 
 Locale convention (feature/locale branch):
     The validation table column headers are kept literally English in
@@ -45,7 +47,7 @@ class ValidationRow:
     observed_relevance: int | None
     reference_links: list[EvidenceItem] = field(default_factory=list)
     raw_row_markdown: str = ""
-    # Stream D: narrative bridge text + which reasoning dimension this row
+    # bridge: narrative bridge text + which reasoning dimension this row
     # supports. NULL on legacy validation files (Phase 2 backfill skill
     # populates retroactively).
     bridge_text: str | None = None
@@ -142,7 +144,7 @@ _BRIDGE_DIM_RE = re.compile(
 def _extract_bridge_paragraphs(markdown: str) -> dict[int, tuple[str, str | None]]:
     """Parse the ``## Bridge`` section into {row_index: (text, dimension)}.
 
-    Stream D writer rule (active 2026-05-02): each validation row has a
+    bridge writer rule (active 2026-05-02): each validation row has a
     matching paragraph starting with ``**Bridge (Pred ID #N):**``. Row
     index is 1-based and matches the table's body-row order. The
     paragraph's `support_dimension` is the first of the four reasoning

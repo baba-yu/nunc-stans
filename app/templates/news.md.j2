@@ -36,7 +36,7 @@ Coverage window: {{ coverage_window }}
 ## Headlines
 
 {% for h in headlines.technical -%}
-- **{{ h.lead }} — {{ h.body }}**
+- **{{ h.lead }}** — {{ h.body | strip_lead_emdash }}
 {%- if h.citations %} {{ h.citations | render_citations }}{% endif %}
 
 {% endfor %}
@@ -46,9 +46,9 @@ Coverage window: {{ coverage_window }}
 {{ loop.index }}. {{ p.title }}
 
    {{ p.body | indent_block(3) }}
-
+{% if p.reasoning.plain_language %}
    In plain language: {{ p.reasoning.plain_language | indent_block(3) }}
-
+{% endif %}
 {% endfor %}
 ## Change Log
 

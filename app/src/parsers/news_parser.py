@@ -1,4 +1,6 @@
-"""Parse ``report/news-YYYYMMDD.md`` files.
+"""DEPRECATED: legacy markdown parser, retained for emergency-recovery use only. Production ingest goes through app/skills/ingest_sourcedata.py from app/sourcedata/.
+
+Parse ``report/news-YYYYMMDD.md`` files.
 
 Locale convention (feature/locale branch):
     Section headers in news files stay literally English in every
@@ -153,18 +155,18 @@ class PredictionSummary:
     short_label: str
     raw_markdown: str
     reference_links: list[str] = field(default_factory=list)
-    # Stream J: dedicated short title (≤ 80 chars). NULL when the
+    # title field: dedicated short title (≤ 80 chars). NULL when the
     # writer hasn't emitted one (legacy items predating 2026-05-02).
     title: str | None = None
-    # Stream C: structured reasoning trace. NULL on legacy items;
+    # reasoning fields: structured reasoning trace. NULL on legacy items;
     # populated when the writer emits the 5-field block right under
-    # the Stream J title line.
+    # the title field title line.
     reasoning_because: str | None = None
     reasoning_given: str | None = None
     reasoning_so_that: str | None = None
     reasoning_landing: str | None = None
     eli14: str | None = None
-    # Stream K (Phase B): mid-tier summary the writer emits as a
+    # mid-tier summary (Phase B): mid-tier summary the writer emits as a
     # `**Summary:**` marker block between the reasoning bullets and
     # the long-form body. NULL when the writer didn't write one
     # (legacy items + un-backfilled predictions). The dashboard
@@ -204,9 +206,9 @@ def _split_sections(markdown: str) -> dict[str, str]:
 
 
 def _extract_stream_j_title(body: str) -> tuple[str | None, str]:
-    """Detect a Stream J one-line title at the start of a prediction body.
+    """Detect a title field one-line title at the start of a prediction body.
 
-    Stream J writer rule (active 2026-05-02): each `## Future` item starts
+    title field writer rule (active 2026-05-02): each `## Future` item starts
     with a one-line title (≤ 80 chars, no markdown, no scope prefix),
     followed by a blank line, followed by the existing prose body. We
     detect the pattern by:
@@ -264,10 +266,10 @@ _STREAM_C_FIELDS = ("because", "given", "so_that", "landing", "eli14")
 
 
 def _extract_stream_k_summary(body: str) -> tuple[str | None, str]:
-    """Detect a Stream K `**Summary:**` marker block.
+    """Detect a mid-tier summary `**Summary:**` marker block.
 
-    Stream K writer rule (active 2026-05-02 forward): after the
-    Stream C reasoning bullets and the blank-line gap, the writer
+    mid-tier summary writer rule (active 2026-05-02 forward): after the
+    reasoning fields bullets and the blank-line gap, the writer
     optionally emits a single-paragraph mid-tier summary marked with
     a leading bold ``**Summary:**`` token. The block ends at the
     next blank line; everything after the blank is the long-form
@@ -307,10 +309,10 @@ def _extract_stream_k_summary(body: str) -> tuple[str | None, str]:
 
 
 def _extract_stream_c_reasoning(body: str) -> tuple[dict[str, str], str]:
-    """Detect a Stream C 5-field reasoning block at the start of `body`.
+    """Detect a reasoning fields 5-field reasoning block at the start of `body`.
 
-    Stream C writer rule (active 2026-05-02): immediately after the
-    Stream J title (and the blank-line gap), the writer emits a
+    reasoning fields writer rule (active 2026-05-02): immediately after the
+    title field title (and the blank-line gap), the writer emits a
     bullet list of exactly 5 fields::
 
         - because: <observed precondition>
@@ -423,22 +425,22 @@ def parse_news_markdown(markdown: str, *, source_path: Path | str | None = None)
             # all carry the prefix forward into the DB and the
             # dashboard.
             raw_body = _strip_scope_prefix_anywhere(raw_body)
-            # Stream J: a one-line title at the start of the body, separated
+            # title field: a one-line title at the start of the body, separated
             # by a blank line from the prose. None when the item is in the
             # legacy `**bold title** —` shape.
             stream_j_title, body_after_title = _extract_stream_j_title(raw_body)
-            # Stream C: 5-field reasoning bullet list right after the title.
-            # Only attempted when Stream J title was present (the two
-            # streams ship together; partial Stream C without title is
+            # reasoning fields: 5-field reasoning bullet list right after the title.
+            # Only attempted when title field title was present (the two
+            # streams ship together; partial reasoning fields without title is
             # not a supported writer state).
             reasoning: dict[str, str] = {}
             stream_k_summary: str | None = None
             if stream_j_title is not None:
                 reasoning, body_after_reasoning = _extract_stream_c_reasoning(body_after_title)
                 body = body_after_reasoning if reasoning else body_after_title
-                # Stream K: optional `**Summary:**` mid-tier summary
+                # mid-tier summary: optional `**Summary:**` mid-tier summary
                 # block right after the reasoning bullets. Independent
-                # of Stream C — Stream J + summary alone is a valid
+                # of reasoning fields — title field + summary alone is a valid
                 # state (writer wrote a summary but skipped the 5-field
                 # reasoning). The body remainder becomes the long-form.
                 stream_k_summary, body_after_summary = _extract_stream_k_summary(body)
@@ -446,7 +448,7 @@ def parse_news_markdown(markdown: str, *, source_path: Path | str | None = None)
                     body = body_after_summary
             else:
                 body = raw_body
-                # Even without Stream J/C, the writer might have placed
+                # Even without title / reasoning, the writer might have placed
                 # a `**Summary:**` block as the very first thing in a
                 # legacy item — pick it up if so.
                 stream_k_summary, body_after_summary = _extract_stream_k_summary(body)
@@ -460,7 +462,7 @@ def parse_news_markdown(markdown: str, *, source_path: Path | str | None = None)
             summary = _strip_links(body).strip()
             # Collapse runs of whitespace.
             summary = re.sub(r"\s+", " ", summary)
-            # Stream J: when a clean title was extracted, prefer it as the
+            # title field: when a clean title was extracted, prefer it as the
             # short_label hint over the (often markdown-heavy) bold_hint.
             short_label = _derive_short_label(
                 summary,
