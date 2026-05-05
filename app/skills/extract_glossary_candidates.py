@@ -85,7 +85,7 @@ def init_glossary_seed(
       "insert" (default) — insert rows whose term doesn't yet exist;
         existing rows are never touched. Safe for the daily flow.
       "upsert" — also UPDATE definition fields on existing rows from
-        the YAML (aliases, eli14/why locale fan-out, canonical_link,
+        the YAML (aliases, quick_def/why locale fan-out, canonical_link,
         status, reviewed_by_human). DB-owned fields are preserved:
         first_seen_date, last_seen_date, occurrences_30d,
         distinct_days_14d. updated_at is bumped on UPDATE.
@@ -116,10 +116,10 @@ def init_glossary_seed(
                     """
                     UPDATE glossary_terms SET
                       aliases_json        = ?,
-                      one_liner_eli14     = ?,
-                      one_liner_eli14_ja  = ?,
-                      one_liner_eli14_es  = ?,
-                      one_liner_eli14_fil = ?,
+                      quick_def     = ?,
+                      quick_def_ja  = ?,
+                      quick_def_es  = ?,
+                      quick_def_fil = ?,
                       why_it_matters      = ?,
                       why_it_matters_ja   = ?,
                       why_it_matters_es   = ?,
@@ -132,10 +132,10 @@ def init_glossary_seed(
                     """,
                     (
                         json.dumps(entry.get("aliases") or []),
-                        entry.get("one_liner_eli14"),
-                        entry.get("one_liner_eli14_ja"),
-                        entry.get("one_liner_eli14_es"),
-                        entry.get("one_liner_eli14_fil"),
+                        entry.get("quick_def"),
+                        entry.get("quick_def_ja"),
+                        entry.get("quick_def_es"),
+                        entry.get("quick_def_fil"),
                         entry.get("why_it_matters"),
                         entry.get("why_it_matters_ja"),
                         entry.get("why_it_matters_es"),
@@ -153,8 +153,8 @@ def init_glossary_seed(
             """
             INSERT INTO glossary_terms (
                 term, aliases_json,
-                one_liner_eli14, one_liner_eli14_ja,
-                one_liner_eli14_es, one_liner_eli14_fil,
+                quick_def, quick_def_ja,
+                quick_def_es, quick_def_fil,
                 why_it_matters, why_it_matters_ja,
                 why_it_matters_es, why_it_matters_fil,
                 canonical_link, status, first_seen_date,
@@ -164,10 +164,10 @@ def init_glossary_seed(
             (
                 entry["term"],
                 json.dumps(entry.get("aliases") or []),
-                entry.get("one_liner_eli14"),
-                entry.get("one_liner_eli14_ja"),
-                entry.get("one_liner_eli14_es"),
-                entry.get("one_liner_eli14_fil"),
+                entry.get("quick_def"),
+                entry.get("quick_def_ja"),
+                entry.get("quick_def_es"),
+                entry.get("quick_def_fil"),
                 entry.get("why_it_matters"),
                 entry.get("why_it_matters_ja"),
                 entry.get("why_it_matters_es"),

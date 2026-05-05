@@ -9,7 +9,7 @@ Definitions for newly-promoted active rows must be filled by the
 writer's LLM context inside `1_daily_update`. This skill exposes
 `pending_definitions()` so the orchestrator can hand the list to the
 LLM as a structured input. When invoked with `--mode auto` it just
-flips the status flag; the orchestrator fills in `one_liner_eli14`
+flips the status flag; the orchestrator fills in `quick_def`
 and `why_it_matters` afterward and calls `commit_definition()` to
 persist them.
 
@@ -92,7 +92,7 @@ def pending_definitions(conn: sqlite3.Connection) -> list[dict]:
         SELECT term, aliases_json, occurrences_30d, distinct_days_14d
           FROM glossary_terms
          WHERE status = 'active'
-           AND (one_liner_eli14 IS NULL OR one_liner_eli14 = '')
+           AND (quick_def IS NULL OR quick_def = '')
         """,
     )
     return [dict(r) for r in cur.fetchall()]
@@ -101,7 +101,7 @@ def pending_definitions(conn: sqlite3.Connection) -> list[dict]:
 def commit_definition(
     conn: sqlite3.Connection,
     term: str,
-    one_liner_eli14: str,
+    quick_def: str,
     why_it_matters: str,
     canonical_link: str | None = None,
     reviewed_by_human: bool = False,
@@ -110,7 +110,7 @@ def commit_definition(
     conn.execute(
         """
         UPDATE glossary_terms
-           SET one_liner_eli14   = ?,
+           SET quick_def   = ?,
                why_it_matters    = ?,
                canonical_link    = COALESCE(?, canonical_link),
                reviewed_by_human = COALESCE(?, reviewed_by_human),
@@ -118,7 +118,7 @@ def commit_definition(
          WHERE term = ?
         """,
         (
-            one_liner_eli14,
+            quick_def,
             why_it_matters,
             canonical_link,
             1 if reviewed_by_human else None,

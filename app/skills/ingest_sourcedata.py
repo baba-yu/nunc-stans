@@ -15,8 +15,8 @@ Public API:
   * :func:`ingest_day_locales` — fan-in of ja/es/fil locale JSON files.
   * :func:`scan_dates` — list available date dirs under ``app/sourcedata/``.
 
-The single field rename across the JSON ↔ DB boundary is
-``reasoning.plain_language`` JSON ↔ ``predictions.eli14`` DB column.
+JSON and DB use matching key names — `reasoning.plain_language` JSON
+maps to `predictions.plain_language` DB column directly.
 Every other key maps by direct name.
 """
 
@@ -243,8 +243,7 @@ def _ingest_predictions_file(
             reasoning_given=pred.reasoning.given,
             reasoning_so_that=pred.reasoning.so_that,
             reasoning_landing=pred.reasoning.landing,
-            # The single JSON ↔ DB rename: plain_language → eli14.
-            eli14=pred.reasoning.plain_language,
+            plain_language=pred.reasoning.plain_language,
             summary_text=pred.summary,
         )
         pid_by_index[idx] = prediction_id
@@ -593,7 +592,7 @@ def _ingest_locale_predictions(
             reasoning_given=pred.reasoning.given,
             reasoning_so_that=pred.reasoning.so_that,
             reasoning_landing=pred.reasoning.landing,
-            eli14=pred.reasoning.plain_language,
+            plain_language=pred.reasoning.plain_language,
         )
         count += 1
     return count

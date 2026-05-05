@@ -292,7 +292,7 @@ def _upsert_prediction(
     reasoning_given: str | None = None,
     reasoning_so_that: str | None = None,
     reasoning_landing: str | None = None,
-    eli14: str | None = None,
+    plain_language: str | None = None,
     summary_text: str | None = None,
 ) -> str:
     prediction_id = _hash_id("prediction", prediction_date, prediction_summary)
@@ -301,7 +301,7 @@ def _upsert_prediction(
         INSERT OR IGNORE INTO predictions (
           prediction_id, prediction_summary, prediction_short_label, title,
           reasoning_because, reasoning_given, reasoning_so_that,
-          reasoning_landing, eli14, summary,
+          reasoning_landing, plain_language, summary,
           prediction_date, source_file_id, source_row_index, raw_text
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,
@@ -314,7 +314,7 @@ def _upsert_prediction(
             reasoning_given,
             reasoning_so_that,
             reasoning_landing,
-            eli14,
+            plain_language,
             summary_text,
             prediction_date,
             source_file_id,
@@ -353,7 +353,7 @@ def _upsert_prediction(
           reasoning_given    = COALESCE(?, reasoning_given),
           reasoning_so_that  = COALESCE(?, reasoning_so_that),
           reasoning_landing  = COALESCE(?, reasoning_landing),
-          eli14              = COALESCE(?, eli14),
+          plain_language              = COALESCE(?, plain_language),
           summary            = COALESCE(?, summary),
           target_start_date  = COALESCE(?, target_start_date),
           target_end_date    = COALESCE(?, target_end_date),
@@ -372,7 +372,7 @@ def _upsert_prediction(
             reasoning_given,
             reasoning_so_that,
             reasoning_landing,
-            eli14,
+            plain_language,
             summary_text,
             target_start,
             target_end,
@@ -592,7 +592,7 @@ def _ingest_prediction_summary(
         reasoning_given=pred.reasoning_given,
         reasoning_so_that=pred.reasoning_so_that,
         reasoning_landing=pred.reasoning_landing,
-        eli14=pred.eli14,
+        plain_language=pred.plain_language,
         summary_text=pred.summary_text,
     )
     match_by_scope = _pick_theme_per_scope(pred.summary, themes)
@@ -1002,12 +1002,12 @@ def _update_prediction_locale_cols(
     reasoning_given: str | None = None,
     reasoning_so_that: str | None = None,
     reasoning_landing: str | None = None,
-    eli14: str | None = None,
+    plain_language: str | None = None,
 ) -> None:
     """Fill *_<locale> columns for a sibling-locale news file.
 
     Phase 4a: extended beyond prediction_summary / short_label / summary
-    (mid-tier) to cover title field title + reasoning fields + eli14.
+    (mid-tier) to cover title field title + reasoning fields + plain_language.
     Non-empty values UPDATE; None values are left untouched (COALESCE pattern)
     so a partial sibling parse never clobbers a previously-filled column.
     """
@@ -1024,7 +1024,7 @@ def _update_prediction_locale_cols(
         (f"reasoning_given_{locale}", reasoning_given),
         (f"reasoning_so_that_{locale}", reasoning_so_that),
         (f"reasoning_landing_{locale}", reasoning_landing),
-        (f"eli14_{locale}", eli14),
+        (f"plain_language_{locale}", plain_language),
     ]
     # summary + short_label are always written when sibling parse succeeds;
     # the rest use COALESCE so a parser miss doesn't overwrite a prior value.
@@ -1101,7 +1101,7 @@ def _ingest_localized_news_group(
             reasoning_given=pred.reasoning_given,
             reasoning_so_that=pred.reasoning_so_that,
             reasoning_landing=pred.reasoning_landing,
-            eli14=pred.eli14,
+            plain_language=pred.plain_language,
             summary_text=pred.summary_text,
         )
         canon_pred_ids[pred.index] = prediction_id
@@ -1163,7 +1163,7 @@ def _ingest_localized_news_group(
                 reasoning_given=pred.reasoning_given,
                 reasoning_so_that=pred.reasoning_so_that,
                 reasoning_landing=pred.reasoning_landing,
-                eli14=pred.eli14,
+                plain_language=pred.plain_language,
             )
 
 

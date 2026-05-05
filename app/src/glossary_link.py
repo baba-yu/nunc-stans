@@ -29,7 +29,7 @@ from pathlib import Path
 class GlossaryEntry:
     term: str
     aliases: tuple[str, ...]
-    eli14: str
+    quick_def: str
     why_it_matters: str
 
 
@@ -42,11 +42,11 @@ def load_active_glossary(db_path: Path) -> list[GlossaryEntry]:
     try:
         cur = conn.execute(
             """
-            SELECT term, aliases_json, one_liner_eli14, why_it_matters
+            SELECT term, aliases_json, quick_def, why_it_matters
               FROM glossary_terms
              WHERE status = 'active'
-               AND one_liner_eli14 IS NOT NULL
-               AND one_liner_eli14 <> ''
+               AND quick_def IS NOT NULL
+               AND quick_def <> ''
             """
         )
         out: list[GlossaryEntry] = []
@@ -60,7 +60,7 @@ def load_active_glossary(db_path: Path) -> list[GlossaryEntry]:
                 GlossaryEntry(
                     term=row["term"],
                     aliases=aliases,
-                    eli14=row["one_liner_eli14"] or "",
+                    quick_def=row["quick_def"] or "",
                     why_it_matters=row["why_it_matters"] or "",
                 )
             )
@@ -107,7 +107,7 @@ def annotate(text: str, entries: list[GlossaryEntry]) -> str:
         if not entry:
             return original
         seen.add(key)
-        title = (entry.eli14 or "").replace('"', "&quot;").strip()
+        title = (entry.quick_def or "").replace('"', "&quot;").strip()
         if entry.why_it_matters:
             why = entry.why_it_matters.replace('"', "&quot;").strip()
             title = f"{title} — {why}"

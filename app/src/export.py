@@ -733,14 +733,14 @@ def _build_scope_graph(conn: sqlite3.Connection, scope_id: str) -> dict:
                -- reasoning fields: reasoning trace. NULL until the writer fills
                -- them in. The frontend Reasoning tab hides empty fields.
                p.reasoning_because, p.reasoning_given,
-               p.reasoning_so_that, p.reasoning_landing, p.eli14,
-               -- Phase 4a: locale fan-out for title / reasoning + eli14.
+               p.reasoning_so_that, p.reasoning_landing, p.plain_language,
+               -- Phase 4a: locale fan-out for title / reasoning + plain_language.
                p.title_ja, p.title_es, p.title_fil,
                p.reasoning_because_ja, p.reasoning_because_es, p.reasoning_because_fil,
                p.reasoning_given_ja, p.reasoning_given_es, p.reasoning_given_fil,
                p.reasoning_so_that_ja, p.reasoning_so_that_es, p.reasoning_so_that_fil,
                p.reasoning_landing_ja, p.reasoning_landing_es, p.reasoning_landing_fil,
-               p.eli14_ja, p.eli14_es, p.eli14_fil,
+               p.plain_language_ja, p.plain_language_es, p.plain_language_fil,
                -- Phase 3: structured time bounds derived from
                -- reasoning_landing. Prediction's destination window.
                p.target_start_date, p.target_end_date,
@@ -1651,21 +1651,21 @@ def _build_scope_graph(conn: sqlite3.Connection, scope_id: str) -> dict:
                     "title_clean": prediction_title,
                     # reasoning fields: structured reasoning trace. The frontend
                     # Reasoning tab renders the four `because/given/so_that/
-                    # landing` fields plus the `eli14` plain-language line.
+                    # landing` fields plus the `plain_language` line.
                     # All five fields are nullable; the tab hides empty rows.
                     "reasoning": {
-                        "because":  pr["reasoning_because"],
-                        "given":    pr["reasoning_given"],
-                        "so_that":  pr["reasoning_so_that"],
-                        "landing":  pr["reasoning_landing"],
-                        "eli14":    pr["eli14"],
+                        "because":        pr["reasoning_because"],
+                        "given":          pr["reasoning_given"],
+                        "so_that":        pr["reasoning_so_that"],
+                        "landing":        pr["reasoning_landing"],
+                        "plain_language": pr["plain_language"],
                     },
                     "reasoning_locales": {
-                        "because": _loc(pr["reasoning_because"], pr["reasoning_because_ja"], pr["reasoning_because_es"], pr["reasoning_because_fil"]),
-                        "given":   _loc(pr["reasoning_given"],   pr["reasoning_given_ja"],   pr["reasoning_given_es"],   pr["reasoning_given_fil"]),
-                        "so_that": _loc(pr["reasoning_so_that"], pr["reasoning_so_that_ja"], pr["reasoning_so_that_es"], pr["reasoning_so_that_fil"]),
-                        "landing": _loc(pr["reasoning_landing"], pr["reasoning_landing_ja"], pr["reasoning_landing_es"], pr["reasoning_landing_fil"]),
-                        "eli14":   _loc(pr["eli14"],             pr["eli14_ja"],             pr["eli14_es"],             pr["eli14_fil"]),
+                        "because":        _loc(pr["reasoning_because"], pr["reasoning_because_ja"], pr["reasoning_because_es"], pr["reasoning_because_fil"]),
+                        "given":          _loc(pr["reasoning_given"],   pr["reasoning_given_ja"],   pr["reasoning_given_es"],   pr["reasoning_given_fil"]),
+                        "so_that":        _loc(pr["reasoning_so_that"], pr["reasoning_so_that_ja"], pr["reasoning_so_that_es"], pr["reasoning_so_that_fil"]),
+                        "landing":        _loc(pr["reasoning_landing"], pr["reasoning_landing_ja"], pr["reasoning_landing_es"], pr["reasoning_landing_fil"]),
+                        "plain_language": _loc(pr["plain_language"],    pr["plain_language_ja"],    pr["plain_language_es"],    pr["plain_language_fil"]),
                     },
                     "title_locales": _loc(pr["prediction_title"], pr["title_ja"], pr["title_es"], pr["title_fil"]),
                     # mid-tier summary: mid-tier summary + locale fan-out.
@@ -2253,15 +2253,15 @@ def run_export(
             cur = conn.execute(
                 """
                 SELECT term, aliases_json,
-                       one_liner_eli14,
-                       one_liner_eli14_ja, one_liner_eli14_es, one_liner_eli14_fil,
+                       quick_def,
+                       quick_def_ja, quick_def_es, quick_def_fil,
                        why_it_matters,
                        why_it_matters_ja, why_it_matters_es, why_it_matters_fil,
                        canonical_link
                   FROM glossary_terms
                  WHERE status = 'active'
-                   AND one_liner_eli14 IS NOT NULL
-                   AND one_liner_eli14 <> ''
+                   AND quick_def IS NOT NULL
+                   AND quick_def <> ''
                  ORDER BY term
                 """
             )
@@ -2274,7 +2274,7 @@ def run_export(
                             aliases = []
                     except (json.JSONDecodeError, TypeError):
                         aliases = []
-                en_eli = row["one_liner_eli14"]
+                en_qd = row["quick_def"]
                 en_why = row["why_it_matters"]
 
                 def _fan(en, ja, es, fil):
@@ -2290,12 +2290,12 @@ def run_export(
                     "aliases": aliases,
                     # Legacy flat fields kept for back-compat with older
                     # frontend builds that don't read the locale dict yet.
-                    "one_liner_eli14": en_eli,
+                    "quick_def": en_qd,
                     "why_it_matters": en_why,
                     # Phase 2 brought-forward locale fan-out. Per-locale
                     # NULL falls back to EN at write time so the frontend
-                    # can index `entry.eli14[loc]` unconditionally.
-                    "eli14": _fan(en_eli, row["one_liner_eli14_ja"], row["one_liner_eli14_es"], row["one_liner_eli14_fil"]),
+                    # can index `entry.quick_def_locales[loc]` unconditionally.
+                    "quick_def_locales": _fan(en_qd, row["quick_def_ja"], row["quick_def_es"], row["quick_def_fil"]),
                     "why":   _fan(en_why, row["why_it_matters_ja"],   row["why_it_matters_es"],   row["why_it_matters_fil"]),
                     "canonical_link": row["canonical_link"],
                 })

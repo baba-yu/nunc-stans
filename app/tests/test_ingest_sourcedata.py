@@ -166,7 +166,7 @@ def test_round_trip_predictions(fake_repo: Path, conn: sqlite3.Connection):
         """
         SELECT prediction_summary, title, prediction_short_label, prediction_date,
                reasoning_because, reasoning_given, reasoning_so_that,
-               reasoning_landing, eli14, summary, source_row_index
+               reasoning_landing, plain_language, summary, source_row_index
         FROM predictions WHERE prediction_date = ?
         """,
         (SAMPLE_DATE,),
@@ -183,8 +183,8 @@ def test_round_trip_predictions(fake_repo: Path, conn: sqlite3.Connection):
     assert r["reasoning_given"] == p["reasoning"]["given"]
     assert r["reasoning_so_that"] == p["reasoning"]["so_that"]
     assert r["reasoning_landing"] == p["reasoning"]["landing"]
-    # The single JSON ↔ DB column rename: plain_language -> eli14.
-    assert r["eli14"] == p["reasoning"]["plain_language"]
+    # JSON and DB share the column name `plain_language`.
+    assert r["plain_language"] == p["reasoning"]["plain_language"]
     assert r["summary"] == p["summary"]
     assert r["source_row_index"] == 0
 
@@ -294,7 +294,7 @@ def test_locale_columns_filled(fake_repo: Path, conn: sqlite3.Connection):
         SELECT title_ja, prediction_summary_ja, prediction_short_label_ja,
                summary_ja,
                reasoning_because_ja, reasoning_given_ja,
-               reasoning_so_that_ja, reasoning_landing_ja, eli14_ja
+               reasoning_so_that_ja, reasoning_landing_ja, plain_language_ja
         FROM predictions WHERE prediction_date = ?
         """,
         (SAMPLE_DATE,),
@@ -309,4 +309,4 @@ def test_locale_columns_filled(fake_repo: Path, conn: sqlite3.Connection):
     assert r["reasoning_given_ja"] == p["reasoning"]["given"]
     assert r["reasoning_so_that_ja"] == p["reasoning"]["so_that"]
     assert r["reasoning_landing_ja"] == p["reasoning"]["landing"]
-    assert r["eli14_ja"] == p["reasoning"]["plain_language"]
+    assert r["plain_language_ja"] == p["reasoning"]["plain_language"]

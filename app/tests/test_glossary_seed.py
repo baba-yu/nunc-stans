@@ -16,10 +16,10 @@ _SEED_V1 = """\
 terms:
   - term: TestTerm
     aliases: [TT]
-    one_liner_eli14: "v1 EN definition"
-    one_liner_eli14_ja: "v1 JA"
-    one_liner_eli14_es: "v1 ES"
-    one_liner_eli14_fil: "v1 FIL"
+    quick_def: "v1 EN definition"
+    quick_def_ja: "v1 JA"
+    quick_def_es: "v1 ES"
+    quick_def_fil: "v1 FIL"
     why_it_matters: "v1 EN why"
     why_it_matters_ja: "v1 JA why"
     why_it_matters_es: "v1 ES why"
@@ -33,10 +33,10 @@ _SEED_V2 = """\
 terms:
   - term: TestTerm
     aliases: [TT, "Test Term"]
-    one_liner_eli14: "v2 EN definition"
-    one_liner_eli14_ja: "v2 JA"
-    one_liner_eli14_es: "v2 ES"
-    one_liner_eli14_fil: "v2 FIL"
+    quick_def: "v2 EN definition"
+    quick_def_ja: "v2 JA"
+    quick_def_es: "v2 ES"
+    quick_def_fil: "v2 FIL"
     why_it_matters: "v2 EN why"
     why_it_matters_ja: "v2 JA why"
     why_it_matters_es: "v2 ES why"
@@ -68,7 +68,7 @@ def test_insert_mode_adds_new_term(conn_and_yaml):
     counts = init_glossary_seed(conn, seed, mode="insert")
     assert counts == {"inserted": 1, "updated": 0}
     row = _row(conn, "TestTerm")
-    assert row["one_liner_eli14"] == "v1 EN definition"
+    assert row["quick_def"] == "v1 EN definition"
     assert json.loads(row["aliases_json"]) == ["TT"]
     assert row["status"] == "active"
 
@@ -83,7 +83,7 @@ def test_insert_mode_skips_existing(conn_and_yaml):
     counts = init_glossary_seed(conn, seed, mode="insert")
     assert counts == {"inserted": 0, "updated": 0}
     row = _row(conn, "TestTerm")
-    assert row["one_liner_eli14"] == "v1 EN definition"
+    assert row["quick_def"] == "v1 EN definition"
     assert row["canonical_link"] == "https://example.com/v1"
     assert row["status"] == "active"
 
@@ -108,8 +108,8 @@ def test_upsert_mode_updates_existing(conn_and_yaml):
 
     post = _row(conn, "TestTerm")
     # YAML-owned fields: overwritten.
-    assert post["one_liner_eli14"] == "v2 EN definition"
-    assert post["one_liner_eli14_ja"] == "v2 JA"
+    assert post["quick_def"] == "v2 EN definition"
+    assert post["quick_def_ja"] == "v2 JA"
     assert post["why_it_matters_fil"] == "v2 FIL why"
     assert post["canonical_link"] == "https://example.com/v2"
     assert post["status"] == "retired"

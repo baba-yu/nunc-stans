@@ -374,7 +374,7 @@ def _parse_news_bullets(body: str) -> list[dict]:
 
 
 # ---------------------------------------------------------------------------
-# Per-locale prediction extraction (title/reasoning/eli14/summary)
+# Per-locale prediction extraction (title/reasoning/plain_language/summary)
 # ---------------------------------------------------------------------------
 
 
@@ -395,7 +395,7 @@ def _extract_prediction_locale_fields(
         "reasoning_given": pred.reasoning_given,
         "reasoning_so_that": pred.reasoning_so_that,
         "reasoning_landing": pred.reasoning_landing,
-        "eli14": pred.eli14,
+        "plain_language": pred.plain_language,
     }
 
 
@@ -442,7 +442,7 @@ def _predictions_json_for_locale(
             "given": p.reasoning_given or "",
             "so_that": p.reasoning_so_that or "",
             "landing": p.reasoning_landing or "",
-            "plain_language": p.eli14 or "",
+            "plain_language": p.plain_language or "",
         }
         # Prefer the parsed `**Summary:**` mid-tier summary; fall back
         # to the body's first sentence so the JSON has SOMETHING in

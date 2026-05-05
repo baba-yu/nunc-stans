@@ -38,7 +38,7 @@ def list_candidates(conn: sqlite3.Connection, *, limit: int = 25) -> list[dict]:
             OR reasoning_given   IS NULL
             OR reasoning_so_that IS NULL
             OR reasoning_landing IS NULL
-            OR eli14             IS NULL
+            OR plain_language             IS NULL
             OR title             IS NULL
             OR summary           IS NULL
          ORDER BY prediction_date DESC, source_row_index ASC
@@ -71,7 +71,7 @@ def commit_backfill(
     reasoning_given: str | None = None,
     reasoning_so_that: str | None = None,
     reasoning_landing: str | None = None,
-    eli14: str | None = None,
+    plain_language: str | None = None,
     summary: str | None = None,
     summary_ja: str | None = None,
     summary_es: str | None = None,
@@ -90,7 +90,7 @@ def commit_backfill(
                reasoning_given   = COALESCE(?, reasoning_given),
                reasoning_so_that = COALESCE(?, reasoning_so_that),
                reasoning_landing = COALESCE(?, reasoning_landing),
-               eli14             = COALESCE(?, eli14),
+               plain_language             = COALESCE(?, plain_language),
                summary           = COALESCE(?, summary),
                summary_ja        = COALESCE(?, summary_ja),
                summary_es        = COALESCE(?, summary_es),
@@ -104,7 +104,7 @@ def commit_backfill(
             reasoning_given,
             reasoning_so_that,
             reasoning_landing,
-            eli14,
+            plain_language,
             summary,
             summary_ja,
             summary_es,

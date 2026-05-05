@@ -165,7 +165,7 @@ class PredictionSummary:
     reasoning_given: str | None = None
     reasoning_so_that: str | None = None
     reasoning_landing: str | None = None
-    eli14: str | None = None
+    plain_language: str | None = None
     # mid-tier summary (Phase B): mid-tier summary the writer emits as a
     # `**Summary:**` marker block between the reasoning bullets and
     # the long-form body. NULL when the writer didn't write one
@@ -481,7 +481,7 @@ def parse_news_markdown(markdown: str, *, source_path: Path | str | None = None)
                     reasoning_given=reasoning.get("given"),
                     reasoning_so_that=reasoning.get("so_that"),
                     reasoning_landing=reasoning.get("landing"),
-                    eli14=reasoning.get("eli14"),
+                    plain_language=reasoning.get("eli14"),
                     summary_text=stream_k_summary,
                 )
             )

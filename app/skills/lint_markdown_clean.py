@@ -31,7 +31,7 @@ from pathlib import Path
 # Patterns are deliberately strict — false positives here block ship.
 _FORBIDDEN: list[tuple[str, str, int]] = [
     # Coined project terms.
-    ("eli14", r"\beli14\b", re.IGNORECASE),
+    ("plain_language", r"\bplain_language\b", re.IGNORECASE),
     ("JTBD", r"\bJTBD\b", 0),
     # Legacy stream-letter labels — case-insensitive, whole-word boundary.
     ("legacy stream-letter label", r"\bStream\s+[A-FJK]\b", 0),
@@ -56,7 +56,7 @@ _FORBIDDEN: list[tuple[str, str, int]] = [
     ("- given: bullet key", r"^\s*-\s+given\s*:", re.MULTILINE),
     ("- so_that: bullet key", r"^\s*-\s+so_that\s*:", re.MULTILINE),
     ("- landing: bullet key", r"^\s*-\s+landing\s*:", re.MULTILINE),
-    ("- eli14: bullet key", r"^\s*-\s+eli14\s*:", re.MULTILINE),
+    ("- plain_language: bullet key", r"^\s*-\s+plain_language\s*:", re.MULTILINE),
     # Pipeline meta scope prefixes — already covered by an existing
     # rule in the writer flow; restated here so a single lint pass
     # covers the full forbidden-token catalogue.
@@ -158,7 +158,7 @@ def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(
         description=(
             "Greps user-facing markdown for forbidden internal-pipeline "
-            "tokens (legacy stream-letter labels, Pred ID #N, parser anchors, eli14, ...)."
+            "tokens (legacy stream-letter labels, Pred ID #N, parser anchors, plain_language, ...)."
         )
     )
     g = p.add_mutually_exclusive_group(required=True)

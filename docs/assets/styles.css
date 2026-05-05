@@ -1149,11 +1149,11 @@ details.full-prediction[open] > summary {
    Sits between the title (above the metrics tiles) and the prediction
    tabs. Default-visible. The full prediction text below collapses
    into <details> when this mid-tier is present. */
-/* Tier 1 of the 3-tier prediction pane: ELI14 — the writer's
+/* Tier 1 of the 3-tier prediction pane: plain language — the writer's
    plain-language one-sentence summary. Default-visible, prominent.
    The voice should read like "what would you tell a smart 14-year-old
    about this prediction in one breath". */
-.prediction-eli14 {
+.prediction-plain-language {
   margin: 14px 0 6px;
   padding: 12px 14px;
   background: rgba(24, 199, 216, 0.07);
@@ -1166,8 +1166,8 @@ details.full-prediction[open] > summary {
 }
 
 /* Tier 2 (optional, secondary): Stream K technical summary, ≤ 300
-   chars. Collapsible <details> — closed by default when ELI14 is
-   already shown above; open by default when ELI14 is missing
+   chars. Collapsible <details> — closed by default when plain language is
+   already shown above; open by default when plain language is missing
    (legacy items where Stream K is the only mid-tier content). */
 .prediction-summary-mid {
   margin: 6px 0 4px;
@@ -1559,7 +1559,7 @@ body.alt-view-mode #probe-menu-toggle {
   font-size: 12px;
   color: var(--text-muted);
 }
-/* PREDICTION column. Shows the locale-aware ELI14 explanation when a
+/* PREDICTION column. Shows the locale-aware plain language explanation when a
    prediction has one, otherwise the title — both rendered identically
    so the reader sees a uniform body text per row regardless of source. */
 .list-table .cell-prediction {

@@ -6,9 +6,9 @@ Three checks:
 
 * **form** — purely Python, deterministic. Hits empty defs, over-long
   defs (>25 words / >2 sentences), banned-word infiltration into the
-  ELI14 line (jargon the writer was supposed to avoid).
+  quick_def line (jargon the writer was supposed to avoid).
 * **semantic** — LLM-as-judge. The orchestrator hands each (term,
-  one_liner_eli14, why_it_matters) tuple to the writer's LLM context
+  quick_def, why_it_matters) tuple to the writer's LLM context
   with the prompt template in the skill spec; the LLM returns
   ``{"verdict": "match|mismatch|uncertain", "reason": ..., "suggested_fix": ...}``.
   ``commit_validation()`` writes that to ``glossary_audit`` and, on
@@ -31,11 +31,11 @@ import sys
 from pathlib import Path
 
 
-# Words that should not appear inside an ELI14 sentence — these are the
-# jargon the line is supposed to translate AWAY from. The list is
+# Words that should not appear inside a quick_def sentence — these are
+# the jargon the line is supposed to translate AWAY from. The list is
 # intentionally narrow: too aggressive a list and every legitimate AI
 # definition would trip.
-_FORBIDDEN_IN_ELI14 = frozenset(
+_FORBIDDEN_IN_QUICK_DEF = frozenset(
     {
         "leverage", "synergy", "paradigm", "ecosystem",  # corporate noise
         "utilize", "facilitate",                         # use 'use' / 'help'
@@ -79,7 +79,7 @@ def form_check(row: dict) -> dict:
                     "suggested_fix": "..." (optional)}
     """
     term = (row.get("term") or "").strip()
-    eli = (row.get("one_liner_eli14") or "").strip()
+    qd = (row.get("quick_def") or "").strip()
     why = (row.get("why_it_matters") or "").strip()
     issues: list[str] = []
 
@@ -90,21 +90,21 @@ def form_check(row: dict) -> dict:
     if term.lower() in _GENERIC_TERM_WORDS:
         issues.append(f"term {term!r} looks like a generic English word, not a proper noun / acronym")
 
-    if not eli:
+    if not qd:
         return {"check_type": "form", "verdict": "fail",
-                "reason": "one_liner_eli14 is empty"}
+                "reason": "quick_def is empty"}
 
-    eli_words = _word_count(eli)
-    if eli_words > 25:
-        issues.append(f"one_liner_eli14 is {eli_words} words (cap 25)")
-    eli_sentences = _sentence_count(eli)
-    if eli_sentences > 2:
-        issues.append(f"one_liner_eli14 has {eli_sentences} sentences (cap 2)")
+    qd_words = _word_count(qd)
+    if qd_words > 25:
+        issues.append(f"quick_def is {qd_words} words (cap 25)")
+    qd_sentences = _sentence_count(qd)
+    if qd_sentences > 2:
+        issues.append(f"quick_def has {qd_sentences} sentences (cap 2)")
 
-    eli_lower = eli.lower()
-    forbidden_hits = [w for w in _FORBIDDEN_IN_ELI14 if re.search(rf"\b{re.escape(w)}\b", eli_lower)]
+    qd_lower = qd.lower()
+    forbidden_hits = [w for w in _FORBIDDEN_IN_QUICK_DEF if re.search(rf"\b{re.escape(w)}\b", qd_lower)]
     if forbidden_hits:
-        issues.append(f"one_liner_eli14 contains forbidden jargon: {forbidden_hits}")
+        issues.append(f"quick_def contains forbidden jargon: {forbidden_hits}")
 
     if why:
         why_words = _word_count(why)
@@ -113,7 +113,7 @@ def form_check(row: dict) -> dict:
 
     if not issues:
         return {"check_type": "form", "verdict": "pass", "reason": ""}
-    # `fail` if the term is generic OR the eli14 has hard-blockers;
+    # `fail` if the term is generic OR the quick_def has hard-blockers;
     # otherwise `warn`.
     blocking = any("generic English" in i or "forbidden jargon" in i for i in issues)
     return {
@@ -190,11 +190,11 @@ def list_pending_semantic(conn: sqlite3.Connection, *, limit: int = 25) -> list[
     """Return active rows that haven't had a passing semantic audit yet."""
     cur = conn.execute(
         """
-        SELECT t.term, t.aliases_json, t.one_liner_eli14, t.why_it_matters,
+        SELECT t.term, t.aliases_json, t.quick_def, t.why_it_matters,
                t.canonical_link
           FROM glossary_terms t
          WHERE t.status = 'active'
-           AND t.one_liner_eli14 IS NOT NULL
+           AND t.quick_def IS NOT NULL
            AND t.reviewed_by_human = 0
            AND NOT EXISTS (
              SELECT 1 FROM glossary_audit a
@@ -266,7 +266,7 @@ def run(db_path: Path, *, limit: int) -> dict:
     try:
         cur = conn.execute(
             """
-            SELECT term, aliases_json, one_liner_eli14, why_it_matters, canonical_link
+            SELECT term, aliases_json, quick_def, why_it_matters, canonical_link
               FROM glossary_terms
              WHERE status = 'active'
              ORDER BY term

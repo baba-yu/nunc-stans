@@ -310,14 +310,14 @@ CREATE TABLE IF NOT EXISTS predictions (
   --   reasoning_given    : structural force (e.g. "enterprise risk transfer once a CNA exists")
   --   reasoning_so_that  : consequence (e.g. "skill marketplaces lose enterprise sales unless signed")
   --   reasoning_landing  : when + actor placement (e.g. "Q3 2026, MITRE + CSAI joint advisory")
-  --   eli14              : 1-sentence plain-language version, ≤ 25 words
+  --   plain_language     : 1-sentence plain-language version, ≤ 25 words
   reasoning_because TEXT,
   reasoning_given TEXT,
   reasoning_so_that TEXT,
   reasoning_landing TEXT,
-  eli14 TEXT,
+  plain_language TEXT,
 
-  -- Phase 4a: locale fan-out for title field title + reasoning fields + eli14.
+  -- Phase 4a: locale fan-out for title field title + reasoning fields + plain_language.
   -- NULL = fall back to canonical EN. Filled by ingest from sibling locale
   -- markdown files (news-YYYYMMDD.md in report/{ja,es,fil}/).
   title_ja TEXT,
@@ -335,9 +335,9 @@ CREATE TABLE IF NOT EXISTS predictions (
   reasoning_landing_ja TEXT,
   reasoning_landing_es TEXT,
   reasoning_landing_fil TEXT,
-  eli14_ja TEXT,
-  eli14_es TEXT,
-  eli14_fil TEXT,
+  plain_language_ja TEXT,
+  plain_language_es TEXT,
+  plain_language_fil TEXT,
 
   -- Phase 3: structured time bounds derived from `reasoning_landing`.
   -- The prediction's *destination* — when the prediction completes.
@@ -1074,17 +1074,17 @@ CREATE TABLE IF NOT EXISTS glossary_terms (
   term TEXT PRIMARY KEY,
   -- JSON array of alternate spellings / abbreviations / common synonyms.
   aliases_json TEXT,
-  -- 1-line ELI14 definition. Plain language; no jargon. NULL for candidates.
-  one_liner_eli14 TEXT,
+  -- 1-line plain-language definition. No jargon. NULL for candidates.
+  quick_def TEXT,
   -- 1-line "why a builder cares". NULL for candidates.
   why_it_matters TEXT,
   -- Locale-fan-out for the EN definitions. NULL = fall back to EN.
   -- Phase 2 prebrought-forward (was originally scheduled later) so
   -- the dashboard's hover tooltip ships in the user's selected
   -- locale instead of always EN.
-  one_liner_eli14_ja TEXT,
-  one_liner_eli14_es TEXT,
-  one_liner_eli14_fil TEXT,
+  quick_def_ja TEXT,
+  quick_def_es TEXT,
+  quick_def_fil TEXT,
   why_it_matters_ja TEXT,
   why_it_matters_es TEXT,
   why_it_matters_fil TEXT,

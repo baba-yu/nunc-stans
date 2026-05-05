@@ -7,7 +7,7 @@ Reads the per-date sourcedata JSON files
 (``app/sourcedata/<date>/{predictions,headlines,change_log,news_section}.json``,
 plus the locale variants under ``app/sourcedata/locales/<date>/<locale>/``)
 and returns/writes the rendered markdown. The renderer is pure prose:
-no ``eli14`` keyword, no legacy stream-letter vocabulary, no
+no ``plain_language`` keyword, no legacy stream-letter vocabulary, no
 ``- because:``/``- given:``/``- so_that:``/``- landing:`` bullet keys,
 no ``**Summary:**`` parser anchor — those internal field names live in
 the JSON, not in the rendered markdown.

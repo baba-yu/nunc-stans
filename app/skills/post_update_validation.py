@@ -60,7 +60,7 @@ EN_PREDICTION_COLS = (
     "reasoning_given",
     "reasoning_so_that",
     "reasoning_landing",
-    "eli14",
+    "plain_language",
     "summary",
 )
 
@@ -404,7 +404,7 @@ def _check_json_exports_for_date(
         if not isinstance(rl, dict):
             errs.append(f"{tag}: detail.reasoning_locales missing or not dict")
         else:
-            for key in ("because", "given", "so_that", "landing", "eli14"):
+            for key in ("because", "given", "so_that", "landing", "plain_language"):
                 bag = rl.get(key)
                 if not isinstance(bag, dict):
                     errs.append(
