@@ -27,6 +27,7 @@ from app.skills.sourcedata_schemas import (
     BridgesFile,
     NeedsFile,
     PredictionsFile,
+    ReadingsFile,
 )
 
 _NEWS_RE = re.compile(r"^news-(\d{8})\.md$")
@@ -326,11 +327,140 @@ def apply_needs(repo_root: Path, date_iso: str, payload: dict) -> Path:
     )
 
 
+def apply_readings(
+    repo_root: Path, date_iso: str, payload: dict | ReadingsFile
+) -> Path:
+    """Validate + atomically write ``app/sourcedata/<date>/readings.json``.
+
+    Spec: ``design/sourcedata-layout.md §JSON schemas (canonical) →
+    readings.json``. The payload is the day's full readings: chain edges
+    + structural relations + cluster pointers.
+
+    Accepts either a raw dict (validated via ``ReadingsFile.from_dict``)
+    or a pre-validated ``ReadingsFile`` instance (round-tripped through
+    ``to_dict``). Raises ``SourcedataValidationError`` on schema failure;
+    no file is created when validation fails. Idempotent — re-applying
+    the same payload overwrites the existing file atomically.
+    """
+    if isinstance(payload, ReadingsFile):
+        out_dict = payload.to_dict()
+    else:
+        ReadingsFile.from_dict(payload)
+        out_dict = payload
+    return _atomic_write_json(
+        _date_dir(repo_root, date_iso) / "readings.json", out_dict
+    )
+
+
+def merge_readings_files(date_dir: Path) -> Path:
+    """Merge per-prediction ``readings.<pid>.json`` files into ``readings.json``.
+
+    Mirrors :func:`app.skills.extract_needs.merge_needs_files`. The
+    compose-readings sub-agent writes one per-prediction file shaped
+    like::
+
+        {
+          "chain_edges": [<edge>, ...],
+          "relations":   [<rel>, ...],
+          "cluster_pointers": [<cp>, ...]   # optional; usually one entry
+                                            # for this prediction's keys
+        }
+
+    or, equivalently, an explicit form::
+
+        {
+          "prediction_id": "<pid>",
+          "chain_edges": [...],
+          "relations": [...],
+          "cluster_pointers": [...]
+        }
+
+    The merge step combines all per-prediction files into the day's
+    canonical ``readings.json``. Determinism rules:
+
+      * ``chain_edges`` are concatenated in filename-sorted order, then
+        deduped on the tuple
+        ``(source_prediction_id, downstream_prediction_id, via_evidence_id)``
+        — last write wins, matching the
+        ``INSERT OR REPLACE`` semantics in the ingester.
+      * ``relations`` are deduped on the unordered pair
+        ``(min(prediction_a, prediction_b), max(...), relation_type)``.
+      * ``cluster_pointers`` are deduped by ``prediction_id`` (later
+        files overwrite earlier ones for the same prediction).
+
+    Raises ``FileNotFoundError`` if no per-pid files exist.
+    """
+    date_dir = Path(date_dir)
+    if not date_dir.is_dir():
+        raise FileNotFoundError(f"date directory missing: {date_dir}")
+    sources = sorted(
+        p for p in date_dir.glob("readings.*.json")
+        if p.name != "readings.json"
+    )
+    if not sources:
+        raise FileNotFoundError(
+            f"no readings.<pid>.json files under {date_dir}"
+        )
+    edges_by_key: dict[tuple, dict] = {}
+    relations_by_key: dict[tuple, dict] = {}
+    cluster_by_pid: dict[str, dict] = {}
+    edge_order: list[tuple] = []
+    rel_order: list[tuple] = []
+    cp_order: list[str] = []
+    for src in sources:
+        try:
+            raw = json.loads(src.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as e:
+            raise ValueError(f"{src}: invalid JSON: {e}") from e
+        if not isinstance(raw, dict):
+            raise ValueError(
+                f"{src}: top-level payload must be an object, got "
+                f"{type(raw).__name__}"
+            )
+        edges = raw.get("chain_edges", []) or []
+        rels = raw.get("relations", []) or []
+        cps = raw.get("cluster_pointers", []) or []
+        for e in edges:
+            key = (
+                e.get("source_prediction_id"),
+                e.get("downstream_prediction_id"),
+                e.get("via_evidence_id"),
+            )
+            if key not in edges_by_key:
+                edge_order.append(key)
+            edges_by_key[key] = e
+        for r in rels:
+            a = r.get("prediction_a")
+            b = r.get("prediction_b")
+            rt = r.get("relation_type")
+            ordered = tuple(sorted((a, b)))
+            key = (ordered[0], ordered[1], rt)
+            if key not in relations_by_key:
+                rel_order.append(key)
+            relations_by_key[key] = r
+        for c in cps:
+            pid = c.get("prediction_id")
+            if pid is None:
+                continue
+            if pid not in cluster_by_pid:
+                cp_order.append(pid)
+            cluster_by_pid[pid] = c
+    merged = {
+        "date": date_dir.name,
+        "chain_edges": [edges_by_key[k] for k in edge_order],
+        "relations": [relations_by_key[k] for k in rel_order],
+        "cluster_pointers": [cluster_by_pid[p] for p in cp_order],
+    }
+    out = date_dir / "readings.json"
+    return _atomic_write_json(out, merged)
+
+
 _VALID_LOCALES = ("ja", "es", "fil")
 _STREAM_VALIDATORS = {
     "predictions": PredictionsFile,
     "bridges": BridgesFile,
     "needs": NeedsFile,
+    "readings": ReadingsFile,
 }
 
 
@@ -441,7 +571,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument(
         "--stream",
         required=True,
-        choices=("predictions", "bridges", "needs"),
+        choices=("predictions", "bridges", "needs", "readings"),
     )
     ap.add_argument(
         "--locale",
@@ -485,6 +615,7 @@ def main(argv: list[str] | None = None) -> int:
                 "predictions": apply_predictions,
                 "bridges": apply_bridges,
                 "needs": apply_needs,
+                "readings": apply_readings,
             }[args.stream]
             out = apply_fn(repo_root, args.date, payload)
         print(f"OK {out}")

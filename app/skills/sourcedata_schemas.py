@@ -628,6 +628,233 @@ class NewsSectionFile:
 
 
 # ---------------------------------------------------------------------------
+# readings.json (Phase 6.5 — cross-prediction relations + chain edges +
+#                cluster pointers)
+# ---------------------------------------------------------------------------
+#
+# Schema source: design/sourcedata-layout.md §JSON schemas (canonical) and
+# the canonical Readings stream description in
+# design/scheduled/6_weekly_maintenance.md §Cross-stream correlation. The
+# DB target tables are ``prediction_chain`` (chain edges) and
+# ``prediction_relations`` (semantic relations); ``cluster_pointers`` is
+# informational metadata consumed by the export layer (see
+# ``app/src/export.py:_build_evidence_cluster_index``) and has no
+# dedicated DB column.
+
+
+@dataclass
+class ChainEdge:
+    """One ``prediction_chain`` row: source -> downstream, optionally via evidence.
+
+    ``strength`` lives in ``[0, 1]``. ``via_evidence_id`` is the evidence
+    item that mediates the chain (nullable when the edge is direct
+    semantic implication).
+    """
+
+    source_prediction_id: str
+    downstream_prediction_id: str
+    via_evidence_id: str | None
+    strength: float
+    notes: str | None
+
+    @classmethod
+    def from_dict(cls, d: dict, path: str = "chain_edges[]") -> "ChainEdge":
+        if not isinstance(d, dict):
+            raise SourcedataValidationError(
+                f"{path}: expected object, got {type(d).__name__}"
+            )
+        strength = _require(d, "strength", (int, float), path)
+        if strength is None:
+            raise SourcedataValidationError(
+                f"{path}.strength: must not be null"
+            )
+        strength_f = float(strength)
+        if not (0.0 <= strength_f <= 1.0):
+            raise SourcedataValidationError(
+                f"{path}.strength: must be in [0, 1], got {strength_f}"
+            )
+        return cls(
+            source_prediction_id=_require_str(d, "source_prediction_id", path),
+            downstream_prediction_id=_require_str(
+                d, "downstream_prediction_id", path
+            ),
+            via_evidence_id=_optional(d, "via_evidence_id", (str,), path),
+            strength=strength_f,
+            notes=_optional(d, "notes", (str,), path),
+        )
+
+    def to_dict(self) -> dict:
+        return {
+            "source_prediction_id": self.source_prediction_id,
+            "downstream_prediction_id": self.downstream_prediction_id,
+            "via_evidence_id": self.via_evidence_id,
+            "strength": self.strength,
+            "notes": self.notes,
+        }
+
+
+@dataclass
+class Relation:
+    """One ``prediction_relations`` row: structural relation between A and B.
+
+    ``relation_type`` is one of the five canonical values defined in the
+    DB schema: ``parallel`` / ``exclusive_variant`` / ``negation`` /
+    ``entails`` / ``equivalent``. ``family_id`` groups
+    ``exclusive_variant`` rows that share an outcome space; NULL for the
+    other relation types. ``prob_mass`` is an optional probability share
+    in ``[0, 1]`` for ``exclusive_variant`` rows (the frontend
+    normalizes the family to 100% when rendering).
+    """
+
+    prediction_a: str
+    prediction_b: str
+    relation_type: str
+    family_id: str | None
+    prob_mass: float | None
+    notes: str | None
+
+    _VALID_RELATION_TYPES = (
+        "parallel",
+        "exclusive_variant",
+        "negation",
+        "entails",
+        "equivalent",
+    )
+
+    @classmethod
+    def from_dict(cls, d: dict, path: str = "relations[]") -> "Relation":
+        if not isinstance(d, dict):
+            raise SourcedataValidationError(
+                f"{path}: expected object, got {type(d).__name__}"
+            )
+        rt = _require_str(d, "relation_type", path)
+        if rt not in cls._VALID_RELATION_TYPES:
+            raise SourcedataValidationError(
+                f"{path}.relation_type: must be one of "
+                f"{cls._VALID_RELATION_TYPES}, got {rt!r}"
+            )
+        pm_raw = _optional(d, "prob_mass", (int, float), path)
+        pm: float | None
+        if pm_raw is None:
+            pm = None
+        else:
+            pm = float(pm_raw)
+            if not (0.0 <= pm <= 1.0):
+                raise SourcedataValidationError(
+                    f"{path}.prob_mass: must be in [0, 1], got {pm}"
+                )
+        return cls(
+            prediction_a=_require_str(d, "prediction_a", path),
+            prediction_b=_require_str(d, "prediction_b", path),
+            relation_type=rt,
+            family_id=_optional(d, "family_id", (str,), path),
+            prob_mass=pm,
+            notes=_optional(d, "notes", (str,), path),
+        )
+
+    def to_dict(self) -> dict:
+        return {
+            "prediction_a": self.prediction_a,
+            "prediction_b": self.prediction_b,
+            "relation_type": self.relation_type,
+            "family_id": self.family_id,
+            "prob_mass": self.prob_mass,
+            "notes": self.notes,
+        }
+
+
+@dataclass
+class ClusterPointer:
+    """Per-prediction list of evidence-cluster keys that support it.
+
+    Cluster keys follow the export layer's shape — ``"<theme_id>|<YYYY-Www>"``
+    (see ``app/src/export.py:_build_evidence_cluster_index``). The
+    Readings tab consumes these pointers when the export layer renders
+    the cluster density block; there is no per-prediction DB column for
+    them, so the JSON file itself is the source of truth.
+    """
+
+    prediction_id: str
+    cluster_keys: list[str]
+
+    @classmethod
+    def from_dict(
+        cls, d: dict, path: str = "cluster_pointers[]"
+    ) -> "ClusterPointer":
+        if not isinstance(d, dict):
+            raise SourcedataValidationError(
+                f"{path}: expected object, got {type(d).__name__}"
+            )
+        keys_raw = _require_list(d, "cluster_keys", path)
+        keys: list[str] = []
+        for i, k in enumerate(keys_raw):
+            if not isinstance(k, str):
+                raise SourcedataValidationError(
+                    f"{path}.cluster_keys[{i}]: expected str, got "
+                    f"{type(k).__name__}"
+                )
+            keys.append(k)
+        return cls(
+            prediction_id=_require_str(d, "prediction_id", path),
+            cluster_keys=keys,
+        )
+
+    def to_dict(self) -> dict:
+        return {
+            "prediction_id": self.prediction_id,
+            "cluster_keys": list(self.cluster_keys),
+        }
+
+
+@dataclass
+class ReadingsFile:
+    """Day's readings: chain edges + structural relations + cluster pointers.
+
+    Schema is language-agnostic (no locale fields); ``notes`` is the
+    only translatable field, and locale fan-out is optional.
+    """
+
+    date: str
+    chain_edges: list[ChainEdge]
+    relations: list[Relation]
+    cluster_pointers: list[ClusterPointer]
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "ReadingsFile":
+        path = "readings.json"
+        date = _require_str(d, "date", path)
+        edges_raw = _require_list(d, "chain_edges", path)
+        rels_raw = _require_list(d, "relations", path)
+        cps_raw = _require_list(d, "cluster_pointers", path)
+        edges = [
+            ChainEdge.from_dict(e, path=f"{path}.chain_edges[{i}]")
+            for i, e in enumerate(edges_raw)
+        ]
+        rels = [
+            Relation.from_dict(r, path=f"{path}.relations[{i}]")
+            for i, r in enumerate(rels_raw)
+        ]
+        cps = [
+            ClusterPointer.from_dict(c, path=f"{path}.cluster_pointers[{i}]")
+            for i, c in enumerate(cps_raw)
+        ]
+        return cls(
+            date=date,
+            chain_edges=edges,
+            relations=rels,
+            cluster_pointers=cps,
+        )
+
+    def to_dict(self) -> dict:
+        return {
+            "date": self.date,
+            "chain_edges": [e.to_dict() for e in self.chain_edges],
+            "relations": [r.to_dict() for r in self.relations],
+            "cluster_pointers": [c.to_dict() for c in self.cluster_pointers],
+        }
+
+
+# ---------------------------------------------------------------------------
 # maintenance-candidates.json (Sunday slot 5.5 — 6_weekly_maintenance Step 0)
 # ---------------------------------------------------------------------------
 

@@ -35,6 +35,7 @@ from app.skills.sourcedata_schemas import (
     NeedsFile,
     NewsSectionFile,
     PredictionsFile,
+    ReadingsFile,
     SourcedataValidationError,
 )
 
@@ -135,6 +136,10 @@ def _load_change_log(path: Path) -> ChangeLogFile:
 
 def _load_news_section(path: Path) -> NewsSectionFile:
     return NewsSectionFile.from_dict(_load_json(path))
+
+
+def _load_readings(path: Path) -> ReadingsFile:
+    return ReadingsFile.from_dict(_load_json(path))
 
 
 # ---------------------------------------------------------------------------
@@ -532,6 +537,175 @@ def _ingest_news_section_file(
 
 
 # ---------------------------------------------------------------------------
+# readings.json -> prediction_chain + prediction_relations
+# ---------------------------------------------------------------------------
+
+
+def _chain_id(
+    source_pid: str, downstream_pid: str, via_evidence_id: str | None
+) -> str:
+    """Deterministic ``prediction_chain.chain_id`` from the edge tuple.
+
+    Same shape as other ID hashes in the project: ``chain.<sha1[:16]>``
+    over ``source|downstream|via``. The ``via`` portion is the literal
+    string when present, empty when null — both forms collide-resistant.
+    """
+    import hashlib
+
+    parts = (
+        source_pid or "",
+        downstream_pid or "",
+        via_evidence_id or "",
+    )
+    h = hashlib.sha1("|".join(parts).encode("utf-8")).hexdigest()
+    return f"chain.{h[:16]}"
+
+
+def _relation_id(
+    prediction_a: str, prediction_b: str, relation_type: str
+) -> str:
+    """Deterministic ``prediction_relations.relation_id``.
+
+    The (a, b) pair is order-normalized so re-running with the order
+    swapped produces the same id (relations are bidirectional in the
+    DB schema; the writer picks a canonical orientation but the id
+    must collapse on re-ingest).
+    """
+    import hashlib
+
+    a, b = sorted((prediction_a or "", prediction_b or ""))
+    h = hashlib.sha1(
+        "|".join((a, b, relation_type or "")).encode("utf-8")
+    ).hexdigest()
+    return f"relation.{h[:16]}"
+
+
+def _ingest_readings_file(
+    conn: sqlite3.Connection,
+    *,
+    repo_root: Path,
+    date_iso: str,
+    json_path: Path,
+) -> dict:
+    """Ingest ``readings.json`` for ``date_iso``.
+
+    Writes ``prediction_chain`` rows from ``chain_edges`` and
+    ``prediction_relations`` rows from ``relations``. ``cluster_pointers``
+    is informational metadata consumed by the export layer (see
+    ``app/src/export.py:_build_evidence_cluster_index``); the JSON file
+    itself is the source of truth and there is no per-prediction DB
+    column to write.
+
+    Both tables use deterministic ``INSERT OR REPLACE`` keyed on a hash
+    of the natural identity tuple, so re-ingesting the same JSON produces
+    identical row counts (idempotent).
+
+    Returns a count summary::
+
+        {"chain_edges": N, "relations": M, "cluster_pointers": K}
+    """
+    rf = _load_readings(json_path)
+    _register_source_file(
+        conn,
+        repo_root=repo_root,
+        json_path=json_path,
+        file_type="other",
+        report_date=rf.date,
+    )
+    now_iso = _ingest._now_iso()
+    for edge in rf.chain_edges:
+        cid = _chain_id(
+            edge.source_prediction_id,
+            edge.downstream_prediction_id,
+            edge.via_evidence_id,
+        )
+        conn.execute(
+            """
+            INSERT OR REPLACE INTO prediction_chain (
+              chain_id, source_prediction_id, downstream_prediction_id,
+              via_evidence_id, strength, notes,
+              created_at, updated_at
+            ) VALUES (?, ?, ?, ?, ?, ?,
+                      COALESCE((SELECT created_at FROM prediction_chain
+                                WHERE chain_id = ?), ?),
+                      ?)
+            """,
+            (
+                cid,
+                edge.source_prediction_id,
+                edge.downstream_prediction_id,
+                edge.via_evidence_id,
+                edge.strength,
+                edge.notes,
+                cid,
+                now_iso,
+                now_iso,
+            ),
+        )
+    for rel in rf.relations:
+        rid = _relation_id(
+            rel.prediction_a, rel.prediction_b, rel.relation_type
+        )
+        conn.execute(
+            """
+            INSERT OR REPLACE INTO prediction_relations (
+              relation_id, prediction_a, prediction_b, relation_type,
+              family_id, prob_mass, notes,
+              created_at, updated_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?,
+                      COALESCE((SELECT created_at FROM prediction_relations
+                                WHERE relation_id = ?), ?),
+                      ?)
+            """,
+            (
+                rid,
+                rel.prediction_a,
+                rel.prediction_b,
+                rel.relation_type,
+                rel.family_id,
+                rel.prob_mass,
+                rel.notes,
+                rid,
+                now_iso,
+                now_iso,
+            ),
+        )
+    return {
+        "chain_edges": len(rf.chain_edges),
+        "relations": len(rf.relations),
+        "cluster_pointers": len(rf.cluster_pointers),
+    }
+
+
+def _ingest_locale_readings(
+    conn: sqlite3.Connection,
+    *,
+    date_iso: str,
+    json_path: Path,
+    locale: str,
+) -> int:
+    """Locale fan-in stub for readings.
+
+    Readings has no locale-specific DB columns: ``chain_edges`` and
+    ``relations`` are language-agnostic, and ``notes`` is the only
+    translatable field. Locale readings files are NOT produced by the
+    v1 orchestrator — this function exists for API symmetry with the
+    other ``_ingest_locale_*`` ingesters and to absorb a missing locale
+    file gracefully.
+
+    If the locale readings JSON is present we still validate its schema
+    (so a future writer that emits localized notes catches errors here
+    rather than at export time), but we don't write anything to the DB
+    yet. Returns the number of validated entries (chain edges +
+    relations) for the caller's roll-up.
+    """
+    if not Path(json_path).is_file():
+        return 0
+    rf = _load_readings(json_path)
+    return len(rf.chain_edges) + len(rf.relations)
+
+
+# ---------------------------------------------------------------------------
 # Locale fan-in
 # ---------------------------------------------------------------------------
 
@@ -754,6 +928,7 @@ def ingest_day(
         "headlines": 0,
         "change_log": 0,
         "news_section": 0,
+        "readings": {"chain_edges": 0, "relations": 0, "cluster_pointers": 0},
     }
     base = date_dir(repo_root, date_iso)
     if not base.is_dir():
@@ -786,6 +961,15 @@ def ingest_day(
             repo_root=repo_root,
             date_iso=date_iso,
             json_path=bridges_path,
+        )
+
+    readings_path = base / "readings.json"
+    if readings_path.is_file():
+        summary["readings"] = _ingest_readings_file(
+            conn,
+            repo_root=repo_root,
+            date_iso=date_iso,
+            json_path=readings_path,
         )
 
     headlines_path = base / "headlines.json"
