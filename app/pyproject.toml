@@ -1,0 +1,20 @@
+[project]
+name = "future-prediction-app"
+version = "0.1.0"
+description = "Backend pipeline that ingests daily news + future-prediction reports into SQLite and exports static JSON for the GitHub Pages dashboard."
+requires-python = ">=3.10"
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0"]
+# fastembed pulls in onnxruntime + tokenizers + numpy. Needed only when
+# the surface-form fuzzy match fails on a new prediction variant; the
+# pipeline degrades gracefully to LCS-only if fastembed isn't installed.
+semantic = ["fastembed>=0.8.0"]
+
+[project.scripts]
+fpapp = "src.cli:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
