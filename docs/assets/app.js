@@ -153,7 +153,7 @@
       "meta.sub.window":   "ウィンドウ",
       "meta.sub.report":   "レポート",
       "meta.sub.build":    "ビルド",
-      "title":             "予測インテリジェンス",
+      "title":             "AI未来予測空間",
       "ai.notice":         "本ページの記事および要約は、Anthropic 社の生成AI「Claude」によって作成されています。",
       "panel.tab.reasoning": "Reasoning",
       "panel.tab.bridge":    "Bridge",
@@ -188,17 +188,17 @@
       "tooltip.need_window":   "Need の期限ウィンドウ",
       "tooltip.task_runway":   "タスク実行ウィンドウ",
       "tooltip.bridge_target": "Bridge の目標ウィンドウ",
-      "view.observatory":      "観測",
-      "view.probe":            "探査",
+      "view.observatory":      "観察",
+      "view.probe":            "探索",
       "probe.tab.predictions": "PREDICTIONS",
       "probe.tab.news":        "NEWS",
       "timeline.back":             "← 一覧に戻る",
-      "timeline.open_in_observatory": "観測で開く",
+      "timeline.open_in_observatory": "観察で開く",
       "timeline.notfound":         "現在のスコープに該当する予測が見つかりません。",
       "timeline.detail.placeholder": "タイムライン上のポイントまたは期間をクリックすると詳細が表示されます。",
       "timeline.detail.open_this":   "この予測のタイムラインを開く →",
-      "panel.open_in_probe":     "→ 探査",
-      "panel.open_in_probe.tip": "この予測のタイムラインを探査で開く",
+      "panel.open_in_probe":     "→ 探索",
+      "panel.open_in_probe.tip": "この予測のタイムラインを探索で開く",
     },
     es: {
       "scope.mix":      "MIX",
@@ -468,15 +468,15 @@
   // a flat <ul> string (no fancy layout) suitable for inline meta.
   function renderTimelineLineage(node) {
     if (!node || node.type !== "prediction") return "";
-    const parents = (node.parent_ids || []).map(nodeById).filter(Boolean);
+    const parents = (node.parent_ids || []).map(lookupProbeNode).filter(Boolean);
     if (!parents.length) return "";
     const seenTheme = new Set();
     const rows = parents.map((p) => {
       const theme = p.type === "theme"
         ? p
-        : ((p.parent_ids || []).map(nodeById).find((x) => x && x.type === "theme") || null);
+        : ((p.parent_ids || []).map(lookupProbeNode).find((x) => x && x.type === "theme") || null);
       const cat = theme
-        ? ((theme.parent_ids || []).map(nodeById).find((x) => x && x.type === "category") || null)
+        ? ((theme.parent_ids || []).map(lookupProbeNode).find((x) => x && x.type === "category") || null)
         : null;
       const themeKey = theme ? theme.id : `__no_theme__${p.id}`;
       if (seenTheme.has(themeKey)) return "";
@@ -817,6 +817,29 @@
     const g = currentGraph();
     if (!g) return null;
     return g._index ? g._index.get(id) : null;
+  }
+
+  // Look up a node by ID, preferring the PROBE list-scope graph (the
+  // user's filter on the PREDICTIONS / NEWS list) over the OBSERVATORY
+  // graph (state.scopeId). The two can diverge — list-scope drives
+  // which graph the rows came from, state.scopeId drives the canvas —
+  // and using the wrong graph here makes nodeById return null for any
+  // category / theme / prediction that lives outside state.scopeId's
+  // graph, which silently swallows row clicks and shows raw IDs in
+  // place of localised labels. Same intent as scopedPred() inside
+  // renderEvidenceView, generalised so the timeline and lineage
+  // renderers can share it.
+  function lookupProbeNode(id) {
+    const sel = document.getElementById("list-scope");
+    const sc = (sel && sel.value) || state.scopeId;
+    if (sc) {
+      const g = state.graphsByScope.get(sc);
+      if (g && g._index) {
+        const n = g._index.get(id);
+        if (n) return n;
+      }
+    }
+    return nodeById(id);
   }
 
   function indexGraph(graph) {
@@ -4045,11 +4068,11 @@
       switch (sort.col) {
         case "scope":    return (n.scope_id || "").toLowerCase();
         case "category": {
-          const c = nodeById(n.category_id);
+          const c = lookupProbeNode(n.category_id);
           return ((c && (nodeLabel(c, "short_label") || nodeLabel(c, "label"))) || n.category_id || "").toLowerCase();
         }
         case "theme": {
-          const t = nodeById(n.theme_id);
+          const t = lookupProbeNode(n.theme_id);
           return ((t && (nodeLabel(t, "short_label") || nodeLabel(t, "label"))) || n.theme_id || "").toLowerCase();
         }
         case "status":   return STATUS_RANK[m.status] != null ? STATUS_RANK[m.status] : -1;
@@ -4094,8 +4117,8 @@
     const rows = preds.slice(0, cap).map((n) => {
       const detail = n.detail || {};
       const m = (n.metrics_by_window && n.metrics_by_window[windowFilter]) || {};
-      const cat = nodeById(n.category_id);
-      const theme = nodeById(n.theme_id);
+      const cat = lookupProbeNode(n.category_id);
+      const theme = lookupProbeNode(n.theme_id);
       const catLabel = cat ? (nodeLabel(cat, "short_label") || nodeLabel(cat, "label") || cat.id)
                            : (n.category_id || "—");
       const themeLabel = theme ? (nodeLabel(theme, "short_label") || nodeLabel(theme, "label") || theme.id)
@@ -4150,7 +4173,7 @@
     body.querySelectorAll("tr[data-goto]").forEach((row) => {
       row.addEventListener("click", () => {
         const id = row.dataset.goto;
-        if (!nodeById(id)) return;
+        if (!lookupProbeNode(id)) return;
         openProbeTimeline(id);
       });
     });
@@ -4376,7 +4399,7 @@
   // Replaces the table; CSS hides the .alt-view-head (toggle + filters)
   // while #list-view.is-timeline is set.
   function renderPredictionTimeline(body, predId) {
-    const node = nodeById(predId);
+    const node = lookupProbeNode(predId);
     if (!node) {
       body.innerHTML = `
         <div class="timeline-head">
@@ -4550,7 +4573,7 @@
         ev.stopPropagation();
         const id = el.dataset.goto;
         if (!id) return;
-        const target = nodeById(id);
+        const target = lookupProbeNode(id);
         if (!target) return;
         if (target.type === "prediction") {
           openProbeTimeline(id);
