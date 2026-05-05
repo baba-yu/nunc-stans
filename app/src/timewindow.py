@@ -78,6 +78,22 @@ _MONTH_YEAR_RE = re.compile(
 # "by [Q3 2026]" / "before [date]" — strip the prefix and re-parse.
 _BY_PREFIX_RE = re.compile(r"\b(by|before|until|in)\s+", re.IGNORECASE)
 
+# Anchor-relative expressions like "within ~1 quarter", "within 1 quarter",
+# "within 2 quarters", "within ~3 months", "next quarter". Resolve to a
+# (anchor, anchor + N units) range when the caller supplies an anchor date.
+# The leading "~" / "the next" / "the coming" are tolerated.
+_RELATIVE_RE = re.compile(
+    r"\b(?:within|in|over|across|the\s+next|the\s+coming|next|coming)\s*"
+    r"(?:~\s*)?(\d+)?\s*"
+    r"(quarters?|Qs?|months?|weeks?|years?|year)\b",
+    re.IGNORECASE,
+)
+# Bare "next quarter" / "next year" without an explicit number defaults to 1.
+_NEXT_UNIT_RE = re.compile(
+    r"\bnext\s+(quarter|month|week|year)\b",
+    re.IGNORECASE,
+)
+
 
 def _last_day(year: int, month: int) -> int:
     return calendar.monthrange(year, month)[1]
@@ -101,6 +117,65 @@ def _month_bounds(year: int, month: int) -> tuple[date, date]:
             date(year, month, _last_day(year, month)))
 
 
+def _add_units(d: date, n: int, unit: str) -> date:
+    """Return ``d`` shifted by ``n`` units (quarter / month / week / year).
+
+    Quarters are 3 months. Year/month math handles month-end overflow by
+    clamping to the last valid day of the target month. Used by relative
+    time-window resolution (e.g. "within ~1 quarter from prediction_date").
+    """
+    u = unit.lower().rstrip("s")
+    if u in ("q", "quarter"):
+        months = 3 * n
+    elif u == "month":
+        months = n
+    elif u == "week":
+        return d + timedelta(weeks=n)
+    elif u == "year":
+        months = 12 * n
+    else:
+        return d
+    new_month = d.month - 1 + months
+    new_year = d.year + new_month // 12
+    new_month = new_month % 12 + 1
+    new_day = min(d.day, _last_day(new_year, new_month))
+    return date(new_year, new_month, new_day)
+
+
+def _resolve_relative(
+    s: str, anchor_iso: str
+) -> tuple[Optional[str], Optional[str]]:
+    """Resolve anchor-relative phrases like 'within ~1 quarter' to an
+    (anchor, anchor + N units) pair.
+
+    Returns ``(None, None)`` when ``s`` is not a relative phrase or
+    ``anchor_iso`` doesn't parse as a date.
+    """
+    try:
+        y, mo, d = (int(p) for p in anchor_iso.split("-"))
+        anchor = date(y, mo, d)
+    except (ValueError, AttributeError):
+        return None, None
+
+    # "within ~N units" / "in N units" / "over N quarters" etc.
+    m = _RELATIVE_RE.search(s)
+    if m:
+        n_raw = m.group(1)
+        n = int(n_raw) if n_raw else 1
+        unit = m.group(2)
+        end = _add_units(anchor, n, unit)
+        return anchor.isoformat(), end.isoformat()
+
+    # Bare "next quarter" / "next year" — defaults to 1 unit.
+    m = _NEXT_UNIT_RE.search(s)
+    if m:
+        unit = m.group(1)
+        end = _add_units(anchor, 1, unit)
+        return anchor.isoformat(), end.isoformat()
+
+    return None, None
+
+
 def _modifier_bounds(year: int, month: int, modifier: str) -> tuple[date, date]:
     """early/mid/late within a month: 1-10, 11-20, 21-end."""
     last = _last_day(year, month)
@@ -114,14 +189,27 @@ def _modifier_bounds(year: int, month: int, modifier: str) -> tuple[date, date]:
     return _month_bounds(year, month)
 
 
-def parse_time_window(text: str) -> tuple[Optional[str], Optional[str]]:
+def parse_time_window(
+    text: str, anchor: Optional[str] = None
+) -> tuple[Optional[str], Optional[str]]:
     """Parse a free-text time expression into (start, end) ISO date strings.
 
     Returns ``(None, None)`` when no recognizable expression is found.
+
+    When ``anchor`` is supplied as an ISO date and the text is a relative
+    expression like ``"Within ~1 quarter"`` / ``"in 2 quarters"`` /
+    ``"next year"``, the parser resolves it to (anchor, anchor + N units).
     """
     if not text:
         return None, None
     s = text.strip()
+
+    # Anchor-relative expressions take precedence when an anchor is
+    # supplied and the text is a relative phrase.
+    if anchor:
+        rel = _resolve_relative(s, anchor)
+        if rel != (None, None):
+            return rel
 
     # Strip leading prepositions like "by Q3 2026" → "Q3 2026"
     s = _BY_PREFIX_RE.sub("", s)

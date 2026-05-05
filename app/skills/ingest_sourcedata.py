@@ -608,8 +608,16 @@ def _ingest_locale_needs(
     """Fill locale columns on ``prediction_needs`` + ``needs_tasks``.
 
     Locale needs files mirror the canonical EN shape. We match by the
-    JSON prediction id (same id as the EN file used) and within each
-    prediction by the actor field — the actor is the natural key.
+    JSON prediction id, then by **position within the per-prediction
+    list** — pairing the i-th locale need with the i-th EN need that
+    was just ingested (rowid order matches insertion order in SQLite).
+
+    Earlier versions matched on `actor` as a "natural key", but the
+    locale-fanout contract translates the `actor` value, so the join
+    failed in practice (the locale file's actor never equaled the EN
+    actor). Index-based pairing is the deterministic equivalent: the
+    locale file is generated FROM the EN canonical, so the lengths and
+    ordering are guaranteed to match.
     """
     nf = _load_needs(json_path)
     pid_by_jsonid: dict[str, str] = _get_pid_map(conn, date_iso)
@@ -618,19 +626,20 @@ def _ingest_locale_needs(
     count = 0
     for json_pid, needs in nf.by_prediction.items():
         db_pid = pid_by_jsonid.get(json_pid, json_pid)
-        # Pull the existing EN need rows for this prediction so we can
-        # match by actor.
+        # Pull existing EN need rows in ROWID order — that's insertion
+        # order, which matches the EN sourcedata's per-prediction list
+        # order, which the locale file mirrors.
         cur = conn.execute(
-            "SELECT need_id, actor FROM prediction_needs WHERE prediction_id = ?",
+            "SELECT need_id FROM prediction_needs WHERE prediction_id = ? "
+            "ORDER BY rowid",
             (db_pid,),
         )
-        existing = {r["actor"]: r["need_id"] for r in cur.fetchall()}
-        for n in needs:
-            need_id = existing.get(n.actor)
-            if need_id is None:
-                # No matching EN need; skip rather than silently invent
-                # one (extract-needs is the canonical source of needs).
-                continue
+        existing_ordered = [r["need_id"] for r in cur.fetchall()]
+        for idx, n in enumerate(needs):
+            if idx >= len(existing_ordered):
+                # More locale needs than EN needs — skip the extras.
+                break
+            need_id = existing_ordered[idx]
             conn.execute(
                 f"""
                 UPDATE prediction_needs SET

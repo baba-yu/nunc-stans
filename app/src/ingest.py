@@ -333,8 +333,11 @@ def _upsert_prediction(
     if reasoning_landing:
         try:
             from . import timewindow
+            # Pass prediction_date as anchor so relative phrases like
+            # "Within ~1 quarter" resolve to a (prediction_date,
+            # prediction_date + 3mo) range instead of NULL.
             target_start, target_end = timewindow.parse_time_window(
-                reasoning_landing
+                reasoning_landing, anchor=prediction_date
             )
         except Exception:
             pass
