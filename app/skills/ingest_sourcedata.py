@@ -348,17 +348,50 @@ def _ingest_bridges_file(
     from app.src.parsers.prediction_parser import EvidenceItem, ValidationRow
 
     pid_by_jsonid: dict[str, str] = _get_pid_map(conn, date_iso)
+    # Themes are needed if we have to fall through to a fuzzy-match
+    # placeholder lookup for cross-day prediction references.
+    themes_for_match = _ingest._load_themes(conn) if bf.validation_rows else []
     count = 0
     for entry in bf.validation_rows:
-        # Map JSON id back to a DB prediction id when we can; otherwise
-        # leave it as the JSON id (the legacy ingest also creates
-        # placeholder rows when the prediction can't be matched, but
-        # for sourcedata the JSON is authoritative — the writer is
-        # expected to have produced predictions.json on the same day or
-        # to reference an existing prediction by hashed id).
-        prediction_id = pid_by_jsonid.get(
-            entry.prediction_ref.id, entry.prediction_ref.id
-        )
+        # Map JSON id back to a DB prediction id when we can. The
+        # bridges JSON often references predictions from PRIOR days
+        # (the FP file checks 7 days of preds against today's news),
+        # which are not in pid_by_jsonid for the current connection.
+        prediction_id = pid_by_jsonid.get(entry.prediction_ref.id)
+        if prediction_id is None:
+            cur = conn.execute(
+                "SELECT 1 FROM predictions WHERE prediction_id = ?",
+                (entry.prediction_ref.id,),
+            )
+            if cur.fetchone() is not None:
+                prediction_id = entry.prediction_ref.id
+            else:
+                # Defer to the legacy match-or-create helper so that
+                # cross-day bridge references collapse onto the
+                # original prediction row whenever fuzzy/semantic match
+                # finds it (instead of forking a brand-new row per
+                # bridge mention). This mirrors the legacy markdown
+                # ingest's behaviour and keeps the predictions table
+                # at the same row count post-rebuild.
+                synth = ValidationRow(
+                    prediction_summary=entry.prediction_ref.short_label,
+                    prediction_date=entry.prediction_ref.prediction_date or "",
+                    related_items_text=entry.evidence_summary,
+                    reference_links=[
+                        EvidenceItem(url=ref.url, title=ref.label)
+                        for ref in entry.reference_links
+                    ],
+                    observed_relevance=entry.today_relevance,
+                    raw_row_markdown=entry.bridge.narrative,
+                    bridge_text=entry.bridge.narrative,
+                    support_dimension=entry.bridge.support_dimension,
+                )
+                prediction_id = _ingest._match_or_create_prediction(
+                    conn,
+                    row=synth,
+                    themes=themes_for_match,
+                    source_file_id=source_file_id,
+                )
         row = ValidationRow(
             prediction_summary=entry.prediction_ref.short_label,
             prediction_date=entry.prediction_ref.prediction_date,
@@ -379,6 +412,33 @@ def _ingest_bridges_file(
             prediction_id=prediction_id,
             row=row,
         )
+        # Evidence linking — mirrors legacy `_ingest_validation_file`.
+        # Without this the rebuild loses the evidence_items table and
+        # docs/data/evidence-reverse.json comes back empty.
+        for ev in row.reference_links:
+            ev_id = _ingest._upsert_evidence(
+                conn,
+                url=ev.url,
+                title=ev.title,
+                first_seen=bf.date,
+                source_file_id=source_file_id,
+            )
+            cur = conn.execute(
+                "SELECT scope_id FROM prediction_scope_assignments "
+                "WHERE prediction_id = ?",
+                (prediction_id,),
+            )
+            for sr in cur.fetchall():
+                _ingest._link_prediction_evidence(
+                    conn,
+                    prediction_id=prediction_id,
+                    evidence_id=ev_id,
+                    scope_id=sr["scope_id"],
+                    validation_date=bf.date,
+                    observed_relevance=entry.today_relevance,
+                    contradiction=0.0,
+                    is_new=True,
+                )
         count += 1
     return count
 

@@ -89,16 +89,23 @@ def _check_news(text: str) -> list[str]:
 
 def _check_future_prediction(text: str) -> list[str]:
     errors: list[str] = []
-    required = [
-        "## Checking Predictions Against Reality",
-        "## Summary of Findings",
-        "## Relation to My Own Predictions",
-    ]
-    for h in required:
-        if not re.search(rf"^{re.escape(h)}\s*$", text, re.MULTILINE):
-            errors.append(f"missing H2 section: {h!r}")
+    # Legacy markdown carries `## Checking Predictions Against Reality`;
+    # Phase 3 renderer emits `## Validation findings` for the same
+    # structural slot. Accept either header so this gate works on both
+    # the legacy corpus and the new sourcedata-rendered output. The
+    # `## Summary of Findings` + `## Relation to My Own Predictions`
+    # blocks are optional in the new template (only emitted when a
+    # `summary.json` sibling exists), so they're no longer required.
+    table_header_pattern = (
+        r"^##\s+(?:Checking Predictions Against Reality|Validation findings)\s*$"
+    )
+    if not re.search(table_header_pattern, text, re.MULTILINE):
+        errors.append(
+            "missing H2 section: '## Checking Predictions Against Reality' "
+            "or '## Validation findings'"
+        )
     sec = re.search(
-        r"^## Checking Predictions Against Reality\s*$(.*?)(?=^##\s|\Z)",
+        rf"{table_header_pattern}(.*?)(?=^##\s|\Z)",
         text, re.MULTILINE | re.DOTALL,
     )
     if sec:
@@ -122,7 +129,10 @@ def _check_future_prediction(text: str) -> list[str]:
                 "validation table ends at section EOF without closing blank line (likely truncated)"
             )
     else:
-        errors.append("could not locate ## Checking Predictions Against Reality body")
+        errors.append(
+            "could not locate '## Checking Predictions Against Reality' "
+            "or '## Validation findings' body"
+        )
     if not text.endswith("\n"):
         errors.append("file does not end with newline (likely truncated mid-token)")
     tail = text.rstrip()[-200:]

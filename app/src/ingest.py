@@ -929,6 +929,20 @@ def _match_or_create_prediction(
 # ---------------------------------------------------------------------------
 
 
+def _stem_to_iso(stem: str, *, prefix: str) -> str | None:
+    """Convert a filename stem like ``news-20260424`` -> ``2026-04-24``.
+
+    Returns ``None`` if the stem doesn't match the expected
+    ``<prefix><YYYYMMDD>`` shape.
+    """
+    if not stem.startswith(prefix):
+        return None
+    rest = stem[len(prefix):]
+    if len(rest) < 8 or not rest[:8].isdigit():
+        return None
+    return f"{rest[0:4]}-{rest[4:6]}-{rest[6:8]}"
+
+
 def _collect_localized_files(root: Path, pattern: str) -> dict[str, dict[str, Path]]:
     """Group report files by date stem and locale.
 
@@ -1234,7 +1248,11 @@ def _ingest_localized_validation_group(
             )
 
 
-def run_ingest(db_path: Path | None = None) -> dict:
+def run_ingest(
+    db_path: Path | None = None,
+    *,
+    skip_dates: set[str] | None = None,
+) -> dict:
     """Ingest all available markdown files. Returns a small report dict.
 
     Locale-aware (feature/locale branch): walks
@@ -1243,13 +1261,26 @@ def run_ingest(db_path: Path | None = None) -> dict:
     accepted as legacy/EN. The EN file (or the first available
     locale) is the canonical source for each date; sibling-locale
     files contribute *_<locale> column back-fills.
+
+    ``skip_dates`` (Phase 4 fallback path) lets the caller exclude
+    dates that have already been ingested via the sourcedata path —
+    re-running the markdown ingest for a date that has a JSON-derived
+    canonical row would create a duplicate row because the regenerated
+    markdown's ``pred.summary`` is layout-different from the original
+    JSON ``body``, producing a different prediction-id hash.
     """
+    skip = set(skip_dates or ())
     conn = connect(db_path) if db_path else connect()
     try:
         themes = _load_themes(conn)
 
         news_groups = _collect_localized_files(report_dir(), "news-*.md")
         for stem in sorted(news_groups):
+            # stem like "news-20260424"; convert to ISO and skip if
+            # already ingested from sourcedata.
+            date_iso = _stem_to_iso(stem, prefix="news-")
+            if date_iso and date_iso in skip:
+                continue
             _ingest_localized_news_group(
                 conn,
                 stem=stem,
@@ -1261,6 +1292,9 @@ def run_ingest(db_path: Path | None = None) -> dict:
             future_prediction_dir(), "future-prediction-*.md"
         )
         for stem in sorted(validation_groups):
+            date_iso = _stem_to_iso(stem, prefix="future-prediction-")
+            if date_iso and date_iso in skip:
+                continue
             _ingest_localized_validation_group(
                 conn,
                 stem=stem,

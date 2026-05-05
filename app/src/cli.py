@@ -89,12 +89,13 @@ def _run_sourcedata_pre_ingest() -> dict:
 
     dates = _isd.scan_dates(db.repo_root())
     if not dates:
-        return {"dates": 0}
-    totals = {
+        return {"dates": 0, "ingested_dates": set()}
+    totals: dict = {
         "dates": 0,
         "predictions": 0,
         "needs": 0,
         "bridges": 0,
+        "ingested_dates": set(),
     }
     conn = db.connect()
     try:
@@ -105,6 +106,12 @@ def _run_sourcedata_pre_ingest() -> dict:
             totals["predictions"] += s.get("predictions", 0)
             totals["needs"] += s.get("needs", 0)
             totals["bridges"] += s.get("bridges", 0)
+            # Only count a date as "fully ingested via sourcedata" if
+            # the canonical predictions stream was present — bridges-
+            # only or headlines-only days still need the legacy
+            # markdown ingest to populate prediction rows.
+            if s.get("predictions", 0) > 0:
+                totals["ingested_dates"].add(d)
     finally:
         conn.close()
     return totals
@@ -118,7 +125,7 @@ def _cmd_update(args: argparse.Namespace) -> int:
     # same prediction from a legacy markdown file cannot overwrite the
     # sourcedata-derived values.
     sd_totals = _run_sourcedata_pre_ingest()
-    ing = ingest.run_ingest()
+    ing = ingest.run_ingest(skip_dates=sd_totals.get("ingested_dates"))
     sco = score.run_score()
     exp = export.run_export()
     # evidence-reverse.json is generated outside run_export() (separate skill),
