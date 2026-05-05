@@ -3,7 +3,14 @@ name = "future-prediction-app"
 version = "0.1.0"
 description = "Backend pipeline that ingests daily news + future-prediction reports into SQLite and exports static JSON for the GitHub Pages dashboard."
 requires-python = ">=3.10"
-dependencies = []
+dependencies = [
+    # Phase 3: deterministic Jinja2 markdown renderer for sourcedata-driven
+    # `report/<L>/news-*.md` and `future-prediction/<L>/future-prediction-*.md`.
+    # The legacy `cli update` markdown-fallback path does NOT require this
+    # (renderer modules use a soft import), so the dependency only matters
+    # for the new sourcedata writer flow.
+    "jinja2>=3.0",
+]
 
 [project.optional-dependencies]
 dev = ["pytest>=7.0"]

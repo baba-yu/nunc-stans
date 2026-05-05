@@ -1,4 +1,4 @@
-"""Persist LLM-extracted Needs + 5W1H tasks for a prediction (Stream E).
+"""Persist LLM-extracted Needs + 5W1H tasks for a prediction.
 
 Spec: ``design/skills/extract-needs.md``.
 
@@ -10,6 +10,17 @@ to land — i.e. who's pushing the world toward the predicted state and
 the 5W1H breakdown of their task. (Originally named JTBD; renamed
 because "Jobs-To-Be-Done" framed the actor as someone who reacts after
 landing, opposite of the system's intent.)
+
+Phase 3 output relocation:
+
+  Per-prediction temp files now live under
+  ``app/sourcedata/<date>/needs.<pid>.json``. After all per-prediction
+  sub-agents finish, :func:`merge_needs_files` deterministically merges
+  them into the canonical ``app/sourcedata/<date>/needs.json``
+  (consumed by ``ingest_sourcedata`` and the renderer flow). The legacy
+  ``.jtbd-tmp/today-needs-pred-*.json`` files are NOT deleted in
+  Phase 3 — Phase 4's backfill migrates them. Phase 3 only stops
+  writing new ones there.
 
 JSON shape (each item):
     {
@@ -141,15 +152,129 @@ def commit_need(
     return summary
 
 
+def merge_needs_files(date_dir: Path) -> Path:
+    """Merge ``needs.<pid>.json`` per-prediction files into ``needs.json``.
+
+    Spec: ``design/skills/extract-needs.md`` (Phase 3 output relocation).
+
+    Walks ``<date_dir>/needs.*.json`` and combines them into a single
+    ``<date_dir>/needs.json`` matching the ``NeedsFile`` schema:
+
+        {
+          "date": "<YYYY-MM-DD inferred from date_dir.name>",
+          "by_prediction": {
+            "<prediction_id>": [<need records>],
+            ...
+          }
+        }
+
+    Each per-prediction file is one of:
+
+      * A bare list of need records (the on-disk shape used by the CLI).
+        The prediction id is taken from the filename (``needs.<pid>.json``).
+      * A dict ``{"prediction_id": "...", "needs": [...]}`` (the shape
+        a sub-agent emits when it wants to be explicit).
+
+    Deterministic ordering: per-prediction keys sorted by id; per-need
+    rows preserved in source order so the writer's intent stays intact.
+
+    Returns the path to the merged ``needs.json``. Raises
+    ``FileNotFoundError`` if no source files exist (the orchestrator
+    should not call merge before any sub-agent has written).
+    """
+    date_dir = Path(date_dir)
+    if not date_dir.is_dir():
+        raise FileNotFoundError(f"date directory missing: {date_dir}")
+    sources = sorted(p for p in date_dir.glob("needs.*.json")
+                     if p.name != "needs.json")
+    if not sources:
+        raise FileNotFoundError(
+            f"no needs.<pid>.json files under {date_dir}"
+        )
+    by_pred: dict[str, list[dict]] = {}
+    for src in sources:
+        try:
+            raw = json.loads(src.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as e:
+            raise ValueError(f"{src}: invalid JSON: {e}") from e
+        if isinstance(raw, dict) and "prediction_id" in raw and "needs" in raw:
+            pid = str(raw["prediction_id"])
+            needs_list = raw["needs"]
+        else:
+            # Bare list shape; derive prediction id from filename.
+            #   needs.prediction.adb89416691d7587.json
+            #   -> "prediction.adb89416691d7587"
+            stem = src.stem  # e.g. "needs.prediction.adb89416691d7587"
+            if not stem.startswith("needs."):
+                raise ValueError(
+                    f"{src}: filename does not start with 'needs.'"
+                )
+            pid = stem[len("needs."):]
+            needs_list = raw
+        if not isinstance(needs_list, list):
+            raise ValueError(
+                f"{src}: needs payload must be a list, got "
+                f"{type(needs_list).__name__}"
+            )
+        # Preserve source order; later sources for the same pid append.
+        by_pred.setdefault(pid, []).extend(needs_list)
+
+    merged = {
+        "date": date_dir.name,
+        "by_prediction": {pid: by_pred[pid] for pid in sorted(by_pred)},
+    }
+    out = date_dir / "needs.json"
+    # Atomic write so a crashed merge never leaves a half-written file.
+    import os
+    import tempfile
+
+    fd, tmp = tempfile.mkstemp(prefix="needs.json.", dir=str(date_dir))
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as f:
+            json.dump(merged, f, ensure_ascii=False, indent=2)
+            f.write("\n")
+        os.replace(tmp, out)
+    except Exception:
+        try:
+            os.remove(tmp)
+        except OSError:
+            pass
+        raise
+    return out
+
+
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(
         description="Persist LLM-extracted Need records for a prediction"
     )
-    p.add_argument("--db", required=True, type=Path)
-    p.add_argument("--prediction-id", required=True)
-    p.add_argument("--needs-json-file", required=True, type=Path,
+    sub = p.add_subparsers(dest="cmd")
+
+    # Default subcommand-less form (the existing CLI).
+    p.add_argument("--db", type=Path)
+    p.add_argument("--prediction-id")
+    p.add_argument("--needs-json-file", type=Path,
                    help="Path to a JSON file containing a list of Need records.")
+
+    # `merge` subcommand: combine per-prediction temp files into needs.json.
+    merge_p = sub.add_parser(
+        "merge",
+        help="Merge needs.<pid>.json files into needs.json under a date dir",
+    )
+    merge_p.add_argument("--date-dir", required=True, type=Path)
+
     args = p.parse_args(argv)
+
+    if args.cmd == "merge":
+        out = merge_needs_files(args.date_dir)
+        print(f"OK merged into {out}")
+        return 0
+
+    # Default: persist a single per-prediction file into the DB.
+    if not args.db or not args.prediction_id or not args.needs_json_file:
+        p.error(
+            "--db, --prediction-id, and --needs-json-file are required "
+            "(or use the `merge` subcommand)."
+        )
     if not args.db.is_file():
         print(f"FAIL DB not found: {args.db}", file=sys.stderr)
         return 2

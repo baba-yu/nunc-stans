@@ -1,0 +1,67 @@
+{#
+  news.md.j2 — render `report/<locale>/news-YYYYMMDD.md` from sourcedata JSON.
+
+  Spec: design/sourcedata-layout.md §Markdown rendered shape (after).
+
+  Inputs (passed by render_news_md.render_day):
+    date_iso         : "YYYY-MM-DD"
+    date_compact     : "YYYYMMDD"
+    coverage_window  : "YYYY-MM-DD to YYYY-MM-DD (3-day rolling window)"
+    locale           : "en" | "ja" | "es" | "fil"
+    ai_notice_block  : multi-line string carrying the localized notice
+    headlines        : HeadlinesFile.to_dict()  (technical[], plain[])
+    predictions      : PredictionsFile.to_dict() (predictions[])
+    change_log       : ChangeLogFile.to_dict()   (items[])
+    news_section     : NewsSectionFile.to_dict() (sections[])
+
+  External vocabulary (Phase 3):
+    "## Quick Reads"  (was "## Plain Headlines")
+    "## Headlines"
+    "## Future"        — numbered "1. <title>", body paragraph, then
+                         a separate "In plain language: …" paragraph
+    "## Change Log"
+    "## News"          — sub-headers from news_section.sections[].category
+-#}
+# News Report {{ date_iso }}
+
+{{ ai_notice_block }}
+
+Coverage window: {{ coverage_window }}
+
+## Quick Reads
+
+{% for line in headlines.plain -%}
+- {{ line }}
+{% endfor %}
+## Headlines
+
+{% for h in headlines.technical -%}
+- **{{ h.lead }} — {{ h.body }}**
+{%- if h.citations %} {{ h.citations | render_citations }}{% endif %}
+
+{% endfor %}
+## Future
+
+{% for p in predictions.predictions %}
+{{ loop.index }}. {{ p.title }}
+
+   {{ p.body | indent_block(3) }}
+
+   In plain language: {{ p.reasoning.plain_language | indent_block(3) }}
+
+{% endfor %}
+## Change Log
+
+{% for item in change_log['items'] -%}
+- {{ item.diff_narrative }}
+{% endfor %}
+## News
+
+{% for sec in news_section.sections %}
+### {{ sec.category }}
+
+{% for b in sec.bullets -%}
+- {{ b.body }}{% if b.citations %} {{ b.citations | render_citations }}{% endif %}
+
+{% endfor %}
+{% endfor %}
