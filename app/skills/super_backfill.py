@@ -324,3 +324,46 @@ def apply_needs(repo_root: Path, date_iso: str, payload: dict) -> Path:
     return _atomic_write_json(
         _date_dir(repo_root, date_iso) / "needs.json", payload
     )
+
+
+_VALID_LOCALES = ("ja", "es", "fil")
+_STREAM_VALIDATORS = {
+    "predictions": PredictionsFile,
+    "bridges": BridgesFile,
+    "needs": NeedsFile,
+}
+
+
+def apply_locale(
+    repo_root: Path,
+    date_iso: str,
+    locale: str,
+    stream: str,
+    payload: dict,
+) -> Path:
+    """Validate + atomically write a locale-specific stream JSON.
+
+    Output path: ``app/sourcedata/locales/<date>/<locale>/<stream>.json``.
+
+    Locale JSONs share the EN schemas (PredictionsFile, BridgesFile,
+    NeedsFile), so the same validators apply.
+    """
+    if locale not in _VALID_LOCALES:
+        raise ValueError(
+            f"unknown locale: {locale!r}; expected one of {_VALID_LOCALES}"
+        )
+    if stream not in _STREAM_VALIDATORS:
+        raise ValueError(
+            f"unknown stream: {stream!r}; expected one of {tuple(_STREAM_VALIDATORS)}"
+        )
+    _STREAM_VALIDATORS[stream].from_dict(payload)
+    out = (
+        Path(repo_root)
+        / "app"
+        / "sourcedata"
+        / "locales"
+        / date_iso
+        / locale
+        / f"{stream}.json"
+    )
+    return _atomic_write_json(out, payload)

@@ -386,3 +386,42 @@ def test_apply_predictions_overwrites_existing_file(tmp_path):
         )
     )
     assert loaded["predictions"][0]["title"] == "Updated title"
+
+
+# ---------------------------------------------------------------------------
+# Task 7: apply_locale
+# ---------------------------------------------------------------------------
+
+
+def test_apply_locale_writes_to_locales_subdir(tmp_path):
+    payload = _valid_predictions_payload()
+    out = sb.apply_locale(tmp_path, "2026-04-22", "ja", "predictions", payload)
+    assert out == tmp_path / "app/sourcedata/locales/2026-04-22/ja/predictions.json"
+    assert json.loads(out.read_text(encoding="utf-8")) == payload
+
+
+def test_apply_locale_handles_all_three_locales(tmp_path):
+    payload = _valid_predictions_payload()
+    for loc in ("ja", "es", "fil"):
+        out = sb.apply_locale(tmp_path, "2026-04-22", loc, "predictions", payload)
+        assert out.parent.name == loc
+
+
+def test_apply_locale_rejects_unknown_stream(tmp_path):
+    with pytest.raises(ValueError, match="unknown stream"):
+        sb.apply_locale(
+            tmp_path, "2026-04-22", "ja", "headlines", {"date": "2026-04-22"}
+        )
+
+
+def test_apply_locale_rejects_unknown_locale(tmp_path):
+    with pytest.raises(ValueError, match="unknown locale"):
+        sb.apply_locale(
+            tmp_path, "2026-04-22", "de", "predictions", _valid_predictions_payload()
+        )
+
+
+def test_apply_locale_validates_schema(tmp_path):
+    bad = {"date": "2026-04-22", "predictions": [{"id": "x"}]}
+    with pytest.raises(SourcedataValidationError):
+        sb.apply_locale(tmp_path, "2026-04-22", "ja", "predictions", bad)
