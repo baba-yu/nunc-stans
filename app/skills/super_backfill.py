@@ -17,7 +17,9 @@ per (date, stream, item) per the operator runbook in
 
 from __future__ import annotations
 
+import json
 import re
+from datetime import date, timedelta
 from pathlib import Path
 
 _NEWS_RE = re.compile(r"^news-(\d{8})\.md$")
@@ -182,3 +184,79 @@ def extract_validation_rows_from_fp(path: Path) -> list[dict]:
             "reference_links": links,
         })
     return out
+
+
+def prior_predictions_window(
+    repo_root: Path, date_iso: str, n: int = 7
+) -> list[dict]:
+    """Return predictions from the prior ``n`` days of sourcedata.
+
+    Used to give bridge sub-agents chronological context: a validation row
+    that references a prediction from 6 days ago needs that prediction's
+    body + reasoning available so the bridge narrative can cite it
+    correctly.
+
+    Each entry preserves the JSON id, title, body, prediction_date,
+    reasoning, and summary fields. Days with missing or unreadable
+    ``predictions.json`` are silently skipped.
+    """
+    repo_root = Path(repo_root)
+    y, mo, d = (int(p) for p in date_iso.split("-"))
+    cur = date(y, mo, d)
+    out: list[dict] = []
+    for k in range(1, n + 1):
+        prior = cur - timedelta(days=k)
+        prior_iso = prior.isoformat()
+        path = repo_root / "app" / "sourcedata" / prior_iso / "predictions.json"
+        if not path.is_file():
+            continue
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        for entry in data.get("predictions", []):
+            out.append({
+                "id": entry.get("id"),
+                "title": entry.get("title"),
+                "body": entry.get("body"),
+                "prediction_date": prior_iso,
+                "reasoning": entry.get("reasoning"),
+                "summary": entry.get("summary"),
+            })
+    return out
+
+
+def prepare_context(repo_root: Path, date_iso: str) -> dict:
+    """Build the per-day context bundle that drives sub-agent dispatch.
+
+    Output shape::
+
+        {
+          "date": "<YYYY-MM-DD>",
+          "predictions_to_compose": [{"title": ..., "body": ...}, ...],
+          "validation_rows_to_bridge": [<row>, ...],
+          "prior_predictions": [<entry>, ...]
+        }
+
+    ``predictions_to_compose`` and ``validation_rows_to_bridge`` are
+    empty when their source markdown is missing for that date.
+    """
+    repo_root = Path(repo_root)
+    yyyymmdd = date_iso.replace("-", "")
+    news_path = repo_root / "report" / "en" / f"news-{yyyymmdd}.md"
+    fp_path = (
+        repo_root / "future-prediction" / "en" / f"future-prediction-{yyyymmdd}.md"
+    )
+    preds = (
+        extract_predictions_from_news(news_path) if news_path.is_file() else []
+    )
+    rows = (
+        extract_validation_rows_from_fp(fp_path) if fp_path.is_file() else []
+    )
+    prior = prior_predictions_window(repo_root, date_iso)
+    return {
+        "date": date_iso,
+        "predictions_to_compose": preds,
+        "validation_rows_to_bridge": rows,
+        "prior_predictions": prior,
+    }

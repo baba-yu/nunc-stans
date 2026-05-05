@@ -197,3 +197,78 @@ def test_extract_validation_rows_skips_malformed_rows(tmp_path):
     out = sb.extract_validation_rows_from_fp(p)
     assert len(out) == 1
     assert out[0]["prediction_ref"]["short_label"] == "Good row"
+
+
+# ---------------------------------------------------------------------------
+# Task 5: prior_predictions_window + prepare_context
+# ---------------------------------------------------------------------------
+
+
+def test_prior_predictions_window_reads_prior_sourcedata(tmp_path):
+    """Returns predictions from app/sourcedata/<prior>/predictions.json
+    for up to N days before date_iso."""
+    import json
+    base = tmp_path / "app/sourcedata/2026-04-22"
+    base.mkdir(parents=True)
+    (base / "predictions.json").write_text(
+        json.dumps({
+            "date": "2026-04-22",
+            "predictions": [
+                {
+                    "id": "prediction.aaaa1111bbbb2222",
+                    "title": "T1",
+                    "body": "B1",
+                    "reasoning": {
+                        "because": "x", "given": "y", "so_that": "z",
+                        "landing": "by Q4", "plain_language": "kid",
+                    },
+                    "summary": "S1",
+                }
+            ],
+        }),
+        encoding="utf-8",
+    )
+    out = sb.prior_predictions_window(tmp_path, "2026-04-23", n=7)
+    assert len(out) == 1
+    assert out[0]["id"] == "prediction.aaaa1111bbbb2222"
+    assert out[0]["prediction_date"] == "2026-04-22"
+    assert out[0]["title"] == "T1"
+
+
+def test_prior_predictions_window_empty_when_no_prior(tmp_path):
+    out = sb.prior_predictions_window(tmp_path, "2026-04-22", n=7)
+    assert out == []
+
+
+def test_prepare_context_bundles_predictions_validation_rows_and_prior(tmp_path):
+    """Day-1: news only. Day-2: news + FP referencing day-1."""
+    (tmp_path / "report/en").mkdir(parents=True)
+    (tmp_path / "future-prediction/en").mkdir(parents=True)
+    (tmp_path / "report/en/news-20260422.md").write_text(
+        "## Future\n\n1. P1\n\n   Body1.\n\n2. P2\n\n   Body2.\n\n## Change Log\n",
+        encoding="utf-8",
+    )
+    (tmp_path / "report/en/news-20260423.md").write_text(
+        "## Future\n\n1. P3\n\n   Body3.\n\n## Change Log\n",
+        encoding="utf-8",
+    )
+    (tmp_path / "future-prediction/en/future-prediction-20260423.md").write_text(
+        "## Validation findings\n\n"
+        "| Prediction (summary) | Prediction date | Today's relevance | "
+        "Evidence summary | Reference link(s) |\n"
+        "|---|---|---|---|---|\n"
+        "| P1 | 2026-04-22 | 4 | x | [a](https://x) |\n",
+        encoding="utf-8",
+    )
+    b1 = sb.prepare_context(tmp_path, "2026-04-22")
+    assert b1["date"] == "2026-04-22"
+    assert len(b1["predictions_to_compose"]) == 2
+    assert b1["validation_rows_to_bridge"] == []
+    assert b1["prior_predictions"] == []
+
+    b2 = sb.prepare_context(tmp_path, "2026-04-23")
+    assert len(b2["predictions_to_compose"]) == 1
+    assert b2["predictions_to_compose"][0]["title"] == "P3"
+    assert len(b2["validation_rows_to_bridge"]) == 1
+    assert b2["validation_rows_to_bridge"][0]["prediction_ref"]["short_label"] == "P1"
+    assert b2["prior_predictions"] == []  # Sourcedata for day-1 not yet populated.
