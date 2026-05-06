@@ -54,3 +54,8 @@ def init_db(path: Path | None = None) -> Path:
     finally:
         conn.close()
     return p
+conn.executescript(sql)
+        conn.commit()
+    finally:
+        conn.close()
+    return p
