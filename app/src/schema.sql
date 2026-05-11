@@ -1204,7 +1204,7 @@ VALUES
    'Local inference stacks: llama.cpp, Ollama, MLX, WebGPU, OpenVINO, vLLM, SGLang, Foundry-Local. Consumer-GPU runtime (RTX 4090 / 5090, M4 Max). Qwen / DeepSeek / Bonsai loaders. GGUF / safetensors loading. Coding-agent local backends. On-device inference for privacy / cost / latency.', 'active'),
 
   ('tech.ai_chip_architecture', 'tech', 'tech.infrastructure', 'AI Chip Architecture', 'AI Chips', 'AI Chip Architecture',
-   'TPU, Trainium, MAIA, MI300X, training/inference SKU separation, accelerator-specific model behavior.', 'active'),
+   'TPU, Trainium, MAIA, MI300X, Cerebras IPO, WSE-3, AMD MI355X, AMD AI-accelerator revenue, training-vs-inference SKU split, accelerator-revenue 10-Q segment footnote, GB300 vs Trainium positioning, per-accelerator margin disclosure, hyperscaler custom silicon, accelerator-specific model behavior.', 'active'),
 
   ('tech.physical_ai_robotics', 'tech', 'tech.infrastructure', 'Physical AI / Robotics', 'Physical AI', 'Physical AI / Robotics',
    'Humanoid robots, Robot-as-a-Service (RaaS), production-line robotics, Siemens HMND 01, NVIDIA Isaac GR00T, NVIDIA Cosmos, Neura × AWS, DEEPX × Hyundai, IROS robotics benchmarks, GTC robotics league tables, Foxconn, FANUC, Universal Robots, Agility Digit, Figure 02, Apptronik Apollo, Tesla Optimus, AEON, Mega Omniverse, Hannover Messe Physical AI, 8-hour autonomous production runs.', 'active'),
@@ -1225,7 +1225,11 @@ VALUES
    'AI coding agent platforms (Claude Code, Codex, Cursor, Kiro), IDE integration, CI/CD agent runners, developer tool registries, enterprise developer-workflow consolidation, code-review automation, agent-driven repository operations, Skills marketplace adoption, Microsoft Build platform anchor, Microsoft Foundry Toolkit, AWS AgentCore CLI, GitHub Copilot CLI, Codex CLI 0.128.0 model-provider-owned discovery, dev-experience SLA, GitHub-as-platform consolidation.', 'active'),
 
   ('business.compute_capex_strategy', 'business', 'business.capital-supply-chain', 'Compute Capex Strategy', 'Compute Capex', 'Compute Capex Strategy',
-   'Mag 7 capex disclosures, Alphabet 2026 $175-185B capex, Microsoft Azure capex commitments, Tesla compute capex, Trainium / GB300 / Vera Rubin / MAIA accelerator commitments, 5GW Trainium capacity, 10-year compute deals, data center power footprint, hyperscaler buildout.', 'active');
+   'Mag 7 capex disclosures, Alphabet 2026 $175-185B capex, Microsoft Azure capex commitments, Tesla compute capex, Trainium / GB300 / Vera Rubin / MAIA accelerator commitments, 5GW Trainium capacity, 10-year compute deals, data center power footprint, hyperscaler buildout.', 'active'),
+  ('tech.ai_macro_capital_markets', 'tech', 'tech.infrastructure', 'AI Macro & Capital Markets', 'AI Macro', 'AI Macro & Capital Markets',
+   'Macro and capital-markets dynamics shaping AI: Mag 7 super-week earnings, AI-capex ROI repricing, AI-revenue disclosure rewrite (SEC concept release, OpenAI audited revenue cadence, AMD AI-accelerator 10-Q segment, Microsoft audited monthly AI-business KPIs), Powell-Fed Board institutional-volatility regime, FOMC dissent norm, Cerebras IPO, Apple-buyback collision with $700B AI-capex print, AI-accelerator vendor forward-supply 8-K cadence.', 'active'),
+  ('business.inference_server_supply_chain', 'business', 'business.regulation-compliance', 'Inference Server Supply Chain', 'Inference Supply', 'Inference Server Supply Chain',
+   'Inference-server supply-chain governance: AI-Infra CVE class as regulatory primitive, indirect prompt injection as top CVE category, GGUF supply-chain integrity gates (signed cards, SSTI scans), OAuth trust between AI SaaS, inference-server SSTI to OWASP LLM Top-10 v2026, agent-skills attack-surface threat sub-matrix, CISA AI-Infra KEV sub-catalog with inference-server SBOM, NIST non-human-identity control profile.', 'active');
 
 -- ============================================================
 -- 15. Views for exporter
@@ -1470,7 +1474,10 @@ WHERE theme_id = 'tech.local_inference_runtime';
 UPDATE themes SET
   label_ja = 'AIチップアーキテクチャ', short_label_ja = 'AIチップ',
   label_es = 'Arquitectura de chips de IA', short_label_es = 'Chips de IA',
-  label_fil = 'Arkitektura ng AI Chip', short_label_fil = 'AI Chips'
+  label_fil = 'Arkitektura ng AI Chip', short_label_fil = 'AI Chips',
+  description_ja = 'TPU、Trainium、MAIA、MI300X、Cerebras IPO、WSE-3、AMD MI355X、AMDのAIアクセラレータ売上、トレーニング/インファレンスSKU分離、10-Qセグメント脚注でのアクセラレータ売上開示、GB300対Trainiumのポジショニング、アクセラレータ単位の利益開示、ハイパースケーラのカスタムシリコン、アクセラレータ固有のモデル挙動。',
+  description_es = 'TPU, Trainium, MAIA, MI300X, Cerebras IPO, WSE-3, AMD MI355X, ingresos AMD por aceleradores AI, separación de SKU entrenamiento/inferencia, divulgación 10-Q de ingresos por aceleradores, posicionamiento GB300 vs Trainium, divulgación de margen por acelerador, silicio personalizado de hyperscaler, comportamiento de modelo específico por acelerador.',
+  description_fil = 'TPU, Trainium, MAIA, MI300X, Cerebras IPO, WSE-3, AMD MI355X, AMD AI-accelerator revenue, paghahati ng training-vs-inference SKU, accelerator-revenue 10-Q segment footnote, positioning ng GB300 kumpara sa Trainium, per-accelerator margin disclosure, custom silicon ng hyperscaler, accelerator-specific na ugali ng modelo.'
 WHERE theme_id = 'tech.ai_chip_architecture';
 
 UPDATE themes SET
@@ -1520,6 +1527,24 @@ UPDATE themes SET
   label_es = 'Estrategia de capex de cómputo', short_label_es = 'Capex de cómputo',
   label_fil = 'Estratehiya ng Compute Capex', short_label_fil = 'Compute Capex'
 WHERE theme_id = 'business.compute_capex_strategy';
+
+UPDATE themes SET
+  label_ja = 'AIマクロと資本市場', short_label_ja = 'AIマクロ',
+  label_es = 'Macro de IA y mercados de capitales', short_label_es = 'Macro IA',
+  label_fil = 'AI Macro at Capital Markets', short_label_fil = 'AI Macro',
+  description_ja = 'AIを形作るマクロ・資本市場の力学: Mag 7 スーパーウィーク決算、AI capex ROI の再評価、AI 売上開示のリライト (SEC コンセプトリリース、OpenAI の監査済み月次売上、AMD AI アクセラレータ 10-Q セグメント、Microsoft 監査済み月次 AI 事業 KPI)、Powell-Fed Board 制度ボラティリティ・レジーム、FOMC 反対票の常態化、Cerebras IPO、Apple 自社株買いと $700B AI capex の衝突、AI アクセラレータ・ベンダーの先渡し供給 8-K 開示。',
+  description_es = 'Dinámicas macroeconómicas y de mercados de capitales que dan forma a la IA: resultados de la super-semana de Mag 7, reprecio del ROI de AI-capex, reescritura de divulgación de ingresos de IA (concept release de la SEC, cadencia de ingresos auditados de OpenAI, segmento 10-Q de aceleradores AI de AMD, KPIs mensuales auditados del negocio de IA de Microsoft), régimen de volatilidad institucional Powell-Fed Board, norma de disidencia del FOMC, IPO de Cerebras, colisión de la recompra de Apple con la impresión de $700B AI capex, cadencia de divulgaciones 8-K de oferta forward de proveedores de aceleradores AI.',
+  description_fil = 'Macro at capital-markets dynamics na humuhubog sa AI: Mag 7 super-week earnings, repricing ng AI-capex ROI, rewrite ng AI-revenue disclosure (SEC concept release, OpenAI audited revenue cadence, AMD AI-accelerator 10-Q segment, Microsoft audited monthly AI-business KPIs), Powell-Fed Board institutional-volatility regime, norm ng dissent sa FOMC, Cerebras IPO, banggaan ng Apple buyback sa $700B AI-capex print, cadence ng forward-supply 8-K ng mga AI-accelerator vendor.'
+WHERE theme_id = 'tech.ai_macro_capital_markets';
+
+UPDATE themes SET
+  label_ja = '推論サーバ・サプライチェーン', short_label_ja = '推論サプライ',
+  label_es = 'Cadena de suministro de servidores de inferencia', short_label_es = 'Suministro inferencia',
+  label_fil = 'Inference Server Supply Chain', short_label_fil = 'Inference Supply',
+  description_ja = '推論サーバのサプライチェーン・ガバナンス: 規制プリミティブとしての AI-Infra CVE クラス、トップ CVE カテゴリとしての間接プロンプトインジェクション、GGUF サプライチェーン整合性ゲート (署名済みカード、SSTI スキャン)、AI SaaS 間の OAuth 信頼、推論サーバ SSTI から OWASP LLM Top-10 v2026 へ、エージェント・スキル攻撃面の脅威サブマトリックス、推論サーバ SBOM 付き CISA AI-Infra KEV サブカタログ、NIST 非人間アイデンティティ・コントロール・プロファイル。',
+  description_es = 'Gobernanza de la cadena de suministro de servidores de inferencia: la clase CVE de infraestructura de IA como primitiva regulatoria, inyección indirecta de prompt como categoría CVE principal, controles de integridad de la cadena de suministro GGUF (tarjetas firmadas, escaneos SSTI), confianza OAuth entre SaaS de IA, SSTI de servidor de inferencia integrado al OWASP LLM Top-10 v2026, sub-matriz de amenazas de superficie de ataque de agent-skills, sub-catálogo CISA AI-Infra KEV con SBOM de servidor de inferencia, perfil de control de identidad no-humana del NIST.',
+  description_fil = 'Gobernanza ng supply chain ng inference server: AI-Infra CVE class bilang regulatory primitive, indirect prompt injection bilang top CVE category, mga integrity gate ng GGUF supply chain (signed cards, SSTI scans), OAuth trust sa pagitan ng AI SaaS, inference-server SSTI tungo sa OWASP LLM Top-10 v2026, threat sub-matrix ng agent-skills attack surface, CISA AI-Infra KEV sub-catalog na may SBOM ng inference server, profile ng kontrol ng non-human identity ng NIST.'
+WHERE theme_id = 'business.inference_server_supply_chain';
 
 -- ============================================================
 -- 17. Migration note for ALTER TABLE

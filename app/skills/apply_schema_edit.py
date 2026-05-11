@@ -10,6 +10,7 @@ See `design/skills/apply-schema-edit.md` for the full spec.
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import re
 import shutil
@@ -39,7 +40,13 @@ class RunResult:
 
 
 def parse_proposal(path: Path) -> list[Operation]:
-    """Parse the `## Recommended actions` section into typed operations."""
+    """Parse the `## Recommended actions` section into typed operations.
+
+    Each numbered recommendation may carry a fenced ```action / ```json block
+    with the authoritative machine-parseable directive (`kind`, ids, new
+    description, locale fields). The block, when present, overrides the prose
+    classification — the prose stays for human review, the JSON drives apply.
+    """
     text = path.read_text(encoding="utf-8")
     m = re.search(
         r"^##\s+Recommended actions\s*$(.*?)(?=^##\s|\Z)",
@@ -54,22 +61,67 @@ def parse_proposal(path: Path) -> list[Operation]:
     ops: list[Operation] = []
     for raw in items:
         flat = " ".join(line.strip() for line in raw.splitlines()).strip()
-        ops.append(_classify(flat))
+        block = _extract_action_json(raw)
+        op = _classify(flat)
+        if block:
+            op.args["json_block"] = block
+            jk = block.get("kind")
+            if jk in ("add", "rewrite-description", "rename", "merge",
+                      "split", "promote-candidate", "log-only"):
+                op.kind = jk
+                for k in ("theme_id", "category_id", "old_id", "new_id",
+                          "absorbed_id", "survivor_id", "candidate_id"):
+                    if k in block and k not in op.args:
+                        op.args[k] = block[k]
+        ops.append(op)
     return ops
 
 
-_RE_ADD = re.compile(r"\bAdd\s+`?(?P<theme_id>[\w.\-_]+)`?\s+theme\s+under\s+`?(?P<category_id>[\w.\-_]+)`?", re.IGNORECASE)
+def _extract_action_json(item_text: str) -> dict | None:
+    """Extract the first fenced ```action / ```json block from a recommendation.
+
+    Returns None if no block exists or the block fails to JSON-parse.
+    Apply-side callers must tolerate missing blocks (older proposals + advisory
+    items both legitimately omit them).
+    """
+    # Allow leading whitespace before either fence (markdown numbered-list
+    # body content is typically indented under its parent item by 3+ spaces).
+    m = re.search(r"```(?:action|json)\s*\n(.*?)\n[ \t]*```", item_text, re.DOTALL)
+    if not m:
+        return None
+    try:
+        obj = json.loads(m.group(1).strip())
+    except json.JSONDecodeError:
+        return None
+    return obj if isinstance(obj, dict) else None
+
+
+# Prose-classification regexes (fallback when no JSON action block is present).
+# Match either:
+#   "Add `theme_id` theme under `category_id`"    (legacy single-line form)
+#   "Add new theme `theme_id`"                    (current convention; category from JSON)
+_RE_ADD = re.compile(
+    r"\bAdd\s+`?(?P<theme_id>[\w.\-_]+)`?\s+theme\s+under\s+`?(?P<category_id>[\w.\-_]+)`?",
+    re.IGNORECASE,
+)
+_RE_ADD_NEW = re.compile(
+    r"\bAdd\s+new\s+theme\s+`?(?P<theme_id>[\w.\-_]+)`?",
+    re.IGNORECASE,
+)
 _RE_RENAME = re.compile(r"\bRename\s+`?(?P<old>[\w.\-_]+)`?\s*[→\->]+\s*`?(?P<new>[\w.\-_]+)`?", re.IGNORECASE)
 _RE_MERGE = re.compile(r"\bMerge\s+`?(?P<absorbed>[\w.\-_]+)`?\s+into\s+`?(?P<survivor>[\w.\-_]+)`?", re.IGNORECASE)
 _RE_SPLIT = re.compile(r"\bSplit\s+`?(?P<theme_id>[\w.\-_]+)`?", re.IGNORECASE)
 _RE_PROMOTE = re.compile(r"\bPromote\s+candidate\s+`?(?P<candidate_id>[\w.\-_]+)`?", re.IGNORECASE)
-_RE_TIGHTEN = re.compile(r"\bTighten\s+description", re.IGNORECASE)
-_RE_LOG_ONLY = re.compile(r"\b(Investigate|No\s+splits|out of scope)\b", re.IGNORECASE)
+_RE_TIGHTEN = re.compile(r"\b(?:Tighten|Rewrite)\s+description", re.IGNORECASE)
+_RE_LOG_ONLY = re.compile(r"\b(Investigate|Investigation|No\s+splits|out of scope|no schema edit)\b", re.IGNORECASE)
 
 
 def _classify(line: str) -> Operation:
     if (m := _RE_ADD.search(line)):
         return Operation("add", line, {"theme_id": m.group("theme_id"), "category_id": m.group("category_id")})
+    if (m := _RE_ADD_NEW.search(line)):
+        # category_id absent from prose — caller must supply via JSON action block.
+        return Operation("add", line, {"theme_id": m.group("theme_id")})
     if (m := _RE_RENAME.search(line)):
         return Operation("rename", line, {"old_id": m.group("old"), "new_id": m.group("new")})
     if (m := _RE_MERGE.search(line)):
@@ -82,21 +134,36 @@ def _classify(line: str) -> Operation:
         # Theme list is implicit in surrounding prose; the operator must list
         # them inline. Pull `theme_id` tokens out of the line itself.
         ids = re.findall(r"`([\w.\-_]+)`", line)
-        return Operation("rewrite-description", line, {"theme_ids": ids})
+        # First inline backtick id is the canonical target when a JSON block
+        # is absent; downstream code reads `theme_ids` (list) and `theme_id` (single).
+        args: dict = {"theme_ids": ids}
+        if ids:
+            args["theme_id"] = ids[0]
+        return Operation("rewrite-description", line, args)
     if _RE_LOG_ONLY.search(line):
         return Operation("log-only", line, note="advisory; no schema edit")
     return Operation("log-only", line, note="unrecognized recommendation; skipping")
 
 
 def render_plan(ops: Iterable[Operation]) -> str:
-    """Human-readable plan for stdout / dry-run output."""
+    """Human-readable plan for stdout / dry-run output.
+
+    Skips the verbose `json_block` arg (its full text is in the proposal
+    file; we don't need to echo it here, and locale descriptions break the
+    Windows default cp1252 stdout encoding).
+    """
     out = []
     for i, op in enumerate(ops, 1):
         if op.kind == "log-only":
             out.append(f"  {i}. [log-only] {op.note}: {op.raw_line[:80]}")
         else:
-            args_str = " ".join(f"{k}={v}" for k, v in op.args.items())
-            out.append(f"  {i}. [{op.kind}] {args_str}")
+            args_str = " ".join(
+                f"{k}={v}"
+                for k, v in op.args.items()
+                if k != "json_block"
+            )
+            json_marker = " (+JSON action block)" if "json_block" in op.args else ""
+            out.append(f"  {i}. [{op.kind}] {args_str}{json_marker}")
     return "\n".join(out) if out else "  (no operations)"
 
 
@@ -150,21 +217,79 @@ def _apply_one(text: str, op: Operation) -> str:
     raise _OpError(f"unknown operation kind: {op.kind}")
 
 
+def _sql_escape(s: str) -> str:
+    """Escape single quotes for embedding in SQL single-quoted literals."""
+    return s.replace("'", "''")
+
+
 def _apply_add(text: str, op: Operation) -> str:
-    theme_id = op.args["theme_id"]
-    category_id = op.args["category_id"]
+    theme_id = op.args.get("theme_id")
+    category_id = op.args.get("category_id")
+    if not theme_id:
+        raise _OpError("add: missing theme_id (provide in prose 'Add new theme `<id>`' or JSON block)")
+    if not category_id:
+        raise _OpError(
+            f"add: missing category_id for theme {theme_id!r}; "
+            "provide via JSON action block ({'category_id': '<id>'}) or the legacy 'Add `<id>` theme under `<cat>`' prose form"
+        )
     if re.search(rf"'{re.escape(theme_id)}'", text):
         raise _OpError(f"theme_id {theme_id!r} already present in schema; refusing to duplicate")
     if not re.search(rf"'{re.escape(category_id)}'", text):
         raise _OpError(f"category_id {category_id!r} not present in schema; cannot add theme under it")
-    canonical = theme_id.split(".")[-1].replace("_", " ").title()
-    short = canonical[:20]
-    description = "(description pending; populated by next compose-theme-proposal run)"
+
+    block = op.args.get("json_block") or {}
+    canonical_default = theme_id.split(".")[-1].replace("_", " ").title()
+    label_en = block.get("label_en") or canonical_default
+    short_en = block.get("short_label_en") or label_en[:20]
+    tooltip_en = block.get("tooltip_en") or label_en
+    description_en = block.get("description_en") or "(description pending; populated by next compose-theme-proposal run)"
+    scope = category_id.split(".")[0]
     new_row = (
-        f"  ('{theme_id}', '{category_id.split('.')[0]}', '{category_id}', "
-        f"'{canonical}', '{short}', '{canonical}',\n   '{description}', 'active'),\n"
+        f"  ('{_sql_escape(theme_id)}', '{_sql_escape(scope)}', '{_sql_escape(category_id)}', "
+        f"'{_sql_escape(label_en)}', '{_sql_escape(short_en)}', '{_sql_escape(tooltip_en)}',\n"
+        f"   '{_sql_escape(description_en)}', 'active'),\n"
     )
-    return _insert_before_themes_seed_terminator(text, new_row)
+    text = _insert_before_themes_seed_terminator(text, new_row)
+
+    # Append a locale UPDATE block at the end of the theme UPDATE region when
+    # the JSON action block carries any locale fields. Skipping the UPDATE is
+    # acceptable but loses locale coverage (frontend falls back to EN).
+    if any(k in block for k in ("label_ja", "label_es", "label_fil",
+                                 "short_label_ja", "short_label_es", "short_label_fil",
+                                 "description_ja", "description_es", "description_fil")):
+        text = _append_locale_update_for_new_theme(text, theme_id, block)
+    return text
+
+
+def _append_locale_update_for_new_theme(text: str, theme_id: str, block: dict) -> str:
+    """Insert a locale UPDATE block at the end of the theme UPDATE region."""
+    # Build label / short_label / description lines per locale.
+    parts: list[str] = []
+    for loc in ("ja", "es", "fil"):
+        label = block.get(f"label_{loc}")
+        short = block.get(f"short_label_{loc}")
+        if label and short:
+            parts.append(f"  label_{loc} = '{_sql_escape(label)}', short_label_{loc} = '{_sql_escape(short)}'")
+    for loc in ("ja", "es", "fil"):
+        desc = block.get(f"description_{loc}")
+        if desc:
+            parts.append(f"  description_{loc} = '{_sql_escape(desc)}'")
+    if not parts:
+        return text
+    update_block = (
+        "\nUPDATE themes SET\n"
+        + ",\n".join(parts)
+        + f"\nWHERE theme_id = '{_sql_escape(theme_id)}';\n"
+    )
+    # Insert before the section-17 migration-note marker. If the marker is
+    # missing (older schema or hand-edits), fall back to appending at EOF.
+    marker = re.search(
+        r"\n-- ={5,}\s*\n-- 17\. Migration note",
+        text,
+    )
+    if marker:
+        return text[: marker.start()] + update_block + text[marker.start():]
+    return text.rstrip() + "\n" + update_block
 
 
 def _insert_before_themes_seed_terminator(text: str, new_row: str) -> str:
@@ -184,29 +309,79 @@ def _insert_before_themes_seed_terminator(text: str, new_row: str) -> str:
 
 
 def _apply_rewrite_description(text: str, op: Operation) -> str:
-    ids = op.args.get("theme_ids") or []
+    block = op.args.get("json_block") or {}
+    # JSON authoritative: a single-target block. Prose fallback: list of ids.
+    json_target = block.get("theme_id") or op.args.get("theme_id")
+    ids = [json_target] if json_target else (op.args.get("theme_ids") or [])
     if not ids:
-        raise _OpError("rewrite-description: no theme_ids extracted from recommendation line")
-    # Best-effort: leave the actual description text untouched (the recommender
-    # phrase carries keyword guidance; populating it requires writer context the
-    # skill does not have). Mark the row with a description-pending stub so the
-    # next theme-review pass can refine it.
+        raise _OpError("rewrite-description: no theme_id available (set in JSON block or prose)")
+
+    new_desc_en = block.get("new_description_en") or block.get("new_description")
+    new_desc_locales = {
+        "ja": block.get("new_description_ja"),
+        "es": block.get("new_description_es"),
+        "fil": block.get("new_description_fil"),
+    }
+
     for theme_id in ids:
+        # Match the description column (7th column) of the themes seed row.
         pattern = re.compile(
-            rf"(\(\s*'{re.escape(theme_id)}'\s*,\s*'[^']+'\s*,\s*'[^']+'\s*,\s*'[^']+'\s*,\s*'[^']*'\s*,\s*'[^']*',\s*\n\s*)'([^']*)'",
+            rf"(\(\s*'{re.escape(theme_id)}'\s*,\s*'[^']+'\s*,\s*'[^']+'\s*,\s*'[^']+'\s*,\s*'[^']*'\s*,\s*'[^']*',\s*\n\s*)'((?:[^']|'')*)'",
             re.MULTILINE,
         )
         if not pattern.search(text):
             raise _OpError(f"theme_id {theme_id!r} description row not found")
-        # Use straight-quote-free text so we never inject an unescaped
-        # apostrophe into a single-quoted SQL string. The phrase is a
-        # placeholder; the real rewrite lands in a follow-up writer pass.
-        text = pattern.sub(
-            lambda m: m.group(1) + "'(description-rewrite pending — see this week theme-review proposal)'",
-            text,
-            count=1,
-        )
+        replacement = new_desc_en if new_desc_en else "(description-rewrite pending — see this week theme-review proposal)"
+        escaped = _sql_escape(replacement)
+        text = pattern.sub(lambda m: m.group(1) + f"'{escaped}'", text, count=1)
+
+        # Locale description columns live in the trailing UPDATE block(s).
+        # Upsert per-locale `description_<loc>` into the existing UPDATE for
+        # this theme_id; append a new UPDATE if none exists.
+        for loc, val in new_desc_locales.items():
+            if not val:
+                continue
+            text = _upsert_locale_description(text, theme_id, loc, val)
+
     return text
+
+
+def _upsert_locale_description(text: str, theme_id: str, locale: str, new_value: str) -> str:
+    """Add or replace `description_<locale>` inside the theme's locale UPDATE."""
+    escaped = _sql_escape(new_value)
+    update_re = _theme_locale_update_re(theme_id)
+    m = update_re.search(text)
+    if not m:
+        # No existing UPDATE — append one with just the description for this locale.
+        update_block = (
+            f"\nUPDATE themes SET\n"
+            f"  description_{locale} = '{escaped}'\n"
+            f"WHERE theme_id = '{_sql_escape(theme_id)}';\n"
+        )
+        marker = re.search(r"\n-- ={5,}\s*\n-- 17\. Migration note", text)
+        if marker:
+            return text[: marker.start()] + update_block + text[marker.start():]
+        return text.rstrip() + "\n" + update_block
+    # Existing UPDATE — try in-place replace of description_<locale> = '...';
+    # else inject the column right before WHERE.
+    block_text = m.group(0)
+    col_re = re.compile(
+        rf"description_{locale}\s*=\s*'((?:[^']|'')*)'",
+        re.IGNORECASE,
+    )
+    if col_re.search(block_text):
+        new_block_text = col_re.sub(f"description_{locale} = '{escaped}'", block_text, count=1)
+    else:
+        # Inject before WHERE clause; append `,` to the prior SET column.
+        injected = re.sub(
+            r"\n(WHERE\s+theme_id)",
+            f",\n  description_{locale} = '{escaped}'\n\\1",
+            block_text,
+            count=1,
+            flags=re.IGNORECASE,
+        )
+        new_block_text = injected
+    return text[: m.start()] + new_block_text + text[m.end():]
 
 
 def _apply_rename(text: str, op: Operation) -> str:
@@ -301,7 +476,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--proposal", required=True, type=Path)
     p.add_argument("--schema", required=True, type=Path)
     p.add_argument("--snapshot", required=True, type=Path)
-    p.add_argument("--mode", choices=["manual", "auto"], default="manual")
+    p.add_argument("--mode", choices=["manual", "auto"], default="auto")
     args = p.parse_args(argv)
 
     dry_run = os.environ.get("DRY_RUN") == "1"
