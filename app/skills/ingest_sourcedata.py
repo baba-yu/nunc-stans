@@ -24,6 +24,7 @@ from __future__ import annotations
 
 import json
 import sqlite3
+import sys
 from pathlib import Path
 
 from app.src import ingest as _ingest
@@ -613,66 +614,96 @@ def _ingest_readings_file(
         report_date=rf.date,
     )
     now_iso = _ingest._now_iso()
+    # Bad refs in readings.json (via_evidence_id pointing at an evidence row
+    # that doesn't exist yet, or prediction ids that don't match the current
+    # corpus) crash the whole `cli update` if left unguarded. Skip-with-warning
+    # per row instead — readings is a derived/advisory stream, not a strict-gate
+    # input, and a stale chain edge should not block the daily pipeline.
+    chain_inserted = 0
+    chain_skipped = 0
     for edge in rf.chain_edges:
         cid = _chain_id(
             edge.source_prediction_id,
             edge.downstream_prediction_id,
             edge.via_evidence_id,
         )
-        conn.execute(
-            """
-            INSERT OR REPLACE INTO prediction_chain (
-              chain_id, source_prediction_id, downstream_prediction_id,
-              via_evidence_id, strength, notes,
-              created_at, updated_at
-            ) VALUES (?, ?, ?, ?, ?, ?,
-                      COALESCE((SELECT created_at FROM prediction_chain
-                                WHERE chain_id = ?), ?),
-                      ?)
-            """,
-            (
-                cid,
-                edge.source_prediction_id,
-                edge.downstream_prediction_id,
-                edge.via_evidence_id,
-                edge.strength,
-                edge.notes,
-                cid,
-                now_iso,
-                now_iso,
-            ),
-        )
+        try:
+            conn.execute(
+                """
+                INSERT OR REPLACE INTO prediction_chain (
+                  chain_id, source_prediction_id, downstream_prediction_id,
+                  via_evidence_id, strength, notes,
+                  created_at, updated_at
+                ) VALUES (?, ?, ?, ?, ?, ?,
+                          COALESCE((SELECT created_at FROM prediction_chain
+                                    WHERE chain_id = ?), ?),
+                          ?)
+                """,
+                (
+                    cid,
+                    edge.source_prediction_id,
+                    edge.downstream_prediction_id,
+                    edge.via_evidence_id,
+                    edge.strength,
+                    edge.notes,
+                    cid,
+                    now_iso,
+                    now_iso,
+                ),
+            )
+            chain_inserted += 1
+        except sqlite3.IntegrityError as e:
+            chain_skipped += 1
+            print(
+                f"WARN ingest readings {date_iso}: skip chain edge "
+                f"{edge.source_prediction_id}->{edge.downstream_prediction_id} "
+                f"via {edge.via_evidence_id}: {e}",
+                file=sys.stderr,
+            )
+    rel_inserted = 0
+    rel_skipped = 0
     for rel in rf.relations:
         rid = _relation_id(
             rel.prediction_a, rel.prediction_b, rel.relation_type
         )
-        conn.execute(
-            """
-            INSERT OR REPLACE INTO prediction_relations (
-              relation_id, prediction_a, prediction_b, relation_type,
-              family_id, prob_mass, notes,
-              created_at, updated_at
-            ) VALUES (?, ?, ?, ?, ?, ?, ?,
-                      COALESCE((SELECT created_at FROM prediction_relations
-                                WHERE relation_id = ?), ?),
-                      ?)
-            """,
-            (
-                rid,
-                rel.prediction_a,
-                rel.prediction_b,
-                rel.relation_type,
-                rel.family_id,
-                rel.prob_mass,
-                rel.notes,
-                rid,
-                now_iso,
-                now_iso,
-            ),
-        )
+        try:
+            conn.execute(
+                """
+                INSERT OR REPLACE INTO prediction_relations (
+                  relation_id, prediction_a, prediction_b, relation_type,
+                  family_id, prob_mass, notes,
+                  created_at, updated_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?,
+                          COALESCE((SELECT created_at FROM prediction_relations
+                                    WHERE relation_id = ?), ?),
+                          ?)
+                """,
+                (
+                    rid,
+                    rel.prediction_a,
+                    rel.prediction_b,
+                    rel.relation_type,
+                    rel.family_id,
+                    rel.prob_mass,
+                    rel.notes,
+                    rid,
+                    now_iso,
+                    now_iso,
+                ),
+            )
+            rel_inserted += 1
+        except sqlite3.IntegrityError as e:
+            rel_skipped += 1
+            print(
+                f"WARN ingest readings {date_iso}: skip relation "
+                f"{rel.prediction_a}<>{rel.prediction_b} ({rel.relation_type}): {e}",
+                file=sys.stderr,
+            )
     return {
-        "chain_edges": len(rf.chain_edges),
-        "relations": len(rf.relations),
+        "chain_edges": chain_inserted,
+        "chain_edges_skipped": chain_skipped,
+        "relations": rel_inserted,
+        "relations_skipped": rel_skipped,
         "cluster_pointers": len(rf.cluster_pointers),
     }
 
