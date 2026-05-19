@@ -2,17 +2,15 @@
 
 Spec: ``design/skills/run-update-pages-bat.md``.
 
-Cross-platform: invokes ``app/update_pages.bat`` on Windows, falls back
-to ``python -m src.cli update`` on Unix-likes (the bat is just a wrapper
-around the same CLI). Recovery: on a malformed/locked sqlite, remove the
-DB file and retry once.
+Invokes ``python -m app.src.cli update`` from the repo root on every
+platform — the update step that ``app/update_pages.bat`` wraps. Recovery:
+on a malformed/locked sqlite, remove the DB file and retry once.
 """
 
 from __future__ import annotations
 
 import argparse
 import os
-import platform
 import sqlite3
 import subprocess
 import sys
@@ -23,18 +21,16 @@ DB_PATH = Path("app/data/analytics.sqlite")
 
 
 def _run_update() -> tuple[int, str]:
-    if platform.system() == "Windows":
-        cmd: list[str] = ["app/update_pages.bat"]
-        shell = True
-    else:
-        cmd = [sys.executable, "-m", "src.cli", "update"]
-        shell = False
+    # `update_pages.bat` only wraps the update CLI; invoke it directly so the
+    # call is identical on every OS. Run as `app.src.cli` from the repo root
+    # (not `src.cli` from `app/`): cli.py's `from app.skills import ...` needs
+    # the `app` package on sys.path. The .bat's `cd app && python -m src.cli`
+    # form breaks that, and its forward-slash path misparsed under cmd.exe.
     proc = subprocess.run(
-        cmd,
-        cwd="app" if not (platform.system() == "Windows") else None,
-        shell=shell,
+        [sys.executable, "-m", "app.src.cli", "update"],
         capture_output=True,
         text=True,
+        encoding="utf-8",
     )
     return proc.returncode, (proc.stdout or "") + (proc.stderr or "")
 
@@ -54,6 +50,12 @@ def _integrity_ok() -> bool:
 
 
 def main(argv: list[str] | None = None) -> int:
+    # Windows consoles default to cp1252; subprocess output may carry
+    # non-cp1252 text. Force UTF-8 so printing it cannot crash.
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+    except (AttributeError, ValueError):
+        pass
     p = argparse.ArgumentParser(description="Run update_pages with sqlite + pytest sanity")
     p.add_argument("--skip-pytest", action="store_true",
                    help="Skip the post-run pytest pass (faster CI)")
@@ -86,6 +88,7 @@ def main(argv: list[str] | None = None) -> int:
             cwd="app",
             capture_output=True,
             text=True,
+            encoding="utf-8",
         )
         if proc.returncode != 0:
             print(proc.stdout)

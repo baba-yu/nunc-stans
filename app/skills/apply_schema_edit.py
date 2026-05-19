@@ -472,6 +472,13 @@ def make_diff(before: str, after: str, label: str) -> str:
 
 
 def main(argv: list[str] | None = None) -> int:
+    # Windows consoles default to cp1252; the schema diff embeds the theme
+    # seeds' Japanese / Spanish / Filipino text. Force UTF-8 so printing the
+    # diff cannot crash with UnicodeEncodeError.
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+    except (AttributeError, ValueError):
+        pass
     p = argparse.ArgumentParser(description="Apply a theme-review proposal to schema.sql")
     p.add_argument("--proposal", required=True, type=Path)
     p.add_argument("--schema", required=True, type=Path)
