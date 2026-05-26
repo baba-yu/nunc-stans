@@ -75,6 +75,36 @@ _FORBIDDEN: list[tuple[str, str, int]] = [
         r"（(?:技術|非技術|テクノロジー|非テクノロジー|ビジネス|非ビジネス|ビジ|ミックス)）",
         0,
     ),
+    # Lifecycle metadata — anti-inertia (ADR-002, 2026-05-26).
+    # These are the surface signature of the 5/08→5/25 storyline-inertia
+    # drift documented in ``design/decisions/ADR-002-news-anti-inertia.md``.
+    # The renderer never emits them; writer-side avoidance + lint catch is
+    # the enforcement. Patterns are narrow on purpose — legitimate prose
+    # like "third consecutive earnings beat" stays unflagged.
+    (
+        "day-N storyline numbering",
+        # Case-sensitive on purpose: lowercase ``day-25`` / ``day-twenty-five``
+        # / ``day-22 Friday scan`` is the bad continuity anchor. Capitalized
+        # ``Day 2026`` / ``Day 3`` of a multi-day event / ``Earth Day`` are
+        # legitimate prose and stay unflagged.
+        r"\bday-(?:\d+|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen)(?:-(?:one|two|three|four|five|six|seven|eight|nine))?\b",
+        0,
+    ),
+    (
+        "aging vocabulary",
+        r"\b(?:weekend|doubly|triply|quadruply|quintuply|sextuply)[\s\-](?:weekend[\s\-])?aged\b",
+        re.IGNORECASE,
+    ),
+    (
+        "N-day-old artifact filler",
+        r"\b(?:\d+|one|two|three|four|five|six|seven|eight|nine|ten)[\s\-]day[\s\-]old\s+artifact\b",
+        re.IGNORECASE,
+    ),
+    (
+        "holiday-equivalent day filler",
+        r"\bholiday[\s\-]equivalent\s+(?:day|operating\s+day|days)\b",
+        re.IGNORECASE,
+    ),
 ]
 
 
