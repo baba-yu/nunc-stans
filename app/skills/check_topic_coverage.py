@@ -207,22 +207,37 @@ _TOPIC_PATTERNS: list[tuple[str, list[tuple[str, int]]]] = [
     ("Bay Area / SV AI meet-up events", [
         # Topic scope per `reference/news-topics.md §Topic scope
         # clarifications`: shorthand for "AI industry event coverage" —
-        # vendor-hosted events, conferences with AI tracks, hackathons,
-        # Bay Area meet-ups. Not just SF-geographic events.
+        # any vendor-hosted AI event, conference, hackathon, meet-up.
+        # Not just SF-geographic events.
         #
-        # CRITICAL: patterns must include event-ness. A bare vendor name
-        # like `\bZenity\b` matches every Zenity mention (most are CVE /
-        # security news, not events) — that's a false positive for this
-        # topic. Require the vendor name to co-occur with an event token
-        # (Summit / DevDay / Conference / forum / hackathon / etc.) or
-        # use a known event brand name directly.
+        # CRITICAL: do NOT hardcode vendor names. Listing specific
+        # vendors (Zenity, Anthropic, etc.) creates a whitelist that
+        # excludes future vendors (Lakera, Robust Intelligence, the next
+        # AI startup hosting their first dev event). The category is
+        # "event coverage", so the patterns detect *event-ness* in the
+        # surrounding context — not vendor identity.
         #
-        # Generic meet-up / hackathon / track tokens
+        # Two pattern classes only:
+        # (1) generic event-ness tokens (Summit, conference, hackathon,
+        #     keynote, etc.) that appear in any event-coverage prose
+        # (2) self-anchored event brand names (the brand IS the event)
+        #
+        # Generic event-ness — works regardless of vendor
         (r"meet[- ]?up", _I),
         (r"\bhackathon\b", _I),
+        (r"\bkeynote (?:at|during|opens|opened)", _I),
+        # Allow up to ~4 adjective words between the lead verb and the
+        # event-type noun ("hosted its annual AI Security Summit").
+        (r"\b(?:hosted|held|kicked off|opened|wrapped|concluded|launched|sponsored) (?:a|an|the|its)?\s*(?:annual|inaugural|first[- ]ever|biennial)?\s*(?:\w+[\s-]+){0,4}(?:Summit|conference|hackathon|event|workshop|forum|symposium|developer day|user conference)\b", _I),
+        (r"\b(?:annual|inaugural|first[- ]ever|biennial|developer|customer|partner|launch) (?:\w+[\s-]+){0,3}(?:Summit|conference|event|day|forum)\b", _I),
+        (r"\b(?:Summit|Conference|Hackathon|Forum|Symposium) (?:202[0-9]|kicked off|opens|opened|wrapped|concluded|keynote)", _I),
+        (r"\b(?:speak|present|announce|demo|panel) (?:at|during) (?:the |a |an )?(?:Summit|conference|event|forum|hackathon|symposium|workshop|developer day)\b", _I),
+        (r"\bdev[ -]?conference\b", _I),
         (r"AI Village", _I),
         (r"AI Track\b", _I),
-        # Known event brands (self-anchored — the name itself is the event)
+        # Self-anchored event brand names — the brand string itself
+        # signals "this is an event". Adding new ones is fine; these
+        # are not vendors, they are event names.
         (r"AI Engineer Summit", _I),
         (r"AI Builders", _I),
         (r"AI Tinkerers", _I),
@@ -237,14 +252,6 @@ _TOPIC_PATTERNS: list[tuple[str, list[tuple[str, int]]]] = [
         (r"DEF ?CON", 0),
         (r"Black Hat", _I),
         (r"Latent Space (?:meet|event)", _I),
-        # Vendor name + event token (require co-occurrence within ~50 chars).
-        # Examples: "Zenity Summit 2026", "Zenity hosted a developer day".
-        # Add new vendors here as they show up hosting AI events.
-        (r"\bZenity\b[^.\n]{0,60}\b(?:Summit|Conference|Forum|DevDay|hackathon|event|workshop|webinar|launch|day)\b", _I),
-        (r"\b(?:Anthropic|OpenAI|Google|Microsoft|Meta|Cohere|Mistral)\b[^.\n]{0,60}\b(?:Summit|DevDay|Connect|launch event|developer (?:event|day|conference)|public event)\b", _I),
-        # Generic "<Vendor> <event-type>" — broader fallback
-        (r"\b(?:annual|launch|developer|customer|partner) (?:summit|conference|event|day)\b", _I),
-        (r"\bdev[ -]?conference\b", _I),
     ]),
 ]
 
