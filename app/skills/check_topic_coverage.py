@@ -207,14 +207,25 @@ _TOPIC_PATTERNS: list[tuple[str, list[tuple[str, int]]]] = [
     ("Bay Area / SV AI meet-up events", [
         # Topic scope per `reference/news-topics.md §Topic scope
         # clarifications`: shorthand for "AI industry event coverage" —
-        # vendor events, conferences with AI tracks, hackathons,
+        # vendor-hosted events, conferences with AI tracks, hackathons,
         # Bay Area meet-ups. Not just SF-geographic events.
+        #
+        # CRITICAL: patterns must include event-ness. A bare vendor name
+        # like `\bZenity\b` matches every Zenity mention (most are CVE /
+        # security news, not events) — that's a false positive for this
+        # topic. Require the vendor name to co-occur with an event token
+        # (Summit / DevDay / Conference / forum / hackathon / etc.) or
+        # use a known event brand name directly.
+        #
+        # Generic meet-up / hackathon / track tokens
         (r"meet[- ]?up", _I),
+        (r"\bhackathon\b", _I),
+        (r"AI Village", _I),
+        (r"AI Track\b", _I),
+        # Known event brands (self-anchored — the name itself is the event)
         (r"AI Engineer Summit", _I),
         (r"AI Builders", _I),
         (r"AI Tinkerers", _I),
-        (r"\bhackathon\b", _I),
-        (r"\bZenity\b", _I),
         (r"\bDevDay\b", _I),
         (r"GitHub Universe", _I),
         (r"Snowflake Summit", _I),
@@ -225,12 +236,15 @@ _TOPIC_PATTERNS: list[tuple[str, list[tuple[str, int]]]] = [
         (r"\bRSAC\b", 0),
         (r"DEF ?CON", 0),
         (r"Black Hat", _I),
-        (r"AI Village", _I),
-        (r"AI Track\b", _I),
         (r"Latent Space (?:meet|event)", _I),
+        # Vendor name + event token (require co-occurrence within ~50 chars).
+        # Examples: "Zenity Summit 2026", "Zenity hosted a developer day".
+        # Add new vendors here as they show up hosting AI events.
+        (r"\bZenity\b[^.\n]{0,60}\b(?:Summit|Conference|Forum|DevDay|hackathon|event|workshop|webinar|launch|day)\b", _I),
+        (r"\b(?:Anthropic|OpenAI|Google|Microsoft|Meta|Cohere|Mistral)\b[^.\n]{0,60}\b(?:Summit|DevDay|Connect|launch event|developer (?:event|day|conference)|public event)\b", _I),
+        # Generic "<Vendor> <event-type>" — broader fallback
+        (r"\b(?:annual|launch|developer|customer|partner) (?:summit|conference|event|day)\b", _I),
         (r"\bdev[ -]?conference\b", _I),
-        # Generic vendor + event: "<Vendor> annual event", "<Vendor> launch event"
-        (r"\b(?:annual|launch|developer|customer) (?:summit|conference|event)\b", _I),
     ]),
 ]
 
