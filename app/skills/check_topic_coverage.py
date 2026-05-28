@@ -84,11 +84,27 @@ _TOPIC_PATTERNS: list[tuple[str, list[tuple[str, int]]]] = [
         (r"\bTGI\b", 0),  # case-sensitive — TGI is too short to ignore-case safely
     ]),
     ("Ecosystems for Local LLM Embedded System (Foundry Local, etc.)", [
+        # Topic scope per `reference/news-topics.md §Topic scope
+        # clarifications`: not just Foundry Local — covers any
+        # local/edge/on-device LLM runtime/ecosystem.
         (r"Foundry Local", _I),
-        (r"edge LLM", _I),
-        (r"on-device inference", _I),
-        (r"embedded LLM", _I),
+        (r"\bOllama\b", _I),
+        (r"\bLM Studio\b", _I),
         (r"\bllama\.cpp\b", _I),
+        (r"\bMLX\b", 0),
+        (r"\bROCm\b", _I),
+        (r"\bOpenVINO\b", _I),
+        (r"Snapdragon AI", _I),
+        (r"\bHexagon NPU\b", _I),
+        (r"TensorRT-LLM[- ]edge", _I),
+        (r"\bMLC LLM\b", _I),
+        (r"edge LLM", _I),
+        (r"edge[- ]AI", _I),
+        (r"on-device inference", _I),
+        (r"on-device LLM", _I),
+        (r"embedded LLM", _I),
+        (r"\bNPU runtime", _I),
+        (r"\bNPU inference\b", _I),
     ]),
     ("Local LLM Models", [
         (r"\bQwen[0-9]", _I),
@@ -189,11 +205,32 @@ _TOPIC_PATTERNS: list[tuple[str, list[tuple[str, int]]]] = [
         (r"\banalyst\b", _I),
     ]),
     ("Bay Area / SV AI meet-up events", [
+        # Topic scope per `reference/news-topics.md §Topic scope
+        # clarifications`: shorthand for "AI industry event coverage" —
+        # vendor events, conferences with AI tracks, hackathons,
+        # Bay Area meet-ups. Not just SF-geographic events.
         (r"meet[- ]?up", _I),
         (r"AI Engineer Summit", _I),
         (r"AI Builders", _I),
         (r"AI Tinkerers", _I),
-        (r"AI Hackathon", _I),
+        (r"\bhackathon\b", _I),
+        (r"\bZenity\b", _I),
+        (r"\bDevDay\b", _I),
+        (r"GitHub Universe", _I),
+        (r"Snowflake Summit", _I),
+        (r"Data\+AI Summit", _I),
+        (r"Databricks (?:Summit|Data\+AI)", _I),
+        (r"re:Invent", _I),
+        (r"\bRSA Conference\b", _I),
+        (r"\bRSAC\b", 0),
+        (r"DEF ?CON", 0),
+        (r"Black Hat", _I),
+        (r"AI Village", _I),
+        (r"AI Track\b", _I),
+        (r"Latent Space (?:meet|event)", _I),
+        (r"\bdev[ -]?conference\b", _I),
+        # Generic vendor + event: "<Vendor> annual event", "<Vendor> launch event"
+        (r"\b(?:annual|launch|developer|customer) (?:summit|conference|event)\b", _I),
     ]),
 ]
 
