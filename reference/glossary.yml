@@ -934,6 +934,62 @@ terms:
     status: active
     reviewed_by_human: true
 
+  - term: "Foundry Local"
+    aliases: ["Microsoft Foundry Local"]
+    quick_def: "Microsoft's runtime for running AI models directly on your own computer instead of in the cloud."
+    quick_def_ja: "AI モデルをクラウドではなく自分のパソコン上で直接動かすための Microsoft のランタイム。"
+    quick_def_es: "El runtime de Microsoft para ejecutar modelos de IA directamente en tu propio ordenador en vez de en la nube."
+    quick_def_fil: "Ang runtime ng Microsoft para patakbuhin ang mga AI model mismo sa sarili mong computer sa halip na sa cloud."
+    why_it_matters: "Lets developers run and prototype models on local hardware, cutting cloud cost and latency and keeping data on the device."
+    why_it_matters_ja: "開発者が手元のハードウェアでモデルを動かし試作できるようになり、クラウド費用と遅延を抑え、データを端末内にとどめられる。"
+    why_it_matters_es: "Permite a los desarrolladores ejecutar y prototipar modelos en hardware local, reduciendo coste y latencia de la nube y manteniendo los datos en el propio dispositivo."
+    why_it_matters_fil: "Pinapayagan ang mga developer na patakbuhin at i-prototype ang mga model sa local hardware, na nagpapababa sa cloud cost at latency at nananatili sa device ang data."
+    canonical_link: https://learn.microsoft.com/en-us/azure/ai-foundry/foundry-local/
+    status: active
+    reviewed_by_human: true
+
+  - term: "Microsoft Scout"
+    aliases: [Scout]
+    quick_def: "An always-on Microsoft work agent that acts across Teams, Outlook, and Microsoft 365 on a user's behalf."
+    quick_def_ja: "Teams、Outlook、Microsoft 365 をまたいでユーザーの代わりに動く、常時稼働の Microsoft の仕事用エージェント。"
+    quick_def_es: "Un agente de trabajo de Microsoft siempre activo que actúa en Teams, Outlook y Microsoft 365 en nombre del usuario."
+    quick_def_fil: "Isang laging-bukas na work agent ng Microsoft na kumikilos sa Teams, Outlook, at Microsoft 365 para sa user."
+    why_it_matters: "Shows open agent frameworks becoming the engine inside first-party products, with enterprise identity and data controls around them."
+    why_it_matters_ja: "オープンなエージェント基盤が自社製品の中核エンジンになり、その周りを企業の ID とデータ管理が固める流れを示す。"
+    why_it_matters_es: "Muestra cómo los marcos de agentes abiertos se vuelven el motor dentro de productos propios, rodeados de controles de identidad y datos empresariales."
+    why_it_matters_fil: "Pinapakita kung paano nagiging engine ang open agent frameworks sa loob ng first-party na produkto, na napapaligiran ng enterprise identity at data controls."
+    canonical_link: https://www.microsoft.com/en-us/microsoft-365/blog/2026/06/02/introducing-microsoft-scout-your-always-on-personal-agent/
+    status: active
+    reviewed_by_human: true
+
+  - term: Nemotron
+    aliases: ["NVIDIA Nemotron"]
+    quick_def: "NVIDIA's family of open-weight language models, including very large versions built for multi-step agent reasoning."
+    quick_def_ja: "NVIDIA のオープンウェイト言語モデル群。複数ステップのエージェント推論向けに作られた超大型版も含む。"
+    quick_def_es: "La familia de modelos de lenguaje de pesos abiertos de NVIDIA, incluidas versiones muy grandes pensadas para el razonamiento de agentes en varios pasos."
+    quick_def_fil: "Pamilya ng open-weight language models ng NVIDIA, kasama ang napakalalaking bersyon na ginawa para sa multi-step agent reasoning."
+    why_it_matters: "NVIDIA's open models push the open-weight field forward and steer usage toward NVIDIA chips."
+    why_it_matters_ja: "NVIDIA のオープンモデルはオープンウェイト分野を前に進めつつ、利用を NVIDIA のチップへ誘導する。"
+    why_it_matters_es: "Los modelos abiertos de NVIDIA hacen avanzar el campo de pesos abiertos y orientan el uso hacia los chips de NVIDIA."
+    why_it_matters_fil: "Itinutulak ng open models ng NVIDIA ang larangan ng open-weight at inaakay ang paggamit papunta sa mga chip ng NVIDIA."
+    canonical_link: https://huggingface.co/collections/nvidia/nvidia-nemotron-v3
+    status: active
+    reviewed_by_human: true
+
+  - term: MoE
+    aliases: ["Mixture-of-Experts", "mixture of experts"]
+    quick_def: "A model design where only a few of its many specialist sub-networks switch on per word, so a huge model runs cheaply."
+    quick_def_ja: "多数ある専門家ネットワークのうち、単語ごとにごく一部だけが働くモデル設計。巨大なモデルでも安く動かせる。"
+    quick_def_es: "Un diseño de modelo en el que solo unas pocas de sus muchas subredes especialistas se activan por palabra, de modo que un modelo enorme funciona barato."
+    quick_def_fil: "Isang disenyo ng model kung saan iilan lang sa maraming specialist sub-networks nito ang bumubukas kada salita, kaya mura tumakbo ang napakalaking model."
+    why_it_matters: "Lets models grow far larger in skill without a matching rise in the compute each answer costs."
+    why_it_matters_ja: "1 回の回答にかかる計算量をそれほど増やさずに、モデルの能力を大きく伸ばせる。"
+    why_it_matters_es: "Permite que los modelos crezcan mucho en capacidad sin un aumento equivalente en el cómputo que cuesta cada respuesta."
+    why_it_matters_fil: "Pinapayagan ang mga model na lumago nang husto sa kakayahan nang walang katumbas na pagtaas sa compute na ginagastos kada sagot."
+    canonical_link: https://en.wikipedia.org/wiki/Mixture_of_experts
+    status: active
+    reviewed_by_human: true
+
   - term: "local LLM"
     aliases: ["on-device LLM", "self-hosted LLM"]
     quick_def: "An LLM that runs on your own hardware — laptop, phone, on-prem server — instead of being called via someone else's cloud API. Privacy, cost, and offline capability are the typical drivers."
