@@ -14,8 +14,8 @@ Sorted by `count` descending, then host alphabetical.
 | host | count | first_seen | last_seen | sample_label |
 |---|---|---|---|---|
 | arxiv.org | 137 | 2026-04-29 | 2026-05-28 | arXiv - Corpus2Skill (2604.14572) |
+| github.com | 115 | 2026-04-19 | 2026-06-05 | GitHub - QwenLM/Qwen3.6 |
 | anthropic.com | 112 | 2026-04-21 | 2026-05-31 | Anthropic - Anthropic and Amazon expand collaboration |
-| github.com | 110 | 2026-04-19 | 2026-06-02 | GitHub - QwenLM/Qwen3.6 |
 | simonwillison.net | 105 | 2026-04-19 | 2026-05-31 | Simon Willison - Qwen3.6-27B |
 | thehackernews.com | 93 | 2026-04-20 | 2026-05-30 | The Hacker News - nginx-ui CVE-2026-33032 |
 | aws.amazon.com | 86 | 2026-04-19 | 2026-06-01 | AWS - Amazon Bedrock AgentCore adds new features |
@@ -26,18 +26,18 @@ Sorted by `count` descending, then host alphabetical.
 | sf.aitinkerers.org | 67 | 2026-04-19 | 2026-06-04 | AI Tinkerers SF 2026 |
 | venturebeat.com | 66 | 2026-04-24 | 2026-05-29 | VentureBeat - Microsoft patched a Copilot Studio prompt inje |
 | infoq.com | 59 | 2026-04-21 | 2026-06-02 | InfoQ - Cloudflare Builds High-Performance Infrastructure fo |
+| the-decoder.com | 58 | 2026-04-23 | 2026-06-05 | The Decoder - Anthropic ships ten AI agents for finance |
 | ai.engineer | 55 | 2026-05-30 | 2026-06-04 | AI Engineer World's Fair |
-| the-decoder.com | 54 | 2026-04-23 | 2026-05-28 | The Decoder - Anthropic ships ten AI agents for finance |
+| developer.apple.com | 51 | 2026-05-30 | 2026-06-05 | Apple Developer |
 | helpnetsecurity.com | 49 | 2026-04-19 | 2026-06-01 | Help Net Security - Indirect prompt injection is taking hold |
 | cloudsecurityalliance.org | 48 | 2026-04-24 | 2026-05-05 | CSA - The Agentic Trust Framework |
-| developer.apple.com | 48 | 2026-05-30 | 2026-06-04 | Apple Developer |
 | microsoft.com | 48 | 2026-04-24 | 2026-06-04 | Microsoft Security Blog - Zero Trust for AI |
 | datacenterdynamics.com | 45 | 2026-05-06 | 2026-05-28 | Datacenter Dynamics - AMD Helios double-wide rack 3 exaflops |
 | thehackerwire.com | 45 | 2026-04-22 | 2026-05-03 | TheHackerWire - Xerte Online Toolkits RCE |
 | therobotreport.com | 45 | 2026-04-23 | 2026-05-19 | The Robot Report - Tesla 10M Optimus |
 | unsloth.ai | 42 | 2026-04-28 | 2026-06-03 | Unsloth - Updates Changelog |
+| databricks.com | 41 | 2026-05-30 | 2026-06-05 | Databricks |
 | cisa.gov | 38 | 2026-04-19 | 2026-05-07 | CISA - Microsoft Defender KEV addition |
-| databricks.com | 38 | 2026-05-30 | 2026-06-01 | Databricks |
 | pypi.org | 38 | 2026-04-19 | 2026-05-31 | PyPI - sglang |
 | fool.com | 37 | 2026-04-23 | 2026-05-03 | The Motley Fool - Anthropic Announcement for Alphabet and Br |
 | beamstart.com | 34 | 2026-05-06 | 2026-05-19 | BEAMSTART - Cerebras Gears Up for $26 Billion IPO Fueled by |
@@ -46,6 +46,7 @@ Sorted by `count` descending, then host alphabetical.
 | 247wallst.com | 31 | 2026-04-25 | 2026-05-19 | 24/7 Wall St - Cheap Salesforce Vs. Expensive ServiceNow |
 | pymnts.com | 31 | 2026-04-26 | 2026-05-19 | PYMNTS - Google Doubles Down on Anthropic With New $40 Billi |
 | thenextweb.com | 31 | 2026-04-23 | 2026-05-31 | TheNextWeb - Google Cloud Next 2026: AI agents, A2A, Workspa |
+| advisories.gitlab.com | 30 | 2026-05-06 | 2026-06-05 | GitLab Advisories - CVE-2026-41264 Flowise CSV Agent Prompt |
 | decrypt.co | 30 | 2026-04-21 | 2026-05-28 | Decrypt - Apptronik Apollo Mercedes Sindelfingen six to thir |
 | moscone.com | 30 | 2026-06-02 | 2026-06-04 | Moscone Center - Snowflake Summit 2026 |
 | openai.com | 30 | 2026-04-23 | 2026-05-29 | OpenAI - Introducing workspace agents in ChatGPT |
@@ -55,7 +56,7 @@ Sorted by `count` descending, then host alphabetical.
 | mistral.ai | 23 | 2026-05-06 | 2026-05-28 | Mistral AI - Workflows for work that runs the business |
 | andrew.ooo | 22 | 2026-05-06 | 2026-05-19 | andrew.ooo - AISI Cyber Eval GPT-5.5 vs Mythos vs Opus May 2 |
 | businesswire.com | 22 | 2026-04-24 | 2026-06-03 | BusinessWire - Anthropic Partners with Blackstone, Hellman & |
-| advisories.gitlab.com | 21 | 2026-05-06 | 2026-05-12 | GitLab Advisories - CVE-2026-41264 Flowise CSV Agent Prompt |
+| techtimes.com | 22 | 2026-05-31 | 2026-06-05 | TechTimes analysis |
 | learn.microsoft.com | 21 | 2026-04-22 | 2026-06-02 | Microsoft Learn - Foundry What's new for April 2026 (RFT) |
 | news.ycombinator.com | 21 | 2026-04-21 | 2026-05-28 | Hacker News - Qwen3.6-35B-A3B: Agentic coding power, now ope |
 | adversa.ai | 20 | 2026-05-05 | 2026-05-19 | Adversa AI - Top Agentic AI security resources May 2026 |
@@ -65,7 +66,6 @@ Sorted by `count` descending, then host alphabetical.
 | shadowserver.org | 19 | 2026-05-07 | 2026-05-19 | Shadowserver - n8n CVE-2026-21858 First Week Scan Report |
 | aikido.dev | 18 | 2026-05-06 | 2026-05-10 | Aikido - n8n Critical Vulnerability CVE-2026-21858 Unauthent |
 | ciodive.com | 18 | 2026-05-31 | 2026-05-31 | CIO Dive |
-| techtimes.com | 18 | 2026-05-31 | 2026-05-31 | TechTimes analysis |
 | dev.to | 17 | 2026-04-20 | 2026-05-04 | DEV Community - Hermes Agent Review: 95.6K Stars |
 | reuters.com | 17 | 2026-05-27 | 2026-05-28 | Reuters - Cerebras CBRS Wednesday May 27 close 224.85 instit |
 | trendingtopics.eu | 17 | 2026-05-06 | 2026-05-14 | Trending Topics - Cerebras IPO 2026 launches IPO bid at 26.6 |
@@ -151,6 +151,7 @@ Sorted by `count` descending, then host alphabetical.
 | bmwgroup.com | 6 | 2026-04-25 | 2026-04-26 | BMW Group - First humanoid robot in Plant Leipzig |
 | ca.investing.com | 6 | 2026-06-03 | 2026-06-03 | Investing.com - Broadcom Q2 2026 earnings beat, stock rises |
 | crescendo.ai | 6 | 2026-04-20 | 2026-05-03 | Crescendo - Latest AI News and Updates |
+| docs.litellm.ai | 6 | 2026-06-05 | 2026-06-05 | LiteLLM docs - Security Update: CVE-2026-42208 in LiteLLM Pr |
 | federalnewsnetwork.com | 6 | 2026-05-04 | 2026-05-04 | Federal News Network - When AI agents act, security has to k |
 | federalregister.gov | 6 | 2026-05-01 | 2026-05-03 | Federal Register - RFI on Security Considerations for AI Age |
 | globenewswire.com | 6 | 2026-04-22 | 2026-04-24 | GlobeNewswire - Humanoid Robot Market $8.78B by 2035 |
@@ -167,6 +168,7 @@ Sorted by `count` descending, then host alphabetical.
 | cybersecuritynews.com | 5 | 2026-04-23 | 2026-05-05 | Cybersecurity News - Cisco to Acquire Astrix Security |
 | defensenews.com | 5 | 2026-05-02 | 2026-05-03 | Defense News |
 | developer.nvidia.com | 5 | 2026-04-24 | 2026-04-27 | NVIDIA Developer Blog - Rubin Platform |
+| fedscoop.com | 5 | 2026-06-05 | 2026-06-05 | FedScoop - Bipartisan 'Great American AI Act' draft proposes |
 | feedly.com | 5 | 2026-04-28 | 2026-04-28 | Feedly - CVE-2026-5760 |
 | ghacks.net | 5 | 2026-04-26 | 2026-04-26 | gHacks - DeepSeek Releases V4 Models With 9.5x Lower Memory |
 | gracker.ai | 5 | 2026-04-28 | 2026-05-02 | GrackerAI - AI Dev 26 x SF – Free Tickets (event listing) |
@@ -203,6 +205,7 @@ Sorted by `count` descending, then host alphabetical.
 | msspalert.com | 4 | 2026-05-05 | 2026-05-05 | MSSP Alert - Cisco to Acquire Astrix Security |
 | newreleases.io | 4 | 2026-04-22 | 2026-04-27 | newreleases.io - openclaw v2026.4.20-beta.1 |
 | newsroom.cisco.com | 4 | 2026-04-24 | 2026-05-03 | Cisco Newsroom - Reimagines Security for the Agentic Workfor |
+| nextgov.com | 4 | 2026-06-05 | 2026-06-05 | Nextgov/FCW - Lawmakers propose AI framework that would pree |
 | nvd.nist.gov | 4 | 2026-05-05 | 2026-05-05 | NVD - CVE-2026-5760 Detail |
 | pillar.security | 4 | 2026-04-26 | 2026-04-26 | Pillar Security - Prompt Injection leads to RCE and Sandbox |
 | pointguardai.com | 4 | 2026-04-25 | 2026-04-25 | PointGuard AI - CVE-2026-21520 |
@@ -210,6 +213,7 @@ Sorted by `count` descending, then host alphabetical.
 | press.bmwgroup.com | 4 | 2026-04-25 | 2026-04-25 | BMW Group Press - bringing Physical AI to Europe |
 | promptquorum.com | 4 | 2026-04-25 | 2026-04-26 | PromptQuorum - Local LLMs 2026 |
 | roboticstomorrow.com | 4 | 2026-04-22 | 2026-04-23 | Robotics Tomorrow - Accenture Vodafone SAP Humanoid Warehous |
+| rollcall.com | 4 | 2026-06-05 | 2026-06-05 | Roll Call - Bipartisan AI draft proposes three-year preempti |
 | startuphub.ai | 4 | 2026-04-27 | 2026-05-29 | StartupHub.ai - AMD Sets Q1 2026 Earnings Date |
 | stocktwits.com | 4 | 2026-06-04 | 2026-06-04 | Stocktwits - SpaceX IPO Pricing At $135 Per Share Will Value |
 | techxplore.com | 4 | 2026-04-25 | 2026-04-25 | TechXplore - DeepSeek V4 1M context |
