@@ -13,8 +13,8 @@ Sorted by `count` descending, then host alphabetical.
 
 | host | count | first_seen | last_seen | sample_label |
 |---|---|---|---|---|
-| arxiv.org | 153 | 2026-04-29 | 2026-06-15 | arXiv - Corpus2Skill (2604.14572) |
-| github.com | 143 | 2026-04-19 | 2026-06-16 | GitHub - QwenLM/Qwen3.6 |
+| arxiv.org | 155 | 2026-04-29 | 2026-06-18 | arXiv - Corpus2Skill (2604.14572) |
+| github.com | 147 | 2026-04-19 | 2026-06-18 | GitHub - QwenLM/Qwen3.6 |
 | anthropic.com | 124 | 2026-04-21 | 2026-06-16 | Anthropic - Anthropic and Amazon expand collaboration |
 | simonwillison.net | 114 | 2026-04-19 | 2026-06-16 | Simon Willison - Qwen3.6-27B |
 | thehackernews.com | 98 | 2026-04-20 | 2026-06-17 | The Hacker News - nginx-ui CVE-2026-33032 |
@@ -22,8 +22,8 @@ Sorted by `count` descending, then host alphabetical.
 | huggingface.co | 87 | 2026-04-22 | 2026-06-09 | Hugging Face - prism-ml/Bonsai-8B-gguf |
 | aws.amazon.com | 86 | 2026-04-19 | 2026-06-01 | AWS - Amazon Bedrock AgentCore adds new features |
 | databricks.com | 81 | 2026-05-30 | 2026-06-17 | Databricks |
+| snowflake.com | 79 | 2026-05-30 | 2026-06-18 | Snowflake Summit 26 |
 | hpcwire.com | 78 | 2026-05-06 | 2026-06-17 | AIwire - Cerebras Systems Announces Launch of Initial Public |
-| snowflake.com | 77 | 2026-05-30 | 2026-05-31 | Snowflake Summit 26 |
 | venturebeat.com | 70 | 2026-04-24 | 2026-06-10 | VentureBeat - Microsoft patched a Copilot Studio prompt inje |
 | sf.aitinkerers.org | 67 | 2026-04-19 | 2026-06-04 | AI Tinkerers SF 2026 |
 | helpnetsecurity.com | 62 | 2026-04-19 | 2026-06-14 | Help Net Security - Indirect prompt injection is taking hold |
@@ -69,12 +69,12 @@ Sorted by `count` descending, then host alphabetical.
 | shadowserver.org | 19 | 2026-05-07 | 2026-05-19 | Shadowserver - n8n CVE-2026-21858 First Week Scan Report |
 | aikido.dev | 18 | 2026-05-06 | 2026-05-10 | Aikido - n8n Critical Vulnerability CVE-2026-21858 Unauthent |
 | ciodive.com | 18 | 2026-05-31 | 2026-05-31 | CIO Dive |
+| interestingengineering.com | 18 | 2026-05-30 | 2026-06-18 | Interesting Engineering |
 | dev.to | 17 | 2026-04-20 | 2026-05-04 | DEV Community - Hermes Agent Review: 95.6K Stars |
 | reuters.com | 17 | 2026-05-27 | 2026-05-28 | Reuters - Cerebras CBRS Wednesday May 27 close 224.85 instit |
 | trendingtopics.eu | 17 | 2026-05-06 | 2026-05-14 | Trending Topics - Cerebras IPO 2026 launches IPO bid at 26.6 |
 | githubuniverse.com | 16 | 2026-05-30 | 2026-05-31 | GitHub Universe FAQ |
 | humanoidsdaily.com | 16 | 2026-05-30 | 2026-05-30 | Humanoids Daily |
-| interestingengineering.com | 16 | 2026-05-30 | 2026-05-30 | Interesting Engineering |
 | opentools.ai | 16 | 2026-05-30 | 2026-05-30 | OpenTools |
 | tech-insider.org | 16 | 2026-04-22 | 2026-05-03 | Tech Insider - Cerebras IPO Filing |
 | techstackipo.com | 16 | 2026-05-30 | 2026-05-30 | TechStackIPO |
@@ -116,6 +116,7 @@ Sorted by `count` descending, then host alphabetical.
 | tradingkey.com | 11 | 2026-04-22 | 2026-05-03 | tradingkey - Anthropic Moving Toward AI Chips for Claude |
 | vfuturemedia.com | 11 | 2026-04-30 | 2026-05-03 | V Future Media - Humanoid Robots 2026 |
 | windowsforum.com | 11 | 2026-06-02 | 2026-06-02 | Windows Forum - Build 2026: Microsoft makes AI agents the ne |
+| 10times.com | 10 | 2026-06-08 | 2026-06-18 | Hot Chips - HC38 (Aug 2026) |
 | aboutamazon.com | 10 | 2026-04-21 | 2026-05-02 | About Amazon - New Amazon Bedrock AgentCore capabilities |
 | apple.com | 10 | 2026-06-01 | 2026-06-06 | Apple Newsroom - Apple kicks off Worldwide Developers Confer |
 | azure.microsoft.com | 10 | 2026-06-02 | 2026-06-02 | Microsoft Azure Blog - Introducing Anthropic's Claude models |
@@ -141,7 +142,6 @@ Sorted by `count` descending, then host alphabetical.
 | research.google | 9 | 2026-04-29 | 2026-05-03 | Google Research - TurboQuant |
 | sec.gov | 9 | 2026-04-28 | 2026-05-28 | SEC - Cerebras S-1 (April 2026) |
 | startuphub.ai | 9 | 2026-04-27 | 2026-06-12 | StartupHub.ai - AMD Sets Q1 2026 Earnings Date |
-| 10times.com | 8 | 2026-06-08 | 2026-06-10 | Hot Chips - HC38 (Aug 2026) |
 | ai-infra-summit.com | 8 | 2026-06-05 | 2026-06-08 | AI Infra Summit 2026 |
 | blackhat.com | 8 | 2026-06-05 | 2026-06-06 | Black Hat USA 2026 |
 | claude.com | 8 | 2026-05-30 | 2026-05-30 | claude.com |
@@ -194,6 +194,7 @@ Sorted by `count` descending, then host alphabetical.
 | mediapost.com | 6 | 2026-04-25 | 2026-04-26 | MediaPost - Tesla Earth Day Optimus |
 | medium.com | 6 | 2026-04-19 | 2026-04-27 | Medium - New 1 bit LLM is here: Bonsai-8B |
 | newatlas.com | 6 | 2026-04-25 | 2026-04-27 | New Atlas - Physical AI humanoids at BMW factory |
+| pandaily.com | 6 | 2026-06-07 | 2026-06-18 | Pandaily - BYD Secretly Develops Humanoid Robot Codename 'Ya |
 | sacra.com | 6 | 2026-05-02 | 2026-05-03 | Sacra - OpenAI revenue |
 | zerohedge.com | 6 | 2026-06-12 | 2026-06-12 | ZeroHedge - SpaceX Prices Biggest Ever IPO At $135 Per Share |
 | blogs.cisco.com | 5 | 2026-05-05 | 2026-05-05 | Cisco Blogs - Cisco Announces Intent to Acquire Astrix Secur |
@@ -209,6 +210,7 @@ Sorted by `count` descending, then host alphabetical.
 | keycard.ai | 5 | 2026-04-24 | 2026-04-24 | Keycard - The Control Plane for Autonomous Agents |
 | knowledgehubmedia.com | 5 | 2026-04-30 | 2026-04-30 | Knowledge Hub Media - SuiteConnect 2026 Agent Skills |
 | labs.cloudsecurityalliance.org | 5 | 2026-04-24 | 2026-04-26 | Cloud Security Alliance - Antigravity Sandbox Escape |
+| letsdatascience.com | 5 | 2026-05-06 | 2026-06-18 | Let's Data Science - Frontier Model Review Board EO draft de |
 | perspectives.nvidia.com | 5 | 2026-05-05 | 2026-05-05 | NVIDIA Perspectives - Real cost AI scale hyperscaler acceler |
 | releasealert.dev | 5 | 2026-04-22 | 2026-04-30 | releasealert.dev - llama.cpp |
 | spknowledge.com | 5 | 2026-04-19 | 2026-04-26 | Knowledge Share - Mastering Azure Foundry Local |
@@ -245,7 +247,6 @@ Sorted by `count` descending, then host alphabetical.
 | newreleases.io | 4 | 2026-04-22 | 2026-04-27 | newreleases.io - openclaw v2026.4.20-beta.1 |
 | newsroom.cisco.com | 4 | 2026-04-24 | 2026-05-03 | Cisco Newsroom - Reimagines Security for the Agentic Workfor |
 | nvd.nist.gov | 4 | 2026-05-05 | 2026-05-05 | NVD - CVE-2026-5760 Detail |
-| pandaily.com | 4 | 2026-06-07 | 2026-06-07 | Pandaily - BYD Secretly Develops Humanoid Robot Codename 'Ya |
 | pillar.security | 4 | 2026-04-26 | 2026-04-26 | Pillar Security - Prompt Injection leads to RCE and Sandbox |
 | pointguardai.com | 4 | 2026-04-25 | 2026-04-25 | PointGuard AI - CVE-2026-21520 |
 | preprints.org | 4 | 2026-05-02 | 2026-05-03 | Preprints.org - Agent Harness Survey |
@@ -287,7 +288,6 @@ Sorted by `count` descending, then host alphabetical.
 | googlecloudpresscorner.com | 3 | 2026-04-23 | 2026-04-25 | Google Cloud Press - Thinking Machines Expands Use of Google |
 | iiot-world.com | 3 | 2026-04-25 | 2026-04-25 | IIoT World - BMW's 30,000-Car Proof |
 | kb.cert.org | 3 | 2026-04-21 | 2026-04-26 | CERT/CC - VU#915947 SGLang chat-template RCE |
-| letsdatascience.com | 3 | 2026-05-06 | 2026-05-07 | Let's Data Science - Frontier Model Review Board EO draft de |
 | linuxfoundation.org | 3 | 2026-06-07 | 2026-06-07 | Linux Foundation - Confidential Computing Summit 2026 Schedu |
 | llm-stats.com | 3 | 2026-04-19 | 2026-05-03 | LLM-Stats - AI Updates Today (May 2026) |
 | lmsys.org | 3 | 2026-05-08 | 2026-05-27 | SGLang - RadixArk v0 5 4 release tool result cache reuse CVE |
@@ -350,6 +350,7 @@ Sorted by `count` descending, then host alphabetical.
 | jpost.com | 2 | 2026-05-04 | 2026-05-04 | Jerusalem Post - Tesla begins production of first humanoid r |
 | livenewschat.eu | 2 | 2026-04-28 | 2026-04-28 | Live News Chat - Mag 7 Earnings Week |
 | manilatimes.net | 2 | 2026-04-26 | 2026-04-26 | Manila Times - Humanoid robots are about to move from labs t |
+| manufacturingdive.com | 2 | 2026-06-18 | 2026-06-18 | Manufacturing Dive - Robotics startup backed by Nvidia, Amaz |
 | mezha.net | 2 | 2026-04-27 | 2026-04-27 | Mezha - Sam Altman accuses Anthropic of using fear to market |
 | nist.gov | 2 | 2026-04-25 | 2026-04-26 | NIST - NIST Updates NVD Operations to Address Record CVE Gro |
 | notateslaapp.com | 2 | 2026-04-27 | 2026-04-27 | NotaTeslaApp - Tesla Delays Optimus Gen 3 Unveil for 'Finish |
@@ -361,10 +362,13 @@ Sorted by `count` descending, then host alphabetical.
 | platform.claude.com | 2 | 2026-05-01 | 2026-05-01 | Anthropic - Claude API Release Notes |
 | prateeksinghphd.in | 2 | 2026-04-21 | 2026-04-26 | Prateek Singh PhD - The Agent Wars: OpenClaw, NemoClaw, Herm |
 | promarket.org | 2 | 2026-04-27 | 2026-04-27 | ProMarket - The Antitrust Risks of Anthropic's Project Glass |
+| reinvent.awsevents.com | 2 | 2026-06-18 | 2026-06-18 | AWS re:Invent 2026 (November 30-December 4, Las Vegas) |
 | relvehq.com | 2 | 2026-06-14 | 2026-06-14 | Relve - Databricks Data + AI Summit 2026 (June 15-18, San Fr |
 | robohorizon.com | 2 | 2026-04-28 | 2026-04-28 | RoboHorizon - Figure AI Now Builds a Humanoid Every 90 Minut |
 | salt.security | 2 | 2026-04-27 | 2026-04-27 | Salt Security - The Era of Agentic Security Is Here |
 | sciencedaily.com | 2 | 2026-04-20 | 2026-04-20 | ScienceDaily - Think AI knows what it's doing? Scientists sa |
 | sessionize.com | 2 | 2026-06-17 | 2026-06-17 | Sessionize - AI Engineer World's Fair 2026 (June 29-July 2, |
+| stable-learn.com | 2 | 2026-06-18 | 2026-06-18 | StableLearn - GLM-5.2 Goes Fully Open: 753B Parameters at 1/ |
+| techfundingnews.com | 2 | 2026-06-18 | 2026-06-18 | Tech Funding News - Amazon, NVIDIA and Tether back NEURA Rob |
 | technode.com | 2 | 2026-06-07 | 2026-06-07 | TechNode - BYD is developing humanoid robots, according to s |
 | upcomingevents.com | 2 | 2026-06-10 | 2026-06-10 | UpcomingEvents - AI Infra Summit 2026, Santa Clara Conventio |
