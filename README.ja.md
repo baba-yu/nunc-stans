@@ -11,6 +11,30 @@
 
 ---
 
+## 2026-06-25
+
+### News
+
+- **OpenAIとBroadcom、OpenAI初の自社推論チップ「Jalapeno」を披露** — OpenAIとBroadcomは6月24日、複数年にわたる共同設計から生まれた最初のチップであり、OpenAI初の自社推論アクセラレータとなる「Jalapeno」を披露した。OpenAIはこれを、学習ではなくLLM推論を軸に設計した「Intelligence Processor」と位置づける。エンジニアリングサンプルはすでに量産目標の動作周波数と消費電力でラボ内のワークロードを実行しており、初期テストでは1ワットあたりの性能が「現行の最先端を大きく上回る」とOpenAIは述べる。データセンターへの初期導入は2026年末までにギガワット規模で行う計画だ。プラットフォームは単体のダイではなくラックスケールで構成され、Broadcomのファブリック「Tomahawk」（最大1.6テラビット/秒）が複数のアクセラレータを相互接続し、Celestiaがサーバーラックを共同設計している。構造的に読み解けば、最大手のフロンティアモデル購入者がいまやハイパースケーラーの定石をなぞり、自社の推論ASICを設計してマーチャントGPUの採算構造から抜け出そうとしている。これにより、OpenAIとBroadcomの名を冠した製品が、Google-BroadcomのTPUやAmazon Trainiumの系譜と並ぶ。1ワットあたりの優位はベンダーの主張であり、まだ第三者によるベンチマーク検証は行われていない。 [SiliconANGLE - OpenAI, Broadcom debut custom Jalapeno chip for AI inference](https://siliconangle.com/2026/06/24/openai-broadcom-debut-custom-jalapeno-chip-llm-inference/), [Neowin - OpenAI and Broadcom unveil Jalapeno, a new AI chip built for LLM inference](https://www.neowin.net/news/openai-and-broadcom-unveil-jalapeo-a-new-ai-chip-built-for-llm-inference/), [Constellation Research - OpenAI, Broadcom unveil first AI inference chip](https://www.constellationr.com/insights/news/openai-broadcom-unveil-first-ai-inference-chip)
+
+- **Gartner：AIコーディングのコストは2028年までに開発者の平均年収を上回る可能性** — Gartnerは6月24日、2028年までにAIコーディングのコストが開発者の平均年収を上回るとの調査ノートを公開した。LLMのトークン消費量の増加と、エージェント型コーディングツールにおける従量課金への移行がその背景にある。引用しやすい具体的な数値こそがニュースだ。ノートが引くGartner Peer Insightsのデータによれば、技術部門のリーダーの23%がすでに開発者1人あたり月額$200〜$500をトークンに費やしており、6%の組織は開発者1人あたり月額$2,000超を支払っている。Gartnerは、コスト急増が最も激しいのは、エージェント駆動のワークフローにおける統制されていない自律性、肥大化したコンテキストウィンドウ、そして使用を最適化するための構造化されたフィードバックの欠如によるものだと警告する。そのうえで、開発者1人あたりのコストの中心となっているのは自律型開発ループのツール群（Cursor、Claude Code、Codex CLIといったエージェント型IDE）だと名指しする。トークンの規律は自然には生まれず、エージェントの大規模展開がその恩恵を食い潰す前に、統制された開発運用モデルが各組織には必要だという立場だ。これはアナリストによる予測であって出荷済みの製品ではないため、2028年という分岐点はあくまで見通しにとどまる。 [Gartner - AI coding costs will surpass the average developer's salary by 2028 as token consumption surges](https://www.gartner.com/en/newsroom/press-releases/2026-06-24-gartner-predicts-ai-coding-costs-will-surpass-average-developer-salary-by-2028-as-token-consumption-surges)
+
+- **いま動向を押さえておきたいAIイベント：今週は開発カンファレンスと攻撃的セキュリティのトラックが開幕、チップとセキュリティの予定は秋まで続く** — 3つのサブトラックすべてにわたる先読みの予定表。今週初めに閉幕したイベント（Automate 2026、6月22〜25日、McCormick Place、AI Tinkerers SF Offensive Security Demo Night、Snowflakeのバーチャル開催のDev Day、いずれも6月25日）は終了し、先読みのリストから外れる。主流の開発/データ：AI Engineer World's FairがMoscone Westを舞台に開催される。公式のAIE World's Fair HackathonはCerebral Valleyとの共催で6月27〜28日、任意参加のNew Engineer Orientationは6月28日、メインプログラムは6月29日から7月2日まで。GitHub Universeは10月28〜29日に戻り、AWS re:Inventは11月30日から12月4日までラスベガスで開催される。AIセキュリティ：Black Hat USAのAI Summitは8月1〜6日にラスベガスでDEF CONのAI Villageと並んで開催され、SecurityWeekのAI Risk SummitはHalf Moon Bayで8月11〜12日に続く。OWASP Global AppSec USAはサンフランシスコで11月5〜6日、ZenityのAI Agent Security Summitシリーズも注視リストに残る。AIチップ/ハードウェア：AMDのAdvancing AI 2026はサンフランシスコのMosconeで7月22〜23日に予定され、Instinct MI400シリーズが焦点になると見られる（基調講演は7月23日）。Hot Chips 2026はStanfordのMemorial Auditoriumで8月23〜25日、AI Infra SummitはSanta Clara Convention Centerで9月15〜17日に開催される。 [TweakTown - AMD announces Advancing AI 2026 event for July (July 22-23, San Francisco)](https://www.tweaktown.com/news/110826/amd-announces-advancing-ai-2026-event-for-july/index.html), [MLQ - AMD sets July date for Advancing AI 2026 flagship event in San Francisco](https://mlq.ai/news/v2/amd-sets-july-date-for-advancing-ai-2026-flagship-event-in-san-francisco/)
+
+[news-20260625.md](report/ja/news-20260625.md)
+
+### Predictions check
+
+本日の証拠群には支配的な軸が一つある。AIを動かす経済性が明示的に価格づけされつつあり、最大手の購入者がそれを生き延びるためにハードウェアと支出を組み替えている。先頭に立つのは、6月24日のOpenAIとBroadcomによるJalapeno公開だ。OpenAI初の自社推論アクセラレータであり、複数年にわたる共同設計から生まれた最初のチップで、学習ではなくLLM推論を軸に設計した「Intelligence Processor」と位置づけられている。エンジニアリングサンプルはすでに量産目標の動作周波数と消費電力でラボ内のワークロードを動かしており、OpenAIは1ワットあたりの性能が「現行の最先端を大きく上回る」と主張する。最初のデータセンター展開は2026年末までにギガワット規模を目標とし、BroadcomのTomahawkファブリック（最大1.6テラビット/秒）で接続され、Celestiaがラックを共同設計する。これは「推論ASICを設計する企業群が2027年上半期までに4社目の自社設計チップを得る」予測（6月25日）の起点の兆候であり、繰り越されている「Corsair級推論シリコンが2027年第3四半期までに名前のあるハイパースケーラー展開を受注する」（6月17日）を、名前付き・日付付きの展開という形で強く裏支えする。一方で、1ワットあたりの優位は、独立したベンチマークが出るまではベンダーの主張にとどまる。
+
+2つ目の数値が明確な筋は、Gartnerの6月24日の研究ノートだ。LLMのトークン消費の増大と、エージェント型ツールにおける従量課金への移行を背景に、2028年までにAIコーディングのコストが開発者の平均年収を上回ると予測する。技術系リーダーの23%がすでに開発者1人あたり月額$200〜$500をトークンに費やし、6%の組織は月額$2,000超を支払っている。Gartnerは、最も急峻なコスト上昇の要因を、統制なき自律性、肥大化したコンテキストウィンドウ、構造化された利用フィードバックの欠如に求め、Cursor、Claude Code、Codex CLIといったエージェント型IDEを1席あたりのコストの中心と名指しする。この診断は製品仕様書のように読め、「エージェント型コーディングプラットフォームが2027年第2四半期までにトークン予算と上限をデフォルトで搭載する」予測（6月25日）の起点の兆候となる。
+
+セキュリティの流れは、新たなCVEではなく調達の軸で前進する。XBOWの自律型攻撃側プラットフォーム（環境を地図化し、脆弱性を探り、多段階の悪用を機械の速度で連鎖させる）が、Accenture Venturesからの戦略投資と、顧客向けに継続的な攻撃側テストを実施するパートナーシップを、NVIDIA NVentures、Samsung Ventures、SentinelOne S Venturesが出資する$35MのシリーズC追加調達の上に獲得した。この資金調達とパートナーシップの形は、「自律型ペンテストエージェントが2026年第4四半期までに名前のあるマネージドティアとして出荷される」予測（6月25日）の源となる兆候であり、繰り越されている「自律型ペンテストベンダーが2027年第1四半期までに名前のある企業/政府との取引を獲得する」（6月22日）も裏支えする。今週のAI Tinkerers SF Offensive Security Demo Nightと、Black Hat USAのAI Summit（8月1〜6日）、DEF CONのAI Villageが、秋の調達時期を前に企業バイヤー層を舞台に上げる。横断する構図はこうだ。推論コストがいまや統制の中心であり、基盤層では独自シリコンで、開発者ツール層では支出統制で、そして監査済みの攻撃側ツールが調達可能なデリバリースタックへ移ることで応えられている。
+
+[future-prediction-20260625.md](future-prediction/ja/future-prediction-20260625.md)
+
+---
+
 ## 2026-06-24
 
 ### News
@@ -60,25 +84,5 @@
 応答は、既定で最小権限のみとするハーネスの作り込みと、セキュリティ系イベントの予定表として現れる。OpenClaw の 6 月（2026.6.x）リリースは、vCard と位置ピンの注入を修正し、Docker サンドボックスの境界を厳格化し、Browser の CDP エンドポイント検証を追加し、SSH の検査をループバックに固定した。NVIDIA の NemoClaw は、Hermes や OpenClaw のようなサードパーティ製エージェントを OpenShell サンドボックス内に包み込み、認証情報の取り扱いとより厳格なネットワークポリシーの既定値を備える。Nous Research の Hermes Agent は、MCP 認証情報フィルタリング・SSRF 対策・Tirith の実行前スキャンを出荷する。これは本日最も強い裏付けのまとまりで、「既定拒否のツールセット制御」予測（6 月 20 日）は一致度 5 のシグナルを得た。「メタハーネスがベンダー横断のポリシー基盤になる」（6 月 15 日）と「インラインな MCP チャネル内ポリシー適用」（6 月 16 日）の両方の見立ても、出荷時の既定まで一歩のところまで密度を増した。本日開幕した Confidential Computing Summit（6 月 23〜24 日、SF Mint、Amazon/AMD/Google/Meta/Microsoft/NVIDIA/Samsung）は「機密 GPU の認証を契約条項に」予測（6 月 14 日）の直近の足がかりを供給し、6 月 25 日の XBOW 提供 Offensive Security Demo Night と StakeBench が「実際に動かして指摘を証明する」見立て（6 月 21 日）を後押しした。本日復活した休眠予測は「Agent-in-the-Loop Secret Exfiltration」（4 月 20 日）で、OWASP の CVE に裏打ちされた順位付け、Claude Code の 22 件の勧告、StakeBench の「安全な構成はない」という結果、Hermes の認証情報フィルタリングが相まって、エージェントのツール呼び出しを通じた機密漏えいを再び最上位に押し上げた。横断する構図はこうだ。能力はいまや 1 台の機械で動き、注入には頑健な防御がなく、そしてハーネス自身が呼び出すツール群こそ最大の攻撃対象領域として扱われ始めている。
 
 [future-prediction-20260623.md](future-prediction/ja/future-prediction-20260623.md)
-
----
-
-## 2026-06-22
-
-### News
-
-- **Hyundai 取締役会、本日 SoftBank の株式買い取りを採決へ。Boston Dynamics の評価額は約3倍に** — Hyundai Motor は本日6月22日に取締役会を開き、SoftBank Group が持つ Boston Dynamics の残り9.65%の株式を約$325Mで買い取ることを承認する見通しだ。これにより、マサチューセッツ州 Waltham のロボティクス企業は Hyundai の完全子会社になる。SoftBank の退出は、2021年の取引で得たプットオプションによるもので、Boston Dynamics が2026年6月までに米国 IPO を完了しなければ株式を売り戻せる権利だ。上場がないため、SoftBank は権利を行使すると Hyundai に通知した。新たに浮かぶ事実は評価額だ。9.65%で$325Mということは、企業価値はおよそ$3.37Bとなり、Hyundai の2021年の取引時の約$1.1B（80%に対して約$880M）の3倍を超える。Korea Economic Daily は、この統合が2028年から Hyundai 各工場に Atlas ヒューマノイドを約25,000台導入する計画と結びついており、将来の IPO への道を開きうると報じている。取引条件、25,000台という数字、そして採決そのものは韓国の経済紙が報じたもので、Hyundai や SoftBank はまだ確認していない。 [KED Global - Hyundai が SoftBank の株式買い取りで Boston Dynamics を完全所有へ](https://www.kedglobal.com/robotics/newsView/ked202606210001), [Global Banking & Finance Review - Hyundai が SoftBank の残る Boston Dynamics 株を$325Mで買い取りへ](https://www.globalbankingandfinance.com/hyundai-buy-softbanks-remaining-stake-boston-dynamics-325/), [Crypto Briefing - Hyundai が SoftBank の残る Boston Dynamics 株を$325Mで取得へ](https://cryptobriefing.com/hyundai-acquires-softbank-boston-dynamics-stake/)
-
-- **予定を組んでおくべき AI イベント。機密コンピューティングと攻撃的セキュリティが明日開幕** — 3つのサブトラックにわたる先々のカレンダーで、最も近いイベントは1日後に迫り、終了日を過ぎたものはない。AI セキュリティ: Confidential Computing Summit が6月23-24日にサンフランシスコの Mint で開催される（Linux Foundation と OPAQUE、基調講演に AMD、Google、Microsoft、NVIDIA、Meta、Samsung）。AI Tinkerers SF は6月25日に Offensive Security Demo Night を開き、自律ペンテストエージェントのライブデモが並ぶ（スポンサーは XBOW）。SecurityWeek の AI Risk Summit が8月11-12日に続く。Black Hat USA の AI Summit は8月1-6日に DEF CON の AI Village と並んで走る。OWASP Global AppSec USA は11月5-6日だ。メインストリームの開発/データ: Snowflake は6月25日にバーチャルの Dev Day を開く。AI Engineer World's Fair は6月29日から7月2日まで Moscone West を占有し（オリエンテーションは6月28日）、最大級の技術系 AI エンジニアリング会議とされ、20を超えるトラック、約250人の登壇者、専用の Inference と Security のトラックを擁し、OpenAI、Anthropic、Google DeepMind、Amazon AGI Labs、Microsoft が出展、ハッカソンは6月27-28日だ。GitHub Universe は10月28-29日、AWS re:Invent は11月30日から12月4日。AI チップ: AMD の Advancing AI は7月22-23日（MI400 シリーズが焦点と見られる）、Hot Chips は8月23-25日、AI Infra Summit は9月15-17日。 [Linux Foundation - Confidential Computing Summit 2026（6月23-24日、サンフランシスコ）](https://events.linuxfoundation.org/confidential-computing-summit/), [AI Engineer World's Fair 2026（6月29日-7月2日、サンフランシスコ）](https://www.ai.engineer/worldsfair/2026), [AMD - Advancing AI 2026（7月22-23日、サンフランシスコ）](https://www.amd.com/en/corporate/events/advancing-ai.html)
-
-[news-20260622.md](report/ja/news-20260622.md)
-
-### Predictions check
-
-本日の証拠群は件数こそ少ないが整合性は珍しく高く、二つの起点から動く。物理AIにおける一つの強い企業の触媒と、統制と調達の場を据える先のイベントカレンダーである。先頭はHyundaiだ。本日6月22日の取締役会で、SoftBankが持つBoston Dynamics株の残り9.65%を約$325Mで買い取る議案を採決する見込みで、~$3.37B相当の企業価値（2021年評価のおよそ3倍）を示唆しつつ、ロードマップに投じる資本と社内需要を持つ戦略的オーナーの傘下へ同社を完全に取り込む。これは休眠中だった「自動車メーカー製ヒューマノイドが第二の量産参入を加える」予測（6月7日）を関連度4で[REVIVED]させる直接の裏づけだ。垂直統合された自動車メーカーがバランスシートとサプライチェーンの重みを、2028年からの約25,000台規模の社内Atlasフリートに投じることは、まさに本持論がTeslaやBYDと並んで増えると述べる、自動車メーカーを軸とした導入の型である。ただし既存の取り組みの統合であって、動作プロトタイプと量産コスト低減を示した新たな第二の参入者の開示ではないという正直なギャップがある。同じ買収は「ライバルのヒューマノイドメーカーが$500M超のチップ・クラウド戦略ラウンドを獲得する」予測（6月18日）に関連度3で、資本がプラットフォームに集まる方向で触れるが、これは社内子会社の完全買収であって専業企業への外部シンジケートではない。
-
-第二の筋は先のイベントカレンダーで、新事実は運ばないものの近い将来の場を固める。Confidential Computing Summit（6月23〜24日、サンフランシスコ造幣局、AMD・Google・Microsoft・NVIDIA・Meta・Samsungが秘匿AIとデータ主権の基調講演に登壇）は、「機密GPUアテステーションがクラウドAIの契約条項になる」予測（6月14日）を関連度4で生かす。本持論が依拠するGPUとハイパースケーラーの各社がまさにその議題のもとに集うからだ。ただしサミットはベンダーと需要を表に出すのであって、公開されたアテステーション条項そのものではない。続いてAI TinkerersのOffensive Security Demo Night（6月25日、協賛XBOW）が自律型ペンテストエージェントの実演をライブで行い、「AWS Continuumのサンドボックス攻撃検証が業界標準になる」予測（6月21日）に、「実際に動かして発見を証明する」能力において関連度3で触れ、8月のBlack Hat USA AI SummitとDEF CON AI Villageに先立つ。さらにSnowflake Dev Day（6月25日）、AI Engineer World's Fair（6月29日〜7月2日）、AMDのAdvancing AI（7月22〜23日）が控える。本日は物理的な実運用の柱を鋭く前進させる一方、訓練の土台とアテステーション統制の柱は近づくサミットに向けて開いたまま後日に残す。
-
-[future-prediction-20260622.md](future-prediction/ja/future-prediction-20260622.md)
 
 ---

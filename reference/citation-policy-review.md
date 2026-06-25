@@ -17,10 +17,10 @@ Sorted by `count` descending, then host alphabetical.
 | github.com | 154 | 2026-04-19 | 2026-06-20 | GitHub - QwenLM/Qwen3.6 |
 | anthropic.com | 124 | 2026-04-21 | 2026-06-16 | Anthropic - Anthropic and Amazon expand collaboration |
 | simonwillison.net | 116 | 2026-04-19 | 2026-06-19 | Simon Willison - Qwen3.6-27B |
+| siliconangle.com | 98 | 2026-04-23 | 2026-06-25 | SiliconANGLE - OpenAI workspace agents |
 | thehackernews.com | 98 | 2026-04-20 | 2026-06-17 | The Hacker News - nginx-ui CVE-2026-33032 |
 | huggingface.co | 95 | 2026-04-22 | 2026-06-20 | Hugging Face - prism-ml/Bonsai-8B-gguf |
 | aws.amazon.com | 93 | 2026-04-19 | 2026-06-21 | AWS - Amazon Bedrock AgentCore adds new features |
-| siliconangle.com | 90 | 2026-04-23 | 2026-06-16 | SiliconANGLE - OpenAI workspace agents |
 | snowflake.com | 85 | 2026-05-30 | 2026-06-23 | Snowflake Summit 26 |
 | databricks.com | 81 | 2026-05-30 | 2026-06-17 | Databricks |
 | hpcwire.com | 78 | 2026-05-06 | 2026-06-17 | AIwire - Cerebras Systems Announces Launch of Initial Public |
@@ -185,6 +185,7 @@ Sorted by `count` descending, then host alphabetical.
 | bmwgroup.com | 6 | 2026-04-25 | 2026-04-26 | BMW Group - First humanoid robot in Plant Leipzig |
 | ca.investing.com | 6 | 2026-06-03 | 2026-06-03 | Investing.com - Broadcom Q2 2026 earnings beat, stock rises |
 | community.databricks.com | 6 | 2026-06-06 | 2026-06-06 | Databricks Community - Data + AI Summit 2026 registration no |
+| constellationr.com | 6 | 2026-06-25 | 2026-06-25 | Constellation Research - OpenAI, Broadcom unveil first AI in |
 | crescendo.ai | 6 | 2026-04-20 | 2026-05-03 | Crescendo - Latest AI News and Updates |
 | d-matrix.ai | 6 | 2026-06-17 | 2026-06-17 | d-Matrix - Corsair AI Inference Platform Enters Full Product |
 | federalnewsnetwork.com | 6 | 2026-05-04 | 2026-05-04 | Federal News Network - When AI agents act, security has to k |
@@ -220,10 +221,12 @@ Sorted by `count` descending, then host alphabetical.
 | knowledgehubmedia.com | 5 | 2026-04-30 | 2026-04-30 | Knowledge Hub Media - SuiteConnect 2026 Agent Skills |
 | labs.cloudsecurityalliance.org | 5 | 2026-04-24 | 2026-04-26 | Cloud Security Alliance - Antigravity Sandbox Escape |
 | letsdatascience.com | 5 | 2026-05-06 | 2026-06-18 | Let's Data Science - Frontier Model Review Board EO draft de |
+| neowin.net | 5 | 2026-06-19 | 2026-06-25 | Neowin - Google Gemini co-lead Noam Shazeer is leaving for O |
 | perspectives.nvidia.com | 5 | 2026-05-05 | 2026-05-05 | NVIDIA Perspectives - Real cost AI scale hyperscaler acceler |
 | releasealert.dev | 5 | 2026-04-22 | 2026-04-30 | releasealert.dev - llama.cpp |
 | spknowledge.com | 5 | 2026-04-19 | 2026-04-26 | Knowledge Share - Mastering Azure Foundry Local |
 | tenable.com | 5 | 2026-04-20 | 2026-04-25 | Tenable - Copilot Studio Security |
+| tweaktown.com | 5 | 2026-06-25 | 2026-06-25 | TweakTown - AMD announces Advancing AI 2026 event for July ( |
 | unit42.paloaltonetworks.com | 5 | 2026-06-17 | 2026-06-17 | Palo Alto Networks Unit 42 - Pickle in the Middle: Hijacking |
 | wallstreetwaves.com | 5 | 2026-04-30 | 2026-04-30 | WallStreet Waves - April 29 After-Hours Earnings |
 | zenity.io | 5 | 2026-04-24 | 2026-06-05 | Zenity Newsroom - FedRAMP In Process Status |
@@ -245,6 +248,7 @@ Sorted by `count` descending, then host alphabetical.
 | eweek.com | 4 | 2026-04-27 | 2026-04-27 | eWeek - Tesla Optimus Robot Launch Timeline Targets 2027 Sca |
 | fastcompany.com | 4 | 2026-06-08 | 2026-06-08 | Fast Company - What to expect from Apple at WWDC 26 |
 | fazm.ai | 4 | 2026-04-19 | 2026-04-30 | Fazm Blog - vLLM Update April 2026 |
+| gartner.com | 4 | 2026-06-25 | 2026-06-25 | Gartner - AI coding costs will surpass the average developer |
 | globalbankingandfinance.com | 4 | 2026-06-22 | 2026-06-22 | Global Banking & Finance Review - Hyundai to buy SoftBank's |
 | groq.com | 4 | 2026-05-28 | 2026-05-28 | Groq blog - LPU-v3 Inference Network commercial availability |
 | group.mercedes-benz.com | 4 | 2026-05-27 | 2026-05-27 | Mercedes-Benz Group - Apptronik Apollo Gen 2 Tuscaloosa fina |
@@ -252,6 +256,7 @@ Sorted by `count` descending, then host alphabetical.
 | infosecurity-magazine.com | 4 | 2026-04-24 | 2026-04-30 | Infosecurity Magazine - 10 In-the-Wild Indirect Prompt Injec |
 | kiplinger.com | 4 | 2026-04-28 | 2026-04-29 | Kiplinger - April Fed Meeting: Live Updates and Commentary |
 | leetllm.com | 4 | 2026-05-04 | 2026-05-04 | LeetLLM - 2026 Inference Engine Showdown |
+| mlq.ai | 4 | 2026-06-25 | 2026-06-25 | MLQ - AMD sets July date for Advancing AI 2026 flagship even |
 | moodys.com | 4 | 2026-05-05 | 2026-05-05 | Moody's Press - Moody's brings credit and compliance workflo |
 | msspalert.com | 4 | 2026-05-05 | 2026-05-05 | MSSP Alert - Cisco to Acquire Astrix Security |
 | newreleases.io | 4 | 2026-04-22 | 2026-04-27 | newreleases.io - openclaw v2026.4.20-beta.1 |
@@ -366,7 +371,6 @@ Sorted by `count` descending, then host alphabetical.
 | manilatimes.net | 2 | 2026-04-26 | 2026-04-26 | Manila Times - Humanoid robots are about to move from labs t |
 | manufacturingdive.com | 2 | 2026-06-18 | 2026-06-18 | Manufacturing Dive - Robotics startup backed by Nvidia, Amaz |
 | mezha.net | 2 | 2026-04-27 | 2026-04-27 | Mezha - Sam Altman accuses Anthropic of using fear to market |
-| neowin.net | 2 | 2026-06-19 | 2026-06-19 | Neowin - Google Gemini co-lead Noam Shazeer is leaving for O |
 | nist.gov | 2 | 2026-04-25 | 2026-04-26 | NIST - NIST Updates NVD Operations to Address Record CVE Gro |
 | notateslaapp.com | 2 | 2026-04-27 | 2026-04-27 | NotaTeslaApp - Tesla Delays Optimus Gen 3 Unveil for 'Finish |
 | ofox.ai | 2 | 2026-04-25 | 2026-04-25 | OFox - DeepSeek V4 Released |
