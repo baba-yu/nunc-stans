@@ -11,6 +11,28 @@
 
 ---
 
+## 2026-06-26
+
+### News
+
+- **最高深刻度のRCEがMLフィーチャーストア層に：Feastのレジストリに認証不要のリモートコード実行** — オープンソースの機械学習フィーチャーストアであるFeastに、認証不要で深刻度最大のリモートコード実行（RCE）の欠陥が見つかり、6月24日にCVE-2026-56121として公開された。v4.0採点でCVSS 9.3（v3.1の尺度では9.8）と評価され、Feast 0.63.0で修正されている。レジストリサーバーがgRPCリクエストを処理する際、OnDemandFeatureView仕様のuser_defined_function.bodyフィールドをbase64からデコードし、認可チェックを一切経ずにそのままdill.loads()へ渡してしまう。そのため攻撃者は、任意の__reduce__メソッドを仕込んだシリアライズ済みPythonオブジェクトを送り込み、認証情報なしでFeastのサービスアカウント権限としてOSコマンドを実行できる。構造的に読み取れるのは、機械学習の弱点が、モデルや推論エンジンより一段下の、データとメタデータを扱う配管部分へ降りてきたということだ。シリアライズされた変換ロジックをネットワーク越しに取り込むレジストリは、デシリアライズが認可で守られない限り、認証不要のコード実行口にほかならない。運用者は、ネットワークから到達可能なgRPCレジストリを持つ0.63.0より前のあらゆる構成を露出状態とみなし、ただちにアップグレードし、レジストリが信頼できないネットワークから到達不能であることを確認すべきだ。 [GitHub Advisory Database - Feast unsafe deserialization allows unauthenticated RCE (CVE-2026-56121)](https://github.com/advisories/GHSA-q63x-9pfm-mjx4), [NVD - CVE-2026-56121 Detail (Feast before 0.63.0, gRPC registry deserialization RCE)](https://nvd.nist.gov/vuln/detail/CVE-2026-56121)
+
+- **いま予定に入れておきたいAIイベント：AI Engineer World's Fairが今週末に開幕、チップとセキュリティの日程は夏まで続く** — 3つのサブトラックすべてにまたがる今後の日程は、今週末にサンフランシスコのMoscone Westで開かれるAI Engineer World's Fairが起点となる。主流の開発／データ系では、Cerebral Valleyとの共催による公式のAIE World's Fair Hackathonが6月27〜28日を埋め、任意参加のNew Engineer Orientationが6月28日に行われ、本編は6月29日から7月2日まで開催される（20を超えるトラック、250名以上の登壇者）。GitHub Universeは10月28〜29日に再び開かれ、AWS re:Inventはラスベガスで11月30日から12月4日まで行われる。AIセキュリティ系では、Black Hat USA 2026がラスベガスのMandalay Bayで8月1〜6日に開催され、Summit Day（AI Summitトラックを含む）が8月4日、本編のBriefingsが8月5〜6日、その直後にDEF CON 34とそのAI Villageが8月6〜9日に続く。SecurityWeekのAI Risk Summitは8月11〜12日にHalf Moon BayのRitz-Carltonで、OWASP Global AppSec USAは11月5〜6日にサンフランシスコで開かれる。AIチップ／ハードウェア系では、AMDのAdvancing AI 2026が7月22〜23日にMosconeで開催され、対面の基調講演とInstinct MI400シリーズに焦点を当てた回が7月23日に行われる。Hot Chips 2026は8月23〜25日にStanfordのMemorial Auditoriumで、AI Infra Summitは9月15〜17日にSanta Clara Convention Centerで開催される。 [AI Engineer - World's Fair 2026 (June 29 - July 2, Moscone West, San Francisco)](https://www.ai.engineer/worldsfair/2026), [AMD - Advancing AI 2026 (San Francisco, July 22-23)](https://www.amd.com/en/corporate/events/advancing-ai.html), [Black Hat - USA 2026 (August 1-6, Mandalay Bay, Las Vegas)](https://blackhat.com/us-26/), [SecurityWeek - AI Risk Summit, August 11-12, Half Moon Bay](https://www.securityweek.com/securityweek-to-host-ai-risk-summit-august-11-12-at-the-ritz-carlton-half-moon-bay/)
+
+[news-20260626.md](report/ja/news-20260626.md)
+
+### Predictions check
+
+本日はニュースの少ない日で、土台となる話題はひとつだ。機械学習の基盤層における深刻度最大の欠陥である。オープンソースの機械学習フィーチャーストアであるFeastについて、6月24日にCVE-2026-56121が公開された。認証不要のリモートコード実行の欠陥で、CVSSはv4.0で9.3（v3.1では9.8）と評価され、Feast 0.63.0で修正されている。レジストリサーバーがgRPCリクエストを処理する際、OnDemandFeatureView仕様のuser_defined_function.bodyフィールドをbase64でデコードし、認可チェックを一切経ずにそのままdill.loads()へ渡してしまう。そのため攻撃者は、任意の__reduce__メソッドを持つ細工済みのシリアライズ済みPythonオブジェクトを送り込み、認証情報なしにFeastのサービスアカウント権限でOSコマンドを実行できる。構造的に読み取れるのは、機械学習の弱点が、モデルや推論エンジンより一段下の、データとメタデータを扱う配管部分まで降りてきたということだ。
+
+この単一のCVEが、本日の最も強い裏付けの起点となる。関連度は5段階中5を得て、「機械学習のレジストリサーバーが2027年第1四半期までに2件目の深刻度最大のデシリアライズRCEを記録する」見立て（6月26日）と、「セキュリティベンダーが2027年第1四半期までに機械学習のデシリアライズ走査を名前のある製品階層として出荷する」見立て（6月26日）の双方を、高い整合性で裏支えする。フィーチャーストア・モデルレジストリ・メタデータサーバーにまたがって繰り返し現れるpickle/dill/joblibの仕組みは、2件目の名前のある事例を見込ませると同時に、アプリケーションセキュリティのベンダー（Snyk／Endor Labs／JFrog／Protect AI／HiddenLayerの系統）に、製品化すべき実証済みで武器化可能な脆弱性クラスを与える。防御側の対をなす「マネージドのモデル配信プラットフォームが2027年上半期までに安全な成果物の取り扱いを既定にする」見立て（6月17日）も、その動機づけとなる脅威について本日最も強い裏付けを整合性4で得た。だが4件すべてに共通する隔たりは同じで、本日提供されたのは最初の事例と引き金であって、実際の再発・出荷されたスキャナー・既定化されたプラットフォームではない。
+
+2つ目の話題は、ニュースの出来事ではなく、3つのトラックからなる前向きのAIイベントのカレンダーであり、主に秘匿コンピューティングの筋にとっての会場の地図として機能する。AI Engineer World's Fairは今週末にMoscone Westで開幕し（ハッカソンは6月27〜28日、本編は6月29日から7月2日まで）、その後にAMDのAdvancing AI 2026（7月22〜23日）、Black Hat USA 2026（8月1〜6日、AI Summitは8月4日）、DEF CON 34のAI Village（8月6〜9日）、SecurityWeekのAI Risk Summit（8月11〜12日）、Hot Chips（8月23〜25日）、OWASP Global AppSec USA（11月5〜6日）と続く。同じFeastのレジストリの脆弱性は、引き継がれた秘匿推論と署名付きモデル証明の見立てを脅威の側から後押しするが、それらや自律ペンテストの見立て（6月22日・25日）、数値で示すプロンプトインジェクション耐性の調達基準（6月23日）については、本日提供されたのは脅威の背景と会場のリズムのみで、出荷される部品・階層・契約条項はまだ現れていない。
+
+[future-prediction-20260626.md](future-prediction/ja/future-prediction-20260626.md)
+
+---
+
 ## 2026-06-25
 
 ### News
@@ -58,31 +80,5 @@
 フィジカル層は Automate 2026（6月22～25日、McCormick Place）で固まった。主たるテーマはフィジカル AI で、初めて NVIDIA がスポンサーを務める Humanoid Robot Pavilion は20を超えるプラットフォームを集める。Collaborative Robotics の第二世代 Proxie は、中核となる実行ではクラウドに依存せずタスク推論を完全にロボット側で行い、月額5,000ドルで提供され、定量的な第一世代の実績を発表の拠り所とした。病院・製造・物流にわたる12,627時間の稼働、4,000万ポンド超の運搬、1,700万歩の人間の歩行節約である。このサブスク料金・監査済み稼働時間という枠組みが「General-purpose mobile cobots cross 100K production-operation hours by H1 2027」予測（6月24日）の源となる兆候であり、引き継がれた「Captive in-house fleets will lead paid humanoid deployment」（6月22日）と復活した「Automaker-built humanoid programs add a second high-volume entrant」（6月7日）を、名指しの基準ではなくエコシステムの広がりの面で相互に支える。今週のイベント・カレンダーが連結組織を供給する。6月25日の XBOW が後ろ盾となる Offensive Security Demo Night は、8月の Black Hat の AI Summit と DEF CON の AI Village に先立って自律型ペンテスト・ツールを公の舞台に置き続け、自律型ペンテストの名指し取引（6月22日）と AWS Continuum のエクスプロイト実証（6月21日）の見立てに、契約ではなく可視性の支えを与える。一方、AMD の Advancing AI、Hot Chips、AI Infra Summit の連なりは、推論シリコン展開の注視（6月17日）をカレンダー上の文脈としてのみ枠づける。
 
 [future-prediction-20260624.md](future-prediction/ja/future-prediction-20260624.md)
-
----
-
-## 2026-06-23
-
-### News
-
-- **Unsloth の Dynamic GGUF が 744B の GLM-5.2 を単一ワークステーションに収める** — Unsloth は、Z.ai が新たにオープンウェイト化した GLM-5.2 の Dynamic GGUF 量子化版を公開した。GLM-5.2 は 7,440 億パラメータの mixture-of-experts モデル（アクティブは約 40B）で、100 万トークンのコンテキストウィンドウを持ち、データセンターの外でもローカル実行できるようになった。この精度選択型の方式は、精度に敏感な層を 8 ビットまたは 16 ビットに引き上げ、残りを 1 ビットまたは 2 ビットに下げることで、1.51TB のチェックポイントを、2 ビットの UD-IQ2_M ビルドで約 239GB（84% 削減）に、1 ビットビルドでおよそ 217GB（約 86%）まで縮める。マルチ GPU クラスタではなく、メモリを多く積んだ単一ノードの 1 台に収まる大きさだ。リリースは Unsloth Studio によるローカル実行と組み合わさり、GLM-5.2 はコーディングと推論でクローズドな最前線に迫るベンチマーク結果だと位置づけられる。圧縮と品質の主張は Unsloth 自身のもので第三者による再現はなく、ここまで攻めた 1-2 ビット量子化は、メモリ削減と引き換えに無視できない精度を犠牲にする。 [AIToolly - Unsloth が 744B のオープンモデル GLM-5.2 を 100 万トークンのコンテキストでローカル実行可能に](https://aitoolly.com/ai-news/article/2026-06-23-unsloth-enables-local-execution-of-glm-52-a-744b-parameter-open-model-with-1m-context-window)
-
-- **OWASP 2.01 がエージェント型リスクを実在の CVE に結びつけ、StakeBench は「安全な構成は存在しない」と結論** — エージェント型 AI のセキュリティをめぐる状況は、仮定の脅威から記録された事案へと移った。OWASP の State of Agentic AI Security and Governance v2.01 は 53 件のエージェント型プロジェクトを追跡し、いまやほぼすべてのリスクカテゴリを具体的な CVE・ベンダーの注意喚起・侵害報告に結びつけている。53 件のうち 28 件をコーディングエージェントと数え、セキュリティ注意喚起が最も多いリポジトリ（n8n 57、Claude Code 22、AutoGPT 15、Dify 13、Roo-Code 11）を順位づけ、7 つのプロジェクトが毎日かそれ以上の頻度で更新を出している点を指摘する。うち 1 つはおよそ 8 時間ごとで、この更新の速さが監査を難しくする。OWASP はプロンプトインジェクションを、エージェント型アプリケーション向けの Top 10 の 10 カテゴリのうち 6 つに対応づけている。これとは別の学術ベンチマーク StakeBench は、南洋理工大学・ST Engineering・IBM Research・イリノイ大学アーバナ・シャンペーン校によるもので、3,168 回の敵対的試行を実施し、間接的なプロンプトインジェクションの成功率は 41.67% から 68.16%、直接攻撃は 79% 超に達し、テストしたすべての構成でこうなり、堅牢な振る舞いの領域に収まったものはなかったと示した。土台となるモデルを入れ替えると、間接インジェクションの成功率が最大 26.49 ポイント動いた。Semantic Kernel のようなフレームワークでのインジェクションがホストレベルの RCE にまで発展しうるという Microsoft の以前の開示が、ベンダー側の現実を裏打ちする。 [Microsoft Security - プロンプトがシェルになるとき: AI エージェントフレームワークの RCE 脆弱性](https://www.microsoft.com/en-us/security/blog/2026/05/07/prompts-become-shells-rce-vulnerabilities-ai-agent-frameworks/), [CSO Online - プロンプトインジェクションが今日の AI エージェントを破る、研究が警告（StakeBench）](https://www.csoonline.com/article/4184455/prompt-injection-breaks-todays-ai-agents-study-warns.html)
-
-- **コーディングエージェントのハーネスが、既定で最小権限の実行へと収れんする** — オープンなコーディングエージェントのハーネスは、派手な新機能ではなくセキュリティ強化を出してきた。OpenClaw の 2026.6.x 系の 6 月リリースは、vCard や位置ピンを使ったインジェクションといった具体的な悪用経路をふさぎ、Docker サンドボックスの境界を厳しくし、Browser の CDP エンドポイント検証を追加し、SSH トンネルのチェックをループバックに固定したままにし、安全でない長さのチャット・ツール・パッケージ・レスポンスを拒否し始めた。あわせて OpenRouter の初期設定を正規のフローとして組み込んだ。NVIDIA の NemoClaw は、Hermes や OpenClaw のような常時稼働エージェントを OpenShell サンドボックス内で動かすためのオープンなリファレンススタックで、ルーティングされた推論とライフサイクル管理の周りで、サンドボックスの強化・認証情報の取り扱い・より厳しいネットワークポリシーの既定値を優先する。Nous Research の Hermes Agent も同じ方向で、明示的に承認された環境変数だけをサブプロセスに渡す MCP の認証情報フィルタリングに加え、認証情報の伏せ字化・SSRF 対策・MCP 設定に対する Tirith の事前実行スキャンを備える。一貫しているのは、各ハーネスが自らの呼び出し可能な機能群を主要な攻撃対象領域とみなす点で、プロンプトインジェクションがエージェント型リスクの中心だとする OWASP と StakeBench の知見と符合する。 [The New Stack - 「エージェントとは LLM とハーネスだ」: NVIDIA が OpenClaw について本当に考えていること（NemoClaw）](https://thenewstack.io/nvidia-openclaw-agent-blueprints/), [innFactory - OpenClaw 対 Hermes Agent: 2026 年の二大 AI エージェントフレームワークの比較](https://innfactory.ai/en/blog/openclaw-vs-hermes-agent-comparison/)
-
-- **Confidential Computing Summit が本日開幕、攻撃的セキュリティの夜は 6 月 25 日** — AI セキュリティの予定がいま始まる。Confidential Computing Summit は 6 月 23-24 日に San Francisco Mint で開かれ、主催は Linux Foundation と OPAQUE、AI の主権・エージェントのセキュリティ・知的財産の保護・検証可能な実行環境・コンフィデンシャル AI のワークロードがテーマだ。登壇者は Amazon・AMD・Google・Meta・Microsoft・NVIDIA・Samsung Electronics・TII・UC Berkeley から。AI Tinkerers San Francisco は 6 月 25 日に Offensive Security Demo Night を開催し、自律的なペネトレーションテストを行うエージェントのライブデモを披露する。スポンサーは XBOW。さらに先では、Black Hat USA の AI Summit が 8 月 1-6 日にラスベガスで DEF CON の AI Village と並行して開かれ、SecurityWeek の AI Risk Summit が 8 月 11-12 日に Half Moon Bay で続き、OWASP Global AppSec USA が 11 月 5-6 日にサンフランシスコで、Zenity の AI Agent Security Summit シリーズも引き続き注目対象だ。主流の開発者・データ系では、Snowflake が 6 月 25 日にオンラインの Dev Day を開き、AI Engineer World's Fair が Moscone West を会場に 6 月 29 日から 7 月 2 日まで行われる（任意参加のオリエンテーションは 6 月 28 日、Cerebral Valley と組んだハッカソンは 6 月 27-28 日）。AI チップ系では、AMD の Advancing AI 2026 が 7 月 22-23 日に Moscone で（基調講演は 7 月 23 日）、Hot Chips 2026 が 8 月 23-25 日に Stanford で、AI Infra Summit が 9 月 15-17 日に Santa Clara Convention Center で開かれる。 [Confidential Computing Summit 2026 スケジュール（6 月 23-24 日、San Francisco Mint）](https://ccsummit2026.sched.com/), [XBOW - 実践における攻撃的 AI（AI Tinkerers SF Offensive Security Demo Night のスポンサー、6 月 25 日）](https://xbow.com/offensive-ai-in-practice-workshop), [Snowflake Dev Day - Americas Virtual（2026 年 6 月 25 日）](https://www.snowflake.com/en/dev-day/americas-virtual/)
-
-[news-20260623.md](report/ja/news-20260623.md)
-
-### Predictions check
-
-本日の証拠群は珍しくまとまりが良く、どの話題も、ローカルモデルの能力とエージェントセキュリティのリスクが交わる同じ継ぎ目を指している。主役は、自社所有のハードウェア上での能力の飛躍だ。Unsloth の Dynamic GGUF 量子化が、Z.ai が新たにオープンウェイト化した GLM-5.2 ── 7,440 億パラメータ（うち稼働は約 400 億）、100 万トークンのコンテキスト窓を持つ混合エキスパート(MoE)モデル ── を、1.51TB のチェックポイントから 2 ビット版で約 239GB（84% の削減）、1 ビット版でおよそ 217GB まで絞り込む。マルチ GPU クラスタではなく大容量メモリの単一ノード機に収まる大きさで、Unsloth Studio によるローカル実行が可能だ。圧縮率もフロンティアに迫るというコーディングの主張も Unsloth 自身のもので再現されておらず、1〜2 ビットという積極さは測定可能な精度と引き換えになる。それでも方向は明らかで、フロンティア級の中国製オープンウェイトモデルがいまや自前ホスト可能になり、「ホスト型の中国 API より自前ホストのオープンウェイトコードモデルを選ぶ」という予測（6 月 18 日）を直接前進させた。
-
-その能力に対し、セキュリティの証拠は理論から実際の事案へと固まった。OWASP の State of Agentic AI Security and Governance v2.01 は、追跡対象 53 プロジェクト（うち 28 はコーディングエージェント）にわたって、ほぼすべてのリスク区分を具体的な CVE・ベンダー勧告・侵害報告に結び付け、最も多くの勧告を抱えるリポジトリを順位付けし（n8n 57、Claude Code 22、AutoGPT 15、Dify 13、Roo-Code 11）、プロンプト注入を Top 10 区分のうち 6 つに対応付けた。StakeBench のベンチマーク（南洋理工大学、ST Engineering、IBM Research、UIUC）は 3,168 件の敵対的試行を走らせ、間接的なプロンプト注入の成功率が 41.67〜68.16%、直接攻撃がどの構成でも 79% を超えること、頑健に振る舞う領域に入った構成は一つもないこと、モデルの選び方で間接攻撃の成功率が最大 26.49 ポイント振れることを見いだした。Semantic Kernel のようなフレームワークでの注入がホストレベルの RCE にまで拡大しうるという Microsoft の以前の開示が、ベンダー側の現実を裏付ける。
-
-応答は、既定で最小権限のみとするハーネスの作り込みと、セキュリティ系イベントの予定表として現れる。OpenClaw の 6 月（2026.6.x）リリースは、vCard と位置ピンの注入を修正し、Docker サンドボックスの境界を厳格化し、Browser の CDP エンドポイント検証を追加し、SSH の検査をループバックに固定した。NVIDIA の NemoClaw は、Hermes や OpenClaw のようなサードパーティ製エージェントを OpenShell サンドボックス内に包み込み、認証情報の取り扱いとより厳格なネットワークポリシーの既定値を備える。Nous Research の Hermes Agent は、MCP 認証情報フィルタリング・SSRF 対策・Tirith の実行前スキャンを出荷する。これは本日最も強い裏付けのまとまりで、「既定拒否のツールセット制御」予測（6 月 20 日）は一致度 5 のシグナルを得た。「メタハーネスがベンダー横断のポリシー基盤になる」（6 月 15 日）と「インラインな MCP チャネル内ポリシー適用」（6 月 16 日）の両方の見立ても、出荷時の既定まで一歩のところまで密度を増した。本日開幕した Confidential Computing Summit（6 月 23〜24 日、SF Mint、Amazon/AMD/Google/Meta/Microsoft/NVIDIA/Samsung）は「機密 GPU の認証を契約条項に」予測（6 月 14 日）の直近の足がかりを供給し、6 月 25 日の XBOW 提供 Offensive Security Demo Night と StakeBench が「実際に動かして指摘を証明する」見立て（6 月 21 日）を後押しした。本日復活した休眠予測は「Agent-in-the-Loop Secret Exfiltration」（4 月 20 日）で、OWASP の CVE に裏打ちされた順位付け、Claude Code の 22 件の勧告、StakeBench の「安全な構成はない」という結果、Hermes の認証情報フィルタリングが相まって、エージェントのツール呼び出しを通じた機密漏えいを再び最上位に押し上げた。横断する構図はこうだ。能力はいまや 1 台の機械で動き、注入には頑健な防御がなく、そしてハーネス自身が呼び出すツール群こそ最大の攻撃対象領域として扱われ始めている。
-
-[future-prediction-20260623.md](future-prediction/ja/future-prediction-20260623.md)
 
 ---
