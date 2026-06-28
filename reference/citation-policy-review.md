@@ -13,7 +13,7 @@ Sorted by `count` descending, then host alphabetical.
 
 | host | count | first_seen | last_seen | sample_label |
 |---|---|---|---|---|
-| github.com | 161 | 2026-04-19 | 2026-06-26 | GitHub - QwenLM/Qwen3.6 |
+| github.com | 165 | 2026-04-19 | 2026-06-27 | GitHub - QwenLM/Qwen3.6 |
 | arxiv.org | 159 | 2026-04-29 | 2026-06-19 | arXiv - Corpus2Skill (2604.14572) |
 | anthropic.com | 124 | 2026-04-21 | 2026-06-16 | Anthropic - Anthropic and Amazon expand collaboration |
 | simonwillison.net | 116 | 2026-04-19 | 2026-06-19 | Simon Willison - Qwen3.6-27B |
@@ -23,8 +23,8 @@ Sorted by `count` descending, then host alphabetical.
 | aws.amazon.com | 93 | 2026-04-19 | 2026-06-21 | AWS - Amazon Bedrock AgentCore adds new features |
 | snowflake.com | 85 | 2026-05-30 | 2026-06-23 | Snowflake Summit 26 |
 | databricks.com | 81 | 2026-05-30 | 2026-06-17 | Databricks |
+| ai.engineer | 78 | 2026-05-30 | 2026-06-27 | AI Engineer World's Fair |
 | hpcwire.com | 78 | 2026-05-06 | 2026-06-17 | AIwire - Cerebras Systems Announces Launch of Initial Public |
-| ai.engineer | 75 | 2026-05-30 | 2026-06-26 | AI Engineer World's Fair |
 | venturebeat.com | 70 | 2026-04-24 | 2026-06-10 | VentureBeat - Microsoft patched a Copilot Studio prompt inje |
 | sf.aitinkerers.org | 69 | 2026-04-19 | 2026-06-19 | AI Tinkerers SF 2026 |
 | the-decoder.com | 68 | 2026-04-23 | 2026-06-21 | The Decoder - Anthropic ships ten AI agents for finance |
@@ -36,10 +36,10 @@ Sorted by `count` descending, then host alphabetical.
 | microsoft.com | 51 | 2026-04-24 | 2026-06-23 | Microsoft Security Blog - Zero Trust for AI |
 | cloudsecurityalliance.org | 48 | 2026-04-24 | 2026-05-05 | CSA - The Agentic Trust Framework |
 | techtimes.com | 48 | 2026-05-31 | 2026-06-24 | TechTimes analysis |
+| advisories.gitlab.com | 47 | 2026-05-06 | 2026-06-27 | GitLab Advisories - CVE-2026-41264 Flowise CSV Agent Prompt |
 | datacenterdynamics.com | 45 | 2026-05-06 | 2026-05-28 | Datacenter Dynamics - AMD Helios double-wide rack 3 exaflops |
 | thehackerwire.com | 45 | 2026-04-22 | 2026-05-03 | TheHackerWire - Xerte Online Toolkits RCE |
 | therobotreport.com | 45 | 2026-04-23 | 2026-05-19 | The Robot Report - Tesla 10M Optimus |
-| advisories.gitlab.com | 44 | 2026-05-06 | 2026-06-06 | GitLab Advisories - CVE-2026-41264 Flowise CSV Agent Prompt |
 | fool.com | 44 | 2026-04-23 | 2026-06-07 | The Motley Fool - Anthropic Announcement for Alphabet and Br |
 | csoonline.com | 43 | 2026-04-22 | 2026-06-23 | CSO Online - Prompt injection turned Google's Antigravity fi |
 | cisa.gov | 38 | 2026-04-19 | 2026-05-07 | CISA - Microsoft Defender KEV addition |
@@ -47,10 +47,10 @@ Sorted by `count` descending, then host alphabetical.
 | pypi.org | 38 | 2026-04-19 | 2026-05-31 | PyPI - sglang |
 | openai.com | 37 | 2026-04-23 | 2026-06-21 | OpenAI - Introducing workspace agents in ChatGPT |
 | 247wallst.com | 36 | 2026-04-25 | 2026-06-07 | 24/7 Wall St - Cheap Salesforce Vs. Expensive ServiceNow |
+| amd.com | 36 | 2026-05-05 | 2026-06-27 | AMD - AMD Reports First Quarter 2026 Financial Results |
 | techstartups.com | 36 | 2026-04-25 | 2026-06-10 | Tech Startups - Top Tech News Today, April 30, 2026 |
 | beamstart.com | 34 | 2026-05-06 | 2026-05-19 | BEAMSTART - Cerebras Gears Up for $26 Billion IPO Fueled by |
 | thenextweb.com | 33 | 2026-04-23 | 2026-06-19 | TheNextWeb - Google Cloud Next 2026: AI agents, A2A, Workspa |
-| amd.com | 32 | 2026-05-05 | 2026-06-26 | AMD - AMD Reports First Quarter 2026 Financial Results |
 | pymnts.com | 32 | 2026-04-26 | 2026-06-19 | PYMNTS - Google Doubles Down on Anthropic With New $40 Billi |
 | sysdig.com | 32 | 2026-05-06 | 2026-05-27 | Sysdig - CVE-2026-33626 LMDeploy SSRF exploited in 12 hours |
 | decrypt.co | 30 | 2026-04-21 | 2026-05-28 | Decrypt - Apptronik Apollo Mercedes Sindelfingen six to thir |
@@ -64,13 +64,14 @@ Sorted by `count` descending, then host alphabetical.
 | news.ycombinator.com | 21 | 2026-04-21 | 2026-05-28 | Hacker News - Qwen3.6-35B-A3B: Agentic coding power, now ope |
 | okta.com | 20 | 2026-04-24 | 2026-04-27 | Okta Blog - Every Agent Needs an Identity: Introducing Okta |
 | yottalabs.ai | 20 | 2026-05-06 | 2026-05-27 | Yotta Labs - vLLM vs SGLang Which Inference Engine Should Yo |
+| nvd.nist.gov | 19 | 2026-05-05 | 2026-06-27 | NVD - CVE-2026-5760 Detail |
 | prnewswire.com | 19 | 2026-04-29 | 2026-06-16 | PR Newswire - Novita AI Launches Sandbox to Secure OpenClaw, |
 | roboticsandautomationnews.com | 19 | 2026-04-22 | 2026-05-30 | Robotics & Automation News - Nvidia and partners showcase AI |
 | shadowserver.org | 19 | 2026-05-07 | 2026-05-19 | Shadowserver - n8n CVE-2026-21858 First Week Scan Report |
 | aikido.dev | 18 | 2026-05-06 | 2026-05-10 | Aikido - n8n Critical Vulnerability CVE-2026-21858 Unauthent |
+| blackhat.com | 18 | 2026-06-05 | 2026-06-27 | Black Hat USA 2026 |
 | ciodive.com | 18 | 2026-05-31 | 2026-05-31 | CIO Dive |
 | interestingengineering.com | 18 | 2026-05-30 | 2026-06-18 | Interesting Engineering |
-| blackhat.com | 17 | 2026-06-05 | 2026-06-26 | Black Hat USA 2026 |
 | dev.to | 17 | 2026-04-20 | 2026-05-04 | DEV Community - Hermes Agent Review: 95.6K Stars |
 | reuters.com | 17 | 2026-05-27 | 2026-05-28 | Reuters - Cerebras CBRS Wednesday May 27 close 224.85 instit |
 | trendingtopics.eu | 17 | 2026-05-06 | 2026-05-14 | Trending Topics - Cerebras IPO 2026 launches IPO bid at 26.6 |
@@ -111,11 +112,11 @@ Sorted by `count` descending, then host alphabetical.
 | qwen.ai | 12 | 2026-04-27 | 2026-05-02 | Qwen Research - Qwen3.6-27B: Flagship-Level Coding in a 27B |
 | stocktwits.com | 12 | 2026-06-04 | 2026-06-07 | Stocktwits - SpaceX IPO Pricing At $135 Per Share Will Value |
 | tipranks.com | 12 | 2026-04-27 | 2026-06-06 | TipRanks - Cathie Wood Sheds $70M+ AMD Stock |
+| webflow.sysdig.com | 12 | 2026-06-27 | 2026-06-27 | Sysdig - Understanding Langflow CVE-2026-55255, and why high |
 | badhost.org | 11 | 2026-06-02 | 2026-06-02 | BadHost - CVE-2026-48710 Starlette host-header auth bypass |
 | cloud.google.com | 11 | 2026-04-23 | 2026-04-27 | Google Cloud - Introducing Gemini Enterprise Agent Platform |
 | globenewswire.com | 11 | 2026-04-22 | 2026-06-16 | GlobeNewswire - Humanoid Robot Market $8.78B by 2035 |
 | nsa.gov | 11 | 2026-06-06 | 2026-06-06 | NSA - Press release: Security Design Considerations for AI-D |
-| nvd.nist.gov | 11 | 2026-05-05 | 2026-06-26 | NVD - CVE-2026-5760 Detail |
 | securityweek.com | 11 | 2026-04-20 | 2026-06-26 | SecurityWeek - Claude Code, Gemini CLI, GitHub Copilot Agent |
 | tradingkey.com | 11 | 2026-04-22 | 2026-05-03 | tradingkey - Anthropic Moving Toward AI Chips for Claude |
 | vfuturemedia.com | 11 | 2026-04-30 | 2026-05-03 | V Future Media - Humanoid Robots 2026 |
@@ -204,6 +205,7 @@ Sorted by `count` descending, then host alphabetical.
 | packworld.com | 6 | 2026-06-24 | 2026-06-24 | Packaging World - Physical AI dominates Automate 2026's open |
 | pandaily.com | 6 | 2026-06-07 | 2026-06-18 | Pandaily - BYD Secretly Develops Humanoid Robot Codename 'Ya |
 | sacra.com | 6 | 2026-05-02 | 2026-05-03 | Sacra - OpenAI revenue |
+| zenity.io | 6 | 2026-04-24 | 2026-06-27 | Zenity Newsroom - FedRAMP In Process Status |
 | zerohedge.com | 6 | 2026-06-12 | 2026-06-12 | ZeroHedge - SpaceX Prices Biggest Ever IPO At $135 Per Share |
 | blogs.cisco.com | 5 | 2026-05-05 | 2026-05-05 | Cisco Blogs - Cisco Announces Intent to Acquire Astrix Secur |
 | cdn.openai.com | 5 | 2026-06-17 | 2026-06-21 | OpenAI - Predicting LLM Safety Before Release by Simulating |
@@ -230,7 +232,6 @@ Sorted by `count` descending, then host alphabetical.
 | tweaktown.com | 5 | 2026-06-25 | 2026-06-25 | TweakTown - AMD announces Advancing AI 2026 event for July ( |
 | unit42.paloaltonetworks.com | 5 | 2026-06-17 | 2026-06-17 | Palo Alto Networks Unit 42 - Pickle in the Middle: Hijacking |
 | wallstreetwaves.com | 5 | 2026-04-30 | 2026-04-30 | WallStreet Waves - April 29 After-Hours Earnings |
-| zenity.io | 5 | 2026-04-24 | 2026-06-05 | Zenity Newsroom - FedRAMP In Process Status |
 | agile-robots.com | 4 | 2026-04-26 | 2026-04-26 | Agile Robots - Humanoid Agile ONE embodies Physical AI at Ha |
 | ai-redteam.com | 4 | 2026-06-12 | 2026-06-12 | AI Red Team - AI Engineer World's Fair 2026 |
 | airia.com | 4 | 2026-04-28 | 2026-04-29 | Airia - AI Security in 2026 |
