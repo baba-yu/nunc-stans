@@ -11,6 +11,34 @@
 
 ---
 
+## 2026-06-28
+
+### News
+
+- **Liquid AI、初日からvLLMとSGLangに対応する230Mのエッジモデルを出荷** — 6月27日、Liquid AIはLFM2.5-230Mを公開した。LFM2アーキテクチャに基づく230百万パラメータのテキスト専用モデルで、32,768トークンのコンテキストウィンドウを備え、スマホ・ロボット・自動化機器上でのエージェント型タスクを狙う。オープンウェイトのベース版と指示チューニング版のチェックポイントが、初日からllama.cpp、MLX、vLLM、SGLang、ONNXのランタイム対応とともに、lfm1.0ライセンスのもとHugging Faceで提供され、4ビット時のサイズは293〜375MBに収まる。LiquidはGalaxy S25 Ultraで毎秒213トークン、Raspberry Pi 5で毎秒42トークン、IFEvalスコア71.71を報告し、これがQwen3.5-0.8BとGemma 3 1Bを上回るとしている。データセンターで使われるのと同じOpenAI互換の推論エンジンが、いまや1ギガバイト未満のオンデバイスモデルの既定の対象になっている。 [MarkTechPost - Liquid AI ships LFM2.5-230M with llama.cpp, MLX, vLLM, SGLang, and ONNX support for on-device inference](https://www.marktechpost.com/2026/06/27/liquid-ai-ships-lfm2-5-230m-with-llama-cpp-mlx-vllm-sglang-and-onnx-support-for-on-device-inference/), [Hugging Face - LiquidAI/LFM2.5-230M model card](https://huggingface.co/LiquidAI/LFM2.5-230M)
+
+- **Qualcomm、CUDAに挑むためModularのクロスベンダー推論コンパイラを買収** — 6月24日、QualcommはModularの買収契約を発表した。ModularはMojo言語と、同じモデルコードをNvidia、AMD、Intel、Qualcommのチップ上でプロセッサごとの書き換えなしに実行できるMAX推論エンジンを手がけるスタートアップだ。報道は全株式取引の規模をおよそ39.2億ドル（最大1,920万株）とし、2026年下半期に完了予定で、エンタープライズ推論におけるNvidiaのCUDA囲い込みへの直接的な一手と読み解いている。Qualcommはまた、2026年末までに大手ハイパースケーラー向けのカスタムシリコン出荷を見込むとし、80〜100億ドルの評価額でTenstorrentを買収する交渉を続けていると報じられている。これらを合わせると、コンパイラ・アクセラレータ・ハイパースケーラー供給にまたがる、Nvidiaへのフルスタックかつオープン命令セットの挑戦に向けておよそ140億ドルを投じることになる。 [Qualcomm - Qualcomm to Acquire Modular (press release, June 24 2026)](https://investor.qualcomm.com/news-events/press-releases/news-details/2026/Qualcomm-to-Acquire-Modular/default.aspx), [Tech Startups - Qualcomm acquires AI startup Modular in $4 billion deal to challenge Nvidia's CUDA dominance](https://techstartups.com/2026/06/24/qualcomm-acquires-ai-startup-modular-in-4-billion-deal-to-challenge-nvidias-cuda-dominance/)
+
+- **Unslothのベータ版、GLM-5.2、Gemma 4のマルチトークン予測、DiffusionGemmaを追加** — 高速かつメモリ効率の良いLoRA/QLoRAファインチューニングのためのオープンソースライブラリUnslothは、6月18日にv0.1.471-betaを出荷し、目玉となる変更は新モデル対応の幅広さだった。Z.aiのGLM-5.2（今月エージェント型コーディングのベンチマークで首位に立ったMITライセンスの約753BパラメータのMoE）を全推論レベルで完全対応したほか、約2倍の高速推論を実現するマルチトークン予測付きのGemma 4、ライブのノイズ除去可視化を備えたDiffusionGemmaの画像生成パス、DeepSeek-OCRを追加した。このビルドはさらに、使用可能なコンテキストを約3倍に伸ばすとされる改良版の自動メモリ調整アルゴリズム、強化されたBlackwell RTX 50X/60X対応、テンソル並列の信頼性向上、vLLM 0.22+互換、並列実行モードも加えた。注目すべきパターンは、最先端のオープンウェイト公開（6月16日のGLM-5.2）から、その2日後に第一級のファインチューニング対応が出てくるまでの間隔が縮まっていることだ。 [GitHub - unslothai/unsloth release v0.1.471-beta (June 18 2026)](https://github.com/unslothai/unsloth/releases/tag/v0.1.471-beta), [DataCamp - GLM-5.2: Features, Setup, Benchmarks, and Model Switching Guide](https://www.datacamp.com/blog/glm-5-2)
+
+- **OWASP、プロンプトインジェクションをエージェント型AIの修正不能な性質として捉え直す** — OWASP GenAI Security Projectは今月、State of Agentic AI Security and Governanceのバージョン2.01を公開し、セキュリティの語り口をまた一つのCVEから設計上の制約へと鋭く転換した。プロンプトインジェクションは大半のエージェント型AIの事案をつなぐ自在継手であり、いまやOWASPのエージェント型アプリケーション向けTop 10の10分類のうち6つに対応する。モデルはシステムプロンプト・ユーザーの要求・取得したテキストを区別のない一つのトークン列として扱うため、どのトークンが命令でどれがデータかを確実に印付ける手段がなく、この欠陥はパッチで直すのではなく設計上の予算で緩和される。報告書はSimon Willisonの致命的な三要素とMetaのエージェント・ルール・オブ・トゥーに依拠し、コーディングエージェントを震源地と名指しする。追跡対象の53のエージェント型プロジェクトのうち28がコーディングエージェントで、最も多く勧告を受けたリポジトリはn8n（57）、Claude Code（22）、AutoGPT（15）、Dify（13）、Roo-Code（11）だった。 [OWASP GenAI Security Project - State of Agentic AI Security and Governance 2.01](https://genai.owasp.org/resource/state-of-agentic-ai-security-and-governance/), [Simon Willison - The lethal trifecta for AI agents: private data, untrusted content, and external communication](https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/)
+
+- **AI World's Fairが今週開幕、夏のチップとセキュリティの日程も確定** — 今後の予定は3つのサブトラックにまたがる。主流の開発／データ系では、AI Engineer World's Fairの本プログラムが6月29日から7月2日までサンフランシスコのMoscone Westで開かれ（約29トラック、約300人の登壇者、6,000人超の参加者）、さらに先にはGitHub Universeが10月28〜29日、AWS re:Inventが11月30日〜12月4日に控える。AIセキュリティ系では、SecurityWeekのAI Risk Summitが8月11〜12日にHalf Moon BayのRitz-Carltonで、Black Hat USA 2026とAI Village付きのDEF CON 34が8月初旬にラスベガスで、OWASP Global AppSec USAが11月5〜6日にサンフランシスコで開催され、ZenityのAI Agent Security Summitシリーズも引き続き注視対象に残る。AIチップ／ハードウェア系では、AMDのAdvancing AI 2026が7月22〜23日にMoscone、Hot Chips 2026が8月23〜25日にStanford、AI Infra Summitが9月15〜17日にSanta Claraで開かれる。 [AI Engineer - World's Fair 2026 program (main program June 29 - July 2, Moscone West, San Francisco)](https://www.ai.engineer/worldsfair/2026/llms.md), [SecurityWeek - AI Risk Summit, August 11-12, Ritz-Carlton Half Moon Bay](https://www.securityweek.com/securityweek-to-host-ai-risk-summit-august-11-12-at-the-ritz-carlton-half-moon-bay/), [Hot Chips - 2026 symposium (August 23-25, Stanford Memorial Auditorium)](https://hotchips.org/)
+
+[news-20260628.md](report/ja/news-20260628.md)
+
+### Predictions check
+
+本日のシグナルは、オープンで可搬なAIスタックが、エッジモデル・ベンダー横断のチップコンパイラ・エージェント型セキュリティ姿勢という3つの層で同時に成熟していることを示す。各層がそれぞれ新たな見立ての起点となるシグナルを供給した。エッジ層では、Liquid AIが6月27日に公開したLFM2.5-230M（2億3000万パラメータのテキスト専用モデル、4ビット時293〜375MB、Galaxy S25 Ultraで毎秒213トークン）が、オープンウェイトのベース版と指示チューニング版をHugging Faceで配布し、初日からllama.cpp、MLX、vLLM、SGLang、ONNXに対応した。対をなすのがUnslothのv0.1.471-beta（6月18日）で、Z.aiのGLM-5.2向けのLoRA/QLoRA対応を、6月16日のオープンウェイト公開からわずか2日後に第一級対応として加えた。このフロンティアで実証された2日という間隔をエッジ層に当てはめることが、「今期に公開された1B未満のオンデバイスモデルが、ウェイト公開と同じ週のうちに主流のチューニングツールキットでLoRA/QLoRA対応を得る」見立て（6月28日）を関連度5段階中5で支える。隔たりは、その特定の1B未満チェックポイントについて主流ツールキットが同じ週に対応した事実がまだない点だ。
+
+シリコン層では、Qualcommが6月24日に合意したModularの買収（約39億2000万ドルの全株式取引、2026年下半期に完了見込み）が中心となる。Modularは、Nvidia・AMD・Intel・Qualcommの各チップでプロセッサごとの書き換えなしに同じモデルコードを動かすMAX推論エンジンを手がける。年内のハイパースケーラー向け独自シリコン供給の約束と、80〜100億ドル規模と報じられるTenstorrentとの協議を合わせ、約140億ドルがNvidia対抗のフルスタック構築に向かう。最大の中立的なベンダー横断型コンパイラ資産を市場から取り除いたこの動きが、「少なくとも1社の競合アクセラレータ陣営が2027年第1四半期までに同等のCUDA非依存の推論コンパイラを買収する」見立て（6月28日）を関連度5で触発する。隔たりは、競合による対抗買収がまだ発表されていない点だ。
+
+3つ目の層はエージェント型セキュリティだ。OWASP GenAI Security Projectのバージョン2.01は、プロンプトインジェクションをパッチ可能なCVEから構造的な設計上の制約へと捉え直し、エージェント型Top 10の10分類のうち6つに対応づける。モデルがシステムプロンプト・ユーザー要求・取得テキストを区別のないトークン列として扱うため、命令とデータを確実に分ける手立てがなく、欠陥はパッチではなく設計上の予算（致命的な三要素、ルール・オブ・トゥー）で緩和される。報告書はコーディングエージェントを震源地と名指しし、勧告が最も多いリポジトリはn8n、Claude Code、AutoGPT、Dify、Roo-Codeだ。この論拠が「主要なコーディングエージェント基盤が2027年第1四半期までにルール・オブ・トゥー型の権限ゲートを既定有効で搭載する」見立て（6月28日）を関連度5で支える。隔たりは、既定有効の三要素ゲートを出荷した基盤がまだない点だ。引き継がれたクラスタも整合的に波及する。256GB未満の単一ノード仮説（6月23日）はGLM-5.2のMoEとメモリ効率化ツールを、トークン予算デフォルト化の仮説（6月25日）は広い既定有効ガードレールの圧力を、それぞれ土台に取った。一方、AMDのAdvancing AI（7月22〜23日）と機密推論の筋は、来たる会場の時計を待っている。
+
+[future-prediction-20260628.md](future-prediction/ja/future-prediction-20260628.md)
+
+---
+
 ## 2026-06-27
 
 ### News
@@ -57,26 +85,3 @@
 
 ---
 
-## 2026-06-25
-
-### News
-
-- **OpenAIとBroadcom、OpenAI初の自社推論チップ「Jalapeno」を披露** — OpenAIとBroadcomは6月24日、複数年にわたる共同設計から生まれた最初のチップであり、OpenAI初の自社推論アクセラレータとなる「Jalapeno」を披露した。OpenAIはこれを、学習ではなくLLM推論を軸に設計した「Intelligence Processor」と位置づける。エンジニアリングサンプルはすでに量産目標の動作周波数と消費電力でラボ内のワークロードを実行しており、初期テストでは1ワットあたりの性能が「現行の最先端を大きく上回る」とOpenAIは述べる。データセンターへの初期導入は2026年末までにギガワット規模で行う計画だ。プラットフォームは単体のダイではなくラックスケールで構成され、Broadcomのファブリック「Tomahawk」（最大1.6テラビット/秒）が複数のアクセラレータを相互接続し、Celestiaがサーバーラックを共同設計している。構造的に読み解けば、最大手のフロンティアモデル購入者がいまやハイパースケーラーの定石をなぞり、自社の推論ASICを設計してマーチャントGPUの採算構造から抜け出そうとしている。これにより、OpenAIとBroadcomの名を冠した製品が、Google-BroadcomのTPUやAmazon Trainiumの系譜と並ぶ。1ワットあたりの優位はベンダーの主張であり、まだ第三者によるベンチマーク検証は行われていない。 [SiliconANGLE - OpenAI, Broadcom debut custom Jalapeno chip for AI inference](https://siliconangle.com/2026/06/24/openai-broadcom-debut-custom-jalapeno-chip-llm-inference/), [Neowin - OpenAI and Broadcom unveil Jalapeno, a new AI chip built for LLM inference](https://www.neowin.net/news/openai-and-broadcom-unveil-jalapeo-a-new-ai-chip-built-for-llm-inference/), [Constellation Research - OpenAI, Broadcom unveil first AI inference chip](https://www.constellationr.com/insights/news/openai-broadcom-unveil-first-ai-inference-chip)
-
-- **Gartner：AIコーディングのコストは2028年までに開発者の平均年収を上回る可能性** — Gartnerは6月24日、2028年までにAIコーディングのコストが開発者の平均年収を上回るとの調査ノートを公開した。LLMのトークン消費量の増加と、エージェント型コーディングツールにおける従量課金への移行がその背景にある。引用しやすい具体的な数値こそがニュースだ。ノートが引くGartner Peer Insightsのデータによれば、技術部門のリーダーの23%がすでに開発者1人あたり月額$200〜$500をトークンに費やしており、6%の組織は開発者1人あたり月額$2,000超を支払っている。Gartnerは、コスト急増が最も激しいのは、エージェント駆動のワークフローにおける統制されていない自律性、肥大化したコンテキストウィンドウ、そして使用を最適化するための構造化されたフィードバックの欠如によるものだと警告する。そのうえで、開発者1人あたりのコストの中心となっているのは自律型開発ループのツール群（Cursor、Claude Code、Codex CLIといったエージェント型IDE）だと名指しする。トークンの規律は自然には生まれず、エージェントの大規模展開がその恩恵を食い潰す前に、統制された開発運用モデルが各組織には必要だという立場だ。これはアナリストによる予測であって出荷済みの製品ではないため、2028年という分岐点はあくまで見通しにとどまる。 [Gartner - AI coding costs will surpass the average developer's salary by 2028 as token consumption surges](https://www.gartner.com/en/newsroom/press-releases/2026-06-24-gartner-predicts-ai-coding-costs-will-surpass-average-developer-salary-by-2028-as-token-consumption-surges)
-
-- **いま動向を押さえておきたいAIイベント：今週は開発カンファレンスと攻撃的セキュリティのトラックが開幕、チップとセキュリティの予定は秋まで続く** — 3つのサブトラックすべてにわたる先読みの予定表。今週初めに閉幕したイベント（Automate 2026、6月22〜25日、McCormick Place、AI Tinkerers SF Offensive Security Demo Night、Snowflakeのバーチャル開催のDev Day、いずれも6月25日）は終了し、先読みのリストから外れる。主流の開発/データ：AI Engineer World's FairがMoscone Westを舞台に開催される。公式のAIE World's Fair HackathonはCerebral Valleyとの共催で6月27〜28日、任意参加のNew Engineer Orientationは6月28日、メインプログラムは6月29日から7月2日まで。GitHub Universeは10月28〜29日に戻り、AWS re:Inventは11月30日から12月4日までラスベガスで開催される。AIセキュリティ：Black Hat USAのAI Summitは8月1〜6日にラスベガスでDEF CONのAI Villageと並んで開催され、SecurityWeekのAI Risk SummitはHalf Moon Bayで8月11〜12日に続く。OWASP Global AppSec USAはサンフランシスコで11月5〜6日、ZenityのAI Agent Security Summitシリーズも注視リストに残る。AIチップ/ハードウェア：AMDのAdvancing AI 2026はサンフランシスコのMosconeで7月22〜23日に予定され、Instinct MI400シリーズが焦点になると見られる（基調講演は7月23日）。Hot Chips 2026はStanfordのMemorial Auditoriumで8月23〜25日、AI Infra SummitはSanta Clara Convention Centerで9月15〜17日に開催される。 [TweakTown - AMD announces Advancing AI 2026 event for July (July 22-23, San Francisco)](https://www.tweaktown.com/news/110826/amd-announces-advancing-ai-2026-event-for-july/index.html), [MLQ - AMD sets July date for Advancing AI 2026 flagship event in San Francisco](https://mlq.ai/news/v2/amd-sets-july-date-for-advancing-ai-2026-flagship-event-in-san-francisco/)
-
-[news-20260625.md](report/ja/news-20260625.md)
-
-### Predictions check
-
-本日の証拠群には支配的な軸が一つある。AIを動かす経済性が明示的に価格づけされつつあり、最大手の購入者がそれを生き延びるためにハードウェアと支出を組み替えている。先頭に立つのは、6月24日のOpenAIとBroadcomによるJalapeno公開だ。OpenAI初の自社推論アクセラレータであり、複数年にわたる共同設計から生まれた最初のチップで、学習ではなくLLM推論を軸に設計した「Intelligence Processor」と位置づけられている。エンジニアリングサンプルはすでに量産目標の動作周波数と消費電力でラボ内のワークロードを動かしており、OpenAIは1ワットあたりの性能が「現行の最先端を大きく上回る」と主張する。最初のデータセンター展開は2026年末までにギガワット規模を目標とし、BroadcomのTomahawkファブリック（最大1.6テラビット/秒）で接続され、Celestiaがラックを共同設計する。これは「推論ASICを設計する企業群が2027年上半期までに4社目の自社設計チップを得る」予測（6月25日）の起点の兆候であり、繰り越されている「Corsair級推論シリコンが2027年第3四半期までに名前のあるハイパースケーラー展開を受注する」（6月17日）を、名前付き・日付付きの展開という形で強く裏支えする。一方で、1ワットあたりの優位は、独立したベンチマークが出るまではベンダーの主張にとどまる。
-
-2つ目の数値が明確な筋は、Gartnerの6月24日の研究ノートだ。LLMのトークン消費の増大と、エージェント型ツールにおける従量課金への移行を背景に、2028年までにAIコーディングのコストが開発者の平均年収を上回ると予測する。技術系リーダーの23%がすでに開発者1人あたり月額$200〜$500をトークンに費やし、6%の組織は月額$2,000超を支払っている。Gartnerは、最も急峻なコスト上昇の要因を、統制なき自律性、肥大化したコンテキストウィンドウ、構造化された利用フィードバックの欠如に求め、Cursor、Claude Code、Codex CLIといったエージェント型IDEを1席あたりのコストの中心と名指しする。この診断は製品仕様書のように読め、「エージェント型コーディングプラットフォームが2027年第2四半期までにトークン予算と上限をデフォルトで搭載する」予測（6月25日）の起点の兆候となる。
-
-セキュリティの流れは、新たなCVEではなく調達の軸で前進する。XBOWの自律型攻撃側プラットフォーム（環境を地図化し、脆弱性を探り、多段階の悪用を機械の速度で連鎖させる）が、Accenture Venturesからの戦略投資と、顧客向けに継続的な攻撃側テストを実施するパートナーシップを、NVIDIA NVentures、Samsung Ventures、SentinelOne S Venturesが出資する$35MのシリーズC追加調達の上に獲得した。この資金調達とパートナーシップの形は、「自律型ペンテストエージェントが2026年第4四半期までに名前のあるマネージドティアとして出荷される」予測（6月25日）の源となる兆候であり、繰り越されている「自律型ペンテストベンダーが2027年第1四半期までに名前のある企業/政府との取引を獲得する」（6月22日）も裏支えする。今週のAI Tinkerers SF Offensive Security Demo Nightと、Black Hat USAのAI Summit（8月1〜6日）、DEF CONのAI Villageが、秋の調達時期を前に企業バイヤー層を舞台に上げる。横断する構図はこうだ。推論コストがいまや統制の中心であり、基盤層では独自シリコンで、開発者ツール層では支出統制で、そして監査済みの攻撃側ツールが調達可能なデリバリースタックへ移ることで応えられている。
-
-[future-prediction-20260625.md](future-prediction/ja/future-prediction-20260625.md)
-
----

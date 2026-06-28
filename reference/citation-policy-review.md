@@ -13,25 +13,25 @@ Sorted by `count` descending, then host alphabetical.
 
 | host | count | first_seen | last_seen | sample_label |
 |---|---|---|---|---|
-| github.com | 165 | 2026-04-19 | 2026-06-27 | GitHub - QwenLM/Qwen3.6 |
+| github.com | 171 | 2026-04-19 | 2026-06-28 | GitHub - QwenLM/Qwen3.6 |
 | arxiv.org | 159 | 2026-04-29 | 2026-06-19 | arXiv - Corpus2Skill (2604.14572) |
 | anthropic.com | 124 | 2026-04-21 | 2026-06-16 | Anthropic - Anthropic and Amazon expand collaboration |
-| simonwillison.net | 116 | 2026-04-19 | 2026-06-19 | Simon Willison - Qwen3.6-27B |
+| simonwillison.net | 119 | 2026-04-19 | 2026-06-28 | Simon Willison - Qwen3.6-27B |
+| huggingface.co | 98 | 2026-04-22 | 2026-06-28 | Hugging Face - prism-ml/Bonsai-8B-gguf |
 | siliconangle.com | 98 | 2026-04-23 | 2026-06-25 | SiliconANGLE - OpenAI workspace agents |
 | thehackernews.com | 98 | 2026-04-20 | 2026-06-17 | The Hacker News - nginx-ui CVE-2026-33032 |
-| huggingface.co | 95 | 2026-04-22 | 2026-06-20 | Hugging Face - prism-ml/Bonsai-8B-gguf |
 | aws.amazon.com | 93 | 2026-04-19 | 2026-06-21 | AWS - Amazon Bedrock AgentCore adds new features |
 | snowflake.com | 85 | 2026-05-30 | 2026-06-23 | Snowflake Summit 26 |
+| ai.engineer | 81 | 2026-05-30 | 2026-06-28 | AI Engineer World's Fair |
 | databricks.com | 81 | 2026-05-30 | 2026-06-17 | Databricks |
-| ai.engineer | 78 | 2026-05-30 | 2026-06-27 | AI Engineer World's Fair |
 | hpcwire.com | 78 | 2026-05-06 | 2026-06-17 | AIwire - Cerebras Systems Announces Launch of Initial Public |
 | venturebeat.com | 70 | 2026-04-24 | 2026-06-10 | VentureBeat - Microsoft patched a Copilot Studio prompt inje |
 | sf.aitinkerers.org | 69 | 2026-04-19 | 2026-06-19 | AI Tinkerers SF 2026 |
 | the-decoder.com | 68 | 2026-04-23 | 2026-06-21 | The Decoder - Anthropic ships ten AI agents for finance |
 | helpnetsecurity.com | 62 | 2026-04-19 | 2026-06-14 | Help Net Security - Indirect prompt injection is taking hold |
+| marktechpost.com | 60 | 2026-04-22 | 2026-06-28 | MarkTechPost - Coding Tutorial for PrismML Bonsai 1-Bit LLM |
 | infoq.com | 59 | 2026-04-21 | 2026-06-02 | InfoQ - Cloudflare Builds High-Performance Infrastructure fo |
 | unsloth.ai | 58 | 2026-04-28 | 2026-06-20 | Unsloth - Updates Changelog |
-| marktechpost.com | 57 | 2026-04-22 | 2026-06-24 | MarkTechPost - Coding Tutorial for PrismML Bonsai 1-Bit LLM |
 | developer.apple.com | 54 | 2026-05-30 | 2026-06-05 | Apple Developer |
 | microsoft.com | 51 | 2026-04-24 | 2026-06-23 | Microsoft Security Blog - Zero Trust for AI |
 | cloudsecurityalliance.org | 48 | 2026-04-24 | 2026-05-05 | CSA - The Agentic Trust Framework |
@@ -42,13 +42,13 @@ Sorted by `count` descending, then host alphabetical.
 | therobotreport.com | 45 | 2026-04-23 | 2026-05-19 | The Robot Report - Tesla 10M Optimus |
 | fool.com | 44 | 2026-04-23 | 2026-06-07 | The Motley Fool - Anthropic Announcement for Alphabet and Br |
 | csoonline.com | 43 | 2026-04-22 | 2026-06-23 | CSO Online - Prompt injection turned Google's Antigravity fi |
+| techstartups.com | 39 | 2026-04-25 | 2026-06-28 | Tech Startups - Top Tech News Today, April 30, 2026 |
 | cisa.gov | 38 | 2026-04-19 | 2026-05-07 | CISA - Microsoft Defender KEV addition |
 | moscone.com | 38 | 2026-06-02 | 2026-06-17 | Moscone Center - Snowflake Summit 2026 |
 | pypi.org | 38 | 2026-04-19 | 2026-05-31 | PyPI - sglang |
 | openai.com | 37 | 2026-04-23 | 2026-06-21 | OpenAI - Introducing workspace agents in ChatGPT |
 | 247wallst.com | 36 | 2026-04-25 | 2026-06-07 | 24/7 Wall St - Cheap Salesforce Vs. Expensive ServiceNow |
 | amd.com | 36 | 2026-05-05 | 2026-06-27 | AMD - AMD Reports First Quarter 2026 Financial Results |
-| techstartups.com | 36 | 2026-04-25 | 2026-06-10 | Tech Startups - Top Tech News Today, April 30, 2026 |
 | beamstart.com | 34 | 2026-05-06 | 2026-05-19 | BEAMSTART - Cerebras Gears Up for $26 Billion IPO Fueled by |
 | thenextweb.com | 33 | 2026-04-23 | 2026-06-19 | TheNextWeb - Google Cloud Next 2026: AI agents, A2A, Workspa |
 | pymnts.com | 32 | 2026-04-26 | 2026-06-19 | PYMNTS - Google Doubles Down on Anthropic With New $40 Billi |
@@ -92,6 +92,7 @@ Sorted by `count` descending, then host alphabetical.
 | attack.mitre.org | 14 | 2026-05-01 | 2026-05-03 | MITRE - Updates April 2026 |
 | blog.vllm.ai | 14 | 2026-04-27 | 2026-05-27 | vLLM Blog |
 | gadgetbridge.com | 14 | 2026-06-08 | 2026-06-08 | Gadgetbridge - Apple's WWDC 2026 kicks off today: Here is ev |
+| genai.owasp.org | 14 | 2026-05-06 | 2026-06-28 | OWASP GenAI Exploit Round-up Report Q1 2026 |
 | justsecurity.org | 14 | 2026-05-10 | 2026-05-19 | Just Security - US cyber eval reciprocity outlier posture cu |
 | lawfaremedia.org | 14 | 2026-05-10 | 2026-05-19 | Lawfare - FMRB executive order Section 708 State Farm reason |
 | renovateqr.com | 14 | 2026-04-25 | 2026-05-03 | Renovate QR - Chinese AI Models in April 2026 |
@@ -100,6 +101,7 @@ Sorted by `count` descending, then host alphabetical.
 | wiz.io | 14 | 2026-05-07 | 2026-05-19 | Wiz Research - Joint MCP exposure baseline May 2026 |
 | devblogs.microsoft.com | 13 | 2026-04-23 | 2026-06-04 | Microsoft Foundry Blog - From Local to Production |
 | pbs.org | 13 | 2026-05-01 | 2026-05-03 | PBS NewsHour - Powell says he will stay on Fed board after c |
+| securityweek.com | 13 | 2026-04-20 | 2026-06-28 | SecurityWeek - Claude Code, Gemini CLI, GitHub Copilot Agent |
 | 9to5mac.com | 12 | 2026-04-22 | 2026-06-08 | 9to5Mac - OpenAI Codex expansion |
 | blackstone.com | 12 | 2026-05-04 | 2026-05-04 | Blackstone - Anthropic + Blackstone + Hellman & Friedman + G |
 | censys.com | 12 | 2026-05-06 | 2026-05-19 | Censys - n8n Unauthenticated RCE Ni8mare CVE-2026-21858 Advi |
@@ -117,7 +119,6 @@ Sorted by `count` descending, then host alphabetical.
 | cloud.google.com | 11 | 2026-04-23 | 2026-04-27 | Google Cloud - Introducing Gemini Enterprise Agent Platform |
 | globenewswire.com | 11 | 2026-04-22 | 2026-06-16 | GlobeNewswire - Humanoid Robot Market $8.78B by 2035 |
 | nsa.gov | 11 | 2026-06-06 | 2026-06-06 | NSA - Press release: Security Design Considerations for AI-D |
-| securityweek.com | 11 | 2026-04-20 | 2026-06-26 | SecurityWeek - Claude Code, Gemini CLI, GitHub Copilot Agent |
 | tradingkey.com | 11 | 2026-04-22 | 2026-05-03 | tradingkey - Anthropic Moving Toward AI Chips for Claude |
 | vfuturemedia.com | 11 | 2026-04-30 | 2026-05-03 | V Future Media - Humanoid Robots 2026 |
 | windowsforum.com | 11 | 2026-06-02 | 2026-06-02 | Windows Forum - Build 2026: Microsoft makes AI agents the ne |
@@ -128,7 +129,6 @@ Sorted by `count` descending, then host alphabetical.
 | build.microsoft.com | 10 | 2026-05-02 | 2026-05-30 | Microsoft Build 2026 |
 | cybelangel.com | 10 | 2026-06-10 | 2026-06-10 | CybelAngel - LiteLLM vulnerability CVE-2026-42271: 7 things |
 | en.sedaily.com | 10 | 2026-06-02 | 2026-06-02 | Seoul Economic Daily - Snowflake integrates Anthropic's Clau |
-| genai.owasp.org | 10 | 2026-05-06 | 2026-05-08 | OWASP GenAI Exploit Round-up Report Q1 2026 |
 | macworld.com | 10 | 2026-06-07 | 2026-06-08 | Macworld - WWDC 2026: Keynote date, start time, length and A |
 | openrouter.ai | 10 | 2026-05-28 | 2026-05-28 | OpenRouter status - Qwen3.6-Max-Preview-235B integration cyc |
 | ropesgray.com | 10 | 2026-06-06 | 2026-06-06 | Ropes & Gray - Trump's AI Cybersecurity Order: A Voluntary F |
@@ -255,6 +255,7 @@ Sorted by `count` descending, then host alphabetical.
 | groq.com | 4 | 2026-05-28 | 2026-05-28 | Groq blog - LPU-v3 Inference Network commercial availability |
 | group.mercedes-benz.com | 4 | 2026-05-27 | 2026-05-27 | Mercedes-Benz Group - Apptronik Apollo Gen 2 Tuscaloosa fina |
 | hai.stanford.edu | 4 | 2026-04-27 | 2026-04-30 | Stanford HAI - Upcoming Events |
+| hotchips.org | 4 | 2026-06-05 | 2026-06-28 | Hot Chips 2026 |
 | infosecurity-magazine.com | 4 | 2026-04-24 | 2026-04-30 | Infosecurity Magazine - 10 In-the-Wild Indirect Prompt Injec |
 | kiplinger.com | 4 | 2026-04-28 | 2026-04-29 | Kiplinger - April Fed Meeting: Live Updates and Commentary |
 | leetllm.com | 4 | 2026-05-04 | 2026-05-04 | LeetLLM - 2026 Inference Engine Showdown |
@@ -292,6 +293,7 @@ Sorted by `count` descending, then host alphabetical.
 | ccsummit2026.sched.com | 3 | 2026-06-23 | 2026-06-23 | Confidential Computing Summit 2026 schedule (June 23-24, San |
 | cipherssecurity.com | 3 | 2026-04-30 | 2026-05-01 | Cipher Security - CVE-2026-3854 GitHub Enterprise Server RCE |
 | cloudcomputing-news.net | 3 | 2026-04-25 | 2026-04-25 | Cloud Computing News - Amazon-Anthropic $25B |
+| datacamp.com | 3 | 2026-06-28 | 2026-06-28 | DataCamp - GLM-5.2: Features, Setup, Benchmarks, and Model S |
 | digitalapplied.com | 3 | 2026-06-24 | 2026-06-24 | Digital Applied - Micron and Anthropic strike a strategic AI |
 | earezki.com | 3 | 2026-04-20 | 2026-04-29 | Dev\ |
 | econotimes.com | 3 | 2026-06-19 | 2026-06-19 | EconoTimes - Hyundai to acquire SoftBank's remaining Boston |
@@ -305,6 +307,7 @@ Sorted by `count` descending, then host alphabetical.
 | googlecloudpresscorner.com | 3 | 2026-04-23 | 2026-04-25 | Google Cloud Press - Thinking Machines Expands Use of Google |
 | hardware.slashdot.org | 3 | 2026-06-19 | 2026-06-19 | Slashdot - Hyundai takes full control of Boston Dynamics as |
 | iiot-world.com | 3 | 2026-04-25 | 2026-04-25 | IIoT World - BMW's 30,000-Car Proof |
+| investor.qualcomm.com | 3 | 2026-06-28 | 2026-06-28 | Qualcomm - Qualcomm to Acquire Modular (press release, June |
 | kb.cert.org | 3 | 2026-04-21 | 2026-04-26 | CERT/CC - VU#915947 SGLang chat-template RCE |
 | llm-stats.com | 3 | 2026-04-19 | 2026-05-03 | LLM-Stats - AI Updates Today (May 2026) |
 | lmsys.org | 3 | 2026-05-08 | 2026-05-27 | SGLang - RadixArk v0 5 4 release tool result cache reuse CVE |
@@ -360,7 +363,6 @@ Sorted by `count` descending, then host alphabetical.
 | hannovermesse.de | 2 | 2026-04-25 | 2026-04-25 | Hannover Messe 2026 official |
 | hendryadrian.com | 2 | 2026-04-22 | 2026-04-22 | hendryadrian - CISA Adds 8 Exploited Vulnerabilities |
 | heygotrade.com | 2 | 2026-04-28 | 2026-04-28 | Heygotrade - Mag 7 Earnings 2026 |
-| hotchips.org | 2 | 2026-06-05 | 2026-06-05 | Hot Chips 2026 |
 | hotchipssymposium.regfox.com | 2 | 2026-06-14 | 2026-06-14 | Hot Chips 2026 Registration - Stanford, August 23-25 |
 | humanoid.press | 2 | 2026-05-01 | 2026-05-02 | Humanoid Press - Latest Humanoid Robot News |
 | indexbox.io | 2 | 2026-04-26 | 2026-04-26 | IndexBox - Nvidia Stock Gains 19% in April as Semiconductor |
