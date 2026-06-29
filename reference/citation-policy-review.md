@@ -22,7 +22,7 @@ Sorted by `count` descending, then host alphabetical.
 | thehackernews.com | 98 | 2026-04-20 | 2026-06-17 | The Hacker News - nginx-ui CVE-2026-33032 |
 | aws.amazon.com | 93 | 2026-04-19 | 2026-06-21 | AWS - Amazon Bedrock AgentCore adds new features |
 | snowflake.com | 85 | 2026-05-30 | 2026-06-23 | Snowflake Summit 26 |
-| ai.engineer | 81 | 2026-05-30 | 2026-06-28 | AI Engineer World's Fair |
+| ai.engineer | 83 | 2026-05-30 | 2026-06-29 | AI Engineer World's Fair |
 | databricks.com | 81 | 2026-05-30 | 2026-06-17 | Databricks |
 | hpcwire.com | 78 | 2026-05-06 | 2026-06-17 | AIwire - Cerebras Systems Announces Launch of Initial Public |
 | venturebeat.com | 70 | 2026-04-24 | 2026-06-10 | VentureBeat - Microsoft patched a Copilot Studio prompt inje |
@@ -87,6 +87,7 @@ Sorted by `count` descending, then host alphabetical.
 | blogs.nvidia.com | 15 | 2026-04-22 | 2026-06-14 | NVIDIA Blog - GPT-5.5 Powers Codex on NVIDIA Infrastructure |
 | invezz.com | 15 | 2026-04-22 | 2026-05-04 | Invezz - Anthropic forms JV with Wall Street firms |
 | meetup.com | 15 | 2026-04-19 | 2026-06-16 | Meetup - Silicon Valley AI Innovators |
+| securityweek.com | 15 | 2026-04-20 | 2026-06-29 | SecurityWeek - Claude Code, Gemini CLI, GitHub Copilot Agent |
 | techcommunity.microsoft.com | 15 | 2026-04-22 | 2026-06-17 | Microsoft TechCommunity - Foundry Labs April 2026 |
 | aisi.gov.uk | 14 | 2026-04-22 | 2026-05-07 | AISI - Claude Mythos Preview evaluation |
 | attack.mitre.org | 14 | 2026-05-01 | 2026-05-03 | MITRE - Updates April 2026 |
@@ -101,7 +102,6 @@ Sorted by `count` descending, then host alphabetical.
 | wiz.io | 14 | 2026-05-07 | 2026-05-19 | Wiz Research - Joint MCP exposure baseline May 2026 |
 | devblogs.microsoft.com | 13 | 2026-04-23 | 2026-06-04 | Microsoft Foundry Blog - From Local to Production |
 | pbs.org | 13 | 2026-05-01 | 2026-05-03 | PBS NewsHour - Powell says he will stay on Fed board after c |
-| securityweek.com | 13 | 2026-04-20 | 2026-06-28 | SecurityWeek - Claude Code, Gemini CLI, GitHub Copilot Agent |
 | 9to5mac.com | 12 | 2026-04-22 | 2026-06-08 | 9to5Mac - OpenAI Codex expansion |
 | blackstone.com | 12 | 2026-05-04 | 2026-05-04 | Blackstone - Anthropic + Blackstone + Hellman & Friedman + G |
 | censys.com | 12 | 2026-05-06 | 2026-05-19 | Censys - n8n Unauthenticated RCE Ni8mare CVE-2026-21858 Advi |
@@ -172,6 +172,7 @@ Sorted by `count` descending, then host alphabetical.
 | felloai.com | 7 | 2026-04-28 | 2026-04-30 | Felloai - DeepSeek V4 Released |
 | fisglobal.com | 7 | 2026-05-05 | 2026-05-05 | FIS Press - FIS Brings Agentic AI to Banking with Anthropic |
 | freemalaysiatoday.com | 7 | 2026-05-06 | 2026-05-08 | Free Malaysia Today - Trump AI executive order moves to inte |
+| gartner.com | 7 | 2026-06-25 | 2026-06-29 | Gartner - AI coding costs will surpass the average developer |
 | marketscreener.com | 7 | 2026-06-06 | 2026-06-06 | MarketScreener - China Renaissance Initiates Nvidia at Buy W |
 | morganstanley.com | 7 | 2026-05-28 | 2026-05-28 | Morgan Stanley Research - Cerebras Systems CBRS Overweight i |
 | roboticstomorrow.com | 7 | 2026-04-22 | 2026-06-24 | Robotics Tomorrow - Accenture Vodafone SAP Humanoid Warehous |
@@ -193,6 +194,7 @@ Sorted by `count` descending, then host alphabetical.
 | federalnewsnetwork.com | 6 | 2026-05-04 | 2026-05-04 | Federal News Network - When AI agents act, security has to k |
 | federalregister.gov | 6 | 2026-05-01 | 2026-05-03 | Federal Register - RFI on Security Considerations for AI Age |
 | grafa.com | 6 | 2026-06-03 | 2026-06-03 | Grafa - Broadcom reports Q2 earnings: AI chip revenue jumps |
+| hotchips.org | 6 | 2026-06-05 | 2026-06-29 | Hot Chips 2026 |
 | hyperframeresearch.com | 6 | 2026-04-25 | 2026-04-25 | HyperFRAME Research - Identity as the Last Firewall |
 | implicator.ai | 6 | 2026-04-25 | 2026-06-04 | Implicator - Thinking Machines Multi-Billion Google GB300 De |
 | infosec-conferences.com | 6 | 2026-06-14 | 2026-06-16 | Infosec-Conferences - Confidential Computing Summit 2026 (Ju |
@@ -204,6 +206,7 @@ Sorted by `count` descending, then host alphabetical.
 | newatlas.com | 6 | 2026-04-25 | 2026-04-27 | New Atlas - Physical AI humanoids at BMW factory |
 | packworld.com | 6 | 2026-06-24 | 2026-06-24 | Packaging World - Physical AI dominates Automate 2026's open |
 | pandaily.com | 6 | 2026-06-07 | 2026-06-18 | Pandaily - BYD Secretly Develops Humanoid Robot Codename 'Ya |
+| qualcomm.com | 6 | 2026-06-29 | 2026-06-29 | Qualcomm - Qualcomm Unveils Comprehensive Data Center Roadma |
 | sacra.com | 6 | 2026-05-02 | 2026-05-03 | Sacra - OpenAI revenue |
 | zenity.io | 6 | 2026-04-24 | 2026-06-27 | Zenity Newsroom - FedRAMP In Process Status |
 | zerohedge.com | 6 | 2026-06-12 | 2026-06-12 | ZeroHedge - SpaceX Prices Biggest Ever IPO At $135 Per Share |
@@ -218,6 +221,7 @@ Sorted by `count` descending, then host alphabetical.
 | gracker.ai | 5 | 2026-04-28 | 2026-05-02 | GrackerAI - AI Dev 26 x SF – Free Tickets (event listing) |
 | helpforce.ai | 5 | 2026-04-30 | 2026-05-02 | Help Force AI - Tesla Optimus vs Boston Dynamics Atlas vs Fi |
 | innfactory.ai | 5 | 2026-06-23 | 2026-06-23 | innFactory - OpenClaw vs. Hermes Agent: comparison of the tw |
+| investors.micron.com | 5 | 2026-06-29 | 2026-06-29 | Micron Investor Relations - Fiscal Q3 2026 Earnings Call Pre |
 | kavout.com | 5 | 2026-06-10 | 2026-06-10 | Kavout - What triggered the recent semiconductor sell-off |
 | kedglobal.com | 5 | 2026-06-22 | 2026-06-22 | KED Global - Hyundai to take full ownership of Boston Dynami |
 | keycard.ai | 5 | 2026-04-24 | 2026-04-24 | Keycard - The Control Plane for Autonomous Agents |
@@ -236,6 +240,7 @@ Sorted by `count` descending, then host alphabetical.
 | ai-redteam.com | 4 | 2026-06-12 | 2026-06-12 | AI Red Team - AI Engineer World's Fair 2026 |
 | airia.com | 4 | 2026-04-28 | 2026-04-29 | Airia - AI Security in 2026 |
 | airisksummit.com | 4 | 2026-06-08 | 2026-06-08 | SecurityWeek - AI Risk Summit 2026 |
+| aiweekly.co | 4 | 2026-06-29 | 2026-06-29 | AI Weekly - Micron Q3 2026: Revenue Quadruples to $42B, HBM |
 | alation.com | 4 | 2026-06-01 | 2026-06-01 | Alation Snowflake Summit 2026 guide |
 | apptronik.com | 4 | 2026-05-27 | 2026-05-27 | Apptronik press release - Apollo Generation 2 ten unit cohor |
 | artificialintelligence-news.com | 4 | 2026-04-23 | 2026-05-29 | Artificial Intelligence News - Sony AI robot beats players a |
@@ -250,12 +255,10 @@ Sorted by `count` descending, then host alphabetical.
 | eweek.com | 4 | 2026-04-27 | 2026-04-27 | eWeek - Tesla Optimus Robot Launch Timeline Targets 2027 Sca |
 | fastcompany.com | 4 | 2026-06-08 | 2026-06-08 | Fast Company - What to expect from Apple at WWDC 26 |
 | fazm.ai | 4 | 2026-04-19 | 2026-04-30 | Fazm Blog - vLLM Update April 2026 |
-| gartner.com | 4 | 2026-06-25 | 2026-06-25 | Gartner - AI coding costs will surpass the average developer |
 | globalbankingandfinance.com | 4 | 2026-06-22 | 2026-06-22 | Global Banking & Finance Review - Hyundai to buy SoftBank's |
 | groq.com | 4 | 2026-05-28 | 2026-05-28 | Groq blog - LPU-v3 Inference Network commercial availability |
 | group.mercedes-benz.com | 4 | 2026-05-27 | 2026-05-27 | Mercedes-Benz Group - Apptronik Apollo Gen 2 Tuscaloosa fina |
 | hai.stanford.edu | 4 | 2026-04-27 | 2026-04-30 | Stanford HAI - Upcoming Events |
-| hotchips.org | 4 | 2026-06-05 | 2026-06-28 | Hot Chips 2026 |
 | infosecurity-magazine.com | 4 | 2026-04-24 | 2026-04-30 | Infosecurity Magazine - 10 In-the-Wild Indirect Prompt Injec |
 | kiplinger.com | 4 | 2026-04-28 | 2026-04-29 | Kiplinger - April Fed Meeting: Live Updates and Commentary |
 | leetllm.com | 4 | 2026-05-04 | 2026-05-04 | LeetLLM - 2026 Inference Engine Showdown |
@@ -306,6 +309,7 @@ Sorted by `count` descending, then host alphabetical.
 | gigazine.net | 3 | 2026-04-23 | 2026-04-24 | GIGAZINE - Qwen3.6-27B |
 | googlecloudpresscorner.com | 3 | 2026-04-23 | 2026-04-25 | Google Cloud Press - Thinking Machines Expands Use of Google |
 | hardware.slashdot.org | 3 | 2026-06-19 | 2026-06-19 | Slashdot - Hyundai takes full control of Boston Dynamics as |
+| hcltech.com | 3 | 2026-06-29 | 2026-06-29 | HCLTech - Sarvam raises $234 million in first close of $300 |
 | iiot-world.com | 3 | 2026-04-25 | 2026-04-25 | IIoT World - BMW's 30,000-Car Proof |
 | investor.qualcomm.com | 3 | 2026-06-28 | 2026-06-28 | Qualcomm - Qualcomm to Acquire Modular (press release, June |
 | kb.cert.org | 3 | 2026-04-21 | 2026-04-26 | CERT/CC - VU#915947 SGLang chat-template RCE |
