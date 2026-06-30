@@ -11,6 +11,34 @@
 
 ---
 
+## 2026-06-30
+
+### News
+
+- **ClaudeがAzureホスト型GB300上でMicrosoft FoundryのGAに到達** — AnthropicとMicrosoftは6月29日、Microsoft Foundry内でClaudeをプレビューから一般提供へ移行し、[Claude Opus 4.8とHaiku 4.5をMessages API経由で](https://claude.com/blog/claude-in-microsoft-foundry)プロンプトキャッシュと拡張思考とともに公開した。一般提供される「Azureホスト型」ティアは、企業のID・ネットワーク・課金・ガバナンス管理のもとAzureインフラ上をエンドツーエンドで走り、単一の統合請求書とMicrosoft Enterprise Agreement連携を備える。一方「Anthropicインフラ・ホスト型」ティアはプレビューにとどまる。 [Claude by Anthropic - Claude in Microsoft Foundry is now generally available](https://claude.com/blog/claude-in-microsoft-foundry)
+
+- **vLLM v0.24.0が量子化デフォルトのModel Runner V2を出荷** — 支配的なオープンソース推論サーバーが[vLLM v0.24.0](https://github.com/vllm-project/vllm/releases)をリリースし、256人の貢献者から571件のコミットを取り込んだ。Model Runner V2は量子化モデルをデフォルトでサポートするようになり、多層KVキャッシュ・オフロード経路がGPUメモリを超えてキャッシュを退避するオブジェクトストレージの二次層を追加し、DeepSeek-V4はスパースインデックスキャッシュとプリフィルのチャンク計画パスを得て、DeepEP v2がMoEのエキスパート並列のために統合された。カーネルはswap_abによりSM90 CUTLASS FP8で180-290%の高速化を謳い、Rustフロントエンドは認証・CORS・トークン化エンドポイントと、ツール呼び出しと推論を統一したストリーミングパーサーで成熟した。 [GitHub - vllm-project/vllm Releases (v0.24.0)](https://github.com/vllm-project/vllm/releases)
+
+- **WorldEvolverがエージェント計画のため推論時に世界モデルを進化させる** — 6月29日のarXiv論文[「Self-Evolving World Models for LLM Agent Planning」(Xuan Zhang、Wenxuan Zhang、See-Kiong Ng、Yang Deng著)](https://arxiv.org/abs/2606.30639)は、行動の結果をうまく予測できないために計画を誤るエージェントを標的にする。WorldEvolverフレームワークは、エピソード記憶、予測誤差から明示的なルールを蒸留する意味記憶、計画器が見る前に信頼できない予測をふるい落とす選択的予見を組み合わせる。世界モデルは運用中に進化し続け、コアのエージェントは凍結したまま、再訓練なしで推論時に適応する。著者らは3つの基盤モデルにわたり最高の予測精度と、競合する世界モデルのベースラインを上回るタスク成功率を報告している。 [arXiv - Self-Evolving World Models for LLM Agent Planning (2606.30639)](https://arxiv.org/abs/2606.30639)
+
+- **AI Engineer World's Fairが会期中盤。チップとセキュリティの日程も確定** — [AI Engineer World's Fair](https://www.ai.engineer/worldsfair/2026)はサンフランシスコのMoscone Westで会期中盤を迎えている（6月29日から7月2日。約29トラック、約300人の登壇者、6,000人超の参加者）。7月1日にAutoresearch基調講演、7月2日にHarness Engineeringがある。チップのトラックでは、AMDのAdvancing AI 2026が7月22-23日、[Hot Chips 2026](https://hotchips.org/)がスタンフォードで8月23-25日に開催される。セキュリティでは、SecurityWeekの[AI Risk Summit](https://www.securityweek.com/securityweek-to-host-ai-risk-summit-august-11-12-at-the-ritz-carlton-half-moon-bay/)がRitz-Carlton Half Moon Bayで8月11-12日に、8月初旬のBlack Hat USAとDEF CON 34に先立って開かれる。 [AI Engineer - World's Fair 2026 (June 29 - July 2, Moscone West, San Francisco)](https://www.ai.engineer/worldsfair/2026), [Hot Chips - 2026 symposium (August 23-25, Stanford Memorial Auditorium)](https://hotchips.org/), [SecurityWeek - AI Risk Summit, August 11-12, Ritz-Carlton Half Moon Bay](https://www.securityweek.com/securityweek-to-host-ai-risk-summit-august-11-12-at-the-ritz-carlton-half-moon-bay/)
+
+- **AzureホストのClaudeティアがNVIDIA GB300 NVL72上で稼働** — Foundryローンチの裏にある差別化要因はインフラ層だ。AzureホストのClaudeティアは[Quantum-X800 InfiniBandネットワークを備えたNVIDIA GB300 NVL72システム](https://blogs.nvidia.com/blog/anthropic-nvidia-gb300-blackwell-ultra-microsoft-azure/)上を走る。NVIDIAはGB300の推論効率を総所有コストの削減要因として訴求し、自律的でドメイン特化したエージェント向けにSecure Agent Workspaceのリファレンス設計と組み合わせて展開している。フロンティアラボの旗艦モデルが、ハイパースケーラー自社シリコン上でその自社カタログと並んで座るようになり、ラボのAPIを呼ぶことと自社クラウドテナント内に展開することの隔たりを縮めている。 [NVIDIA Blog - Claude Meets Blackwell Ultra: Anthropic's Models Now Run on NVIDIA GB300 in Azure](https://blogs.nvidia.com/blog/anthropic-nvidia-gb300-blackwell-ultra-microsoft-azure/)
+
+[news-20260630.md](report/ja/news-20260630.md)
+
+### Predictions check
+
+本日のシグナルは、配信と基盤をめぐる物語だ。モデルと利用者の間に位置する層が3つの方面で同時に強化され、一方でチップとセキュリティのイベント日程が、これらの筋が次にどこで対面の場として決着するかを定めた。中心となる裏付けは展開の軸にある。AnthropicとMicrosoftは6月29日、ClaudeをMicrosoft Foundry内でプレビューから一般提供へ移し、プロンプトキャッシュと拡張思考を伴うMessages API経由でClaude Opus 4.8とHaiku 4.5を公開した。これはAzureインフラ上をエンドツーエンドで走り、課金を一本化してEnterprise Agreementと統合された、一般提供のAzureホスト型ティアのもとで提供される。差別化要因はその下のシリコンだ。このティアはQuantum-X800 InfiniBandを備えたNVIDIA GB300 NVL72システム上を走り、NVIDIAはGB300の推論効率を総所有コストの削減要因として打ち出し、統制された領域特化のエージェント向けにSecure Agent Workspaceのリファレンス設計を同梱した。この立ち上げは新仮説「2番目のフロンティアラボが2027年第2四半期までにハイパースケーラー自社シリコン上でファーストパーティ一般提供に到達する」の起点シグナルとなる。フロンティア研究所の旗艦モデルが今やハイパースケーラー自社シリコン上で自社カタログと並ぶようになり、研究所のAPIを呼ぶことと自社クラウドテナント内に展開することの隔たりが縮んだからだ。
+
+オープンソースの配信の軸も並んで動いた。vLLM v0.24.0は256人の貢献者から571件のコミットを取り込み、Model Runner V2が量子化モデルを既定とし、GPUメモリを超えてオブジェクトストレージの二次層へキャッシュを退避させる多層KVキャッシュ・オフロード経路、DeepEP v2のエキスパート並列、180〜290%のSM90 CUTLASS FP8カーネル高速化を加えた。この単一リリースが「量子化デフォルトの推論提供が2027年上半期までにOSS推論の標準になる」という新仮説を支えるとともに、休眠していた2つの仮説を復活させる。「統一的な圧縮KVキャッシュフラグ」仮説（2026-04-30）は関連度4で戻り、階層化KV退避を埋もれたフラグではなく既定経路の機能として製品化していく動きを示す。ただし単一スタックにおける退避の階層化にとどまり、予測が求める複数スタック横断の名前を持つ圧縮のつまみではない。「Reservoirルーティング」仮説（2026-05-27）は関連度3で復活し、DeepEP v2とDeepSeek-V4のルーティング最適化が、MoEルーティングの内部処理が主流サーバーにとって既定経路の関心事であることを裏付ける一方、名前を持つステートフルなルーター状態のプリミティブそれ自体は未搭載のままだ。同じリリースは「単一ノードで256GB未満のフロンティア級オープンウェイト」仮説（2026-06-23）の基盤インフラとしても寄与し、量子化を既定とするロードにKV退避が加わることでメモリ下限を直接引き下げる。
+
+研究の軸はWorldEvolverだ。6月29日のarXiv論文は、推論時に更新されてLLMエージェントの行動と結果の予測を鋭くする自己進化する世界モデルを提案する。エピソード記憶、予測誤差から蒸留した意味規則、信頼できない予測を計画器の手前で落とす選択的予見によってこれを行い、世界モデルは運用中に適応する一方でコアのエージェントは凍結したままだ。論文は3つの基盤モデルにわたり最高の予測精度と、競合ベースラインを上回るタスク成功率を報告し、実行時のメモリ更新を微調整より安価な信頼性の梃子として位置づける。これが新仮説「GitHub Copilotコーディングエージェントが2027年第2四半期までに推論時の自己進化メモリを出荷する」の起点シグナルとなり、「コーディングエージェント基盤が三位一体ゲートを既定で出荷する」仮説（2026-06-28）にもエージェントハーネスの信頼性という主題で接触する。ただしこれは、エージェントの許可された組み合わせをゲートで制約するのではなく、振る舞いの予測品質を改善するものだ。横断するパターンは、フロンティア推論が統制されたハイパースケーラーのシリコンへ統合される一方で、ローカル配信スタックのメモリ下限が下がるという二分化であり、先の予定表、すなわち本日から7月2日までのAI Engineer World's Fair、AMDのAdvancing AI（7月22〜23日）、Hot Chips（8月23〜25日）、8月のAIセキュリティの集まりが、これらの筋が次に決着する会場を定めている。
+
+[future-prediction-20260630.md](future-prediction/ja/future-prediction-20260630.md)
+
+---
+
 ## 2026-06-29
 
 ### News
@@ -66,28 +94,3 @@
 [future-prediction-20260628.md](future-prediction/ja/future-prediction-20260628.md)
 
 ---
-
-## 2026-06-27
-
-### News
-
-- **Langflowのテナント横断IDOR（CVE-2026-55255）が実環境で悪用される** — Sysdigの脅威リサーチチームは6月25日、LLMエージェント向けのオープンソースのビジュアル構築ツールLangflowに存在するテナント横断の安全でない直接オブジェクト参照（IDOR）の欠陥が、実環境で悪用された初の既知事例を報告した。CVSS 9.9と評価され、1.9.1で修正されている。get_flow_by_id_or_endpoint_nameがフローをUUIDで解決する際に所有者チェックを一切行わないため、認証済みのユーザーは誰でも、/api/v1/responses経由で別テナントのフローを実行できる（CWE-639）。観測された連鎖では、攻撃者がフローIDを収集し、約20秒後に入力「leak api keys」とともに再生しており、対象インスタンスはKEV掲載のRCEであるCVE-2026-33017も動かしていた。1.9.1より前を運用している者は、いますぐアップグレードし、露出したフローIDはすでに採取されているものとみなすべきだ。 [Sysdig - Understanding Langflow CVE-2026-55255, and why higher-CVSS vulnerabilities aren't always the most exploited](https://webflow.sysdig.com/blog/understanding-langflow-cve-2026-55255-and-why-higher-cvss-vulnerabilities-arent-always-the-most-exploited), [GitHub Advisory Database - Langflow IDOR in /api/v1/responses lets authenticated attackers run another user's flow (CVE-2026-55255)](https://github.com/advisories/GHSA-qrpv-q767-xqq2)
-
-- **AutoGPTのSSRF防御回避（CVE-2026-56663）が内部サービスを露出させる** — 継続的に動くAIエージェントを構築・実行するためのオープンソース基盤AutoGPTに高深刻度の欠陥が見つかり、6月26日にCVE-2026-56663として公開された。CVSS 8.5と評価され、0.6.52で修正されている。エージェントが外向きのHTTP呼び出しに使うSendWebRequestBlockが、IPv4射影IPv6アドレスの扱いを誤り、特定のIP範囲を検証できていないため、認証済みのユーザーは内部IPフィルターをくぐり抜けるリクエストを組み立て、プライベートネットワーク上のサービスに到達できる。汎用の取得部品であるため、テナントのエージェントは、本来は到達できないはずのクラウドのメタデータや内部の管理画面、データベースを探るよう仕向けられてしまう。0.6.52より前を運用している者は、アップグレードし、エージェント実行基盤からの外向き通信を絞り込むべきだ。 [NVD - CVE-2026-56663 Detail (AutoGPT SSRF-protection bypass via IPv4-mapped IPv6 addresses, fixed in 0.6.52)](https://nvd.nist.gov/vuln/detail/CVE-2026-56663)
-
-- **いま予定に入れておきたいAIイベント：AI Engineer World's Fairの週末が開幕、チップとセキュリティの日程は秋まで続く** — 3つのサブトラックすべてにまたがる今後の日程は、この週末にサンフランシスコで開かれるAI Engineer World's Fairが起点となる。主流の開発／データ系では、Cerebral Valleyとの共催によるAIE World's Fair Hackathonがいままさに進行中で（6月27〜28日、再帰的自己改善がテーマ、賞金総額1万ドル超）、任意参加のNew Engineer Orientationが6月28日、本編は6月29日から7月2日までMoscone Westで開催される。AIセキュリティ系では、Black Hat USA 2026が8月初旬にラスベガスのMandalay Bayで開かれ、その直後にDEF CON 34とそのAI Villageが続く。SecurityWeekのAI Risk Summitは8月11〜12日、OWASP Global AppSec USAは11月5〜6日に開かれる。AIチップ／ハードウェア系では、AMDのAdvancing AI 2026が7月22〜23日にMosconeで開かれ、Instinct MI400シリーズに焦点を当てた回が7月23日に行われる。Hot Chips 2026は8月23〜25日、AI Infra Summitは9月15〜17日に開催される。 [AI Engineer - World's Fair 2026 (hackathon June 27-28; main program June 29 - July 2, Moscone West, San Francisco)](https://www.ai.engineer/worldsfair/2026), [AMD - Advancing AI 2026 (San Francisco, July 22-23)](https://www.amd.com/en/corporate/events/advancing-ai.html), [Black Hat - USA 2026 AI Summit (Mandalay Bay, Las Vegas, early August)](https://blackhat.com/us-26/ai-summit.html)
-
-[news-20260627.md](report/ja/news-20260627.md)
-
-### Predictions check
-
-本日、エージェント型AIの攻撃対象領域はひとつの境界を越えた。理論と単発の勧告から、実環境で観測された悪用へと移ったのだ。主役はLangflowのCVE-2026-55255で、LLMエージェント向けの普及したビジュアル構築ツールにおける、テナント横断の安全でない直接オブジェクト参照の欠陥（CWE-639、CVSS 9.9、1.9.1で修正）だ。get_flow_by_id_or_endpoint_nameがUUIDで解決するフローに所有者チェックがないため、認証済みのどのユーザーも/api/v1/responses経由で別テナントのフローを実行できる。Sysdigは6月25日に初の実環境での悪用を報告し、攻撃者がフローIDを収集して約20秒後に入力「leak api keys」とともに再生し、同じインスタンスでKEV掲載のRCEであるCVE-2026-33017も動かしていた様子を観測した。これと対をなすのがAutoGPTのCVE-2026-56663（CVSS 8.5、0.6.52で修正）で、SendWebRequestBlockがIPv4射影IPv6アドレスを誤って扱い、内部サービスに到達してしまう実行層の欠陥だ。
-
-この2件のCVEが本日最も強い裏付けの起点となり、同じ週に並んだ2件の新たな見立てを揃って下支えする。「マルチテナントのエージェント構築ツールが2027年第1四半期までにCVSS 9.0以上のテナント横断認可CVEを引き寄せる」見立て（6月27日）には、Langflowが最初の分類事例として、またn8n／Flowise／Dify／LangGraph Platform／CrewAIの系列に繰り返し現れる設計上の型として種をまく。「主要なAIエージェント基盤が2027年第2四半期までにゼロトラスト制御を初期状態で有効にして出荷する」見立て（6月27日）には、悪用されたテナント横断IDORとSSRF回避が同じ週に並んだことが後押しとなる。双方が関連度5段階中5を整合性4で得た。共通する隔たりは、本日提供されたのが動機づけのCVEであって、分類を裏づける2つ目のプラットフォームでも、名前のある既定の構えを変えるリリースでもない、という点だ。
-
-引き継がれた防御側の見立て、すなわち「コーディングエージェントのハーネスが拒否を既定とするツールセット制御を採用する」（6月20日）と「OpenClawが拒否を既定とするツールとネットワーク制御を出荷する」（6月23日）も、脅威の側から直接の裏づけを得た。AutoGPTの是正策（アップグレードと外向き通信の制限）は、これらの予測が標準になると見込む既定の手作業による版だ。3つ目の話題は前向きの3トラックのAIイベントカレンダーで、AMDのAdvancing AI 2026（7月22〜23日、MI400シリーズの基調講演は7月23日）が「AMD Instinct MI400が名前の付いた出荷・メモリ・ラックの仕様を伴って投入される」見立て（6月27日）に日付と会場という契機を整合性4で提供する一方、秘匿推論の階層（6月26日）や調達のプロンプトインジェクション基準（6月23日）には、漂う会場のリズムのみを与えた。
-
-[future-prediction-20260627.md](future-prediction/ja/future-prediction-20260627.md)
-
----
-
