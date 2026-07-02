@@ -11,6 +11,34 @@
 
 ---
 
+## 2026-07-02
+
+### News
+
+- **Langflowのテナント間IDORが実際に悪用され始めた** — Sysdig Threat Research Teamは、CVE-2026-55255が実環境で悪用された初の事例を報告した。これはローコードのAIエージェント構築ツールLangflowに存在するCVSS 9.9の不適切な直接オブジェクト参照(IDOR)で、NVDが6月23日に公開したものだ。この欠陥により、認証済みの攻撃者は`/api/v1/responses`エンドポイント経由で被害者のフローIDを渡すだけで、他ユーザーの任意のフローを実行できてしまう。Langflow 1.9.2で修正済みだ。Sysdigがより鋭く指摘するのは、このIDORが、より古く注目度の高い9.8のLangflow RCEよりも先に武器化された点である。つまり素のCVSS値は、攻撃者が実際に狙うエージェントフレームワークの穴を予測する指標としては貧弱だということだ。Langflowは社内でマルチユーザーの「市民開発者」向けエージェント工場として立ち上げられることが多く、認証済みユーザー限定のバグでも、テナント間に及ぶ広い影響範囲につながる。もはやモデルだけでなく、ビジュアルなエージェント構築レイヤーそのものが主要な攻撃対象になっている。[NVD - CVE-2026-55255 Detail](https://nvd.nist.gov/vuln/detail/CVE-2026-55255), [Sysdig - Understanding Langflow CVE-2026-55255](https://www.sysdig.com/blog/understanding-langflow-cve-2026-55255-and-why-higher-cvss-vulnerabilities-arent-always-the-most-exploited)
+
+- **Unsloth v0.1.471-betaがGLM 5.2、約3倍のコンテキスト、Blackwell RTX対応を追加** — Unslothの最新タグ付きビルドは、GLM 5.2を全推論レベルで同週対応させ、メモリ自動フィットのアルゴリズムを刷新して、同一VRAMで実現可能なコンテキスト長を約3倍に伸ばしたと主張する。あわせてBlackwell RTX GPUへの対応強化、トレンドフィードと検索を備えた再設計版モデルHub、StudioセッションをCloudflare暗号化で保護する`--secure`フラグも追加された。これは、混合エキスパート(MoE)の学習が12倍高速化し、VRAMを35%超節約し、単一の192GB B200上で最大380KトークンのRLコンテキストを実現したと報告した従来路線の延長線上にある。Unslothは、単一ワークステーションGPUで最新のオープンウェイトMoEチェックポイントをチューニングする際の定番の入り口であり続けている。[GitHub - unslothai/unsloth releases](https://github.com/unslothai/unsloth/releases), [Unsloth - 2026 Update: Faster MoE](https://unslothai.substack.com/p/unsloth-2026-update-faster-moe)
+
+- **Mistral 3が完全なオープンウェイトのApache-2.0ファミリーとして登場** — Mistral AIはMistral 3を発表した。中核となるMistral Large 3は、アクティブ41B・総計675Bパラメータで学習された疎な混合エキスパート(MoE)で、これに14B・8B・3Bの3つの密モデルが加わる。このファミリーは明確にエージェント指向・ツール利用重視と位置づけられ、コーディング、ドキュメント分析、長時間のオーケストレーションにまたがる。また、重みを商用ファインチューニングや再配布に安全に使える寛容なApache 2.0条項へ、というMistralの方針転換を引き継いでいる。小型の密モデル群はOllama、llama.cpp、MLXで余裕をもって動くサイズに収められ、MoEの旗艦モデルはvLLMとSGLangに収まる。これによりQwen 3.5やDeepSeekの最新の疎チェックポイントに対するオープンウェイト勢の構図が一段と鮮明になる。[Mistral AI - Introducing Mistral 3](https://mistral.ai/news/mistral-3/)
+
+- **AMDがMI400のお披露目を7月22-23日に設定、メモリがサイクルを牽引** — AMDは、サンフランシスコのMoscone Centerで7月22-23日に開催するAdvancing AI 2026イベントを確定させた。ここでは、MI400シリーズ(TSMCの2nmプロセスによるCDNA 5)と「Helios」ラックスケールシステムの詳細が明かされると見られ、報道はMI350世代の2倍を超えるメモリ帯域を指し示している。業界全体の底流にあるのは、いまや制約となっているのが素のFLOPSではなくメモリだという点だ。長コンテキスト推論によるKVキャッシュの増大が、より大きなHBMプールへと購入者を押しやっており、高帯域メモリが2026暦年を通じて売り切れのまま推移していることが、この逼迫に拍車をかけている。TAMは2028年までに約$100Bに達すると予測される。NVIDIAの対抗策は市場の最上位を容量競争に保っており、最大288GBのHBM3eを搭載するBlackwell Ultra GB300や、512GBを狙うRubin Ultraの各仕様がそれにあたる。[AMD - Advancing AI 2026 press release](https://ir.amd.com/news-events/press-releases/detail/1283/amd-announces-advancing-ai-2026), [Introl - The AI Memory Supercycle: HBM 2026](https://introl.com/blog/ai-memory-supercycle-hbm-2026)
+
+- **AIイベント：World's Fairが本日閉幕、チップ・セキュリティの日程も確定** — Moscone Westで開催中のAI Engineer World's Fairが本日7月2日に閉幕し、29トラック561セッション、6,000名超の参加者を集めた4日間の会期を締めくくる。AIチップのトラックでは、MI400をお披露目するAMDのAdvancing AI 2026が7月22-23日で次に控え、続いてStanfordでのHot Chipsが8月23-25日、Santa ClaraでのAI Infra Summitが9月15-17日に予定される。AIセキュリティでは、日程が8月上旬から中旬に集中する。SecurityWeekのAI Risk SummitがHalf Moon Bayで8月11-12日、Black Hat USAとDEF CON 34のAI VillageがLas Vegasで8月上旬に開催され、OWASP Global AppSec USAがSan Franciscoで11月5-6日に続く。並行して、ZenityのAI Agent Security Summitシリーズも世界各地での開催を継続する。さらに先では、GitHub Universeが10月28-29日、AWS re:Inventが11月30日から12月4日に設定されている。[AI Engineer - World's Fair 2026](https://www.ai.engineer/worldsfair/2026), [AMD - Advancing AI event page](https://www.amd.com/en/corporate/events/advancing-ai.html)
+
+[news-20260702.md](report/ja/news-20260702.md)
+
+### Predictions check
+
+本日のニュースは、既存の2つのテーゼをほぼそのまま裏づけた。実環境で確認されたLangflowのテナント間IDORの悪用は、まさに**マルチテナントのエージェント構築ツールは2027年Q1までに9.0超のテナント間認可CVEを引き当てる**というテーゼ(6月27日)が見込んでいた、名指しの9.0超・マルチテナント認可のCVEそのものであり、関連度は最大の5/5で、しかも予測の地平のはるか手前で実際に武器化された形で到来した。これは同時に、共有される実行レイヤー認可のシグナルの上で、休眠状態だった*エージェントフレームワークのSQLツールは2027年Q1までにデフォルト読み取り専用の実行ガードを搭載する*テーゼ(6月5日)を再び動かし、継続中の*ゼロトラスト制御が2027年Q2までにデフォルトオンになる*(6月27日)および*デフォルト拒否のツールセットゲーティングが2027年H1までに実現する*(6月20日)の各テーゼへの圧力を保っている。この同じインシデントは、本日の新規テーゼ**エージェント構築プラットフォームは2027年Q1までにテナント単位のフロー認可を追加する**の種でもある。エージェント構築ツールのCVE群に共通する障害モードは、認証済みユーザーがテナント間へ到達できてしまうことであり、オブジェクトレベルの認可がそれを封じるからだ。
+
+ハードウェア側では、AMDが確定させた7月22-23日のAdvancing AIの日程が、MI400のお披露目——名指しされたHeliosラック、MI350の2倍超のメモリ帯域——を、**AMD Instinct MI400は2026年Q3までに名指しの出荷・メモリ・ラック仕様を伴って登場する**というテーゼ(6月27日)の窓の内側に、5/5でぴたりと収める。そして本日の新規テーゼ**AMD MI400はAdvancing AIでピークFLOPSよりメモリ帯域を前面に打ち出す**は、これを直接足場にしている。HBMが2026年まで売り切れ、TAMが約$100Bという構図は、継続中の*HBM割り当てが2027年Q2までにベンダー開示の中で名指しの拘束的上限になる*テーゼ(6月29日)を供給側の希少性として前進させる。もっとも、割り当ての上限を提出書類の中で名指ししたベンダーはまだない。
+
+オープンウェイトとローカルチューニングの各軸が、この日を締めくくる。Mistral 3のApache-2.0の密モデル14B/8B/3B版は、フロンティア級のオープンウェイトを単一ノードの256GB未満という枠内に収め、*フロンティア級のオープンウェイトLLMが2026年Q4までに256GB未満の単一ノードで動く*テーゼ(6月23日)を前進させる。一方、そのローンチ当日のvLLM/SGLang対応にOllama/llama.cpp/MLXのパッケージングを加えた点は、*量子化デフォルトのサービングが2027年H1までにOSS推論のベースラインとして定着する*テーゼ(6月30日)を後押しし、本日の新規テーゼ**ローンチ当日のvLLM/SGLang＋Ollama対応がオープンウェイトMoEリリースの基準になる**の種となる。UnslothのGLM 5.2への同週対応と3倍コンテキストの自動フィットは、ファストフォローの頻度と長コンテキストの機構という軸で、*サブギガバイトのオンデバイス同週Unslothチューニング*(6月28日)および*単一24-32GB GPUでの100Kトークンのファインチューニング*(6月20日)の各テーゼを前進させる。横断的なパターンとして、エージェント構築ツールの攻撃対象、メモリ主導のアクセラレータサイクル、そしてオープンウェイト＋ローカルチューニングのスタックが、すべて同じ日に前進した。
+
+[future-prediction-20260702.md](future-prediction/ja/future-prediction-20260702.md)
+
+---
+
 ## 2026-07-01
 
 ### News
@@ -64,33 +92,5 @@
 研究の軸はWorldEvolverだ。6月29日のarXiv論文は、推論時に更新されてLLMエージェントの行動と結果の予測を鋭くする自己進化する世界モデルを提案する。エピソード記憶、予測誤差から蒸留した意味規則、信頼できない予測を計画器の手前で落とす選択的予見によってこれを行い、世界モデルは運用中に適応する一方でコアのエージェントは凍結したままだ。論文は3つの基盤モデルにわたり最高の予測精度と、競合ベースラインを上回るタスク成功率を報告し、実行時のメモリ更新を微調整より安価な信頼性の梃子として位置づける。これが新仮説「GitHub Copilotコーディングエージェントが2027年第2四半期までに推論時の自己進化メモリを出荷する」の起点シグナルとなり、「コーディングエージェント基盤が三位一体ゲートを既定で出荷する」仮説（2026-06-28）にもエージェントハーネスの信頼性という主題で接触する。ただしこれは、エージェントの許可された組み合わせをゲートで制約するのではなく、振る舞いの予測品質を改善するものだ。横断するパターンは、フロンティア推論が統制されたハイパースケーラーのシリコンへ統合される一方で、ローカル配信スタックのメモリ下限が下がるという二分化であり、先の予定表、すなわち本日から7月2日までのAI Engineer World's Fair、AMDのAdvancing AI（7月22〜23日）、Hot Chips（8月23〜25日）、8月のAIセキュリティの集まりが、これらの筋が次に決着する会場を定めている。
 
 [future-prediction-20260630.md](future-prediction/ja/future-prediction-20260630.md)
-
----
-
-## 2026-06-29
-
-### News
-
-- **Micron、売上を414.5億ドルへと4倍に伸ばし、2026年のHBMをすべて完売** — 6月25日に報告されたMicronの2026会計年度第3四半期の決算は、AI構築の動きをメモリ供給の物語へと変える。売上高414.6億ドルは前年同期の93.0億ドルからおよそ346%増で、コンセンサスのおよそ352.5億ドルを大きく上回り、第4四半期はおよそ500億ドルと見込まれる。構造的なシグナルは、NvidiaとAMDのアクセラレータに供給される広帯域メモリ側にある。CEOのSanjay Mehrotra氏は、MicronがHBM需要の半分から3分の2しか満たせず、2026年の供給はすべて複数年契約のもとで完売したと述べた。HBM4の売上は10億ドルを超え、HBM3Eのおよそ2倍の速さで立ち上がっている。さらに当四半期には、最低契約売上およそ1000億ドルと顧客からの前払い金220億ドルを固定する16件のテイク・オア・ペイ型の戦略的顧客契約が含まれた。読み取れるのは、AI計算が今やGPUだけでなくメモリによっても律速されているということだ。 [AI Weekly - Micron Q3 2026: Revenue Quadruples to $42B, HBM Supply Sold Out](https://aiweekly.co/alerts/micron-q3-2026-revenue-quadruples-to-42b-hbm-supply-sold-out), [Micron Investor Relations - Fiscal Q3 2026 Earnings Call Prepared Remarks](https://investors.micron.com/static-files/631b1a32-5537-46ae-8f40-82e42fc79dfe)
-
-- **Qualcomm、2028年向けの最初のDragonfly CPU顧客としてMetaを名指し** — 6月24日、Qualcommはフルなデータセンター向けロードマップを公開し、サーバーシリコンの売り込みに初めて名指しのハイパースケーラーを結びつけた。戦略的で複数世代にわたる契約のもと、Metaは当該部品が2028年に商用提供を迎えた際、Qualcomm Dragonfly C1000 CPUを次世代サーバー群の動力源として採用する計画だ。ロードマップは、Dragonfly C1000 CPU（既存のサーバーCPUに対しワットあたり性能が2倍超と主張）、Dragonfly AI300推論アクセラレータ（現行のGPUアーキテクチャに対しワットあたり性能が4～8倍と主張、2028年にサンプル出荷）、そしてAI200に対し最大54倍の帯域幅向上をもたらすとQualcommが述べる新たなHigh Bandwidth Computeメモリ階層にまたがり、Lenovo、Supermicro、Micron、SK hynix、Samsungを含む35社以上のエコシステムパートナーを擁する。位置づけは学習向けの取り組みではなく、明確にNvidiaへの推論経済性の攻勢だ。難点は時間軸で、最初の商用サンプル出荷はまだ2年先だ。 [Qualcomm - Qualcomm Unveils Comprehensive Data Center Roadmap for the Agentic AI Era with New Dragonfly Portfolio (June 24 2026)](https://www.qualcomm.com/news/releases/2026/06/qualcomm-unveils-comprehensive-data-center-roadmap-for-the-agent)
-
-- **Gartner、2026年のAIエージェントソフトウェアを2065億ドル・139%増と見積もる** — Gartnerの最新予測は、AIエージェントソフトウェアの支出を2026年におよそ2065億ドルと見積もる——2025年の864億ドルからおよそ139%増で、2027年には3763億ドルに向かう見通し——これはAI支出全体の47%の拡大のほぼ3倍の伸び率であり、すでに活況のある市場のなかでも、目的特化型のエージェントソフトウェアを企業向けソフトウェアの最も急成長する区分にしている。Gartnerはこの楽観論に、エージェント型AIプロジェクトの40%超が2027年末までに中止されると予想する、という従来からの注意を添えており、支出曲線と中止リスクがともに上昇している。シグナルは、エージェント型ソフトウェアが一般的なAI支出から独立した独自の項目となり、目的特化型ツールという狭い区分に予算と精査が集中しているということだ。 [Gartner - Gartner Forecasts Worldwide AI Spending to Grow 47% in 2026](https://www.gartner.com/en/newsroom/press-releases/2026-05-19-gartner-forecasts-worldwide-ai-spending-to-grow-47-percent-in-2026)
-
-- **HCLTech、2.34億ドルのクローズを主導し、15億ドルのソブリンAIユニコーンSarvamを生み出す** — ソブリンAIの命題は今週、具体的なデータ点を得た。HCLTechは、Sarvamの3億ドルのシリーズBの2.34億ドルのファーストクローズを、15億ドルの評価額で主導したと認めた——HCLTech自身の1.5億ドルの出資でおよそ10.5%の株式を取得——インド最新のAIユニコーンを生み出した。この資金調達は、コーディング、エージェント、サイバーセキュリティのワークロードを標的とし、国内で構築・ホスト・統治される最先端モデルの計算と学習に充てられる。Gartnerの2065億ドルのエージェント支出予測と照らし合わせると、この取引は、エージェント支出の波が今や米国の最先端ラボだけでなく国家代表のモデル開発企業をも資金の流れへと引き込んでいることを示しており、純粋なVCではなく企業向けITサービスの大手が出資を支えている。 [HCLTech - Sarvam raises $234 million in first close of $300 million Series B at $1.5 billion valuation](https://www.hcltech.com/press-releases/sarvam-raises-234-million-first-close-300-million-series-b-15-billion-valuation)
-
-- **AI World's Fairが本日開幕、夏のチップ・セキュリティの日程も確定** — 今後の予定は3つのサブトラックにまたがる。主流の開発／データ系では、AI Engineer World's Fairの本編プログラムがサンフランシスコのMoscone Westで6月29日から7月2日まで開催され（およそ29トラック、およそ300名の講演者、6000名超の参加者）、本日Coding Agentsの基調講演と展示で開幕し、続いてAutoresearch（7月1日）とHarness Engineering（7月2日）の基調講演が行われる。さらに先には、GitHub Universeが10月28～29日に戻り、AWS re:Inventが11月30日から12月4日まで開催される。AIセキュリティ系では、SecurityWeekのAI Risk Summitが8月11～12日にハーフムーンベイのRitz-Carltonで、Black Hat USA 2026とAI Villageを擁するDEF CON 34が8月初旬にラスベガスで、OWASP Global AppSec USAが11月5～6日にサンフランシスコで開催され、ZenityのAI Agent Security Summitシリーズも引き続き注視対象だ。AIチップ／ハードウェア系では、AMDのAdvancing AI 2026が7月22～23日にMosconeで、Hot Chips 2026が8月23～25日にスタンフォードで、AI Infra Summitが9月15～17日にサンタクララで開催される。 [AI Engineer - World's Fair 2026 (main program June 29 - July 2, Moscone West, San Francisco)](https://www.ai.engineer/worldsfair/2026), [SecurityWeek - AI Risk Summit, August 11-12, Ritz-Carlton Half Moon Bay](https://www.securityweek.com/securityweek-to-host-ai-risk-summit-august-11-12-at-the-ritz-carlton-half-moon-bay/), [Hot Chips - 2026 symposium (August 23-25, Stanford Memorial Auditorium)](https://hotchips.org/)
-
-[news-20260629.md](report/ja/news-20260629.md)
-
-### Predictions check
-
-本日のシグナルは、AI増強がGPUの物語から、メモリと資金の物語へと固まったことだ。チップ採算と資本の流れという2つの軸が、それぞれ新たな仮説の起点シグナルを供給している。メモリ階層では、Micronの2026会計年度第3四半期の決算(6月25日報道)が、増強全体を誤った軸で律速されたものとして描き直す。売上高は414.6億ドル、前年同期比およそ346%増で、約352.5億ドルの市場予想を大きく上回り、5四半期連続の過去最高となった。第4四半期の見通しは約500億ドルだ。構造的なシグナルはHBMの希少性だ。Sanjay Mehrotra最高経営責任者はMicronが需要の半分から3分の2しか満たせないと語り、2026年の供給はすべて複数年契約のもとで完売し、HBM4の売上は10億ドルを超えHBM3Eのおよそ2倍の速さで立ち上がり、当四半期には最低契約売上高にしておよそ1000億ドルを固定する16件のtake-or-pay型の戦略的顧客契約に加え前払いの顧客資金220億ドルを計上した。この完売の供給開示が、「HBM allocation becomes a named binding cap in a vendor disclosure by Q2 2027」という新仮説の起点シグナルとなり、最高の5/5の関連度を持つ。本日は供給側の希少性を供給したが、買い手側のアクセラレータ・ベンダーやハイパースケーラーがHBMを自社出荷の律速上限として名指しした事実はまだない。同じ決算は、引き継いだ「OpenAI locks equity-coupled HBM allocation」仮説(6月24日)を直接前へ進める。take-or-payと前払い資金の型がいまや16の戦略的顧客にわたって標準だ。ただし名指しのフロンティア研究所の相手や出資連動は開示されていない。さらに同じ決算は、「hyperscaler details AI-buildout debt financing」仮説(6月13日)を供給側から後押しする。ここでは、ハイパースケーラーが自社の説明会で社債を名指しするのではなく、顧客が資金を前払いする形だ。
-
-シリコン層では、Qualcommの6月24日のDragonflyロードマップが、マーチャント型の非Nvidiaスタックに初めて名指しのハイパースケーラーを結びつける。複数世代にわたる戦略的合意のもと、Metaは、2028年の商用提供開始時にDragonfly C1000 CPU(既存のサーバーCPU比で2倍超の電力あたり性能をうたう)を次世代サーバー群に採用する計画だ。あわせて、Dragonfly AI300推論アクセラレータ(現行GPUアーキテクチャ比で4〜8倍の電力あたり性能をうたい、2028年サンプル出荷)と、AI200比で最大54倍の帯域向上をうたうHigh Bandwidth Computeのメモリ階層も並び、Lenovo・Supermicro・Micron・SK hynix・Samsungを含む35社超のエコシステムパートナーが支える。競争上の契機は仕様ではなく名指しの顧客への言及だ。いったん1社の事業者がNvidiaへの推論採算上の攻勢を支持すると記録に残れば、その論拠は同業に裏付けられた調達シグナルとなり、競合が応えざるを得なくなる。これが「second hyperscaler names non-Nvidia data-center inference silicon by Q4 2027」という新仮説を5/5で生み、隔たりは第2の最上位事業者と、Qualcommの2年というサンプル出荷の遅れだ。同じ案件は、引き継いだ「Corsair-class inference silicon books a named hyperscaler deployment」仮説(6月17日)に合致し、「inference-ASIC cohort fourth-named-buyer」仮説(6月25日)が名指しの部品と買い手を加え続けるのを保ち、「rival accelerator vendor buys a CUDA-agnostic inference compiler」仮説(6月28日)を補強する。昨日のModular/コンパイラの半分と本日のハードウェアの半分は、同じフルスタック攻勢の両面だ。ただし競合の対抗買収はまだ表に出ていない。
-
-資本の流れの層では、GartnerがAIエージェント向けソフトウェア支出を2026年に約2065億ドルと見積もる。2025年の864億ドルからおよそ139%増、2027年には3763億ドルに向かい、AI支出全体の47%成長のほぼ3倍にあたる。これは専用のエージェント向けソフトウェアを企業向けソフトウェアで最速成長の領域とするものだが、2027年末までにエージェント型AIプロジェクトの40%超が中止されるという従来からの警告と対になり、支出と中止の曲線がともに上がる。対応する供給側のデータ点が、HCLTechがSarvamの3億ドルのシリーズBについて2億3400万ドルのファーストクローズを15億ドルの評価額で主導したことだ。HCLTech自身が1.5億ドルを投じて約10.5%の持ち分を取得し、コーディング・エージェント・サイバーセキュリティ向けのフロンティアモデルを国内で構築・ホスト・統治するインドの最新AIユニコーンを誕生させた。この組み合わせが「sovereign-AI national champion crosses unicorn valuation by Q4 2026」という新仮説の起点シグナルとなり、5/5の関連度を持つ。西側VCではなく企業向けITサービスの戦略的投資家が軸であり、隔たりは、同じ国内戦略的出資の構造で別の市場における第2の主権チャンピオンが現れることだ。横断的なパターンは、計算の希少性・マーチャント型シリコンの競争・国産チャンピオンの資本が本日同じ日に固まったことであり、一方で先の予定表、すなわち本日から7月2日まで開催のAI Engineer World's Fair、AMDのAdvancing AI(7月22〜23日)、Hot Chips(8月23〜25日)、8月のAIセキュリティの集まり(AI Risk Summit、Black Hat、DEF CON)が、これらの筋が次に決着する会場を定めている。
-
-[future-prediction-20260629.md](future-prediction/ja/future-prediction-20260629.md)
 
 ---
