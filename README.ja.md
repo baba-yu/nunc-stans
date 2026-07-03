@@ -11,6 +11,34 @@
 
 ---
 
+## 2026-07-03
+
+### News
+
+- **OpenAI が Codex Remote を、すべての有料 ChatGPT プランで GA に移行** — OpenAI は 6 月 25 日、Codex Remote をプレビューから一般提供（GA）へ格上げし、長時間の実行になるコーディングセッションのスマートフォンからの操作を、すべての有料 ChatGPT プラン（Plus、Pro、Business、Enterprise、Education）に開放しました。ChatGPT のモバイルアプリから、開発者は接続済みの Mac または Windows ホスト上で作業を開始・継続し、進捗を見守り、個々の操作を遠隔で承認できます。今回のローンチは、従来のリモートシェル方式を、デバイスとホストを 1 対 1 で認証する QR ペアリングを備えた専用リレーへと置き換え、開発マシンを公開インターネットから切り離したまま到達可能に保ちます。同じ時期に Codex CLI 0.142.2 も出荷され、MCP のツール検索を既定で有効にし、DigitalOcean Droplet のワークスペースプラグインを追加しました。この組み合わせは、コーディングエージェントのハーネスを、端末に縛られたものではなく、完全に非同期でどこからでも承認できるループへと押し進めます。 [Releasebot - OpenAI Codex updates (Remote GA, CLI 0.142.2)](https://releasebot.io/updates/openai/codex), [TechTimes - OpenAI Codex Remote Goes Live for All Plans](https://www.techtimes.com/articles/319201/20260627/openai-codex-remote-goes-live-all-plans-phone-control-now-secured-qr-relay.htm)
+
+- **Anthropic が 99% 超のジェイルブレイク分類器とともに Fable 5 を世界的に復旧** — Anthropic は 7 月 1 日、Fable 5 を世界的に復旧させました。米商務省が 6 月 30 日に、Amazon が発見したジェイルブレイクを受けておよそ 19 日間このモデルを停止させていた緊急輸出規制を解除した翌日のことです。このモデルは AWS、Google Cloud、Microsoft 上の Claude.ai、Claude Platform API、Claude Code、Claude Cowork で再び利用可能になり、Anthropic が言うところの当該ジェイルブレイクを 99% を超える有効性で遮断する新しい分類器を備えます。ただしその代償として、セキュリティに隣接する正当なコーディングの問い合わせの一部は Opus 4.8 に振り向けられます。復旧には 4 項目の政府との取り決めが伴いました。公開前のモデルアクセス、迅速な脅威インテリジェンスの共有、重要インフラへの参画、そしてジェイルブレイクのリスクスコアリング手法の共同開発です。これは Anthropic 最大の出資者にとっての節目と並んで起きています。Menlo Ventures は、いまや約 $14B の価値を持つ Anthropic 株を背景に、自社史上最大の $3B の調達を完了しました。 [Build Fast with AI - AI News Today July 3 2026](https://www.buildfastwithai.com/blogs/ai-news-today-july-3-2026), [Menlo Ventures - Menlo Turns 50 and Announces $3B in Fresh Capital](https://menlovc.com/perspective/menlo-turns-50-and-announces-3b-in-fresh-capital-to-go-all-in-on-ai/)
+
+- **Bridgewater と Thinking Machines が Qwen3-235B を微調整し、フロンティアモデルを上回る** — Bridgewater の AIA Labs と Mira Murati の Thinking Machines Lab は 6 月 30 日、オープンウェイトの Qwen3-235B ベースを特化的に微調整したモデルが、6 つの情報フィルタリングタスクで平均 84.7% の精度に達し、検証した最良のフロンティアモデルの 78.2% を上回る 29.8% のエラー削減を示した結果を公開しました。このモデルは Thinking Machines の Tinker プラットフォーム上で、Bridgewater の独自の専門家ラベル付き金融データを用いて学習され、その改善はラウンドロビン方式のインターリーブ・バッチング（+12.1%）、非対称クリッピングを備えた CISPO 損失（+10.1%）、定期的に昇格させる教師を用いたオンポリシー蒸留（+3.1%）に帰せられます。チームによれば、このモデルはフロンティアの代替に比べてタスクあたりの推論コストがおよそ 13.8 分の 1 で動作するとされ、よく調整されたオープンウェイトのチェックポイントに質の高いドメインラベルを組み合わせれば、狭い専門タスクで汎用のフロンティア規模を上回るというテーゼの、明快な裏付けとなります。 [Thinking Machines Lab - Learning to Replicate Expert Judgment in Financial Tasks](https://thinkingmachines.ai/news/learning-to-replicate-expert-judgment-in-financial-tasks/), [Blockchain.News - Bridgewater Fine-Tunes Model to Beat Frontier LLMs](https://blockchain.news/ainews/bridgewater-fine-tunes-model-beats-frontier-llms)
+
+- **動作する悪用が、Flowise の Custom-MCP RCE（CVE-2026-40933）のパッチを回避** — Obsidian Security は、CVE-2026-40933 に対する動作する概念実証を公開しました。これは、GitHub スター 52,000 超のデプロイで使われるローコードのエージェント構築ツール Flowise に付属する Custom MCP ツールのリモートコード実行の欠陥です。この不具合は stdio トランスポートに存在し、ユーザーが与えたコマンドを Flowise サーバー上でサンドボックス化されていない子プロセスとして起動します。そのため、汚染されたエクスポート済みワークフローファイルは、被害者が取り込んだ瞬間に自動でコマンドを実行してしまい、承認プロンプトは一切要りません。自己ホスト型のオープンソース版も企業版も、現行バージョンでも既定で脆弱なままであり、公式パッチを回避できることも研究者が実証したため、バージョンを上げるだけでは穴は塞がりません。今回の公表は、協調的な MCP サプライチェーン勧告が LiteLLM、Agent Zero、LangBot、Windsurf にわたって跡付けた、より広い stdio コマンドインジェクションのパターンの内側にあります。推奨される緩和策は、stdio を無効にして Server-Sent Events を用い、取り込んだ MCP 設定はいずれも信頼できないコードとして扱うことです。 [NVD - CVE-2026-40933 Detail](https://nvd.nist.gov/vuln/detail/CVE-2026-40933), [Infosecurity Magazine - Critical Flowise Flaw Gives Attackers Full Server Control](https://www.infosecurity-magazine.com/news/flowise-mcp-rce-poc/), [OX Security - MCP Supply Chain Advisory](https://www.ox.security/blog/mcp-supply-chain-advisory-rce-vulnerabilities-across-the-ai-ecosystem/)
+
+- **AMD の 7 月 22〜23 日の MI400 披露が、密な AI イベントの並びを先導** — 最も近い AI チップの起爆剤は、サンフランシスコの Moscone で 7 月 22〜23 日に開かれる AMD の Advancing AI 2026 で、MI400 シリーズと「Helios」ラックスケールシステムが提供時期とともに見込まれています。同じハードウェアのトラックでは、Hot Chips がスタンフォードで 8 月 23〜25 日に、AI Infra Summit がサンタクララで 9 月 15〜17 日に続きます。AI セキュリティの枠は 8 月中旬に集まります。SecurityWeek の AI Risk Summit が Half Moon Bay の Ritz-Carlton で 8 月 11〜12 日に開かれ、Black Hat USA と DEF CON 34 の AI Village が 8 月上旬にラスベガスで、OWASP Global AppSec USA がサンフランシスコで 11 月 5〜6 日に続きます。Zenity の AI Agent Security Summit シリーズは、エージェントの乗っ取りと MCP レイヤーの防御に取り組むチーム向けに世界各地での開催を続けており、今週の Flowise の MCP 悪用を踏まえれば直接に関わりがあります。主流の開発トラックでは、GitHub Universe が 10 月 28〜29 日、AWS re:Invent が 11 月 30 日〜12 月 4 日に予定されています。最も近い二つの行動は、7 月 22 日の AMD 基調講演と 8 月 11〜12 日の AI Risk Summit への登録です。 [SemiWiki - Hot Chips 2026](https://semiwiki.com/event/hot-chips-2026/), [PR Newswire - SecurityWeek to Host AI Risk Summit August 11-12](https://www.prnewswire.com/news-releases/securityweek-to-host-ai-risk-summit-august-11-12-at-the-ritz-carlton-half-moon-bay-ca-302783094.html), [AI Infra Summit - 2026 FAQs](https://www.ai-infra-summit.com/faqs)
+
+[news-20260703.md](report/ja/news-20260703.md)
+
+### Predictions check
+
+本日のサイクルは、二つの軸を中心に珍しく整合しています。一つは、自作が購入に勝る状況を生むオープンウェイトの微調整の経済性であり、もう一つは、いつまでもふさがらないエージェントツールの攻撃対象領域です。Bridgewater と Thinking Machines による Qwen3-235B の微調整（金融判断タスクで 84.7% 対 78.2%、タスクあたりのコストはおよそ 13.8 分の 1、その向上は具体的な事後学習のレシピに帰せられる）は、本日の新規テーゼ **オープンウェイト MoE の微調整が、2027 年 Q2 までに専門的な特化タスクでフロンティア API を上回る** の起点となり、規模より手法という共通の仕組みを介して、休眠していた四つのテーゼを一挙に復活させます。「公開時点での vLLM/SGLang と Ollama の対応がオープンウェイト MoE の公開基準になる」テーゼ（7 月 2 日、関連度 4/5）、「単一の 24〜32GB GPU の微調整が 100K トークン文脈を日常的にこなす」テーゼ（6 月 20 日）、「サブ 7B のオープンウェイト推論モデルが検証済みの AIME-80 を突破する」テーゼ（6 月 19 日）、そして本日の並行する悪用の証明を介した「AWS Continuum のサンドボックスでの悪用検証が業界の標準になる」テーゼ（6 月 21 日）です。自作か購入かの答えは、独自ラベルを保有するあらゆる場面で、自前所有の特化モデルへと傾きつつあります。
+
+セキュリティの軸が本日の最も密度の高い圧力のシグナルです。Obsidian Security による Flowise の Custom-MCP RCE（CVE-2026-40933）の動作する概念実証は、stdio トランスポートが汚染された取り込み済みワークフローを、承認プロンプトなしにサンドボックス化されていない子プロセスとして実行し、しかも公式パッチを回避できるというもので、標準の「エージェント構築フレームワークが MCP ツール実行を既定でサンドボックス化して出荷する」予測（7 月 1 日）を最大の関連度 5/5 で直接前進させ、「エージェント構築プラットフォームがテナント単位のフロー認可を加える」テーゼ（7 月 2 日）を関連度 3/5 で支え、Codex Remote の QR ペアリングされた承認のハーネスと組み合わさって「コーディングエージェントのプラットフォームが三点セットの権限ゲートを既定で出荷する」予測（6 月 28 日）を鋭くします。この収束、すなわち実環境で動くパッチ耐性のある悪用クラスが、ホワイトハウスが 7 月 7 日の週に自主的なフロンティアモデルの標準枠組みを整えようとするまさにそのときに到来したことが、本日の新規テーゼ **MCP の stdio トランスポートが、エージェントフレームワーク全体で 2027 年 Q1 までに既定で無効になる** を後押しする圧力そのものです。このテーゼは、セキュリティ上の指針が収束した一つの指示（stdio を無効にして SSE を用い、取り込んだ設定は信頼できないコードとして扱う）を、主要なフレームワークが標準化するであろう明白な堅牢化のレバーとして読み解きます。
+
+さらに二つの筋がサイクルを締めくくります。OpenAI が Codex Remote を CLI 0.142.2 とともに全有料プランで GA に移したことは、製品化の勢いとして「OpenAI または Google がエージェント調整済みの中位モデルを出荷する」テーゼ（7 月 1 日）を後押しし、一方イベントカレンダーは AMD の 7 月 22〜23 日の MI400 披露を直近の起爆剤として保ち、「AMD MI400 がメモリ帯域をピーク FLOPS より前面に売り込む」（7 月 2 日）と「AMD Instinct MI400 が具体的な出荷・メモリ・ラック仕様を伴って登場する」（6 月 27 日）の双方を、基調講演待ちの着地の姿勢に置いています。三つ目の新規テーゼ **Menlo Ventures は 2027 年 Q1 までに 30 億ドルの調達を専用の AI ファンドへ投じる** は、本日の資本の話から直接に読み取れます。Menlo の史上最大となる $3B の調達は、いまや $965B の評価額に対しておよそ $14B と評価される Anthropic 株の持ち分と切り離せず、汎用型のファンドでは吸収しきれない集中の問題を生みます。そして、フロンティアへのアクセスをめぐって立ち上がりつつある政府のセキュリティ・開示体制は、下手な鉄砲式のシード分散投資よりも、集中した後期ステージの AI ファンドの妙味を高めます。横断する筋は、MCP の配線レイヤー、メモリ主導のアクセラレータのサイクル、そしてオープンウェイトとローカル調整のスタックが、いずれも同じ日に前進したという点です。
+
+[future-prediction-20260703.md](future-prediction/ja/future-prediction-20260703.md)
+
+---
+
 ## 2026-07-02
 
 ### News
@@ -64,33 +92,5 @@
 **縦割りのドメイン向けエージェントハーネスが2027年第1四半期までに2番目のフロンティア研究所から出荷される** が3つ目の新仮説で、Claude Science がまいたものだ。差別化される製品が重みではなく、既存モデルに重ねるコネクタとドメインスキルの層である以上、少なくとももう1つのフロンティア研究所か主要プラットフォームが、新モデルで応えるのではなく——科学・法務・金融向けに——自前の縦割りハーネスを出荷すると見込まれる。6月29日のオーケストレーションの arXiv 群（構成を第一級の工学課題として扱う 2606.31518 と、自己進化する生物プロトコルエージェント 2606.31763）は、研究の最前線が同じ統合とオーケストレーションの層へ収束していることを示し、継続中の *エージェントのメタハーネスが2027年上半期までにベンダー横断のエージェント向けポリシー基盤になる*（6月15日）と *オーケストレーションのベンチマークが2027年第1四半期までにレイテンシ開示の列を加える*（6月24日）の各仮説を後押しする。ストリームを横断するパターンは、モデルの採算、ハーネスの価値、オーケストレーション研究、エージェントツールの攻撃面がいずれも同じ層へ向かっていることだ。
 
 [future-prediction-20260701.md](future-prediction/ja/future-prediction-20260701.md)
-
----
-
-## 2026-06-30
-
-### News
-
-- **ClaudeがAzureホスト型GB300上でMicrosoft FoundryのGAに到達** — AnthropicとMicrosoftは6月29日、Microsoft Foundry内でClaudeをプレビューから一般提供へ移行し、[Claude Opus 4.8とHaiku 4.5をMessages API経由で](https://claude.com/blog/claude-in-microsoft-foundry)プロンプトキャッシュと拡張思考とともに公開した。一般提供される「Azureホスト型」ティアは、企業のID・ネットワーク・課金・ガバナンス管理のもとAzureインフラ上をエンドツーエンドで走り、単一の統合請求書とMicrosoft Enterprise Agreement連携を備える。一方「Anthropicインフラ・ホスト型」ティアはプレビューにとどまる。 [Claude by Anthropic - Claude in Microsoft Foundry is now generally available](https://claude.com/blog/claude-in-microsoft-foundry)
-
-- **vLLM v0.24.0が量子化デフォルトのModel Runner V2を出荷** — 支配的なオープンソース推論サーバーが[vLLM v0.24.0](https://github.com/vllm-project/vllm/releases)をリリースし、256人の貢献者から571件のコミットを取り込んだ。Model Runner V2は量子化モデルをデフォルトでサポートするようになり、多層KVキャッシュ・オフロード経路がGPUメモリを超えてキャッシュを退避するオブジェクトストレージの二次層を追加し、DeepSeek-V4はスパースインデックスキャッシュとプリフィルのチャンク計画パスを得て、DeepEP v2がMoEのエキスパート並列のために統合された。カーネルはswap_abによりSM90 CUTLASS FP8で180-290%の高速化を謳い、Rustフロントエンドは認証・CORS・トークン化エンドポイントと、ツール呼び出しと推論を統一したストリーミングパーサーで成熟した。 [GitHub - vllm-project/vllm Releases (v0.24.0)](https://github.com/vllm-project/vllm/releases)
-
-- **WorldEvolverがエージェント計画のため推論時に世界モデルを進化させる** — 6月29日のarXiv論文[「Self-Evolving World Models for LLM Agent Planning」(Xuan Zhang、Wenxuan Zhang、See-Kiong Ng、Yang Deng著)](https://arxiv.org/abs/2606.30639)は、行動の結果をうまく予測できないために計画を誤るエージェントを標的にする。WorldEvolverフレームワークは、エピソード記憶、予測誤差から明示的なルールを蒸留する意味記憶、計画器が見る前に信頼できない予測をふるい落とす選択的予見を組み合わせる。世界モデルは運用中に進化し続け、コアのエージェントは凍結したまま、再訓練なしで推論時に適応する。著者らは3つの基盤モデルにわたり最高の予測精度と、競合する世界モデルのベースラインを上回るタスク成功率を報告している。 [arXiv - Self-Evolving World Models for LLM Agent Planning (2606.30639)](https://arxiv.org/abs/2606.30639)
-
-- **AI Engineer World's Fairが会期中盤。チップとセキュリティの日程も確定** — [AI Engineer World's Fair](https://www.ai.engineer/worldsfair/2026)はサンフランシスコのMoscone Westで会期中盤を迎えている（6月29日から7月2日。約29トラック、約300人の登壇者、6,000人超の参加者）。7月1日にAutoresearch基調講演、7月2日にHarness Engineeringがある。チップのトラックでは、AMDのAdvancing AI 2026が7月22-23日、[Hot Chips 2026](https://hotchips.org/)がスタンフォードで8月23-25日に開催される。セキュリティでは、SecurityWeekの[AI Risk Summit](https://www.securityweek.com/securityweek-to-host-ai-risk-summit-august-11-12-at-the-ritz-carlton-half-moon-bay/)がRitz-Carlton Half Moon Bayで8月11-12日に、8月初旬のBlack Hat USAとDEF CON 34に先立って開かれる。 [AI Engineer - World's Fair 2026 (June 29 - July 2, Moscone West, San Francisco)](https://www.ai.engineer/worldsfair/2026), [Hot Chips - 2026 symposium (August 23-25, Stanford Memorial Auditorium)](https://hotchips.org/), [SecurityWeek - AI Risk Summit, August 11-12, Ritz-Carlton Half Moon Bay](https://www.securityweek.com/securityweek-to-host-ai-risk-summit-august-11-12-at-the-ritz-carlton-half-moon-bay/)
-
-- **AzureホストのClaudeティアがNVIDIA GB300 NVL72上で稼働** — Foundryローンチの裏にある差別化要因はインフラ層だ。AzureホストのClaudeティアは[Quantum-X800 InfiniBandネットワークを備えたNVIDIA GB300 NVL72システム](https://blogs.nvidia.com/blog/anthropic-nvidia-gb300-blackwell-ultra-microsoft-azure/)上を走る。NVIDIAはGB300の推論効率を総所有コストの削減要因として訴求し、自律的でドメイン特化したエージェント向けにSecure Agent Workspaceのリファレンス設計と組み合わせて展開している。フロンティアラボの旗艦モデルが、ハイパースケーラー自社シリコン上でその自社カタログと並んで座るようになり、ラボのAPIを呼ぶことと自社クラウドテナント内に展開することの隔たりを縮めている。 [NVIDIA Blog - Claude Meets Blackwell Ultra: Anthropic's Models Now Run on NVIDIA GB300 in Azure](https://blogs.nvidia.com/blog/anthropic-nvidia-gb300-blackwell-ultra-microsoft-azure/)
-
-[news-20260630.md](report/ja/news-20260630.md)
-
-### Predictions check
-
-本日のシグナルは、配信と基盤をめぐる物語だ。モデルと利用者の間に位置する層が3つの方面で同時に強化され、一方でチップとセキュリティのイベント日程が、これらの筋が次にどこで対面の場として決着するかを定めた。中心となる裏付けは展開の軸にある。AnthropicとMicrosoftは6月29日、ClaudeをMicrosoft Foundry内でプレビューから一般提供へ移し、プロンプトキャッシュと拡張思考を伴うMessages API経由でClaude Opus 4.8とHaiku 4.5を公開した。これはAzureインフラ上をエンドツーエンドで走り、課金を一本化してEnterprise Agreementと統合された、一般提供のAzureホスト型ティアのもとで提供される。差別化要因はその下のシリコンだ。このティアはQuantum-X800 InfiniBandを備えたNVIDIA GB300 NVL72システム上を走り、NVIDIAはGB300の推論効率を総所有コストの削減要因として打ち出し、統制された領域特化のエージェント向けにSecure Agent Workspaceのリファレンス設計を同梱した。この立ち上げは新仮説「2番目のフロンティアラボが2027年第2四半期までにハイパースケーラー自社シリコン上でファーストパーティ一般提供に到達する」の起点シグナルとなる。フロンティア研究所の旗艦モデルが今やハイパースケーラー自社シリコン上で自社カタログと並ぶようになり、研究所のAPIを呼ぶことと自社クラウドテナント内に展開することの隔たりが縮んだからだ。
-
-オープンソースの配信の軸も並んで動いた。vLLM v0.24.0は256人の貢献者から571件のコミットを取り込み、Model Runner V2が量子化モデルを既定とし、GPUメモリを超えてオブジェクトストレージの二次層へキャッシュを退避させる多層KVキャッシュ・オフロード経路、DeepEP v2のエキスパート並列、180〜290%のSM90 CUTLASS FP8カーネル高速化を加えた。この単一リリースが「量子化デフォルトの推論提供が2027年上半期までにOSS推論の標準になる」という新仮説を支えるとともに、休眠していた2つの仮説を復活させる。「統一的な圧縮KVキャッシュフラグ」仮説（2026-04-30）は関連度4で戻り、階層化KV退避を埋もれたフラグではなく既定経路の機能として製品化していく動きを示す。ただし単一スタックにおける退避の階層化にとどまり、予測が求める複数スタック横断の名前を持つ圧縮のつまみではない。「Reservoirルーティング」仮説（2026-05-27）は関連度3で復活し、DeepEP v2とDeepSeek-V4のルーティング最適化が、MoEルーティングの内部処理が主流サーバーにとって既定経路の関心事であることを裏付ける一方、名前を持つステートフルなルーター状態のプリミティブそれ自体は未搭載のままだ。同じリリースは「単一ノードで256GB未満のフロンティア級オープンウェイト」仮説（2026-06-23）の基盤インフラとしても寄与し、量子化を既定とするロードにKV退避が加わることでメモリ下限を直接引き下げる。
-
-研究の軸はWorldEvolverだ。6月29日のarXiv論文は、推論時に更新されてLLMエージェントの行動と結果の予測を鋭くする自己進化する世界モデルを提案する。エピソード記憶、予測誤差から蒸留した意味規則、信頼できない予測を計画器の手前で落とす選択的予見によってこれを行い、世界モデルは運用中に適応する一方でコアのエージェントは凍結したままだ。論文は3つの基盤モデルにわたり最高の予測精度と、競合ベースラインを上回るタスク成功率を報告し、実行時のメモリ更新を微調整より安価な信頼性の梃子として位置づける。これが新仮説「GitHub Copilotコーディングエージェントが2027年第2四半期までに推論時の自己進化メモリを出荷する」の起点シグナルとなり、「コーディングエージェント基盤が三位一体ゲートを既定で出荷する」仮説（2026-06-28）にもエージェントハーネスの信頼性という主題で接触する。ただしこれは、エージェントの許可された組み合わせをゲートで制約するのではなく、振る舞いの予測品質を改善するものだ。横断するパターンは、フロンティア推論が統制されたハイパースケーラーのシリコンへ統合される一方で、ローカル配信スタックのメモリ下限が下がるという二分化であり、先の予定表、すなわち本日から7月2日までのAI Engineer World's Fair、AMDのAdvancing AI（7月22〜23日）、Hot Chips（8月23〜25日）、8月のAIセキュリティの集まりが、これらの筋が次に決着する会場を定めている。
-
-[future-prediction-20260630.md](future-prediction/ja/future-prediction-20260630.md)
 
 ---
