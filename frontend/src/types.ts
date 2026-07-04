@@ -65,3 +65,27 @@ export interface NewCommitment {
   resources: Resources
   note: string | null
 }
+
+// A flattened News prediction (world scope), produced by the federation-side
+// world adapter (frontend/scripts/build-world.mjs) from News's export. The
+// world view reads these; nothing here is persisted into self (F6).
+export interface WorldPrediction {
+  /** the News prediction id; becomes `world/prediction/<id>` on an edge */
+  id: string
+  label: string
+  scope: string | null
+  summary: string | null
+  date: string | null
+}
+
+// POST /self/edges body. The engine assigns `id` and `created_at`; the client
+// must not send them (the engine rejects unknown fields).
+export interface NewEdge {
+  type: EdgeType
+  from: string
+  to: string
+  to_label: string
+  from_label?: string
+  note?: string
+  author: Author
+}

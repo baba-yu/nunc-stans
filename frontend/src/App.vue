@@ -3,6 +3,7 @@ import { computed, onMounted } from 'vue'
 import CommitmentList from './components/CommitmentList.vue'
 import EdgeList from './components/EdgeList.vue'
 import AuthorForm from './components/AuthorForm.vue'
+import WorldView from './components/WorldView.vue'
 import { useMeStore } from './stores/me'
 
 const store = useMeStore()
@@ -16,7 +17,10 @@ const provenance = computed(() => {
   return `provenance: ${aiPrompted}/${total} of my bets were AI-prompted (${percent}%) · ${store.edges.length} edges${skipped}`
 })
 
-onMounted(() => store.load())
+onMounted(() => {
+  store.load()
+  store.loadWorld()
+})
 </script>
 
 <template>
@@ -28,6 +32,9 @@ onMounted(() => store.load())
     <CommitmentList :commitments="store.commitments" />
 
     <AuthorForm />
+
+    <h2>World (News)</h2>
+    <WorldView />
 
     <h2>Edges</h2>
     <EdgeList :edges="store.edges" />
