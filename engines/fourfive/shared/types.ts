@@ -1,0 +1,99 @@
+// Types shared between the Vue frontend and the Hono server.
+
+import type { Blueprint } from './blueprint'
+
+export type ChatRole = 'user' | 'assistant' | 'system'
+
+export interface ChatMessage {
+  role: ChatRole
+  content: string
+}
+
+export interface Session {
+  id: string
+  app_id: string | null
+  title: string
+  created_at: string
+  updated_at: string
+}
+
+export interface Message {
+  id: string
+  session_id: string
+  role: ChatRole
+  content: string
+  created_at: string
+  input_tokens?: number | null
+  output_tokens?: number | null
+}
+
+export interface TemporaryApp {
+  id: string
+  name: string
+  slug: string
+  description: string | null
+  current_version: number
+  workspace_path: string
+  created_at: string
+  updated_at: string
+}
+
+// --- API DTOs ---
+
+export interface HealthResponse {
+  ok: boolean
+  provider: string
+  model: string
+  version: string
+}
+
+export interface CreateSessionBody {
+  title?: string
+  mode?: 'new' | 'compose'
+  /** compose: name of the new composite app (also the session title). */
+  name?: string
+  /** compose: apps the new app depends on; pinned at their current version. */
+  dependencies?: { app_id: string }[]
+}
+
+export interface SendMessageBody {
+  content: string
+  think?: boolean
+  maxTokens?: number
+}
+
+export interface SendMessageResponse {
+  userMessage: Message
+  assistantMessage: Message
+  blueprint: Blueprint | null
+}
+
+export interface UsageResponse {
+  input: number
+  output: number
+  total: number
+}
+
+export interface AppListItem {
+  id: string
+  name: string
+  slug: string
+  description: string | null
+  current_version: number
+  updated_at: string
+}
+
+/** One dependency of the current session's app, with its pinned blueprint. */
+export interface DependencyInfo {
+  app_id: string
+  name: string
+  slug: string
+  pinned_version: number
+  current_version: number
+  blueprint: Blueprint | null
+}
+
+export interface SessionBlueprintResponse {
+  blueprint: Blueprint | null
+  dependencies: DependencyInfo[]
+}
