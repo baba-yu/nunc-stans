@@ -1,0 +1,90 @@
+:root {
+  color-scheme: light dark;
+}
+body {
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  margin: 0;
+}
+main {
+  max-width: 44rem;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  line-height: 1.5;
+}
+h1 {
+  font-size: 1.4rem;
+  margin-bottom: 0.2rem;
+}
+#provenance {
+  font-size: 0.85rem;
+  opacity: 0.7;
+  margin-bottom: 1.6rem;
+}
+h2 {
+  font-size: 1.05rem;
+  margin: 1.6rem 0 0.6rem;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.35);
+  padding-bottom: 0.25rem;
+}
+.card {
+  border: 1px solid rgba(128, 128, 128, 0.35);
+  border-radius: 8px;
+  padding: 0.7rem 0.9rem;
+  margin: 0.5rem 0;
+}
+.card .title {
+  font-weight: 600;
+}
+.meta {
+  font-size: 0.82rem;
+  opacity: 0.75;
+}
+.note {
+  font-size: 0.85rem;
+  margin-top: 0.3rem;
+}
+ul.edges {
+  list-style: none;
+  padding: 0;
+}
+ul.edges li {
+  padding: 0.35rem 0;
+  border-bottom: 1px dashed rgba(128, 128, 128, 0.25);
+  font-size: 0.9rem;
+}
+.etype {
+  font-variant: small-caps;
+  opacity: 0.75;
+  padding: 0 0.35rem;
+}
+.toid {
+  font-size: 0.75rem;
+  opacity: 0.55;
+  display: block;
+}
+.warn {
+  color: #b00;
+  font-size: 0.85rem;
+}
+form {
+  border: 1px dashed rgba(128, 128, 128, 0.4);
+  border-radius: 8px;
+  padding: 0.8rem;
+  margin-top: 0.8rem;
+  display: grid;
+  gap: 0.45rem;
+}
+form input,
+form textarea {
+  font: inherit;
+  padding: 0.3rem 0.45rem;
+}
+form button {
+  font: inherit;
+  padding: 0.35rem 0.8rem;
+  width: fit-content;
+}
+#msg {
+  font-size: 0.85rem;
+  min-height: 1.2rem;
+}
