@@ -1,0 +1,6 @@
+target/
+node_modules/
+*.swp
+CLAUDE.md
+AGENTS.md
+.claude/
