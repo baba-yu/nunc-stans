@@ -334,7 +334,11 @@ delta if not, and note the `~/news` commit the news subtree corresponds to;
 declare a **code freeze on `~/news`** (data-only commits from the daily
 routine are fine; any code fix lands in the monorepo copy) until Phase C
 retires it; apply §2.3 renames (dirs, crate, env, vocabulary,
-`design/naming.md`);
+`design/naming.md`); amend the constitution's engine-independence clause
+(§13: "engine changes only for the engine's own reasons") to match the
+unified-product direction — engines are now internal components of one
+product and may be modified freely, while the contracts keep defining the
+scope boundaries;
 move `~/federation` → `~/nuncstans`; rename `~/federation-data` →
 `~/nuncstans-data` (ledger flags, justfile, env shim); archive `~/fourfive`,
 `nuncstans-hermes-stack`, `multi-stakeholder-simulater`, and the stray `~`
@@ -363,7 +367,7 @@ DAG as code (steps = functions, I/O = the existing sourcedata JSON schemas,
 gates = the existing deterministic checks); build `packages/ai` (§2.6);
 port the Python compute to TS against golden-master fixtures (Python stays as
 the oracle until parity); sync the news subtree to the `~/news` tip before
-any code change here; move `analytics.sqlite` out of the repo to
+any code change here (follow the re-sync recipe in `engines/news/FEDERATION.md`); move `analytics.sqlite` out of the repo to
 `~/nuncstans-data/world/` (same file, same schema, same data — new location);
 split `~/news` into a data+publishing remnant
 (report/, docs/ Pages) fed by the monorepo pipeline (D3); schedule via WSL
