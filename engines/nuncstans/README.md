@@ -12,17 +12,20 @@ is not localhost (DNS-rebinding guard).
 
 ## Run
 
-From the federation root, with `FED_DATA` exported in your shell:
+From the **federation root**, with `FED_DATA` exported in your shell:
 
 ```sh
 just up
 ```
 
-or directly:
+or directly, **from this directory** (`engines/nuncstans`):
 
 ```sh
 cargo run -- --self-dir <path-to-self-vault> --static-dir ../../frontend --port 8720
 ```
+
+The engine refuses to start unless `--self-dir` is a git repository root with
+no remote (F11).
 
 ## API (v0)
 
@@ -39,6 +42,17 @@ cargo run -- --self-dir <path-to-self-vault> --static-dir ../../frontend --port 
 Every successful write is followed by a best-effort commit into the vault's
 own git history — the interim audit record (prd-override §1.2). The response
 reports `vault_committed`.
+
+## Known limitations (v0)
+
+- **No caller authentication.** Any process that can reach the loopback port
+  can read and write the vault. The Host guard blocks DNS-rebinding from a
+  browser, but not a local process. On WSL2, `localhost` is forwarded between
+  Linux and Windows, so "loopback" includes the Windows host — treat the
+  machine as the trust boundary. A local per-session token is a candidate for
+  a later phase.
+- **Single writer.** The in-process lock does not span processes; run one
+  engine per vault.
 
 ## What v0 deliberately does not do
 

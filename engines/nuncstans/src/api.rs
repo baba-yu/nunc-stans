@@ -27,6 +27,9 @@ struct App {
 
 pub fn router(self_dir: PathBuf, static_dir: Option<PathBuf>) -> anyhow::Result<Router> {
     let store = SelfStore::open(self_dir)?;
+    // Refuse to serve an unsafe vault (not a repo root, or has a remote): the
+    // engine is the writer, so it enforces F11 rather than trusting setup.
+    store.check_vault_safety()?;
     let app = App { store: Arc::new(Mutex::new(store)) };
     let mut router = Router::new()
         .route("/health", get(health))
@@ -106,7 +109,10 @@ struct Resources {
 }
 
 pub fn valid_slug(s: &str) -> bool {
+    // Length bound keeps an over-long-but-character-valid slug from reaching
+    // the filesystem and failing with ENAMETOOLONG (a 500); it stays a 422.
     !s.is_empty()
+        && s.len() <= 100
         && s.chars()
             .all(|c| c.is_ascii_lowercase() || c.is_ascii_digit() || c == '-')
 }
@@ -257,7 +263,7 @@ async fn append_outcome(State(app): State<App>, Json(input): Json<NewOutcome>) -
         "note": input.note,
         "recorded_at": Utc::now().to_rfc3339_opts(SecondsFormat::Secs, true),
     });
-    match store.append_outcome(&input.commitment_slug, &input.component, &doc) {
+    match store.append_outcome(&input.commitment_slug, &input.component, doc) {
         Ok(file) => {
             let vaulted =
                 store.vault_commit(&format!("ns: commitment_close_recorded {id} ({})", input.component));

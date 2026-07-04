@@ -10,6 +10,10 @@ VAULT=$(mktemp -d)
 trap 'kill "$SERVER_PID" 2>/dev/null; rm -rf "$VAULT"' EXIT
 
 git -C "$VAULT" init -q -b main
+# Pin an identity so the throwaway vault commits even with no ambient git
+# config (fresh clone / CI).
+git -C "$VAULT" config user.name smoke
+git -C "$VAULT" config user.email smoke@localhost
 git -C "$VAULT" commit -q --allow-empty -m "self: vault init"
 
 "$BIN" --self-dir "$VAULT" --port "$PORT" 2>/dev/null &
@@ -63,6 +67,15 @@ check "unknown commitment refused" "404" "$(code -X POST "$BASE/self/outcomes" -
   -d '{"commitment_slug":"nope","component":"subjective","result":"happy"}')"
 
 check "outcomes listed"            'partially_confirmed' "$(curl -s "$BASE/self/outcomes/smoke-a")"
+
+# the network-facing security control: a non-local Host must be refused
+check "rebinding host refused"     "403" "$(code -H 'Host: evil.example' "$BASE/health")"
+check "localhost host allowed"     "200" "$(code -H 'Host: localhost' "$BASE/health")"
+
+# over-long slug is a client mistake (422), never a 500
+long=$(printf 'a%.0s' $(seq 1 300))
+check "overlong slug refused 422"  "422" "$(code -X POST "$BASE/self/commitments" -H 'content-type: application/json' \
+  -d "{\"slug\":\"$long\",\"title\":\"t\",\"started_at\":\"2026-07-04\"}")"
 
 # the vault's git history is the audit record: every write left a commit
 log=$(git -C "$VAULT" log --oneline)
