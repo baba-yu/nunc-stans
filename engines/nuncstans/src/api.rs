@@ -2,8 +2,9 @@ use std::{path::PathBuf, sync::Arc};
 
 use axum::{
     Json, Router,
-    extract::{Path as UrlPath, State},
-    http::StatusCode,
+    extract::{Path as UrlPath, Request, State},
+    http::{StatusCode, header},
+    middleware::{self, Next},
     response::{IntoResponse, Response},
     routing::{get, post},
 };
@@ -11,7 +12,7 @@ use chrono::{SecondsFormat, Utc};
 use serde::Deserialize;
 use serde_json::{Value, json};
 use tokio::sync::Mutex;
-use tower_http::{cors::CorsLayer, services::ServeDir};
+use tower_http::services::ServeDir;
 use uuid::Uuid;
 
 use crate::{
@@ -33,12 +34,32 @@ pub fn router(self_dir: PathBuf, static_dir: Option<PathBuf>) -> anyhow::Result<
         .route("/self/edges", get(list_edges).post(append_edge))
         .route("/self/outcomes", post(append_outcome))
         .route("/self/outcomes/{slug}", get(list_outcomes))
-        .layer(CorsLayer::permissive())
         .with_state(app);
     if let Some(dir) = static_dir {
         router = router.fallback_service(ServeDir::new(dir));
     }
-    Ok(router)
+    // The self scope is a sovereignty vault: no CORS is offered at all (the
+    // ME view is served same-origin by this engine), and the Host guard
+    // keeps DNS-rebinding pages from addressing the API through a public
+    // hostname that resolves to loopback.
+    Ok(router.layer(middleware::from_fn(require_local_host)))
+}
+
+async fn require_local_host(req: Request, next: Next) -> Response {
+    let host = req
+        .headers()
+        .get(header::HOST)
+        .and_then(|h| h.to_str().ok())
+        .unwrap_or("");
+    let name = host.rsplit_once(':').map(|(h, _)| h).unwrap_or(host);
+    if matches!(name, "127.0.0.1" | "localhost") {
+        next.run(req).await
+    } else {
+        err(
+            StatusCode::FORBIDDEN,
+            "the engine only answers when addressed as localhost (DNS-rebinding guard)",
+        )
+    }
 }
 
 fn err(status: StatusCode, msg: impl Into<String>) -> Response {

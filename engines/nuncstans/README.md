@@ -6,7 +6,9 @@ outcomes, file-backed. Manages what the constitution assigns to NuncStans
 
 The source-of-truth data lives **outside this repository** (F11) and is only
 ever passed in explicitly via `--self-dir` — its location never appears in
-this repo (FD-3.2). The engine binds loopback only.
+this repo (FD-3.2). The engine binds loopback only, serves the ME view
+same-origin, offers no CORS at all, and refuses requests whose Host header
+is not localhost (DNS-rebinding guard).
 
 ## Run
 
