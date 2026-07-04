@@ -80,9 +80,23 @@ async function load() {
     return;
   }
 
-  // F9: one-line provenance mix — where what you are looking at comes from.
+  // F9: the one-line provenance mix — of my own bets, the proportion
+  // prompted by AI-routed information. Computed from edges: a commitment is
+  // AI-prompted if it is the source of an informed_by edge whose author is
+  // ai or sensor. Recomputed here, not asserted (journey check 6).
+  const commitmentIds = new Set(commitments.map(c => c.id));
+  const aiPrompted = new Set();
+  for (const e of edges) {
+    if (e.type === "informed_by" && (e.author === "ai" || e.author === "sensor")
+        && commitmentIds.has(e.from)) {
+      aiPrompted.add(e.from);
+    }
+  }
+  const n = commitments.length;
+  const k = aiPrompted.size;
+  const pct = n ? Math.round((k / n) * 100) : 0;
   $("provenance").textContent =
-    `self: ${commitments.length} commitments · ${edges.length} edges · vault: local, no remote` +
+    `provenance: ${k}/${n} of my bets were AI-prompted (${pct}%) · ${edges.length} edges` +
     (cm + em ? ` · ${cm + em} malformed record(s) skipped` : "");
 
   const cbox = $("commitments");
@@ -114,22 +128,49 @@ async function load() {
   if (!edges.length) ebox.append(el("li", "meta", "no edges yet"));
 }
 
+// Read a response whether the engine answered with its JSON error contract
+// or axum answered with a plain-text extractor rejection (4xx/415). Never
+// let `r.json()` throw and kill the handler silently.
+async function readResult(r) {
+  const text = await r.text();
+  try { return JSON.parse(text); }
+  catch { return { error: text || `HTTP ${r.status}` }; }
+}
+
 $("commitForm").addEventListener("submit", async (ev) => {
   ev.preventDefault();
   const f = new FormData(ev.target);
+  // money_jpy is an integer count of yen on the server (Option<i64>); parse it
+  // as one here so a stray decimal becomes a clean client-side error, not a
+  // server rejection.
+  const rawMoney = (f.get("money_jpy") || "").trim();
+  let money = null;
+  if (rawMoney) {
+    if (!/^\d+$/.test(rawMoney)) {
+      $("msg").textContent = "money_jpy must be a whole number of yen";
+      $("msg").className = "warn";
+      return;
+    }
+    money = Number(rawMoney);
+  }
+  const rawHours = (f.get("hours") || "").trim();
   const body = {
     slug: f.get("slug"), title: f.get("title"), started_at: f.get("started_at"),
-    resources: {
-      money_jpy: f.get("money_jpy") ? Number(f.get("money_jpy")) : null,
-      hours: f.get("hours") ? Number(f.get("hours")) : null,
-    },
+    resources: { money_jpy: money, hours: rawHours ? Number(rawHours) : null },
     note: f.get("note") || null,
   };
-  const r = await fetch("/self/commitments", {
-    method: "POST", headers: { "content-type": "application/json" },
-    body: JSON.stringify(body),
-  });
-  const out = await r.json();
+  let r, out;
+  try {
+    r = await fetch("/self/commitments", {
+      method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    out = await readResult(r);
+  } catch (e) {
+    $("msg").textContent = "engine unreachable";
+    $("msg").className = "warn";
+    return;
+  }
   $("msg").textContent = r.ok
     ? `authored ${out.id}` + (out.vault_committed ? " (vault committed)" : " (vault commit FAILED)")
     : `refused: ${out.error}`;
