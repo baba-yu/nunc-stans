@@ -1,6 +1,7 @@
 target/
 node_modules/
 frontend/dist/
+frontend/public/world-headlines.json
 *.swp
 CLAUDE.md
 AGENTS.md
