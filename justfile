@@ -60,7 +60,8 @@ _up-gate:
       --engine-url "http://127.0.0.1:${NS_ENGINE_PORT:-8721}" \
       --fourfive-url "http://127.0.0.1:8787" \
       --formans-dist frontend/nunc-stans-formans/dist \
-      --fourfive-dist engines/fourfive/dist
+      --fourfive-dist engines/fourfive/dist \
+      --data-dir "{{data_dir}}"
 
 # Build everything the gate serves. The world adapter runs first so the
 # read-only world view has fresh headlines. NEWS_WORLD points at News's
