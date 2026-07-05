@@ -7,6 +7,10 @@ set shell := ["bash", "-uc"]
 
 data_dir := env_var_or_default('NS_DATA', env_var_or_default('FED_DATA', ''))
 
+# Doctor + NS_DATA skeleton init (idempotent). Safe on a pristine machine.
+bootstrap:
+    sh tools/bootstrap.sh
+
 _require_data:
     @if [ -z "{{data_dir}}" ]; then echo "set NS_DATA to the data-store root"; exit 1; fi
     @if [ -z "${NS_DATA:-}" ] && [ -n "${FED_DATA:-}" ]; then echo "warning: FED_DATA is deprecated; use NS_DATA"; fi
