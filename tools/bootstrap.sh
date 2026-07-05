@@ -28,7 +28,18 @@ command -v python3 >/dev/null 2>&1 || say "warn python3 missing (needed until Ph
 command -v ollama  >/dev/null 2>&1 || say "info ollama not found (optional - local models)"
 
 say "== data store =="
-CFG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/nunc-stans"
+# The config must live where the app reads it (tools/data-dir.ts): %APPDATA%
+# on native Windows (Git-Bash sh), XDG elsewhere. Paths written into the
+# config must be Windows-form there — node cannot open /c/... MSYS paths.
+case "$(uname -s 2>/dev/null)" in
+  MINGW*|MSYS*|CYGWIN*) WIN=1 ;;
+  *) WIN=0 ;;
+esac
+if [ "$WIN" -eq 1 ] && [ -n "${APPDATA:-}" ]; then
+  CFG_DIR="$(printf '%s' "$APPDATA" | tr '\\' '/')/nunc-stans"
+else
+  CFG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/nunc-stans"
+fi
 CFG="$CFG_DIR/config.json"
 DIR="${1:-${NS_DATA:-}}"
 if [ -z "$DIR" ] && [ -f "$CFG" ]; then
@@ -47,7 +58,11 @@ if [ -z "$DIR" ]; then
   fi
 fi
 mkdir -p "$DIR" || { say "NG   cannot create $DIR"; exit 1; }
-DIR=$(cd "$DIR" && pwd)
+if [ "$WIN" -eq 1 ]; then
+  DIR=$(cd "$DIR" && pwd -W) # Windows form (C:/...) so node and cargo can open it
+else
+  DIR=$(cd "$DIR" && pwd)
+fi
 for d in self world artifact profiles runs; do mkdir -p "$DIR/$d"; done
 if [ ! -d "$DIR/self/.git" ]; then
   git -C "$DIR/self" init -q && say "ok   initialized $DIR/self as a git repo"
