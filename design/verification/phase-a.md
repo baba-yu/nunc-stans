@@ -62,6 +62,25 @@ merged to `main` at the review gate).
   mount skeleton; stopping those containers is the owner's call — until
   then the skeleton dir may reappear.
 
+- T10: `~/federation` → `~/nunc-stans`; `~/nuncstans` →
+  `~/old/nuncstans-design-repo`. Repo-local git identity survived the move;
+  checks, tests, and a live boot re-verified from the new path (e82ba5c).
+- T11 / S-0: fresh vault at /tmp/s0-vault — `just bootstrap` → "bootstrap
+  ok"; `just up` → `/health` `{"engine":"nunc-stans-engine","ok":true}`;
+  home HTML served; `/self/commitments` returned the clean empty state
+  (`{"commitments":[],"malformed_skipped":0}`). PASS in 3 commands.
+- T11 / S-10: pristine `ubuntu:24.04` container (Docker, repo mounted
+  read-only, cloned inside): apt just + Node 24 (nodesource) + rustup →
+  `sh tools/bootstrap.sh` ok → `NS_DATA=$HOME/nunc-stans-data just up` →
+  `/health` answered, home HTML served — **S-10-PASS, exit 0**. Two real
+  portability defects were found and fixed by this story:
+  1. container-side `git clone /src` needs `safe.directory` (documented in
+     the story context; not a repo defect), and
+  2. the repo-root package.json lacked a `packageManager` pin, so corepack
+     on a pristine machine fetched latest pnpm (11.x) and refused the
+     frontend's 10.33.0 pin — fixed in 7dbaa52 (this would have broken the
+     CI web job on every runner).
+
 ## Decisions log
 
 - Design-repo absorption source branch: `dev` (plan said `main`; `main` is a stub).
@@ -73,4 +92,22 @@ merged to `main` at the review gate).
 
 ## Exit criteria
 
-(filled at close — see Task 11)
+- [x] `just up` works from `~/nunc-stans` (T10 + S-0 evidence above)
+- [x] `just check` green (`node tools/check.ts`, 3× ok — FD-3.2 refined to
+      code-scope, see Decisions)
+- [x] Vocabulary grep clean: `git grep -iI federation` outside
+      naming.md/development/verification returns only the exempted slug
+      `federation-local`
+- [x] Every stack README verified by running its commands (`just up`,
+      `just web`, engine `scripts/smoke.sh` all-pass, pnpm test suites,
+      `just bootstrap`)
+- [x] S-0 pass (cold start, 3 commands)
+- [x] S-10 pass (pristine ubuntu:24.04, exit 0)
+- [ ] PENDING owner: create private `baba-yu/nunc-stans`, push
+      `phase/a-consolidation` + `main` + tags → the 3-OS CI matrix proves
+      itself (any Windows/macOS failures are in-phase fixes)
+- [ ] PENDING owner review gate: merge `phase/a-consolidation` → `main`
+- Caveat: `honcho-sim-deriver-1` (+ langfuse/litellm/clickhouse) containers
+  still run from archived experiments; Docker recreates an empty
+  `~/multi-stakeholder-simulater` mount skeleton until they are stopped
+  (owner's call).
