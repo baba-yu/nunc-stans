@@ -163,6 +163,12 @@ function writeExpected(rel: string, content: string, normalized = false) {
 }
 
 async function run() {
+  // The capture-day normalization token-replaces every occurrence of
+  // today's date — if today IS a fixture day, legitimate date strings
+  // get clobbered (bit us when 2026-07-05 was captured on 2026-07-05).
+  if ([...RENDER_DAYS, ...DB_DAYS].includes(CAPTURE_DAY))
+    throw new Error(
+      `capture day ${CAPTURE_DAY} collides with a fixture day — run the capture on another (UTC) day`);
   const PY = pickPython();
   const log: Record<string, unknown> = { python: PY, captureDay: CAPTURE_DAY, sanity: {} };
 
@@ -204,12 +210,18 @@ async function run() {
       ...LOCALES.flatMap(L => ['--path', `report/${L}/news-${compact(d)}.md`])], true).exit;
     gates.pwiFp = py(PY, ['-m', 'app.skills.post_write_integrity', '--kind', 'future-prediction',
       ...LOCALES.flatMap(L => ['--path', `future-prediction/${L}/future-prediction-${compact(d)}.md`])], true).exit;
+    // Gate reports carry no genuine today-stamps — only fixture dates
+    // and the work path. The capture-day rule must NOT apply here (it
+    // clobbers fixture dates when the capture day collides).
+    const normalizeGates = (text: string) =>
+      text.replace(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z?/g, '1970-01-01T00:00:00Z')
+        .replaceAll(WORK, '<WORK>');
     const topic = py(PY, ['-m', 'app.skills.check_topic_coverage', '--date', d], true);
     gates.topic = topic.exit;
-    writeExpected(`gates/${d}.topic.txt`, normalize(topic.out));
+    writeExpected(`gates/${d}.topic.txt`, normalizeGates(topic.out));
     const flow = py(PY, ['-m', 'app.skills.daily_flow_check', '--date', d, '--report-missing'], true);
     gates.flow = flow.exit;
-    writeExpected(`gates/${d}.flow.txt`, normalize(flow.out));
+    writeExpected(`gates/${d}.flow.txt`, normalizeGates(flow.out));
     writeExpected(`gates/${d}.json`, JSON.stringify(gates, null, 2) + '\n');
   }
 

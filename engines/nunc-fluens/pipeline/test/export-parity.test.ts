@@ -6,7 +6,9 @@ import { describe, expect, it } from 'vitest';
 import { readFileSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import { runExport } from '../src/export/export.ts';
-import { buildGoldenDb, GOLDENS, normalizeVolatile } from './helpers/build-db.ts';
+import {
+  buildGoldenDb, GOLDENS, goldenCaptureCollision, normalizeVolatile,
+} from './helpers/build-db.ts';
 
 const EXPECTED = join(GOLDENS, 'expected', 'export');
 const FILES = ['graph-tech.json', 'graph-business.json', 'graph-mix.json',
@@ -31,7 +33,8 @@ function roundLayouts(v: unknown): void {
 }
 
 describe('export parity vs the oracle golden JSONs', () => {
-  it('reproduces all five export files (parsed-equal, normalized)',
+  it.skipIf(goldenCaptureCollision())(
+    'reproduces all five export files (parsed-equal, normalized)',
     { timeout: 180_000 }, () => {
       const { db, workRoot } = buildGoldenDb();
       try {

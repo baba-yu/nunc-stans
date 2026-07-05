@@ -21,6 +21,25 @@ export function normalizeVolatile(text: string): string {
     .replaceAll(TODAY, '<CAPTURE_DAY>');
 }
 
+/** Goldens captured ON a fixture day have that day's date strings
+ * clobbered by the <CAPTURE_DAY> normalization token — comparisons are
+ * then only meaningful on that same day. capture.ts now refuses such
+ * runs; this guard keeps the suite honest until the next recapture.
+ * Returns null when valid, else a skip reason. */
+export function goldenCaptureCollision(): string | null {
+  const log = JSON.parse(
+    readFileSync(join(GOLDENS, 'expected', 'capture-log.json'), 'utf8'));
+  const captured: string = log.captureDay;
+  const fixtureDays = new Set([
+    ...MANIFEST.renderDays,
+    ...daysBetween(MANIFEST.dbRange.start, MANIFEST.dbRange.end),
+  ]);
+  if (!fixtureDays.has(captured)) return null;
+  if (TODAY === captured) return null; // same-day symmetry still holds
+  return `goldens were captured on fixture day ${captured}; recapture on a `
+    + `non-fixture UTC day (capture.ts now enforces this) and re-run`;
+}
+
 export function daysBetween(startIso: string, endIso: string): string[] {
   const out: string[] = [];
   let t = Date.parse(startIso + 'T12:00:00Z');
