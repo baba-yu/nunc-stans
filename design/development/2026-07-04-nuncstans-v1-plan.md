@@ -10,6 +10,11 @@
 - Updated 2026-07-04 (owner feedback round 2): portability and
   reproducibility made an explicit requirement — the product must reproduce
   on any WSL2/Linux environment, real data excluded (§2.10, S-10, D9).
+- Updated 2026-07-04 (owner feedback round 3): D9 confirmed (BYOL noted;
+  start signal still pending); portability targets widened to Ubuntu +
+  Windows + macOS (§2.10); `nuncstans-agent` added as a first-party CLI
+  agent stack (§2.11, Phase D, S-11); the per-phase implementation-plan
+  gate made explicit (§7, Phase E precondition).
 - Executor: Claude (Fable), phase by phase, with an owner review gate per phase
 - Relation to existing docs: extends `design/development/development-plan.md`
   (the HTAS M-milestones remain the product-side roadmap). The old
@@ -186,6 +191,8 @@ nuncstans-formans/              (monorepo root; was ~/federation)
     news/                       News pipeline (canonical here after Phase C)
     fourfive/                   FourFive server + app factory
   apps-host/                    host server for generated app bundles (new, Phase E)
+  agents/
+    nuncstans-agent/            first-party CLI agent (new, Phase D — §2.11)
   frontend/
     shell/                      single-origin shell: ME + world + /fourfive/ + /apps/ + profiles + timeline
     packages/
@@ -269,10 +276,12 @@ One place where models are called; nothing else talks to a provider directly.
 - **Two tiers: model providers and agent runtimes.** Model providers:
   `anthropic-api`, `openai`, `google`, `ollama`, `mock`. **Agent runtimes**
   are selectable executors that bring their own tooling and memory:
-  `claude-code` (headless CLI — rides the subscription, no API key), a
-  local-LLM coding agent with manda-gated retrieval, a Honcho-backed agent
-  (Hermes). Per the owner: News may want claude-code, while sparring and
-  custom agents (DB, skills, memory, MCP) may want the local runtimes. Every
+  `claude-code` (headless CLI — rides the subscription, no API key),
+  **`nuncstans-agent`** (first-party, local-LLM-first, manda-gated memory —
+  §2.11), and optionally external runtimes such as a Honcho-backed agent
+  (Hermes) for comparison. Per the owner: News may want claude-code, while
+  sparring and custom agents (DB, skills, memory, MCP) run on
+  `nuncstans-agent`. Every
   context that calls AI — News steps, FourFive chat, app agents — selects a
   runtime or provider through its profile. Each entry declares capabilities:
   `{chat, stream, tools, structured, web_search: native|none, thinking,
@@ -369,20 +378,28 @@ and/or an owner-chosen offsite target (D8). F11's intent is "no plaintext
 ledger on someone else's server"; an encrypted bundle you carry yourself is
 compatible with that intent.
 
-### 2.10 Portability and reproducibility (owner requirement, feedback round 2)
+### 2.10 Portability and reproducibility (owner requirement, rounds 2–3)
 
-The product is not for this machine only. Target: **any WSL2/Ubuntu or plain
-Linux x86_64 box reproduces the whole system from the repo plus one bootstrap
-step, real data excluded.** WSL is not special here — it is just Ubuntu. The
-Windows/MSIX/UNC quirks in §5 note 12 concern the *development tool* driving
-this particular machine; nothing in the product may depend on them.
+The product is not for this machine only. Development happens in WSL, but the
+product targets **three operating systems: Ubuntu (native or WSL2), Windows
+11 (native), and macOS** — each must reproduce the whole system from the repo
+plus one bootstrap step, real data excluded. The Windows/MSIX/UNC quirks in
+§5 note 12 concern the *development tool* driving this particular machine;
+nothing in the product may depend on them.
 
-- **Runtime surface (all Linux-native):** git, `just`, Rust (pinned via
-  `rust-toolchain.toml`), Node ≥ 24 with corepack (pnpm version pinned in
-  `package.json`), Python 3.10+ (until Phase C retires it), SQLite (bundled
-  by better-sqlite3 / rusqlite). Optional: Ollama for local models; Docker
-  only for optional runtimes (e.g. Honcho). No Windows dependency, no MSIX
-  assumption, no macOS gate (likely works, untested, not a target).
+- **Runtime surface (cross-platform):** git, `just`, Rust (pinned via
+  `rust-toolchain.toml`; axum/tokio are OS-portable), Node ≥ 24 with corepack
+  (pnpm pinned in `package.json`; better-sqlite3 ships prebuilds for all
+  three OSes), Python 3.10+ (until Phase C retires it — one more reason to
+  finish D4), SQLite. Optional: Ollama (available on all three OSes) for
+  local models; Docker Desktop only for optional runtimes (e.g. Honcho).
+- **Cross-platform tooling policy:** repo tooling is written in TypeScript
+  run by Node (or Rust), not bash — `tools/check.sh` and `commit-scope.sh`
+  get ported when touched; justfile recipes stay thin wrappers. Unix-only
+  code paths (e.g. the engine's 600/700 vault permissions) get explicit
+  Windows equivalents or documented degradation. Scheduling is documented
+  per OS: systemd timer / cron (Linux), Task Scheduler (Windows), launchd
+  (macOS) — the CLI is the contract; the OS scheduler is an adapter.
 - **`just bootstrap` (new, Phase A):** verifies or installs the toolchain,
   initializes the `NS_DATA` skeleton (`self/` as a git repo with no remote,
   `world/`, `artifact/`, `profiles/`, `runs/`), and prints a doctor report.
@@ -390,18 +407,51 @@ this particular machine; nothing in the product may depend on them.
 - **No machine-specific state in the repo:** all paths flow through `NS_DATA`
   and config — no user-specific or absolute paths (the run-summary WSL path
   hardcoded into `~/news` and this machine's corepack shim workaround are
-  exactly what this rule bans); ports configurable; scheduling documented for
-  both systemd timers and plain cron; every AI feature must degrade to `mock`
-  (zero credentials) and must run fully local via `ollama` — `claude-code` is
-  a convenience default, never a requirement.
-- **Distribution assumption (D9):** v1 targets *each user running their own
-  instance* — local-first, one vault per user, per-user SQLite. A hosted
-  multi-tenant service is explicitly out of scope for v1 (it forks the
-  architecture: auth, isolation, sync) and would be its own plan.
-- **Proof, not promise:** story S-10 boots a pristine WSL distro or
-  container, clones the repo, runs `just bootstrap && just up`, and reaches
-  the home screen. First executed at Phase A close, re-verified at every
-  phase close, and extended with `just journey` at Phase F.
+  exactly what this rule bans); ports configurable; every AI feature must
+  degrade to `mock` (zero credentials) and must run fully local via `ollama`
+  — `claude-code` is a convenience default, never a requirement.
+- **Distribution assumption (D9, confirmed round 3):** v1 targets *each user
+  running their own instance* — local-first, **BYOL** (users bring their own
+  models and API keys; no bundled credentials), one vault per user, per-user
+  SQLite. Monetization (experience + accumulated-data moat) is a future
+  concern, not a v1 constraint. A hosted multi-tenant service is explicitly
+  out of scope for v1 (it forks the architecture: auth, isolation, sync) and
+  would be its own plan.
+- **Proof, not promise:**
+  - CI matrix on GitHub Actions (`ubuntu-latest`, `windows-latest`,
+    `macos-latest`): bootstrap + build + unit tests, running from the moment
+    the D2 remote exists, green as a standing phase-exit condition.
+  - Story S-10 (full boot to the home screen): Ubuntu — pristine WSL distro
+    or container, at every phase close from A. Windows native — from Phase B
+    close (once the shell exists). macOS — continuously via the CI matrix;
+    a full manual pass before v1 is called done (hardware-dependent).
+  - Phase F extends S-10 with `just journey`.
+
+### 2.11 `nuncstans-agent`: the first-party agent (owner requirement, round 3)
+
+The owner wants a Hermes-Agent-like experience — a conversational agent in
+the terminal — built from this project's own parts: **manda plus a self-made
+agent, tryable from the CLI.** No such stack exists today (`~/manda` is a
+gateway with no agent attached; `old/nuncstans-agent` is a superseded
+prototype), so it becomes a first-class deliverable:
+`agents/nuncstans-agent/` (TypeScript).
+
+v0 scope (built in Phase D):
+
+- Terminal chat with streaming and visible thinking; model via `packages/ai`
+  (Ollama first-class, any provider or runtime selectable).
+- **Memory exclusively through the manda MCP gateway** — append / candidate /
+  committed lanes, mandate-gated writes, audited. manda stays a separate OSS
+  dependency (§5 note 13); this agent is its first real consumer.
+- MCP client for tools — including, from Phase E, the CRUD tools of generated
+  apps: this agent is how "the agent co-uses the app" is proven (S-7).
+- Profile-driven (model, prompt, skills, memory scope) and subject to the
+  goal-verify loop (§2.6); every run logged to `~/nuncstans-data/runs/`.
+
+Not in v0: autonomous coding-agent behavior (file-editing loops). That is a
+later extension; until then, coding tasks go through the `claude-code`
+runtime. The constitutional line holds for every runtime: no agent writes
+self-scope commitments (F3).
 
 ## 3. Phases
 
@@ -410,7 +460,7 @@ this particular machine; nothing in the product may depend on them.
 | A | Consolidation and naming | — | 1–2 |
 | B | Single-origin shell + nunc-ui | A | 2–3 |
 | C | News newstack: coded pipeline + provider layer | A (B can run in parallel) | 4–6 |
-| D | Profiles + goal-loop surfaces + agent-abi v0 | C (`packages/ai`) | 2–3 |
+| D | Profiles + goal-loop + agent-abi v0 + nuncstans-agent v0 | C (`packages/ai`) | 3–5 |
 | E | FourFive app factory + apps-host | B, D | 5–8 |
 | F | Journey validation: CI + 4-week live gate | E | 2 + 4 weeks calendar |
 
@@ -491,28 +541,35 @@ ported tests green against goldens; stories S-3 and S-4 pass. Content quality
 across providers will differ; acceptance is structural validity, and quality
 tuning is ongoing operations, not a phase gate.
 
-### Phase D — Profiles + goal-loop surfaces
+### Phase D — Profiles + goal-loop surfaces + nuncstans-agent v0
 
 Work: profile store and Profiles screen; wire FourFive chat and News step
 config to profiles; goal-verify toggle per chat message and per pipeline
-step; run-log viewer in the shell; draft `contracts/agent-abi.md` v0;
-integrate the first non-Claude **agent runtime** (a local-LLM coding agent
-with manda-gated retrieval, or Hermes with Honcho) behind the
-external-process boundary, license verified and recorded first; while
-touching that code, fix FourFive's Claude streaming stub and stale default
-model id.
+step; run-log viewer in the shell; draft `contracts/agent-abi.md` v0; build
+**`nuncstans-agent` v0** (§2.11) — terminal chat on `packages/ai`,
+manda-gated memory, MCP tool client, profile-driven; Hermes/Honcho remains
+an optional comparison runtime (external process; license verified and
+recorded first if integrated); while touching that code, fix FourFive's
+Claude streaming stub and stale default model id.
 
 Exit: profiles can be created and switched from the UI; a verify-on message
 visibly loops (≤ max_iters), reports unmet gaps, and shows cost; a local
-model via Ollama works under a profile, and at least one non-Claude agent
-runtime is selectable from a profile; stories S-5 and S-6 pass.
+model via Ollama works under a profile; `nuncstans-agent chat` works in a
+terminal with mandate-gated memory operations through manda; stories S-5,
+S-6, and S-11 pass.
 
 ### Phase E — FourFive app factory
 
+Precondition (owner gate, round 3): Phase E starts only after its own design
+spec and implementation plan — bundle format, apps-host API, MCP surface,
+codegen approach, security rails — are written and owner-approved. It is
+deliberately written after Phases C–D exist, because `packages/ai`, profiles,
+and `nuncstans-agent` fix the shapes it must target.
+
 Work: bundle generator (DDL, CRUD, MCP tools, UI, scenario tests — §2.8);
 apps-host mounted at `/apps/`; metrics contract consumed by the strategy
-read-out; generate `runway-tracker@v1`; prove agent co-use with a
-profile-driven agent doing CRUD through MCP alongside the human UI.
+read-out; generate `runway-tracker@v1`; prove agent co-use with
+`nuncstans-agent` doing CRUD through MCP alongside the human UI.
 
 Exit: runway-tracker usable by human (generated UI) and agent (MCP) with data
 in the vault; a second, unrelated small app generated end-to-end in one
@@ -556,9 +613,9 @@ during its phase and executed before the phase closes:
 - **S-6 (D):** I send a message with goal-verify ON and an unmeetable goal;
   the loop stops at max_iters, reports the unmet gaps, and the cost is
   visible.
-- **S-7 (E):** Human and agent both add rows to runway-tracker; each sees the
-  other's rows; the metrics view updates; the strategy read-out quotes only
-  declared metrics.
+- **S-7 (E):** Human (generated UI) and `nuncstans-agent` (MCP) both add rows
+  to runway-tracker; each sees the other's rows; the metrics view updates;
+  the strategy read-out quotes only declared metrics.
 - **S-8 (E):** I design a new tiny app in FourFive chat and use its generated
   UI in the same session, with its data file created in the vault.
 - **S-9 (B):** I open the timeline view and see my recent weeks as a time
@@ -566,8 +623,13 @@ during its phase and executed before the phase closes:
   point to the underlying record.
 - **S-10 (A; re-run at every phase close):** On a pristine WSL2/Ubuntu (or a
   container), `git clone` + `just bootstrap` + `just up` reaches the home
-  screen with no manual steps beyond documented prerequisites; at Phase F the
-  same run also passes `just journey`.
+  screen with no manual steps beyond documented prerequisites; from Phase B
+  the same passes on native Windows; at Phase F the run also passes
+  `just journey`. The 3-OS CI matrix stays green throughout.
+- **S-11 (D):** In a terminal I start `nuncstans-agent chat` under a profile
+  with a local model; the agent answers with streaming and visible thinking,
+  reads and writes memory only through manda within its mandate and refuses a
+  write outside it; the run appears in the run log.
 
 ## 5. Things the owner may not have accounted for (critical notes)
 
@@ -634,10 +696,16 @@ during its phase and executed before the phase closes:
     this project is `yukibaba3912@gmail.com` (owner directive, repo-local;
     past commits stay untouched — already applied to `~/federation`).
 13. **Out of scope on purpose:** `manda` stays a separate OSS repo (the
-    public/private boundary is why it was carved out); the monorepo may later
-    *depend* on it for the mandate rail, not absorb it. `work/`,
-    `obsidian-vault`, and `second_brain` are untouched. `old/` remains the
-    graveyard and receives the newly archived items.
+    public/private boundary is why it was carved out); the monorepo *depends*
+    on it — `nuncstans-agent` is its first real consumer (§2.11) — but never
+    absorbs it. `work/`, `obsidian-vault`, and `second_brain` are untouched.
+    `old/` remains the graveyard and receives the newly archived items.
+14. **Three-OS portability has a real cost.** Windows and macOS as targets
+    mean: repo tooling in TypeScript instead of bash, Windows handling for
+    the engine's unix-permission guards, three scheduling adapters, and a CI
+    matrix as a standing gate. Accepted deliberately — distribution is the
+    goal — but it is paid mostly in Phases A–C, not free. Development itself
+    stays in WSL.
 
 ## 6. Open decisions
 
@@ -654,12 +722,15 @@ any of them.
 | D6 | Primary accent | News cyan `#18c7d8` | FourFive blue `#5b8cff` |
 | D7 | Default pipeline provider | **Approved (round 1**, condition: no GPL-style copyleft — claude-code is proprietary freeware**):** `claude-code`; runtimes and providers selectable per profile | API-first |
 | D8 | Vault backup destination | Encrypted weekly bundle to a second local disk; owner adds an offsite copy | Owner-specified (e.g., encrypted cloud object storage) |
-| D9 | v1 distribution target | Personal instances: each user runs their own local-first instance with their own vault (portable per §2.10) | Hosted multi-tenant service — out of scope for v1; would be its own plan |
+| D9 | v1 distribution target | **Confirmed (round 3):** personal instances, BYOL — each user runs their own local-first instance with their own vault (portable per §2.10); monetization deferred (experience + data moat) | Hosted multi-tenant service — out of scope for v1; would be its own plan |
 
 ## 7. Execution protocol
 
-- Executor: Fable, one phase per stretch, plan → implement → verify → owner
-  review gate. Stories are executed and evidenced before a phase closes.
+- Executor: Fable, one phase per stretch. **Every phase opens with a written
+  implementation plan approved by the owner before code is touched** (Phase E
+  additionally requires its design spec approved — see the Phase E
+  precondition). Then implement → verify → owner review gate. Stories are
+  executed and evidenced before a phase closes.
 - Owner actions that Claude cannot perform on this machine: GitHub pushes
   (credential manager auth), and the D2 remote repurpose.
 - This plan document is updated (not rewritten) as decisions D1–D8 are
