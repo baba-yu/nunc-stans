@@ -4,7 +4,8 @@
 - Commit style: `area: lowercase description`, one sentence; the default AI
   co-author trailer is fine. Areas: `design`, `contracts`, `ns`
   (engines/nunc-stans), `nf` (engines/nunc-fluens), `ff` (engines/fourfive),
-  `fe` (frontend), `tool` (justfile, tools/, CI).
+  `fe` (frontend), `gate` (gate/, the single-origin front door),
+  `tool` (justfile, tools/, CI).
 - One commit = one area unless `contracts/` is touched
   (`node tools/commit-scope.ts` enforces).
 - `node tools/check.ts` (= `just check`) must be green before pushing.
