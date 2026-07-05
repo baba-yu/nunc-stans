@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue'
 import { HeatDot, Panel } from 'nunc-ui'
+import NewsSettings from '../components/NewsSettings.vue'
 import { useMeStore } from '../stores/me'
 import { slugFor } from '../slug'
 import type { WorldPrediction } from '../types'
@@ -103,6 +104,10 @@ onMounted(async () => {
             no world headlines — run <code>just build-world</code> with <code>NEWS_WORLD</code> set
           </li>
         </ul>
+      </Panel>
+
+      <Panel cold title="News pipeline">
+        <NewsSettings />
       </Panel>
 
       <Panel cold title="Prediction dashboard" class="graph-panel">
