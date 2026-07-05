@@ -81,6 +81,19 @@ merged to `main` at the review gate).
      frontend's 10.33.0 pin — fixed in 7dbaa52 (this would have broken the
      CI web job on every runner).
 
+- Round 6 (owner, post-T11): the data store became **user-designated**
+  (workspace model) — `just bootstrap [dir]` initializes any folder and
+  remembers it in the per-user app config
+  (`~/.config/nunc-stans/config.json` via `tools/data-dir.ts`; `NS_DATA`
+  remains a per-invocation override, `FED_DATA` still warns). No path
+  convention remains in code or docs; the owner's store stays at its
+  current location, now referenced only by their config. Evidence:
+  config-driven `just up` with no environment served the real vault
+  (3 commitments); S-0 re-ran PASS under an XDG-isolated fresh profile;
+  S-10 re-ran PASS in a pristine container designating
+  `/root/my-chosen-data-folder` (exit 0). Commits b505d9f, b11ecff,
+  9ac28cd.
+
 ## Decisions log
 
 - Design-repo absorption source branch: `dev` (plan said `main`; `main` is a stub).
