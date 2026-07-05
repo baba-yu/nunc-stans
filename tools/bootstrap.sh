@@ -1,5 +1,9 @@
 #!/bin/sh
-# nunc-stans bootstrap: doctor + NS_DATA skeleton. Idempotent.
+# nunc-stans bootstrap: doctor + data-store designation (workspace model).
+# Usage: sh tools/bootstrap.sh [data-dir]
+#   With an argument (or NS_DATA set): designates that folder, creates and
+#   initializes it if needed, and remembers it in the app config.
+#   Without: reuses the configured store, or asks interactively on a TTY.
 # POSIX sh on purpose: this is the one script that runs before the toolchain
 # exists (the documented exception to the TypeScript tooling policy).
 set -u
@@ -24,20 +28,41 @@ command -v python3 >/dev/null 2>&1 || say "warn python3 missing (needed until Ph
 command -v ollama  >/dev/null 2>&1 || say "info ollama not found (optional - local models)"
 
 say "== data store =="
-NS_DATA="${NS_DATA:-${FED_DATA:-$HOME/nunc-stans-data}}"
-say "NS_DATA=$NS_DATA"
-for d in self world artifact profiles runs; do mkdir -p "$NS_DATA/$d"; done
-if [ ! -d "$NS_DATA/self/.git" ]; then
-  git -C "$NS_DATA/self" init -q && say "ok   initialized $NS_DATA/self as a git repo"
-else
-  say "ok   $NS_DATA/self is a git repo"
+CFG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/nunc-stans"
+CFG="$CFG_DIR/config.json"
+DIR="${1:-${NS_DATA:-}}"
+if [ -z "$DIR" ] && [ -f "$CFG" ]; then
+  # single-key file written by this script; keep the parse simple
+  DIR=$(sed -n 's/.*"data_dir"[[:space:]]*:[[:space:]]*"\(.*\)".*/\1/p' "$CFG")
+  [ -n "$DIR" ] && say "using the configured store: $DIR"
 fi
-if [ -n "$(git -C "$NS_DATA/self" remote 2>/dev/null)" ]; then
-  say "NG   $NS_DATA/self has a git remote - forbidden (F11). Remove it."; missing=1
+if [ -z "$DIR" ]; then
+  if [ -t 0 ]; then
+    printf 'Choose a folder for your data store (it will be created): '
+    read -r DIR
+  fi
+  if [ -z "$DIR" ]; then
+    say "NG   no data store designated - run: just bootstrap <dir>  (or set NS_DATA)"
+    exit 1
+  fi
+fi
+mkdir -p "$DIR" || { say "NG   cannot create $DIR"; exit 1; }
+DIR=$(cd "$DIR" && pwd)
+for d in self world artifact profiles runs; do mkdir -p "$DIR/$d"; done
+if [ ! -d "$DIR/self/.git" ]; then
+  git -C "$DIR/self" init -q && say "ok   initialized $DIR/self as a git repo"
+else
+  say "ok   $DIR/self is a git repo"
+fi
+if [ -n "$(git -C "$DIR/self" remote 2>/dev/null)" ]; then
+  say "NG   $DIR/self has a git remote - forbidden (F11). Remove it."; missing=1
 else
   say "ok   self vault has no remote (F11)"
 fi
-chmod 700 "$NS_DATA/self" 2>/dev/null || true
+chmod 700 "$DIR/self" 2>/dev/null || true
+mkdir -p "$CFG_DIR"
+printf '{\n  "data_dir": "%s"\n}\n' "$DIR" > "$CFG"
+say "ok   data store remembered in $CFG"
 
 if [ "$missing" -eq 0 ]; then say "== bootstrap ok =="; else say "== bootstrap incomplete =="; fi
 exit "$missing"

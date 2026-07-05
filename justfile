@@ -1,19 +1,20 @@
 set shell := ["bash", "-uc"]
 
-# NS_DATA must point at the data-store root, which lives OUTSIDE this
-# repository (FD-3.2). Its actual path never appears in this repo; see
-# design/development/setup-phase0.md. FED_DATA is the deprecated old name
-# and still works for one phase.
+# The data store is user-designated (workspace model): `just bootstrap [dir]`
+# initializes a folder of your choice and remembers it in the app config;
+# tools/data-dir.ts resolves it (NS_DATA env overrides per invocation).
+# No data path is hardcoded in this repo (FD-3.2).
 
-data_dir := env_var_or_default('NS_DATA', env_var_or_default('FED_DATA', ''))
+data_dir := `node tools/data-dir.ts 2>/dev/null || true`
 
-# Doctor + NS_DATA skeleton init (idempotent). Safe on a pristine machine.
-bootstrap:
-    sh tools/bootstrap.sh
+# Doctor + data-store designation/init (idempotent). `just bootstrap <dir>`
+# designates a folder; without an argument it reuses the configured store
+# or asks interactively.
+bootstrap dir='':
+    sh tools/bootstrap.sh {{dir}}
 
 _require_data:
-    @if [ -z "{{data_dir}}" ]; then echo "set NS_DATA to the data-store root"; exit 1; fi
-    @if [ -z "${NS_DATA:-}" ] && [ -n "${FED_DATA:-}" ]; then echo "warning: FED_DATA is deprecated; use NS_DATA"; fi
+    @if [ -z "{{data_dir}}" ]; then echo "no data store configured - run: just bootstrap <dir>  (or set NS_DATA)"; exit 1; fi
 
 up: _require_data build-frontend
     cargo run --manifest-path engines/nunc-stans/Cargo.toml --release -- \
@@ -24,7 +25,7 @@ up: _require_data build-frontend
 # Build the Vue frontend to frontend/dist (served by the engine at /). The
 # world adapter runs first so the read-only world view has fresh headlines.
 # NEWS_WORLD points at News's exported graph (e.g. ~/news/docs/data/graph-mix.json);
-# its path lives outside this repo, like NS_DATA. Unset = empty world view.
+# its path lives outside this repo, like the data store. Unset = empty world view.
 build-frontend: build-world
     pnpm -C frontend install --frozen-lockfile || pnpm -C frontend install
     pnpm -C frontend build
