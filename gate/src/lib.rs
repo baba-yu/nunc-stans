@@ -1,32 +1,38 @@
 pub mod guard;
 pub mod proxy;
 
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 use axum::{
     Json, Router,
+    body::Body,
     extract::{OriginalUri, Request, State},
+    http::{StatusCode, header},
     middleware,
-    response::Response,
+    response::{IntoResponse, Response},
     routing::{any, get},
 };
 use serde_json::{Value, json};
-use tower_http::services::{ServeDir, ServeFile};
+use tower::ServiceExt;
+use tower_http::services::ServeDir;
 
-/// Shared proxy state: one plain-http client plus the two loopback upstreams.
+/// Shared state: one plain-http client, the two loopback upstreams, and the
+/// formans dist (the SPA fallback handler reads its index.html).
 #[derive(Clone)]
 pub struct GateCfg {
     pub client: reqwest::Client,
     pub engine_url: String,
     pub fourfive_url: String,
+    pub formans_dist: PathBuf,
 }
 
 impl GateCfg {
-    pub fn new(engine_url: String, fourfive_url: String) -> Self {
+    pub fn new(engine_url: String, fourfive_url: String, formans_dist: PathBuf) -> Self {
         Self {
             client: reqwest::Client::new(),
             engine_url,
             fourfive_url,
+            formans_dist,
         }
     }
 }
@@ -35,9 +41,12 @@ impl GateCfg {
 ///   /gate/health        the gate's own liveness
 ///   /health, /self/*    → ledger engine (S-10 keeps proving gate→engine)
 ///   /fourfive/api/*     → fourfive server, `/fourfive` prefix stripped
-///   /fourfive/**        fourfive dist (static)
-///   everything else     formans dist with an index.html SPA fallback
-pub fn build_router(cfg: GateCfg, formans_dist: &Path, fourfive_dist: &Path) -> Router {
+///   /fourfive/**        fourfive dist (static; a missing asset is a 404)
+///   everything else     formans dist; extensionless misses fall back to
+///                       index.html (vue-router), file-like misses stay 404
+///                       so probes (e.g. /world-graph/data/manifest.json)
+///                       tell the truth.
+pub fn build_router(cfg: GateCfg, fourfive_dist: &Path) -> Router {
     // nest_service, not nest: `nest` discards a nested router's fallback,
     // and the fourfive static mount lives in that fallback.
     let fourfive = Router::new()
@@ -49,10 +58,7 @@ pub fn build_router(cfg: GateCfg, formans_dist: &Path, fourfive_dist: &Path) -> 
         .route("/health", any(proxy_engine))
         .route("/self/{*path}", any(proxy_engine))
         .nest_service("/fourfive", fourfive)
-        .fallback_service(
-            ServeDir::new(formans_dist)
-                .fallback(ServeFile::new(formans_dist.join("index.html"))),
-        )
+        .fallback(formans_static)
         .with_state(cfg)
         .layer(middleware::from_fn(guard::require_local_host))
 }
@@ -63,6 +69,38 @@ async fn gate_health() -> Json<Value> {
         "gate": "nunc-stans-gate",
         "version": env!("CARGO_PKG_VERSION"),
     }))
+}
+
+/// Static serving with an honest SPA fallback: only a path whose last
+/// segment has no extension can fall back to index.html — an asset or data
+/// probe that misses must 404, never masquerade as the app shell.
+async fn formans_static(State(cfg): State<GateCfg>, req: Request) -> Response {
+    let extensionless = !req
+        .uri()
+        .path()
+        .rsplit('/')
+        .next()
+        .unwrap_or("")
+        .contains('.');
+    let served = ServeDir::new(&cfg.formans_dist)
+        .oneshot(req)
+        .await
+        .expect("ServeDir is infallible");
+    if served.status() == StatusCode::NOT_FOUND && extensionless {
+        match tokio::fs::read(cfg.formans_dist.join("index.html")).await {
+            Ok(bytes) => Response::builder()
+                .header(header::CONTENT_TYPE, "text/html; charset=utf-8")
+                .body(Body::from(bytes))
+                .expect("static index response"),
+            Err(_) => (
+                StatusCode::NOT_FOUND,
+                "formans dist has no index.html — run `just build`",
+            )
+                .into_response(),
+        }
+    } else {
+        served.map(Body::new)
+    }
 }
 
 async fn proxy_engine(State(cfg): State<GateCfg>, req: Request) -> Response {
@@ -79,8 +117,8 @@ async fn proxy_fourfive(
     OriginalUri(orig): OriginalUri,
     req: Request,
 ) -> Response {
-    // Inside `nest` the request URI is prefix-stripped; the original URI
-    // extension keeps the real path for the mount-aware rewrite.
+    // Inside the nested service the request URI is prefix-stripped; the
+    // original URI extension keeps the real path for the mount-aware rewrite.
     let pq = orig.path_and_query().map(|p| p.as_str()).unwrap_or("/");
     let stripped = proxy::strip_mount(pq, "/fourfive");
     proxy::forward(&cfg.client, format!("{}{}", cfg.fourfive_url, stripped), req).await

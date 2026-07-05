@@ -54,8 +54,8 @@ async fn spawn_gate() -> String {
     let engine = spawn(stub_engine()).await;
     let fourfive = spawn(stub_fourfive()).await;
     let (formans_dist, fourfive_dist) = make_dists();
-    let cfg = GateCfg::new(engine, fourfive);
-    spawn(build_router(cfg, &formans_dist, &fourfive_dist)).await
+    let cfg = GateCfg::new(engine, fourfive, formans_dist);
+    spawn(build_router(cfg, &fourfive_dist)).await
 }
 
 /// Raw HTTP/1.1 request so the Host header is fully under test control.
@@ -108,6 +108,12 @@ async fn static_mounts_and_spa_fallback() {
     // Unknown client-side route falls back to the formans index (vue-router).
     let spa = reqwest::get(format!("{gate}/timeline")).await.unwrap().text().await.unwrap();
     assert!(spa.contains("FORMANS-INDEX"), "got: {spa}");
+    // A file-like miss must stay a 404 — probes (e.g. the world view's
+    // manifest HEAD) must never be fooled by the SPA fallback.
+    let miss = reqwest::get(format!("{gate}/world-graph/data/manifest.json")).await.unwrap();
+    assert_eq!(miss.status(), 404);
+    let asset = reqwest::get(format!("{gate}/assets/nope.js")).await.unwrap();
+    assert_eq!(asset.status(), 404);
 }
 
 #[tokio::test]
@@ -126,8 +132,9 @@ async fn upstream_down_is_a_502_with_advice() {
     let cfg = GateCfg::new(
         "http://127.0.0.1:1".to_owned(),
         "http://127.0.0.1:1".to_owned(),
+        formans_dist,
     );
-    let gate = spawn(build_router(cfg, &formans_dist, &fourfive_dist)).await;
+    let gate = spawn(build_router(cfg, &fourfive_dist)).await;
     let resp = reqwest::get(format!("{gate}/health")).await.unwrap();
     assert_eq!(resp.status(), 502);
     let body = resp.text().await.unwrap();

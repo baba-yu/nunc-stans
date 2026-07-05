@@ -32,8 +32,8 @@ async fn main() -> anyhow::Result<()> {
         .init();
 
     let args = Args::parse();
-    let cfg = GateCfg::new(args.engine_url, args.fourfive_url);
-    let app = build_router(cfg, &args.formans_dist, &args.fourfive_dist);
+    let cfg = GateCfg::new(args.engine_url, args.fourfive_url, args.formans_dist);
+    let app = build_router(cfg, &args.fourfive_dist);
 
     // The screen is a single origin on localhost (§10-B): loopback only.
     let addr = SocketAddr::from(([127, 0, 0, 1], args.port));
