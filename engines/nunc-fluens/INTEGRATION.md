@@ -1,5 +1,14 @@
 # Nunc Fluens (news) in the monorepo
 
+> **Phase C in progress:** the TS pipeline is being built under
+> `pipeline/` (plan: `design/development/2026-07-05-phase-c-plan.md`).
+> The news checkout is designated via `just news-link <dir>` (config
+> `news_repo`, env override `NS_NEWS_REPO`); `analytics.sqlite` now
+> lives at `<data store>/world/analytics.sqlite` (`just news-migrate-db`
+> copies it there, verified; the upstream copy remains until the
+> scheduler cutover). This document is rewritten when the split of the
+> upstream repo into a data+publish remnant completes.
+
 News owns the `world` scope: world prediction, observation, and external
 context (constitution §6.1). This directory is the News **pipeline code**,
 consolidated into the nunc-stans monorepo. The News **data** is deliberately
