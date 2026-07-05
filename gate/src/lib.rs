@@ -1,4 +1,5 @@
 pub mod guard;
+pub mod news_config;
 pub mod proxy;
 
 use std::path::{Path, PathBuf};
@@ -24,6 +25,9 @@ pub struct GateCfg {
     pub engine_url: String,
     pub fourfive_url: String,
     pub formans_dist: PathBuf,
+    /// User-designated data store (workspace model); carries the news
+    /// settings file the config API serves. None ⇒ the API answers 503.
+    pub data_dir: Option<PathBuf>,
 }
 
 impl GateCfg {
@@ -33,7 +37,13 @@ impl GateCfg {
             engine_url,
             fourfive_url,
             formans_dist,
+            data_dir: None,
         }
+    }
+
+    pub fn with_data_dir(mut self, data_dir: Option<PathBuf>) -> Self {
+        self.data_dir = data_dir;
+        self
     }
 }
 
@@ -55,6 +65,10 @@ pub fn build_router(cfg: GateCfg, fourfive_dist: &Path) -> Router {
         .with_state(cfg.clone());
     Router::new()
         .route("/gate/health", get(gate_health))
+        .route(
+            "/api/world/news-config",
+            get(news_config::get_news_config).put(news_config::put_news_config),
+        )
         .route("/health", any(proxy_engine))
         .route("/self/{*path}", any(proxy_engine))
         .nest_service("/fourfive", fourfive)
