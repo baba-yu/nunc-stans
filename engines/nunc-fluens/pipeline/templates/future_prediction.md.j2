@@ -1,0 +1,66 @@
+{#
+  future_prediction.md.j2 — render
+  `future-prediction/<locale>/future-prediction-YYYYMMDD.md` from
+  sourcedata JSON.
+
+  Spec: design/sourcedata-layout.md §Markdown rendered shape (after).
+
+  Inputs (passed by render_future_prediction_md.render_day):
+    date_iso         : "YYYY-MM-DD"
+    coverage_window  : human-readable string for the window stanza
+    locale           : "en" | "ja" | "es" | "fil"
+    ai_notice_block  : multi-line string carrying the localized notice
+    bridges          : BridgesFile.to_dict() (validation_rows[])
+    summary          : optional dict with keys
+                         plain_language        — short prose
+                         findings              — multi-paragraph prose
+                         relation_to_my_preds  — multi-paragraph prose
+
+  External vocabulary (Phase 3):
+    "## Validation findings"      — keeps the structured table; renamed
+                                    section header.
+    "## Bridge"                    — paragraphs that reference predictions
+                                    by short_label + ISO date, NEVER by
+                                    `Pred ID #N`. NO `Coherence N/5` /
+                                    `Remaining gap:` markers in markdown.
+    "## Summary (Plain Language)"  — optional
+    "## Summary of Findings"       — optional
+    "## Relation to My Own Predictions" — optional
+-#}
+# Future Prediction Validation Report {{ date_iso }}
+
+{{ ai_notice_block }}
+
+Coverage window: {{ coverage_window }}
+
+## Validation findings
+
+| Prediction (summary) | Prediction date | Today's relevance | Evidence summary | Reference link(s) |
+|---|---|---|---|---|
+{% for row in bridges.validation_rows -%}
+| {{ row.prediction_ref.short_label | table_cell }} | {{ row.prediction_ref.prediction_date }} | {{ row.today_relevance }} | {{ row.evidence_summary | table_cell }} | {{ row.reference_links | render_citations }} |
+{% endfor %}
+
+## Bridge
+
+{% for row in bridges.validation_rows %}
+On the "{{ row.prediction_ref.short_label }}" prediction ({{ row.prediction_ref.prediction_date }}): {{ row.bridge.narrative }}
+
+{% endfor %}
+{%- if summary and summary.plain_language %}
+## Summary (Plain Language)
+
+{{ summary.plain_language }}
+
+{% endif -%}
+{%- if summary and summary.findings %}
+## Summary of Findings
+
+{{ summary.findings }}
+
+{% endif -%}
+{%- if summary and summary.relation_to_my_preds %}
+## Relation to My Own Predictions
+
+{{ summary.relation_to_my_preds }}
+{% endif %}
