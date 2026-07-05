@@ -46,4 +46,4 @@ test:
     pnpm -C frontend test
 
 check:
-    @bash tools/check.sh
+    @node tools/check.ts
