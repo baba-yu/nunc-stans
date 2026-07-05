@@ -23,6 +23,7 @@ const emit = defineEmits<{ 'update:modelValue': [id: string] }>()
 <style scoped>
 .nui-tabs {
   display: flex;
+  flex-wrap: wrap;
   gap: 6px;
 }
 .nui-tab {

@@ -51,6 +51,11 @@ describe('nunc-ui primitives', () => {
     expect(w.emitted('close')).toBeTruthy()
   })
 
+  it('Modal wide variant carries the modifier class', async () => {
+    mount(Modal, { props: { open: true, wide: true }, slots: { default: 'w' } })
+    expect(document.body.querySelector('.nui-modal--wide')).toBeTruthy()
+  })
+
   it('DataChip shows label and mono value', () => {
     const w = mount(DataChip, { props: { label: 'run', value: 'abc123' } })
     expect(w.find('.nui-datachip-label').text()).toBe('run')
