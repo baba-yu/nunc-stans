@@ -16,8 +16,8 @@ stans*, the standing now. manda and fourfive keep their names. The name
 | federation ID / federation-id / `valid_federation_id` | scope ID / scope-id / `valid_scope_id` |
 | Federation Constitution | Nunc Stans Constitution (`design/constitution/constitution.md`) |
 | Federation:Phase N | Pre-v1 Phase N |
-| FED_DATA | NS_DATA (deprecated fallback kept one phase) |
-| ~/federation-data | ~/nunc-stans-data |
+| FED_DATA | NS_DATA override, or the app-configured store (deprecated fallback kept one phase) |
+| ~/federation-data (fixed path) | a **user-designated data store** (workspace model: `just bootstrap <dir>` initializes any folder and the app config remembers it; no path convention exists) |
 | ~/federation (repo) | ~/nunc-stans |
 | ~/nuncstans (design repo) | absorbed; archived at ~/old/nuncstans-design-repo |
 | nuncstans / NuncStans | nunc-stans / Nunc Stans (hyphenation) |

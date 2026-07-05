@@ -25,6 +25,11 @@
   the integrated UI, not the repo — the monorepo simplifies to `~/nunc-stans`
   (remote `baba-yu/nunc-stans`); the single-origin UI is **Nunc Stans
   Formans** (`frontend/nunc-stans-formans/`, never abbreviated to "formans").
+- Updated 2026-07-04 (owner feedback round 6, data store): no fixed data
+  path — the store is a user-designated folder (workspace model, like an
+  Obsidian vault); `just bootstrap [dir]` initializes and remembers it in
+  the per-user app config; `NS_DATA` is a per-invocation override
+  (§2.9, D10).
 - Executor: Claude (Fable), phase by phase, with an owner review gate per phase
 - Relation to existing docs: extends `design/development/development-plan.md`
   (the HTAS M-milestones remain the product-side roadmap). The old
@@ -376,8 +381,15 @@ data: ~/nunc-stans-data/apps/<slug>/data.sqlite   (per-user, local — requireme
 
 ### 2.9 Data topology (requirement 8)
 
+The data store is a **user-designated folder** (workspace model — owner
+decision, round 6): `just bootstrap [dir]` initializes any folder of the
+user's choice and the app remembers it in its per-user config
+(`~/.config/nunc-stans/config.json`; `%APPDATA%` on Windows). `NS_DATA`
+overrides per invocation (scripts, CI, tests). No data-path convention
+exists in code or docs (FD-3.2 enforces this). Inside the designated store:
+
 ```
-~/nunc-stans-data/
+<data store>/
   self/         ledger vault (git, NO remote — F11 unchanged)
   world/        News DB cache (analytics.sqlite moves here; rebuildable from report/ markdown)
   artifact/     FourFive workspace (blueprints, versions) — moves out of the repo
@@ -394,7 +406,7 @@ multi-tenancy would be its own plan).
 
 **Backup (new obligation):** F11 forbids remotes for `self/`, which today
 means zero copies of the most irreplaceable data. `just backup` produces an
-encrypted archive (age or 7z-AES) of `~/nunc-stans-data` to a second disk
+encrypted archive (age or 7z-AES) of the configured data store to a second disk
 and/or an owner-chosen offsite target (D8). F11's intent is "no plaintext
 ledger on someone else's server"; an encrypted bundle you carry yourself is
 compatible with that intent.
@@ -421,10 +433,12 @@ nothing in the product may depend on them.
   Windows equivalents or documented degradation. Scheduling is documented
   per OS: systemd timer / cron (Linux), Task Scheduler (Windows), launchd
   (macOS) — the CLI is the contract; the OS scheduler is an adapter.
-- **`just bootstrap` (new, Phase A):** verifies or installs the toolchain,
-  initializes the `NS_DATA` skeleton (`self/` as a git repo with no remote,
-  `world/`, `artifact/`, `profiles/`, `runs/`), and prints a doctor report.
-  Setup lives in a script, not in prose.
+- **`just bootstrap [dir]` (new, Phase A):** verifies the toolchain, then
+  designates the data store (workspace model) — creates the folder if
+  needed, initializes the skeleton (`self/` as a git repo with no remote,
+  `world/`, `artifact/`, `profiles/`, `runs/`), and remembers it in the
+  per-user app config. Prints a doctor report. Setup lives in a script, not
+  in prose.
 - **No machine-specific state in the repo:** all paths flow through `NS_DATA`
   and config — no user-specific or absolute paths (the run-summary WSL path
   hardcoded into `~/news` and this machine's corepack shim workaround are
@@ -753,6 +767,7 @@ any of them.
 | D7 | Default pipeline provider | **Approved (round 1**, condition: no GPL-style copyleft — claude-code is proprietary freeware**):** `claude-code`; runtimes and providers selectable per profile | API-first |
 | D8 | Vault backup destination | Encrypted weekly bundle to a second local disk; owner adds an offsite copy | Owner-specified (e.g., encrypted cloud object storage) |
 | D9 | v1 distribution target | **Confirmed (round 3):** personal instances, BYOL — each user runs their own local-first instance with their own vault (portable per §2.10); monetization deferred (experience + data moat) | Hosted multi-tenant service — out of scope for v1; would be its own plan |
+| D10 | Data store location | **Decided (round 6):** user-designated folder, workspace model — the app config remembers it; no path convention in code or docs | Fixed conventional path (rejected) |
 
 ## 7. Execution protocol
 

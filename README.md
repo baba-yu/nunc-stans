@@ -13,9 +13,8 @@ Targets Ubuntu (native/WSL2), Windows 11, and macOS.
 ## Quickstart
 
 ```sh
-just bootstrap            # doctor + data-store init (or: sh tools/bootstrap.sh)
-export NS_DATA=~/nunc-stans-data
-just up                   # build + serve on http://127.0.0.1:8720
+just bootstrap <folder-of-your-choice>   # doctor + designate your data store (asks if omitted)
+just up                                  # build + serve on http://127.0.0.1:8720
 ```
 
 ## Layout
@@ -29,9 +28,12 @@ just up                   # build + serve on http://127.0.0.1:8720
 | `contracts/` | scope IDs, edge schema, glossary, agent ABI |
 | `design/` | design corpus, plans, stories, verification records |
 
-The data store lives outside the repo at `NS_DATA` (default
-`~/nunc-stans-data`); the `self/` vault is a git repo with **no remote**
-(rule F11). See `CONTRIBUTING.md` for conventions,
+The data store is **a folder you designate** (workspace model, like an
+Obsidian vault): `just bootstrap <dir>` initializes it and the app remembers
+it in its per-user config (`~/.config/nunc-stans/config.json`; `%APPDATA%`
+on Windows). `NS_DATA` overrides it per invocation (scripts, CI). The store
+always lives outside this repository; its `self/` vault is a git repo with
+**no remote** (rule F11). See `CONTRIBUTING.md` for conventions,
 [design/naming.md](design/naming.md) for the naming map, and
 [design/development/2026-07-04-nuncstans-v1-plan.md](design/development/2026-07-04-nuncstans-v1-plan.md)
 for the roadmap.
