@@ -75,6 +75,29 @@ review gate). Plan: `design/development/2026-07-04-phase-b-plan.md`
   lanes commitments/edges/provenance + the two reserved lanes labeled
   "no records yet (Phase D+)"; markers jump to `/?focus=<id>`. Formans:
   3 test files (16 tests) green, build green.
+- T10 (2026-07-05): stories executed against a scratch vault
+  (`NS_DATA=/tmp/phaseb-vault`, git-initialized self/, no remote; real
+  store untouched), NEWS_WORLD set, headless Chromium (Playwright) since
+  the Chrome-extension bridge was offline.
+  - **S-1 PASS** (mechanical): /health engine JSON, /gate/health,
+    /fourfive/api/health provider JSON, `<title>Nunc Stans</title>`,
+    /fourfive/ FourFive HTML, /timeline 200 — all through :8720; visual
+    pass over the four surfaces (screenshot set).
+  - **S-2 PASS** (click-through): provenance before `1/2 (50%) · 1 edges`;
+    "Commit from this headline" on a live News headline → `authored
+    self/commitment/news-138d13eb-… + informed_by → News (provenance
+    updated)`; after: `2/3 (67%) · 2 edges`.
+  - **S-9 PASS** (click-through): W27 with ○×3 / ●×1, edges count 2,
+    provenance heat step, both reserved lanes labeled; marker click →
+    `/?focus=<id>` → home highlights the record (home-focused.png). Two
+    defects found by execution and fixed in-phase: (1) `fill:none` SVG
+    circles were clickable only on their hairline stroke —
+    `pointer-events: all`; (2) the outcome's `recorded_at` is
+    server-assigned, so S-9's pass text was made date-independent (the
+    multi-week spread stays pinned by timeline.test.ts).
+  - Screenshots: `design/ui/phase-b/{home,world,timeline,home-focused,
+    fourfive}.png` (fourfive pre-restyle look lives in git history at
+    feced16^ — no separate 'before' capture).
 
 ## Decisions log
 
