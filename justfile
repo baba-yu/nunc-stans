@@ -17,6 +17,26 @@ bootstrap dir='':
 _require_data:
     @if [ -z "{{data_dir}}" ]; then echo "no data store configured - run: just bootstrap <dir>  (or set NS_DATA)"; exit 1; fi
 
+# --- News pipeline (nunc-fluens, Phase C) -----------------------------
+# The news data+publish checkout is user-designated like the data store:
+# `just news-link <dir>` remembers it (config news_repo; NS_NEWS_REPO
+# overrides per invocation).
+
+news-link dir:
+    node engines/nunc-fluens/pipeline/src/cli.ts link "{{dir}}"
+
+news-status:
+    node engines/nunc-fluens/pipeline/src/cli.ts status
+
+# Copy analytics.sqlite into <data store>/world/ (verified, idempotent;
+# junk siblings are not migrated; upstream copy stays until cutover).
+news-migrate-db: _require_data
+    node engines/nunc-fluens/pipeline/src/cli.ts migrate-db
+
+# Schema-validate one day's sourcedata (incl. locale fan-out).
+news-validate date:
+    node engines/nunc-fluens/pipeline/src/cli.ts validate "{{date}}"
+
 # One origin (the gate, :8720) fronts everything; the ledger engine (:8721)
 # and the fourfive server (:8787) stay loopback-internal behind it.
 # NS_PORT moves the gate; NS_ENGINE_PORT moves the engine. The three
