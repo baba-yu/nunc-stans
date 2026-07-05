@@ -137,7 +137,12 @@ def _idf_score(
     ``agent`` eight times can't just pile into whichever theme happens to
     have the longest description.
     """
-    return sum(1.0 / df[tok] for tok in (text_tokens & theme_tokens) if df.get(tok, 0) > 0)
+    # Sorted iteration so the float sum is order-deterministic: set
+    # iteration order is hash-seed dependent, and exact rational ties
+    # between themes (they happen — 73/15 vs 73/15 on the live corpus)
+    # were being broken by per-process rounding noise. Phase C port
+    # determinism fix; the TS port sums in the same sorted order.
+    return sum(1.0 / df[tok] for tok in sorted(text_tokens & theme_tokens) if df.get(tok, 0) > 0)
 
 
 def _load_themes(conn: sqlite3.Connection) -> list[ThemeRow]:

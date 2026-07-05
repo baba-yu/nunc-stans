@@ -135,7 +135,10 @@ type Ran = { exit: number; out: string };
 function py(PY: string, args: string[], allowFail = false): Ran {
   const r = spawnSync(PY, args, {
     cwd: WORK, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024,
-    env: { ...process.env, PYTHONPATH: WORK },
+    // PYTHONHASHSEED pinned: set-iteration order feeds float sums in the
+    // oracle; unpinned hashing made captures run-dependent (see the
+    // idf-tie determinism fix in app/src/ingest.py).
+    env: { ...process.env, PYTHONPATH: WORK, PYTHONHASHSEED: '0' },
   });
   if (r.error) throw r.error;
   const exit = r.status ?? -1;
@@ -148,6 +151,7 @@ const CAPTURE_DAY = new Date().toISOString().slice(0, 10);
 function normalize(text: string): string {
   return text
     .replace(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z?/g, '1970-01-01T00:00:00Z')
+    .replace(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/g, '1970-01-01 00:00:00')
     .replaceAll(CAPTURE_DAY, '<CAPTURE_DAY>')
     .replaceAll(WORK, '<WORK>');
 }
