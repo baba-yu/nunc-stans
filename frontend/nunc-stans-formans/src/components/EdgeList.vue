@@ -9,7 +9,7 @@ defineProps<{ edges: Edge[] }>()
     <template v-if="edges.length">
       <!-- Fallback display by to_label: the target store may be unreachable,
            the label always is (constitution Phase 1). -->
-      <li v-for="e in edges" :key="e.id">
+      <li v-for="e in edges" :key="e.id" :data-record-id="e.id">
         <span>{{ e.from_label || e.from }}</span>
         <span class="etype">{{ e.type }} →</span>
         <span>{{ e.to_label }}</span>

@@ -1,42 +1,31 @@
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
-import CommitmentList from './components/CommitmentList.vue'
-import EdgeList from './components/EdgeList.vue'
-import AuthorForm from './components/AuthorForm.vue'
-import WorldView from './components/WorldView.vue'
+import { onMounted } from 'vue'
+import { RouterLink, RouterView } from 'vue-router'
+import { Badge } from 'nunc-ui'
 import { useMeStore } from './stores/me'
 
 const store = useMeStore()
 
-// F9: the one-line provenance mix — of my own bets, the proportion prompted by
-// AI-routed information. Recomputed from edges, never asserted.
-const provenance = computed(() => {
-  if (!store.reachable) return 'engine unreachable — is `just up` running?'
-  const { aiPrompted, total, percent } = store.mix
-  const skipped = store.malformed ? ` · ${store.malformed} malformed record(s) skipped` : ''
-  return `provenance: ${aiPrompted}/${total} of my bets were AI-prompted (${percent}%) · ${store.edges.length} edges${skipped}`
-})
-
-onMounted(() => {
-  store.load()
-  store.loadWorld()
-})
+// The shell owns the engine-status chip; views load what they need.
+onMounted(() => store.load())
 </script>
 
 <template>
-  <main>
-    <h1>ME</h1>
-    <div id="provenance">{{ provenance }}</div>
-
-    <h2>Commitments</h2>
-    <CommitmentList :commitments="store.commitments" />
-
-    <AuthorForm />
-
-    <h2>World (News)</h2>
-    <WorldView />
-
-    <h2>Edges</h2>
-    <EdgeList :edges="store.edges" />
-  </main>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand">Nunc Stans</div>
+      <nav class="tabs">
+        <RouterLink to="/" class="tab" exact-active-class="tab--active">ME</RouterLink>
+        <RouterLink to="/world" class="tab" active-class="tab--active">World</RouterLink>
+        <RouterLink to="/timeline" class="tab" active-class="tab--active">Timeline</RouterLink>
+        <a href="/fourfive/" class="tab">FourFive</a>
+      </nav>
+      <div class="topbar-meta">
+        <Badge :variant="store.reachable ? 'success' : 'error'">
+          {{ store.reachable ? 'engine ok' : 'engine unreachable' }}
+        </Badge>
+      </div>
+    </header>
+    <RouterView />
+  </div>
 </template>

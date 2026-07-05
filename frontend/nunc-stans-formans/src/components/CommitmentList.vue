@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Card } from 'nunc-ui'
 import type { Commitment } from '../types'
 
 defineProps<{ commitments: Commitment[] }>()
@@ -17,11 +18,12 @@ function meta(c: Commitment): string {
 
 <template>
   <div v-if="commitments.length">
-    <div v-for="c in commitments" :key="c.id" class="card">
+    <!-- data-record-id: the /?focus=<id> jump target (timeline S-9). -->
+    <Card v-for="c in commitments" :key="c.id" :data-record-id="c.id">
       <div class="title">{{ c.title || c.id }}</div>
-      <div class="meta">{{ meta(c) }}</div>
       <div v-if="c.note" class="note">{{ c.note }}</div>
-    </div>
+      <template #meta>{{ meta(c) }}</template>
+    </Card>
   </div>
   <p v-else class="meta">no commitments yet</p>
 </template>
