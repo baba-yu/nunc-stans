@@ -413,6 +413,13 @@ apply-schema-edit, weekly-maintenance port).
 ### Task 12: Retire Python + close
 - [ ] Delete `engines/nunc-fluens/app/`; CI news job → vitest; root README
       + engine README updated.
+- [ ] **Shrink the goldens (owner decision 2026-07-06):** the real-content
+      corpus exists only to validate the port against the oracle during
+      this phase. Once the exit runs and stories pass, replace
+      `pipeline/goldens/` with minimal synthetic fixtures (schema-shaped,
+      no personal content) and drop the real corpus from the monorepo —
+      its home is the owner's production `nunc-fluens` remnant. The
+      redistributable repo must not carry one user's editorial data.
 - [ ] `NEWS_WORLD` grep-clean; naming.md rows updated (~/news → executed);
       v1 plan in-place updates (D3/D4 executed; §2.2 layout note).
 - [ ] `design/verification/phase-c.md` (stories, exit runs, goldens
