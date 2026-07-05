@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** One monorepo named `nunc-stans-formans` holds every stack with the
+**Goal:** One monorepo named `nunc-stans` holds every stack with the
 "federation" name retired, the design corpus deduplicated, the data dir
 renamed, peripheral stacks archived, a bootstrap + CI skeleton in place, and
 stories S-0/S-10 passing.
@@ -24,7 +24,7 @@ the skill default location).
 ## Execution notes (read first)
 
 - All commands below run **inside WSL at the repo root** (`~/federation`
-  until Task 10; `~/nunc-stans-formans` after). When driving from a
+  until Task 10; `~/nunc-stans` after). When driving from a
   Windows-side session, wrap each block:
   `wsl.exe -e sh -c 'cd ~/federation && <commands>'`. Never rely on the
   Windows session cwd — Tasks 9–10 move directories.
@@ -56,7 +56,7 @@ Modify: `justfile`, `contracts/edge.schema.json` (text only), `design/**`
 `design/development/2026-07-04-nuncstans-v1-plan.md` (exit-check refinement).
 Delete: `tools/check.sh`, `tools/commit-scope.sh` (after ports verified).
 Filesystem: `~/federation-data → ~/nunc-stans-data`; archives into `~/old/`;
-`~/federation → ~/nunc-stans-formans`; `~/nuncstans → ~/old/nuncstans-design-repo`.
+`~/federation → ~/nunc-stans`; `~/nuncstans → ~/old/nuncstans-design-repo`.
 
 ---
 
@@ -259,11 +259,13 @@ Step 3.6.
 ```markdown
 # Naming map (2026-07)
 
-The product is **Nunc Stans**. The monorepo (integrated environment) is
-**nunc-stans-formans**. The self-scope engine is `engines/nunc-stans` (crate
-`nunc-stans-engine`); the news engine is `engines/nunc-fluens` — *nunc
-fluens*, the flowing now, paired with *nunc stans*, the standing now. manda
-and fourfive keep their names. The name "federation" is retired.
+The product is **Nunc Stans**; the monorepo is `~/nunc-stans`. The
+integrated UI is **Nunc Stans Formans** (`frontend/nunc-stans-formans/`,
+assembled in Phase B; never abbreviated to "formans"). The self-scope engine
+is `engines/nunc-stans` (crate `nunc-stans-engine`); the news engine is
+`engines/nunc-fluens` — *nunc fluens*, the flowing now, paired with *nunc
+stans*, the standing now. manda and fourfive keep their names. The name
+"federation" is retired.
 
 | Old | New |
 |---|---|
@@ -275,8 +277,10 @@ and fourfive keep their names. The name "federation" is retired.
 | Federation:Phase N | Pre-v1 Phase N |
 | FED_DATA | NS_DATA (deprecated fallback kept one phase) |
 | ~/federation-data | ~/nunc-stans-data |
-| ~/federation (repo) | ~/nunc-stans-formans |
+| ~/federation (repo) | ~/nunc-stans |
 | ~/nuncstans (design repo) | absorbed; archived at ~/old/nuncstans-design-repo |
+| integrated UI ("shell") | Nunc Stans Formans — frontend/nunc-stans-formans (Phase B) |
+| GitHub remote (new, monorepo) | baba-yu/nunc-stans |
 | nuncstans / NuncStans | nunc-stans / Nunc Stans (hyphenation, round 4) |
 | engines/nuncstans, crate nuncstans-engine | engines/nunc-stans, crate nunc-stans-engine |
 | News (the stack), engines/news | Nunc Fluens, engines/nunc-fluens |
@@ -535,7 +539,7 @@ node tools/commit-scope.ts   # ok commit-scope
 
 ```sh
 #!/bin/sh
-# nunc-stans-formans bootstrap: doctor + NS_DATA skeleton. Idempotent.
+# nunc-stans bootstrap: doctor + NS_DATA skeleton. Idempotent.
 set -u
 missing=0
 say() { printf '%s\n' "$*"; }
@@ -600,13 +604,14 @@ git commit -m "tool: add just bootstrap with a doctor report and NS_DATA skeleto
 - [ ] **Step 7.1: Root `README.md`**
 
 ```markdown
-# nunc-stans-formans
+# nunc-stans
 
-The workshop where **Nunc Stans** is formed — a local-first personal system:
-AI reads the world and proposes futures worth committing to (news); you
-choose or write your own future and put resources behind it (the nunc-stans
-engine — the self ledger); together you turn the path into small apps
-(fourfive) that human and agent use side by side.
+**Nunc Stans** — a local-first personal system: AI reads the world and
+proposes futures worth committing to (nunc-fluens); you choose or write your
+own future and put resources behind it (the nunc-stans engine — the self
+ledger); together you turn the path into small apps (fourfive) that human
+and agent use side by side. The integrated UI where that forming happens is
+**Nunc Stans Formans** (`frontend/nunc-stans-formans/`, arrives in Phase B).
 
 Local-first, BYOL (bring your own models/keys), one vault per user.
 Targets Ubuntu (native/WSL2), Windows 11, macOS.
@@ -624,7 +629,7 @@ Targets Ubuntu (native/WSL2), Windows 11, macOS.
 | `engines/nunc-stans` | Rust self-scope engine (append-only ledger + vault guard) |
 | `engines/nunc-fluens` | Nunc Fluens — the news pipeline (world scope). Code canonical here; `~/news` is data+publishing. **Code-frozen there since 2026-07 — code changes land here.** |
 | `engines/fourfive` | FourFive design tool (artifact scope) |
-| `frontend/` | ME view / world view (Vue 3 + TS) |
+| `frontend/` | ME view / world view (Vue 3 + TS); becomes **Nunc Stans Formans** (`frontend/nunc-stans-formans/`) in Phase B |
 | `contracts/` | scope IDs, edge schema, glossary, agent ABI |
 | `design/` | design corpus, plans, stories, verification records |
 
@@ -773,14 +778,14 @@ git add design/verification/phase-a.md && git commit -m "design: record the home
 - [ ] **Step 10.2: Move both directories**
 
 ```bash
-mv ~/federation ~/nunc-stans-formans
+mv ~/federation ~/nunc-stans
 mv ~/nuncstans ~/old/nuncstans-design-repo   # its uncommitted scratchbin goes along, as-is
 ```
 
 - [ ] **Step 10.3: Post-move verification (absolute paths only)**
 
 ```bash
-cd ~/nunc-stans-formans
+cd ~/nunc-stans
 git status --porcelain                        # empty
 git config user.email                         # yukibaba3912@gmail.com (repo-local survives the move)
 node tools/check.ts                           # 3× ok
@@ -791,7 +796,7 @@ kill %1 2>/dev/null; wait
 ```
 
 - [ ] **Step 10.4: Update the assistant memory files** (Claude-side): paths
-  `~/federation → ~/nunc-stans-formans`, design repo archived — in
+  `~/federation → ~/nunc-stans`, design repo archived — in
   `MEMORY.md` + `federation-build.md`.
 
 - [ ] **Step 10.5: Evidence commit**
@@ -801,7 +806,7 @@ git add design/verification/phase-a.md && git commit -m "design: record the phas
 ```
 
 Note: any Claude session anchored at the old paths must switch to absolute
-paths or reopen at `~/nunc-stans-formans` (WSL-side recommended from here on).
+paths or reopen at `~/nunc-stans` (WSL-side recommended from here on).
 
 ### Task 11: Stories, verification, owner handoff
 
@@ -830,7 +835,7 @@ Pass: home screen reachable with no steps beyond documented prerequisites.
 - [ ] **Step 11.3: Execute S-10 (pristine Ubuntu container)**
 
 ```bash
-docker run --rm -it -v ~/nunc-stans-formans:/src:ro ubuntu:24.04 bash -c '
+docker run --rm -it -v ~/nunc-stans:/src:ro ubuntu:24.04 bash -c '
   set -e
   apt-get update && apt-get install -y git curl build-essential python3 pkg-config
   curl -fsSL https://deb.nodesource.com/setup_24.x | bash - && apt-get install -y nodejs
@@ -854,7 +859,7 @@ Fill `design/verification/phase-a.md` exit-criteria checklist with evidence:
 
 ```markdown
 ## Exit criteria
-- [ ] `just up` works from ~/nunc-stans-formans (log excerpt)
+- [ ] `just up` works from ~/nunc-stans (log excerpt)
 - [ ] `node tools/check.ts` green
 - [ ] vocabulary grep clean (command + empty output)
 - [ ] every stack README verified by running its command
@@ -873,10 +878,10 @@ git add design/stories design/verification && git commit -m "design: close phase
 Owner, in a native shell:
 
 ```bash
-# 1. Create the private repo baba-yu/nunc-stans-formans on GitHub (empty, no README)
+# 1. Create the private repo baba-yu/nunc-stans on GitHub (empty, no README)
 wsl
-cd ~/nunc-stans-formans
-git remote add origin https://github.com/baba-yu/nunc-stans-formans.git
+cd ~/nunc-stans
+git remote add origin https://github.com/baba-yu/nunc-stans.git
 git push -u origin main --follow-tags
 # 2. Watch the first CI run; report any Windows/macOS failures back for in-phase fixes.
 ```

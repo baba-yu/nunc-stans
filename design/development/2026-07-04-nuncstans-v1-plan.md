@@ -21,6 +21,10 @@
   `~/nunc-stans-data`, prose "Nunc Stans"; the news stack becomes
   **Nunc Fluens** (`engines/nunc-fluens`; the external `~/news` repo is
   renamed at Phase C). manda and fourfive keep their names.
+- Updated 2026-07-04 (owner feedback round 5, naming): *formans* belongs to
+  the integrated UI, not the repo — the monorepo simplifies to `~/nunc-stans`
+  (remote `baba-yu/nunc-stans`); the single-origin UI is **Nunc Stans
+  Formans** (`frontend/nunc-stans-formans/`, never abbreviated to "formans").
 - Executor: Claude (Fable), phase by phase, with an owner review gate per phase
 - Relation to existing docs: extends `design/development/development-plan.md`
   (the HTAS M-milestones remain the product-side roadmap). The old
@@ -31,10 +35,11 @@
 
 Owner direction (2026-07-04), restated as requirements:
 
-1. The product is **Nunc Stans**; the monorepo (the integrated environment) is
-   named **`nunc-stans-formans`** — the workshop where Nunc Stans is formed —
-   so the product/engine name and the environment name never collide. The
-   name "federation" is retired everywhere (repo name, env vars, document
+1. The product is **Nunc Stans**; the monorepo is `~/nunc-stans` (product
+   name = repo name). **Nunc Stans Formans** — never abbreviated — names the
+   *integrated UI* where the forming happens
+   (`frontend/nunc-stans-formans/`, assembled in Phase B). The name
+   "federation" is retired everywhere (repo name, env vars, document
    vocabulary). One monorepo holds every stack.
 2. News and FourFive keep their look and feel — their visual language becomes
    the design system for **all** UI.
@@ -140,7 +145,7 @@ app/update_pages.sh                   # same, from repo root
 
 ### 2.1 One repository, one history
 
-Decision: a **single-git monorepo named `nunc-stans-formans`**, evolved in
+Decision: a **single-git monorepo named `nunc-stans`**, evolved in
 place from `~/federation` (it already contains every stack, imported with
 history).
 
@@ -188,7 +193,7 @@ is hard; splitting later is easy — so default to one repo now.
 ### 2.2 Layout
 
 ```
-nunc-stans-formans/              (monorepo root; was ~/federation)
+nunc-stans/                     (monorepo root; was ~/federation)
   justfile                      just up / news-run / journey / check / backup
   contracts/                    scope-id, edge schema, glossary, agent-abi v0 (new)
   design/                       canonical design corpus (deduped; ~/nuncstans/plan absorbed)
@@ -200,7 +205,7 @@ nunc-stans-formans/              (monorepo root; was ~/federation)
   agents/
     nunc-stans-agent/            first-party CLI agent (new, Phase D — §2.11)
   frontend/
-    shell/                      single-origin shell: ME + world + /fourfive/ + /apps/ + profiles + timeline
+    nunc-stans-formans/         the integrated UI (Nunc Stans Formans): ME + world + /fourfive/ + /apps/ + profiles + timeline
     packages/
       nunc-ui/                  design tokens + shared Vue primitives (new)
       ai/                       provider registry + search adapters + goal-loop + run log (new)
@@ -212,11 +217,14 @@ pnpm workspace across the TS packages; Cargo stays per-engine.
 
 ### 2.3 Naming migration
 
-- Directory: `~/federation` → `~/nunc-stans-formans` (owner's naming, feedback
-  round 1: the integrated environment is *nunc-stans-formans*, so it never
-  collides with the product/engine name). The current `~/nuncstans` design
-  repo is absorbed first (subtree merge, history preserved), then archived to
-  `~/old/`.
+- Directory: `~/federation` → `~/nunc-stans` (round 5: *formans* belongs to
+  the integrated UI, not the monorepo). No collision remains — the old
+  `~/nuncstans` design repo differs as a string and is archived in this very
+  phase: it is absorbed first (subtree merge, history preserved), then moved
+  to `~/old/`.
+- Integrated UI: the single-origin UI is named **Nunc Stans Formans**,
+  directory `frontend/nunc-stans-formans/` (assembled in Phase B from
+  today's `frontend/`); never abbreviated to "formans".
 - Engine: `engines/nuncstans` → `engines/nunc-stans`, crate
   `nuncstans-engine` → `nunc-stans-engine` (round-4 hyphenation). News:
   `engines/news` → `engines/nunc-fluens` — *nunc fluens*, the flowing now,
@@ -234,7 +242,7 @@ pnpm workspace across the TS packages; Cargo stays per-engine.
 - Git identity: the monorepo (and later the `~/news` remnant) get repo-local
   `user.email = yukibaba3912@gmail.com` (owner directive, feedback round 1;
   existing history stays untouched). Already applied to `~/federation`.
-- GitHub: a new private repo `baba-yu/nunc-stans-formans` (owner creates and
+- GitHub: a new private repo `baba-yu/nunc-stans` (owner creates and
   pushes — D2). The old `baba-yu/nuncstans` design repo is archived as is.
 
 ### 2.4 Stack policy
@@ -278,6 +286,9 @@ owner wants everything to feel like:
   profile manager — consumes it. The News D3 canvas graph is kept as-is and
   wrapped in a shell view.
 - Single localhost origin for everything (constitution §10-B), one `just up`.
+  The integrated UI itself is named **Nunc Stans Formans**
+  (`frontend/nunc-stans-formans/`, never abbreviated); where this document
+  says "the shell", it means Nunc Stans Formans.
 
 ### 2.6 AI layer: `frontend/packages/ai`
 
@@ -468,7 +479,7 @@ self-scope commitments (F3).
 | Phase | Name | Depends on | Size (focused Fable sessions) |
 |---|---|---|---|
 | A | Consolidation and naming | — | 1–2 |
-| B | Single-origin shell + nunc-ui | A | 2–3 |
+| B | Nunc Stans Formans (the integrated UI) + nunc-ui | A | 2–3 |
 | C | News newstack: coded pipeline + provider layer | A (B can run in parallel) | 4–6 |
 | D | Profiles + goal-loop + agent-abi v0 + nunc-stans-agent v0 | C (`packages/ai`) | 3–5 |
 | E | FourFive app factory + apps-host | B, D | 5–8 |
@@ -499,26 +510,28 @@ retires it; apply §2.3 renames (dirs, crate, env, vocabulary,
 unified-product direction — engines are now internal components of one
 product and may be modified freely, while the contracts keep defining the
 scope boundaries;
-move `~/federation` → `~/nunc-stans-formans`; rename `~/federation-data` →
+move `~/federation` → `~/nunc-stans`; rename `~/federation-data` →
 `~/nunc-stans-data` (engine flags, justfile, env shim); archive `~/fourfive`,
 `nuncstans-hermes-stack`, `multi-stakeholder-simulater`, and the stray `~`
 junk into `~/old/` (nothing deleted); carry LICENSE/NOTICE (Apache-2.0) to the
 monorepo root; write a `README.md` per stack with a working one-command run; write
 `just bootstrap` and purge machine-specific paths per §2.10; set the
 repo-local git identity (`yukibaba3912@gmail.com`; history untouched);
-prepare the new private remote `baba-yu/nunc-stans-formans` (owner creates
+prepare the new private remote `baba-yu/nunc-stans` (owner creates
 and pushes).
 
-Exit: `just up` works from `~/nunc-stans-formans`; `just check` green;
+Exit: `just up` works from `~/nunc-stans`; `just check` green;
 `rg -i federation` hits only `design/naming.md` and git history; every stack
 README has a verified run command; stories S-0 and S-10 pass (S-10 in a
 pristine WSL distro or container).
 
-### Phase B — Single-origin shell + nunc-ui
+### Phase B — Nunc Stans Formans (the integrated UI) + nunc-ui
 
-Work: create `frontend/packages/nunc-ui` (§2.5 tokens + primitives); restyle
-ME and world views; mount FourFive under `/fourfive/` behind the shell origin
-(the old Phase-4 item); navigation chrome; the F9 provenance line stays on
+Work: assemble the integrated UI **Nunc Stans Formans**
+(`frontend/nunc-stans-formans/`, evolving from today's `frontend/`); create
+`frontend/packages/nunc-ui` (§2.5 tokens + primitives); restyle
+ME and world views; mount FourFive under `/fourfive/` behind the single
+origin (the old Phase-4 item); navigation chrome; the F9 provenance line stays on
 home; add a **timeline view** (owner request, feedback round 1) — the self
 scope as a time series: commitments opened, outcomes closed, interventions,
 mandate windows, and the weekly provenance mix, rendered on the nunc-ui heat
@@ -689,8 +702,11 @@ during its phase and executed before the phase closes:
    Without scheduling it, the stories stay "tested" only in the CI sense.
 10. **Naming has a blast radius.** "nuncstans" currently names the design
     repo, the Rust engine, a GitHub remote, and (in docs) the self system.
-    The owner's round-4 naming settles it: monorepo `nunc-stans-formans`,
-    engine `engines/nunc-stans`, news `nunc-fluens`. Historical documents
+    The owner's rounds 4–5 naming settles it: monorepo `~/nunc-stans`,
+    integrated UI **Nunc Stans Formans**, engine `engines/nunc-stans`, news
+    `nunc-fluens`. A mild echo remains (`engines/nunc-stans` inside
+    `~/nunc-stans`) — accepted; renaming the engine to a functional name
+    (e.g. `ledger`) stays available if it ever grates. Historical documents
     will still read oddly in places, and `design/naming.md` is the Rosetta
     stone rather than rewriting history.
 11. **The vault has zero backup today,** and F11 (no remote) is the reason.
@@ -727,10 +743,10 @@ any of them.
 | # | Decision | Default | Alternative |
 |---|---|---|---|
 | D1 | Repo topology | Single git monorepo — re-examined at owner request, analysis in §2.1 | Nested per-stack repos (institutionalizes the two-homes problem; not recommended) |
-| D2 | GitHub remote | **Decided (round 1):** new private repo `baba-yu/nunc-stans-formans`; owner creates and pushes | Stay local-only |
+| D2 | GitHub remote | **Decided (rounds 1+5):** new private repo `baba-yu/nunc-stans`; owner creates and pushes | Stay local-only |
 | D3 | Public News dashboard | Keep: `~/news` becomes a data+publish remnant fed by the monorepo pipeline | Go fully local; retire Pages |
 | D4 | Python pipeline | Port to TS with golden-master parity, then retire Python | Keep Python permanently as a pinned CLI |
-| D5 | Naming | **Decided (rounds 1+4):** monorepo `nunc-stans-formans`; engine `engines/nunc-stans` (crate `nunc-stans-engine`); news → `nunc-fluens` (external repo renamed at Phase C); agent `nunc-stans-agent`; manda and fourfive unchanged | — |
+| D5 | Naming | **Decided (rounds 1–5):** monorepo `~/nunc-stans`; integrated UI **Nunc Stans Formans** (`frontend/nunc-stans-formans/`, no abbreviation); engine `engines/nunc-stans` (crate `nunc-stans-engine`); news → `nunc-fluens` (external repo renamed at Phase C); agent `nunc-stans-agent`; manda and fourfive unchanged | — |
 | D6 | Primary accent | News cyan `#18c7d8` | FourFive blue `#5b8cff` |
 | D7 | Default pipeline provider | **Approved (round 1**, condition: no GPL-style copyleft — claude-code is proprietary freeware**):** `claude-code`; runtimes and providers selectable per profile | API-first |
 | D8 | Vault backup destination | Encrypted weekly bundle to a second local disk; owner adds an offsite copy | Owner-specified (e.g., encrypted cloud object storage) |
