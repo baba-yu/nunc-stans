@@ -7,8 +7,8 @@ nunc-stans engine. In Phase B this evolves into **Nunc Stans Formans**
 ## Dev loop
 
 ```sh
-# terminal 1 — the engine (serves the built UI + /self API):
-export NS_DATA=~/nunc-stans-data
+# terminal 1 — the engine (serves the built UI + /self API).
+# Uses your configured data store; run `just bootstrap <dir>` once first.
 just up
 
 # terminal 2 — hot reload (proxies /self + /health to :8720):
