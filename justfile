@@ -1,4 +1,5 @@
 set shell := ["bash", "-uc"]
+set windows-shell := ["sh", "-cu"]
 
 # The data store is user-designated (workspace model): `just bootstrap [dir]`
 # initializes a folder of your choice and remembers it in the app config;
@@ -16,28 +17,48 @@ bootstrap dir='':
 _require_data:
     @if [ -z "{{data_dir}}" ]; then echo "no data store configured - run: just bootstrap <dir>  (or set NS_DATA)"; exit 1; fi
 
-up: _require_data build-frontend
+# One origin (the gate, :8720) fronts everything; the ledger engine (:8721)
+# and the fourfive server (:8787) stay loopback-internal behind it.
+# NS_PORT moves the gate; NS_ENGINE_PORT moves the engine. The three
+# commands live in sub-recipes so quoting and env expansion happen in
+# just's shell on every OS (concurrently itself never parses them).
+up: _require_data build
+    pnpm exec concurrently -k -n engine,fourfive,gate -c yellow,blue,cyan \
+      "just _up-engine" "just _up-fourfive" "just _up-gate"
+
+_up-engine: _require_data
     cargo run --manifest-path engines/nunc-stans/Cargo.toml --release -- \
       --self-dir "{{data_dir}}/self" \
-      --static-dir frontend/nunc-stans-formans/dist \
-      --port "${NS_PORT:-8720}"
+      --port "${NS_ENGINE_PORT:-8721}"
 
-# Build the Vue frontend to frontend/nunc-stans-formans/dist. The world
-# adapter runs first so the read-only world view has fresh headlines.
-# NEWS_WORLD points at News's exported graph (e.g. ~/news/docs/data/graph-mix.json);
-# its path lives outside this repo, like the data store. Unset = empty world view.
-build-frontend: build-world
+_up-fourfive:
+    pnpm -C engines/fourfive start:server
+
+_up-gate:
+    cargo run --manifest-path gate/Cargo.toml --release -- \
+      --port "${NS_PORT:-8720}" \
+      --engine-url "http://127.0.0.1:${NS_ENGINE_PORT:-8721}" \
+      --fourfive-url "http://127.0.0.1:8787" \
+      --formans-dist frontend/nunc-stans-formans/dist \
+      --fourfive-dist engines/fourfive/dist
+
+# Build everything the gate serves. The world adapter runs first so the
+# read-only world view has fresh headlines. NEWS_WORLD points at News's
+# exported graph (e.g. ~/news/docs/data/graph-mix.json); its path lives
+# outside this repo, like the data store. Unset = empty world view.
+build: build-world
     pnpm install --frozen-lockfile || pnpm install
-    pnpm -C frontend/nunc-stans-formans build
+    pnpm -r build
+    cargo build --release --manifest-path engines/nunc-stans/Cargo.toml
+    cargo build --release --manifest-path gate/Cargo.toml
 
 # Flatten News's world export into the formans public dir
 # (§13-B: conversion on the Nunc Stans side; News is not asked to change).
 build-world:
     node frontend/nunc-stans-formans/scripts/build-world.mjs
 
-# Fast dev loop: Vite dev server (proxies /self + /health to the engine).
-# Run `just build-world` once first if you want headlines in dev.
-# Run `just up` (or the engine) in another terminal.
+# Fast dev loop: Vite dev server for formans (HMR). Run `just up` in
+# another terminal — the dev proxy points at the gate (:8720).
 web:
     pnpm -C frontend/nunc-stans-formans dev
 
@@ -48,6 +69,7 @@ ritual: _require_data
 
 test:
     cargo test --manifest-path engines/nunc-stans/Cargo.toml
+    cargo test --manifest-path gate/Cargo.toml
     pnpm -r test
 
 check:
