@@ -1,7 +1,7 @@
 name: ci
 on:
   push:
-    branches: [main, newstack, 'phase/**']
+    branches: [main, dev, newstack, 'phase/**']
   pull_request:
 
 jobs:
