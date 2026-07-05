@@ -95,7 +95,10 @@ Derived decisions:
 - **Port scope rule:** everything the daily/weekly DAG invokes is ported;
   one-off backfills are retired un-ported (`backfill_*`,
   `build_evidence_reverse`, `migrate_to_sourcedata`, `super_backfill`,
-  `migrations/01_*`). `fastembed` semantic matching is not ported — the
+  `migrations/01_*`, and — reclassified at T1 after confirming no
+  scheduled/*.md invokes it — `rename_future_titles`, the applied
+  historical title migration; its tests run in CI until T12 via staged
+  fixtures). `fastembed` semantic matching is not ported — the
   in-code LCS fallback is the ported behavior (recorded as a documented
   degradation; revisit only if fuzzy-match quality regresses).
 - **Commit areas:** `nf` (engines/nunc-fluens/**), `fe` (frontend/** incl.
@@ -266,25 +269,26 @@ apply-schema-edit, weekly-maintenance port).
 
 ## Tasks
 
-### Task 0: Preflight
-- [ ] Branch `newstack` off `dev`; record upstream tip (`~/news` 9e86e01)
-      and verify subtree diff clean (re-run today's check).
-- [ ] Import the spec corpus into `engines/nunc-fluens/design/` with
-      provenance headers (sourcedata-layout.md, scheduled/*.md, the
-      DAG-relevant skills/*.md).
-- [ ] Fix INTEGRATION.md's stale `engines/news` prefix now (small honest
-      commit; full rewrite waits for T8).
+### Task 0: Preflight — DONE 2026-07-05
+- [x] Branch `newstack` off `dev`; upstream tip `~/news` 9e86e01 recorded,
+      subtree diff verified clean (src/skills/tests all identical).
+- [x] Spec corpus imported to `engines/nunc-fluens/design/` (44 files:
+      scheduled 10, skills 32, ADR 2, sourcedata-layout) + provenance
+      README (commit 749fc08).
+- [x] INTEGRATION.md stale `engines/news` paths fixed (b80a414).
 
-### Task 1: Golden-master harness (before any port)
-- [ ] Pick fixture days: 3 weekdays with distinct shapes + 1 Sunday
-      (weekly chain) from committed sourcedata; copy inputs (sourcedata,
-      last-7 reports, dormant snapshot, glossary.yml, references slice)
-      into `pipeline/goldens/input/`.
-- [ ] Capture oracle outputs with the Python app: rendered md ×4 locales,
-      DB row dumps (deterministic order), graph-*.json exports, check
-      exit codes → `pipeline/goldens/expected/`.
-- [ ] Restore the 12 excluded CI tests with fixture data; news job green
-      with zero `--ignore/--deselect`.
+### Task 1: Golden-master harness (before any port) — DONE 2026-07-05
+- [x] Fixture days: 2026-07-03/04/05 + Sunday 2026-06-28 (weekly chain);
+      DB range 06-22..28; inputs staged to `pipeline/goldens/input/`
+      (11 MB) by `capture.ts stage`.
+- [x] Oracle capture (`capture.ts run`): 32 rendered md (all 29 with a
+      committed twin byte-match history), normalized DB dump, 4 export
+      JSONs, gate exits all 0 (133e795). Volatile-field normalization:
+      ISO timestamps, capture-day tokens, work-path.
+- [x] Full pytest suite restored: `stage-ci` stages fixture data
+      (+ 16 historical predictions.json days for the retired
+      rename-future-titles tests); local run 133 passed / 1 skipped /
+      0 excluded; CI news job exclusions removed.
 
 ### Task 2: packages/ai v0
 - [ ] Types + capabilities; providers `anthropic-api`, `ollama`, `mock`;
@@ -321,9 +325,10 @@ apply-schema-edit, weekly-maintenance port).
 ### Task 4c: Deterministic port — export + gates + weekly
 - [ ] `export` + `run-update-pages` (graph-*.json, manifest, dashboard
       rebuild), `citation-restriction-check`, `check-topic-coverage`,
-      `apply-schema-edit` (manual mode), `weekly-maintenance`,
-      `rename_future_titles` — export parity on goldens; vitest suite
-      covering the 122-test intent green.
+      `apply-schema-edit` (manual mode), `weekly-maintenance` — export
+      parity on goldens; vitest suite covering the ported-surface test
+      intent green (`rename_future_titles` retired un-ported, see port
+      scope rule).
 
 ### Task 5: Orchestrator
 - [ ] DAG runner: DOW table, artifact-presence resume, DRY_RUN, `--only`;
