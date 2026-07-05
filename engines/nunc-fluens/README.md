@@ -1,5 +1,13 @@
 # news
 
+> **Monorepo note (2026-07):** this engine is **Nunc Fluens**
+> (`engines/nunc-fluens`) — the CODE-canonical copy of the news pipeline.
+> The live data, daily reports, and the GitHub Pages dashboard stay in
+> `~/news` until Phase C; that repo is **code-frozen** (code changes land
+> here). See [INTEGRATION.md](INTEGRATION.md) for the code/data split and
+> the re-sync recipe. The README below is the imported product README,
+> regenerated daily in `~/news`.
+
 *Available in: [日本語](README.ja.md) | [Español](README.es.md) | [Filipino](README.fil.md)*
 
 <!-- ai-notice -->
