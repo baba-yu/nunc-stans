@@ -374,13 +374,19 @@ apply-schema-edit, weekly-maintenance port).
       9 decimals (libm-vs-V8 sin/cos ULP). The export-side set-order
       nondeterminism got the same sorted-sum fix as ingest (oracle +
       TS + goldens recaptured; oracle pytest still 133).
-- [ ] Remaining, moved next to their consumers (T5): `run-update-pages`
-      wrapper, `citation-restriction-check`, `check-topic-coverage`,
+- [x] Four step gates ported with golden output parity (114bb2c):
       `daily-flow-check`, `post-update-validation`,
-      `validate-glossary-terms`, `apply-schema-edit` (manual mode),
-      `weekly-maintenance` — these are DAG step gates; porting them
-      inside the orchestrator work keeps each one exercised the day it
-      lands.
+      `check-topic-coverage`, `citation-restriction-check`. In passing,
+      defused a goldens time bomb: capturing on a UTC day that IS a
+      fixture day lets the capture-day token clobber real date strings
+      (the corpus was captured on 2026-07-05, a fixture day).
+      `capture.ts` now refuses colliding runs, gate reports skip the
+      capture-day rule, and parity tests self-skip via
+      `goldenCaptureCollision` until the corpus is **recaptured on a
+      non-fixture UTC day (≥ 2026-07-06) — required next session**.
+- [ ] Remaining, ported inside the T5 orchestrator work:
+      `run-update-pages` wrapper, `validate-glossary-terms`,
+      `apply-schema-edit` (manual mode), `weekly-maintenance`.
 
 ### Task 5: Orchestrator
 - [ ] DAG runner: DOW table, artifact-presence resume, DRY_RUN, `--only`;
