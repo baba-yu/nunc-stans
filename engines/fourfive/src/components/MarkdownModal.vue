@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Modal } from 'nunc-ui'
 import { useSessionStore } from '../stores/session'
 
 const store = useSessionStore()
@@ -26,9 +27,8 @@ function download() {
 </script>
 
 <template>
-  <div v-if="store.showMarkdown" class="modal" @click.self="store.closeMarkdown()">
-    <div class="modal__box">
-      <header class="modal__bar">
+  <Modal :open="store.showMarkdown" wide @close="store.closeMarkdown()">
+    <header class="modal__bar">
         <span class="modal__title">Markdown Blueprint</span>
         <div class="modal__actions">
           <button class="btn" @click="copy">Copy</button>
@@ -50,6 +50,5 @@ function download() {
         </button>
       </div>
       <pre class="modal__md">{{ store.markdown }}</pre>
-    </div>
-  </div>
+  </Modal>
 </template>
