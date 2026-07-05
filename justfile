@@ -19,7 +19,7 @@ build-frontend: build-world
     pnpm -C frontend build
 
 # Flatten News's world export into frontend/public/world-headlines.json
-# (§13-B: conversion on the federation side; News is not asked to change).
+# (§13-B: conversion on the Nunc Stans side; News is not asked to change).
 build-world:
     node frontend/scripts/build-world.mjs
 
