@@ -12,7 +12,7 @@ data_dir := `node tools/data-dir.ts 2>/dev/null || true`
 # designates a folder; without an argument it reuses the configured store
 # or asks interactively.
 bootstrap dir='':
-    sh tools/bootstrap.sh {{dir}}
+    sh tools/bootstrap.sh "{{dir}}"
 
 _require_data:
     @if [ -z "{{data_dir}}" ]; then echo "no data store configured - run: just bootstrap <dir>  (or set NS_DATA)"; exit 1; fi
