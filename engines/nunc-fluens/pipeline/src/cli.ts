@@ -106,7 +106,11 @@ async function cmdRun(argv: string[]): Promise<number> {
     : 'native'
   const synthModel = (newsCfg.synthModel as string) ?? null
 
-  const { createAi } = await import('nunc-ai')
+  // Relative source import: node refuses to type-strip files under
+  // node_modules, so the workspace-linked 'nunc-ai' specifier only
+  // works in vitest. The relative path bypasses node_modules entirely.
+  const { createAi } = await import('../../../../frontend/packages/ai/src/index.ts') as
+    typeof import('nunc-ai')
   const { runDay } = await import('./orchestrator/dag.ts')
   const ai = opts.replay ? null : createAi({ runLogFile: runLogFile(cfg.dataDir) })
   const r = await runDay({

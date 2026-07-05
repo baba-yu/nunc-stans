@@ -3,8 +3,11 @@
 import { join } from 'node:path';
 import { connect } from '../db/db.ts';
 import { worldDbFile } from '../config.ts';
-import { RunCtx, RunManifest, StepDef, StepFailure } from './core.ts';
+import { RunCtx, RunManifest, StepDef } from './core.ts';
 import { dailyUpdateSteps, futurePredictionSteps, dailyBriefingSteps } from './steps.ts';
+import {
+  themeReviewSteps, weeklyMaintenanceSteps, weeklyMemorySteps,
+} from './steps-sunday.ts';
 import type { Ai } from 'nunc-ai';
 
 export interface DayPlanTask {
@@ -18,20 +21,12 @@ export function taskPlanFor(dow: number): DayPlanTask[] {
     { task: '2_future_prediction', steps: futurePredictionSteps() },
   ];
   if (dow === 0) {
-    // Sunday inserts 4_weekly_memory / 5_weekly_theme_review /
-    // 6_weekly_maintenance before the briefing. Their TS steps land
-    // with the weekly-skill ports; refuse loudly rather than silently
-    // skipping a required chain.
-    daily.push({
-      task: '4_weekly_memory',
-      steps: [{
-        id: 'weekly-not-implemented', kind: 'det',
-        run: () => {
-          throw new StepFailure('weekly-not-implemented',
-            'the Sunday chain (4/5/6) is not ported yet — see the Phase C plan T5 checklist');
-        },
-      }],
-    });
+    // Sunday ordering per 0_daily_master: 1 → 2 → 4 → 5 → 6 → 3.
+    // Replay verifies the committed weekly artifacts; the live weekly
+    // paths fail loudly inside their steps until ported.
+    daily.push({ task: '4_weekly_memory', steps: weeklyMemorySteps() });
+    daily.push({ task: '5_weekly_theme_review', steps: themeReviewSteps() });
+    daily.push({ task: '6_weekly_maintenance', steps: weeklyMaintenanceSteps() });
   }
   daily.push({ task: '3_daily_briefing', steps: dailyBriefingSteps() });
   return daily;
