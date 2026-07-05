@@ -1,4 +1,11 @@
-import type { CommitmentsResponse, EdgesResponse, NewCommitment, NewEdge, WorldPrediction } from './types'
+import type {
+  CommitmentsResponse,
+  EdgesResponse,
+  NewCommitment,
+  NewEdge,
+  Outcome,
+  WorldPrediction,
+} from './types'
 
 // Read a response whether the engine answered with its JSON error contract
 // ({error: ...}) or axum answered with a plain-text extractor rejection
@@ -58,6 +65,20 @@ export async function appendEdge(body: NewEdge): Promise<EdgeResult> {
   const out = await readResult<{ edge: unknown }>(r)
   if (r.ok) return { ok: true }
   return { ok: false, error: 'error' in out ? (out as { error: string }).error : `HTTP ${r.status}` }
+}
+
+export interface OutcomesResponse {
+  outcomes: Outcome[]
+  malformed_skipped: number
+}
+
+// Outcomes are listed per commitment (the engine's only outcome read); the
+// timeline fetches them in parallel across commitments — fine at vault scale,
+// a bulk endpoint is future work if that ever changes.
+export async function getOutcomes(slug: string): Promise<OutcomesResponse> {
+  const r = await fetch(`/self/outcomes/${slug}`)
+  if (!r.ok) throw new Error(`GET /self/outcomes/${slug}: HTTP ${r.status}`)
+  return r.json()
 }
 
 // The world view's data: News headlines flattened by the Nunc Stans-side

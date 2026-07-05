@@ -67,7 +67,7 @@ export interface NewCommitment {
 }
 
 // A flattened News prediction (world scope), produced by the Nunc Stans-side
-// world adapter (frontend/scripts/build-world.mjs) from News's export. The
+// world adapter (tools/build-world.ts) from News's export. The
 // world view reads these; nothing here is persisted into self (F6).
 export interface WorldPrediction {
   /** the News prediction id; becomes `world/prediction/<id>` on an edge */
