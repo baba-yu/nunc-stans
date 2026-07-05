@@ -55,6 +55,7 @@ nunc-stans/
 │   ├── development/                 ← operative plans live here
 │   │   ├── 2026-07-04-nuncstans-v1-plan.md    ← THE plan (Phases A–F, decisions D1–D10)
 │   │   ├── 2026-07-04-phase-a-plan.md         ← Phase A implementation plan (executed)
+│   │   ├── 2026-07-04-phase-b-plan.md         ← Phase B implementation plan (executed; decisions B1–B4)
 │   │   ├── development-plan.md                ← HISTORICAL (HTAS M-milestones; product-side reference)
 │   │   └── setup-phase0.md                    ← HISTORICAL (superseded by `just bootstrap` + README)
 │   │
@@ -78,10 +79,15 @@ nunc-stans/
 │   │   ├── journey-examples.md      ← the five-stage loop, four personas
 │   │   ├── test-spec-journey.md     ← Yu's 19 steps (T0–T18, checks 1–11) — Phase F
 │   │   ├── S-0.md                   ← cold start (PASS, Phase A)
-│   │   └── S-10.md                  ← pristine environment (PASS, Phase A)
+│   │   ├── S-1.md / S-2.md / S-9.md ← one origin / headline commit / timeline (PASS, Phase B)
+│   │   └── S-10.md                  ← pristine environment (PASS, Phases A+B)
+│   │
+│   ├── ui/
+│   │   └── phase-b/                 ← screenshot set (home, world, timeline, fourfive)
 │   │
 │   └── verification/
-│       └── phase-a.md               ← Phase A evidence, decisions, exit criteria
+│       ├── phase-a.md               ← Phase A evidence, decisions, exit criteria
+│       └── phase-b.md               ← Phase B evidence, decisions, exit criteria
 │
 ├── contracts/                       ← the only cross-engine coupling surface
 │   ├── edge.schema.json

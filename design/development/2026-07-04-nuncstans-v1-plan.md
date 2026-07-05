@@ -200,6 +200,9 @@ is hard; splitting later is easy — so default to one repo now.
 ```
 nunc-stans/                     (monorepo root; was ~/federation)
   justfile                      just up / news-run / journey / check / backup
+  gate/                         Rust single-origin front door (added Phase B, B1):
+                                static UI serving + loopback proxies to the engine
+                                and fourfive; apps-host mounts behind it at /apps/ (Phase E)
   contracts/                    scope-id, edge schema, glossary, agent-abi v0 (new)
   design/                       canonical design corpus (deduped; ~/nuncstans/plan absorbed)
   engines/
@@ -566,6 +569,13 @@ companion (week counter, ritual log).
 
 Exit: one origin serves ME + world + FourFive with the shared language;
 stories S-1, S-2, and S-9 pass; a screenshot set is saved under `design/ui/`.
+
+Executed 2026-07-05 per `design/development/2026-07-04-phase-b-plan.md`
+(owner decisions B1–B4: the single origin is fronted by an independent Rust
+gate crate — `gate/`, a deliberate §2.2 layout addition; fourfive adopted
+nunc-ui in-phase; the News dashboard is wrapped as-is with d3 vendored; the
+timeline ships real lanes plus reserved intervention/mandate lanes).
+Evidence: `design/verification/phase-b.md`.
 
 ### Phase C — News newstack
 
