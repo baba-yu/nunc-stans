@@ -169,3 +169,57 @@ form button[type='submit']:hover {
   outline-offset: 2px;
   border-radius: var(--nui-radius-s);
 }
+
+/* world view — the cold data surface */
+.world {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.nui-cold .meta,
+.nui-cold .toid,
+.nui-cold .dim {
+  color: var(--nui-cold-dim);
+}
+.nui-cold h2 {
+  border-color: var(--nui-cold-border);
+}
+.headlines {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.headlines li {
+  padding: 0.55rem 0;
+  border-bottom: 1px dashed var(--nui-cold-border);
+  font-size: 0.9rem;
+}
+.headlines .label {
+  margin-left: 0.4rem;
+}
+.graph-panel {
+  margin-top: 1.2rem;
+}
+.graph-frame {
+  display: block;
+  width: 100%;
+  height: 70vh;
+  border: 0;
+  border-radius: var(--nui-radius-s);
+  background: var(--nui-cold-bg);
+}
+.nui-cold form input,
+.nui-cold form textarea {
+  background: rgba(9, 19, 33, 0.8);
+  border-color: var(--nui-cold-border);
+  color: var(--nui-cold-text);
+}
+.nui-cold main button,
+.nui-cold button {
+  background: rgba(16, 35, 58, 0.8);
+  border: 1px solid var(--nui-cold-border);
+  color: var(--nui-cold-text);
+}
+.nui-cold button:hover {
+  border-color: var(--nui-accent);
+}
