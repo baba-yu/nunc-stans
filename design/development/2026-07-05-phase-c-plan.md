@@ -301,11 +301,12 @@ apply-schema-edit, weekly-maintenance port).
       tests — live smoke happens when S-3 exercises real keys).
 - [x] Goal-verify config plumbing (off) + run-log JSONL writer.
 - [x] 12 unit tests green (`pnpm --filter nunc-ai test`); typecheck green.
-- [ ] Headless probe (risk 3): **`claude` CLI is not installed in WSL**
-      (the old routine ran via Windows Cowork). Owner installs it in WSL
-      (native installer, no sudo: `curl -fsSL https://claude.ai/install.sh
-      | bash`, then login once); probe + systemd verification then land
-      with T9.
+- [x] Headless probe (risk 3): owner installed + logged in the CLI in
+      WSL (`~/.local/bin/claude`, not on non-login-shell PATH — the
+      systemd unit will set PATH or NS_CLAUDE_BIN). `claude -p
+      --output-format json` verified 2026-07-06: envelope `{result,
+      usage}` parses exactly as the T2 runtime expects. systemd-launched
+      verification remains at T9.
 
 ### Task 3: Pipeline scaffold + data moves — DONE 2026-07-06
 - [x] Package `nunc-fluens-pipeline` at `engines/nunc-fluens/pipeline/`
@@ -329,11 +330,19 @@ apply-schema-edit, weekly-maintenance port).
       backs up). Upstream copy stays until the T9 cutover; INTEGRATION.md
       carries the interim note.
 
-### Task 4a: Deterministic port — render chain
-- [ ] nunjucks env + `news.md.j2` + `future_prediction.md.j2`;
-      `render-news-md`, `render-future-prediction-md`,
-      `post-write-integrity`, `lint-markdown-clean` — byte-identical on
-      goldens, all 4 locales.
+### Task 4a: Deterministic port — render chain — DONE 2026-07-06
+- [x] nunjucks over the verbatim `.j2` templates; `render-news-md`,
+      `render-future-prediction-md`, `post-write-integrity` (all six
+      kinds), `lint-markdown-clean`. **All 32 golden renders
+      byte-identical**; lint/pwi gate exits match; 63 pipeline tests
+      green (96a8aa2, 77212a5). Oracle warts preserved deliberately:
+      `indent_block` appends `\n` even to single-line input, the fil FP
+      ai-notice carries a trailing newline the news copy lacks, and
+      Jinja2's empty-list falsiness is shimmed (nunjucks uses JS
+      truthiness). Fixture-drift lesson recorded: `capture.ts stage`
+      and `run` always travel together. CI gitignore fix in-between:
+      the engine's unanchored data-path ignores had swallowed the
+      committed golden report/FP fixtures (772c887).
 
 ### Task 4b: Deterministic port — DB chain
 - [ ] `db/` (schema.sql apply, access layer), parsers (news, prediction,
