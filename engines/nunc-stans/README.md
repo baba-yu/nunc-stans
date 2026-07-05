@@ -12,7 +12,7 @@ is not localhost (DNS-rebinding guard).
 
 ## Run
 
-From the **repo root**, with `FED_DATA` exported in your shell:
+From the **repo root**, with `NS_DATA` exported in your shell:
 
 ```sh
 just up
