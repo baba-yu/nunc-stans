@@ -8,6 +8,11 @@ import type {
   UsageResponse,
 } from '../../shared/types'
 
+// Base-relative API root: '/fourfive/api' when mounted on the single origin
+// (vite base '/fourfive/'), and the same in standalone dev where the vite
+// proxy rewrites it back to the local server's '/api'.
+const API = import.meta.env.BASE_URL + 'api'
+
 async function http<T>(url: string, init?: RequestInit): Promise<T> {
   const res = await fetch(url, {
     headers: { 'content-type': 'application/json' },
@@ -21,34 +26,34 @@ async function http<T>(url: string, init?: RequestInit): Promise<T> {
 }
 
 export const api = {
-  health: () => http<HealthResponse>('/api/health'),
-  listSessions: () => http<Session[]>('/api/sessions'),
+  health: () => http<HealthResponse>(`${API}/health`),
+  listSessions: () => http<Session[]>(`${API}/sessions`),
   createSession: (title?: string) =>
-    http<Session>('/api/sessions', { method: 'POST', body: JSON.stringify({ title }) }),
+    http<Session>(`${API}/sessions`, { method: 'POST', body: JSON.stringify({ title }) }),
   renameSession: (sessionId: string, title: string) =>
-    http<Session>(`/api/sessions/${sessionId}`, { method: 'PATCH', body: JSON.stringify({ title }) }),
-  getMessages: (sessionId: string) => http<Message[]>(`/api/sessions/${sessionId}/messages`),
+    http<Session>(`${API}/sessions/${sessionId}`, { method: 'PATCH', body: JSON.stringify({ title }) }),
+  getMessages: (sessionId: string) => http<Message[]>(`${API}/sessions/${sessionId}/messages`),
   sendMessage: (sessionId: string, content: string, think?: boolean, maxTokens?: number) =>
-    http<SendMessageResponse>(`/api/sessions/${sessionId}/messages`, {
+    http<SendMessageResponse>(`${API}/sessions/${sessionId}/messages`, {
       method: 'POST',
       body: JSON.stringify({ content, think, maxTokens }),
     }),
   getBlueprint: (sessionId: string) =>
-    http<SessionBlueprintResponse>(`/api/sessions/${sessionId}/blueprint`),
-  listApps: () => http<AppListItem[]>('/api/apps'),
+    http<SessionBlueprintResponse>(`${API}/sessions/${sessionId}/blueprint`),
+  listApps: () => http<AppListItem[]>(`${API}/apps`),
   createComposeSession: (name: string, appIds: string[]) =>
-    http<Session>('/api/sessions', {
+    http<Session>(`${API}/sessions`, {
       method: 'POST',
       body: JSON.stringify({ mode: 'compose', name, dependencies: appIds.map((app_id) => ({ app_id })) }),
     }),
   updateDependencyPin: (appId: string, depId: string, version: number) =>
-    http<{ ok: boolean }>(`/api/apps/${appId}/dependencies/${depId}`, {
+    http<{ ok: boolean }>(`${API}/apps/${appId}/dependencies/${depId}`, {
       method: 'PATCH',
       body: JSON.stringify({ version }),
     }),
-  getUsage: (sessionId: string) => http<UsageResponse>(`/api/sessions/${sessionId}/usage`),
+  getUsage: (sessionId: string) => http<UsageResponse>(`${API}/sessions/${sessionId}/usage`),
   generateMarkdown: (sessionId: string, stack?: string) =>
-    http<{ markdown: string; path: string | null }>(`/api/sessions/${sessionId}/markdown`, {
+    http<{ markdown: string; path: string | null }>(`${API}/sessions/${sessionId}/markdown`, {
       method: 'POST',
       body: JSON.stringify({ stack }),
     }),
@@ -61,7 +66,7 @@ export const api = {
     opts: { think?: boolean; maxTokens?: number },
     on: (event: string, data: string) => void,
   ): Promise<void> {
-    const res = await fetch(`/api/sessions/${sessionId}/messages/stream`, {
+    const res = await fetch(`${API}/sessions/${sessionId}/messages/stream`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ content, think: opts.think, maxTokens: opts.maxTokens }),
