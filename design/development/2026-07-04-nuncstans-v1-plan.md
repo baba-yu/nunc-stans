@@ -512,8 +512,10 @@ Rules that apply to every phase:
 - **A phase closes only when its user stories run and pass** (§4). Each
   closure writes `design/verification/<phase>.md` with the evidence — fixing
   the Phase 0–3 pattern of undocumented completion.
-- Each phase runs on a branch (`phase/a-consolidation`, …; Phase C uses
-  `newstack`), merged to `main` at the review gate.
+- Work lands on `dev` (owner directive, 2026-07-04): the owner pushes `dev`
+  and merges to `main` via PR at the review gates. A phase may still cut a
+  topic branch off `dev` (e.g. `newstack` for Phase C) when isolation
+  helps. (Phase A ran on `phase/a-consolidation` under the earlier rule.)
 - Execution happens inside WSL (native modules, pnpm, cargo). Commit style
   follows the repo convention (`area: message`, English, no AI attribution).
 
