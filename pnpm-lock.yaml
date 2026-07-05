@@ -26,6 +26,9 @@ importers:
       mermaid:
         specifier: ^11.4.0
         version: 11.16.0
+      nunc-ui:
+        specifier: workspace:*
+        version: link:../../frontend/packages/nunc-ui
       pinia:
         specifier: ^2.3.0
         version: 2.3.1(typescript@5.9.3)(vue@3.5.39(typescript@5.9.3))
