@@ -50,6 +50,24 @@ review gate). Plan: `design/development/2026-07-04-phase-b-plan.md`
   /self/commitments (real vault, read-only), /fourfive/api/health (mock,
   prefix strip), /fourfive/ HTML, / formans HTML, foreign-Host 403;
   teardown clean; engine solo boot on :8731 (F12). `windows-shell` set.
+- T6 (2026-07-05): formans shell — vue-router (/ /world /timeline), topbar
+  chrome + engine chip, ME on Card/Panel, `?focus=` jump, title "Nunc
+  Stans", dev proxy → gate. Tests 10 green, build green; /timeline 200 via
+  the gate SPA fallback (c945034).
+- T7 (2026-07-05): fourfive on nunc-ui — tokens aliased (accent → cyan;
+  `.btn--primary` text flips dark for contrast), Modal (shell; primitive
+  gained a `wide` variant since the markdown modal is 900px-class),
+  Badge ×2, Tabs (switcher). 24 tests + typecheck + build + mock smoke
+  green (3 commits: nunc-ui variant, ff tokens, ff swaps).
+- T8 (2026-07-05): world view on the cold surface + the dashboard wrap.
+  `tools/build-world.ts` stages dashboard + data with mtime/size skip
+  (51 copied first run, 0 on rerun of 47 checked) and vendors d3 locally
+  (no CDN in the staged html); 237 live headlines flattened; through the
+  gate: /world-graph/index.html serves the dashboard, manifest 200
+  `application/json`. **Bug found and fixed in-phase:** the gate's SPA
+  fallback answered 200/index.html for ANY missing path, which would have
+  fooled the manifest probe (and any curl check) — file-like misses now
+  stay 404 (bf3f5f4, regression-tested in gate/tests).
 
 ## Decisions log
 
