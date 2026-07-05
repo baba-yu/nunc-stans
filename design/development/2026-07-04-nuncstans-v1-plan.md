@@ -7,6 +7,9 @@
   added, orchestrator reality corrected (manual daily prompt, not Cowork),
   timeline view + S-9 added, git identity directive recorded, monorepo
   rationale re-examined at owner request (§2.1).
+- Updated 2026-07-04 (owner feedback round 2): portability and
+  reproducibility made an explicit requirement — the product must reproduce
+  on any WSL2/Linux environment, real data excluded (§2.10, S-10, D9).
 - Executor: Claude (Fable), phase by phase, with an owner review gate per phase
 - Relation to existing docs: extends `design/development/development-plan.md`
   (the HTAS M-milestones remain the product-side roadmap). The old
@@ -356,7 +359,8 @@ data: ~/nuncstans-data/apps/<slug>/data.sqlite   (per-user, local — requiremen
 
 Single-user today; the layout is per-user-shardable (one data root = one
 user), so multi-user later is a directory question, not a schema question.
-Do not build tenancy now.
+Do not build tenancy now (D9: v1 ships personal instances; hosted
+multi-tenancy would be its own plan).
 
 **Backup (new obligation):** F11 forbids remotes for `self/`, which today
 means zero copies of the most irreplaceable data. `just backup` produces an
@@ -364,6 +368,40 @@ encrypted archive (age or 7z-AES) of `~/nuncstans-data` to a second disk
 and/or an owner-chosen offsite target (D8). F11's intent is "no plaintext
 ledger on someone else's server"; an encrypted bundle you carry yourself is
 compatible with that intent.
+
+### 2.10 Portability and reproducibility (owner requirement, feedback round 2)
+
+The product is not for this machine only. Target: **any WSL2/Ubuntu or plain
+Linux x86_64 box reproduces the whole system from the repo plus one bootstrap
+step, real data excluded.** WSL is not special here — it is just Ubuntu. The
+Windows/MSIX/UNC quirks in §5 note 12 concern the *development tool* driving
+this particular machine; nothing in the product may depend on them.
+
+- **Runtime surface (all Linux-native):** git, `just`, Rust (pinned via
+  `rust-toolchain.toml`), Node ≥ 24 with corepack (pnpm version pinned in
+  `package.json`), Python 3.10+ (until Phase C retires it), SQLite (bundled
+  by better-sqlite3 / rusqlite). Optional: Ollama for local models; Docker
+  only for optional runtimes (e.g. Honcho). No Windows dependency, no MSIX
+  assumption, no macOS gate (likely works, untested, not a target).
+- **`just bootstrap` (new, Phase A):** verifies or installs the toolchain,
+  initializes the `NS_DATA` skeleton (`self/` as a git repo with no remote,
+  `world/`, `artifact/`, `profiles/`, `runs/`), and prints a doctor report.
+  Setup lives in a script, not in prose.
+- **No machine-specific state in the repo:** all paths flow through `NS_DATA`
+  and config — no user-specific or absolute paths (the run-summary WSL path
+  hardcoded into `~/news` and this machine's corepack shim workaround are
+  exactly what this rule bans); ports configurable; scheduling documented for
+  both systemd timers and plain cron; every AI feature must degrade to `mock`
+  (zero credentials) and must run fully local via `ollama` — `claude-code` is
+  a convenience default, never a requirement.
+- **Distribution assumption (D9):** v1 targets *each user running their own
+  instance* — local-first, one vault per user, per-user SQLite. A hosted
+  multi-tenant service is explicitly out of scope for v1 (it forks the
+  architecture: auth, isolation, sync) and would be its own plan.
+- **Proof, not promise:** story S-10 boots a pristine WSL distro or
+  container, clones the repo, runs `just bootstrap && just up`, and reaches
+  the home screen. First executed at Phase A close, re-verified at every
+  phase close, and extended with `just journey` at Phase F.
 
 ## 3. Phases
 
@@ -405,14 +443,16 @@ move `~/federation` → `~/nuncstans-formans`; rename `~/federation-data` →
 `~/nuncstans-data` (engine flags, justfile, env shim); archive `~/fourfive`,
 `nuncstans-hermes-stack`, `multi-stakeholder-simulater`, and the stray `~`
 junk into `~/old/` (nothing deleted); carry LICENSE/NOTICE (Apache-2.0) to the
-monorepo root; write a `README.md` per stack with a working one-command run; set the
+monorepo root; write a `README.md` per stack with a working one-command run; write
+`just bootstrap` and purge machine-specific paths per §2.10; set the
 repo-local git identity (`yukibaba3912@gmail.com`; history untouched);
 prepare the new private remote `baba-yu/nuncstans-formans` (owner creates
 and pushes).
 
 Exit: `just up` works from `~/nuncstans-formans`; `just check` green;
 `rg -i federation` hits only `design/naming.md` and git history; every stack
-README has a verified run command; story S-0 passes.
+README has a verified run command; stories S-0 and S-10 pass (S-10 in a
+pristine WSL distro or container).
 
 ### Phase B — Single-origin shell + nunc-ui
 
@@ -524,6 +564,10 @@ during its phase and executed before the phase closes:
 - **S-9 (B):** I open the timeline view and see my recent weeks as a time
   series of commitments, outcomes, and interventions, and can jump from any
   point to the underlying record.
+- **S-10 (A; re-run at every phase close):** On a pristine WSL2/Ubuntu (or a
+  container), `git clone` + `just bootstrap` + `just up` reaches the home
+  screen with no manual steps beyond documented prerequisites; at Phase F the
+  same run also passes `just journey`.
 
 ## 5. Things the owner may not have accounted for (critical notes)
 
@@ -578,13 +622,17 @@ during its phase and executed before the phase closes:
 11. **The vault has zero backup today,** and F11 (no remote) is the reason.
     Encrypted offline bundles square the circle (§2.9); pick a destination
     (D8). Losing `self/` loses the product's point.
-12. **Execution environment matters for Fable.** better-sqlite3 (native
-    module), pnpm, and cargo builds must run *inside WSL*; driving them over
-    the Windows UNC path is slow and fragile. Execution sessions should run
-    Claude Code inside WSL, or at minimum execute builds via `wsl.exe`. Git
-    identity for this project is `yukibaba3912@gmail.com` (owner directive,
-    repo-local; past commits stay untouched — already applied to
-    `~/federation`).
+12. **Execution environment matters for Fable — and only for Fable.** This
+    note is about the *development tool*, not the product: better-sqlite3
+    (native module), pnpm, and cargo builds must run inside WSL, and driving
+    them over the Windows UNC path is slow and fragile, so execution sessions
+    should run Claude Code inside WSL (or at minimum execute builds via
+    `wsl.exe`). The product itself is Linux-native with no Windows/MSIX/UNC
+    dependency — and because the owner intends this to be usable beyond one
+    person, §2.10 turns reproducibility on any WSL2/Linux box into a
+    story-tested requirement (S-10) rather than an accident. Git identity for
+    this project is `yukibaba3912@gmail.com` (owner directive, repo-local;
+    past commits stay untouched — already applied to `~/federation`).
 13. **Out of scope on purpose:** `manda` stays a separate OSS repo (the
     public/private boundary is why it was carved out); the monorepo may later
     *depend* on it for the mandate rail, not absorb it. `work/`,
@@ -606,6 +654,7 @@ any of them.
 | D6 | Primary accent | News cyan `#18c7d8` | FourFive blue `#5b8cff` |
 | D7 | Default pipeline provider | **Approved (round 1**, condition: no GPL-style copyleft — claude-code is proprietary freeware**):** `claude-code`; runtimes and providers selectable per profile | API-first |
 | D8 | Vault backup destination | Encrypted weekly bundle to a second local disk; owner adds an offsite copy | Owner-specified (e.g., encrypted cloud object storage) |
+| D9 | v1 distribution target | Personal instances: each user runs their own local-first instance with their own vault (portable per §2.10) | Hosted multi-tenant service — out of scope for v1; would be its own plan |
 
 ## 7. Execution protocol
 
