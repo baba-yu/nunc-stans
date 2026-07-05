@@ -26,11 +26,11 @@ the daily pipeline. Pre-v1 Phase 3 ("News view integration") is where
 News's `export.py` output is retargeted from GitHub Pages to local serving and
 a read-only world view is added to the ME screen (with `informed_by` edges
 auto-attached on "create a commitment from this headline"). Until then,
-`engines/news` is the code frame only; it is not wired into `just up`.
+`engines/nunc-fluens` is the code frame only; it is not wired into `just up`.
 
 ## Re-syncing the code
 
-The upstream code evolves. To refresh `engines/news` from `~/news`:
+The upstream code evolves. To refresh `engines/nunc-fluens` from `~/news`:
 
 ```sh
 git clone --single-branch --branch dev --no-local ~/news /tmp/news-code
@@ -42,7 +42,7 @@ uvx git-filter-repo --force \
   --path reference/ --path docs/index.html --path docs/assets \
   --path README.md --path README.ja.md --path README.es.md --path README.fil.md
 cd ~/nunc-stans
-git subtree pull --prefix=engines/news /tmp/news-code dev
+git subtree pull --prefix=engines/nunc-fluens /tmp/news-code dev
 ```
 
 `git filter-repo` is deterministic, so the filtered history's commit ids are
