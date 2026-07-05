@@ -60,7 +60,7 @@ export async function appendEdge(body: NewEdge): Promise<EdgeResult> {
   return { ok: false, error: 'error' in out ? (out as { error: string }).error : `HTTP ${r.status}` }
 }
 
-// The world view's data: News headlines flattened by the federation-side
+// The world view's data: News headlines flattened by the Nunc Stans-side
 // adapter and served as a static file (same origin). Absent file (adapter not
 // run / NEWS_WORLD unset) degrades to an empty world view, not an error.
 export async function getWorld(): Promise<WorldPrediction[]> {

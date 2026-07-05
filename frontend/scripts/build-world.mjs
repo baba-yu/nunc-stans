@@ -1,9 +1,9 @@
-// Federation-side world adapter (constitution §13-B: conversion is written on
-// the federation side; News is never asked to change its output format).
+// Nunc Stans-side world adapter (constitution §13-B: conversion is written on
+// the Nunc Stans side; News is never asked to change its output format).
 //
 // News's export.py writes a heavy node/link graph (graph-mix.json, ~26 MB) as
 // the world source of truth (a rebuildable cache, external to this monorepo —
-// see the News engine's FEDERATION note). Federation:Phase 3 drops the GitHub
+// see the Nunc Fluens engine INTEGRATION note). Pre-v1 Phase 3 drops the GitHub
 // Pages target and serves that output locally: this script reads the graph,
 // flattens the prediction nodes into the minimal headline shape the ME world
 // view needs, and writes it under the served static dir.
@@ -68,8 +68,8 @@ const headlines = nodes
   .map((n) => {
     const d = n.detail ?? {}
     return {
-      // The stable, content-hash prediction id becomes the world federation id
-      // `world/prediction/<id>` on the informed_by edge (contracts/federation-id.md).
+      // The stable, content-hash prediction id becomes the world scope id
+      // `world/prediction/<id>` on the informed_by edge (contracts/scope-id.md).
       id: n.id,
       label: firstLabel(n.short_label, n.label, d.title, n.id) ?? n.id,
       scope: typeof n.scope_id === 'string' ? n.scope_id : null,

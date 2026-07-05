@@ -1,4 +1,4 @@
-// These types mirror contracts/edge.schema.json and the nuncstans-engine's
+// These types mirror contracts/edge.schema.json and the nunc-stans-engine's
 // self-scope records. The JSON Schema in contracts/ is the source of truth;
 // keep these in sync with it, not the other way round. The frontend never
 // imports engine internals — it only speaks the wire shapes over HTTP.
@@ -66,7 +66,7 @@ export interface NewCommitment {
   note: string | null
 }
 
-// A flattened News prediction (world scope), produced by the federation-side
+// A flattened News prediction (world scope), produced by the Nunc Stans-side
 // world adapter (frontend/scripts/build-world.mjs) from News's export. The
 // world view reads these; nothing here is persisted into self (F6).
 export interface WorldPrediction {
