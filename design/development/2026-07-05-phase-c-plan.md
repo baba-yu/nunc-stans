@@ -307,14 +307,27 @@ apply-schema-edit, weekly-maintenance port).
       | bash`, then login once); probe + systemd verification then land
       with T9.
 
-### Task 3: Pipeline scaffold + data moves
-- [ ] Package skeleton, CLI, config resolution (`tools/lib/data-dir.ts`
-      extraction + `newsRepo` key + `just news-link`).
-- [ ] Port `sourcedata_schemas.py` → `schemas/` (zod/ajv) from
-      sourcedata-layout.md; validate the fixture days as a self-test.
-- [ ] `nunc-fluens migrate-db` (+ `just news-migrate-db`): integrity-check,
-      backup, copy to `<data store>/world/`, junk siblings excluded;
-      engine README documents the move.
+### Task 3: Pipeline scaffold + data moves — DONE 2026-07-06
+- [x] Package `nunc-fluens-pipeline` at `engines/nunc-fluens/pipeline/`
+      (workspace member; bin `nunc-fluens`: link/status/migrate-db/
+      validate, `run` stubbed until T5). Config resolution extracted to
+      `tools/lib/data-dir.ts` (tools/data-dir.ts is a thin wrapper,
+      behavior verified identical); `news_repo` config key + NS_NEWS_REPO
+      + `just news-link/news-status/news-validate/news-migrate-db`.
+      Commits 3b3db80, 4fb00a1, 944f94a.
+- [x] `sourcedata_schemas.py` ported one-to-one to
+      `pipeline/src/schemas/sourcedata.ts` — **hand-rolled validators,
+      not zod/ajv** (deviation, recorded: the oracle deliberately avoids
+      a schema lib; porting its helpers keeps error-message parity,
+      asserted by tests). 9 canonical file schemas; self-test parses +
+      round-trips every canonical file of every fixture day (EN +
+      locales); live `just news-validate 2026-07-04` = 24 files, 0
+      failures. 14 tests green.
+- [x] `migrate-db` executed for real: `~/news/app/data/analytics.sqlite`
+      → `~/nunc-stans-data/world/analytics.sqlite` (30 937 088 bytes,
+      integrity_check ok both sides, junk siblings excluded, re-run
+      backs up). Upstream copy stays until the T9 cutover; INTEGRATION.md
+      carries the interim note.
 
 ### Task 4a: Deterministic port — render chain
 - [ ] nunjucks env + `news.md.j2` + `future_prediction.md.j2`;
