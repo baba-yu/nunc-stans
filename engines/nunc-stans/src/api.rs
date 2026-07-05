@@ -76,7 +76,7 @@ fn internal(e: impl std::fmt::Display) -> Response {
 async fn health() -> Json<Value> {
     Json(json!({
         "ok": true,
-        "engine": "nuncstans-engine",
+        "engine": "nunc-stans-engine",
         "version": env!("CARGO_PKG_VERSION"),
     }))
 }

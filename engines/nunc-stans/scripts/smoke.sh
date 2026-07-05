@@ -3,7 +3,7 @@
 # walks the write paths, including the denials that keep the store honest.
 set -u
 
-BIN=${BIN:-target/debug/nuncstans-engine}
+BIN=${BIN:-target/debug/nunc-stans-engine}
 PORT=${SMOKE_PORT:-8765}
 BASE="http://127.0.0.1:$PORT"
 VAULT=$(mktemp -d)
@@ -47,7 +47,7 @@ out=$(curl -s -X POST "$BASE/self/edges" -H 'content-type: application/json' \
 check "edge appended"              '"type":"serves"' "$out"
 
 # invalid edges must 422: bad id pattern, missing to_label, bogus author
-check "bad federation id refused"  "422" "$(code -X POST "$BASE/self/edges" -H 'content-type: application/json' \
+check "bad scope id refused"  "422" "$(code -X POST "$BASE/self/edges" -H 'content-type: application/json' \
   -d '{"type":"serves","from":"news/item/x","to":"self/prediction/p2","to_label":"P2","author":"user"}')"
 check "empty to_label refused"     "422" "$(code -X POST "$BASE/self/edges" -H 'content-type: application/json' \
   -d '{"type":"serves","from":"self/commitment/smoke-a","to":"self/prediction/p2","to_label":" ","author":"user"}')"

@@ -41,7 +41,7 @@ pub enum Author {
 }
 
 /// The contract's `^(world|self|artifact)/[a-z_]+/.+` without a regex dep.
-pub fn valid_federation_id(s: &str) -> bool {
+pub fn valid_scope_id(s: &str) -> bool {
     let mut parts = s.splitn(3, '/');
     let (Some(scope), Some(typ), Some(rest)) = (parts.next(), parts.next(), parts.next()) else {
         return false;
@@ -60,15 +60,15 @@ impl Edge {
         if self.to_label.trim().is_empty() {
             return Err("to_label must be non-empty (fallback display depends on it)".into());
         }
-        if !valid_federation_id(&self.from) {
+        if !valid_scope_id(&self.from) {
             return Err(format!(
-                "from '{}' is not a federation id (<scope>/<type>/<original-id>)",
+                "from '{}' is not a scope id (<scope>/<type>/<original-id>)",
                 self.from
             ));
         }
-        if !valid_federation_id(&self.to) {
+        if !valid_scope_id(&self.to) {
             return Err(format!(
-                "to '{}' is not a federation id (<scope>/<type>/<original-id>)",
+                "to '{}' is not a scope id (<scope>/<type>/<original-id>)",
                 self.to
             ));
         }
@@ -81,15 +81,15 @@ mod tests {
     use super::*;
 
     #[test]
-    fn federation_id_pattern_matches_contract() {
-        assert!(valid_federation_id("self/commitment/2025-08-gpu-server"));
-        assert!(valid_federation_id("world/prediction/x"));
-        assert!(valid_federation_id("artifact/app_version/runway-tracker@v1"));
-        assert!(valid_federation_id("self/prediction/a/b")); // `.+` may contain slashes
-        assert!(!valid_federation_id("news/item/x")); // unknown scope
-        assert!(!valid_federation_id("self/Commitment/x")); // uppercase type
-        assert!(!valid_federation_id("self/commitment/")); // empty original-id
-        assert!(!valid_federation_id("self")); // too few segments
+    fn scope_id_pattern_matches_contract() {
+        assert!(valid_scope_id("self/commitment/2025-08-gpu-server"));
+        assert!(valid_scope_id("world/prediction/x"));
+        assert!(valid_scope_id("artifact/app_version/runway-tracker@v1"));
+        assert!(valid_scope_id("self/prediction/a/b")); // `.+` may contain slashes
+        assert!(!valid_scope_id("news/item/x")); // unknown scope
+        assert!(!valid_scope_id("self/Commitment/x")); // uppercase type
+        assert!(!valid_scope_id("self/commitment/")); // empty original-id
+        assert!(!valid_scope_id("self")); // too few segments
     }
 
     #[test]

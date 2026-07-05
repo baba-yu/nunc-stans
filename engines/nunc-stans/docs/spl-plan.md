@@ -124,7 +124,7 @@ v1 was an answer to the problem of "the AI authoring the user's inner aspect." O
 
 Strength: purity. The trust claim can be verified just by reading the schema. Weakness: being a machine of observation. Nothing happens unless the user moves, and there was zero room for the AI to move a person.
 
-**Two points that mattered in hindsight.** First, v1 §14's metric set (placing time-in-app and acceptance rate as danger metrics, and completed loop count and discard count as good metrics) was the codification of counter-positioning against the engagement economy. Second, v1 §16.4 (the local agent only observes, cannot write the core) foreshadowed the later integration face of the rail. v1 is not a discard but the wedge of NuncStans:Phase 1.
+**Two points that mattered in hindsight.** First, v1 §14's metric set (placing time-in-app and acceptance rate as danger metrics, and completed loop count and discard count as good metrics) was the codification of counter-positioning against the engagement economy. Second, v1 §16.4 (the local agent only observes, cannot write the core) foreshadowed the later integration face of the rail. v1 is not a discard but the wedge of Nunc Stans:Phase 1.
 
 **3.2 v2-final — two-peer + mandate + butler**
 
@@ -373,7 +373,7 @@ effective_at is at or after created_at + a set time. Prevents poking, on the spo
 
 **An honest limit.** The budget binds frequency but does not bind the choice of target — there remains room for the AI to conserve its budget and use it at the most vulnerable moment. The mitigation is quiet hours · cooling-off · disclosure of the intervention-time pattern in the treasure box. Not a complete solution (§13).
 
-**The non-adoption of excluded_contexts (the judgment as of v3).** "No intervention while drinking / in psychological distress" is desirable, but detecting the situation demands additional observation = surveillance, in a head-on collision with observation minimization. Constantly inferring the user's emotions in order to suppress intervention is putting the cart before the horse. In v3, exclusion conditions are limited to time bands and the user's self-reported tags (e.g. a meeting on the calendar); exclusion by inference of emotional state is not adopted. Redesigned in NuncStans:Phase 2 (§13).
+**The non-adoption of excluded_contexts (the judgment as of v3).** "No intervention while drinking / in psychological distress" is desirable, but detecting the situation demands additional observation = surveillance, in a head-on collision with observation minimization. Constantly inferring the user's emotions in order to suppress intervention is putting the cart before the horse. In v3, exclusion conditions are limited to time bands and the user's self-reported tags (e.g. a meeting on the calendar); exclusion by inference of emotional state is not adopted. Redesigned in Nunc Stans:Phase 2 (§13).
 
 **7.2 Metadata leakage budget — verbs remain, nouns dissolve**
 
@@ -431,7 +431,7 @@ v2 §9 counted only "the butler's betrayal." But the one who hands out roles to 
 
 - third-party audit / self-hosting option
 
-**An honest note.** This domain cannot be defended by the schema (a confession of the same kind as Inv 16). Enforcement lies in the processes of placement / build / audit. That is exactly why this defense set becomes the certification product of NuncStans:Phase 3 itself (§8.3 — making invariants revenue-critical).
+**An honest note.** This domain cannot be defended by the schema (a confession of the same kind as Inv 16). Enforcement lies in the processes of placement / build / audit. That is exactly why this defense set becomes the certification product of Nunc Stans:Phase 3 itself (§8.3 — making invariants revenue-critical).
 
 **7.5 Invariants 21–26 (inheriting v2's 1–20)**
 
@@ -514,7 +514,7 @@ These function as a governance pattern of delegated influence for the era in whi
 
 - The chasm between category consent and instance consent narrows with the brakes but does not close. Cadence disclosure is accountability, not consent in that moment.
 
-- The justification hazard — what propagates is the vocabulary, not the trigger. A degraded copy with hard expiry and the FK gate stripped out could become an indulgence for dark patterns. The mitigation is the conformance test and certification (NuncStans:Phase 3). Not prevention.
+- The justification hazard — what propagates is the vocabulary, not the trigger. A degraded copy with hard expiry and the FK gate stripped out could become an indulgence for dark patterns. The mitigation is the conformance test and certification (Nunc Stans:Phase 3). Not prevention.
 
 - Significance is proportional to adoption — as long as the spec sleeps in a repo, significance is zero. It arises only with publication · audit · adoption.
 
@@ -522,7 +522,7 @@ These function as a governance pattern of delegated influence for the era in whi
 
 The operational metric for "recognizing an intervention, on reflection, as supportive" is the mandate renewal rate — the rate at which, after the expiry lapses, the user voluntarily re-authors. Not the acceptance rate of interventions. Acceptance can be earned even by manipulation, but re-delegation after the expiry is born only of re-contracting after reading the disclosure.
 
-**10. NuncStans:Phase 0 — the pre-registered experiment**
+**10. Nunc Stans:Phase 0 — the pre-registered experiment**
 
 > **▷ Plainly put —** the more you want a drug to work, the more, before taking it, you write "if it doesn't work, discard it" on paper and post it on the wall. The same as pre-registration of a clinical trial. Moving the pass line after seeing the data would be the maker doing the silent revision this product forbids the user.
 
@@ -548,8 +548,8 @@ The operational metric for "recognizing an intervention, on reflection, as suppo
 
 | **Verdict**               | **Condition**                         | **Consequence**                                                              |
 |------------------------|----------------------------------|-----------------------------------------------------------------------|
-| Go                     | A ≥ 6/30                         | Bare demand exists. To NuncStans:Phase 1 (productizing the wedge)                                 |
-| Concierge-dependent Go | A \< 6 and B ≥ 8 and B − A ≥ 5 | Demand is activation-dependent. Consider bringing NuncStans:Phase 2 (mandate rail) forward           |
+| Go                     | A ≥ 6/30                         | Bare demand exists. To Nunc Stans:Phase 1 (productizing the wedge)                                 |
+| Concierge-dependent Go | A \< 6 and B ≥ 8 and B − A ≥ 5 | Demand is activation-dependent. Consider bringing Nunc Stans:Phase 2 (mandate rail) forward           |
 | Kill                   | A ≤ 3/30 and B ≤ 3/30           | Abandon the thesis. Do not advance as a consumer wedge                         |
 | Rework                 | other than the above                         | Revise the vertical / onboarding / loop definition. But do not call this a success |
 
@@ -579,11 +579,11 @@ A thin app + recruitment ≈ 2–3 weeks / a 90-day run / 1 week of analysis. Re
 
 > **▷ Plainly put —** the ferry (one person can row it) → the bridge (everyone passes through) → the building code (certifying how to build the bridge). The next rung does not start work until the prior rung's verification is passed.
 
-**11.1 NuncStans:Phase 0 — now**
+**11.1 Nunc Stans:Phase 0 — now**
 
 The experiment of §10. The top-priority deliverable.
 
-**11.2 NuncStans:Phase 1 — wedge (on Go)**
+**11.2 Nunc Stans:Phase 1 — wedge (on Go)**
 
 Productizing the v1 loop. Implement local-first, export, core invariants (1–10). Choose just one liability-light vertical:
 
@@ -593,19 +593,19 @@ Productizing the v1 loop. Implement local-first, export, core invariants (1–10
 
 Metrics: horizon-return rate and completed loops. Danger metrics (time-in-app etc.) inherit v1 §14.
 
-**11.3 NuncStans:Phase 2 — rail (on loop entrenchment + signs of mandate demand)**
+**11.3 Nunc Stans:Phase 2 — rail (on loop entrenchment + signs of mandate demand)**
 
 Full implementation of the v2 + v3 machinery (mandate / butler / treasure box / suspension / budget / scope isolation). Supplier-side onboarding for a single vertical. Publication of the intervention transparency log.
 
 **North star: the mandate renewal rate (§9.3).** How to read suspension — a brake that is used and resumed is healthy (not churn). Zero suspension rather raises the suspicion that the button is not visible.
 
-**11.4 NuncStans:Phase 3 — governance layer**
+**11.4 Nunc Stans:Phase 3 — governance layer**
 
 Publishing the open protocol / conformance test / certification / attested runtime / third-party audit. The operator defense set of §7.4 becomes the product as-is.
 
 **11.5 Company or standard**
 
-The current stance: open substrate + trusted operator. The path of claiming a moat as a closed SaaS is not taken. Both paths — company (hosted · enterprise · attested runtime) and standard (protocol · certification) — are not closed until the NuncStans:Phase 2 data is out.
+The current stance: open substrate + trusted operator. The path of claiming a moat as a closed SaaS is not taken. Both paths — company (hosted · enterprise · attested runtime) and standard (protocol · certification) — are not closed until the Nunc Stans:Phase 2 data is out.
 
 **12. Business model**
 
@@ -643,7 +643,7 @@ Consistency (a reprise of §8.3): as long as the product is "the trust of the au
 
 - The target-conservation problem of the budget — frequency can be bound, but conservation for the most vulnerable moment cannot (§7.1)
 
-- The surveillance dilemma of excluded_contexts — situation detection demands observation. v3 limited it to time bands + self-reporting, but the redesign in NuncStans:Phase 2 is unsolved
+- The surveillance dilemma of excluded_contexts — situation detection demands observation. v3 limited it to time bands + self-reporting, but the redesign in Nunc Stans:Phase 2 is unsolved
 
 - The selection bias of the cold-user recruitment channel — how to measure the bias of the "general channel" itself
 

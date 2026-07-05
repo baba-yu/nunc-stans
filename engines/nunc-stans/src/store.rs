@@ -27,7 +27,7 @@ impl SelfStore {
     pub fn open(dir: PathBuf) -> Result<Self> {
         if !dir.is_dir() {
             bail!(
-                "self dir {} does not exist — initialize the vault first (Federation:Phase 0 step 7)",
+                "self dir {} does not exist — initialize the vault first (Pre-v1 Phase 0 step 7)",
                 dir.display()
             );
         }
@@ -216,7 +216,7 @@ impl SelfStore {
             let name = format!("{stem}.json");
             match fs::OpenOptions::new().write(true).create_new(true).open(dir.join(&name)) {
                 Ok(mut f) => {
-                    // A federation id so a felt-sense revision can point at the
+                    // A scope id so a felt-sense revision can point at the
                     // record it supersedes (prd-override §1.1).
                     if let Value::Object(map) = &mut doc {
                         map.insert(
@@ -274,9 +274,9 @@ impl SelfStore {
                 .arg(&self.dir)
                 .args([
                     "-c",
-                    "user.name=nuncstans-engine",
+                    "user.name=nunc-stans-engine",
                     "-c",
-                    "user.email=nuncstans-engine@localhost",
+                    "user.email=nunc-stans-engine@localhost",
                 ])
                 .args(args)
                 .output()
@@ -402,7 +402,7 @@ mod tests {
         assert_ne!(a, b); // a revision is a new file, not an edit
         let read = s.list_outcomes("a").unwrap();
         assert_eq!(read.values.len(), 2);
-        // each outcome carries a federation id for supersedes linkage
+        // each outcome carries a scope id for supersedes linkage
         assert!(read.values.iter().all(|v| v["id"].as_str().is_some_and(|s| s.starts_with("self/outcome/a/"))));
         let _ = fs::remove_dir_all(dir);
     }
