@@ -158,7 +158,7 @@ function writeExpected(rel: string, content: string, normalized = false) {
   fs.writeFileSync(p, normalized ? normalize(content) : content);
 }
 
-function run() {
+async function run() {
   const PY = pickPython();
   const log: Record<string, unknown> = { python: PY, captureDay: CAPTURE_DAY, sanity: {} };
 
@@ -218,9 +218,17 @@ function run() {
     py(PY, ['-m', 'app.src.cli', 'ingest-sourcedata', '--date', d]);
   }
   py(PY, ['-m', 'app.src.cli', 'score']);
-  const dump = py(PY, ['-c',
-    "import sqlite3,sys; c=sqlite3.connect('app/data/analytics.sqlite'); [sys.stdout.write(l+'\\n') for l in c.iterdump()]"]).out;
-  writeExpected('db/analytics.dump.sql', dump, true);
+  // Serialize with the pipeline's own dumper (src/db/dump.ts) so the
+  // TS parity comparison uses one serializer on both sides — CPython's
+  // iterdump formats REALs differently across libsqlite3 versions.
+  const { dumpSql } = await import('../src/db/dump.ts');
+  const Database = (await import('better-sqlite3')).default;
+  const oracleDb = new Database(path.join(WORK, 'app/data/analytics.sqlite'), { readonly: true });
+  try {
+    writeExpected('db/analytics.dump.sql', dumpSql(oracleDb), true);
+  } finally {
+    oracleDb.close();
+  }
 
   // -- export -------------------------------------------------------------
   py(PY, ['-m', 'app.src.cli', 'export']);
@@ -244,5 +252,5 @@ function run() {
 const cmd = process.argv[2];
 if (cmd === 'stage') stage(process.argv[3] ?? path.join(os.homedir(), 'news'));
 else if (cmd === 'stage-ci') stageCi();
-else if (cmd === 'run') run();
+else if (cmd === 'run') await run();
 else { console.error('usage: node capture.ts stage [upstream] | stage-ci | run'); process.exit(2); }
