@@ -28,6 +28,17 @@ review gate). Plan: `design/development/2026-07-04-phase-b-plan.md`
   from the new layout serves `/health`, home HTML, and the real vault's
   commitments on :8720 (old topology retained until T5). check.ts 3× ok.
   Stale pre-move `frontend/{dist,public}` artifacts removed (untracked).
+- T2 (2026-07-05): `frontend/packages/nunc-ui` — tokens.css (§2.5 values),
+  8 primitives, 8 vitest smokes green, vue-tsc clean; workspace now runs 3
+  suites green (formans 2 files / fourfive 3 / nunc-ui 1).
+- T3 (2026-07-05): `gate/` crate (lib + bin `nunc-stans-gate`): static
+  mounts, streaming proxy (reqwest, no-TLS), Host guard. Tests: 1 unit
+  (mount strip) + 6 integration (engine round-trip, prefix strip, SSE
+  content-type + both events, static + SPA fallback, foreign-Host 403,
+  upstream-down 502) — all pass. Deviation caught by the tests: axum
+  `nest()` discards a nested router's fallback, so the fourfive static
+  mount uses `nest_service()` instead. CI engine job gains the gate test
+  step; commit-scope gains the `gate` area.
 
 ## Decisions log
 
