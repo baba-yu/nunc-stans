@@ -98,6 +98,41 @@ review gate). Plan: `design/development/2026-07-04-phase-b-plan.md`
   - Screenshots: `design/ui/phase-b/{home,world,timeline,home-focused,
     fourfive}.png` (fourfive pre-restyle look lives in git history at
     feced16^ — no separate 'before' capture).
+- T11 (2026-07-05): S-10 both legs.
+  - **Ubuntu PASS**: pristine `ubuntu:24.04` container (repo mounted
+    read-only, cloned inside): apt + Node 24 + rustup + `cargo install
+    just` → `sh tools/bootstrap.sh /root/my-data` → `just up` → through
+    :8720: /health, /gate/health, /fourfive/api/health, Nunc Stans title —
+    S-10-PASS, exit 0.
+  - **Native Windows 11 PASS** (this machine, git-bash `sh`, scratch
+    APPDATA + scratch store, `RUSTUP_TOOLCHAIN=1.96.1-x86_64-pc-windows-msvc`):
+    doctor all ok (git/just/node/corepack/pnpm/cargo), store initialized at
+    a SPACED path (`C:/Users/Yuki Baba/.s10w/store`), config written to
+    %APPDATA% in Windows form, `just up` built and served natively, same
+    four checks green — S-10-NATIVE-PASS. **Two portability defects found
+    and fixed by this story:** (1) bootstrap wrote its config to the XDG
+    path everywhere while `tools/data-dir.ts` reads %APPDATA% on win32, and
+    wrote MSYS-form paths node cannot open — bootstrap now targets APPDATA
+    on Windows and canonicalizes with `pwd -W` (7d1076e); (2) the justfile
+    passed `{{dir}}` unquoted, splitting spaced Windows paths (5d0250d).
+  - README documents the three-process topology and the Windows
+    prerequisites (f48fdda).
+- T12 (2026-07-05): final suite green — engine 11, gate 7 (1 unit + 6
+  integration), workspace 3 suites (formans 16 incl. timeline, fourfive 24,
+  nunc-ui 9), `node tools/check.ts` 3× ok. Ledger constraint proven:
+  `git log pre-phase-b..HEAD -- engines/nunc-stans/` is empty. 32 commits,
+  every one `commit-scope` clean. v1-plan updated in place (gate deviation,
+  B1–B4 pointer); reading order refreshed.
+
+## Machine notes (this Windows box, not product requirements)
+
+- Native `just` was installed via `cargo install just` (proves the MSVC
+  linker); this machine's rustup default host is unusually
+  `x86_64-pc-windows-gnu`, so the S-10 run pinned
+  `RUSTUP_TOOLCHAIN=1.96.1-x86_64-pc-windows-msvc` per invocation — a
+  fresh Windows rustup defaults to msvc and needs no override.
+- The clone-source `safe.directory` entries for the UNC repo path are
+  test-harness plumbing on this machine only.
 
 ## Decisions log
 
@@ -112,4 +147,21 @@ review gate). Plan: `design/development/2026-07-04-phase-b-plan.md`
 
 ## Exit criteria
 
-(filled at close — see plan Task 12)
+- [x] One origin (`127.0.0.1:8720`, the gate) serves ME + world + timeline
+      + FourFive with the shared nunc-ui language (S-1 evidence, T10)
+- [x] S-1 PASS (mechanical checks + visual pass, T10)
+- [x] S-2 PASS (headline → commitment + informed_by; provenance 1/2 50% →
+      2/3 67%, T10)
+- [x] S-9 PASS (lanes + reserved lanes + heat strip + record jump, T10)
+- [x] S-10 PASS on pristine ubuntu:24.04 (exit 0) AND native Windows 11
+      (T11; two portability defects fixed in-phase)
+- [x] Screenshot set in `design/ui/phase-b/` (5 images, T10)
+- [x] Full suite green at close: engine 11 / gate 7 / formans 16 /
+      fourfive 24 / nunc-ui 9; `just check` ok (T12)
+- [x] Ledger engine untouched all phase (git-proven, T12)
+- [x] v1-plan updated in place (gate deviation B1; B2–B4 pointers) and the
+      reading order refreshed (T12)
+- [ ] PENDING owner: push `dev` → the 3-OS CI matrix proves itself on the
+      new workspace layout + gate job (any failures are in-phase fixes)
+- [ ] PENDING owner review gate: PR `dev` → `main` after reviewing this
+      record
