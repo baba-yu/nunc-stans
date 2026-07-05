@@ -1,0 +1,47 @@
+{
+  "date": "2026-07-05",
+  "predictions": [
+    {
+      "id": "prediction.185982a6cad19655",
+      "scope_hint": "tech",
+      "title": "Local-LLM runtimes ship in-model speculative decoding on by default by Q2 2027",
+      "body": "Ollama 0.31, released July 1, turned on multi-token prediction for Gemma 4 on Apple Silicon by default: the model ships a small draft that proposes several tokens, the main model verifies them in one pass and keeps what it agrees with, and Ollama measured Gemma 4 generating nearly 90% faster on a coding-agent benchmark with byte-identical output. Crucially this is a default, not a tuning flag, and the small-batch MLX matmul kernel Ollama upstreamed is usable by any MLX model rather than just Gemma. The mechanism is the sort of change that spreads across a runtime field once one shipping implementation proves the accuracy-neutral speedup: draft-model speculative decoding has existed as an opt-in in llama.cpp, vLLM, and MLX-LM for a while, but wiring it on out of the box, with a bundled draft and a working kernel, is what converts a benchmark into a default users never touch. Coding agents make the payoff structural because they call the model continuously over highly predictable text, so accepted drafts compound over a session. Expect a second mainstream local runtime shipping to end users, LM Studio, llama.cpp-based desktops, MLX-LM, or vLLM's local mode, to make in-model or paired-draft speculative decoding the default path for at least one popular open-weight model family rather than an advanced setting, closing more of the on-device-to-hosted throughput gap without new silicon.",
+      "reasoning": {
+        "because": "Ollama 0.31 shipped Gemma 4 MTP on by default, ~90% faster on coding agents, output unchanged",
+        "given": "Speculative decoding ships as opt-in in rival runtimes; accuracy-neutral wins spread once defaulted",
+        "so_that": "A second mainstream local runtime defaults speculative decoding on for a popular open-weight model family",
+        "landing": "by Q2 2027; a second end-user runtime's release notes flip it to on-by-default",
+        "plain_language": "Ollama made a local model run much faster for free by guessing several words ahead, so other apps will soon do the same by default."
+      },
+      "summary": "Ollama 0.31 turned multi-token prediction on by default for Gemma 4 on Apple Silicon, generating ~90% faster with identical output. Since draft-model speculative decoding is already opt-in elsewhere, expect a second mainstream local runtime to default it on for a popular open family by Q2 2027."
+    },
+    {
+      "id": "prediction.07e7e067c7ee7628",
+      "scope_hint": "business",
+      "title": "Open-model inference neocloud files a public-listing step by Q4 2027",
+      "body": "Together AI's $800 million Series C on July 1, 2026 put an $8.3 billion post-money valuation on a neocloud whose whole business is serving open-weight models such as DeepSeek, Nemotron, MiniMax, and Kimi at a fraction of closed-model cost. Three signals point the same direction. First, the round marks a 2.5x step-up from the February 2025 Series B in roughly seventeen months and was led by Aramco Ventures' Prosperity7, the kind of sovereign-scale check that typically arrives as late-stage, pre-liquidity capital rather than early venture. Second, Prosperity7 managing director Abhishek Shukla framed the company as headed toward the public markets, the same IPO gravity now pulling on the frontier labs. Third, Together is not alone: Fireworks and Baseten have drawn their own outsized rounds this cycle, so the open-model hosting layer is now being capitalized as a durable platform tier in its own right rather than a thin commodity reseller. A GPU footprint planned to grow roughly 50-fold over five years needs a capital base that private syndicates eventually stop underwriting, which pushes the leader of this tier toward public liquidity. Expect one of these open-model inference neoclouds to take a concrete, disclosed step onto the public-market path, a confidential or public S-1 filing, or a formal direct-listing or IPO announcement, rather than leaving the IPO framing as investor commentary. The structural read is that open-model inference has been capitalized as a standalone platform category, and the category's anchor moves into public-market machinery on that basis.",
+      "reasoning": {
+        "because": "Together AI's $800M round at $8.3B was led by Aramco's Prosperity7, which framed it as IPO-bound",
+        "given": "A ~50x GPU-growth plan and a capitalized tier (Together, Fireworks, Baseten) outgrow private capital",
+        "so_that": "One open-model inference neocloud takes a disclosed public-listing step, a confidential/public S-1 or IPO announcement",
+        "landing": "An open-model inference neocloud files or announces a public listing by Q4 2027",
+        "plain_language": "Companies that cheaply run open AI models just raised huge money and are getting so big that one will likely start going public soon."
+      },
+      "summary": "Together AI's $800M Series C at $8.3B, led by Aramco's Prosperity7 and framed as IPO-bound, capitalizes open-model inference as a platform tier alongside Fireworks and Baseten. A ~50x GPU-growth plan outgrows private capital, so one such neocloud likely takes a public-listing step by Q4 2027."
+    },
+    {
+      "id": "prediction.3842041e6c053a30",
+      "scope_hint": "business",
+      "title": "Non-GPU AI-datacenter silicon draws standalone infrastructure funding by Q4 2027",
+      "body": "Two signals in the same news cycle point to the AI-datacenter buildout being priced as more than a GPU-plus-memory story. Stathera closed an oversubscribed $55M Series B (bringing total funding to $75M, led by Maverick Silicon with MediaTek Innovation Fund, TXC, and Celesta participating) explicitly to fund a GEN3 platform for AI-data-center clocks, pitching MEMS timing as a $1.5B cumulative synchronization opportunity through 2030 and framing precise cross-node timing as a real constraint once accelerator clusters scale to tens of thousands of GPUs. In parallel, Tenstorrent CEO Jim Keller publicly denied the reported $8-10B Qualcomm buyout and reaffirmed an independent path on an IPO bridge and confidential S-1, keeping a credible RISC-V accelerator-IP house on a standalone-capitalization trajectory rather than folding into a mobile-SoC incumbent. Read together, capital is naming and funding the non-GPU layers of the AI datacenter — timing, interconnect, and synchronization silicon, plus independent accelerator IP — as distinct line items with their own theses and dedicated funds (Maverick Silicon here is a silicon-specialist backer), not as commodity glue bundled under the GPU. The prediction: within roughly two years, at least one more supplier of a non-GPU AI-datacenter silicon layer beyond the accelerator itself — clock/timing, interconnect, or synchronization — closes an institutional round or files to go public that markets it as a standalone AI-datacenter infrastructure category, and the leading independent accelerator houses stay independent through a public listing rather than being absorbed by consolidation. The coupling is that visible timing-and-interconnect scaling pain plus specialist capital turns these sub-layers from afterthoughts into separately-financed, separately-valued pieces of the AI-infrastructure stack.",
+      "reasoning": {
+        "because": "Stathera raised $55M for AI-datacenter MEMS timing while Tenstorrent denied an $8-10B Qualcomm buyout",
+        "given": "Specialist silicon funds now price non-GPU timing and independent accelerator IP as distinct theses",
+        "so_that": "Another non-GPU AI-datacenter silicon supplier raises or files to go public marketed as its own infrastructure category",
+        "landing": "by Q4 2027; >=1 named round or S-1 for a non-GPU AI-datacenter silicon layer",
+        "plain_language": "Investors are starting to fund the clock and wiring chips inside AI data centers as their own thing, not just the GPUs."
+      },
+      "summary": "Stathera raised $55M for AI-datacenter MEMS timing and Tenstorrent rejected an $8-10B Qualcomm buyout, signaling non-GPU AI-datacenter silicon is now funded as its own category. Expect >=1 more timing or accelerator-IP supplier to raise or file to go public as standalone AI-infrastructure by 2027."
+    }
+  ]
+}

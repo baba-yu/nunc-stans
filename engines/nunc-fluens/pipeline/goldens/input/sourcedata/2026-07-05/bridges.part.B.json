@@ -1,0 +1,32 @@
+{
+  "prediction.cbba6275f880fc04": {
+    "support_dimension": "given",
+    "narrative": "Keller's June 30 denial of the reported Qualcomm buyout keeps one of the few merchant RISC-V accelerator-IP houses independent, anchored in Japan on the Galaxy rack roadmap rather than routed through a mobile-SoC incumbent. That preserves the non-Nvidia supply a second hyperscaler could name for data-center inference, sustaining the availability precondition without being the naming event itself.",
+    "coherence": 2,
+    "remaining_gap": "No hyperscaler has actually named non-Nvidia inference silicon; this only keeps a candidate supplier viable, not a confirmed deployment."
+  },
+  "prediction.225d77f109a86780": {
+    "support_dimension": "given",
+    "narrative": "Keller reaffirmed a focus on IP licensing and high-end scalable AI while denying the buyout, noting talks with many companies as deal appetite rises. Licensable RISC-V accelerator IP lets a new buyer stand up custom inference silicon without a from-scratch design team, so keeping that house independent sustains the supply-side mechanism for a fourth buyer-designed chip.",
+    "coherence": 2,
+    "remaining_gap": "No specific new buyer has named a custom inference ASIC; this strengthens the enabling licensing condition, not the fourth-chip datapoint."
+  },
+  "prediction.b29d00f310d8ad2c": {
+    "support_dimension": "given",
+    "narrative": "The rejected Qualcomm buyout and reaffirmed independent path keep a credible RISC-V house building its own high-end scalable hardware, sustaining the pool of non-Nvidia accelerators a lab could train a frontier model on, the same alternative-silicon field yesterday's Meituan LongCat-2.0 Chinese-ASIC run drew on, now shown holding on the merchant-IP side.",
+    "coherence": 2,
+    "remaining_gap": "No second open-weight model card documents an end-to-end non-Nvidia training run; this supports enabling hardware, not the disclosure itself."
+  },
+  "prediction.d6fc36093d611e94": {
+    "support_dimension": "because",
+    "narrative": "Together's $800 million Series C came with lead investor Prosperity7 framing the company as headed to public markets, which the reporting calls the same IPO gravity now pulling on the frontier labs. That reinforces the structural push from private mega-rounds toward public liquidity, the environment in which a pre-listing step would land.",
+    "coherence": 2,
+    "remaining_gap": "No fresh disclosure about OpenAI's own filing or the US-government equity structure; this moves the surrounding window, not the sovereign-stake step."
+  },
+  "prediction.9bc46d8a918d51a2": {
+    "support_dimension": "landing",
+    "narrative": "The events roundup still names the MI400 series and Helios rack-scale system as the marquee second-half catalyst, but the nearest slot rolled over to Geneva AI Week and the July 8 meetup, with the Advancing AI keynote no longer the nearest confirmed stage. The concrete ship, memory, and rack figures stay a scheduled watch item as the Q3 window narrows.",
+    "coherence": 2,
+    "remaining_gap": "No delivered ship, memory, or rack spec today, and the nearest confirmed hardware venue is Hot Chips on August 23-25, tightening the Q3 deadline."
+  }
+}

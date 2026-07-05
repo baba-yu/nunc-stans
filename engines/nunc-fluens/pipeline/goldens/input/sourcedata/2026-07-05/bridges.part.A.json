@@ -1,0 +1,32 @@
+{
+  "prediction.9eb6e9888959d4b6": {
+    "support_dimension": "because",
+    "narrative": "Ollama 0.31's July 1 release turns in-model speculative decoding on by default for Gemma 4 on Apple Silicon, reporting nearly 90% faster generation with byte-identical output. A bundled draft is verified in one pass and shipped as a default not a flag, with the upstreamed MLX kernel reusable by any model, exactly the accuracy-neutral speedup this expects to spread.",
+    "coherence": 4,
+    "remaining_gap": "No second mainstream runtime, LM Studio, MLX-LM, an llama.cpp desktop, or vLLM local mode, has yet flipped speculative decoding to the default path for a popular open-weight family."
+  },
+  "prediction.70512b58e932f532": {
+    "support_dimension": "so_that",
+    "narrative": "Together AI's July 1 $800M Series C at an $8.3B valuation, a 2.5x step-up led by Aramco's Prosperity7, carries explicit framing toward public markets. A sovereign-scale late-stage check plus a GPU footprint planned to grow 50-fold eventually outruns what private syndicates underwrite, with Together capitalized alongside Fireworks and Baseten as a durable platform tier, the liquidity push this names.",
+    "coherence": 4,
+    "remaining_gap": "Evidence is investor commentary, not a concrete disclosed step: no confidential or public S-1, and no formal direct-listing or IPO announcement has been filed."
+  },
+  "prediction.a879b03610b9ab92": {
+    "support_dimension": "because",
+    "narrative": "Two reinforcing signals land together: Stathera's June 30 oversubscribed $55M Series B, led by Maverick Silicon, funds AI-datacenter timing silicon pitched as a $1.5B synchronization opportunity, while Keller denies the Qualcomm buyout and keeps Tenstorrent's accelerator IP independent. Capital is naming and funding the non-GPU datacenter layers as distinct line items with specialist backers, exactly the standalone-infrastructure-category thesis this extends.",
+    "coherence": 4,
+    "remaining_gap": "Missing is a second non-GPU supplier closing a round or filing that explicitly markets a standalone AI-datacenter category, plus a confirmed independent listing rather than a denied acquisition."
+  },
+  "prediction.14cd36ae7a6a8633": {
+    "support_dimension": "given",
+    "narrative": "Today's win is measured on an M5 Max with nvfp4 quantization, where Ollama's upstreamed small-batch MLX kernel makes Gemma 4's largest matmuls 2x-2.5x faster and is reusable by any MLX model, not just Gemma. That treats a low-bit quantized format as the assumed serving substrate a mainstream runtime optimizes against and ships to end users by default.",
+    "coherence": 3,
+    "remaining_gap": "The story centers on speculative-decoding throughput and a reusable kernel, not a runtime explicitly flipping quantized weights on as the standing default for a model family."
+  },
+  "prediction.a4f83081580b9a3d": {
+    "support_dimension": "landing",
+    "narrative": "Ollama's 0.30.11-0.31 train pairs default multi-token prediction for Gemma 4 with thinking-capability detection, Claude Code and opencode auto-install hooks, Codex drift detection, and a refreshed llama.cpp engine, showing the runtime layer racing to make first-class local coverage a turnkey default. That is the local-optimization lane where launch-day runtime support is becoming the open-weight minimum this names.",
+    "coherence": 3,
+    "remaining_gap": "This is speedups and integration hooks for an existing model, not an open-weight MoE launching with same-day vLLM, SGLang, and Ollama packaging as a stated release bar."
+  }
+}

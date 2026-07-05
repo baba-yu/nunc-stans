@@ -1,0 +1,95 @@
+{
+  "date": "2026-06-26",
+  "by_prediction": {
+    "prediction.c5d53ae94581ec63": [
+      {
+        "actor": "Investigador de seguridad de la cadena de suministro de ML que caza primitivas de RCE por deserialización",
+        "job": "Auditar registros, feature stores y servidores de metadatos de ML de código abierto en busca de sumideros de deserialización previos a la autenticación alcanzables por red y convertir una carga __reduce__ en un RCE reproducible.",
+        "outcome": "Una divulgación coordinada sobre un proyecto nombrado y distinto del plano de datos/metadatos de ML que produzca un CVE/GHSA con CVSS 9.0+ cuya causa raíz sea la deserialización sin autenticación de un objeto suministrado por la red.",
+        "motivation": "El patrón del CVE-2026-56121 de Feast anuncia una clase de error fácil, de gravedad alta y repetible; los investigadores persiguen el reconocimiento, la recompensa y el valor de charla de conferencia del próximo caso.",
+        "task": {
+          "who": "Equipo de investigación ofensiva independiente o de proveedor que triagea endpoints de objetos serializados de infraestructura de ML",
+          "what": "Encontrar y convertir en arma un sumidero de deserialización previo a la autenticación hasta lograr un RCE",
+          "where": "El registro gRPC/HTTP/cola o el servicio de feature store de un segundo proyecto",
+          "when": "Desde el aviso de Feast del 24 de junio hasta el Q1 2027, mientras el patrón está fresco",
+          "why": "Demostrar que la clase de RCE por deserialización reaparece y ganar reconocimiento por la divulgación",
+          "how": "Auditoría de cargas dill/pickle/joblib, fuzzing y presentación coordinada de CVE/GHSA"
+        }
+      },
+      {
+        "actor": "Mantenedor de infraestructura de ML de código abierto de un feature store o un registro de modelos/artefactos",
+        "job": "Lanzar y ampliar un registro que acepta lógica de transformación serializada a través de la red y la entrega a un deserializador, manteniendo la primitiva insegura-en-la-red en producción por defecto.",
+        "outcome": "Un servicio de red aún implementado que deserializa objetos serializados controlables por el atacante antes de la autenticación, dejando el sumidero exacto que un investigador puede convertir en el próximo aviso 9.0+.",
+        "motivation": "La compatibilidad hacia atrás, la ergonomía para desarrolladores y la velocidad de funciones mantienen la serialización tipo pickle/dill en la red porque migrar a un formato seguro es disruptivo y carece de financiación.",
+        "task": {
+          "who": "Mantenedores principales y colaboradores del proyecto de registro/feature store",
+          "what": "Ingerir y deserializar cuerpos de transformación serializados suministrados por la red",
+          "where": "La ruta de gestión de solicitudes del servidor de registro/metadatos del proyecto",
+          "when": "A lo largo del ciclo de versión actual, desde hoy hasta el Q1 2027",
+          "why": "Preservar la compatibilidad y la ergonomía por encima de una deserialización segura por defecto",
+          "how": "Decodificación dill/pickle/cloudpickle/joblib de objetos recibidos por gRPC/HTTP/cola"
+        }
+      }
+    ],
+    "prediction.cd55acce9f1d2c13": [
+      {
+        "actor": "Responsable de producto de una plataforma de seguridad de IA/ML o de la cadena de suministro",
+        "job": "Separar el escáner de deserialización / artefactos serializados de ML del feed SCA genérico hacia su propio nivel de producto nombrado y comercializado, con alcance y precio declarados.",
+        "outcome": "Un nivel de escáner o SKU nombrado y comercializado cuyo alcance declarado cubra explícitamente el riesgo de artefactos serializados de ML y de deserialización insegura, anunciado en la documentación, una versión o un lanzamiento.",
+        "motivation": "Capturar la superficie de ataque recién validada como una capa vendible antes que los rivales, y diferenciarse más allá de una entrada en un feed de CVE una vez que el patrón de RCE por deserialización tiene una forma convertible en arma.",
+        "task": {
+          "who": "Equipo de gestión de producto de seguridad de ML y de salida al mercado del proveedor",
+          "what": "Definir, nombrar y poner precio a un nivel de escáner de deserialización de ML",
+          "where": "Catálogo de productos, notas de versión y superficie de lanzamiento / documentación",
+          "when": "Desde hoy hasta el Q1 2027, aprovechando la ventana de atención del CVE de Feast",
+          "why": "Convertir la superficie validada de artefactos serializados de ML en ingresos recurrentes",
+          "how": "Empaquetar la cobertura de detección en un SKU de escáner de primera clase, no en una línea del feed SCA"
+        }
+      },
+      {
+        "actor": "Equipo de ingeniería de detección e investigación de amenazas de la cadena de suministro de ML",
+        "job": "Construir los escáneres y las reglas que detectan cargas inseguras de pickle/dill/joblib, checkpoints de modelos y cuerpos de transformación de feature stores para que el nivel comercializado tenga cobertura real.",
+        "outcome": "Un motor de detección de artefactos serializados de ML que funcione —firmas, comprobaciones de deserialización controlada y señales de procedencia— que respalde el nivel de escaneo nombrado.",
+        "motivation": "El CVE de Feast demuestra que la primitiva de deserialización insegura es alcanzable por red por debajo de la capa del modelo, así que debe existir una superficie de detección creíble antes de que el nivel pueda venderse como de primera clase.",
+        "task": {
+          "who": "Función de ingeniería de detección e investigación de amenazas de la startup o del proveedor",
+          "what": "Construir detecciones para artefactos y cuerpos serializados inseguros de ML",
+          "where": "Canalización de escaneo a través del plano de datos y metadatos de ML",
+          "when": "Desde hoy hasta el Q1 2027, antes del lanzamiento del nivel convertido en producto",
+          "why": "Dar al nivel nombrado cobertura real de la clase de ataque por deserialización",
+          "how": "Análisis estático de cargas pickle/dill más comprobaciones de deserialización controlada y de procedencia"
+        }
+      }
+    ],
+    "prediction.f7fdcbe86950bd61": [
+      {
+        "actor": "Responsable de producto de computación confidencial de un proveedor de silicio de aceleradores de IA",
+        "job": "Convertir en producto las primitivas existentes de TEE-I/O y raíz de confianza en el chip en un nivel confidencial nombrado y específico de inferencia con atestación de modelo firmado, en lugar de una opción en versión preliminar para desarrolladores.",
+        "outcome": "Un SKU de acelerador de inferencia confidencial nombrado en el que los pesos cifrados en uso y la atestación de modelo verificable por el inquilino sean la función comercializada de la propia pieza.",
+        "motivation": "Diferenciarse más allá del rendimiento por vatio a medida que el silicio de inferencia se mercantiliza, y captar a los compradores regulados y soberanos cuyas necesidades de residencia de datos y protección de propiedad intelectual no cubre una casilla genérica de computación confidencial.",
+        "task": {
+          "who": "Equipos de gestión de producto de silicio de seguridad y de aceleradores del proveedor",
+          "what": "Convertir en producto el TEE-I/O más la atestación en un nivel de inferencia nombrado",
+          "where": "Hoja de ruta del acelerador, bloque de seguridad de silicio y proceso de lanzamiento del SKU",
+          "when": "Desde hoy hasta el H1 2027, apuntando a AMD Advancing AI, Hot Chips o el lanzamiento de un hyperscaler",
+          "why": "Convertir las primitivas latentes de computación confidencial en una función de confidencialidad vendible",
+          "how": "Raíz de confianza en el chip más TEE-I/O con flujo de atestación de modelo firmado"
+        }
+      },
+      {
+        "actor": "Equipo de producto de un nivel gestionado de inferencia confidencial en la nube",
+        "job": "Envolver las primitivas de computación confidencial de los aceleradores comerciales y un servicio de atestación de modelo firmado en un nivel gestionado de inferencia de cara al inquilino que demuestre qué pesos se están ejecutando antes de enviar datos.",
+        "outcome": "Un nivel gestionado de inferencia confidencial nombrado comercializado sobre pesos cifrados en uso más atestación criptográfica del modelo desplegado verificable por el inquilino.",
+        "motivation": "Ganar cargas de trabajo reguladas, soberanas y sensibles a la propiedad intelectual respondiendo a «demuestra que los pesos que estoy consultando son los pesos que aprobé» con una oferta auditada y con raíz en el hardware.",
+        "task": {
+          "who": "Equipo de producto de computación confidencial y de plataforma de IA del proveedor de nube",
+          "what": "Empaquetar la inferencia atestada y cifrada en uso como un nivel gestionado",
+          "where": "Catálogo de servicios de inferencia gestionada y canalización de verificación de atestación",
+          "when": "Desde hoy hasta el H1 2027, antes del escenario de lanzamiento de un hyperscaler",
+          "why": "Convertir las primitivas de confidencialidad del hardware en una garantía de confianza adquirible",
+          "how": "Servicio de atestación sobre NVIDIA Confidential Computing, SEV-SNP o TDX TEE-I/O"
+        }
+      }
+    ]
+  }
+}

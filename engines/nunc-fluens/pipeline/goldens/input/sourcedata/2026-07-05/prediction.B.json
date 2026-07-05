@@ -1,0 +1,14 @@
+{
+  "id": "prediction.07e7e067c7ee7628",
+  "scope_hint": "business",
+  "title": "Open-model inference neocloud files a public-listing step by Q4 2027",
+  "body": "Together AI's $800 million Series C on July 1, 2026 put an $8.3 billion post-money valuation on a neocloud whose whole business is serving open-weight models such as DeepSeek, Nemotron, MiniMax, and Kimi at a fraction of closed-model cost. Three signals point the same direction. First, the round marks a 2.5x step-up from the February 2025 Series B in roughly seventeen months and was led by Aramco Ventures' Prosperity7, the kind of sovereign-scale check that typically arrives as late-stage, pre-liquidity capital rather than early venture. Second, Prosperity7 managing director Abhishek Shukla framed the company as headed toward the public markets, the same IPO gravity now pulling on the frontier labs. Third, Together is not alone: Fireworks and Baseten have drawn their own outsized rounds this cycle, so the open-model hosting layer is now being capitalized as a durable platform tier in its own right rather than a thin commodity reseller. A GPU footprint planned to grow roughly 50-fold over five years needs a capital base that private syndicates eventually stop underwriting, which pushes the leader of this tier toward public liquidity. Expect one of these open-model inference neoclouds to take a concrete, disclosed step onto the public-market path, a confidential or public S-1 filing, or a formal direct-listing or IPO announcement, rather than leaving the IPO framing as investor commentary. The structural read is that open-model inference has been capitalized as a standalone platform category, and the category's anchor moves into public-market machinery on that basis.",
+  "reasoning": {
+    "because": "Together AI's $800M round at $8.3B was led by Aramco's Prosperity7, which framed it as IPO-bound",
+    "given": "A ~50x GPU-growth plan and a capitalized tier (Together, Fireworks, Baseten) outgrow private capital",
+    "so_that": "One open-model inference neocloud takes a disclosed public-listing step, a confidential/public S-1 or IPO announcement",
+    "landing": "An open-model inference neocloud files or announces a public listing by Q4 2027",
+    "plain_language": "Companies that cheaply run open AI models just raised huge money and are getting so big that one will likely start going public soon."
+  },
+  "summary": "Together AI's $800M Series C at $8.3B, led by Aramco's Prosperity7 and framed as IPO-bound, capitalizes open-model inference as a platform tier alongside Fireworks and Baseten. A ~50x GPU-growth plan outgrows private capital, so one such neocloud likely takes a public-listing step by Q4 2027."
+}

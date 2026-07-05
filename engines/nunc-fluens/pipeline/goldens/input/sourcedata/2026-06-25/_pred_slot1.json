@@ -1,0 +1,14 @@
+{
+  "id": "prediction.18ba4b3ebe2d6bba",
+  "scope_hint": "tech",
+  "title": "Inference-ASIC cohort gains a fourth named buyer-designed chip by H1 2027",
+  "body": "By H1 2027 the named-buyer custom-inference-silicon cohort will gain a fourth member: at least one additional frontier-model buyer (Anthropic, Meta, xAI, or Microsoft) will publicly commit to or unveil its own rack-scale inference accelerator co-designed with a merchant partner (Broadcom, Marvell, or a foundry-fronted ASIC house), joining OpenAI's Jalapeno alongside the Google-Broadcom TPU and Amazon Trainium lineage. The June 24 Jalapeno unveiling is the structural trigger: it confirms that the single largest frontier-model buyer judges merchant-GPU inference economics untenable at gigawatt scale and that a co-designed accelerator plus partner networking fabric is the escape hatch. Once a peer-tier buyer ships a named part with vendor per-watt claims and an end-2026 deployment target, the remaining large buyers face the same inference-cost-versus-model-roadmap squeeze and the same proven co-design template, which compresses the build-versus-buy decision for the rest of the cohort. The falsifiable core is a NAMED part or a firm public commitment from a named buyer, not a vague 'exploring custom silicon' rumor; a leak without a named program or an extension of an existing line (e.g. a next-gen TPU or Trainium) does not count as a new cohort entrant. Merchant-GPU inference share among the largest buyers comes under measurable pressure as a consequence, but the load-bearing, checkable claim is the fourth named buyer-designed inference accelerator.",
+  "reasoning": {
+    "because": "OpenAI + Broadcom unveiled Jalapeno on June 24 as OpenAI's first custom inference accelerator",
+    "given": "Gigawatt-scale buyers can't absorb merchant-GPU inference cost, and the co-design ASIC path works",
+    "so_that": "another named frontier buyer (Anthropic, Meta, xAI, Microsoft) commits to or unveils its own rack-scale inference ASIC",
+    "landing": "by H1 2027; 1 named buyer-designed inference chip beyond OpenAI/Google/Amazon",
+    "plain_language": "OpenAI just revealed its own AI chip to cut costs. Soon another big AI company will announce a custom chip of its own."
+  },
+  "summary": "After OpenAI and Broadcom unveiled the Jalapeno inference accelerator on June 24, expect a fourth named frontier buyer (Anthropic, Meta, xAI, or Microsoft) to commit to or unveil its own rack-scale inference ASIC by H1 2027, joining the OpenAI, Google-TPU, and Amazon-Trainium cohort."
+}

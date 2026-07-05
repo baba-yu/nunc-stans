@@ -1,0 +1,44 @@
+[
+  {
+    "actor": "general-purpose mobile-cobot vendor deployment lead",
+    "job": "Expanding paying customer fleets and logging audited per-robot operating hours across hospitals, manufacturing, and logistics on multi-shift schedules.",
+    "outcome": "A cross-customer cumulative fleet operating record exceeding 100,000 production-operation hours, published as a deployment metric.",
+    "motivation": "Subscription pricing makes hours-in-operation the unit buyers underwrite, so a six-figure fleet-hours number anchors marketing and renewals.",
+    "task": {
+      "who": "Customer-deployment and fleet-operations team",
+      "what": "Onboard new sites and accumulate audited production-operation hours",
+      "where": "Live hospital, manufacturing, and logistics customer floors on 16-hour shifts",
+      "when": "2026-06 through H1 2027 runway",
+      "why": "Turn operating hours into the underwritten subscription unit",
+      "how": "On-robot task inference, monthly subscription, audited hour-logging telemetry"
+    }
+  },
+  {
+    "actor": "physical-AI fleet-telemetry and audit engineer",
+    "job": "Instrumenting on-robot logging and reporting so cumulative cross-customer hours, pounds moved, and steps saved are audited and disclosable.",
+    "outcome": "An audited, defensible fleet-hours dataset that supports a six-figure cumulative-hours disclosure rather than a demo claim.",
+    "motivation": "A hours-in-operation scoreboard only holds up if the underlying counts survive buyer and rival scrutiny.",
+    "task": {
+      "who": "Telemetry, data, and reporting engineering function",
+      "what": "Aggregate and audit per-robot operating-hour and material-moved logs",
+      "where": "Fleet telemetry pipeline and on-robot inference logging stack",
+      "when": "2026-06 through H1 2027 runway",
+      "why": "Make the six-figure hours claim auditable, not a demo number",
+      "how": "On-robot logging, cross-customer aggregation, audited reporting process"
+    }
+  },
+  {
+    "actor": "rival general-purpose mobile-cobot product marketing lead",
+    "job": "Repositioning competing platforms to compete on audited hours-in-operation and dollars-of-material-moved instead of show-floor capability clips.",
+    "outcome": "Rival fleet-hours disclosures that race the category toward and past the 100,000 production-operation-hour scoreboard.",
+    "motivation": "Once one platform anchors on a six-figure fleet-hours number, rivals are pulled onto the same scoreboard to stay credible.",
+    "task": {
+      "who": "Product-marketing and deployment-metrics function",
+      "what": "Reframe marketing around cumulative fleet operating-hours metrics",
+      "where": "Industry trade shows, vendor sites, and deployment case studies",
+      "when": "2026-06 through H1 2027 runway",
+      "why": "Stay credible after a rival anchors on six-figure fleet hours",
+      "how": "Audited deployment metrics, hours-and-pounds-moved messaging"
+    }
+  }
+]

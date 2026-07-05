@@ -1,0 +1,193 @@
+{
+  "date": "2026-06-28",
+  "validation_rows": [
+    {
+      "prediction_ref": {
+        "id": "prediction.6f3ab91c4d2e7a08",
+        "short_label": "Sub-gigabyte on-device LLM gains same-week Unsloth tuning support by Q3 2026",
+        "prediction_date": "2026-06-28"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "Today's two lead items are the origin signals this thesis is built on. Liquid AI's June 27 LFM2.5-230M is a 230-million-parameter, text-only model that ships open-weight base and instruction-tuned checkpoints on Hugging Face with launch-day runtime support for llama.cpp, MLX, vLLM, SGLang and ONNX, a 4-bit footprint of 293-375 MB, and 213 tokens/second on a Galaxy S25 Ultra -- a sub-gigabyte on-device model that lands against the full local-inference stack on day one. The paired signal is Unsloth's v0.1.471-beta (June 18), which added first-class LoRA/QLoRA support for Z.ai's GLM-5.2 just two days after its June 16 open-weight drop, plus Gemma 4 multi-token prediction and DiffusionGemma -- demonstrating the tightening release-to-tuning turnaround the prediction extrapolates to the edge tier. The prediction's falsifiable bar: a sub-1B on-device model published this cycle gains LoRA/QLoRA fine-tuning support in a mainstream tuning toolkit within the same week its weights drop. The gap to the bar: today supplies the edge release (LFM2.5-230M) and the proven two-day frontier turnaround, but not yet a mainstream toolkit landing same-week tuning for that specific sub-1B checkpoint.",
+      "reference_links": [
+        {
+          "label": "MarkTechPost - Liquid AI ships LFM2.5-230M with llama.cpp, MLX, vLLM, SGLang, and ONNX support for on-device inference",
+          "url": "https://www.marktechpost.com/2026/06/27/liquid-ai-ships-lfm2-5-230m-with-llama-cpp-mlx-vllm-sglang-and-onnx-support-for-on-device-inference/"
+        },
+        {
+          "label": "Hugging Face - LiquidAI/LFM2.5-230M model card",
+          "url": "https://huggingface.co/LiquidAI/LFM2.5-230M"
+        },
+        {
+          "label": "GitHub - unslothai/unsloth release v0.1.471-beta (June 18 2026)",
+          "url": "https://github.com/unslothai/unsloth/releases/tag/v0.1.471-beta"
+        }
+      ],
+      "bridge": {
+        "narrative": "Liquid AI's June 27 LFM2.5-230M lands a sub-gigabyte on-device model against the full local-inference stack on day one, while Unsloth's v0.1.471-beta added LoRA/QLoRA for GLM-5.2 just two days after its weights dropped. Together the edge release and the proven two-day frontier turnaround make the same-week edge-tuning extrapolation the natural next step.",
+        "support_dimension": "because",
+        "coherence": 4,
+        "remaining_gap": "No mainstream toolkit has yet landed same-week LoRA/QLoRA tuning for this specific sub-1B on-device checkpoint."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.7b3e9f12c4a6d8e0",
+        "short_label": "Rival accelerator vendor buys a CUDA-agnostic inference compiler by Q1 2027",
+        "prediction_date": "2026-06-28"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "Today's lead business item is the precipitating trigger for this thesis. Qualcomm's June 24 agreement to acquire Modular -- the startup behind the Mojo language and the MAX inference engine that runs the same model code across Nvidia, AMD, Intel and Qualcomm chips without per-processor rewrites -- is reported as a roughly $3.92 billion all-stock deal expected to close in the second half of 2026, and read explicitly as a move on Nvidia's CUDA lock-in for enterprise inference. Qualcomm's own release frames the goal as a silicon-agnostic compute layer across devices, edge and data centers. The acquisition arrives with two reinforcing signals: a committed custom-silicon ship to a leading hyperscaler before year-end and reported $8-10 billion Tenstorrent talks, together committing roughly $14 billion toward a full-stack, open-instruction-set challenger to Nvidia. The prediction's falsifiable bar: at least one rival accelerator buyer (AMD, Intel, or a hyperscaler silicon arm) responds by acquiring or taking a controlling stake in a comparable cross-vendor inference-compiler or runtime startup. The gap to the bar: today supplies the catalyzing Qualcomm-Modular deal that removes the largest neutral compiler asset, but no rival counter-acquisition has been announced.",
+      "reference_links": [
+        {
+          "label": "Qualcomm - Qualcomm to Acquire Modular (press release, June 24 2026)",
+          "url": "https://investor.qualcomm.com/news-events/press-releases/news-details/2026/Qualcomm-to-Acquire-Modular/default.aspx"
+        },
+        {
+          "label": "Tech Startups - Qualcomm acquires AI startup Modular in $4 billion deal to challenge Nvidia's CUDA dominance",
+          "url": "https://techstartups.com/2026/06/24/qualcomm-acquires-ai-startup-modular-in-4-billion-deal-to-challenge-nvidias-cuda-dominance/"
+        }
+      ],
+      "bridge": {
+        "narrative": "Qualcomm's June 24 roughly $3.92 billion acquisition of Modular pulls the largest neutral cross-vendor inference compiler off the board, reading explicitly as a strike at CUDA lock-in. That removal is the structural force the prediction names: once the dominant silicon-agnostic asset is captured, rival buyers face pressure to secure comparable runtime independence themselves.",
+        "support_dimension": "because",
+        "coherence": 4,
+        "remaining_gap": "No rival buyer has yet announced a counter-acquisition of a comparable cross-vendor compiler or runtime startup."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.c5aa6ceae507d1a8",
+        "short_label": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
+        "prediction_date": "2026-06-28"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "Today's security lead is the architectural premise this thesis rests on. The OWASP GenAI Security Project's version 2.01 State of Agentic AI Security and Governance reframes prompt injection from another CVE into a design constraint: it is the universal joint connecting most agentic-AI incidents and now maps to six of the ten categories in OWASP's Top 10 for Agentic Applications. Because a model treats system prompt, user request and retrieved text as one undifferentiated token stream, there is no reliable way to mark tokens as commands versus data, so the flaw is mitigated by design budgets, not patched -- the report leans on Simon Willison's lethal trifecta and Meta's Agents Rule of Two. Crucially, it names coding agents the epicenter: 28 of 53 tracked agentic projects are coding agents, with the most-advisoried repositories being n8n (57), Claude Code (22), AutoGPT (15), Dify (13) and Roo-Code (11). The prediction's falsifiable bar: at least one leading coding-agent platform ships a default-on capability gate enforcing a Rule-of-Two constraint -- at most two of private-data access, untrusted-content exposure, and external communication before pausing for human approval. The gap to the bar: today supplies the unpatchable-by-design argument and the epicenter naming, but no platform has shipped a default-on trifecta gate.",
+      "reference_links": [
+        {
+          "label": "OWASP GenAI Security Project - State of Agentic AI Security and Governance 2.01",
+          "url": "https://genai.owasp.org/resource/state-of-agentic-ai-security-and-governance/"
+        },
+        {
+          "label": "Simon Willison - The lethal trifecta for AI agents: private data, untrusted content, and external communication",
+          "url": "https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/"
+        }
+      ],
+      "bridge": {
+        "narrative": "OWASP's June 28 reframing makes prompt injection an unpatchable design constraint mapping to six of ten agentic categories, and names coding agents the epicenter with Claude Code, n8n and AutoGPT topping the advisory tally. That forces the conclusion the prediction rests on: defenses must be orchestration-layer capability budgets, exactly the Rule-of-Two gate the thesis expects a platform to ship default-on.",
+        "support_dimension": "because",
+        "coherence": 4,
+        "remaining_gap": "No coding-agent platform has shipped a default-on trifecta capability gate; the report supplies the rationale and epicenter naming but not a shipped enforcement default."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.3abbcb892f7919d6",
+        "short_label": "Frontier-class open-weight LLM runs single-node under 256GB by Q4 2026",
+        "prediction_date": "2026-06-23"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "Today's Unsloth item bears on the open-weight-frontier half of this thesis. Unsloth's v0.1.471-beta added full support for Z.ai's GLM-5.2 -- the MIT-licensed ~753B-parameter mixture-of-experts that topped agentic-coding benchmarks this month -- across all reasoning levels, two days after its June 16 release, alongside Gemma 4 and an improved auto-fit memory algorithm credited with roughly 3x longer usable context plus tensor-parallel reliability and vLLM 0.22+ compatibility. The relevance is that the frontier open-weight wave (GLM-5.2 at MoE scale, with sparse active-parameter routing) is exactly the class this prediction expects to become single-node-runnable: a sparse 753B-parameter MoE activates only a fraction of weights per token, and the memory-efficiency tooling Unsloth is shipping is the kind that pushes such a model toward a sub-256GB single-node envelope. The gap to the bar: today documents tuning-toolkit coverage and memory improvements, not an independently demonstrated single-node run of a frontier-class open-weight model under 256GB. The contact is the open-weight-frontier and memory-efficiency thread, not a measured single-node footprint.",
+      "reference_links": [
+        {
+          "label": "GitHub - unslothai/unsloth release v0.1.471-beta (June 18 2026)",
+          "url": "https://github.com/unslothai/unsloth/releases/tag/v0.1.471-beta"
+        },
+        {
+          "label": "DataCamp - GLM-5.2: Features, Setup, Benchmarks, and Model Switching Guide",
+          "url": "https://www.datacamp.com/blog/glm-5-2"
+        }
+      ],
+      "bridge": {
+        "narrative": "Unsloth's June 18 beta lands full GLM-5.2 support -- a sparse ~753B MoE activating only a fraction of weights per token -- alongside an auto-fit memory algorithm crediting roughly 3x longer usable context, exactly the open-weight-frontier scale and memory-efficiency tooling that pushes such a model toward a sub-256GB single-node envelope.",
+        "support_dimension": "because",
+        "coherence": 3,
+        "remaining_gap": "No independently demonstrated single-node run of a frontier open-weight model under 256GB; today shows tuning coverage and memory gains, not a measured footprint."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.3a5fa9315f58608d",
+        "short_label": "Agentic coding platforms ship token budgets and caps as default by Q2 2027",
+        "prediction_date": "2026-06-25"
+      },
+      "today_relevance": 2,
+      "evidence_summary": "Today's OWASP report bears on this thesis on the broader default-posture pressure rather than on token budgeting specifically. OWASP's 2.01 reframing names coding agents the epicenter of agentic-AI risk -- 28 of 53 tracked agentic projects are coding agents, with Claude Code, AutoGPT, Dify and Roo-Code among the most-advisoried repositories -- and argues the durable mitigations are orchestration-layer design budgets rather than token-stream filtering. That argument that coding-agent platforms must add default-on guardrails at the orchestration layer is the same competitive-and-advisory pressure this prediction expects to drive token-budget and cap defaults, since unbounded autonomous loops are part of the same uncontrolled-execution risk surface. The gap to the bar: today's report addresses capability gating against the lethal trifecta, not cost or token-budget caps; no agentic coding platform shipped token budgets or caps as a default today. The contact is the shared default-on-guardrail pressure, not a budgeting release.",
+      "reference_links": [
+        {
+          "label": "OWASP GenAI Security Project - State of Agentic AI Security and Governance 2.01",
+          "url": "https://genai.owasp.org/resource/state-of-agentic-ai-security-and-governance/"
+        }
+      ],
+      "bridge": {
+        "narrative": "Unsloth's June 18 v0.1.471-beta adds full GLM-5.2 coverage two days after that MIT-licensed ~753B mixture-of-experts shipped, plus an auto-fit memory algorithm credited with roughly 3x longer usable context. A sparse MoE activates only a fraction of weights per token, and exactly this memory-efficiency tooling is what pushes such a model toward a sub-256GB single-node envelope, reinforcing the thesis's underlying reason.",
+        "support_dimension": "because",
+        "coherence": 3,
+        "remaining_gap": "No independently demonstrated single-node run of a frontier-class open-weight model under 256GB; today shows tooling, not a measured footprint."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.079ca77d11decc5f",
+        "short_label": "AI accelerator ships confidential-inference tier with attestation by H1 2027",
+        "prediction_date": "2026-06-26"
+      },
+      "today_relevance": 2,
+      "evidence_summary": "Today's news touches this thesis through the AI-chip strategy and venue calendar. AMD's Advancing AI 2026 is confirmed for July 22-23 at Moscone, with the keynote and Instinct MI400-series focus on July 23 -- exactly the kind of stage where a confidential-inference part with attestation would surface, and within this prediction's window. Qualcomm's roughly $14 billion full-stack push (the Modular acquisition, reported Tenstorrent talks, and a committed hyperscaler custom-silicon ship before year-end) keeps the merchant-accelerator roadmap contested, the competitive backdrop against which a differentiated confidential-inference SKU would be announced. The prediction expects a purpose-built AI inference accelerator to ship or be unveiled with confidential computing as a named, load-bearing feature: on-die root-of-trust, TEE-I/O keeping weights and activations encrypted in use across the CPU-accelerator boundary, and signed-model attestation marketed as a named tier. The gap to the bar: today gives the upcoming AMD venue and the broader chip-rivalry backdrop, not a shipping part. A generic confidential-computing line on a spec sheet or a confidential-VM offering without TEE-I/O or model attestation does not count; no named confidential-inference tier has been disclosed.",
+      "reference_links": [
+        {
+          "label": "AI Engineer - World's Fair 2026 program (main program June 29 - July 2, Moscone West, San Francisco)",
+          "url": "https://www.ai.engineer/worldsfair/2026/llms.md"
+        }
+      ],
+      "bridge": {
+        "narrative": "AMD's Advancing AI 2026 (July 22-23, Moscone) puts the Instinct MI400-series keynote inside the prediction window, the natural stage for a confidential-inference part, while Qualcomm's roughly $14 billion full-stack push keeps the merchant-accelerator race contested enough to reward a differentiated security SKU. Both are backdrop and venue, not a shipping accelerator with named attestation.",
+        "support_dimension": "landing",
+        "coherence": 2,
+        "remaining_gap": "No shipping part with on-die root-of-trust, TEE-I/O, and signed-model attestation as a named tier; the AMD keynote has not yet happened."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.af116b6aeee58cde",
+        "short_label": "DiffusionGemma seeds an open-weight text-diffusion training category by Q2 2027",
+        "prediction_date": "2026-06-14"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "[REVIVED] Layer-1 keyword match on this dormant row's signals -- DiffusionGemma run-and-train, Gemma 4 multi-token prediction, second local training/inference stack native support, llama.cpp Ollama LM Studio MLX Axolotl TRL -- against today's Unsloth item. Unsloth's v0.1.471-beta ships the DiffusionGemma image-generation path with live denoising visualization and Gemma 4 with multi-token prediction for roughly 2x faster inference, directly extending the open-weight diffusion training/inference coverage this prediction tracks. The prediction's bar is that DiffusionGemma seeds an established open-weight text-diffusion training category -- a second local stack natively supporting diffusion-LM denoising for fine-tune and inference on consumer edge hardware. Today's beta is a concrete second-stack step in exactly that direction: a mainstream tuning toolkit landing first-class DiffusionGemma support alongside Gemma 4 multi-token prediction. The gap to the bar: today's signal is the DiffusionGemma image-generation/denoising path within one toolkit's beta, not yet an independent second open-weight text-diffusion family or a settled multi-stack training category for text diffusion specifically.",
+      "reference_links": [
+        {
+          "label": "GitHub - unslothai/unsloth release v0.1.471-beta (June 18 2026)",
+          "url": "https://github.com/unslothai/unsloth/releases/tag/v0.1.471-beta"
+        }
+      ],
+      "bridge": {
+        "narrative": "AMD's Advancing AI on July 22-23, with its Instinct MI400-series keynote, lands squarely inside the prediction's window and is exactly the stage where a confidential-inference part with attestation would surface, while Qualcomm's roughly $14 billion full-stack push keeps the merchant-accelerator field contested enough to reward a differentiated security SKU. These are the conditions under which the bar gets cleared, not the clearing itself.",
+        "support_dimension": "given",
+        "coherence": 2,
+        "remaining_gap": "No shipping part with on-die root-of-trust, TEE-I/O, and signed-model attestation marketed as a named confidential-inference tier has been disclosed."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.3863162bc445e548",
+        "short_label": "Local fine-tune-to-agent stack ships as a managed hyperscaler service by H2 2026",
+        "prediction_date": "2026-06-03"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "[REVIVED] Layer-2 semantic match: this dormant row's signals -- Unsloth build, QLoRA small open model, consumer-class memory, fine-tune-to-deployed-agent pipeline, managed hyperscaler MLOps console -- map onto today's Unsloth item. v0.1.471-beta tightens the local fine-tuning loop with frontier open-weight coverage (GLM-5.2, Gemma 4 multi-token prediction, DiffusionGemma), an auto-fit memory algorithm credited with roughly 3x longer usable context, enhanced Blackwell RTX 50X/60X support, vLLM 0.22+ compatibility, and a parallel-execution mode that lets a user chat, train, export and run recipes simultaneously -- the consumer-class fine-tune-to-agent toolchain this prediction expects a hyperscaler to absorb into a managed service. The prediction's bar is that this local loop ships as a managed hyperscaler service with a curated tool catalog and synthetic-data generator. The gap to the bar: today's signal is open-source toolkit maturation on consumer hardware, not a hyperscaler productizing the loop as a managed console; the contact is the fine-tune-to-agent pipeline thread, not a managed-service launch.",
+      "reference_links": [
+        {
+          "label": "GitHub - unslothai/unsloth release v0.1.471-beta (June 18 2026)",
+          "url": "https://github.com/unslothai/unsloth/releases/tag/v0.1.471-beta"
+        }
+      ],
+      "bridge": {
+        "narrative": "Unsloth's June 18 beta tightens exactly the consumer-class loop this thesis expects a hyperscaler to absorb: frontier open-weight coverage (GLM-5.2, Gemma 4 multi-token prediction, DiffusionGemma), an auto-fit memory algorithm worth roughly 3x longer context, Blackwell RTX 50X/60X support, vLLM 0.22+ compatibility, and a parallel mode that chats, trains, exports and runs recipes at once. The fine-tune-to-agent toolchain is maturing into the productizable shape the prediction's structural force assumes.",
+        "support_dimension": "because",
+        "coherence": 3,
+        "remaining_gap": "No hyperscaler has wrapped the loop in a managed console with a curated tool catalog and synthetic-data generator; today is open-source maturation, not a service launch."
+      }
+    }
+  ]
+}

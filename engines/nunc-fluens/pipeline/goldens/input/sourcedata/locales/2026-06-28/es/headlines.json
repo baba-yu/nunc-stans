@@ -1,0 +1,53 @@
+{
+  "date": "2026-06-28",
+  "technical": [
+    {
+      "lead": "Liquid AI publica un modelo de borde de 230M con soporte de vLLM y SGLang desde el primer día",
+      "body": "El 27 de junio Liquid AI lanzó LFM2.5-230M, un modelo solo de texto de 230 millones de parámetros sobre la arquitectura LFM2 con una ventana de contexto de 32.768 tokens, orientado a tareas agénticas en teléfonos, robots y dispositivos de automatización. Los checkpoints base y ajustados por instrucciones, de pesos abiertos, se publican en Hugging Face bajo la licencia lfm1.0 con soporte de runtime desde el primer día para llama.cpp, MLX, vLLM, SGLang y ONNX, y una huella de 4 bits de 293-375 MB. Liquid reporta 213 tokens/segundo en un Galaxy S25 Ultra, 42 tokens/segundo en una Raspberry Pi 5 y una puntuación IFEval de 71,71 que, según afirma, supera a Qwen3.5-0.8B y Gemma 3 1B; los mismos motores de servicio compatibles con OpenAI usados en el centro de datos son ahora el objetivo por defecto de un modelo en dispositivo de menos de un gigabyte.",
+      "citations": [
+        {"label": "MarkTechPost - Liquid AI ships LFM2.5-230M with llama.cpp, MLX, vLLM, SGLang, and ONNX support for on-device inference", "url": "https://www.marktechpost.com/2026/06/27/liquid-ai-ships-lfm2-5-230m-with-llama-cpp-mlx-vllm-sglang-and-onnx-support-for-on-device-inference/"},
+        {"label": "Hugging Face - LiquidAI/LFM2.5-230M model card", "url": "https://huggingface.co/LiquidAI/LFM2.5-230M"}
+      ]
+    },
+    {
+      "lead": "Qualcomm adquiere el compilador de inferencia multifabricante de Modular para desafiar a CUDA",
+      "body": "El 24 de junio Qualcomm anunció un acuerdo para adquirir Modular, la startup detrás del lenguaje Mojo y del motor de inferencia MAX que ejecuta el mismo código de modelo en chips de Nvidia, AMD, Intel y Qualcomm sin reescrituras por procesador. La prensa cifra el acuerdo íntegramente en acciones en unos $3,92 mil millones (hasta 19,2 millones de acciones), con cierre previsto en la segunda mitad de 2026, y lo interpreta como un movimiento directo contra el cierre de Nvidia con CUDA para la inferencia empresarial. Qualcomm también dijo que espera enviar silicio personalizado a un hyperscaler líder antes de fin de 2026 y sigue en conversaciones reportadas para comprar Tenstorrent con una valoración de $8-10 mil millones, comprometiendo en conjunto unos $14 mil millones hacia un competidor de pila completa y conjunto de instrucciones abierto frente a Nvidia que abarca compilador, acelerador y suministro a hyperscalers.",
+      "citations": [
+        {"label": "Qualcomm - Qualcomm to Acquire Modular (press release, June 24 2026)", "url": "https://investor.qualcomm.com/news-events/press-releases/news-details/2026/Qualcomm-to-Acquire-Modular/default.aspx"},
+        {"label": "Tech Startups - Qualcomm acquires AI startup Modular in $4 billion deal to challenge Nvidia's CUDA dominance", "url": "https://techstartups.com/2026/06/24/qualcomm-acquires-ai-startup-modular-in-4-billion-deal-to-challenge-nvidias-cuda-dominance/"}
+      ]
+    },
+    {
+      "lead": "La beta de Unsloth añade GLM-5.2, la predicción multitoken de Gemma 4 y DiffusionGemma",
+      "body": "Unsloth, la biblioteca de código abierto para ajuste fino LoRA/QLoRA rápido y eficiente en memoria, lanzó la v0.1.471-beta el 18 de junio, con la amplitud de cobertura de nuevos modelos como cambio destacado: soporte completo para GLM-5.2 de Z.ai (el MoE de ~753B parámetros con licencia MIT que encabezó los benchmarks de programación agéntica este mes) en todos sus niveles de razonamiento, además de Gemma 4 con predicción multitoken para una inferencia aproximadamente 2x más rápida, la vía de generación de imágenes DiffusionGemma con visualización de denoising en vivo, y DeepSeek-OCR. La compilación también añade un algoritmo de memoria con autoajuste mejorado al que se atribuye un contexto utilizable unas 3x más largo, mejor soporte para Blackwell RTX 50X/60X, mayor fiabilidad de tensor-parallel, compatibilidad con vLLM 0.22+ y un modo de ejecución en paralelo. El patrón a seguir es el tiempo de respuesta cada vez más corto entre un lanzamiento de pesos abiertos de frontera (GLM-5.2 el 16 de junio) y la llegada del soporte de ajuste fino de primera clase dos días después.",
+      "citations": [
+        {"label": "GitHub - unslothai/unsloth release v0.1.471-beta (June 18 2026)", "url": "https://github.com/unslothai/unsloth/releases/tag/v0.1.471-beta"},
+        {"label": "DataCamp - GLM-5.2: Features, Setup, Benchmarks, and Model Switching Guide", "url": "https://www.datacamp.com/blog/glm-5-2"}
+      ]
+    },
+    {
+      "lead": "OWASP replantea la inyección de prompts como un rasgo no parcheable de la IA agéntica",
+      "body": "El OWASP GenAI Security Project publicó este mes la versión 2.01 de su State of Agentic AI Security and Governance, afinando el relato de seguridad de un CVE más a una restricción de diseño: la inyección de prompts es la articulación universal que conecta la mayoría de los incidentes de IA agéntica y ahora se asigna a seis de las diez categorías del Top 10 de OWASP para aplicaciones agénticas. Como un modelo trata el prompt del sistema, la solicitud del usuario y el texto recuperado como un único flujo de tokens indiferenciado, no hay forma fiable de marcar tokens como comandos frente a datos, así que la falla se mitiga con presupuestos de diseño, no se parchea. El informe se apoya en la tríada letal de Simon Willison y en la Regla de Dos para Agentes de Meta, y señala a los agentes de código como el epicentro: 28 de 53 proyectos agénticos rastreados son agentes de código, y los repositorios con más advertencias son n8n (57), Claude Code (22), AutoGPT (15), Dify (13) y Roo-Code (11).",
+      "citations": [
+        {"label": "OWASP GenAI Security Project - State of Agentic AI Security and Governance 2.01", "url": "https://genai.owasp.org/resource/state-of-agentic-ai-security-and-governance/"},
+        {"label": "Simon Willison - The lethal trifecta for AI agents: private data, untrusted content, and external communication", "url": "https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/"}
+      ]
+    },
+    {
+      "lead": "La AI World's Fair abre esta semana mientras se fijan las fechas de chips y seguridad del verano",
+      "body": "El calendario por delante abarca tres subtramos. Dev/datos generalista: el programa principal de la AI Engineer World's Fair se celebra del 29 de junio al 2 de julio en Moscone West, San Francisco (~29 tracks, ~300 ponentes, más de 6.000 asistentes), con GitHub Universe el 28-29 de octubre y AWS re:Invent del 30 de noviembre al 4 de diciembre más adelante. Seguridad de IA: el AI Risk Summit de SecurityWeek es el 11-12 de agosto en el Ritz-Carlton de Half Moon Bay; Black Hat USA 2026 y DEF CON 34 con su AI Village se celebran a principios de agosto en Las Vegas; OWASP Global AppSec USA es el 5-6 de noviembre en San Francisco; y la serie AI Agent Security Summit de Zenity sigue en la lista de seguimiento. Chips/hardware de IA: Advancing AI 2026 de AMD es el 22-23 de julio en Moscone, Hot Chips 2026 se celebra del 23 al 25 de agosto en Stanford, y el AI Infra Summit es del 15 al 17 de septiembre en Santa Clara.",
+      "citations": [
+        {"label": "AI Engineer - World's Fair 2026 program (main program June 29 - July 2, Moscone West, San Francisco)", "url": "https://www.ai.engineer/worldsfair/2026/llms.md"},
+        {"label": "SecurityWeek - AI Risk Summit, August 11-12, Ritz-Carlton Half Moon Bay", "url": "https://www.securityweek.com/securityweek-to-host-ai-risk-summit-august-11-12-at-the-ritz-carlton-half-moon-bay/"},
+        {"label": "Hot Chips - 2026 symposium (August 23-25, Stanford Memorial Auditorium)", "url": "https://hotchips.org/"}
+      ]
+    }
+  ],
+  "plain": [
+    "Liquid AI publica un modelo diminuto de 230M para teléfonos y robots",
+    "Qualcomm compra una herramienta para romper el cierre de chips de Nvidia",
+    "Unsloth añade ajuste rápido para los modelos de IA abiertos más nuevos",
+    "El texto oculto puede secuestrar agentes de IA, y no hay parche",
+    "Grandes congresos de IA y eventos de chips que planificar desde ya"
+  ]
+}

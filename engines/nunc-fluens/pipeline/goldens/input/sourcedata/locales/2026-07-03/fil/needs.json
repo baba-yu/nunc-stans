@@ -1,0 +1,137 @@
+{
+  "date": "2026-07-03",
+  "by_prediction": {
+    "prediction.0cbb02dafcbc3e36": [
+      {
+        "actor": "core maintainer ng agent-framework",
+        "job": "muling isinasaayos ang mga default ng MCP transport para dumaan ang mga na-import na config sa isang isolated na channel sa halip na maglunsad ng isang unsandboxed na stdio child process",
+        "outcome": "inilabas na bersyon kung saan opt-in ang stdio MCP execution sa likod ng isang trust prompt o sandbox, na may SSE-style isolation bilang ipinadalang default",
+        "motivation": "pinatutunayan ng Flowise RCE PoC kasama ang isang ipinakitang patch bypass na ang stdio ay isang istruktural na liability na hindi kayang ayusin ng version bump lang",
+        "task": {
+          "who": "transport at security-response na mga maintainer",
+          "what": "i-gate ang stdio MCP execution sa likod ng trust prompt o sandbox",
+          "where": "MCP client transport layer at config-import path",
+          "when": "July 2026 hanggang Q1 2027",
+          "why": "pigilan ang isang config file na tahimik na maging shell access",
+          "how": "SSE o katumbas na isolated transport bilang default"
+        }
+      },
+      {
+        "actor": "coordinator ng MCP supply-chain security advisory",
+        "job": "dinodokumento ang ibinabahaging unvalidated-command-to-subprocess na pattern sa buong LiteLLM, Agent Zero, LangBot, Windsurf at mga kapantay at naglalabas ng convergent na hardening guidance",
+        "outcome": "coordinated na advisory na tumutukoy sa pag-disable ng stdio pabor sa SSE at pagtuturing sa na-import na MCP config bilang untrusted na code bilang ang iisang hardening lever",
+        "motivation": "ang parehong patch-resistant na exploit class ay sumasaklaw sa maraming agent tool, kaya kailangan ng per-project na ayos ng isang cross-framework na tagubilin para i-standardize",
+        "task": {
+          "who": "mga researcher ng vulnerability-coordination at disclosure",
+          "what": "maglathala ng convergent na disable-stdio na hardening guidance",
+          "where": "coordinated multi-vendor MCP supply-chain advisory",
+          "when": "June 2026 hanggang Q4 2026",
+          "why": "bigyan ang mga maintainer ng isang maliwanag na lever laban sa ibinabahaging pattern",
+          "how": "cross-framework na advisory na bumabanggit sa karaniwang injection na pattern"
+        }
+      },
+      {
+        "actor": "drafter ng frontier-model standards framework",
+        "job": "binubuo ang isang voluntary agent-security baseline na gumagawa sa buháy na patch-resistant na stdio exploit bilang ang konkretong test case kung saan isusulat ang unang norms",
+        "outcome": "voluntary standards framework na bumabanggit sa isolated MCP transport bilang isang baseline na inaasahan sa hardening para sa mga compliant na agent framework",
+        "motivation": "ang isang aktibong exploit class na dumarating habang isinusulat ang norms ay nagbibigay sa baseline ng isang handa at maipagtatanggol na hardening requirement na maiaanchor",
+        "task": {
+          "who": "White House frontier-model policy at standards na staff",
+          "what": "i-anchor ang agent-security baseline sa isolated MCP transport",
+          "where": "release ng voluntary frontier-model standards framework",
+          "when": "linggo ng July 7 2026 patungo sa Q1 2027",
+          "why": "security-drives-policy: ang buháy na exploit ang nagiging test case ng norm",
+          "how": null
+        }
+      }
+    ],
+    "prediction.788b3c0d5220ead0": [
+      {
+        "actor": "lead ng fund-formation at GP ng venture firm",
+        "job": "binubuo ang isinarang $3B raise sa isang dedikadong AI vehicle para sipsipin ang isang outsized na frontier-lab anchor na posisyon",
+        "outcome": "isang pinangalanang AI growth/opportunities fund o tanging AI thesis allocation na ginawang pormal at nagsisimula nang ilagay",
+        "motivation": "ang isang solong ~$14B stake ay lumalampas sa mga naunang laki ng fund at hindi maaaring umupo sa loob ng isang di-pinagkakaibang generalist flagship",
+        "task": {
+          "who": "managing partners, fund CFO at formation counsel",
+          "what": "magtayo ng isang AI-dedicated na fund structure",
+          "where": "fund LPA drafting, LP re-allocation at closing docs",
+          "when": "July 2026 hanggang Q1 2027",
+          "why": "sipsipin ang concentration risk mula sa outsized na anchor stake",
+          "how": "pinangalanang growth/opportunities vehicle o tanging AI allocation"
+        }
+      },
+      {
+        "actor": "team ng anchored frontier-lab capital at compute-strategy",
+        "job": "nagpapatakbo ng capital-intensive compute cycles at follow-on rounds na nagbibigay sa concentrated later-stage na mga backer ng dahilan para gawing pormal ang isang AI vehicle",
+        "outcome": "follow-on at adjacent-lab na pagkakataon sa pondo na maaaring paglagyan ng bagong AI fund sa panahong inilaan",
+        "motivation": "kailangan ng lab ng mga backer na kayang mag-underwrite sa frontier compute sa buong regulatory scrutiny at tumataas na valuation",
+        "task": {
+          "who": "lab finance, corporate-development at compute-planning na mga tungkulin",
+          "what": "maglikom at bumuo ng follow-on frontier-compute financing",
+          "where": "later-stage funding rounds at compute-partner negotiations",
+          "when": "July 2026 hanggang Q1 2027",
+          "why": "masiguro ang concentrated na mga backer na kayang pondohan ang compute cycles",
+          "how": "later-stage rounds na nakatali sa mga compute buildout commitment"
+        }
+      },
+      {
+        "actor": "drafting body ng frontier-model policy at standards",
+        "job": "tinatapos ang isang frontier-model standards-and-disclosure framework na nagtataas sa premium sa mga backer na kayang mag-underwrite sa regulatory scrutiny",
+        "outcome": "isang inilathalang standards framework na pabor sa concentrated, later-stage na AI vehicles kaysa spray-and-pray na seed portfolios",
+        "motivation": "ang pagkawing ng top-model access sa isang security-and-disclosure na regime ay pumupwersa sa kapital patungo sa mga compliant na frontier-lab backer",
+        "task": {
+          "who": "executive frontier-model standards at disclosure working group",
+          "what": "maglathala ng frontier-model standards-and-disclosure framework",
+          "where": "release ng White House frontier-model standards framework",
+          "when": "linggo ng July 7, 2026 patungo sa Q1 2027",
+          "why": "itaas ang premium sa mga compliant na frontier-lab underwriter",
+          "how": "government security-and-disclosure standards na regime"
+        }
+      }
+    ],
+    "prediction.f4118d6655c86297": [
+      {
+        "actor": "enterprise applied-ML lead na may hawak na proprietary na expert-labeled na datos",
+        "job": "kinokopya ang inilathalang recipe para i-fine-tune ang isang open-weight MoE base sa kanilang in-house domain labels para sa isang target vertical benchmark",
+        "outcome": "isang domain-tuned na open-MoE specialist na tumatalo sa isang generic na frontier API sa vertical na gawain ng firm sa mas mababang cost bawat gawain",
+        "motivation": "ang pag-aari ng proprietary labels kasama ang isang reproducible na recipe ang gumagawang mas mura at mas mahusay ang pagbuo kaysa magbayad ng frontier API rates bawat gawain",
+        "task": {
+          "who": "in-house applied-ML / model-optimization na team",
+          "what": "i-fine-tune ang open-weight MoE sa proprietary domain labels",
+          "where": "internal training stack laban sa isang vertical benchmark",
+          "when": "July 2026 hanggang Q2 2027",
+          "why": "talunin ang frontier APIs sa vertical sa isang cost discount",
+          "how": "round-robin batching, CISPO loss, on-policy distillation na recipe"
+        }
+      },
+      {
+        "actor": "open-weight-model research lab na naglalathala ng reproducible na fine-tune recipes",
+        "job": "binabalot ang mga training recipe at expert-labeled na fine-tune na resulta sa malilinis na template na maaaring kopyahin ng sinumang firm para sa sariling domain",
+        "outcome": "mas maraming inilathalang open-MoE fine-tune na resulta na tumatalo sa frontier APIs sa mga tiyak na vertical sa malalaking cost discount",
+        "motivation": "ang pagpapakita ng recipe-over-scale na panalo ang nagtatatag sa kanilang platform at mga pamamaraan bilang ang default na build path para sa mga domain specialist",
+        "task": {
+          "who": "post-training research at applied-science na team",
+          "what": "maglathala ng reproducible na open-MoE fine-tune benchmark na resulta",
+          "where": "papers, model cards, at hosted training platforms",
+          "when": "ang mga darating na buwan patungo sa Q2 2027",
+          "why": "patunayan na tinatalo ng domain recipe ang base-model scale sa pangkalahatan",
+          "how": "on-policy distillation na may pana-panahong pina-promote na teacher"
+        }
+      },
+      {
+        "actor": "maintainer ng local-optimization tooling para sa open-weight fine-tuning",
+        "job": "pino-productize ang mga recipe primitive para makapagpatakbo ang sinumang enterprise dataset owner ng domain fine-tunes nang mura nang walang bespoke infrastructure",
+        "outcome": "tooling na gumagawang isang turnkey path ang pagkopya ng round-robin/CISPO/distillation na template para sa mga domain dataset owner",
+        "motivation": "lumalago ang local-optimization na larangan habang mas maraming firm ang nagta-tune ng open-weight specialist sa halip na bumili ng frontier APIs",
+        "task": {
+          "who": "open-source library engineering at developer-experience na team",
+          "what": "maghatid ng efficient na fine-tuning primitives para sa open-weight MoE",
+          "where": "open-source training libraries at optimization toolchains",
+          "when": "July 2026 hanggang Q2 2027",
+          "why": "ibaba ang hadlang sa domain fine-tuning kaysa sa frontier APIs",
+          "how": "memory- at cost-efficient na training kernels at recipes"
+        }
+      }
+    ]
+  }
+}

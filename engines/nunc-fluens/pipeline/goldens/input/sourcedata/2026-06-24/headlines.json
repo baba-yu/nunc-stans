@@ -1,0 +1,49 @@
+{
+  "date": "2026-06-24",
+  "technical": [
+    {
+      "lead": "Sakana Fugu Ultra's Fable-parity claim hits a 30-minute latency wall",
+      "body": "Sakana AI's Fugu, launched June 22 as a single OpenAI-compatible endpoint, is itself a language model trained to route, delegate, verify, and synthesize across a swappable pool of frontier LLMs, with recursive calls to instances of itself; the design builds on two ICLR 2026 papers, TRINITY and Conductor, and the Fugu Ultra tier is pitched as matching Anthropic's Fable 5 and Mythos on Sakana's own coding, scientific, and reasoning tables. The new development is the first independent pushback within 48 hours: Wharton's Ethan Mollick ran Fugu Ultra on his standard shader and interactive-scene coding tests and reported it is \"incredibly slow,\" with runs taking about 30 minutes rather than minutes, and output that was \"fine\" but did not match Fable in practice — so the published parity scores remain unreproduced. The signal is that learned multi-model orchestration can approach frontier quality on paper while paying a steep latency tax that benchmark tables never surface.",
+      "citations": [
+        {"label": "MarkTechPost - Sakana AI launches Sakana Fugu, an orchestration model that routes tasks across a swappable pool of frontier LLMs", "url": "https://www.marktechpost.com/2026/06/22/sakana-ai-launches-sakana-fugu-an-orchestration-model-that-routes-tasks-across-a-swappable-pool-of-frontier-llms/"},
+        {"label": "Tech Times - AI orchestrator Sakana Fugu claims Fable 5 parity; real-world tests reveal 30-minute waits", "url": "https://www.techtimes.com/articles/318968/20260624/ai-orchestrator-sakana-fugu-claims-fable-5-parity-real-world-tests-reveal-30-minute-waits.htm"}
+      ]
+    },
+    {
+      "lead": "Micron joins Anthropic Series H, putting all three HBM makers inside one lab",
+      "body": "Micron and Anthropic announced a strategic partnership on June 22 bundling four pieces: a memory-and-storage co-design effort targeting performance, energy efficiency, and token economics; a multi-year supply allocation spanning HBM, DRAM, and SSDs; an internal Claude rollout across Micron's engineering, manufacturing, and enterprise functions; and a strategic equity investment by Micron in Anthropic's Series H. That round — a $65 billion raise at a roughly $965 billion post-money valuation — closed May 28, but the new fact is Micron's entry, which means all three global HBM suppliers (Micron, Samsung, and SK Hynix) are now Series H participants and Anthropic infrastructure partners, a coupling no other frontier lab currently holds. Neither the supply-agreement value nor Micron's investment size was disclosed, so any specific dollar figure circulating is unconfirmed. The structural read: frontier labs are locking up high-bandwidth-memory capacity through equity, not just purchase orders, ahead of expected Q4 2026 public listings.",
+      "citations": [
+        {"label": "Digital Applied - Micron and Anthropic strike a strategic AI infrastructure deal", "url": "https://www.digitalapplied.com/blog/micron-anthropic-strategic-infrastructure-agreement-2026"}
+      ]
+    },
+    {
+      "lead": "Cobot's Gen 2 Proxie ships on-robot inference with a production track record",
+      "body": "Collaborative Robotics unveiled its second-generation Proxie on June 22 at Automate 2026, framing it as a general-purpose mobile collaborative robot that identifies the work to be done and does it with zero software integration and no human dispatcher. The fresh artifact is that Gen 2 moves task inference fully on-robot, with no cloud dependency for core execution, paired with a ScoutSense sensor stack that perceives the workspace at human eye level, plans and sequences the work, and audibly announces each action; the robot moves carts up to 1,500 pounds, lifts up to 200 pounds vertically, and is offered starting at $5,000 per month. Cobot anchored the launch on a first-generation production record: 12,627 hours logged in real operations, over 40 million pounds of material moved, and more than 17 million human steps saved across hospitals, manufacturing, and logistics. The launch sits inside Automate 2026 (June 22-25, McCormick Place), whose dominant theme is physical AI and whose first-time NVIDIA-sponsored Humanoid Robot Pavilion hosts more than 20 humanoid platforms.",
+      "citations": [
+        {"label": "Robotics Tomorrow - Cobot announces second-generation Proxie, bringing production-tested physical AI to real operations", "url": "https://www.roboticstomorrow.com/news/2026/06/22/cobot-announces-second-generation-proxie-bringing-production-tested-physical-ai-to-real-operations/26756/"},
+        {"label": "Packaging World - Physical AI dominates Automate 2026's opening day while humanoids steal the show floor", "url": "https://www.packworld.com/leaders-new/machinery/robotics/article/22969383/physical-ai-dominates-automate-2026s-opening-day-while-humanoids-steal-the-show-floor"}
+      ]
+    },
+    {
+      "lead": "Offensive-security and dev tracks open this week, June 25 to July 2",
+      "body": "The AI-security and mainstream dev calendars both open this week. On the security track, AI Tinkerers San Francisco hosts an Offensive Security Demo Night on June 25 with live autonomous-pentesting-agent demos backed by sponsor XBOW; further out, Black Hat USA's AI Summit runs August 1-6 in Las Vegas alongside DEF CON's AI Village, SecurityWeek's AI Risk Summit follows August 11-12 at Half Moon Bay, OWASP Global AppSec USA is November 5-6 in San Francisco, and Zenity's AI Agent Security Summit series stays on the watch list. On the mainstream dev/data track, Snowflake runs a virtual Dev Day on June 25 (two luminary talks plus a hands-on agentic-AI lab), and the AI Engineer World's Fair takes over Moscone West with main programming June 29 through July 2 (optional New Engineer Orientation June 28), preceded by the official AIE World's Fair Hackathon with Cerebral Valley on June 27-28; GitHub Universe returns October 28-29 and AWS re:Invent runs November 30 to December 4.",
+      "citations": [
+        {"label": "AI Engineer World's Fair 2026 schedule (June 29-July 2, Moscone West)", "url": "https://www.ai.engineer/worldsfair/schedule"}
+      ]
+    },
+    {
+      "lead": "AI-chip calendar runs from Automate now to AMD, Hot Chips, and AI Infra",
+      "body": "The AI-chip and hardware track stretches from this week into the fall. Automate 2026 is running now (June 22-25, McCormick Place) with a first-time NVIDIA-sponsored Humanoid Robot Pavilion and a Humanoid Robot Forum on June 23-24. Looking ahead, AMD's Advancing AI 2026 is set for July 22-23 at Moscone, with an Instinct MI400-series focus expected and the keynote on July 23; Hot Chips 2026 runs August 23-25 at Stanford; and the AI Infra Summit is September 15-17 at the Santa Clara Convention Center. The throughline is a dense, near-continuous run of chip and accelerator venues across the summer, giving teams tracking AI-hardware roadmaps a stacked calendar to plan attendance and product timing around.",
+      "citations": [
+        {"label": "Automate - Humanoid Robot Pavilion sponsored by NVIDIA (June 22-25, 2026)", "url": "https://www.automateshow.com/education-networking/humanoid-robot-pavilion"}
+      ]
+    }
+  ],
+  "plain": [
+    "Sakana's Fugu claims top-tier parity but runs slow",
+    "Micron joins Anthropic, completing its memory lineup",
+    "A warehouse robot now thinks fully on board",
+    "Security and developer events fill this week",
+    "The AI-chip event calendar runs into the fall"
+  ]
+}

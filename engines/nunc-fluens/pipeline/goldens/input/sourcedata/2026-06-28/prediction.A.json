@@ -1,0 +1,14 @@
+{
+  "id": "prediction.6f3ab91c4d2e7a08",
+  "scope_hint": "tech",
+  "title": "Sub-gigabyte on-device LLM gains same-week Unsloth tuning support by Q3 2026",
+  "body": "The release of Liquid AI's 230M-parameter LFM2.5 with launch-day llama.cpp, MLX, vLLM, SGLang and ONNX runtimes signals that a sub-gigabyte on-device model now ships against the full local-inference stack on day one. With Unsloth's v0.1.471-beta already landing first-class fine-tuning for frontier open weights within two days of release (GLM-5.2 on June 16, support on June 18), the same compression is coming to the edge tier. The prediction is that a sub-1B on-device model published this cycle will gain LoRA/QLoRA fine-tuning support in a mainstream tuning toolkit within the same week as its weights drop, closing the loop from open release to on-device customization. The forcing function is competitive: once one tuning library lands a popular edge checkpoint in days, the others must match the turnaround or cede the on-device developer audience.",
+  "reasoning": {
+    "because": "LFM2.5-230M shipped launch-day across llama.cpp, MLX, vLLM, SGLang and ONNX runtimes",
+    "given": "Unsloth landed GLM-5.2 fine-tuning two days after its June 16 open-weight release",
+    "so_that": "open-weight edge checkpoints get same-week tuning support, collapsing release-to-customization to days on-device",
+    "landing": "A sub-1B edge model gains same-week tuning support by Q3 2026",
+    "plain_language": "Tiny phone-sized AI models will become trainable just days after they are released."
+  },
+  "summary": "Liquid AI's 230M LFM2.5 ships launch-day across llama.cpp, MLX, vLLM, SGLang and ONNX, while Unsloth already adds frontier fine-tuning within two days of a release. Expect a sub-1B on-device model to gain same-week LoRA/QLoRA tuning support in a mainstream toolkit by Q3 2026."
+}

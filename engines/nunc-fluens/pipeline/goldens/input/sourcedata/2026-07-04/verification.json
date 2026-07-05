@@ -1,0 +1,142 @@
+{
+  "date": "2026-07-04",
+  "verifications": [
+    {
+      "topic": "LLM Workflow",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No agent/workflow/pipeline orchestration-platform news today (no Mistral Workflows, n8n, LangFlow, Flowise, Temporal, AutoGen Studio, agent-DAG/workflow-builder story). The Cursor CVE is a coding-IDE security item, not orchestration-layer news, so it does not satisfy this topic. Writer reported searched=true hits=1, but none of the shipped bullets is an orchestration bullet; still a legitimate uncovered."
+    },
+    {
+      "topic": "Multi-profiling for Local LLM (e.g. Multica)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No multi-profiling / Multica-style local-LLM profiling bullet, and no other bullet references Multica. This is a news-driven-only topic with no trigger today, so searched=true hits=0 is consistent."
+    },
+    {
+      "topic": "Agent Harness (OpenClaw, NemoClaw, Hermes Agents, etc.)",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "Cato AI Labs discloses two CVSS 9.8 zero-click sandbox-escape flaws in Cursor, moving the agent-tooling RCE surface from low-code builders into the mainstream coding IDE",
+        "Meituan open-sources LongCat-2.0, a 1.6T-parameter agentic coding MoE trained end-to-end on Chinese ASICs that edges GPT-5.5 on SWE-bench Pro"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "Cursor is named by name in the Agent Harness scope row as a mainstream agentic coding IDE; the sandbox-escape disclosure is centrally about that coding-agent tool. LongCat-2.0 is an agentic coding model benchmarked on SWE-bench Pro, adjacent coding-agent-ness. Writer's hits=2 aligns with the two coding-agent bullets."
+    },
+    {
+      "topic": "Platform for Local LLM (vLLM, SGLang, etc.)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "search_log_overreports",
+      "reason": "No inference-engine / serving-stack news (vLLM, SGLang, TGI, TensorRT-LLM, LiteLLM/Ollama serving, LMDeploy, etc.) appears today. LongCat-2.0's self-serving on Chinese ASICs is a model-release/hardware story, not an OpenAI-compatible serving-runtime item, so the writer's searched=true hits=1 does not map to any shipped serving-stack bullet."
+    },
+    {
+      "topic": "Ecosystems for Local LLM Embedded System (Foundry Local, etc.)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "search_log_overreports",
+      "reason": "No edge / on-device / NPU-runtime news (Foundry Local, Ollama, LM Studio, MLX, ExecuTorch, OpenVINO, llamafile, WebGPU LLM, etc.) today. No shipped bullet corresponds to the writer's claimed hits=1 for this on-device-inference topic."
+    },
+    {
+      "topic": "Local LLM Models",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "Meituan open-sources LongCat-2.0, a 1.6T-parameter agentic coding MoE trained end-to-end on Chinese ASICs that edges GPT-5.5 on SWE-bench Pro"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "LongCat-2.0 is a fresh open-weight LLM release (1.6T MoE, ~48B active, 1M context, MIT license, model published to GitHub/Hugging Face) placed alongside the Qwen/DeepSeek/Mistral sparse-MoE families named in the scope row. This is a core open-weight-release / model-card item; writer's hits=3 credibly counts this plus related family context."
+    },
+    {
+      "topic": "Local LLM Optimization, Fine-tuning (Unsloth — every run)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No Unsloth (or sibling fine-tuning/quantization-tooling) state-change today; no bullet is a fine-tuning-method story. The writer reported the mandatory searched=true with hits=0, which is the correct constant-coverage behavior when Unsloth has no fresh news, so this is consistent (not an overreport)."
+    },
+    {
+      "topic": "Ecosystems for LLM on PaaS (AWS Bedrock, Azure AI Foundry, etc.)",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "Anthropic ships Claude Enterprise spend caps and analytics and opens a HackerOne bounty for Fable 5 cyber-jailbreaks, coupling top-model access to disclosure plumbing"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "Claude Enterprise gaining org/team/department spend caps, per-user model-access entitlements, a usage-analytics dashboard and Analytics API is managed/hosted-frontier-LLM platform (PaaS) governance tooling, fitting the hosted-LLM-API scope. Writer's hits=1 aligns."
+    },
+    {
+      "topic": "AI Security",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "Cato AI Labs discloses two CVSS 9.8 zero-click sandbox-escape flaws in Cursor, moving the agent-tooling RCE surface from low-code builders into the mainstream coding IDE",
+        "Anthropic ships Claude Enterprise spend caps and analytics and opens a HackerOne bounty for Fable 5 cyber-jailbreaks, coupling top-model access to disclosure plumbing"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "The Cursor disclosure is prompt-injection-to-sandbox-escape / agent-tool-call-abuse with responsible disclosure, and the Anthropic bullet centers on a cyber-jailbreak bug-bounty and a jailbreak-severity framework co-developed with AWS/Microsoft/Google. Both are squarely the security-ness pattern (jailbreak, prompt injection, agent hijack, responsible disclosure); writer's hits=4 credibly spans these plus citation context."
+    },
+    {
+      "topic": "CVE update on score ≥ 8.0",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "Cato AI Labs discloses two CVSS 9.8 zero-click sandbox-escape flaws in Cursor, moving the agent-tooling RCE surface from low-code builders into the mainstream coding IDE"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "The bullet carries two explicit CVEs, CVE-2026-50548 and CVE-2026-50549, both CVSS 9.8 RCE, comfortably above the >=8.0 threshold with NVD links. Writer's hits=3 is consistent with the two named CVEs plus related tracking."
+    },
+    {
+      "topic": "Hardware",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "AI events to plan around now: AMD's July 22-23 MI400 reveal is the nearest catalyst, with an early-August security-and-Vegas cluster and a fall chip-and-dev stack behind it",
+        "Meituan open-sources LongCat-2.0, a 1.6T-parameter agentic coding MoE trained end-to-end on Chinese ASICs that edges GPT-5.5 on SWE-bench Pro"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "The events bullet foregrounds AMD's MI400-series and Helios rack-scale reveal plus Hot Chips and the AI Infra Summit (AI-accelerator/data-center hardware), and LongCat-2.0's headline is training end-to-end on 50,000+ Chinese-made ASICs with no NVIDIA GPUs, a concrete AI-silicon/compute-export signal. Writer's hits=2 aligns with these two chip-ness angles."
+    },
+    {
+      "topic": "Physical AI",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "search_log_overreports",
+      "reason": "No robotics / humanoid / embodied-AI / VLA news today. The AI Infra Summit's physical-AI agenda is only mentioned as a future event track, not a robotics news item, so no shipped bullet supports the writer's claimed hits=2 for embodied AI."
+    },
+    {
+      "topic": "LLM-related research and papers",
+      "semantic_verdict": "ambiguous",
+      "matching_bullets": [
+        "Meituan open-sources LongCat-2.0, a 1.6T-parameter agentic coding MoE trained end-to-end on Chinese ASICs that edges GPT-5.5 on SWE-bench Pro"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "LongCat-2.0 introduces a named architectural method (LongCat Sparse Attention) with benchmark results, which reads like applied-research content, but it is presented as a vendor model release and OpenRouter ranking rather than an arXiv paper or formal publication, so its status as a research-and-papers item is borderline. Writer's hits=1 is consistent with this soft read."
+    },
+    {
+      "topic": "Stock prices and corporate activity",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "Crunchbase's H1 2026 tally puts global venture funding at a record $510B with OpenAI and Anthropic alone taking 43%, quantifying how far AI capital has concentrated",
+        "Anthropic ships Claude Enterprise spend caps and analytics and opens a HackerOne bounty for Fable 5 cyber-jailbreaks, coupling top-model access to disclosure plumbing"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "The Crunchbase bullet is core AI-sector financing (record $510B H1 funding, OpenAI+Anthropic 43% concentration, 32 $1B+ IPOs in Q2, Menlo's $3B raise, OpenAI floating a ~5% US-government equity stake ahead of a public debut). The Anthropic bullet also carries enterprise-spend/corporate-activity substance. Writer's hits=3 aligns."
+    },
+    {
+      "topic": "Bay Area / SV AI meet-up events",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "AI events to plan around now: AMD's July 22-23 MI400 reveal is the nearest catalyst, with an early-August security-and-Vegas cluster and a fall chip-and-dev stack behind it"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "A dedicated forward-looking events bullet covering all three mandated sub-tracks: AI-chip/hardware (AMD Advancing AI Jul 22-23, Hot Chips Aug 23-25, AI Infra Summit Sep 15-17), AI-security (SecurityWeek AI Risk Summit Aug 11-12, Black Hat/DEF CON 34 AI Village, OWASP Global AppSec Nov 5-6, Zenity AI Agent Security Summit), and mainstream dev/data (GitHub Universe Oct 28-29, AWS re:Invent Nov 30-Dec 4), plus newly added Ai4 (Aug 4-6) and ACM AI Leadership Summit. Every event is future-dated relative to 2026-07-04, and yesterday's still-upcoming items (AMD, Hot Chips, AI Infra Summit, AI Risk Summit, security block) are all carried forward with none dropped; carry-forward exception applies, so no fresh state-change is required and this is consistent."
+    },
+    {
+      "topic": "Other standing-out topics",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "Anthropic ships Claude Enterprise spend caps and analytics and opens a HackerOne bounty for Fable 5 cyber-jailbreaks, coupling top-model access to disclosure plumbing",
+        "Crunchbase's H1 2026 tally puts global venture funding at a record $510B with OpenAI and Anthropic alone taking 43%, quantifying how far AI capital has concentrated"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "The Anthropic bullet ties top-model access to a government-restoration disclosure arrangement and an enterprise 'tokenmaxxing' cost-governance theme, and the Crunchbase bullet frames a structural cross-cutting story (AI is now the majority of global venture). Both are notable standing-out developments beyond the fixed topic rows; writer's hits=2 aligns."
+    }
+  ]
+}

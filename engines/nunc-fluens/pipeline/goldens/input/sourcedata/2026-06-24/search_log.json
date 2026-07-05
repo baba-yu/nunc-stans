@@ -1,0 +1,152 @@
+{
+  "date": "2026-06-24",
+  "topics": [
+    {
+      "topic": "LLM Workflow",
+      "searched": true,
+      "hits": 2,
+      "promoted_to_bullet": true,
+      "reason_dropped": ""
+    },
+    {
+      "topic": "Multi-profiling for Local LLM (e.g. Multica)",
+      "searched": true,
+      "hits": 0,
+      "promoted_to_bullet": false,
+      "reason_dropped": "News-driven only; no Multica or multi-profiling local-LLM news in the June 21-24 window, and nothing elsewhere referenced it."
+    },
+    {
+      "topic": "Agent Harness (OpenClaw, NemoClaw, Hermes Agents, etc.)",
+      "searched": true,
+      "hits": 2,
+      "promoted_to_bullet": false,
+      "reason_dropped": "OpenClaw 2026.6.x hardening / NemoClaw / Hermes MCP credential filtering are all in the prior-3-day digest (last seen June 23) with no fresh June 24 named release tag or default-deny-on-clean-install artifact; dropped under continuation cap + Rule 2. The Sakana Fugu orchestration model is logged under LLM Workflow rather than here."
+    },
+    {
+      "topic": "Platform for Local LLM (vLLM, SGLang, etc.)",
+      "searched": true,
+      "hits": 1,
+      "promoted_to_bullet": false,
+      "reason_dropped": "Only comparison/benchmark roundups (vLLM vs SGLang vs LMDeploy H100 numbers) refreshed this window; no fresh June 21-24 named release tag or shipped artifact from vLLM/SGLang/TGI/LMDeploy to anchor a state-change bullet."
+    },
+    {
+      "topic": "Ecosystems for Local LLM Embedded System (Foundry Local, etc.)",
+      "searched": true,
+      "hits": 1,
+      "promoted_to_bullet": false,
+      "reason_dropped": "Unsloth Studio local execution of GLM-5.2 is the nearest on-device signal but is the same June 23 GLM-5.2 GGUF artifact (logged under Unsloth). No fresh June 21-24 Foundry Local / Ollama / LM Studio / MLX / NPU-SDK state-change."
+    },
+    {
+      "topic": "Local LLM Models",
+      "searched": true,
+      "hits": 2,
+      "promoted_to_bullet": false,
+      "reason_dropped": "Sakana Fugu (June 22) is an orchestration model behind an API, not an open-weight model release, and is logged under LLM Workflow. GLM-5.2 (Z.ai) surfaces only via the carried-over Unsloth GGUF artifact, not a net-new model drop. No fresh open-weight model card published June 24."
+    },
+    {
+      "topic": "Local LLM Optimization, Fine-tuning (Unsloth - every run)",
+      "searched": true,
+      "hits": 1,
+      "promoted_to_bullet": false,
+      "reason_dropped": "MANDATORY SEARCH PERFORMED. The only Unsloth item in the June 21-24 window is the same June 23 Dynamic GGUF quantization of Z.ai's 744B GLM-5.2 (same 217-239GB / 84-86%-reduction figures, same Unsloth Studio pairing) already in the prior-3-day digest. No new quant build/tag, no independent accuracy-retention reproduction, no different model getting the same treatment, no named third party running it. Restating the June 23 GGUF builds with no new fact is a hold-steady framing, so DROPPED under ADR-002 Rule 2."
+    },
+    {
+      "topic": "Ecosystems for LLM on PaaS (AWS Bedrock, Azure AI Foundry, etc.)",
+      "searched": true,
+      "hits": 1,
+      "promoted_to_bullet": false,
+      "reason_dropped": "The AWS New York Summit agent stack (AWS Context / Continuum / Bedrock AgentCore Guardrails) is in the digest (last seen June 21) with no fresh GA/pricing/named-pilot state-change this window. Sakana Fugu ships as a managed OpenAI-compatible API but is logged under LLM Workflow as its load-bearing bullet."
+    },
+    {
+      "topic": "AI Security",
+      "searched": true,
+      "hits": 3,
+      "promoted_to_bullet": false,
+      "reason_dropped": "OWASP State of Agentic AI v2.01 (June 11) + StakeBench are in the digest with no fresh June 24 report version / new named benchmark / new CVE / procurement-bar. CodeIntegrity's $5M agentic-AI guardrails seed (Syn Ventures) is real but dated May 27, too old to anchor a June 24 state-change bullet. AI-security-SoC standing watch checked (Axiado-style secure-control SoCs, confidential-computing inference): no new June 21-24 shipping/announcement signal beyond the Confidential Computing Summit, which is captured as an events item."
+    },
+    {
+      "topic": "AI Security - Zero-trust based access control for agentic AI",
+      "searched": true,
+      "hits": 1,
+      "promoted_to_bullet": false,
+      "reason_dropped": "Least-privilege / credential-filtering harness work (Hermes MCP, NemoClaw network-policy gating) is digest-carried with no fresh June 24 default-deny artifact. CodeIntegrity runtime control layer is the nearest net-new vendor signal but is a May 27 raise."
+    },
+    {
+      "topic": "AI Security - Monitor and manage AI agent behavior",
+      "searched": true,
+      "hits": 1,
+      "promoted_to_bullet": false,
+      "reason_dropped": "StakeBench adversarial-trial monitoring and OWASP incident cataloging are digest-carried; no fresh June 24 named runtime-monitoring benchmark or product state-change."
+    },
+    {
+      "topic": "CVE update on score >= 8.0",
+      "searched": true,
+      "hits": 2,
+      "promoted_to_bullet": false,
+      "reason_dropped": "Surveyed June 2026 high-score disclosures (Adobe Campaign Classic CVE-2026-48303 CVSS 10.0; Adobe ColdFusion CVE-2026-47928 9.6; Perl DBI CVE-2026-9698 9.8; Windows Defender RoguePlanet CVE-2026-47281 9.6; June Patch Tuesday ~198 CVEs; Oracle June CPU). All are pre-June-21 disclosures or non-AI infra with no fresh June 21-24 high-score addition tied to the AI/agentic angle, which is carried elsewhere. No standalone CVE bullet."
+    },
+    {
+      "topic": "Hardware",
+      "searched": true,
+      "hits": 2,
+      "promoted_to_bullet": true,
+      "reason_dropped": "HBM-supply angle carried by the Micron-Anthropic bullet (all three HBM makers now Series H participants). NVIDIA RTX Spark (Computex, June 1) is early-June with no fresh accelerator/data-center state-change; AI-security-SoC watch checked with no new June 21-24 shipping signal."
+    },
+    {
+      "topic": "Physical AI",
+      "searched": true,
+      "hits": 4,
+      "promoted_to_bullet": true,
+      "reason_dropped": ""
+    },
+    {
+      "topic": "LLM-related research and papers",
+      "searched": true,
+      "hits": 2,
+      "promoted_to_bullet": false,
+      "reason_dropped": "Sakana Fugu rests on two ICLR 2026 papers (TRINITY, Conductor), folded into the LLM Workflow bullet as context. No standalone fresh arXiv paper rose to a high-impact June 21-24 state-change warranting a separate research bullet."
+    },
+    {
+      "topic": "Stock prices and corporate activity (frontier labs, hyperscalers, chip vendors)",
+      "searched": true,
+      "hits": 3,
+      "promoted_to_bullet": true,
+      "reason_dropped": "Carried by the Micron-Anthropic bullet (June 22 Series H equity entry, ~$65B round at ~$965B post-money). OpenAI/Anthropic IPO threads and the SpaceX/xAI debut are pre-June-21 with no fresh pricing/filing/analyst-action this window."
+    },
+    {
+      "topic": "Business plan",
+      "searched": true,
+      "hits": 1,
+      "promoted_to_bullet": false,
+      "reason_dropped": "Micron's internal-Claude deployment + co-design commercial structure appears inside the Micron-Anthropic bullet; no standalone fresh June 21-24 business-model announcement distinct from it."
+    },
+    {
+      "topic": "Application fields",
+      "searched": true,
+      "hits": 2,
+      "promoted_to_bullet": true,
+      "reason_dropped": "Physical-AI application signal (Cobot Proxie in hospitals/manufacturing/logistics, 12,627 production hours) is carried by the Physical AI bullet; Fugu orchestration as a coding application is carried by the LLM Workflow bullet."
+    },
+    {
+      "topic": "Applied research",
+      "searched": true,
+      "hits": 1,
+      "promoted_to_bullet": true,
+      "reason_dropped": "Applied-research signal (Sakana's TRINITY/Conductor ICLR 2026 orchestration work moving from paper to a shipped API and an independent benchmark-vs-reality test) is carried by the LLM Workflow bullet."
+    },
+    {
+      "topic": "Bay Area / SV AI meet-up events",
+      "searched": true,
+      "hits": 5,
+      "promoted_to_bullet": true,
+      "reason_dropped": ""
+    },
+    {
+      "topic": "Other standing-out topics",
+      "searched": true,
+      "hits": 1,
+      "promoted_to_bullet": false,
+      "reason_dropped": "Ambient roundup items (open-weight model leaderboards, KLING v3.0 video model) surfaced but none carried a fresh June 24 hard state-change strong enough to displace the four chosen bullets under the anti-inertia soft-5 target."
+    }
+  ]
+}

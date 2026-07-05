@@ -1,0 +1,175 @@
+{
+  "date": "2026-06-27",
+  "verifications": [
+    {
+      "topic": "LLM Workflow",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "ML attack surface moves from theory to live exploitation: a cross-tenant flaw in the Langflow agent builder is fired in the wild"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "Langflow is a visual workflow/pipeline orchestration builder for LLM agents (a sibling brand to the broader LLM Workflow scope), so the CVE bullet centered on its flow-execution plane semantically belongs to this topic; the writer reports searched=true/hits=2/promoted_to_bullet=true and explicitly routes both agent-orchestration state-changes (Langflow, AutoGPT) into the security/CVE bullets, which aligns."
+    },
+    {
+      "topic": "Multi-profiling for Local LLM (e.g. Multica)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "News-driven-only topic; no bullet references Multica or any sibling multi-profiling activity, so searched=true/hits=0/no-bullet is the expected alignment."
+    },
+    {
+      "topic": "Agent Harness (OpenClaw, NemoClaw, Hermes Agents, etc.)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No bullet is a coding agent / agentic IDE / autonomous dev-tool release; the named harnesses and adjacent tools (Fable 5 in Claude Code, Copilot billing, Cursor Composer) all predate June 25-27, and the AutoGPT CVE is correctly logged as a platform security state-change rather than a harness release, matching the writer's report."
+    },
+    {
+      "topic": "Platform for Local LLM (vLLM, SGLang, etc.)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No bullet is an inference-engine / serving-stack release; the writer reports only comparison/benchmark content with no fresh June 25-27 vLLM/SGLang/TGI state-change, which aligns."
+    },
+    {
+      "topic": "Ecosystems for Local LLM Embedded System (Foundry Local, etc.)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No edge / on-device LLM runtime or NPU-SDK artifact appears in any bullet; the nearest material (Unsloth Studio) is the prior-3-day update wave, not a June 25-27 artifact, matching the writer's drop."
+    },
+    {
+      "topic": "Local LLM Models",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No open-weight model release / model card belongs to any bullet; the nearest releases (MiniMax-M3, GLM-5.2, Kimi K2.7, VibeThinker-3B) are all outside the June 25-27 window, matching the writer's drop under ADR-002 Rule 2."
+    },
+    {
+      "topic": "Local LLM Optimization, Fine-tuning (Unsloth — every run)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "Mandatory Unsloth search was performed (searched=true) with no fresh June 25-27 artifact to promote (Dynamic 2.0 GGUF, GLM-5.2 single-node builds, and Studio features are all in the prior-3-day digest); per the constant-coverage rule this is a consistent searched-nothing-to-promote outcome, not an overreport."
+    },
+    {
+      "topic": "Ecosystems for LLM on PaaS (AWS Bedrock, Azure AI Foundry, etc.)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No managed-inference / hosted-LLM-API announcement belongs to any bullet; the reported Anthropic-Microsoft Maia 200 talk is unconfirmed and not a dated June 25-27 state-change, so searched=true/hits=1/no-bullet aligns."
+    },
+    {
+      "topic": "AI Security",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "ML attack surface moves from theory to live exploitation: a cross-tenant flaw in the Langflow agent builder is fired in the wild",
+        "An SSRF-protection bypass lands in AutoGPT, exposing internal services behind the agent runner"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "Both CVE bullets are squarely AI-security news (an in-the-wild cross-tenant IDOR on an LLM-agent builder and an SSRF-protection bypass on an agent runner, both agent-execution-layer attack-surface primitives), and the writer reports searched=true/hits=4/promoted_to_bullet=true."
+    },
+    {
+      "topic": "AI Security - Zero-trust based access control for agentic AI",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "ML attack surface moves from theory to live exploitation: a cross-tenant flaw in the Langflow agent builder is fired in the wild",
+        "An SSRF-protection bypass lands in AutoGPT, exposing internal services behind the agent runner"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "Both bullets are access-control failures on agentic platforms: Langflow CVE-2026-55255 is a cross-tenant authorization bypass (IDOR / CWE-639) on a flow-execution endpoint, and AutoGPT CVE-2026-56663 is an SSRF-protection bypass letting an agent reach internal services it should not, both squarely the zero-trust agent-access sub-topic; the writer reports promoted_to_bullet=true, which aligns."
+    },
+    {
+      "topic": "AI Security - Monitor and manage AI agent behavior",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No bullet is a fresh agent-behavior-monitoring product/release; OWASP State of Agentic AI Security v2.01 and prompt-injection-as-architectural-flaw coverage are in/near the prior-3-day digest with no new version or result, matching the writer's drop under ADR-002 Rule 2."
+    },
+    {
+      "topic": "CVE update on score ≥ 8.0",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "ML attack surface moves from theory to live exploitation: a cross-tenant flaw in the Langflow agent builder is fired in the wild",
+        "An SSRF-protection bypass lands in AutoGPT, exposing internal services behind the agent runner"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "Both bullets center on CVEs above the 8.0 threshold (Langflow CVE-2026-55255 at CVSS 9.9, AutoGPT CVE-2026-56663 at CVSS 8.5), and the writer reports searched=true/hits=2/promoted_to_bullet=true."
+    },
+    {
+      "topic": "Hardware",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No AI-accelerator / chip / data-center-hardware state-change anchors a bullet; RTX Spark/Rubin, AMD Helios, and the OpenAI/Broadcom Jalapeno item all predate or carry no new fact in window, and AMD Advancing AI / MI400 appears only as an upcoming item inside the events bullet, matching the writer's report."
+    },
+    {
+      "topic": "Hardware - AI-security-SoC intersection (standing watch)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "The secure-AI-accelerator / confidential-computing / on-die-RoT thesis was searched (searched=true/hits=0) with no June 25-27 shipping or announcement signal of a purpose-built secure AI accelerator SoC, so no bullet and consistent alignment for this standing watch."
+    },
+    {
+      "topic": "Physical AI",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No robotics / embodied-AI artifact belongs to any bullet; only industry-status snapshots (Optimus Gen 3, Figure ramp, 1X NEO, Atlas) appear with no fresh June 25-27 ship/order/benchmark, matching the writer's drop under ADR-002 Rule 2."
+    },
+    {
+      "topic": "LLM-related research and papers",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No standout arxiv cs.AI artifact rises to a bullet distinct from the security/CVE items already covered; the writer reports nothing rising to a bullet in window, which is consistent."
+    },
+    {
+      "topic": "Stock prices and corporate activity (frontier labs, hyperscalers, chip vendors)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No financial / M&A / funding / analyst-action state-change appears in any bullet; the Anthropic S-1, OpenAI round, and Micron-Anthropic storyline all predate or carry no new figure in window, and the unverified SpaceX/Cursor item was correctly not used, matching the writer's report."
+    },
+    {
+      "topic": "Business plan",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No fresh business-model/pricing state-change appears in any bullet; the Gartner agentic-coding-economics forecast is in the prior-3-day digest with no competing forecast or vendor token-cap response this window, matching the writer's drop."
+    },
+    {
+      "topic": "Application fields",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "ML attack surface moves from theory to live exploitation: a cross-tenant flaw in the Langflow agent builder is fired in the wild",
+        "An SSRF-protection bypass lands in AutoGPT, exposing internal services behind the agent runner"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "Both CVE bullets touch concrete application layers (the agent-builder application for Langflow and the agent-runner application for AutoGPT); the writer reports this topic covered indirectly via the CVE bullets with no additional standalone artifact, which aligns."
+    },
+    {
+      "topic": "Applied research",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No fresh applied-research artifact distinct from the security/CVE items already evaluated appears in any bullet; the writer reports nothing rising to a standalone bullet in window, which is consistent."
+    },
+    {
+      "topic": "Bay Area / SV AI meet-up events",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "AI events to plan around now: the AI Engineer World's Fair weekend is live, with chip and security dates running through the summer and fall"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "The events bullet is a forward-looking, user-attendable calendar covering all three mandated sub-tracks (mainstream dev: AIE World's Fair hackathon/main program, GitHub Universe, re:Invent; AI-security: Black Hat AI Summit, DEF CON AI Village, SecurityWeek AI Risk Summit, OWASP Global AppSec, Zenity series; AI-chip: AMD Advancing AI, Hot Chips, AI Infra Summit); under the carry-forward exception this is covered/consistent even with no fresh state-change, and the writer reports promoted_to_bullet=true."
+    },
+    {
+      "topic": "Other standing-out topics",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No standout topic outside the enumerated categories appears in any bullet; the writer reports low weekend (Saturday) news volume with none in window, which aligns."
+    }
+  ]
+}

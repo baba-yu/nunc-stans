@@ -1,0 +1,109 @@
+{
+  "date": "2026-06-27",
+  "by_prediction": {
+    "prediction.2d6b8e0a4c1f9357": [
+      {
+        "actor": "security product manager ng agent platform",
+        "job": "Pagtutulak ng isang deny-by-default na per-tenant authorization layer sa orchestration plane para mag-authenticate at mag-authorize ang mga flow bago tumakbo sa isang pinangalanang release.",
+        "outcome": "Isang pinangalanang release ang naglalabas ng per-tenant na flow-/object-level authz bilang default-on, na nagsasara sa mga cross-tenant IDOR gap nang walang anumang opt-in flag.",
+        "motivation": "Pinatutunayan ng live-na-pinananamantalang CVSS 9.9 cross-tenant IDOR sa Langflow na inilalabas ang orchestration layer nang insecure-by-default at nagbabanta ito sa tiwala ng enterprise.",
+        "task": {
+          "who": "ang platform security at authorization engineering sub-team",
+          "what": "Magdagdag ng deny-by-default na per-tenant authorization check bago ang flow execution",
+          "where": "sa flow-resolution at execution path ng agent-orchestration runtime",
+          "when": "mula ngayon hanggang sa panahong inilaan para sa Q2 2027",
+          "why": "para isara ang mga cross-tenant IDOR gap na pinatunayan ng live na pananamantala",
+          "how": "owner-scoped authz middleware na ipinapatupad sa bawat flow resolution"
+        }
+      },
+      {
+        "actor": "networking/egress engineer ng agentic platform",
+        "job": "Pagbuo ng default na outbound-egress allowlisting na may SSRF-hardened na tool-call at web-request blocks para ma-gate ang mga outbound request bago umalis sa runner.",
+        "outcome": "Isang pinangalanang release ang naka-default sa egress allowlisting na may SSRF-resistant na URL parsing, na humaharang sa mga internal-IP fetch mula sa agent tool call bilang default.",
+        "motivation": "Ipinapakita ng CVSS 8.5 SSRF bypass ng AutoGPT na ang mga arbitrary-URL fetch block ay mga SSRF surface maliban kung naka-lock down ang egress mismo.",
+        "task": {
+          "who": "ang runner sandbox at networking engineering sub-team",
+          "what": "Maglabas ng default-on na egress allowlist at SSRF-safe na URL validation",
+          "where": "sa tool-call at web-request execution layer ng agent runner",
+          "when": "sa loob ng panahong inilaan sa pagitan ng kalagitnaan ng 2026 at Q2 2027",
+          "why": "para pigilan ang internal-IP SSRF sa pamamagitan ng mga arbitrary-URL fetch primitive",
+          "how": "allowlist gate kasama ang canonical at IPv6-aware na IP filtering"
+        }
+      }
+    ],
+    "prediction.7f3a9c2e1b8d4056": [
+      {
+        "actor": "security researcher ng agent platform",
+        "job": "Paghahanap ng mga cross-tenant IDOR at broken-object-level-access na bug sa buong klase ng n8n/Flowise/Dify/LangGraph/CrewAI agent builder gamit ang Langflow CVE bilang template.",
+        "outcome": "Isang CVSS >=9.0 cross-tenant authorization/IDOR advisory ang isinampa laban sa isang non-Langflow agent builder, mas mainam kung may in-the-wild o CISA-KEV na katibayan.",
+        "motivation": "Ang pattern ng Langflow CVE-2026-55255 ay isang magagamit-muling lagda ng klase; ang pag-replika nito sa mga kapwa-produkto ay nagdudulot ng mga high-severity at high-visibility na disclosure.",
+        "task": {
+          "who": "vulnerability research / bug-bounty team",
+          "what": "Subukan ang mga flow-resolution at run-execution endpoint para sa kulang na owner check",
+          "where": "Mga self-hosted at SaaS instance ng mga kapwa agent builder",
+          "when": "Panahong inilaan mula June 2026 hanggang Q1 2027",
+          "why": "I-replika ang klase ng Langflow IDOR sa buong kategorya",
+          "how": "Anihin ang mga opaque na flow/run ID; iwagi ang mga cross-tenant request"
+        }
+      },
+      {
+        "actor": "platform engineer ng agent-orchestration",
+        "job": "Paglalabas at pagpapalawak ng mga multi-tenant na flow/run/workspace feature sa isang shared execution endpoint habang ipinagpapaliban ang mga ownership check sa UI o route prefix sa halip na sa object boundary.",
+        "outcome": "Isang live at mapananamantalang cross-tenant access path sa isang kapwa platform na maaaring ihayag ng isang researcher kalaunan bilang isang >=9.0 IDOR advisory.",
+        "motivation": "Pinapaboran ng presyur ng bilis at feature parity ang mga opaque-ID at shared-endpoint na pattern; ipinagpapaliban ang per-object authz bilang non-blocking na hardening.",
+        "task": {
+          "who": "core platform / backend engineering team",
+          "what": "Bumuo ng mga flow-resolution at run endpoint na nakabatay sa opaque ID",
+          "where": "Shared multi-tenant execution at orchestration plane",
+          "when": "Tuluy-tuloy na release cycle hanggang Q1 2027",
+          "why": "Maglabas ng mga multi-tenant feature nang mabilis sa parity ng kategorya",
+          "how": "Opaque UUID lookup na may mga owner check na ipinagpaliban sa UI"
+        }
+      }
+    ],
+    "prediction.9a1c5f7b3e2d8046": [
+      {
+        "actor": "launch product manager ng datacenter-GPU para sa merchant accelerator",
+        "job": "Pagtatapos ng MI400-series launch package at pagpapasya kung aling masusuring spec, GA window, o HBM figure ang ilalagay sa mga keynote slide ng Advancing AI.",
+        "outcome": "Isang pormal na inilunsad na MI400 na may hindi bababa sa isang pinangalanan at masusuring commitment, isang ship window, memory spec, rack, o customer, na nasa rekord sa entablado.",
+        "motivation": "Kailangang sagutin ng AMD ang roadmap ng Nvidia sa entablado gamit ang matitibay na merchant-accelerator spec para mapanatili ang kredibilidad sa mga hyperscaler buyer.",
+        "task": {
+          "who": "ang AMD Instinct datacenter-GPU product-marketing at launch team",
+          "what": "Itakda ang mga claim ng MI400 launch at mga keynote spec slide",
+          "where": "Paghahanda ng Advancing AI 2026 keynote sa Moscone, San Francisco",
+          "when": "mula ngayon hanggang sa panahong inilaan para sa July 23 2026 keynote",
+          "why": "para maglagay ng masusuring MI400 commitment sa rekord",
+          "how": "internal launch-readiness review at pag-sign-off ng keynote slide"
+        }
+      },
+      {
+        "actor": "platform engineer ng rack-scale AI systems",
+        "job": "Pagpoproduktyo ng Helios-class rack-scale platform sa paligid ng MI400 para maging handa para sa demo sa keynote ang isang pinangalanang rack system at ang mga spec nito.",
+        "outcome": "Isang pinangalanang Helios-class rack-scale platform spec na ihinayag sa event, na tumutugon sa qualifying commitment para sa rack system ng prediksyon.",
+        "motivation": "Ang mga rack-scale platform, hindi ang mga hubad na chip, ang binibili ng mga hyperscaler, kaya pinatutunayan ng isang pinangalanang rack na naglalabas ang AMD ng mga deployable na sistema.",
+        "task": {
+          "who": "AMD data-center systems at Helios rack-platform engineering",
+          "what": "I-validate at i-spec ang Helios MI400 rack platform",
+          "where": "Mga AMD systems lab at ang Advancing AI demo floor",
+          "when": "mula ngayon hanggang sa panahong inilaan para sa July 22-23 2026 event",
+          "why": "para ihayag ang isang pinangalanan at deployable na rack-scale platform",
+          "how": "rack bring-up, integration testing, at platform validation"
+        }
+      },
+      {
+        "actor": "co-design partner sa AI-infrastructure ng hyperscaler o frontier-lab",
+        "job": "Pagtatapos ng isang MI400 deployment commitment sa AMD na maaaring pangalanan sa entablado bilang isang datapoint ng customer adoption sa keynote.",
+        "outcome": "Isang pinangalanang hyperscaler o frontier-lab MI400 deployment commitment na inanunsyo sa entablado, na tumutugon sa qualifying commitment para sa pinangalanang customer.",
+        "motivation": "Ang pangalawang merchant-accelerator source ay nagbibigay-diversidad sa supply at sa pricing leverage laban sa Nvidia para sa large-scale training at inference.",
+        "task": {
+          "who": "procurement at co-design team sa AI-infrastructure ng hyperscaler o frontier-lab",
+          "what": "Tapusin ang isang mapapangalanang MI400 deployment commitment",
+          "where": "Mga negosasyon sa co-design at procurement sa pagitan ng AMD at customer",
+          "when": "mula ngayon hanggang sa panahong inilaan para sa July 23 2026 keynote",
+          "why": "para masiguro ang isang pangalawang large-scale merchant accelerator source",
+          "how": "joint roadmap alignment at negosasyon ng purchase-commitment"
+        }
+      }
+    ]
+  }
+}

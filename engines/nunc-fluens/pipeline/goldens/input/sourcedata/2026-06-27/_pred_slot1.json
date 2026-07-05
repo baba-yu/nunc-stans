@@ -1,0 +1,14 @@
+{
+  "id": "prediction.7f3a9c2e1b8d4056",
+  "scope_hint": "tech",
+  "title": "Multi-tenant agent builders draw a 9.0+ cross-tenant authz CVE by Q1 2027",
+  "body": "The Langflow case is not a one-off bug; it is a class signature. CVE-2026-55255 is a cross-tenant insecure-direct-object-reference (CWE-639, authorization bypass through a user-controlled key) on a flow-execution endpoint, rated CVSS 9.9 and now fired in the wild per Sysdig's June 25 report, chained with the already-KEV-listed RCE CVE-2026-33017. The structural read is that the soft underbelly of multi-tenant agent platforms is the orchestration and authorization plane: a visual builder that resolves another tenant's flow by an opaque, harvestable ID and never checks ownership turns the product into a cross-customer exfiltration primitive. The same architectural pattern — opaque flow/run/workspace IDs, a shared execution endpoint, owner checks deferred to UI rather than enforced server-side per object — recurs across the open-source and commercial peers in this category (the n8n / Flowise / Dify / LangGraph Platform / CrewAI class). The forward call: by Q1 2027 at least one OTHER named platform in this category (not Langflow) receives a CVSS >= 9.0 advisory whose root cause is cross-tenant authorization / broken-object-level access / IDOR, ideally with in-the-wild-exploitation or CISA-KEV evidence. The structural answer this pressures the category toward is zero-trust per-tenant gating: ownership enforced at the object boundary on every flow-resolution and run-execution path, not at the UI or the route prefix.",
+  "reasoning": {
+    "because": "Langflow CVE-2026-55255, a CVSS 9.9 cross-tenant IDOR (CWE-639), is fired in the wild plus a KEV RCE",
+    "given": "Peer builders share the pattern: harvestable flow IDs, shared run endpoint, owner checks off-object",
+    "so_that": "Another platform in the n8n/Flowise/Dify/LangGraph/CrewAI class gets a >=9.0 cross-tenant authz/IDOR advisory",
+    "landing": "by Q1 2027; >=1 non-Langflow platform CVE, ideally in-the-wild or CISA-KEV",
+    "plain_language": "The Langflow flaw that let one customer run another's agent is a pattern, so a similar builder will get the same bug soon."
+  },
+  "summary": "Langflow's CVSS 9.9 cross-tenant IDOR (CVE-2026-55255), exploited in the wild and chained with a KEV RCE, signals a class flaw in the agent-orchestration plane. By Q1 2027 expect another multi-tenant agent builder (n8n/Flowise/Dify/LangGraph/CrewAI class) to get a >=9.0 cross-tenant IDOR advisory."
+}

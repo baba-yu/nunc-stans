@@ -1,0 +1,6 @@
+{
+  "support_dimension": "because",
+  "narrative": "Two same-week advisories are the forcing function behind the zero-trust-default-on thesis (Jun 27): Langflow's IDOR (CVSS 9.9) proves the orchestration plane ships without deny-by-default per-tenant authorization, and AutoGPT's SSRF bypass (CVE-2026-56663, CVSS 8.5) proves the execution plane ships without egress-hardened tool calls. A fetch-arbitrary-URL block and an opaque-ID flow are SSRF and cross-tenant surfaces unless gated by default.",
+  "coherence": 4,
+  "remaining_gap": "Still missing a major platform shipping deny-by-default authorization and/or SSRF-hardened egress allowlisting in a named release; today gives motivating CVEs, not a default-posture shipment."
+}

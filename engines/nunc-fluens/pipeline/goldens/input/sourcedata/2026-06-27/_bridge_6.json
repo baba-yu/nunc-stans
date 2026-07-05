@@ -1,0 +1,6 @@
+{
+  "support_dimension": "because",
+  "narrative": "The in-the-wild Langflow IDOR and AutoGPT SSRF show agent-platform plumbing shipping unsafe-by-default and hardening only after a maximum-severity incident, the same default-shipment pressure the safe-artifact-handling prediction (Jun 17) expects to reach managed model-serving platforms. But both are authorization-bypass and request-forgery flaws, not the unsafe-deserialization class (pickle, dill, model checkpoints) that defines this bar, so the contact stays thematic.",
+  "coherence": 2,
+  "remaining_gap": "No deserialization incident and no managed-platform default change today; no named platform flipping safe artifact handling on by default has been disclosed."
+}

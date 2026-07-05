@@ -1,0 +1,49 @@
+{
+  "prediction_id": "prediction.36f4ab773b39713e",
+  "judgements": [
+    {
+      "prediction_id": "prediction.36f4ab773b39713e",
+      "stream": "reasoning",
+      "entry_id": "prediction.36f4ab773b39713e",
+      "verdict": "fresh",
+      "reason": "Thesis (custom silicon splits into training-vs-inference SKUs by H1 2027) reinforced this week: Jun-25 Jalapeno bridge (rel 4, 'given') has OpenAI frame an 'Intelligence Processor' purpose-built for inference alongside TPU/Trainium lineage. because/given/so_that all hold; landing window (H2 2026/H1 2027, $/query peak Q3 2026) still forward-looking, target Q3 2026 not yet reached. No contradicting bridge.",
+      "cross_stream_evidence": [
+        "bridge:validation.fbc14ace0c75bc59"
+      ],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.36f4ab773b39713e",
+      "stream": "bridge",
+      "entry_id": "prediction.36f4ab773b39713e",
+      "verdict": "fresh",
+      "reason": "All 12 bridges supportive or partial; none contradict. Newest (Jun-25, rel 4) is strongly on-thesis. No invalidated bridge to reframe.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.36f4ab773b39713e",
+      "stream": "needs",
+      "entry_id": "prediction.36f4ab773b39713e",
+      "verdict": "fresh",
+      "reason": "All three needs (MAIA/MTIA dual-track SKU shipment, FP4/MXFP4 kernels, procurement contract split) remain open. Jalapeno is OpenAI, not a MAIA/MTIA hyperscaler delivery, so need #1 not satisfied; bridges note MAIA/MTIA dual-SKU announcement still pending. No actor delivered this week.",
+      "cross_stream_evidence": [
+        "bridge:validation.fbc14ace0c75bc59"
+      ],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.36f4ab773b39713e",
+      "stream": "readings",
+      "entry_id": "prediction.36f4ab773b39713e",
+      "verdict": "fresh",
+      "reason": "2 downstream + 4 upstream chain edges and 5 parallel relations all refreshed 2026-06-28 and remain coherent with the thesis. No upstream prediction landed or got contradicted this week, so the reasoning chain is intact and the landing window is unchanged.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    }
+  ]
+}

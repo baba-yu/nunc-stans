@@ -1,0 +1,31 @@
+{
+  "date": "2026-06-28",
+  "vs_date": "2026-06-27",
+  "items": [
+    {
+      "kind": "new",
+      "headline": "Nag-ship ang Liquid AI ng 230M edge model na may launch-day vLLM at SGLang support",
+      "diff_narrative": "Ang balita kahapon ay buong-buong nakatuon sa live-exploited agent-platform CVEs (ang cross-tenant IDOR ng Langflow, ang SSRF bypass ng AutoGPT). Bumubukas ngayon ang isang bagong linya na walang naunang araw na batayan: ang LFM2.5-230M ng Liquid AI noong June 27, isang sub-gigabyte text-only na model na ang pangunahing punto ay ito: ang parehong OpenAI-compatible serving engines na ginagamit sa data center (vLLM, SGLang) kasama ang llama.cpp, MLX at ONNX ang siya na ngayong launch-day targets nito, na pinaiikli ang agwat sa pagitan ng edge runtimes at cluster-grade inference stacks. Isa itong malinis na paglipat ng paksa mula sa mga insidente ng seguridad patungo sa kuwento ng open-weight on-device performance."
+    },
+    {
+      "kind": "new",
+      "headline": "Binili ng Qualcomm ang Modular inference compiler at binabantayan ang Tenstorrent",
+      "diff_narrative": "Isang bagong business/hardware na item na walang katumbas kahapon. Ang ~$3.92B all-stock na pagbili ng Qualcomm sa Modular noong June 24 (ang MAX cross-vendor inference engine), kasama ang naiulat na $8-10B na usapan sa Tenstorrent at isang nakatakdang paghahatid ng hyperscaler custom-silicon bago matapos ang taon, ay bumubuo ng halos $14B na full-stack na hamon sa CUDA lock-in ng Nvidia. Kung saan nanatili sa vulnerability layer ang mga kuwento kahapon, nagdadagdag ngayon ng strategic M&A layer ng parehong agentic-AI stack."
+    },
+    {
+      "kind": "new",
+      "headline": "Isinama ng Unsloth v0.1.471-beta ang GLM-5.2, Gemma 4 at DiffusionGemma sa fine-tuning",
+      "diff_narrative": "Bagong lumitaw ngayon at wala kahapon: nagdagdag ang June 18 beta ng Unsloth ng first-class fine-tuning para sa open-weight wave (GLM-5.2, Gemma 4 multi-token prediction, DiffusionGemma) dalawang araw lamang matapos ang June 16 na paglabas ng GLM-5.2. Umaalalay ito sa item ng Liquid AI para ipakita ang humihigpit na agwat mula release patungo sa tuning, isang anggulo ng tooling na hindi saklaw ng naunang araw."
+    },
+    {
+      "kind": "new",
+      "headline": "Muling binalangkas ng OWASP ang prompt injection bilang structural, hindi-mapa-patch na katangian ng agentic AI",
+      "diff_narrative": "Itinataas ngayon ang naratibo ng seguridad mula sa indibidwal na CVEs kahapon patungo sa isang argumentong arkitektural. Kung saan idinokumento ng June 27 ang dalawang tiyak na agent-platform bugs bilang mga halimbawa ng mahinang orchestration underbelly, pinapalawak ng 2.01 na ulat ng OWASP ang pahayag: ang prompt injection ay ang universal joint na nima-map sa anim ng sampung agentic categories, minimitiga sa pamamagitan ng design budgets (ang lethal trifecta, Agents Rule of Two) sa halip na pinapatch, kung saan tinawag na sentro ang coding agents (28 sa 53 na sinusubaybayang projects; n8n, Claude Code, AutoGPT, Dify at Roo-Code ang pinakamaraming-advisory). Dinadala nito ang structural na pagbasa kahapon ngunit isinasaad ito bilang isang hindi-mapa-patch na design constraint sa halip na isang per-insidenteng natuklasan."
+    },
+    {
+      "kind": "continuing",
+      "headline": "Mga AI event na dapat planuhin ngayon: bumubukas ang main program ng World's Fair ngayong linggo",
+      "diff_narrative": "Nagpapatuloy ang events tracker sa lahat ng tatlong sub-tracks ngunit isinusulong ang kalendaryo nito. Kahapon, inilarawan ang AI Engineer World's Fair bilang isang live na katapusan ng linggo (hackathon June 27-28, Linggong oryentasyon); ngayon ay minarkahan nang lipas ang mga paunang ito at ang main program (June 29 - July 2, Moscone West) ang aktibong sentro, na iniulat na ngayong ~29 tracks, ~300 speakers at 6,000+ attendees laban sa 20+ tracks at 250+ speakers kahapon. Nagdadagdag din ngayon ng papel ng OWASP Global AppSec USA at pinananatili ang mga nakatakdang AI-security at AI-chip na petsa (Black Hat, DEF CON, AI Risk Summit, AMD Advancing AI, Hot Chips, AI Infra Summit), na inaalis lamang ang mga lipas-na-petsa na item ng katapusan ng linggo."
+    }
+  ]
+}

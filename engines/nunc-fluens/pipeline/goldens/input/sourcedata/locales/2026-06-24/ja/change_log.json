@@ -1,0 +1,26 @@
+{
+  "date": "2026-06-24",
+  "vs_date": "2026-06-23",
+  "items": [
+    {
+      "kind": "new",
+      "headline": "Sakanaのfugu Ultraオーケストレーションモデル、最初の独立した現実検証に直面",
+      "diff_narrative": "6月23日に先行例のない新規の最重要トピック。昨日の構成はUnslothのGLM-5.2 GGUFビルドが先頭だったが、新たな状況変化が出ていないため今回は外れる。本日の起点は、6月22日に単一のOpenAI互換エンドポイントとして公開されたSakana AIのfuguへの最初の独立した反証だ。fugu自身が、差し替え可能なフロンティアLLM群にまたがってルーティング・委任・検証・統合を行うよう訓練された言語モデルであり（自分自身への再帰呼び出しも含む）、ICLR 2026のTRINITYとConductorの論文を土台とし、fugu Ultraティアは自社のコーディング・科学・推論の各表でAnthropicのFable 5やMythosと同等だとうたわれている。公開から48時間以内に、WhartonのEthan Mollickがfugu Ultraを自身の標準的なシェーダーおよびインタラクティブシーンのコーディングテストで試し、「とてつもなく遅い」、典型的な所要時間は30分近く、出来栄えは「まずまず」だが実際にはFableに及ばないと報告した。公表された同等性スコアはいまだ独立に再現されていない。これが示す兆候は、学習型のマルチモデルオーケストレーションは紙の上ではフロンティアの品質に迫れる一方で、ベンチマーク表が表に出さない大きな遅延の負担を払っている、ということだ。"
+    },
+    {
+      "kind": "new",
+      "headline": "MicronがAnthropicのSeries Hに参加、HBM3社すべてが一つのラボのメモリ供給網の中に",
+      "diff_narrative": "6月23日に対応のない新規のビジネス/インフラの最重要トピックで、昨日のOWASP/StakeBenchのエージェント型セキュリティの流れに代わるもの。同トピックは本日新たな証拠を伴わない。MicronとAnthropicは6月22日に戦略的提携を発表し、4つの要素を束ねた。性能・エネルギー効率・トークン経済性を狙うメモリ・ストレージの協調設計、Micronのデータセンター向け製品からのHBM・DRAM・SSDにまたがる複数年の供給枠、Micronのエンジニアリング・製造・業務部門全体へのClaude社内展開、そしてMicronによるAnthropicのSeries Hへの戦略出資である。ラウンド自体（約9,650億ドルのポストマネー評価額での650億ドル）は5月28日に完了したが、新たな事実はMicronの参加であり、これにより世界のHBM供給3社、SamsungとSK HynixにMicronを加えた3社が、Anthropicのシリーズ H とインフラパートナーの輪の中に入った。他のどのフロンティアラボも現時点で持たない結びつきだ。供給契約の金額もMicronの出資規模も開示されておらず、具体的な金額はいずれも未確認である。構造的に読み解けば、フロンティアラボは2026年Q4に見込まれる新規上場を前に、単なる発注契約ではなく出資を通じて高帯域メモリの容量を押さえつつある。"
+    },
+    {
+      "kind": "new",
+      "headline": "物理AIがAutomate 2026で工場の現場に到達、Cobotの第2世代Proxieがロボット上での推論を出荷",
+      "diff_narrative": "6月23日に先行例のない新規の最重要トピックで、昨日のコーディングエージェントのハーネス強化の流れ（OpenClaw/NemoClaw/Hermes）に代わるもの。同トピックは本日新たな出荷がない。Collaborative Roboticsは6月22日、Automate 2026で第2世代Proxieを公開し、やるべき仕事を自ら見極めて、ソフトウェア連携も人による指示も一切なしにそれをこなす汎用の移動型協働ロボットと位置づけた。新たな成果は、第2世代がタスク推論を完全にロボット上へ移し、中核処理にクラウドを必要としない点だ。作業空間を人の目の高さで捉え、作業を計画・段取りし、各動作を音声で告げるScoutSenseセンサー群と組み合わされている。ロボットは最大1,500ポンドのカートを動かし、最大200ポンドを垂直に持ち上げ、月額5,000ドルから始まる。Cobotは発表を第1世代の実稼働実績で裏づけた。実運用で記録された12,627時間、運搬した4,000万ポンド超の資材、病院・製造・物流の現場で16時間シフトをこなして削減した1,700万歩超の人手である。今回の発表は、物理AIを主要テーマとするより広いAutomate 2026展（6月22～25日、McCormick Place）の中で行われ、初開催となるNVIDIA協賛のHumanoid Robot Pavilionが20を超えるヒューマノイドのプラットフォームを集めている。"
+    },
+    {
+      "kind": "continuing",
+      "headline": "ベイエリア/SVのAIイベントカレンダーが前進、Confidential Computing Summitが閉幕しAutomateが開催中",
+      "diff_narrative": "3トラックの先を見据えたイベントの項目が6月23日から引き継がれ、カレンダーが前進した。主な変化は、昨日は1日先だったConfidential Computing Summitが本日閉幕し（6月23～24日、San Francisco Mint）先行リストから外れる一方、Automate 2026（6月22～25日、McCormick Place）が初開催のNVIDIA協賛Humanoid Robot Pavilionと6月23～24日のHumanoid Robot Forumを擁して現在開催中となり、前のサイクルから現在進行のAIチップ/ハードウェア枠へ移ったことだ。6月25日のかたまりは維持される。Snowflakeのバーチャルなdev DayとAI TinkerersのOffensive Security Demo Night（協賛XBOW）に続き、AI Engineer World's Fair（6月29日～7月2日、任意の6月28日オリエンテーション、Cerebral Valleyハッカソンは6月27～28日）が控える。さらに先のカレンダーは変わらない。AMD Advancing AI（7月22～23日、基調講演は7月23日）、Black Hat USAのAI Summit（8月1～6日）、SecurityWeekのAI Risk Summit（8月11～12日）、Hot Chips（8月23～25日）、AI Infra Summit（9月15～17日）、GitHub Universe（10月28～29日）、OWASP Global AppSec USA（11月5～6日）、AWS re:Invent（11月30日～12月4日）である。ZenityのAI Agent Security Summitシリーズも引き続き注視リストに残り、3つのサブトラックすべてが引き続きカバーされている。"
+    }
+  ]
+}

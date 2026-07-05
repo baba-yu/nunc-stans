@@ -1,0 +1,44 @@
+[
+  {
+    "actor": "captive owner-manufacturer humanoid-fleet program lead",
+    "job": "Standing up an in-house humanoid production fleet inside the manufacturer's own plants, justified against labor and downtime it already books on its own balance sheet",
+    "outcome": "A captive at-scale humanoid fleet doing real production work that is the largest publicly reported deployment by unit count by H1 2028",
+    "motivation": "Captive demand and owned unit economics let it deploy internally without waiting for a per-robot rental price the open market will bear",
+    "task": {
+      "who": "the manufacturer's automation and manufacturing-engineering deployment team",
+      "what": "Install and scale owned humanoid units onto live production lines",
+      "where": "The manufacturer's own factories and logistics facilities",
+      "when": "Through 2026-2027 ramp toward the H1 2028 landing",
+      "why": "Owned unit economics beat any open-market rental price",
+      "how": "In-house Atlas-class humanoids run on the owner's balance sheet"
+    }
+  },
+  {
+    "actor": "wholly-owned humanoid robot-maker production lead",
+    "job": "Ramping humanoid manufacturing toward the stated ~25,000-unit 2028 target to supply its parent's captive in-house fleet rather than third-party RaaS customers",
+    "outcome": "Verified at-scale unit volume exceeding low-thousands delivered into the owner's plants, making the captive fleet the largest reported paying production deployment",
+    "motivation": "As a fully absorbed subsidiary its demand is its parent's plants, so volume goes inward before any external sale",
+    "task": {
+      "who": "the robot-maker's manufacturing and supply-chain operations team",
+      "what": "Scale humanoid build rate toward the 25,000-unit target",
+      "where": "The robot-maker's production lines and parent-owned deployment sites",
+      "when": "From now through the 2028 production target window",
+      "why": "Parent's captive demand pulls volume inward first",
+      "how": "Atlas humanoid platform built for parent-owned internal deployment"
+    }
+  },
+  {
+    "actor": "strategic-acquisition corporate-development lead",
+    "job": "Executing the ownership-consolidation buyout that absorbs the robot maker whole when the venture IPO exit fails, replacing market pricing with captive ownership",
+    "outcome": "A closed acquisition that gives the owner 100% of the robot maker and the capital structure to deploy fleets internally rather than price them on the open market",
+    "motivation": "Only an owner with capital and captive demand can absorb a robot maker, and the IPO-default put-option exit makes the asset acquirable",
+    "task": {
+      "who": "the acquirer's corporate-development and M&A team",
+      "what": "Close the buyout of the financial sponsor's residual stake",
+      "where": "The robot-maker's cap table and the acquirer's balance sheet",
+      "when": "At the IPO-deadline put-option exit window, mid-2026 onward",
+      "why": "Captive ownership replaces market pricing the open market won't bear",
+      "how": "Put-option-triggered buyout of the sponsor's residual equity"
+    }
+  }
+]

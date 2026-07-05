@@ -1,0 +1,14 @@
+{
+  "id": "prediction.7c1a3f9b2e6d04a8",
+  "scope_hint": "tech",
+  "title": "Frontier-class open-weight LLM runs single-node under 256GB by Q4 2026",
+  "body": "A frontier-class open-weight model (a release benchmarking near the closed-source frontier on coding and reasoning, in the GLM-5.2 / 700B-plus mixture-of-experts class) will be demonstrably runnable on a single high-memory workstation node holding 256GB or less of combined memory by the end of Q4 2026, via aggressive sub-2-bit selective-precision quantization, with a published reproducible recipe and quality measured on a public benchmark rather than vendor self-report. Unsloth's Dynamic GGUF builds already squeezed Z.ai's 744B GLM-5.2 from a 1.51TB checkpoint to roughly 217-239GB, but those compression and quality numbers are Unsloth's own and unverified, and 1-2 bit quantization at this aggression trades measurable accuracy for memory. The prediction lands when at least one such recipe is independently reproduced and its accuracy retention published, confirming that the heaviest open-weight tier has crossed from multi-GPU-cluster territory into single-node, on-prem reach. This sharpens the standing split: advanced or peak-quality work still routes to cloud APIs, while daily and privacy-sensitive workloads can increasingly run locally on owned hardware.",
+  "reasoning": {
+    "because": "Unsloth shrank a 1.51TB 744B GLM-5.2 to ~217-239GB via selective sub-2-bit quantization.",
+    "given": "Selective-precision quant keeps cutting open-weight memory faster than model size grows.",
+    "so_that": "Teams self-host a near-frontier model on owned single-node hardware for daily, privacy-sensitive work.",
+    "landing": "Reproduced sub-256GB single-node run, accuracy published, by Q4 2026.",
+    "plain_language": "By late 2026 one of the biggest top-tier open AI models will run on a single powerful computer, not a server farm."
+  },
+  "summary": "Unsloth squeezed Z.ai's 744B GLM-5.2 from 1.51TB to roughly 217-239GB via sub-2-bit selective-precision quantization. By Q4 2026 a frontier-class open-weight model will run single-node under 256GB with a reproduced recipe and published accuracy, putting the heaviest open models within on-prem reach."
+}

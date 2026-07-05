@@ -1,0 +1,53 @@
+{
+  "date": "2026-06-28",
+  "technical": [
+    {
+      "lead": "Liquid AI、初日からvLLMとSGLangに対応する230Mのエッジモデルを出荷",
+      "body": "6月27日、Liquid AIはLFM2.5-230Mを公開した。LFM2アーキテクチャに基づく230百万パラメータのテキスト専用モデルで、32,768トークンのコンテキストウィンドウを備え、スマホ・ロボット・自動化機器上でのエージェント型タスクを狙う。オープンウェイトのベース版と指示チューニング版のチェックポイントが、初日からllama.cpp、MLX、vLLM、SGLang、ONNXのランタイム対応とともに、lfm1.0ライセンスのもとHugging Faceで出荷され、4ビット時のサイズは293～375MBに収まる。LiquidはGalaxy S25 Ultraで毎秒213トークン、Raspberry Pi 5で毎秒42トークン、IFEvalスコア71.71を報告し、これがQwen3.5-0.8BとGemma 3 1Bを上回るとしている。データセンターで使われるのと同じOpenAI互換の推論エンジンが、今や1ギガバイト未満のオンデバイスモデルの既定の対象になっている。",
+      "citations": [
+        {"label": "MarkTechPost - Liquid AI ships LFM2.5-230M with llama.cpp, MLX, vLLM, SGLang, and ONNX support for on-device inference", "url": "https://www.marktechpost.com/2026/06/27/liquid-ai-ships-lfm2-5-230m-with-llama-cpp-mlx-vllm-sglang-and-onnx-support-for-on-device-inference/"},
+        {"label": "Hugging Face - LiquidAI/LFM2.5-230M model card", "url": "https://huggingface.co/LiquidAI/LFM2.5-230M"}
+      ]
+    },
+    {
+      "lead": "Qualcomm、CUDAに挑むためModularのクロスベンダー推論コンパイラを買収",
+      "body": "6月24日、QualcommはModularの買収契約を発表した。ModularはMojo言語と、同じモデルコードをNvidia、AMD、Intel、Qualcommのチップ上でプロセッサごとの書き換えなしに実行できるMAX推論エンジンを手がけるスタートアップだ。報道は全株式取引の規模をおよそ39.2億ドル（最大1,920万株）とし、2026年下半期に完了予定で、エンタープライズ推論におけるNvidiaのCUDA囲い込みへの直接的な一手と読み解いている。Qualcommはまた、2026年末までに大手ハイパースケーラー向けのカスタムシリコン出荷を見込むとし、80～100億ドルの評価額でTenstorrentを買収する交渉を続けていると報じられている。これらを合わせると、コンパイラ・アクセラレータ・ハイパースケーラー供給にまたがる、Nvidiaへのフルスタックかつオープン命令セットの挑戦に向けておよそ140億ドルを投じることになる。",
+      "citations": [
+        {"label": "Qualcomm - Qualcomm to Acquire Modular (press release, June 24 2026)", "url": "https://investor.qualcomm.com/news-events/press-releases/news-details/2026/Qualcomm-to-Acquire-Modular/default.aspx"},
+        {"label": "Tech Startups - Qualcomm acquires AI startup Modular in $4 billion deal to challenge Nvidia's CUDA dominance", "url": "https://techstartups.com/2026/06/24/qualcomm-acquires-ai-startup-modular-in-4-billion-deal-to-challenge-nvidias-cuda-dominance/"}
+      ]
+    },
+    {
+      "lead": "Unslothのベータ版、GLM-5.2、Gemma 4のマルチトークン予測、DiffusionGemmaを追加",
+      "body": "高速かつメモリ効率の良いLoRA/QLoRAファインチューニングのためのオープンソースライブラリUnslothは、6月18日にv0.1.471-betaを出荷し、目玉となる変更は新モデル対応の幅広さだった。Z.aiのGLM-5.2（今月エージェント型コーディングのベンチマークで首位に立ったMITライセンスの約753BパラメータのMoE）を全推論レベルで完全対応したほか、約2倍の高速推論を実現するマルチトークン予測付きのGemma 4、ライブのノイズ除去可視化を備えたDiffusionGemmaの画像生成パス、DeepSeek-OCRを追加した。このビルドはさらに、使用可能なコンテキストを約3倍に伸ばすとされる改良版の自動メモリ調整アルゴリズム、強化されたBlackwell RTX 50X/60X対応、テンソル並列の信頼性向上、vLLM 0.22+互換、並列実行モードも加えた。注目すべきパターンは、最先端のオープンウェイト公開（6月16日のGLM-5.2）から、その2日後に第一級のファインチューニング対応が出てくるまでの間隔が縮まっていることだ。",
+      "citations": [
+        {"label": "GitHub - unslothai/unsloth release v0.1.471-beta (June 18 2026)", "url": "https://github.com/unslothai/unsloth/releases/tag/v0.1.471-beta"},
+        {"label": "DataCamp - GLM-5.2: Features, Setup, Benchmarks, and Model Switching Guide", "url": "https://www.datacamp.com/blog/glm-5-2"}
+      ]
+    },
+    {
+      "lead": "OWASP、プロンプトインジェクションをエージェント型AIの修正不能な性質として捉え直す",
+      "body": "OWASP GenAI Security Projectは今月、State of Agentic AI Security and Governanceのバージョン2.01を公開し、セキュリティの語り口をまた一つのCVEから設計上の制約へと鋭く転換した。プロンプトインジェクションは大半のエージェント型AIの事案をつなぐ自在継手であり、今やOWASPのエージェント型アプリケーション向けTop 10の10分類のうち6つに対応する。モデルはシステムプロンプト・ユーザーの要求・取得したテキストを区別のない一つのトークン列として扱うため、どのトークンが命令でどれがデータかを確実に印付ける手段がなく、この欠陥はパッチで直すのではなく設計予算で緩和される。報告書はSimon Willisonの致命的な三要素とMetaのエージェント・ルール・オブ・トゥーに依拠し、コーディングエージェントを震源地と名指しする。追跡対象の53のエージェント型プロジェクトのうち28がコーディングエージェントで、最も多く勧告を受けたリポジトリはn8n（57）、Claude Code（22）、AutoGPT（15）、Dify（13）、Roo-Code（11）だった。",
+      "citations": [
+        {"label": "OWASP GenAI Security Project - State of Agentic AI Security and Governance 2.01", "url": "https://genai.owasp.org/resource/state-of-agentic-ai-security-and-governance/"},
+        {"label": "Simon Willison - The lethal trifecta for AI agents: private data, untrusted content, and external communication", "url": "https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/"}
+      ]
+    },
+    {
+      "lead": "AI World's Fairが今週開幕、夏のチップとセキュリティの日程も確定",
+      "body": "今後の予定は3つのサブトラックにまたがる。主流の開発／データ系では、AI Engineer World's Fairの本プログラムが6月29日から7月2日までサンフランシスコのMoscone Westで開かれ（約29トラック、約300人の登壇者、6,000人超の参加者）、さらに先にはGitHub Universeが10月28～29日、AWS re:Inventが11月30日～12月4日に控える。AIセキュリティ系では、SecurityWeekのAI Risk Summitが8月11～12日にHalf Moon BayのRitz-Carltonで、Black Hat USA 2026とAI Village付きのDEF CON 34が8月初旬にラスベガスで、OWASP Global AppSec USAが11月5～6日にサンフランシスコで開催され、ZenityのAI Agent Security Summitシリーズも引き続き注視対象に残る。AIチップ／ハードウェア系では、AMDのAdvancing AI 2026が7月22～23日にMoscone、Hot Chips 2026が8月23～25日にStanford、AI Infra Summitが9月15～17日にSanta Claraで開かれる。",
+      "citations": [
+        {"label": "AI Engineer - World's Fair 2026 program (main program June 29 - July 2, Moscone West, San Francisco)", "url": "https://www.ai.engineer/worldsfair/2026/llms.md"},
+        {"label": "SecurityWeek - AI Risk Summit, August 11-12, Ritz-Carlton Half Moon Bay", "url": "https://www.securityweek.com/securityweek-to-host-ai-risk-summit-august-11-12-at-the-ritz-carlton-half-moon-bay/"},
+        {"label": "Hot Chips - 2026 symposium (August 23-25, Stanford Memorial Auditorium)", "url": "https://hotchips.org/"}
+      ]
+    }
+  ],
+  "plain": [
+    "Liquid AIがスマホやロボット向けの小さな230Mモデルを出荷",
+    "QualcommがNvidiaのチップ囲い込みを崩すツールを買収",
+    "Unslothが最新のオープンAIモデル向けに高速チューニングを追加",
+    "隠れたテキストがAIエージェントを乗っ取りうる、しかもパッチがない",
+    "今から計画しておくべき大型AI会議とチップ関連イベント"
+  ]
+}

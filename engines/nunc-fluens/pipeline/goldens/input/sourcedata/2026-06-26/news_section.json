@@ -1,0 +1,31 @@
+{
+  "date": "2026-06-26",
+  "sections": [
+    {
+      "category": "Maximum-severity RCE lands in the ML feature-store layer: Feast registry server ships unauthenticated remote code execution",
+      "bullets": [
+        {
+          "body": "A critical, unauthenticated remote-code-execution flaw in Feast, the open-source machine-learning feature store, was published on June 24 as CVE-2026-56121, rated CVSS 9.3 under the v4.0 scoring (9.8 on the v3.1 scale) and fixed in Feast 0.63.0. The mechanism is a classic unsafe-deserialization trap wired straight into the data plane: when the registry server processes a gRPC request, it decodes the user_defined_function.body field of an OnDemandFeatureView specification from base64 and passes it directly to dill.loads() before any authorization check runs, so an attacker can submit a crafted serialized Python object carrying an arbitrary __reduce__ method and execute operating-system commands as the Feast service account with no credentials required. The structural read is that the attack surface has moved one layer down from the model and the inference engine into the ML data-and-metadata plumbing that sits behind production feature pipelines — a registry component that ingests serialized transformation logic over the network is, in effect, an unauthenticated code-execution endpoint unless deserialization is gated. Operators running the registry should treat any pre-0.63.0 deployment with a network-reachable gRPC endpoint as exposed, upgrade immediately, and confirm the registry is not addressable from untrusted networks, since the exploit primitive (base64-wrapped pickle to a public RPC surface) is well understood and trivially weaponizable. <a href=\"https://github.com/advisories/GHSA-q63x-9pfm-mjx4\">GitHub Advisory Database - Feast unsafe deserialization allows unauthenticated RCE (CVE-2026-56121)</a> <a href=\"https://nvd.nist.gov/vuln/detail/CVE-2026-56121\">NVD - CVE-2026-56121 Detail (Feast before 0.63.0, gRPC registry deserialization RCE)</a>",
+          "citations": [
+            {"label": "GitHub Advisory Database - Feast unsafe deserialization allows unauthenticated RCE (CVE-2026-56121)", "url": "https://github.com/advisories/GHSA-q63x-9pfm-mjx4"},
+            {"label": "NVD - CVE-2026-56121 Detail (Feast before 0.63.0, gRPC registry deserialization RCE)", "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56121"}
+          ]
+        }
+      ]
+    },
+    {
+      "category": "AI events to plan around now: AI Engineer World's Fair opens this weekend, with the chip and security calendar running through the summer",
+      "bullets": [
+        {
+          "body": "The forward calendar across all three sub-tracks, anchored this weekend by the AI Engineer World's Fair at Moscone West in San Francisco. Mainstream dev/data: the official AIE World's Fair Hackathon, run with Cerebral Valley, fills June 27-28, an optional New Engineer Orientation runs June 28, and the main program runs June 29 through July 2 (over 20 tracks, 250+ speakers); GitHub Universe returns October 28-29 and AWS re:Invent runs November 30 to December 4 in Las Vegas. AI-security: Black Hat USA 2026 runs August 1-6 at Mandalay Bay in Las Vegas, with Summit Day (including the AI Summit track) on August 4 and the main Briefings August 5-6, immediately followed by DEF CON 34 and its AI Village on August 6-9; SecurityWeek's AI Risk Summit is an in-person event August 11-12 at the Ritz-Carlton in Half Moon Bay; OWASP Global AppSec USA is November 5-6 in San Francisco; and Zenity's AI Agent Security Summit series stays on the watch list. AI-chip/hardware: AMD's Advancing AI 2026 is confirmed for July 22-23 at Moscone in San Francisco, with the in-person keynote and Instinct MI400-series focus on July 23 (livestreamed on AMD's YouTube channel); Hot Chips 2026 runs August 23-25 at Stanford's Memorial Auditorium; and the AI Infra Summit is September 15-17 at the Santa Clara Convention Center. <a href=\"https://www.ai.engineer/worldsfair/2026\">AI Engineer - World's Fair 2026 (June 29 - July 2, Moscone West, San Francisco)</a> <a href=\"https://www.amd.com/en/corporate/events/advancing-ai.html\">AMD - Advancing AI 2026 (San Francisco, July 22-23)</a> <a href=\"https://blackhat.com/us-26/\">Black Hat - USA 2026 (August 1-6, Mandalay Bay, Las Vegas)</a> <a href=\"https://www.securityweek.com/securityweek-to-host-ai-risk-summit-august-11-12-at-the-ritz-carlton-half-moon-bay/\">SecurityWeek - AI Risk Summit, August 11-12, Half Moon Bay</a>",
+          "citations": [
+            {"label": "AI Engineer - World's Fair 2026 (June 29 - July 2, Moscone West, San Francisco)", "url": "https://www.ai.engineer/worldsfair/2026"},
+            {"label": "AMD - Advancing AI 2026 (San Francisco, July 22-23)", "url": "https://www.amd.com/en/corporate/events/advancing-ai.html"},
+            {"label": "Black Hat - USA 2026 (August 1-6, Mandalay Bay, Las Vegas)", "url": "https://blackhat.com/us-26/"},
+            {"label": "SecurityWeek - AI Risk Summit, August 11-12, Half Moon Bay", "url": "https://www.securityweek.com/securityweek-to-host-ai-risk-summit-august-11-12-at-the-ritz-carlton-half-moon-bay/"}
+          ]
+        }
+      ]
+    }
+  ]
+}

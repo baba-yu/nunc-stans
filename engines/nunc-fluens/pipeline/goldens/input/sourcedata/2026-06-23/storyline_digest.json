@@ -1,0 +1,50 @@
+{
+  "generated_for": "2026-06-23",
+  "storylines": [
+    {
+      "storyline_label": "Physical AI / M&A: Hyundai moves to 100% ownership of Boston Dynamics, buying SoftBank's remaining 9.65% stake for ~$325M (board vote scheduled June 22)",
+      "last_seen_date": "2026-06-22",
+      "last_state_change_kind": "Scheduled catalyst reached (June 22): Hyundai board expected to convene June 22 to approve buying SoftBank's residual 9.65% Boston Dynamics stake for ~$325M via a 2021 put option (no US IPO by June 2026 trigger), implying a ~$3.37B enterprise value (~3x the 2021 ~$1.1B mark); Korea Economic Daily ties it to a ~25,000-Atlas-by-2028 captive-factory deployment and a possible accelerated IPO; terms/vote unconfirmed by Hyundai/SoftBank as of June 22. NOTE for today: an actual June 22 board approval/close confirmation would be a fresh state-change eligible for a continuation bullet under ADR-002 Rule 2; a still-pending/unchanged status must be DROPPED, not written."
+    },
+    {
+      "storyline_label": "AWS New York Summit agent stack: AWS Context (governed agentic-search knowledge graph) + AWS Continuum (AI-native sandbox-validated code-vulnerability service) + Bedrock AgentCore Guardrails/optimization analytics",
+      "last_seen_date": "2026-06-21",
+      "last_state_change_kind": "New artifacts shipped (June 17 summit, coverage into June 20-21): AWS Context (auto-built governed knowledge graph exposed as a runtime agentic-search layer, access-controlled), AWS Continuum (model-agnostic vuln-management service that discovers/prioritizes/sandbox-validates by building a working exploit/remediates, gated preview, leans on frontier models incl. Claude Mythos), and Bedrock AgentCore Guardrails (prompt-injection/harmful-content/sensitive-data screening) + optimization analytics."
+    },
+    {
+      "storyline_label": "OpenAI beneficial-trait reinforcement learning: small dose of trait-targeted RL generalizes broadly and hardens against jailbreaks + harmful fine-tuning",
+      "last_seen_date": "2026-06-21",
+      "last_state_change_kind": "New research artifact (June 19, alignment.openai.com + PDF): 'Reinforcement Learning Towards Broadly and Persistently Beneficial Models' reports improvement on 44/53 independent benchmarks, cross-domain generalization, 'selective persistence' under adversarial prompts, and resistance of instilled traits to harmful fine-tuning; framed as distinct from Anthropic's explicit constitution; self-reported, awaiting reproduction."
+    },
+    {
+      "storyline_label": "OpenAI LifeSciBench + GPT-Rosalind: 750-task expert-rubric life-science research benchmark exposing the artifact-vs-text gap",
+      "last_seen_date": "2026-06-21",
+      "last_state_change_kind": "New evaluation artifact (released June 17, secondary coverage into June 20): LifeSciBench built with 173 PhD scientists; best model GPT-Rosalind passed ~36.1% overall, fell from 45.1% text-only to 28.1% on tasks requiring real artifacts; OpenAI-authored, scores are the vendor's."
+    },
+    {
+      "storyline_label": "Bay Area / SV AI-event calendar (mainstream-dev, AI-security, AI-chip tracks)",
+      "last_seen_date": "2026-06-22",
+      "last_state_change_kind": "Carry-forward events topic (ADR-002 Rules 1+2 waived): still-upcoming forward calendar as of June 22 spans Confidential Computing Summit (Jun 23-24, SF Mint), AI Tinkerers SF Offensive Security Demo Night (Jun 25, sponsor XBOW), Snowflake virtual Dev Day (Jun 25), AIE World's Fair Hackathon w/ Cerebral Valley (Jun 27-28), AI Engineer World's Fair (Jun 29-Jul 2), AMD Advancing AI (Jul 22-23, keynote Jul 23), Black Hat USA AI Summit / DEF CON AI Village (Aug 1-6), SecurityWeek AI Risk Summit (Aug 11-12), Hot Chips (Aug 23-25), AI Infra Summit (Sep 15-17), GitHub Universe (Oct 28-29), OWASP Global AppSec USA (Nov 5-6), AWS re:Invent (Nov 30-Dec 4); Zenity AI Agent Security Summit on watch list. TODAY June 23: the Confidential Computing Summit OPENS today (Jun 23-24) - still in scope until its Jun 24 end date."
+    },
+    {
+      "storyline_label": "Unsloth v0.1.47-beta local fine-tuning stack (auto-fit context ~3x usable length on a single GPU, GLM-5.2 Studio support, redesigned Model Hub, --secure mode)",
+      "last_seen_date": "2026-06-20",
+      "last_state_change_kind": "New artifact shipped: Unsloth tagged v0.1.47-beta (June 18) with a new auto-fit context algorithm + multi-token prediction (~3x usable context in fixed memory; a single 32GB f16 GPU rising from ~23,040 to 64,000 tokens), full GLM-5.2 fine-tuning support in Unsloth Studio, a Model Hub redesign, a --secure Cloudflare-only mode, restored vLLM 0.22+ compatibility; beta, self-reported."
+    },
+    {
+      "storyline_label": "Liquid AI LFM2.5 350M open-weight retrieval pair (Embedding-350M dense bi-encoder + ColBERT-350M late-interaction) for fast on-device multilingual search across 11 languages",
+      "last_seen_date": "2026-06-20",
+      "last_state_change_kind": "New artifact shipped: Liquid AI published LFM2.5-Embedding-350M and LFM2.5-ColBERT-350M (June 19) under LFM Open License v1.0, both 350M params covering 11 languages; ColBERT reported 0.605 NDCG@10 on NanoBEIR and 0.694 Recall@20 on MKQA-11, GGUF builds under llama.cpp at sub-10ms median query latency on a MacBook Pro M4 Max; self-reported."
+    },
+    {
+      "storyline_label": "Coding-agent-harness control/security cluster: Nous Hermes Blank Slate least-privilege mode, OpenAI Codex Record & Replay, Cisco open-sources FAPO pipeline-aware prompt optimizer",
+      "last_seen_date": "2026-06-20",
+      "last_state_change_kind": "New artifacts shipped (June 18-20): Nous Hermes Agent Blank Slate mode boots default-deny (only File-Ops + Terminal, all else pinned off); OpenAI Codex macOS build 26.616 Record & Replay captures a workflow once as a reusable skill; Cisco open-sourced FAPO, a Claude-Code-driven pipeline-aware prompt optimizer with step-level failure attribution (+14.1pp mean over GEPA across 15/18 pairs)."
+    },
+    {
+      "storyline_label": "NVIDIA SpatialClaw training-free code-as-action spatial-reasoning agent (live Python kernel as action interface)",
+      "last_seen_date": "2026-06-20",
+      "last_state_change_kind": "New artifact shipped: NVIDIA released SpatialClaw (June 19), a training-free framework wrapping a stateful Python kernel; reports 59.9% average across 20 spatial benchmarks (+11.2 over SpaceTools), consistency across six 26B-397B backbones; open code at NVlabs/SpatialClaw."
+    }
+  ]
+}

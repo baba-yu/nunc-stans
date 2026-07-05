@@ -1,0 +1,30 @@
+[
+  {
+    "actor": "AI/ML-security or supply-chain-security platform product lead",
+    "job": "Carving the ML deserialization / serialized-artifact scanner out of the generic SCA feed into its own named, marketed product tier with stated scope and pricing.",
+    "outcome": "A named, marketed scanner tier or SKU whose stated scope explicitly covers ML serialized-artifact and unsafe-deserialization risk, announced in docs, a release, or a launch.",
+    "motivation": "Capture the freshly-validated attack surface as a sellable layer before rivals do, and differentiate beyond a CVE-feed entry once the deserialization-RCE pattern has a weaponizable shape.",
+    "task": {
+      "who": "Vendor's ML-security product-management and go-to-market team",
+      "what": "Define, name, and price an ML deserialization scanner tier",
+      "where": "Product catalog, release notes, and launch / docs surface",
+      "when": "Today through Q1 2027, riding the Feast-CVE attention window",
+      "why": "Turn the validated ML serialized-artifact surface into recurring revenue",
+      "how": "Package detection coverage into a first-class scanner SKU, not an SCA feed line"
+    }
+  },
+  {
+    "actor": "ML-supply-chain detection-engineering and threat-research team",
+    "job": "Building the scanners and rules that detect unsafe pickle/dill/joblib payloads, model checkpoints, and feature-store transformation bodies so the marketed tier has real coverage.",
+    "outcome": "A working ML serialized-artifact detection engine — signatures, gated-deserialization checks, and provenance signals — that backs the named scanning tier.",
+    "motivation": "The Feast CVE proves the unsafe-deserialization primitive is network-reachable below the model layer, so a credible detection surface must exist before the tier can be sold as first-class.",
+    "task": {
+      "who": "Startup's or vendor's detection-engineering and threat-research function",
+      "what": "Build detections for unsafe serialized ML artifacts and bodies",
+      "where": "Scanning pipeline across the ML data-and-metadata plane",
+      "when": "Today through Q1 2027, ahead of the productized tier launch",
+      "why": "Give the named tier real coverage of the deserialization attack class",
+      "how": "Static analysis of pickle/dill payloads plus gated-deserialization and provenance checks"
+    }
+  }
+]

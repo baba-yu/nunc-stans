@@ -1,0 +1,14 @@
+{
+  "id": "prediction.PLACEHOLDER",
+  "scope_hint": "business",
+  "title": "An autonomous-pentest vendor lands a named enterprise/gov deal by Q1 2027",
+  "body": "Autonomous offensive-security agents are moving from conference stage to commercial product: AI Tinkerers San Francisco is hosting an Offensive Security Demo Night on June 25 with live autonomous-pentesting-agent demos sponsored by XBOW, and the Black Hat USA AI Summit plus the DEF CON AI Village run August 1-6, giving vendors a marquee window to convert demos into procurement. The distinguishing capability is no longer scanning but synthesis: agents that autonomously chain reconnaissance, build a working exploit, run it to prove reachability, and document a reproducible kill-chain. This prediction holds that the offensive side of that thread crosses into commercial deployment rather than staying a defensive validation feature: by the end of the first quarter of 2027, at least one autonomous-pentesting or continuous-autonomous-red-teaming vendor (XBOW, Horizon3, RunSybil, or a comparable entrant) will publicly document either a named enterprise or government customer deployment, or a verified, reproducible exploit-chain benchmark result on a third-party target set, positioning continuous autonomous red-teaming as a standing product capability rather than a one-off demo. The mechanism is that buyers already trust scanners far less than a proof-of-exploit, security budgets reward tools that cut human red-team hours, and a public benchmark or logo deal is the cheapest credibility a vendor can buy in a crowded post-Black-Hat field, so the incentive to publish a named landing is structural. The claim is falsified if, by March 31 2027, no autonomous-pentest vendor has publicly documented a named enterprise/government deployment or a verified reproducible exploit-chain benchmark, and continuous autonomous red-teaming remains demo-only.",
+  "reasoning": {
+    "because": "Live autonomous-pentest demos (XBOW, June 25) now chain recon, build, and run a working exploit",
+    "given": "buyers trust proof-of-exploit over scanners and budgets reward cutting human red-team hours",
+    "so_that": "a vendor publishes a named enterprise/gov landing or a verified exploit-chain benchmark for credibility",
+    "landing": "An autonomous-pentest vendor documents a named deal or benchmark by Q1 2027",
+    "plain_language": "Soon a real company will sell AI that hacks into systems for you and proves it works."
+  },
+  "summary": "Autonomous offensive-security agents that build and run working exploits are moving from demo to product, spotlighted by XBOW's June 25 demo night and Black Hat in August. The prediction: by Q1 2027 an autonomous-pentest vendor documents a named enterprise or government deployment, or a verified reproducible exploit-chain benchmark, making continuous autonomous red-teaming a standing product capability."
+}

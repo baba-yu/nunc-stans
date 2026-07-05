@@ -1,0 +1,43 @@
+{
+  "date": "2026-06-27",
+  "sections": [
+    {
+      "category": "ML attack surface moves from theory to live exploitation: a cross-tenant flaw in the Langflow agent builder is fired in the wild",
+      "bullets": [
+        {
+          "body": "On June 25 the Sysdig Threat Research Team reported the first known in-the-wild exploitation of CVE-2026-55255, a cross-tenant insecure-direct-object-reference (IDOR) flaw in Langflow, the popular open-source visual builder for LLM agents and pipelines. The vulnerability, rated CVSS 9.9 and fixed in Langflow 1.9.1, lives in the get_flow_by_id_or_endpoint_name helper: when a flow is resolved by UUID the database lookup performs no owner check, so any authenticated user can execute another tenant's flow simply by supplying its flow ID to the /api/v1/responses endpoint (CWE-639, authorization bypass through a user-controlled key). What makes the Sysdig telemetry notable is the chaining: a single operator first called GET /api/v1/flows/ to harvest the flow IDs that endpoint discloses, then about twenty seconds later replayed those exact IDs as the model parameter on POST /api/v1/responses with the input \"leak api keys\", and against the same instance also ran the older unauthenticated RCE CVE-2026-33017 (CVSS 9.3, already in CISA's Known Exploited Vulnerabilities catalog). The structural read continues the pattern that surfaced in the ML feature-store layer earlier this week: the soft underbelly of agent platforms is the orchestration and metadata plane, where an authorization gap on a flow-execution endpoint turns a multi-tenant agent builder into a cross-customer data-exfiltration primitive. Operators on any pre-1.9.1 Langflow should upgrade now and assume that exposed flow IDs are already being mined. <a href=\"https://webflow.sysdig.com/blog/understanding-langflow-cve-2026-55255-and-why-higher-cvss-vulnerabilities-arent-always-the-most-exploited\">Sysdig - Understanding Langflow CVE-2026-55255, and why higher-CVSS vulnerabilities aren't always the most exploited</a> <a href=\"https://github.com/advisories/GHSA-qrpv-q767-xqq2\">GitHub Advisory Database - Langflow IDOR in /api/v1/responses lets authenticated attackers run another user's flow (CVE-2026-55255)</a> <a href=\"https://advisories.gitlab.com/pypi/langflow/CVE-2026-55255/\">GitLab Advisory Database - CVE-2026-55255 Langflow IDOR (CVSS 9.9, fixed in 1.9.1)</a>",
+          "citations": [
+            {"label": "Sysdig - Understanding Langflow CVE-2026-55255, and why higher-CVSS vulnerabilities aren't always the most exploited", "url": "https://webflow.sysdig.com/blog/understanding-langflow-cve-2026-55255-and-why-higher-cvss-vulnerabilities-arent-always-the-most-exploited"},
+            {"label": "GitHub Advisory Database - Langflow IDOR in /api/v1/responses lets authenticated attackers run another user's flow (CVE-2026-55255)", "url": "https://github.com/advisories/GHSA-qrpv-q767-xqq2"},
+            {"label": "GitLab Advisory Database - CVE-2026-55255 Langflow IDOR (CVSS 9.9, fixed in 1.9.1)", "url": "https://advisories.gitlab.com/pypi/langflow/CVE-2026-55255/"}
+          ]
+        }
+      ]
+    },
+    {
+      "category": "An SSRF-protection bypass lands in AutoGPT, exposing internal services behind the agent runner",
+      "bullets": [
+        {
+          "body": "A new high-severity flaw in AutoGPT, the open-source platform for building, deploying and running continuous AI agents, was published June 26 as CVE-2026-56663, rated CVSS 8.5 and fixed in AutoGPT 0.6.52. The bug is a bypass of AutoGPT's server-side-request-forgery (SSRF) protections: the SendWebRequestBlock that agents use to make outbound HTTP calls mishandles IPv4-mapped IPv6 addresses, failing to validate certain IP ranges, so an authenticated user can craft a request that defeats the internal-IP filter and reaches services on the host's private network. Because the offending block is a general-purpose web-request primitive wired into agent workflows, the practical effect is that a tenant's agent can be steered to probe or pull from internal endpoints — cloud metadata services, internal admin panels, databases — that were supposed to be unreachable. The NVD entry notes NIST has not yet added its own enrichment and is relying on the GitHub CNA assessment. The item is a clean example of why the agent-execution layer keeps drawing CVEs: a block whose entire job is to fetch arbitrary URLs on the agent's behalf is, by construction, an SSRF surface, and a single parsing gap in address normalization re-opens it. Operators running AutoGPT below 0.6.52 should upgrade and constrain outbound egress from the agent runner. <a href=\"https://nvd.nist.gov/vuln/detail/CVE-2026-56663\">NVD - CVE-2026-56663 Detail (AutoGPT SSRF-protection bypass via IPv4-mapped IPv6 addresses, fixed in 0.6.52)</a>",
+          "citations": [
+            {"label": "NVD - CVE-2026-56663 Detail (AutoGPT SSRF-protection bypass via IPv4-mapped IPv6 addresses, fixed in 0.6.52)", "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56663"}
+          ]
+        }
+      ]
+    },
+    {
+      "category": "AI events to plan around now: the AI Engineer World's Fair weekend is live, with chip and security dates running through the summer and fall",
+      "bullets": [
+        {
+          "body": "The forward calendar across all three sub-tracks, anchored this weekend by the AI Engineer World's Fair in San Francisco. Mainstream dev/data: the AIE World's Fair Hackathon, run with Cerebral Valley, is happening now (June 27-28, 9am-5pm, themed around recursive self-improvement, $10,000+ in prizes), the New Engineer Orientation runs Sunday June 28, and the main program runs June 29 through July 2 at Moscone West (over 20 tracks, 250+ speakers); further out, GitHub Universe returns October 28-29 and AWS re:Invent runs November 30 to December 4 in Las Vegas. AI-security: Black Hat USA 2026 is at Mandalay Bay in Las Vegas in early August, with the AI Summit on Summit Day and the main Briefings immediately after, followed by DEF CON 34 and its AI Village in Las Vegas the same week; SecurityWeek's AI Risk Summit is August 11-12 at the Ritz-Carlton in Half Moon Bay; OWASP Global AppSec USA is November 5-6 in San Francisco; and Zenity's AI Agent Security Summit, after its May San Francisco stop, continues its 2026 series in additional cities including New York and Asia, so it stays on the watch list. AI-chip/hardware: AMD's Advancing AI 2026 is July 22-23 at Moscone in San Francisco, with the keynote and Instinct MI400-series focus on July 23; Hot Chips 2026 runs August 23-25 at Stanford's Memorial Auditorium; and the AI Infra Summit is September 15-17 at the Santa Clara Convention Center. <a href=\"https://www.ai.engineer/worldsfair/2026\">AI Engineer - World's Fair 2026 (hackathon June 27-28; main program June 29 - July 2, Moscone West, San Francisco)</a> <a href=\"https://blackhat.com/us-26/ai-summit.html\">Black Hat - USA 2026 AI Summit (Mandalay Bay, Las Vegas, early August)</a> <a href=\"https://zenity.io/resources/events/ai-agent-security-summit-2026\">Zenity - AI Agent Security Summit 2026 global series</a> <a href=\"https://www.amd.com/en/corporate/events/advancing-ai.html\">AMD - Advancing AI 2026 (San Francisco, July 22-23)</a>",
+          "citations": [
+            {"label": "AI Engineer - World's Fair 2026 (hackathon June 27-28; main program June 29 - July 2, Moscone West, San Francisco)", "url": "https://www.ai.engineer/worldsfair/2026"},
+            {"label": "Black Hat - USA 2026 AI Summit (Mandalay Bay, Las Vegas, early August)", "url": "https://blackhat.com/us-26/ai-summit.html"},
+            {"label": "Zenity - AI Agent Security Summit 2026 global series", "url": "https://zenity.io/resources/events/ai-agent-security-summit-2026"},
+            {"label": "AMD - Advancing AI 2026 (San Francisco, July 22-23)", "url": "https://www.amd.com/en/corporate/events/advancing-ai.html"}
+          ]
+        }
+      ]
+    }
+  ]
+}

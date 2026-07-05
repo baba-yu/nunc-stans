@@ -1,0 +1,172 @@
+{
+  "date": "2026-06-23",
+  "verifications": [
+    {
+      "topic": "LLM Workflow",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No workflow/orchestration-platform bullet. The writer searched (Mistral Workflows, n8n, LangFlow, Temporal, Dust.tt), found n8n only as a high-advisory-count repo inside the OWASP report (captured by the AI Security bullet, not a workflow state-change), and correctly dropped under Rule 2."
+    },
+    {
+      "topic": "Multi-profiling for Local LLM (e.g. Multica)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "News-driven-only topic with no Multica or sibling multi-profiling state-change referenced anywhere today. searched=true with hits=0 is fine since constant coverage is not required for this topic."
+    },
+    {
+      "topic": "Agent Harness (OpenClaw, NemoClaw, Hermes Agents, etc.)",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "Coding-agent harnesses keep hardening the sandbox: OpenClaw's June releases patch new injection paths and NVIDIA's NemoClaw pushes managed, network-policy-gated execution"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "The bullet is squarely on the three OSS coding-agent harnesses (OpenClaw 2026.6.x sandbox/injection patches, NVIDIA NemoClaw network-policy-gated execution, Nous Hermes Agent MCP credential filtering + Tirith pre-exec scan). Promoted on fresh June hardening releases; matches search_log promoted=true."
+    },
+    {
+      "topic": "Platform for Local LLM (vLLM, SGLang, etc.)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No inference-engine/serving-stack bullet. Writer searched vLLM/SGLang and found only mid-June comparison/benchmark roundups (MTP speculative decoding landed in May), with no fresh June 21-23 release tag to anchor a state-change. Correctly unpromoted."
+    },
+    {
+      "topic": "Ecosystems for Local LLM Embedded System (Foundry Local, etc.)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No edge/on-device LLM runtime bullet. Writer searched Foundry Local, Ollama MLX, and AMD Lemonade NPU work and found all of it pre-June-21 with no fresh dated state-change this window. Correctly dropped."
+    },
+    {
+      "topic": "Local LLM Models",
+      "semantic_verdict": "ambiguous",
+      "matching_bullets": [
+        "Unsloth ships Dynamic GGUF builds that squeeze Z.ai's 744B GLM-5.2 onto a workstation, cutting a 1.51TB model to roughly 217-239GB"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "GLM-5.2 (Z.ai, 744B MoE open-weight) appears in the Unsloth bullet, but as the quantization target of an optimization artifact rather than as a net-new model-release bullet. The writer searched and correctly judged the underlying releases (GLM-5.2, Nemotron 3 Ultra, MiniMax M3, Kimi K2.7) as earlier-June, declining a separate model-release bullet to avoid duplicating the Unsloth one. Aligned with search_log promoted=false."
+    },
+    {
+      "topic": "Local LLM Optimization, Fine-tuning (Unsloth — every run)",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "Unsloth ships Dynamic GGUF builds that squeeze Z.ai's 744B GLM-5.2 onto a workstation, cutting a 1.51TB model to roughly 217-239GB"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "Constant-coverage mandate satisfied: searched=true and a fresh Unsloth state-change is promoted — Dynamic GGUF selective-precision quantizations of GLM-5.2 cutting a 1.51TB checkpoint to ~217-239GB for single-node local execution. Matches search_log promoted=true."
+    },
+    {
+      "topic": "Ecosystems for LLM on PaaS (AWS Bedrock, Azure AI Foundry, etc.)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No managed-inference/hosted-LLM bullet. Writer searched and found the AWS NY Summit agent stack (Context / Continuum / AgentCore Guardrails) is prior-window digest content barred under Rule 2, with no new Bedrock/Azure/Vertex/OpenRouter feature in-window. Correctly dropped."
+    },
+    {
+      "topic": "AI Security",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "Fresh agentic-AI security evidence: OWASP's 2026 report now catalogs real CVEs and breaches, while a new academic benchmark finds no agent configuration that resists prompt injection"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "Dedicated AI-security bullet: OWASP State of Agentic AI Security v2.01 tying agentic risk categories to concrete CVEs/advisories/breaches, plus the StakeBench academic benchmark showing no configuration resists prompt injection (41.67-68.16% indirect, >79% direct). Matches search_log promoted=true."
+    },
+    {
+      "topic": "Zero-trust based access control for agentic AI",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "Coding-agent harnesses keep hardening the sandbox: OpenClaw's June releases patch new injection paths and NVIDIA's NemoClaw pushes managed, network-policy-gated execution",
+        "Fresh agentic-AI security evidence: OWASP's 2026 report now catalogs real CVEs and breaches, while a new academic benchmark finds no agent configuration that resists prompt injection"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "Covered via the Agent Harness bullet's least-privilege-by-default execution (Hermes MCP credential filtering handing subprocesses only approved env vars, NemoClaw stricter network-policy defaults) and the AI Security bullet's OWASP Top 10 for Agentic Applications mapping. Matches search_log promoted=true."
+    },
+    {
+      "topic": "Monitor and manage AI agent behavior",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "Fresh agentic-AI security evidence: OWASP's 2026 report now catalogs real CVEs and breaches, while a new academic benchmark finds no agent configuration that resists prompt injection",
+        "Coding-agent harnesses keep hardening the sandbox: OpenClaw's June releases patch new injection paths and NVIDIA's NemoClaw pushes managed, network-policy-gated execution"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "Covered via the AI Security bullet (OWASP v2.01 incident cataloging, StakeBench adversarial-trial monitoring) and the Agent Harness bullet (Tirith pre-execution security scan over MCP config, runtime sandbox/CDP/SSH boundary enforcement). Matches search_log promoted=true."
+    },
+    {
+      "topic": "CVE update on score ≥ 8.0",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No freshly disclosed CVSS >= 8.0 CVE dated to the June 21-23 window. Writer surveyed June Patch Tuesday (206 CVEs; 9.8 RCEs in Windows Kernel/HTTP.sys/DHCP, M365 Copilot RCE) and AI-agent CVEs (Cursor, MCP RCE), all pre-June-21; the agentic-security angle is carried by the AI Security bullet. Correctly unpromoted."
+    },
+    {
+      "topic": "Hardware",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No AI-accelerator/chip launch or data-center-capacity bullet. Writer searched (RTX Spark superchip, Meta-NVIDIA Vera Rubin buildout, Axiado AX3080 secure-control SoC watch) and found all milestones pre-June-21 with no new June 21-23 shipping signal. AMD Advancing AI / Hot Chips appear only as forward events. Correctly dropped."
+    },
+    {
+      "topic": "Physical AI",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No robotics/embodied-AI bullet. Writer checked the watch item (Hyundai/Boston Dynamics SoftBank buyout June 22 board vote) and found NO confirmed approval/close - sources trace to June 19-20 reporting of the scheduled vote and 'completes acquisition' headlines resolve to the 2021 deal. Status unchanged, correctly dropped under Rule 2 with Optimus/Figure/BMW items all earlier-June."
+    },
+    {
+      "topic": "LLM-related research and papers",
+      "semantic_verdict": "ambiguous",
+      "matching_bullets": [
+        "Fresh agentic-AI security evidence: OWASP's 2026 report now catalogs real CVEs and breaches, while a new academic benchmark finds no agent configuration that resists prompt injection"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "The StakeBench academic benchmark (NTU / ST Engineering / IBM Research / UIUC, arXiv 2606.13385) appears in the AI Security bullet as its load-bearing artifact rather than as a standalone research bullet. The writer searched arXiv and judged no non-security paper rose to a fresh-enough state-change for a separate bullet; aligned with search_log promoted=false."
+    },
+    {
+      "topic": "Stock prices and corporate activity",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No AI-sector financial bullet. Writer searched and found the SpaceX/xAI debut (June 12), Anthropic confidential S-1, and OpenAI S-1-in-progress all pre-June-21, with no fresh June 21-23 pricing/filing/analyst-action state-change today. Correctly unpromoted."
+    },
+    {
+      "topic": "Business plan",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No standalone business-plan bullet. Writer searched and found no fresh June 21-23 business-model/commercial-plan announcement distinct from the carried-over IPO/funding threads. Correctly unpromoted."
+    },
+    {
+      "topic": "Application fields",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No standalone application-field bullet. Writer noted confidential-AI / on-device coding-agent application themes appear inside the events and harness bullets but found no separate fresh application-field state-change today. Correctly unpromoted."
+    },
+    {
+      "topic": "Applied research",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "Fresh agentic-AI security evidence: OWASP's 2026 report now catalogs real CVEs and breaches, while a new academic benchmark finds no agent configuration that resists prompt injection"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "Applied-research signal carried by the AI Security bullet: the StakeBench adversarial agent benchmark (3,168 trials measuring real prompt-injection success rates) and OWASP's empirical incident cataloging. Matches search_log promoted=true."
+    },
+    {
+      "topic": "Bay Area / SV AI meet-up events",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "AI events to plan around now: the confidential-computing summit opens today and the offensive-security and dev-conference tracks land this week, with the chip and security calendar running into the fall"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "Carry-forward exception applies (ADR-002 Rules 1+2 waived for this topic). All three mandatory sub-tracks covered: AI-security (Confidential Computing Summit Jun 23-24, Offensive Security Demo Night Jun 25, SecurityWeek AI Risk, Black Hat/DEF CON, OWASP Global AppSec, Zenity watch); mainstream (Snowflake Dev Day, AIE World's Fair, GitHub Universe, re:Invent); AI-chip (AMD Advancing AI, Hot Chips, AI Infra Summit). Still-upcoming events carried forward with the soonest now open; not an overreport."
+    },
+    {
+      "topic": "Other standing-out topics",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No separate standout bullet. Writer surfaced Apple Siri-as-agent, Gemini Live Translate, and Moonshot Kimi Work as ambient roundup items but none carried a fresh June 21-23 hard state-change strong enough to displace the four chosen bullets under the anti-inertia soft-5 target. Correctly under-filled."
+    }
+  ]
+}

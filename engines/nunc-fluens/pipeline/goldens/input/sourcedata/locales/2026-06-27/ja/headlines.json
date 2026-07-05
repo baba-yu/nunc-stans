@@ -1,0 +1,52 @@
+{
+  "date": "2026-06-27",
+  "technical": [
+    {
+      "lead": "Langflowのテナント横断IDOR（CVE-2026-55255）が実環境で突かれる",
+      "body": "Sysdigの脅威リサーチチームは6月25日、CVE-2026-55255が実環境で悪用された初の既知事例を報告した。これは、LLMエージェント向けのオープンソースのビジュアル構築ツールLangflowに存在する、テナント横断の安全でない直接オブジェクト参照の欠陥だ。CVSS 9.9と評価され、1.9.1で修正されており、バグはget_flow_by_id_or_endpoint_nameにある。UUIDで解決されたフローは所有者チェックを行わないため、認証済みのユーザーは誰でも、/api/v1/responses経由で別テナントのフローを実行できる（CWE-639）。Sysdigが観測したのは、あるオペレーターがGET /api/v1/flows/からフローIDを収集し、約20秒後にそれらを入力「leak api keys」とともにPOST /api/v1/responsesで再生した様子であり、その対象インスタンスはKEV掲載のRCEであるCVE-2026-33017も動かしていた。1.9.1より前のLangflowを運用している者は、いますぐアップグレードし、露出したフローIDはすでに採取されているものとみなすべきだ。",
+      "citations": [
+        {"label": "Sysdig - Understanding Langflow CVE-2026-55255, and why higher-CVSS vulnerabilities aren't always the most exploited", "url": "https://webflow.sysdig.com/blog/understanding-langflow-cve-2026-55255-and-why-higher-cvss-vulnerabilities-arent-always-the-most-exploited"},
+        {"label": "GitHub Advisory Database - Langflow IDOR in /api/v1/responses lets authenticated attackers run another user's flow (CVE-2026-55255)", "url": "https://github.com/advisories/GHSA-qrpv-q767-xqq2"},
+        {"label": "GitLab Advisory Database - CVE-2026-55255 Langflow IDOR (CVSS 9.9, fixed in 1.9.1)", "url": "https://advisories.gitlab.com/pypi/langflow/CVE-2026-55255/"}
+      ]
+    },
+    {
+      "lead": "AutoGPTのSSRF防御回避（CVE-2026-56663）が内部サービスを露出させる",
+      "body": "継続的に動くAIエージェントを構築・実行するためのオープンソース基盤AutoGPTに高深刻度の欠陥が見つかり、6月26日にCVE-2026-56663として公開された。CVSS 8.5と評価され、0.6.52で修正されている。これは、AutoGPTのサーバーサイドリクエストフォージェリ防御を回避するものだ。エージェントが外向きのHTTP呼び出しに使うSendWebRequestBlockが、IPv4射影IPv6アドレスの扱いを誤り、特定のIP範囲を検証できていないため、認証済みのユーザーは内部IPフィルターをくぐり抜けるリクエストを組み立て、プライベートネットワーク上のサービスに到達できる。問題のブロックはエージェントのワークフローに組み込まれた汎用の取得部品であるため、テナントのエージェントは、本来は到達できないはずのクラウドのメタデータや内部の管理画面、データベースを探るよう仕向けられてしまう。NVDの項目には、NIST独自の補強情報はまだ追加されておらず、GitHub CNAの評価に依拠していると記されている。0.6.52より前を運用している者は、アップグレードし、エージェント実行基盤からの外向き通信を絞り込むべきだ。",
+      "citations": [
+        {"label": "NVD - CVE-2026-56663 Detail (AutoGPT SSRF-protection bypass via IPv4-mapped IPv6 addresses, fixed in 0.6.52)", "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56663"}
+      ]
+    },
+    {
+      "lead": "今後の見立て：2つ目のエージェント構築ツールが2027年Q1までに9.0以上のテナント横断認可CVEを引き寄せる",
+      "body": "Langflowの件は単発ではなく、ひとつの分類を示す署名だ。CVE-2026-55255は、フロー実行エンドポイントにおけるテナント横断の安全でない直接オブジェクト参照（CWE-639）であり、CVSS 9.9、Sysdigの6月25日の報告によれば実環境で突かれ、KEV掲載のRCEであるCVE-2026-33017と連鎖させられている。同じアーキテクチャの型は、n8n／Flowise／Dify／LangGraph Platform／CrewAIの系列の同種製品に繰り返し現れる。すなわち、不透明で収集可能なフロー／実行／ワークスペースのID、共有された実行エンドポイント、サーバー側でオブジェクトごとに強制するのではなくUIに委ねた所有者チェックである。今後の見立て。2027年Q1までに、この分類の他の名前の付いた少なくとも1つの基盤が、テナント横断の認可、オブジェクトレベルのアクセス制御の破綻、あるいはIDORを根本原因とするCVSS 9.0以上の勧告を受ける。できれば実環境での悪用やCISA-KEVの証跡を伴う形で。この分類が向かうよう迫られている構造的な答えは、テナントごとのゼロトラストの関所だ。すべてのフロー解決と実行の経路において、オブジェクトの境界で所有権を強制することである。",
+      "citations": [
+        {"label": "Sysdig - Understanding Langflow CVE-2026-55255, and why higher-CVSS vulnerabilities aren't always the most exploited", "url": "https://webflow.sysdig.com/blog/understanding-langflow-cve-2026-55255-and-why-higher-cvss-vulnerabilities-arent-always-the-most-exploited"},
+        {"label": "GitHub Advisory Database - Langflow IDOR in /api/v1/responses lets authenticated attackers run another user's flow (CVE-2026-55255)", "url": "https://github.com/advisories/GHSA-qrpv-q767-xqq2"}
+      ]
+    },
+    {
+      "lead": "今後の見立て：主要なエージェント基盤が2027年Q2までにゼロトラスト制御を初期状態で有効にして出荷する",
+      "body": "2027年Q2までに、少なくとも1つの主要なAIエージェント基盤、エージェントオーケストレーションのベンダー、あるいはエージェント型IDEが、任意有効化のフラグではなく初期状態で有効なゼロトラスト制御を、名前の付いたリリースで出荷する。資格を満たす姿勢の転換は、拒否を既定とするテナントごとのフロー単位またはオブジェクト単位の認可（フローをUUIDで解決し所有者チェックを行わなかったLangflowのget_flow_by_id_or_endpoint_nameのような、テナント横断のIDORの隙間を塞ぐもの）、および／または、SSRF耐性を高めたツール呼び出しとWebリクエストのブロックを備えた、初期状態の外向き通信の許可リスト（IPv4射影IPv6の解析の隙間が内部IPフィルターを再び開いてしまったAutoGPTのSendWebRequestBlockのような部品を塞ぐもの）である。これを必然たらしめているのは構造的な要因だ。今週だけでも、LangflowでCVSS 9.9のテナント横断IDORが生まれ、Sysdigが6月25日に実環境での初の悪用を報告し、AutoGPTでCVSS 8.5のSSRF回避（CVE-2026-56663、0.6.52で修正、6月26日）が出た。ブログ記事、任意のトグル、単発のCVEパッチ、あるいはロードマップ上の約束は資格を満たさない。",
+      "citations": [
+        {"label": "Sysdig - Understanding Langflow CVE-2026-55255, and why higher-CVSS vulnerabilities aren't always the most exploited", "url": "https://webflow.sysdig.com/blog/understanding-langflow-cve-2026-55255-and-why-higher-cvss-vulnerabilities-arent-always-the-most-exploited"},
+        {"label": "NVD - CVE-2026-56663 Detail (AutoGPT SSRF-protection bypass via IPv4-mapped IPv6 addresses, fixed in 0.6.52)", "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56663"}
+      ]
+    },
+    {
+      "lead": "今後の見立て：AMDが2027年Q3までにInstinct MI400を名前の付いた仕様を伴って投入する",
+      "body": "本日のイベント日程は、AMDのAdvancing AI 2026が7月22〜23日にサンフランシスコのMosconeで開かれ、基調講演とInstinct MI400シリーズに焦点を当てた回が7月23日に行われることを裏付けている。今後の見立て。そのイベントでAMDは、ティーザーではなく、検証可能な名前の付いた約束を少なくとも1つ伴って、データセンター向けアクセラレーターのMI400シリーズを正式に投入し詳細を示す。資格を満たす約束には、明示された一般提供開始または量産出荷の時期、名前の付いた高帯域メモリの容量や帯域の数値、名前の付いたラックスケールの基盤（Helios級のラックシステム）、および／または、名前の付いたハイパースケーラーやフロンティアラボの導入の約束が含まれる。これは、大規模な学習と推論はハイパースケーラー級の商用アクセラレーターの上にとどまるという一貫した見立てに沿っている。だからこそ、クラウドを動かす競争の軸は、商用アクセラレーターのロードマップと、そのメモリおよびラックの仕様、そして名前の付いた顧客の約束である。仕様のないティーザーのスライド、一般提供の時期がないロードマップの図、あるいは前世代のMI355X／MI350系列の再発表は資格を満たさない。",
+      "citations": [
+        {"label": "AMD - Advancing AI 2026 (San Francisco, July 22-23)", "url": "https://www.amd.com/en/corporate/events/advancing-ai.html"},
+        {"label": "AI Engineer - World's Fair 2026 (hackathon June 27-28; main program June 29 - July 2, Moscone West, San Francisco)", "url": "https://www.ai.engineer/worldsfair/2026"}
+      ]
+    }
+  ],
+  "plain": [
+    "実環境の攻撃がLangflowを突き、別ユーザーのAIエージェントを実行した",
+    "AutoGPTのバグでエージェントが隠れた内部サービスに到達できる",
+    "別のエージェント構築ツールも同じアクセスのバグを抱える公算が高い",
+    "大手のエージェント基盤が厳格なアクセス制御を既定で有効にする",
+    "AMDが7月のイベントでMI400 AIチップを投入する"
+  ]
+}

@@ -1,0 +1,123 @@
+{
+  "date": "2026-06-24",
+  "by_prediction": {
+    "prediction.7c1f9a3e84b2d6f0": [
+      {
+        "actor": "Tagapanatili ng AI benchmark",
+        "job": "Pagrebisa sa reporting schema ng isang malawakang sinisitang orchestration leaderboard para makuha ang per-task wall-clock at gastos kasabay ng mga accuracy score.",
+        "outcome": "Isang inilathalang benchmark column na nagpopormal ng latency/cost-per-task bilang isang standard na inire-report na axis para sa mga pag-aangking parity sa multi-model orchestration.",
+        "motivation": "Hinahayaan ng mga accuracy-only na talahanayan ang mga router-as-a-model na sistema na mag-angkin ng frontier parity habang itinatago ang isang ~30-minutong wall-clock tax, na sumisira sa kredibilidad ng benchmark.",
+        "task": {
+          "who": "Team ng benchmark methodology at harness-engineering",
+          "what": "Magdagdag ng per-task na time-to-completion at cost column sa scoring",
+          "where": "Ang evaluation harness at results schema ng leaderboard",
+          "when": "Sa pagitan ng June 2026 at Q1 2027, bago ang susunod na benchmark refresh",
+          "why": "Para hindi maitago ng mga pag-aangking parity ang isang wall-clock tax",
+          "how": "Mga instrumented na per-task timer kasama ang isang standardized na cost-per-task rubric"
+        }
+      },
+      {
+        "actor": "Independiyenteng evaluator ng modelo",
+        "job": "Pagpapatakbo ng real-world na end-to-end na test ng mga orchestration model sa mga praktikal na gawain at paglalathala ng mga wall-clock na obserbasyon na sumasalungat sa mga pag-aangking accuracy-parity.",
+        "outcome": "Malawakang sinisitang ebidensya na materyal ang orchestration latency, na nagpipilit sa mga evaluator at vendor na gamitin ang pagbubunyag ng time-to-completion.",
+        "motivation": "Pinapalabis ng mga vendor leaderboard ang praktikal na kapakinabangan; pinoprotektahan ng paglalabas ng wall-clock na puwang ang mga mambabasa at pinapatibay ang awtoridad ng evaluator.",
+        "task": {
+          "who": "Ang independiyenteng evaluator at ang kanilang testing workflow",
+          "what": "I-time ang mga end-to-end na takbo sa mga standard na praktikal na task suite",
+          "where": "Mga personal na shader, interactive-scene, at reasoning na test setup",
+          "when": "Sa buong panahong inilaan mula June 2026 hanggang maagang 2027",
+          "why": "Para patunayang itinatago ng accuracy parity ang isang wall-clock tax",
+          "how": "Stopwatch-style na end-to-end timing sa mga ma-uulit na task battery"
+        }
+      },
+      {
+        "actor": "Product lead ng orchestration vendor",
+        "job": "Pagpepresyo at pagpoposisyon ng isang learned-router na produkto laban sa mga frontier model, pagpapasya kung maglathala ng mga wall-clock SLA para ipagtanggol ang mga pag-aangking parity.",
+        "outcome": "Isang vendor-published na time-to-completion o wall-clock SLA na gumagawa sa latency bilang isang ibinunyag at kontraktwal na reporting axis.",
+        "motivation": "Sinisira ng mga independiyenteng test ang basta accuracy-parity na marketing; binubuod muli ng pagbubunyag ng mga SLA ang slower-but-better na palitan bilang isang feature na mapapatungan ng mga buyer.",
+        "task": {
+          "who": "Team ng product at developer-relations ng vendor",
+          "what": "Tukuyin at ilathala ang mga per-task na wall-clock SLA tier",
+          "where": "Mga product pricing page, model card, at dokumentasyon",
+          "when": "Sa buong panahong inilaan mula launch hanggang Q1 2027",
+          "why": "Para ipagtanggol ang mga pag-aangking parity laban sa kritisismo sa latency",
+          "how": "Mga tier-based na latency target na suportado ng internal na benchmark telemetry"
+        }
+      }
+    ],
+    "prediction.7c41f9a2e8b6d503": [
+      {
+        "actor": "deployment lead ng general-purpose na mobile-cobot vendor",
+        "job": "Pagpapalawak ng mga fleet ng nagbabayad na customer at pag-log ng audited na per-robot na operating hours sa mga ospital, manufacturing, at logistics sa mga multi-shift na iskedyul.",
+        "outcome": "Isang cross-customer na cumulative na fleet operating record na lumalampas sa 100,000 production-operation hours, na inilathala bilang isang deployment metric.",
+        "motivation": "Ginagawa ng subscription pricing ang hours-in-operation bilang ang unit na pinapatungan ng mga buyer, kaya ang isang six-figure na fleet-hours na numero ang nagpupundar sa marketing at mga renewal.",
+        "task": {
+          "who": "Team ng customer-deployment at fleet-operations",
+          "what": "Mag-onboard ng mga bagong site at mag-ipon ng audited na production-operation hours",
+          "where": "Mga buhay na hospital, manufacturing, at logistics na customer floor sa 16-oras na shift",
+          "when": "2026-06 hanggang sa panahong inilaan sa H1 2027",
+          "why": "Gawing ang underwritten na subscription unit ang operating hours",
+          "how": "On-robot na task inference, buwanang subscription, audited na hour-logging telemetry"
+        }
+      },
+      {
+        "actor": "engineer ng physical-AI fleet-telemetry at audit",
+        "job": "Pag-instrument ng on-robot logging at reporting para ang cumulative na cross-customer hours, libra na nailipat, at hakbang na naiipon ay audited at maipapakita.",
+        "outcome": "Isang audited at maipagtatanggol na fleet-hours na dataset na sumusuporta sa isang six-figure na cumulative-hours na pagbubunyag sa halip na isang demo na pag-aangkin.",
+        "motivation": "Tumitindig lang ang isang hours-in-operation na scoreboard kung makakaligtas ang mga pinagbabatayang bilang sa pagsusuri ng mga buyer at katunggali.",
+        "task": {
+          "who": "Telemetry, data, at reporting na engineering function",
+          "what": "Pagsama-samahin at i-audit ang mga per-robot na operating-hour at material-moved na log",
+          "where": "Fleet telemetry pipeline at on-robot inference logging stack",
+          "when": "2026-06 hanggang sa panahong inilaan sa H1 2027",
+          "why": "Gawing maa-audit ang six-figure na hours na pag-aangkin, hindi isang demo na numero",
+          "how": "On-robot logging, cross-customer na pagsasama-sama, audited na proseso ng reporting"
+        }
+      },
+      {
+        "actor": "product marketing lead ng katunggaling general-purpose na mobile-cobot",
+        "job": "Pagpoposisyon muli ng mga nakikipagtunggaling platform para makipagkumpitensya sa audited na hours-in-operation at dollars-of-material-moved sa halip na mga show-floor na capability clip.",
+        "outcome": "Mga pagbubunyag ng fleet-hours ng katunggali na nagpapatakbo sa kategorya tungo at lampas sa 100,000 production-operation-hour na scoreboard.",
+        "motivation": "Kapag may isang platform na ipinundar ang sarili sa isang six-figure na fleet-hours na numero, nahihila ang mga katunggali sa parehong scoreboard para manatiling kapani-paniwala.",
+        "task": {
+          "who": "Product-marketing at deployment-metrics na function",
+          "what": "Buuin muli ang marketing sa paligid ng mga cumulative na fleet operating-hours na metric",
+          "where": "Mga industry trade show, vendor site, at deployment case study",
+          "when": "2026-06 hanggang sa panahong inilaan sa H1 2027",
+          "why": "Manatiling kapani-paniwala matapos magpundar ang isang katunggali sa six-figure na fleet hours",
+          "how": "Audited na deployment metric, hours-and-pounds-moved na pagmemensahe"
+        }
+      }
+    ],
+    "prediction.b7f4c2a91e6d80a3": [
+      {
+        "actor": "corporate-development lead ng katunggaling frontier-lab",
+        "job": "Pakikipag-ayos ng isang strategic equity stake sa isang high-bandwidth-memory supplier na nakabundle sa isang multi-year na HBM/DRAM allocation para ikandado ang training-scale na kapasidad.",
+        "outcome": "Isang ibinunyag na strategic-investment-plus-multi-year-allocation na deal sa pagitan ng isang non-Anthropic na lab at kahit isa sa tatlong HBM maker.",
+        "motivation": "Iwasan ang spot-market na HBM exposure at tumbasan ang matibay at equity-coupled na kandado ng Anthropic sa binding na hadlang sa scale ng AI training at inference.",
+        "task": {
+          "who": "Team ng corporate-development at supply-chain finance ng lab",
+          "what": "Bumuo ng equity-plus-allocation na term sheet kasama ang isang HBM maker",
+          "where": "Mga negosasyon sa strategic-investment at supply-contract kasama ang isang memory vendor",
+          "when": "Mula ngayon hanggang Q4 2026, bago ang public listing ng mga memory vendor",
+          "why": "Ikandado ang HBM na kapasidad nang mas matibay kaysa pinapayagan ng mga purchase order",
+          "how": "Pre-IPO na strategic investment round kasama ang multi-year na supply-allocation contract"
+        }
+      },
+      {
+        "actor": "strategic-accounts at capital lead ng HBM supplier",
+        "job": "Pagbubuo ng isang equity-plus-supply na allocation na nagpupundar sa isang frontier-lab na customer bago ang isang inaasahang Q4 2026 public listing, na ginagawang isang ownership tie ang offtake.",
+        "outcome": "Isang nilagdaang strategic-investment-plus-allocation na kasunduan na nagbibigay sa isang non-Anthropic na lab ng nakatakdang HBM na kapasidad kapalit ng isang equity stake.",
+        "motivation": "Siguruhin ang anchor demand at balance-sheet na kapital bago ang listing, na nagdadagdag ng pagkakaiba-iba lampas sa allocation ng iisang lab habang kinikita ang mahirap makuhang HBM supply.",
+        "task": {
+          "who": "Mga team ng strategic-accounts, treasury, at capacity-planning ng supplier",
+          "what": "Maglaan ng multi-year na HBM na kapasidad na nakakabit sa isang equity investment",
+          "where": "Mga proseso ng sales, finance, at fab capacity-planning ng memory vendor",
+          "when": "Mula ngayon hanggang Q4 2026, sa window bago ang public listing",
+          "why": "Ikandado ang anchor demand at kapital bago ang IPO",
+          "how": "Equity-coupled na supply allocation laban sa nakareserbang fab output"
+        }
+      }
+    ]
+  }
+}

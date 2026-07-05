@@ -1,0 +1,21 @@
+{
+  "date": "2026-06-27",
+  "vs_date": "2026-06-26",
+  "items": [
+    {
+      "kind": "new",
+      "headline": "Langflow CVE-2026-55255 cross-tenant IDOR fired in the wild, chained with RCE CVE-2026-33017",
+      "diff_narrative": "Today's lead is a fresh artifact that was not present on June 26. Sysdig's June 25 telemetry reports the first known in-the-wild exploitation of CVE-2026-55255, a CVSS 9.9 cross-tenant insecure-direct-object-reference flaw in the Langflow visual agent builder, fixed in 1.9.1: the get_flow_by_id_or_endpoint_name helper runs no owner check, so any authenticated user can execute another tenant's flow via /api/v1/responses. The new detail is the observed chaining — one operator harvested flow IDs from GET /api/v1/flows/, replayed them ~20 seconds later as the model parameter with the input 'leak api keys', and on the same instance also ran the older unauthenticated RCE CVE-2026-33017 (already in CISA's Known Exploited Vulnerabilities catalog). Where June 26's coverage of the same attack surface rested on a freshly-disclosed advisory in the ML feature-store layer, today's shift is the move from disclosed flaw to confirmed live exploitation on an agent-orchestration endpoint. Yesterday's Feast CVE-2026-56121 lead carries no new fact today and so drops out of the change set — it is now context for the structural pattern, not a fresh artifact."
+    },
+    {
+      "kind": "new",
+      "headline": "AutoGPT CVE-2026-56663 SSRF-protection bypass via IPv4-mapped IPv6 addresses",
+      "diff_narrative": "A second net-new item with no June 26 precedent: CVE-2026-56663, published June 26, is a CVSS 8.5 bypass of AutoGPT's server-side-request-forgery protections, fixed in AutoGPT 0.6.52. The SendWebRequestBlock that agents use for outbound HTTP calls mishandles IPv4-mapped IPv6 addresses and fails to validate certain IP ranges, so an authenticated user can defeat the internal-IP filter and reach private-network services — cloud metadata endpoints, internal admin panels, databases. The NVD entry notes NIST has not yet added its own enrichment and is relying on the GitHub CNA assessment. This is a distinct named flaw in the agent-execution layer that did not appear in yesterday's set, and it reinforces the same theme as today's Langflow lead: the orchestration and request-handling plane of agent platforms keeps generating high-severity authorization and request-forgery CVEs."
+    },
+    {
+      "kind": "continuing",
+      "headline": "AI events to plan around: AI Engineer World's Fair weekend, with chip and security dates through the fall",
+      "diff_narrative": "The three-track forward calendar carries over from June 26 with the dates advanced. The headline change is that the AI Engineer World's Fair Hackathon (run with Cerebral Valley) is now live and underway — June 27-28 at 9am-5pm, themed around recursive self-improvement with $10,000+ in prizes — where yesterday it was still ahead; the New Engineer Orientation now lands this Sunday June 28 and the main program follows June 29 through July 2 at Moscone West. Beyond that, the entries are unchanged and all three sub-tracks remain covered: AI-security keeps Black Hat USA 2026's AI Summit and DEF CON 34's AI Village at Mandalay Bay in early August, SecurityWeek's AI Risk Summit August 11-12 at Half Moon Bay, OWASP Global AppSec USA November 5-6 in San Francisco, and Zenity's AI Agent Security Summit series; AI-chip keeps AMD's Advancing AI July 22-23 (keynote and MI400-series focus July 23), Hot Chips August 23-25 at Stanford, and the AI Infra Summit September 15-17 in Santa Clara; mainstream dev/data also keeps GitHub Universe October 28-29 and AWS re:Invent November 30 to December 4. No calendar entries have passed since June 26, so nothing dropped off."
+    }
+  ]
+}

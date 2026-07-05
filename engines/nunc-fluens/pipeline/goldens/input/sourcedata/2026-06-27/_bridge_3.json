@@ -1,0 +1,6 @@
+{
+  "support_dimension": "because",
+  "narrative": "Both advisories evidence the threat the default-deny toolset-gating thesis (Jun 20) answers: Langflow's IDOR runs another tenant's flow on a broad endpoint, and AutoGPT's SSRF bypass (CVE-2026-56663) lets a fetch-arbitrary-URL block reach internal services -- both dangerous because tools and egress are allowed by default rather than gated per task. AutoGPT's patch-plus-egress-advice fix is the manual version of that default.",
+  "coherence": 3,
+  "remaining_gap": "No coding-agent harness shipped default-deny toolset gating as its standard posture today; the evidence is motivating CVEs and a one-off patch, not the default itself becoming standard."
+}

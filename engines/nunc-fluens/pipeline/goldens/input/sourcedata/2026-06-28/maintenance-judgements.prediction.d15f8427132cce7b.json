@@ -1,0 +1,45 @@
+{
+  "prediction_id": "prediction.d15f8427132cce7b",
+  "judgements": [
+    {
+      "prediction_id": "prediction.d15f8427132cce7b",
+      "stream": "reasoning",
+      "entry_id": "prediction.d15f8427132cce7b",
+      "verdict": "fresh",
+      "reason": "Long-dated thesis (target Q2 2027, ~10 months out): a frontier lab files a public S-1 and prices an IPO. This week (Jun 22-28) produced no S-1/IPO/lab-financing movement — only the unrelated Qualcomm/Modular M&A. The `because` precondition (Anthropic confidential draft S-1, OpenAI prepping) and the `given` (SpaceX June pricing reset the public-capital ceiling) both remain intact and uncontradicted. relevance_drift gate fired from absence of a fresh advancing bridge, not from any invalidating development. No reframe needed.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.86
+    },
+    {
+      "prediction_id": "prediction.d15f8427132cce7b",
+      "stream": "bridge",
+      "entry_id": "prediction.d15f8427132cce7b",
+      "verdict": "fresh",
+      "reason": "All 3 bridges are `support_dimension='given'` and remain valid: SpaceX June IPO (rel 4, window-open), SoftBank/Boston Dynamics IPO-clock discipline (rel 2), Anthropic Hyperliquid-proxy/governance-risk (rel 3). None is `contradict`, so none undermines reasoning.because. No new bridge landed this week (the source of the relevance_drift signal), but existing bridges still support the thesis as historical evidence. Nothing to retire.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.84
+    },
+    {
+      "prediction_id": "prediction.d15f8427132cce7b",
+      "stream": "needs",
+      "entry_id": "prediction.d15f8427132cce7b",
+      "verdict": "fresh",
+      "reason": "Both Needs are still pending and forward-looking: (1) finance/legal lead converting the confidential draft S-1 into a public non-confidential registration on EDGAR; (2) underwriting team running the book-build and pricing. Neither actor delivered this week — no Bridge documents a public S-1 or priced offering — so neither flips to done. Coalition unchanged.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.d15f8427132cce7b",
+      "stream": "readings",
+      "entry_id": "prediction.d15f8427132cce7b",
+      "verdict": "fresh",
+      "reason": "No prediction_chain edges and no prediction_relations entries exist for this prediction; nothing landed or got contradicted upstream this week to shorten/weaken the Q2 2027 landing window, and no Need was achieved that would open a new chain-edge candidate. No readings to add or revise.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    }
+  ]
+}

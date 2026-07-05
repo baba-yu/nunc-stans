@@ -1,0 +1,23 @@
+check-topic-coverage :: date=2026-07-03
+  mode=verification (verification.json present — LLM auditor verdict)
+OK LLM Workflow: verdict=covered, alignment=consistent
+     Multi-profiling for Local LLM (e.g. Multica) [news-driven]: verdict=uncovered, alignment=consistent
+OK Agent Harness (OpenClaw, NemoClaw, Hermes Agents, etc.): verdict=covered, alignment=consistent
+     Platform for Local LLM (vLLM, SGLang, etc.): verdict=uncovered, alignment=consistent
+     Ecosystems for Local LLM Embedded System (Foundry Local, etc.): verdict=uncovered, alignment=consistent
+OK Local LLM Models: verdict=covered, alignment=consistent
+OK Local LLM Optimization, Fine-tuning (Unsloth — every run) [MANDATORY]: verdict=covered, alignment=consistent
+OK Ecosystems for LLM on PaaS (AWS Bedrock, Azure AI Foundry, etc.): verdict=covered, alignment=consistent
+OK AI Security: verdict=covered, alignment=consistent
+OK CVE update on score ≥ 8.0: verdict=covered, alignment=consistent
+OK Hardware: verdict=covered, alignment=consistent
+     Physical AI: verdict=uncovered, alignment=consistent
+  ?? LLM-related research and papers: verdict=ambiguous, alignment=consistent
+       reason: The Thinking Machines write-up reports concrete, named methods (interleaved round-robin batching, CISPO asymmetric-clipping loss, on-policy distillation with a promoted teacher) with quantified ablations, which reads like applied-research findings. But it is a lab technical blog framed as a product/benchmark result rather than an arXiv paper or formal publication, so its status as a research-and-papers item is borderline.
+OK Stock prices and corporate activity: verdict=covered, alignment=consistent
+OK Bay Area / SV AI meet-up events: verdict=covered, alignment=consistent
+OK Other standing-out topics: verdict=covered, alignment=consistent
+  
+Summary: 11/16 topics covered (semantic verdict)
+  
+OK topic coverage (verification mode)

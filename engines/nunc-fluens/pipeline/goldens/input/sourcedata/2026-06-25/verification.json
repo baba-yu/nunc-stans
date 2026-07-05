@@ -1,0 +1,117 @@
+{
+  "date": "2026-06-25",
+  "verifications": [
+    {
+      "topic": "LLM Workflow",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "reason": "No bullet centers on an agent/workflow/pipeline orchestration platform release (n8n / LangFlow / Temporal / Dust / Inngest class). The Gartner agentic-coding economics note touches token-cost governance for the developer loop but is a cost forecast, not an orchestration-platform state-change. Writer searched (hits=2) and dropped with no fresh named workflow release, consistent.",
+      "search_log_alignment": "consistent"
+    },
+    {
+      "topic": "Multi-profiling for Local LLM (e.g. Multica)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "reason": "News-driven-only topic; no bullet references Multica or multi-profiling local-LLM work, and nothing elsewhere triggered it. Writer reports searched=true, hits=0 with a valid news-driven reason, which is consistent.",
+      "search_log_alignment": "consistent"
+    },
+    {
+      "topic": "Agent Harness (OpenClaw, NemoClaw, Hermes Agents, etc.)",
+      "semantic_verdict": "ambiguous",
+      "matching_bullets": ["Gartner puts a number on agentic-coding economics: AI coding spend projected to overtake the average developer's salary by 2028 as token consumption surges"],
+      "search_log_alignment": "consistent",
+      "reason": "The Gartner bullet explicitly addresses the unit economics of the coding-agent / agentic-IDE class (the Cursor / Claude Code / Codex CLI autonomous-developer-loop tools), which is the parent topic's broader semantic scope, but it is a token-cost forecast rather than a fresh harness release, so it only borderline belongs. No new named OpenClaw / NemoClaw / Hermes or coding-agent release shipped this window. Writer searched (hits=2), noted the Gartner note touches this category's economics, and logged it under Business plan, which is consistent."
+    },
+    {
+      "topic": "Platform for Local LLM (vLLM, SGLang, etc.)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "reason": "No bullet covers an inference engine / serving stack release; only refreshed benchmark roundups surfaced with no fresh vLLM / SGLang / TGI / LMDeploy named release tag. Writer searched (hits=1) and dropped for lack of a shipped artifact, consistent.",
+      "search_log_alignment": "consistent"
+    },
+    {
+      "topic": "Ecosystems for Local LLM Embedded System (Foundry Local, etc.)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "reason": "No bullet covers an edge / on-device LLM runtime or NPU SDK state-change; Foundry Local / Ollama / LM Studio / MLX activity predates the window. Writer searched (hits=1) and dropped, consistent.",
+      "search_log_alignment": "consistent"
+    },
+    {
+      "topic": "Local LLM Models",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "reason": "No net-new open-weight model card / Apache-2.0 release / quantized drop published June 23-25; the June open-weight wave (MiniMax M3, Nemotron 3 Ultra, Qwen3.6) predates the window and GLM-5.2 resurfaces only via the carried Unsloth GGUF, not a fresh model drop. Writer searched (hits=2) and dropped, consistent.",
+      "search_log_alignment": "consistent"
+    },
+    {
+      "topic": "Local LLM Optimization, Fine-tuning (Unsloth — every run)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "reason": "MANDATORY topic: writer reports searched=true (hits=1), satisfying the constant-coverage requirement. The only Unsloth item was the same June 23 GLM-5.2 Dynamic GGUF already in the prior-3-day digest with no fresh quant build, accuracy reproduction, or new model, so it was honestly dropped under ADR-002 Rule 2. searched=true with a genuine no-fresh-state-change drop is consistent, not an overreport.",
+      "search_log_alignment": "consistent"
+    },
+    {
+      "topic": "Ecosystems for LLM on PaaS (AWS Bedrock, Azure AI Foundry, etc.)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "reason": "No bullet covers a managed-inference / hosted-LLM-API state-change; AWS / Azure / Vertex / OpenRouter activity is pre-window or digest-carried with no fresh GA / pricing / named pilot. Writer searched (hits=1) and dropped, consistent.",
+      "search_log_alignment": "consistent"
+    },
+    {
+      "topic": "AI Security",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "reason": "No bullet centers on an AI / agentic / LLM security incident, vendor, or AI-security-SoC signal; the offensive-security entries appear only as forward-event listings in the events bullet, not as a security state-change bullet. The Jalapeno inference ASIC is a general accelerator with no disclosed security-silicon / RoT angle, correctly logged under Hardware. Writer searched (hits=3) and dropped stale digest items, consistent.",
+      "search_log_alignment": "consistent"
+    },
+    {
+      "topic": "CVE update on score ≥ 8.0",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "reason": "No CVE bullet shipped; the late-June high-score IDs surfaced only via a single aggregator and could not be independently corroborated, so per the verify-specifics rule none were published, and the confirmed Gemini CLI and Cursor flaws were disclosed outside the window. Writer searched (hits=3) and dropped uncorroborated items, consistent.",
+      "search_log_alignment": "consistent"
+    },
+    {
+      "topic": "Hardware",
+      "semantic_verdict": "covered",
+      "matching_bullets": ["OpenAI and Broadcom unveil Jalapeno, OpenAI's first custom inference accelerator, with first deployment targeted by year-end"],
+      "search_log_alignment": "consistent",
+      "reason": "The Jalapeno bullet is a fresh custom inference ASIC (OpenAI's first co-designed accelerator, lab engineering samples at production frequency/power, performance-per-watt claim, Broadcom Tomahawk 1.6 Tbps fabric, Celestia rack co-design, gigawatt-scale year-end deployment), squarely an AI accelerator / data-center hardware state-change. Writer logged searched=true, hits=3, promoted=true, matching coverage."
+    },
+    {
+      "topic": "Physical AI",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "reason": "No bullet centers on a robotics / embodied-AI ship, order, or benchmark; the Cobot Proxie / Automate 2026 thread is digest-carried and Automate 2026 closes today, and Figure / Optimus / 1X are pre-window scaling updates. Writer searched (hits=3) and dropped, consistent.",
+      "search_log_alignment": "consistent"
+    },
+    {
+      "topic": "LLM-related research and papers",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "reason": "No standalone fresh arXiv paper rose to a June 23-25 high-impact state-change; the Jalapeno chip is an applied-research artifact but not a research-paper release, and Sakana's orchestration papers are digest-carried context. Writer searched (hits=1) and dropped, consistent.",
+      "search_log_alignment": "consistent"
+    },
+    {
+      "topic": "Stock prices and corporate activity",
+      "semantic_verdict": "covered",
+      "matching_bullets": ["OpenAI and Broadcom unveil Jalapeno, OpenAI's first custom inference accelerator, with first deployment targeted by year-end", "Gartner puts a number on agentic-coding economics: AI coding spend projected to overtake the average developer's salary by 2028 as token consumption surges"],
+      "search_log_alignment": "consistent",
+      "reason": "Corporate-activity signal is carried by two bullets: the OpenAI-Broadcom custom-silicon partnership (a strategic chip-vendor + frontier-lab move with escape-merchant-GPU-economics framing) and the Gartner agentic-coding cost forecast (a sector cost-structure analyst call). Writer logged searched=true, hits=3, promoted=true, matching coverage."
+    },
+    {
+      "topic": "Bay Area / SV AI meet-up events",
+      "semantic_verdict": "covered",
+      "matching_bullets": ["AI events to plan around now: the dev-conference and offensive-security tracks open this week, with the chip and security calendar running into the fall"],
+      "search_log_alignment": "consistent",
+      "reason": "Carry-forward exception applies. The events bullet is a forward-looking calendar covering all three mandated sub-tracks (mainstream dev/data: AI Engineer World's Fair, GitHub Universe, AWS re:Invent; AI-security: Black Hat USA AI Summit, DEF CON AI Village, SecurityWeek AI Risk Summit, OWASP Global AppSec, Zenity watch; AI-chip/hardware: AMD Advancing AI 2026, Hot Chips 2026, AI Infra Summit), with the week's closed events (Automate 2026, AI Tinkerers Offensive Security Demo Night, Snowflake Dev Day) correctly dropped from the forward list. Accepted as covered + consistent per the carry-forward exception; writer logged searched=true, hits=4, promoted=true."
+    },
+    {
+      "topic": "Other standing-out topics",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "reason": "No dedicated standout bullet; ambient roundup items (open-weight leaderboard shuffles, OpenRouter pricing roundup) surfaced but none carried a fresh June 23-25 hard state-change strong enough to displace the three chosen bullets. Writer searched (hits=1) and dropped, consistent.",
+      "search_log_alignment": "consistent"
+    }
+  ]
+}

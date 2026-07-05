@@ -1,0 +1,15 @@
+{
+  "id": "prediction.0cbb02dafcbc3e36",
+  "scope_hint": "cross",
+  "title": "MCP stdio transport turns off-by-default across agent frameworks by Q1 2027",
+  "body": "The working proof-of-concept for the Flowise Custom-MCP RCE (CVE-2026-40933), combined with the demonstration that its official patch can be bypassed, converts the stdio transport from a convenience default into a liability that a version bump alone cannot fix. Because the flaw is structural rather than a single coding mistake, an imported workflow file launches an unsandboxed child process the moment a victim opens it, and the coordinated MCP supply-chain advisory traces the same unvalidated-command-to-subprocess pattern across LiteLLM, Agent Zero, LangBot, Windsurf, and peers. The security guidance has already converged on one instruction: disable stdio in favor of Server-Sent Events and treat any imported MCP configuration as untrusted code. That convergence, arriving just as the White House readies a voluntary frontier-model standards framework the week of July 7, gives both maintainers and any emerging agent-security baseline a single obvious hardening lever to standardize on. Expect the leading agent frameworks to flip stdio-based MCP execution to opt-in behind an explicit trust prompt or sandbox, with SSE or an equivalently isolated transport as the shipped default, so that a config file can no longer silently become shell access. The coupling is security-drives-policy: a live, patch-resistant exploit class becomes the concrete test case the first agent-security norms are written around."
+  ,
+  "reasoning": {
+    "because": "Flowise Custom-MCP RCE (CVE-2026-40933) has a working PoC and a demonstrated patch bypass",
+    "given": "Same stdio-command-injection pattern spans LiteLLM, Agent Zero, LangBot, Windsurf as US norms near",
+    "so_that": "Frameworks flip stdio MCP execution to opt-in behind trust/sandbox, shipping an SSE-style isolated transport by default",
+    "landing": "Leading agent frameworks make MCP stdio opt-in / off-by-default by Q1 2027",
+    "plain_language": "A hard-to-patch hack made AI tools run code from imported files, so those tools will stop trusting that mode by default."
+  },
+  "summary": "A working exploit and a patch bypass for the Flowise Custom-MCP RCE mark stdio as a structural liability shared across many agent tools. As the White House readies a voluntary frontier-model standards framework, leading agent frameworks are expected to make stdio MCP execution opt-in by Q1 2027."
+  }

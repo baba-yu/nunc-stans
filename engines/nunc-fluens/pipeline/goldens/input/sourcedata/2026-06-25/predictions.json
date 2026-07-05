@@ -1,0 +1,47 @@
+{
+  "date": "2026-06-25",
+  "predictions": [
+    {
+      "id": "prediction.18ba4b3ebe2d6bba",
+      "scope_hint": "tech",
+      "title": "Inference-ASIC cohort gains a fourth named buyer-designed chip by H1 2027",
+      "body": "By H1 2027 the named-buyer custom-inference-silicon cohort will gain a fourth member: at least one additional frontier-model buyer (Anthropic, Meta, xAI, or Microsoft) will publicly commit to or unveil its own rack-scale inference accelerator co-designed with a merchant partner (Broadcom, Marvell, or a foundry-fronted ASIC house), joining OpenAI's Jalapeno alongside the Google-Broadcom TPU and Amazon Trainium lineage. The June 24 Jalapeno unveiling is the structural trigger: it confirms that the single largest frontier-model buyer judges merchant-GPU inference economics untenable at gigawatt scale and that a co-designed accelerator plus partner networking fabric is the escape hatch. Once a peer-tier buyer ships a named part with vendor per-watt claims and an end-2026 deployment target, the remaining large buyers face the same inference-cost-versus-model-roadmap squeeze and the same proven co-design template, which compresses the build-versus-buy decision for the rest of the cohort. The falsifiable core is a NAMED part or a firm public commitment from a named buyer, not a vague 'exploring custom silicon' rumor; a leak without a named program or an extension of an existing line (e.g. a next-gen TPU or Trainium) does not count as a new cohort entrant. Merchant-GPU inference share among the largest buyers comes under measurable pressure as a consequence, but the load-bearing, checkable claim is the fourth named buyer-designed inference accelerator.",
+      "reasoning": {
+        "because": "OpenAI + Broadcom unveiled Jalapeno on June 24 as OpenAI's first custom inference accelerator",
+        "given": "Gigawatt-scale buyers can't absorb merchant-GPU inference cost, and the co-design ASIC path works",
+        "so_that": "another named frontier buyer (Anthropic, Meta, xAI, Microsoft) commits to or unveils its own rack-scale inference ASIC",
+        "landing": "by H1 2027; 1 named buyer-designed inference chip beyond OpenAI/Google/Amazon",
+        "plain_language": "OpenAI just revealed its own AI chip to cut costs. Soon another big AI company will announce a custom chip of its own."
+      },
+      "summary": "After OpenAI and Broadcom unveiled the Jalapeno inference accelerator on June 24, expect a fourth named frontier buyer (Anthropic, Meta, xAI, or Microsoft) to commit to or unveil its own rack-scale inference ASIC by H1 2027, joining the OpenAI, Google-TPU, and Amazon-Trainium cohort."
+    },
+    {
+      "id": "prediction.98d07cefb20b3032",
+      "scope_hint": "business",
+      "title": "Agentic coding platforms ship token budgets and caps as default by Q2 2027",
+      "body": "Major agentic-coding platforms (the Cursor / Claude Code / Codex CLI class of autonomous developer-loop tools and their enterprise tiers) will ship admin-side consumption-governance controls — per-seat and per-team token budgets, hard and soft caps, real-time usage dashboards, and policy guardrails on autonomy depth and context-window size — as default, on-by-default features rather than opt-in add-ons. Gartner's June 24 note put quotable thresholds on the cost curve (23% of tech leaders already spend $200-$500 per developer per month on tokens, 6% pay more than $2,000) and named the steepest escalation as coming from ungoverned autonomy, bloated context windows, and missing usage feedback. That diagnosis is itself the product spec: when the cost center is per-seat token bills and the failure mode is the absence of structured feedback, the competitive and procurement pressure pushes vendors to make the FinOps-for-agents layer table stakes. Enterprises evaluating scaled agent rollout will increasingly require a governed engineering operating model — token discipline enforced in the platform, not left to individual developer restraint — and vendors that lack native budget and cap controls will be at a procurement disadvantage as consumption-based pricing becomes the norm for the category.",
+      "reasoning": {
+        "because": "Gartner's June 24 note ties the steepest agentic-coding cost escalation to ungoverned autonomy",
+        "given": "Consumption pricing makes per-seat token bills the cost center, so control must live in the platform",
+        "so_that": "Vendors make token budgets, caps, dashboards, and autonomy guardrails default to win enterprise procurement at scale",
+        "landing": "by Q2 2027; >=2 major agentic-coding platforms ship default budgets and caps",
+        "plain_language": "AI coding tools cost a lot per person, so the apps will add built-in spending limits and dashboards to keep bills from blowing up."
+      },
+      "summary": "Gartner's June 24 note pins the steepest agentic-coding cost escalation on ungoverned autonomy. Expect major agentic-coding platforms to make token budgets, caps, dashboards, and autonomy guardrails default features by Q2 2027, as enterprises require governed spend before scaling agent rollout."
+    },
+    {
+      "id": "prediction.1508cdb4fd03cc56",
+      "scope_hint": "tech",
+      "title": "Autonomous pentest agents ship as named managed tier by Q4 2026",
+      "body": "Autonomous offensive-security agents are crossing from conference demos into named, procurable enterprise services. XBOW's autonomous platform — which maps application environments, probes for vulnerabilities, and chains multi-step exploitation paths at machine speed — just took a strategic Accenture Ventures investment plus a partnership to run continuous offensive testing for clients, on top of a $35M Series C extension whose backers include NVIDIA NVentures, Samsung Ventures, and SentinelOne S Ventures. That financing-and-partnership shape is the procurement signal: incumbent IT-services and security-platform vendors are wiring autonomous pentesting into their delivery stack rather than treating it as a research curiosity. The forward AI-security event calendar reinforces the timing — the AI Tinkerers SF Offensive Security Demo Night surfaced these agents this week, and Black Hat USA's AI Summit (August 1-6) alongside DEF CON's AI Village give the category its first marquee enterprise-buyer stage before the fall procurement window. The prediction is that by Q4 2026 at least one major services or security-platform vendor markets an autonomous-pentesting agent as a named, continuously-running managed tier — a recurring offering with its own SKU and pricing, not a one-off engagement — moving offensive AI from point-in-time human-led tests toward always-on machine-scale red-teaming. The risk is that liability, scoping, and safe-harbor concerns keep these agents gated behind human-supervised pilots rather than a self-serve managed product, which would push the named-tier launch past the window.",
+      "reasoning": {
+        "because": "XBOW took an Accenture Ventures investment and continuous-testing partnership on a $35M raise",
+        "given": "Services and security incumbents are wiring autonomous pentesting into delivery stacks, not just R&D",
+        "so_that": "A major services or security vendor markets an autonomous-pentest agent as a named, always-on managed tier",
+        "landing": "First named managed autonomous-pentest tier ships by Q4 2026",
+        "plain_language": "AI hacking tools that find security holes by themselves are about to be sold as an always-on service you can subscribe to."
+      },
+      "summary": "Autonomous offensive-security agents like XBOW are moving from demos to procurement, signaled by Accenture's investment, a continuous-testing partnership, and a $35M raise. With Black Hat's AI Summit staging the category in August, expect a vendor to ship one as a named managed tier by Q4 2026."
+    }
+  ]
+}

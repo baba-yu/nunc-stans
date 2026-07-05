@@ -1,0 +1,44 @@
+[
+  {
+    "actor": "hyperscaler confidential-AI product team",
+    "job": "Hardening a confidential-inference offering so a frontier model runs inside a hardware TEE with end-to-end TEE-I/O and customer-verifiable remote attestation",
+    "outcome": "A generally available confidential-inference service for a frontier-class model, with TEE-I/O host-to-GPU and an attestation report the customer verifies before sending prompts",
+    "motivation": "Regulated and sovereign buyers refuse a GPU they cannot attest, so confidential inference captures the highest-value, least price-sensitive workloads",
+    "task": {
+      "who": "the cloud's confidential-computing product and inference-platform engineering team",
+      "what": "Wire end-to-end TEE-I/O and attestation into a frontier-model inference service",
+      "where": "The cloud's managed inference platform and its GA release pipeline",
+      "when": "From the June 2026 summit window through Q1 2027 GA",
+      "why": "Attestable confidentiality unlocks regulated and sovereign inference demand",
+      "how": "Hardware TEE on the accelerator with attestable key release and remote-attestation reports"
+    }
+  },
+  {
+    "actor": "accelerator silicon vendor shipping TEE-I/O",
+    "job": "Moving confidential-computing modes and CPU-enclave-to-GPU-memory TEE-I/O links from demonstrable to volume so hyperscalers can build attestable inference on them",
+    "outcome": "Shipping silicon with hardware root-of-trust, attestable TEE-I/O between host CPU and GPU memory, and attestation services hyperscalers can productize",
+    "motivation": "Confidential AI is the differentiator that pulls regulated buyers onto its accelerators, so enabling attestable inference grows premium silicon demand",
+    "task": {
+      "who": "the silicon vendor's confidential-computing and platform-security engineering group",
+      "what": "Ship volume TEE-I/O links and hardware root-of-trust attestation",
+      "where": "The vendor's GPU/CPU platform, firmware, and attestation service",
+      "when": "Through H2 2026 into early 2027, building on Blackwell confidential modes",
+      "why": "Attestable accelerators win the highest-value confidential-AI workloads",
+      "how": "Hardware root-of-trust, encrypted CPU-GPU memory links, and an attestation verification service"
+    }
+  },
+  {
+    "actor": "regulated/sovereign enterprise buyer demanding attestation",
+    "job": "Specifying contractual attestation and data-residency requirements that force the cloud to prove no operator or co-tenant can read prompts or weights before any deal",
+    "outcome": "Signed commitments and design-partner pull that make verifiable confidential inference a GA procurement requirement, pulling the hyperscaler service to general availability",
+    "motivation": "Healthcare, finance, defense and EU data-residency rules bar sending sensitive prompts to an unattestable shared GPU",
+    "task": {
+      "who": "the buyer's security architecture, compliance, and procurement function",
+      "what": "Mandate verifiable attestation and residency as a purchase precondition",
+      "where": "RFPs, design-partner programs, and vendor security reviews",
+      "when": "Through the runway from mid-2026 into Q1 2027 procurement cycles",
+      "why": "Regulation forbids unattestable processing of sensitive prompts",
+      "how": "Attestation-report verification and TEE-I/O confidentiality clauses in contracts"
+    }
+  }
+]

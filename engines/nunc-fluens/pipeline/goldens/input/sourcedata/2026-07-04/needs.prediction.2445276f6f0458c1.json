@@ -1,0 +1,44 @@
+[
+  {
+    "actor": "domestic-silicon AI lab training-infrastructure lead",
+    "job": "standing up a full non-NVIDIA ASIC training-and-serving cluster and running an end-to-end near-frontier training run on it during the runway",
+    "outcome": "an open-weight near-frontier model trained entirely on domestic accelerators, released with a model card documenting the ASIC-only training run",
+    "motivation": "export controls make NVIDIA allocation unreliable, so proving a full domestic stack works removes the lab's dependence on US-restricted silicon",
+    "task": {
+      "who": "cluster-engineering and model-training teams inside the lab",
+      "what": "run end-to-end near-frontier training on non-NVIDIA ASICs",
+      "where": "a domestic-accelerator training cluster (Ascend, Cambricon, or in-house parts)",
+      "when": "July 2026 through Q2 2027",
+      "why": "escape gating on US-restricted NVIDIA allocation",
+      "how": "Huawei Ascend / Cambricon / in-house ASIC training stack"
+    }
+  },
+  {
+    "actor": "domestic AI-accelerator vendor software-stack team",
+    "job": "hardening the compiler, kernels, and collective-communication libraries so a 1T-plus MoE trains and serves reliably on their ASICs without NVIDIA in the loop",
+    "outcome": "a production-grade ASIC software stack mature enough for an external lab to complete a disclosed end-to-end frontier training run",
+    "motivation": "the LongCat-2.0 existence proof turns their silicon into a credible NVIDIA substitute only if the toolchain reliably supports frontier-scale MoE workloads",
+    "task": {
+      "who": "accelerator compiler, kernel, and communication-library engineers",
+      "what": "harden training toolchain for 1T-plus MoE workloads",
+      "where": "the ASIC's compiler, kernel, and collective-comm software layers",
+      "when": "H2 2026 into early 2027",
+      "why": "make domestic silicon a reliable frontier-training substrate",
+      "how": "vendor SDK plus MoE-tuned collective-communication libraries"
+    }
+  },
+  {
+    "actor": "open-weight lab model-card and technical-report author",
+    "job": "documenting the training substrate explicitly — accelerator type, cluster scale, and end-to-end pipeline — in the model card rather than leaving it to be inferred by observers",
+    "outcome": "a published model card or technical report that states the non-NVIDIA ASIC training run as a disclosed, load-bearing claim",
+    "motivation": "the prediction lands only on explicit disclosure, and documenting compute-independence is itself the differentiating signal the lab wants to broadcast",
+    "task": {
+      "who": "research-communications and documentation staff at the lab",
+      "what": "disclose non-NVIDIA ASIC training substrate in the model card",
+      "where": "the model card / technical report shipped at release",
+      "when": "at release, within the runway ending Q2 2027",
+      "why": "make compute-independence an explicit, defensible claim",
+      "how": "structured training-substrate section in the model card"
+    }
+  }
+]

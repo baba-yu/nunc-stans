@@ -1,0 +1,44 @@
+[
+  {
+    "actor": "agentic-security benchmark research lead",
+    "job": "Publishing and maintaining a citable prompt-injection benchmark with numeric pass thresholds that procurement can reference verbatim in a contract",
+    "outcome": "A named benchmark with a stated maximum injection-success rate that a buyer can cite as a pass/fail acceptance bar",
+    "motivation": "A benchmark only matters if buyers adopt its number; a procurement citation is the proof it moved the market",
+    "task": {
+      "who": "the benchmark's adversarial-evaluation and methodology team",
+      "what": "Define and publish numeric injection-success pass thresholds",
+      "where": "An academic-industry benchmark like StakeBench's results release",
+      "when": "From the 3,168-trial release through 2026 into early 2027",
+      "why": "A citable numeric bar lets buyers replace vendor prose",
+      "how": "Standardized adversarial trial suite with published success-rate scoring"
+    }
+  },
+  {
+    "actor": "enterprise or government agentic-AI procurement standards owner",
+    "job": "Rewriting an agentic-AI procurement gate to require a quantified prompt-injection-resistance score instead of vendor self-attestation prose",
+    "outcome": "A procurement gate, framework control, or certification naming a numeric maximum injection-success rate as pass/fail",
+    "motivation": "An incident trail plus a benchmark makes vendor self-attestation indefensible to auditors and risk committees",
+    "task": {
+      "who": "the buyer's procurement policy and security-architecture function",
+      "what": "Write a numeric injection-resistance threshold into the gate",
+      "where": "The organization's agentic-AI acquisition and certification framework",
+      "when": "Through 2026 into Q2 2027 as benchmarks mature",
+      "why": "Auditable acceptance criteria replace unfalsifiable best-effort claims",
+      "how": "Cite a named benchmark or maximum injection-success-rate cap"
+    }
+  },
+  {
+    "actor": "agentic-AI security framework editor",
+    "job": "Mapping documented prompt-injection CVEs and breach reports to framework controls so the risk becomes a measurable, certifiable acceptance criterion",
+    "outcome": "A framework control that translates the incident trail into a quantified, auditable injection-resistance requirement buyers can adopt",
+    "motivation": "Tying risks to concrete CVEs and benchmarks gives the framework the authority to demand numbers, not promises",
+    "task": {
+      "who": "the standards body's agentic-AI governance working group",
+      "what": "Map prompt-injection incidents to a quantified control",
+      "where": "An OWASP-style agentic-AI security governance framework",
+      "when": "From the v2.01 release through 2026 toward Q2 2027",
+      "why": "Concrete CVE evidence justifies a measurable certification bar",
+      "how": "CVE-to-control mapping plus referenced benchmark thresholds"
+    }
+  }
+]

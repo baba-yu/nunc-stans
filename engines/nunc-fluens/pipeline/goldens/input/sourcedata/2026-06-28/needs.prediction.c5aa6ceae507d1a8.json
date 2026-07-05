@@ -1,0 +1,30 @@
+[
+  {
+    "actor": "coding-agent platform security/orchestration product lead",
+    "job": "Designing and shipping a default-on capability gate that caps the lethal trifecta at the orchestration layer rather than filtering the token stream.",
+    "outcome": "A shipped, default-on Rule-of-Two gate that pauses an agent run for human approval before combining a third dangerous property.",
+    "motivation": "Prompt injection is unpatchable, so capping the trifecta is the only durable defense; advisory volume and competitive pressure force the largest platforms to move first.",
+    "task": {
+      "who": "agent security / orchestration engineering team",
+      "what": "Implement default-on Rule-of-Two capability gate with human-approval pause",
+      "where": "agent orchestration layer / permission enforcement runtime",
+      "when": "H2 2026 through Q1 2027",
+      "why": "Deny the dangerous combination since injection is unpatchable",
+      "how": "Rule-of-Two capability gating at orchestration layer"
+    }
+  },
+  {
+    "actor": "agentic-AI security standards author (OWASP-aligned)",
+    "job": "Publishing and refining the guidance that reframes prompt injection as a structural, unpatchable property and maps it across agentic categories.",
+    "outcome": "Authoritative guidance naming coding agents the epicenter and prescribing trifecta-capping mitigation, giving vendors cover to ship the gate.",
+    "motivation": "Standardize a durable mitigation pattern so the ecosystem stops treating prompt injection as a patchable CVE.",
+    "task": {
+      "who": "OWASP agentic-security working group / standards authors",
+      "what": "Publish guidance reframing prompt injection as structural and unpatchable",
+      "where": "OWASP agentic-AI advisory / Top 10 framework",
+      "when": "ongoing through 2026 into Q1 2027",
+      "why": "Drive vendors toward orchestration-layer trifecta caps",
+      "how": "OWASP 2.01 agentic-category mapping"
+    }
+  }
+]

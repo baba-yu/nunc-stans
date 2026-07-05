@@ -1,0 +1,14 @@
+{
+  "prediction_id": "prediction.4ecb84808c9acc3f",
+  "stream": "reasoning",
+  "applied": true,
+  "origin_date": "2026-04-20",
+  "new_reasoning": {
+    "because": "OWASP shipped 'State of Agentic AI Security and Governance v2.01,' codifying CI/agent leak risk.",
+    "given": "PoCs across Claude Code, Gemini CLI and Copilot are now folded into OWASP's agentic governance base.",
+    "so_that": "Next milestone: a discrete 'Agent-in-the-Loop Secret Exfiltration' entry tops CIS / OWASP lists, beyond broad coverage.",
+    "landing": "By Q3 2026 (Jul-Sep); a named CIS / OWASP top-list entry.",
+    "plain_language": "OWASP just published agent-security guidance. Next, watch for this leak risk to get its own named top spot on the lists."
+  },
+  "reason": "Reframed reasoning forward: OWASP v2.01 governance shipped (prior PoC setup now historical); next precondition is a discrete named top-list entry by Q3 2026."
+}

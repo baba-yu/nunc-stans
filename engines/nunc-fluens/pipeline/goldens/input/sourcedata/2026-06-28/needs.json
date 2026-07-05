@@ -1,0 +1,95 @@
+{
+  "date": "2026-06-28",
+  "by_prediction": {
+    "prediction.6f3ab91c4d2e7a08": [
+      {
+        "actor": "open-weight tuning-toolkit maintainer",
+        "job": "Racing to land first-class LoRA/QLoRA fine-tuning for newly dropped sub-1B edge checkpoints within days of their weight release.",
+        "outcome": "A mainstream tuning toolkit ships same-week LoRA/QLoRA support for a sub-1B on-device model published this cycle.",
+        "motivation": "Whoever lands a popular edge checkpoint first wins the on-device developer audience; lagging cedes mindshare to rivals.",
+        "task": {
+          "who": "core kernel / quantization engineering team",
+          "what": "add LoRA/QLoRA fine-tuning path for new sub-1B checkpoint",
+          "where": "the toolkit's model-support registry and training kernels",
+          "when": "Q3 2026 runway, day-zero to day-seven after each edge weight drop",
+          "why": "match competitor turnaround or lose the on-device dev audience",
+          "how": "LoRA/QLoRA on llama.cpp/MLX-compatible quantized weights"
+        }
+      },
+      {
+        "actor": "on-device model publisher",
+        "job": "Shipping sub-gigabyte open weights launch-day against the full local-inference stack (llama.cpp, MLX, vLLM, SGLang, ONNX).",
+        "outcome": "A sub-1B edge model lands open with broad runtime coverage, making it the obvious target for immediate tuning support.",
+        "motivation": "Maximize adoption and ecosystem pickup of its edge tier by removing every integration barrier at launch.",
+        "task": {
+          "who": "model release / ecosystem integration team",
+          "what": "publish quantized weights with launch-day multi-runtime support",
+          "where": "model hub plus llama.cpp/MLX/vLLM/SGLang/ONNX runtime repos",
+          "when": "Q3 2026 runway, at each edge-model release event",
+          "why": "remove integration friction so tuning libraries adopt immediately",
+          "how": "launch-day GGUF/MLX/ONNX export and runtime PRs"
+        }
+      }
+    ],
+    "prediction.7b3e9f12c4a6d8e0": [
+      {
+        "actor": "rival accelerator vendor's corporate-development team",
+        "job": "Sourcing and negotiating an acquisition or controlling stake in a cross-vendor inference-compiler or runtime startup to answer Qualcomm's Modular buy.",
+        "outcome": "An announced deal acquiring or taking majority control of a comparable silicon-agnostic inference-compiler startup before Q1 2027.",
+        "motivation": "Owning a portable compute layer is now table stakes to sell enterprise inference against Nvidia's CUDA lock-in.",
+        "task": {
+          "who": "corporate development / M&A function",
+          "what": "Source, diligence and term-sheet a cross-vendor compiler startup",
+          "where": "deal pipeline and board approval process",
+          "when": "June 2026 through Q1 2027 runway",
+          "why": "to not cede the portability narrative to Qualcomm",
+          "how": "M&A advisory, technical due diligence, all-stock or cash bid"
+        }
+      },
+      {
+        "actor": "rival accelerator vendor's inference-software platform team",
+        "job": "Specifying the silicon-agnostic compiler capabilities the vendor must own so the corp-dev target closes a real CUDA-portability gap.",
+        "outcome": "A target-fit technical requirements set that justifies acquiring a comparable cross-vendor compiler over building in-house.",
+        "motivation": "A neutral portable compiler is the price of admission for enterprise inference sales against Nvidia.",
+        "task": {
+          "who": "inference compiler / runtime engineering team",
+          "what": "Define cross-vendor compiler capability gaps and build-vs-buy case",
+          "where": "internal software roadmap and architecture review",
+          "when": "June 2026 through Q4 2026 runway",
+          "why": "to justify acquiring rather than ceding portability",
+          "how": "internal compiler-stack benchmarking against MAX"
+        }
+      }
+    ],
+    "prediction.c5aa6ceae507d1a8": [
+      {
+        "actor": "coding-agent platform security/orchestration product lead",
+        "job": "Designing and shipping a default-on capability gate that caps the lethal trifecta at the orchestration layer rather than filtering the token stream.",
+        "outcome": "A shipped, default-on Rule-of-Two gate that pauses an agent run for human approval before combining a third dangerous property.",
+        "motivation": "Prompt injection is unpatchable, so capping the trifecta is the only durable defense; advisory volume and competitive pressure force the largest platforms to move first.",
+        "task": {
+          "who": "agent security / orchestration engineering team",
+          "what": "Implement default-on Rule-of-Two capability gate with human-approval pause",
+          "where": "agent orchestration layer / permission enforcement runtime",
+          "when": "H2 2026 through Q1 2027",
+          "why": "Deny the dangerous combination since injection is unpatchable",
+          "how": "Rule-of-Two capability gating at orchestration layer"
+        }
+      },
+      {
+        "actor": "agentic-AI security standards author (OWASP-aligned)",
+        "job": "Publishing and refining the guidance that reframes prompt injection as a structural, unpatchable property and maps it across agentic categories.",
+        "outcome": "Authoritative guidance naming coding agents the epicenter and prescribing trifecta-capping mitigation, giving vendors cover to ship the gate.",
+        "motivation": "Standardize a durable mitigation pattern so the ecosystem stops treating prompt injection as a patchable CVE.",
+        "task": {
+          "who": "OWASP agentic-security working group / standards authors",
+          "what": "Publish guidance reframing prompt injection as structural and unpatchable",
+          "where": "OWASP agentic-AI advisory / Top 10 framework",
+          "when": "ongoing through 2026 into Q1 2027",
+          "why": "Drive vendors toward orchestration-layer trifecta caps",
+          "how": "OWASP 2.01 agentic-category mapping"
+        }
+      }
+    ]
+  }
+}

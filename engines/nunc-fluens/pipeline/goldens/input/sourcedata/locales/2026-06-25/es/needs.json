@@ -1,0 +1,95 @@
+{
+  "date": "2026-06-25",
+  "by_prediction": {
+    "prediction.1508cdb4fd03cc56": [
+      {
+        "actor": "responsable de producto de oferta gestionada en un proveedor de servicios de TI o de plataformas de seguridad",
+        "job": "Empaquetar un agente de pentesting autónomo en un SKU gestionado recurrente con precio, alcance y términos de safe-harbor antes de la ventana de compras del otoño.",
+        "outcome": "Un plan gestionado de pentesting autónomo con nombre propio, siempre activo, con su propio SKU y precio, comercializado como una oferta continua y no como un encargo puntual.",
+        "motivation": "Captar ingresos recurrentes de seguridad ofensiva y diferenciar la pila de entrega a medida que el red-teaming autónomo pasa de curiosidad de investigación a servicio contratable.",
+        "task": {
+          "who": "Equipo de producto y de gestión de la oferta de servicios gestionados del proveedor",
+          "what": "Definir el SKU, el precio y el alcance del plan de pentesting gestionado",
+          "where": "Proceso de productización del catálogo de servicios, las compras y la pila de entrega",
+          "when": "De hoy hasta el Q4 2026, antes de la ventana de compras del otoño",
+          "why": "Vender el pentesting autónomo como ingreso gestionado recurrente",
+          "how": "Plataforma autónoma integrada con el socio y envuelta en un SKU de servicio gestionado"
+        }
+      },
+      {
+        "actor": "responsable de plataforma e integración de entrega en una startup de seguridad ofensiva autónoma",
+        "job": "Endurecer la plataforma de pentesting autónomo para una operación continua y multiinquilino con clientes, e integrarla en la pila de entrega de un proveedor socio a escala de producción.",
+        "outcome": "Una plataforma de pruebas ofensivas en funcionamiento continuo, integrada en la pila de un proveedor establecido, lista para respaldar un plan gestionado con nombre propio y siempre activo.",
+        "motivation": "Convertir la inversión y la alianza estratégicas en distribución empresarial recurrente, demostrando un red-teaming siempre activo a escala de máquina más allá de las demostraciones en conferencias.",
+        "task": {
+          "who": "Equipo de ingeniería de plataforma e integración con socios de la startup",
+          "what": "Endurecer el agente para una operación continua y multiinquilino con clientes",
+          "where": "Pila de entrega del proveedor socio y entornos de pruebas de clientes",
+          "when": "De hoy hasta el Q4 2026, tras el cierre de la ampliación de la Serie C",
+          "why": "Habilitar una operación siempre activa que un proveedor pueda productizar",
+          "how": "Canal de pruebas ofensivas continuas integrado mediante la API de la alianza"
+        }
+      }
+    ],
+    "prediction.18ba4b3ebe2d6bba": [
+      {
+        "actor": "responsable del programa de silicio personalizado en un comprador de modelos de frontera",
+        "job": "Llevar un acelerador de inferencia interno a escala de rack desde la especificación de arquitectura, pasando por el tape-out, hasta una pieza con nombre propio con afirmaciones del proveedor sobre el rendimiento por vatio y un objetivo de despliegue para finales de 2026.",
+        "outcome": "Un ASIC de inferencia diseñado por el comprador, con nombre propio, comprometido o presentado públicamente, co-diseñado con un socio comercial, que se une al grupo de OpenAI/Google/Amazon como cuarto integrante.",
+        "motivation": "La economía de la inferencia con GPU comerciales a escala de gigavatios es insostenible; un acelerador co-diseñado más el tejido del socio es la vía de escape ya probada para la hoja de ruta de modelos.",
+        "task": {
+          "who": "Equipo del programa de arquitectura de silicio e ingeniería de hardware del comprador",
+          "what": "Co-diseñar y completar el tape-out de un acelerador de inferencia a escala de rack",
+          "where": "Programa de silicio interno con un socio comercial de co-diseño",
+          "when": "De hoy hasta el H1 2027, antes del compromiso público",
+          "why": "Reducir el coste de inferencia a escala de gigavatios frente a la economía de las GPU comerciales",
+          "how": "Co-diseño de ASIC con Broadcom, Marvell o una casa respaldada por una foundry"
+        }
+      },
+      {
+        "actor": "responsable de relación de co-diseño de ASIC en un socio comercial",
+        "job": "Diseñar el acelerador de inferencia personalizado más el tejido de red de un comprador de frontera sobre una plantilla de co-diseño ya probada, y prepararlo para una presentación pública con afirmaciones sobre el rendimiento por vatio.",
+        "outcome": "Una pieza de inferencia con nombre propio, co-diseñada con un socio comercial, lanzada o comprometida por un cuarto comprador de frontera, que replica la plantilla de Jalapeno para un nuevo integrante del grupo.",
+        "motivation": "Convertir la demanda probada de co-diseño al estilo Jalapeno en una victoria de diseño emblemática y repetida, a medida que más compradores a escala de gigavatios se enfrentan a la misma disyuntiva de construir o comprar.",
+        "task": {
+          "who": "Equipo de ingeniería de ASIC personalizado y de tejido de red del proveedor comercial",
+          "what": "Entregar el acelerador co-diseñado y el tejido de red a escala de rack",
+          "where": "Relación de la casa de ASIC comercial con el comprador de frontera",
+          "when": "De hoy hasta el H1 2027, con margen hasta la pieza con nombre propio",
+          "why": "Ganar un contrato emblemático y repetido de co-diseño de silicio de inferencia",
+          "how": "Plantilla de co-diseño reutilizable más el tejido de red del socio"
+        }
+      }
+    ],
+    "prediction.98d07cefb20b3032": [
+      {
+        "actor": "responsable de producto de una plataforma de codificación con agentes",
+        "job": "Construir la gobernanza del consumo en el lado del administrador dentro de la plataforma: presupuestos de tokens por puesto y por equipo, límites estrictos y flexibles, paneles de uso en tiempo real y barreras de profundidad de autonomía.",
+        "outcome": "Presupuestos de tokens, límites, paneles y barreras de autonomía lanzados como funciones activadas por defecto en el plan empresarial de una plataforma importante de codificación con agentes.",
+        "motivation": "Evitar una desventaja de compra a medida que los precios por consumo se convierten en la norma y las empresas exigen un gasto de tokens gobernado antes de escalar el despliegue de agentes.",
+        "task": {
+          "who": "Equipo de producto e ingeniería del plan empresarial de la plataforma",
+          "what": "Lanzar presupuestos de tokens, límites y paneles de uso por defecto",
+          "where": "Consola de administración del plan empresarial de la plataforma de codificación con agentes",
+          "when": "De hoy hasta el margen de la hoja de ruta de producto del Q2 2027",
+          "why": "Convertir el FinOps-para-agentes en un requisito mínimo para ganar las compras",
+          "how": "Medición del consumo, barreras de política y aplicación de presupuestos por puesto"
+        }
+      },
+      {
+        "actor": "responsable de FinOps-para-IA e ingeniería de plataforma en una empresa",
+        "job": "Redactar los requisitos de compra que exijan una disciplina de tokens aplicada por la plataforma, y luego evaluar a los proveedores de codificación con agentes frente a un modelo operativo de ingeniería gobernado antes del despliegue a escala.",
+        "outcome": "Criterios de compra que exigen controles nativos de presupuesto y límite, que obligan a los proveedores a convertir la gobernanza del consumo en algo por defecto y no opcional.",
+        "motivation": "Frenar las facturas de tokens por puesto que rondan entre 200 y más de 2.000 dólares por desarrollador al mes, donde la autonomía sin gobernanza y las ventanas de contexto sobredimensionadas impulsan la escalada de costes más pronunciada.",
+        "task": {
+          "who": "Función de FinOps, compras e ingeniería de plataforma de la empresa",
+          "what": "Exigir presupuestos de tokens aplicados por la plataforma en las evaluaciones de proveedores",
+          "where": "Procesos de compra y de RFP de herramientas de codificación con agentes",
+          "when": "De hoy hasta la ventana de evaluación de despliegue a escala del Q2 2027",
+          "why": "Aplicar la disciplina de tokens en la plataforma, no en la contención del desarrollador",
+          "how": "Requisitos de RFP y cuadros de mando de modelo operativo de ingeniería gobernado"
+        }
+      }
+    ]
+  }
+}

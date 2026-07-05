@@ -1,0 +1,95 @@
+{
+  "date": "2026-06-26",
+  "by_prediction": {
+    "prediction.c5d53ae94581ec63": [
+      {
+        "actor": "ML-supply-chain security researcher na naghahanap ng deserialization-RCE primitive",
+        "job": "Ina-audit ang mga open-source na ML registry, feature store, at metadata server para sa mga network-reachable na pre-auth deserialization sink at ginagawang armas ang isang __reduce__ payload tungo sa isang nauulit na RCE.",
+        "outcome": "Isang coordinated disclosure sa isang pinangalanang at natatanging ML data/metadata-plane na proyekto na nagbubunga ng isang CVSS 9.0+ CVE/GHSA na ang pinag-ugatan ay unauthenticated deserialization ng isang network-supplied na object.",
+        "motivation": "Inaanunsyo ng Feast CVE-2026-56121 na pattern ang isang madali, high-severity, at nauulit na klase ng bug; hinahabol ng mga researcher ang credit, bounty, at halagang pang-conference talk ng susunod na isa.",
+        "task": {
+          "who": "Independent o vendor na offensive-research team na nag-tritriage ng mga ML-infra serialized-object endpoint",
+          "what": "Maghanap at gawing armas ang isang pre-auth deserialization sink tungo sa RCE",
+          "where": "Ang gRPC/HTTP/queue registry o feature-store service ng isang pangalawang proyekto",
+          "when": "Mula sa June 24 Feast advisory hanggang Q1 2027, habang sariwa pa ang pattern",
+          "why": "Patunayan na naulit ang deserialization-RCE na klase at kumita ng disclosure credit",
+          "how": "dill/pickle/joblib payload audit, fuzzing, at coordinated CVE/GHSA filing"
+        }
+      },
+      {
+        "actor": "Open-source na ML-infra maintainer ng isang feature store o model/artifact registry",
+        "job": "Naglulupon at nagpapalawak ng isang registry na tumatanggap ng serialized transformation logic sa network at ibinibigay ito sa isang deserializer, na pinananatili ang unsafe-on-the-wire na primitive sa production bilang default.",
+        "outcome": "Isang nakatayo pa ring network service na dini-deserialize ang mga serialized object na kontrolado ng umaatake bago ang auth, na nag-iiwan sa eksaktong sink na maaaring gawing susunod na 9.0+ advisory ng isang researcher.",
+        "motivation": "Pinananatili ng backward compatibility, developer ergonomics, at feature velocity ang pickle/dill-style na serialization sa wire dahil nakakagambala at walang pondo ang paglipat sa ligtas na format.",
+        "task": {
+          "who": "Mga core maintainer at contributor ng registry/feature-store na proyekto",
+          "what": "Tumanggap at i-deserialize ang mga network-supplied na serialized transform body",
+          "where": "Ang request-handling path ng registry/metadata server ng proyekto",
+          "when": "Sa kasalukuyang release cycle, mula ngayon hanggang Q1 2027",
+          "why": "Panatilihin ang compatibility at ergonomics higit sa safe-by-default deserialization",
+          "how": "dill/pickle/cloudpickle/joblib decode ng mga object na natanggap sa gRPC/HTTP/queue"
+        }
+      }
+    ],
+    "prediction.cd55acce9f1d2c13": [
+      {
+        "actor": "Product lead ng isang AI/ML-security o supply-chain-security platform",
+        "job": "Inihihiwalay ang ML deserialization / serialized-artifact scanner mula sa generic na SCA feed tungo sa sarili nitong pinangalanan at marketed na product tier na may nakasaad na saklaw at presyo.",
+        "outcome": "Isang pinangalanan at marketed na scanner tier o SKU na ang nakasaad na saklaw ay tahasang sumasaklaw sa ML serialized-artifact at unsafe-deserialization na panganib, na inanunsyo sa docs, isang release, o isang launch.",
+        "motivation": "Kunin ang bagong napatunayang attack surface bilang isang nabebentang layer bago gawin iyon ng mga karibal, at mag-iba pa sa isang CVE-feed entry sa sandaling magkaroon ng magagawang armas na hugis ang deserialization-RCE na pattern.",
+        "task": {
+          "who": "Ang ML-security product-management at go-to-market team ng vendor",
+          "what": "Tukuyin, pangalanan, at presyuhan ang isang ML deserialization scanner tier",
+          "where": "Product catalog, release notes, at launch / docs surface",
+          "when": "Mula ngayon hanggang Q1 2027, sakay sa attention window ng Feast CVE",
+          "why": "Gawing recurring revenue ang napatunayang ML serialized-artifact surface",
+          "how": "Ipakete ang detection coverage sa isang first-class scanner SKU, hindi isang SCA feed line"
+        }
+      },
+      {
+        "actor": "ML-supply-chain detection-engineering at threat-research team",
+        "job": "Binubuo ang mga scanner at rule na nag-de-detect ng mga unsafe na pickle/dill/joblib payload, model checkpoint, at feature-store transformation body upang magkaroon ng tunay na coverage ang marketed na tier.",
+        "outcome": "Isang gumaganang ML serialized-artifact detection engine — mga signature, gated-deserialization check, at provenance signal — na sumusuporta sa pinangalanang scanning tier.",
+        "motivation": "Pinatunayan ng Feast CVE na network-reachable ang unsafe-deserialization na primitive sa ibaba ng model layer, kaya kailangang umiral ang isang kapani-paniwalang detection surface bago maibenta ang tier bilang first-class.",
+        "task": {
+          "who": "Ang detection-engineering at threat-research function ng startup o vendor",
+          "what": "Bumuo ng mga detection para sa unsafe na serialized ML artifact at body",
+          "where": "Scanning pipeline sa kabuuan ng ML data-and-metadata plane",
+          "when": "Mula ngayon hanggang Q1 2027, bago ang launch ng naka-produktong tier",
+          "why": "Bigyan ng tunay na coverage ang pinangalanang tier sa deserialization na klase ng atake",
+          "how": "Static analysis ng pickle/dill payload kasama ang gated-deserialization at provenance check"
+        }
+      }
+    ],
+    "prediction.f7fdcbe86950bd61": [
+      {
+        "actor": "Confidential-computing product lead ng isang AI-accelerator silicon vendor",
+        "job": "Inipoproduktong tier ang umiiral na TEE-I/O at on-die root-of-trust na primitive sa isang pinangalanan at inference-specific na confidential tier na may signed-model attestation, sa halip na isang developer-preview flag.",
+        "outcome": "Isang pinangalanang confidential-inference accelerator SKU kung saan ang encrypted-in-use na weights at tenant-verifiable na model attestation ang ibinebentang feature ng part mismo.",
+        "motivation": "Mag-iba pa sa performance-per-watt habang nagiging commodity ang inference silicon, at kunin ang mga regulated at sovereign na mamimili na ang data-residency at IP-protection na pangangailangan ay hindi natugunan ng isang generic na confidential-computing checkbox.",
+        "task": {
+          "who": "Ang security-silicon at accelerator product-management team ng vendor",
+          "what": "Iproduktong tier ang TEE-I/O kasama ang attestation sa isang pinangalanang inference tier",
+          "where": "Accelerator roadmap, silicon security block, at SKU launch process",
+          "when": "Mula ngayon hanggang H1 2027, naka-target sa AMD Advancing AI, Hot Chips, o isang hyperscaler launch",
+          "why": "Gawing nabebentang confidentiality feature ang mga latent na confidential-computing primitive",
+          "how": "On-die root-of-trust kasama ang TEE-I/O na may signed-model attestation flow"
+        }
+      },
+      {
+        "actor": "Product team ng isang cloud confidential-inference managed-tier",
+        "job": "Binabalot ang mga merchant accelerator confidential-computing primitive at isang signed-model attestation service sa isang tenant-facing na managed inference tier na nagpapatunay kung aling weights ang tumatakbo bago ipadala ang data.",
+        "outcome": "Isang pinangalanang managed confidential-inference tier na ibinebenta sa encrypted-in-use na weights kasama ang cryptographic at tenant-verifiable na attestation ng deployed na model.",
+        "motivation": "Manalo sa mga regulated, sovereign, at IP-sensitive na workload sa pamamagitan ng pagsagot sa 'patunayan na ang weights na tinatanong ko ay ang weights na inaprubahan ko' gamit ang isang hardware-rooted at audited na offering.",
+        "task": {
+          "who": "Ang confidential-computing at AI-platform product team ng cloud provider",
+          "what": "Ipakete ang attested at encrypted-in-use na inference bilang isang managed tier",
+          "where": "Managed-inference service catalog at attestation verification pipeline",
+          "when": "Mula ngayon hanggang H1 2027, bago ang isang hyperscaler launch venue",
+          "why": "Gawing nabibiling trust guarantee ang mga hardware confidentiality primitive",
+          "how": "Attestation service sa ibabaw ng NVIDIA Confidential Computing, SEV-SNP, o TDX TEE-I/O"
+        }
+      }
+    ]
+  }
+}

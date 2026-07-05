@@ -1,0 +1,6 @@
+{
+  "support_dimension": "none",
+  "narrative": "Today's news does not advance this thesis. The Feast RCE sits in the same broad family of unauthenticated, network-reachable code-execution surfaces on AI infrastructure, but it is a feature-store deserialization flaw, not an MCP-channel issue, and says nothing about MCP policy-enforcement defaults. No platform enabled inline MCP-channel policy enforcement and no vendor changed channel defaults.",
+  "coherence": 1,
+  "remaining_gap": "Any MCP-specific signal: a platform shipping inline MCP-channel policy enforcement on by default; today offers only faint same-family attack-surface adjacency."
+}

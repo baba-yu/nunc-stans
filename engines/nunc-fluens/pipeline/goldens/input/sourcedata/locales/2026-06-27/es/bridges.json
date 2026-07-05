@@ -1,0 +1,247 @@
+{
+  "date": "2026-06-27",
+  "validation_rows": [
+    {
+      "prediction_ref": {
+        "id": "prediction.f52aeb7468446ca2",
+        "short_label": "Multi-tenant agent builders draw a 9.0+ cross-tenant authz CVE by Q1 2027",
+        "prediction_date": "2026-06-27"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "La noticia principal de hoy es la señal de origen que precipita esta tesis y la firma de clase sobre la que descansa. El IDOR entre inquilinos de Langflow disparado de forma activa es el CVE-2026-55255, una referencia directa e insegura a objetos (CWE-639) con CVSS 9.9 en un endpoint de ejecución de flujos: el helper get_flow_by_id_or_endpoint_name resuelve un flujo por UUID sin comprobación de propietario, de modo que cualquier usuario autenticado puede ejecutar el flujo de otro inquilino a través de /api/v1/responses. El informe de Sysdig del 25 de junio es la primera explotación activa conocida, y la telemetría muestra a un operador recolectando IDs de flujo desde GET /api/v1/flows/ y reproduciéndolos unos 20 segundos después en POST /api/v1/responses con la entrada 'leak api keys,' sobre una instancia que también ejecutaba el RCE listado en CISA-KEV CVE-2026-33017. La lectura estructural de la información de hoy es exactamente la premisa de la predicción: el punto débil de las plataformas de agentes multi-inquilino es el plano de orquestación y autorización -- IDs de flujo/ejecución/espacio de trabajo opacos y recolectables, un endpoint de ejecución compartido y comprobaciones de propietario diferidas a la interfaz en lugar de aplicadas en el servidor por objeto -- y el mismo patrón arquitectónico se repite en la clase de pares n8n / Flowise / Dify / LangGraph Platform / CrewAI. La brecha respecto al listón falsable: la predicción exige una SEGUNDA plataforma distinta y nombrada de esta categoría (no Langflow) que reciba un aviso con CVSS >= 9.0 cuya causa raíz sea la autorización entre inquilinos, el acceso roto a nivel de objeto o un IDOR, idealmente con evidencia de explotación activa o de CISA-KEV. Hoy aporta la primera instancia y el disparador estructural; la recurrencia que confirmaría la clase aún no se ha producido.",
+      "reference_links": [
+        {
+          "label": "Sysdig - Understanding Langflow CVE-2026-55255, and why higher-CVSS vulnerabilities aren't always the most exploited",
+          "url": "https://webflow.sysdig.com/blog/understanding-langflow-cve-2026-55255-and-why-higher-cvss-vulnerabilities-arent-always-the-most-exploited"
+        },
+        {
+          "label": "GitHub Advisory Database - Langflow IDOR in /api/v1/responses lets authenticated attackers run another user's flow (CVE-2026-55255)",
+          "url": "https://github.com/advisories/GHSA-qrpv-q767-xqq2"
+        },
+        {
+          "label": "GitLab Advisory Database - CVE-2026-55255 Langflow IDOR (CVSS 9.9, fixed in 1.9.1)",
+          "url": "https://advisories.gitlab.com/pypi/langflow/CVE-2026-55255/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "El IDOR entre inquilinos de Langflow (CVE-2026-55255, CVSS 9.9) disparado de forma activa el 25 de junio es la señal de origen que precipita: un flujo resuelto por UUID opaco con comprobaciones de propietario diferidas a la interfaz sobre un endpoint de ejecución compartido. Ese es justamente el punto débil del plano de orquestación sobre el que descansa la tesis del CVE de autorización en los builders de agentes multi-inquilino (27 jun), y el patrón se repite en n8n/Flowise/Dify.",
+        "coherence": 4,
+        "remaining_gap": "Aún hace falta una segunda plataforma distinta y nombrada con un aviso de autorización entre inquilinos, BOLA o IDOR con CVSS >= 9.0; hoy solo aporta la primera instancia, no la recurrencia que confirma la clase."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.1e6f56222db35798",
+        "short_label": "Major AI-agent platform ships zero-trust controls as default-on by Q2 2027",
+        "prediction_date": "2026-06-27"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "Los dos avisos de seguridad de hoy son el imperativo estructural en torno al cual se construye esta tesis defensiva. El IDOR entre inquilinos de Langflow (CVE-2026-55255, CVSS 9.9) con primera explotación activa reportada por Sysdig el 25 de junio prueba que el plano de orquestación se entrega sin autorización por inquilino que deniegue por defecto: get_flow_by_id_or_endpoint_name resolvía un flujo por UUID sin comprobación de propietario. El bypass de protección SSRF de AutoGPT (CVE-2026-56663, CVSS 8.5, corregido en 0.6.52, publicado el 26 de junio) prueba que el plano de ejecución se entrega sin defensas de egreso y de llamadas a herramientas endurecidas contra SSRF: el SendWebRequestBlock que los agentes usan para llamadas HTTP salientes gestiona mal las direcciones IPv6 mapeadas a IPv4, lo que reabre el filtro de IP internas de modo que un agente puede alcanzar metadatos de la nube, paneles de administración internos y bases de datos. Juntos hacen el caso exacto de la predicción: un bloque que recupera una URL arbitraria es por construcción una superficie de ataque SSRF, y un flujo resuelto por ID opaco es por construcción una superficie entre inquilinos, a menos que la autorización y el egreso estén controlados por defecto. El objetivo falsable de la predicción es al menos una plataforma importante de agentes de IA, proveedor de orquestación o IDE agéntico que entregue controles zero-trust activados por defecto en una versión nombrada: autorización por inquilino a nivel de objeto que deniegue por defecto y/o listas de permitidos de egreso saliente por defecto con bloques endurecidos contra SSRF. La brecha respecto al listón: una entrada de blog, un interruptor opt-in, un parche puntual de un CVE o una promesa de hoja de ruta no cuentan -- y hoy solo aporta los CVE motivadores, no una versión con postura por defecto.",
+      "reference_links": [
+        {
+          "label": "Sysdig - Understanding Langflow CVE-2026-55255, and why higher-CVSS vulnerabilities aren't always the most exploited",
+          "url": "https://webflow.sysdig.com/blog/understanding-langflow-cve-2026-55255-and-why-higher-cvss-vulnerabilities-arent-always-the-most-exploited"
+        },
+        {
+          "label": "NVD - CVE-2026-56663 Detail (AutoGPT SSRF-protection bypass via IPv4-mapped IPv6 addresses, fixed in 0.6.52)",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56663"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Dos avisos de la misma semana son el imperativo detrás de la tesis del zero-trust activado por defecto (27 jun): el IDOR de Langflow (CVSS 9.9) prueba que el plano de orquestación se entrega sin autorización por inquilino que deniegue por defecto, y el bypass SSRF de AutoGPT (CVE-2026-56663, CVSS 8.5) prueba que el plano de ejecución se entrega sin llamadas a herramientas con egreso endurecido. Un bloque que recupera una URL arbitraria y un flujo de ID opaco son superficies SSRF y entre inquilinos a menos que estén controlados por defecto.",
+        "coherence": 4,
+        "remaining_gap": "Sigue faltando una plataforma importante que entregue autorización que deniegue por defecto y/o listas de permitidos de egreso endurecidas contra SSRF en una versión nombrada; hoy da CVE motivadores, no una entrega con postura por defecto."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.9bc46d8a918d51a2",
+        "short_label": "AMD Instinct MI400 launches with a named ship, memory, or rack spec by Q3 2026",
+        "prediction_date": "2026-06-27"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "El calendario de eventos de hoy aporta el catalizador fechado y nombrado sobre el que gira esta tesis. El Advancing AI 2026 de AMD está confirmado para el 22-23 de julio en Moscone en San Francisco, con la keynote y el foco en la serie Instinct MI400 programados para el 23 de julio -- un foro de lanzamiento construido a propósito para poner sobre la mesa una hoja de ruta de aceleradores comerciales frente a Nvidia. El objetivo falsable de la predicción es que en el evento AMD lance y detalle formalmente la serie de aceleradores de centro de datos MI400 con al menos un compromiso NOMBRADO y comprobable, no un adelanto: una ventana declarada de disponibilidad general o de envío en volumen, una capacidad o ancho de banda de memoria de alto ancho de banda nombrada, una plataforma a escala de rack nombrada (un sistema de rack de clase Helios) y/o un compromiso de despliegue de un hyperscaler o laboratorio frontera nombrado. Esto sigue la tesis permanente de que el entrenamiento y la inferencia a gran escala se mantienen sobre aceleradores comerciales de clase hyperscaler, de modo que la dimensión competitiva que mueve la nube es la hoja de ruta de aceleradores comerciales más sus especificaciones de memoria y rack y los compromisos de clientes nombrados. La brecha respecto al listón: hoy da el foro fechado, no la especificación sobre el escenario. Una diapositiva de adelanto sin especificaciones, un gráfico de hoja de ruta sin ventana de disponibilidad general, un re-anuncio de la línea de generación previa MI355X / MI350 o una filtración no confirmada no cuentan -- el compromiso nombrado que cualifique solo será comprobable tras la keynote del 23 de julio.",
+      "reference_links": [
+        {
+          "label": "AMD - Advancing AI 2026 (San Francisco, July 22-23)",
+          "url": "https://www.amd.com/en/corporate/events/advancing-ai.html"
+        },
+        {
+          "label": "AI Engineer - World's Fair 2026 (hackathon June 27-28; main program June 29 - July 2, Moscone West, San Francisco)",
+          "url": "https://www.ai.engineer/worldsfair/2026"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "landing",
+        "narrative": "El catalizador fechado para la tesis del lanzamiento del AMD Instinct MI400 (27 jun) está sobre la mesa: Advancing AI 2026 está confirmado para el 22-23 de julio en Moscone, con la keynote de la serie MI400 el 23 de julio -- un foro construido para enfrentar una hoja de ruta de aceleradores comerciales a Nvidia, dentro de la ventana del Q3 2026. El terreno para un compromiso nombrado de envío, memoria o rack está preparado.",
+        "coherence": 4,
+        "remaining_gap": "Una especificación nombrada y comprobable (ventana de disponibilidad general, capacidad HBM, rack de clase Helios o despliegue de hyperscaler) solo es verificable tras la keynote del 23 de julio; un adelanto sin especificaciones o un re-anuncio del MI355X no contaría."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.04f4d9d539cf6341",
+        "short_label": "Coding-agent harnesses adopt default-deny toolset gating as standard by H1 2027",
+        "prediction_date": "2026-06-20"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "Los dos avisos de hoy son evidencia directa y activa de la amenaza a la que responde esta tesis de denegación por defecto. El IDOR entre inquilinos de Langflow (CVE-2026-55255, CVSS 9.9) disparado de forma activa según el informe de Sysdig del 25 de junio muestra un endpoint de ejecución de agentes ejecutando el flujo de otro inquilino sin comprobación de propietario, y el bypass SSRF de AutoGPT (CVE-2026-56663, CVSS 8.5, corregido en 0.6.52) muestra un bloque de petición web de propósito general cableado en flujos de trabajo de agentes alcanzando servicios internos que el agente nunca debió tocar. Ambos son exactamente el modo de fallo de permisos abiertos que la predicción espera que los harnesses cierren: una primitiva que recupera una URL arbitraria y un endpoint de ejecución de alcance amplio son peligrosos precisamente porque el conjunto de herramientas y el egreso están permitidos por defecto en lugar de controlados. La predicción sostiene que los harnesses de agentes de codificación harán de la denegación por defecto del conjunto de herramientas la postura estándar -- herramientas y egreso de red apagados hasta que se habiliten explícitamente por tarea. La brecha respecto al listón: hoy aporta los CVE motivadores en plataformas de agentes, no un harness que entregue la denegación por defecto del conjunto de herramientas como su estándar. La propia remediación de AutoGPT es un parche SSRF puntual más una instrucción al operador para restringir el egreso saliente, que es la versión manual del valor por defecto que la predicción espera que se vuelva estándar -- no el valor por defecto en sí.",
+      "reference_links": [
+        {
+          "label": "Sysdig - Understanding Langflow CVE-2026-55255, and why higher-CVSS vulnerabilities aren't always the most exploited",
+          "url": "https://webflow.sysdig.com/blog/understanding-langflow-cve-2026-55255-and-why-higher-cvss-vulnerabilities-arent-always-the-most-exploited"
+        },
+        {
+          "label": "NVD - CVE-2026-56663 Detail (AutoGPT SSRF-protection bypass via IPv4-mapped IPv6 addresses, fixed in 0.6.52)",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56663"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Ambos avisos evidencian la amenaza a la que responde la tesis de la denegación por defecto del conjunto de herramientas (20 jun): el IDOR de Langflow ejecuta el flujo de otro inquilino sobre un endpoint amplio, y el bypass SSRF de AutoGPT (CVE-2026-56663) permite que un bloque que recupera una URL arbitraria alcance servicios internos -- ambos peligrosos porque las herramientas y el egreso están permitidos por defecto en lugar de controlados por tarea. La corrección de parche más consejo de egreso de AutoGPT es la versión manual de ese valor por defecto.",
+        "coherence": 3,
+        "remaining_gap": "Ningún harness de agentes de codificación entregó hoy la denegación por defecto del conjunto de herramientas como su postura estándar; la evidencia son CVE motivadores y un parche puntual, no el valor por defecto en sí volviéndose estándar."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.f3f7e18b691f1c39",
+        "short_label": "OpenClaw ships default-deny tool and network gating out-of-box by Q4 2026",
+        "prediction_date": "2026-06-23"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "El aviso de AutoGPT de hoy encaja de lleno en la mitad de control de red de esta predicción. El CVE-2026-56663 (CVSS 8.5, corregido en 0.6.52) es un bypass de las protecciones SSRF de AutoGPT: el SendWebRequestBlock gestiona mal las direcciones IPv6 mapeadas a IPv4 y no valida ciertos rangos de IP, de modo que un usuario autenticado puede vencer el filtro de IP internas y alcanzar servicios de red privada -- metadatos de la nube, paneles de administración internos, bases de datos. El consejo de corrección -- actualizar y restringir el egreso saliente desde el ejecutor del agente -- es precisamente la postura de red de denegación por defecto que la predicción espera que un harness de agentes entregue de fábrica en lugar de dejarla en manos de los operadores. El IDOR entre inquilinos de Langflow disparado de forma activa refuerza la misma presión más amplia sobre las plataformas de agentes para controlar por defecto en la frontera de objeto y de ejecución. El objetivo falsable de la predicción es que OpenClaw en concreto entregue control de herramientas y de red de denegación por defecto de fábrica. La brecha respecto al listón: hoy aporta el caso de amenaza en proyectos pares (AutoGPT, Langflow), no una versión de OpenClaw; ninguna entrega de denegación por defecto de OpenClaw aparece en la información de hoy.",
+      "reference_links": [
+        {
+          "label": "NVD - CVE-2026-56663 Detail (AutoGPT SSRF-protection bypass via IPv4-mapped IPv6 addresses, fixed in 0.6.52)",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56663"
+        },
+        {
+          "label": "Sysdig - Understanding Langflow CVE-2026-55255, and why higher-CVSS vulnerabilities aren't always the most exploited",
+          "url": "https://webflow.sysdig.com/blog/understanding-langflow-cve-2026-55255-and-why-higher-cvss-vulnerabilities-arent-always-the-most-exploited"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "El bypass SSRF de AutoGPT del 26 de junio (CVE-2026-56663) alimenta la mitad de control de red de la predicción de denegación por defecto de OpenClaw (23 jun): una primitiva de recuperación que alcanza metadatos de la nube y servicios internos es justo el egreso que debería estar apagado de fábrica, y el consejo de la corrección de restringir el egreso saliente es la versión manual del valor por defecto esperado. El IDOR de Langflow disparado de forma activa refuerza la misma presión de control de objeto y de ejecución.",
+        "coherence": 3,
+        "remaining_gap": "El caso de amenaza reside en proyectos pares; ninguna versión de OpenClaw que entregue control de herramientas y de red de denegación por defecto de fábrica aparece hoy."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.079ca77d11decc5f",
+        "short_label": "AI accelerator ships confidential-inference tier with attestation by H1 2027",
+        "prediction_date": "2026-06-26"
+      },
+      "today_relevance": 2,
+      "evidence_summary": "Las noticias de hoy tocan esta tesis principalmente a través del calendario de foros de chips de IA, con un refuerzo tenue por el lado de la amenaza. El Advancing AI 2026 de AMD (22-23 de julio en Moscone, con la keynote y el foco en la serie Instinct MI400 el 23 de julio) es exactamente el tipo de escenario donde aparecería una pieza de inferencia confidencial con atestación, y se sitúa en la ventana de esta predicción. Por el lado de la amenaza, el IDOR de Langflow disparado de forma activa y el bypass SSRF de AutoGPT mantienen la ronda de seguridad de IA agéntica ligada a la integridad y el aislamiento de lo que se ejecuta sobre la infraestructura de IA, la preocupación amplia que la inferencia confidencial enraizada en hardware y la atestación de modelos firmados abordan -- aunque ninguno de los dos CVE es en sí una historia de aceleradores ni de atestación. La predicción espera que un acelerador de inferencia de IA específico se lance o se presente con la computación confidencial como una característica nombrada y de peso: raíz de confianza en el chip, TEE-I/O que mantenga pesos y activaciones cifrados en uso a través de la frontera CPU-acelerador, y atestación de modelos firmados, comercializado como un SKU o nivel de inferencia confidencial con nombre propio. La brecha respecto al listón: hoy da solo el foro próximo de AMD y el trasfondo de amenaza ambiental, no una pieza en distribución. Una línea genérica de computación confidencial en la ficha técnica de una GPU, un artículo de investigación o una oferta de VM confidencial sin TEE-I/O ni atestación de modelos no cuenta; el nivel nombrado de inferencia confidencial aún no se ha divulgado.",
+      "reference_links": [
+        {
+          "label": "AMD - Advancing AI 2026 (San Francisco, July 22-23)",
+          "url": "https://www.amd.com/en/corporate/events/advancing-ai.html"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "El Advancing AI 2026 de AMD (22-23 de julio, Moscone, keynote de la serie MI400 el 23 de julio) se sitúa dentro de la ventana de la predicción del nivel de inferencia confidencial (26 jun) y es exactamente el tipo de escenario donde aparecería una pieza con raíz de confianza en el chip, TEE-I/O y atestación de modelos firmados. El IDOR de Langflow disparado de forma activa y el SSRF de AutoGPT mantienen sonoras las preocupaciones por la integridad de lo que se ejecuta, aunque ninguno es una historia de aceleradores ni de atestación.",
+        "coherence": 2,
+        "remaining_gap": "Solo un foro próximo y trasfondo de amenaza ambiental hoy; no se ha divulgado ninguna pieza en distribución con un nivel nombrado de inferencia confidencial ni atestación."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.94703faa1b26ba42",
+        "short_label": "Managed model-serving platforms default to safe artifact handling by H1 2027",
+        "prediction_date": "2026-06-17"
+      },
+      "today_relevance": 2,
+      "evidence_summary": "Las noticias de hoy inciden en esta tesis por tema más que por un cambio en el manejo por defecto. El IDOR entre inquilinos de Langflow disparado de forma activa y el bypass SSRF de AutoGPT muestran ambos que la fontanería de las plataformas de agentes -- endpoints de ejecución, primitivas de recuperación -- se entrega insegura por defecto y solo se endurece tras un incidente de severidad máxima, que es la misma presión de entrega por defecto que esta predicción espera que alcance a las plataformas gestionadas de servido de modelos. Pero los CVE de hoy son un IDOR de bypass de autorización y un bypass SSRF, no la clase de deserialización insegura de artefactos (pickle/dill, checkpoints de modelos, cuerpos de feature store) que define el listón de esta predicción, de modo que el contacto es temático en lugar de directo. La predicción sostiene que las plataformas gestionadas de servido moverán el manejo seguro de artefactos -- deserialización controlada o aislada en sandbox, artefactos firmados o con procedencia verificada, formatos seguros por defecto -- de una opción opt-in al comportamiento por defecto de la plataforma. La brecha respecto al listón: hoy no aporta ni un incidente de deserialización ni un cambio de manejo por defecto en una plataforma gestionada; el desenlace defensivo -- una plataforma nombrada que active el manejo seguro de artefactos por defecto -- no se ha divulgado.",
+      "reference_links": [
+        {
+          "label": "Sysdig - Understanding Langflow CVE-2026-55255, and why higher-CVSS vulnerabilities aren't always the most exploited",
+          "url": "https://webflow.sysdig.com/blog/understanding-langflow-cve-2026-55255-and-why-higher-cvss-vulnerabilities-arent-always-the-most-exploited"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "El IDOR de Langflow disparado de forma activa y el SSRF de AutoGPT muestran que la fontanería de las plataformas de agentes se entrega insegura por defecto y solo se endurece tras un incidente de severidad máxima, la misma presión de entrega por defecto que la predicción del manejo seguro de artefactos (17 jun) espera que alcance a las plataformas gestionadas de servido de modelos. Pero ambos son fallos de bypass de autorización y de falsificación de petición, no la clase de deserialización insegura (pickle, dill, checkpoints de modelos) que define este listón, de modo que el contacto sigue siendo temático.",
+        "coherence": 2,
+        "remaining_gap": "Hoy ningún incidente de deserialización ni cambio por defecto en una plataforma gestionada; no se ha divulgado ninguna plataforma nombrada que active el manejo seguro de artefactos por defecto."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.3e6e8b6ae1e7c76e",
+        "short_label": "AI-agent procurement adds a numeric prompt-injection-resistance bar by Q2 2027",
+        "prediction_date": "2026-06-23"
+      },
+      "today_relevance": 2,
+      "evidence_summary": "Las noticias de hoy tocan esta tesis por cercanía y foro, no por un cambio en la especificación de aprovisionamiento. El IDOR de Langflow disparado de forma activa y el bypass SSRF de AutoGPT mantienen sonoro el redoble sobre la superficie de ataque de la IA agéntica -- ejecución de flujos entre inquilinos sin autenticar y una primitiva de recuperación de agentes alcanzando servicios internos -- que es el tipo de corriente de incidentes que alimenta la demanda del lado comprador de listones de seguridad medibles en el aprovisionamiento de agentes de IA. El foro de estándares relevante está en el calendario futuro: OWASP Global AppSec USA (5-6 de noviembre en San Francisco) se sitúa en la ventana de la predicción, junto a las líneas de seguridad de IA de Black Hat y DEF CON. Pero estos son fallos de autorización y de falsificación de petición en lugar de inyección de prompts, de modo que el contacto con el listón específico de esta predicción es oblicuo. El objetivo falsable de la predicción es que el aprovisionamiento de agentes de IA añada un listón numérico de resistencia a la inyección de prompts -- un umbral cuantificado en un requisito de compra. La brecha respecto al listón es esencialmente toda la afirmación: hoy aporta presión temática de seguridad y el foro de estándares relevante, no un documento de aprovisionamiento que especifique un umbral numérico de resistencia a la inyección de prompts.",
+      "reference_links": [
+        {
+          "label": "Sysdig - Understanding Langflow CVE-2026-55255, and why higher-CVSS vulnerabilities aren't always the most exploited",
+          "url": "https://webflow.sysdig.com/blog/understanding-langflow-cve-2026-55255-and-why-higher-cvss-vulnerabilities-arent-always-the-most-exploited"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "El IDOR de Langflow disparado de forma activa el 25 de junio y el bypass SSRF de AutoGPT mantienen sonoro el redoble de la superficie de ataque agéntica, la presión del lado comprador que alimenta la demanda de listones de seguridad medibles. OWASP Global AppSec USA (5-6 nov, SF) se sitúa en la ventana. Pero son fallos de autorización y de falsificación de petición, no de inyección de prompts, de modo que el contacto con el listón numérico de resistencia es oblicuo.",
+        "coherence": 2,
+        "remaining_gap": "Ningún documento de aprovisionamiento que especifique un umbral numérico de resistencia a la inyección de prompts; hoy da presión temática y un foro de estándares, no el listón en sí."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.b1fc4c7fdc0c17fe",
+        "short_label": "AI inference proxies gain named CISA KEV-timeline governance by Q2 2027",
+        "prediction_date": "2026-06-10"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "[REVIVED] Coincidencia de palabras clave de Capa 1 entre las señales de esta fila latente -- SSRF, servidor MCP, proxies de inferencia de IA / gateways de LLM como clase de software nombrada, remediación con plazo KEV -- y las noticias de hoy. El bypass de protección SSRF de AutoGPT (CVE-2026-56663, CVSS 8.5, corregido en 0.6.52) es la misma primitiva SSRF sobre un gateway de agentes que esta predicción rastrea: un bloque de petición web de propósito general alcanzando servicios internos a través de una brecha de análisis de IPv6 mapeada a IPv4, con la remediación de restringir el egreso saliente -- la postura exacta de restricción de exposición a internet que la predicción espera ver codificada como gobernanza nombrada. El IDOR entre inquilinos de Langflow disparado de forma activa (CVE-2026-55255, CVSS 9.9), encadenado en la misma instancia con el RCE ya listado en CISA-KEV CVE-2026-33017, refuerza el hilo del plazo KEV directamente: la capa de orquestación/proxy de agentes está generando CVE de severidad máxima activamente explotados, del tipo que atrae listados en CISA-KEV y directivas operativas. El objetivo falsable de la predicción es que los proxies de inferencia de IA / gateways de LLM / servidores MCP obtengan gobernanza de clase de software nombrada con un plazo de remediación de estilo CISA-KEV -- idealmente una publicación conjunta CISA-NSA o una directiva operativa vinculante. La brecha respecto al listón: hoy aporta CVE frescos en esta misma clase (uno encadenado con un RCE listado en KEV), no un instrumento de gobernanza nombrado que designe la clase de software.",
+      "reference_links": [
+        {
+          "label": "NVD - CVE-2026-56663 Detail (AutoGPT SSRF-protection bypass via IPv4-mapped IPv6 addresses, fixed in 0.6.52)",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56663"
+        },
+        {
+          "label": "Sysdig - Understanding Langflow CVE-2026-55255, and why higher-CVSS vulnerabilities aren't always the most exploited",
+          "url": "https://webflow.sysdig.com/blog/understanding-langflow-cve-2026-55255-and-why-higher-cvss-vulnerabilities-arent-always-the-most-exploited"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "El bypass SSRF de AutoGPT (CVE-2026-56663, corregido en 0.6.52) es la misma primitiva SSRF sobre un gateway de agentes que esta tesis del 10 de junio rastrea, remediada al restringir el egreso saliente. El IDOR entre inquilinos de Langflow disparado de forma activa (CVE-2026-55255, CVSS 9.9), encadenado en la instancia con el RCE listado en KEV CVE-2026-33017, refuerza el hilo del plazo KEV: la capa de proxy está generando CVE de severidad máxima activamente explotados.",
+        "coherence": 4,
+        "remaining_gap": "CVE frescos en esta clase, uno encadenado con un RCE listado en KEV, pero ningún instrumento de gobernanza nombrado que designe los proxies de inferencia de IA como clase de software."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.488b349d322d5c4a",
+        "short_label": "Agent-framework SQL tools ship read-only-by-default execution guards by Q1 2027",
+        "prediction_date": "2026-06-05"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "[REVIVED] Coincidencia semántica de Capa 2: las señales de esta fila latente -- ejecución arbitraria por inyección de prompts, aplicación de envoltorio de ejecución del framework, credenciales de solo lectura por defecto con mínimo privilegio -- se corresponden directamente con los CVE de la capa de ejecución de agentes de hoy. El IDOR entre inquilinos de Langflow disparado de forma activa (CVE-2026-55255, CVSS 9.9, get_flow_by_id_or_endpoint_name sin comprobación de propietario) y el bypass SSRF de AutoGPT (CVE-2026-56663, CVSS 8.5, una primitiva de recuperación alcanzando servicios internos) son ambos instancias de la misma causa raíz a la que apunta la respuesta defensiva de esta predicción: los frameworks de agentes ejecutan operaciones de alcance amplio sin guardas de mínimo privilegio que denieguen por defecto en el envoltorio de ejecución. El desenlace específico de la predicción es que las herramientas SQL de los frameworks de agentes entreguen guardas de ejecución de solo lectura por defecto, validadas por el parser y limitadas a SELECT, con escritura/DDL como opt-in -- el análogo SQL de la autorización por objeto y el control de egreso que los CVE de hoy reclaman. La brecha respecto al listón: los fallos de hoy son un IDOR y un SSRF en lugar de una inyección de texto a SQL, y ningún toolkit SQL de agentes entregó hoy guardas de solo lectura por defecto; el contacto es el argumento estructural compartido de denegación por defecto en la ejecución, no una versión de una herramienta SQL.",
+      "reference_links": [
+        {
+          "label": "Sysdig - Understanding Langflow CVE-2026-55255, and why higher-CVSS vulnerabilities aren't always the most exploited",
+          "url": "https://webflow.sysdig.com/blog/understanding-langflow-cve-2026-55255-and-why-higher-cvss-vulnerabilities-arent-always-the-most-exploited"
+        },
+        {
+          "label": "NVD - CVE-2026-56663 Detail (AutoGPT SSRF-protection bypass via IPv4-mapped IPv6 addresses, fixed in 0.6.52)",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56663"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "El IDOR entre inquilinos de Langflow disparado de forma activa (CVE-2026-55255, sin comprobación de propietario) y el bypass SSRF de AutoGPT (CVE-2026-56663) provienen ambos de la causa raíz a la que responde esta tesis del 5 de junio: los frameworks de agentes ejecutan operaciones de alcance amplio sin guardas de mínimo privilegio que denieguen por defecto en el envoltorio de ejecución. Las guardas SQL de solo lectura por defecto y limitadas a SELECT son el mismo argumento estructural aplicado a la herramienta SQL.",
+        "coherence": 3,
+        "remaining_gap": "Los fallos de hoy son un IDOR y un SSRF, no una inyección de texto a SQL, y ningún toolkit SQL de agentes entregó guardas de solo lectura por defecto."
+      }
+    }
+  ]
+}

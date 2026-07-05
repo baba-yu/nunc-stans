@@ -1,0 +1,44 @@
+[
+  {
+    "actor": "open coding-agent harness security maintainer",
+    "job": "Flipping the harness default profile so a fresh install denies tool calls, outbound network, and MCP credentials unless an operator explicitly grants them",
+    "outcome": "A tagged stable release whose changelog states capability, network, and MCP-credential gating are enabled by default on a clean install",
+    "motivation": "Hardening landed piecemeal in 2026.6.x while gating stayed opt-in, leaving fresh installs exposed to the documented injection risk",
+    "task": {
+      "who": "the harness project's core security maintainers and release owners",
+      "what": "Make least-privilege the shipped default execution profile",
+      "where": "The harness default config and stable release branch",
+      "when": "From the June 2026.6.x patches through Q4 2026",
+      "why": "Opt-in gating leaves clean installs unprotected by default",
+      "how": "Default-deny config flip plus changelog and docs update"
+    }
+  },
+  {
+    "actor": "agentic-security standards and benchmark author",
+    "job": "Publishing the converging evidence that ties agent risk categories to CVEs and proves no agent config resists prompt injection, forcing defense to the harness layer",
+    "outcome": "Authoritative reports and benchmark scores that make least-privilege defaults the expected baseline for coding-agent harnesses",
+    "motivation": "If the model layer cannot resist injection, the harness layer must carry the defense, and that case must be made publicly",
+    "task": {
+      "who": "OWASP agentic working group and StakeBench benchmark researchers",
+      "what": "Publish CVE-linked risk rankings and injection-resistance scores",
+      "where": "OWASP 2026 agentic report and StakeBench results",
+      "when": "Through 2026 ahead of the Q4 release window",
+      "why": "Evidence pressures maintainers to ship gating as default",
+      "how": "Indirect and direct prompt-injection test suites against agent configs"
+    }
+  },
+  {
+    "actor": "rival hardened-harness platform engineering team",
+    "job": "Shipping stricter network-policy and MCP-credential-filtering defaults around their sandbox so a competing harness lands default gating first",
+    "outcome": "A same-direction release that defaults to network and credential gating, validating least-privilege-by-default across the harness category",
+    "motivation": "Being first to ship default least-privilege wins security credibility against the presumed first mover in a converging field",
+    "task": {
+      "who": "NemoClaw and Hermes Agent harness engineering teams",
+      "what": "Default-enable network policy and MCP credential filtering",
+      "where": "OpenShell and Tirith pre-execution sandbox layers",
+      "when": "During the 2026 runway toward Q4 2026",
+      "why": "Shipping default gating first earns security leadership",
+      "how": "SSRF protection plus Tirith pre-execution scan as defaults"
+    }
+  }
+]

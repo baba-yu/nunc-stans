@@ -1,0 +1,95 @@
+{
+  "date": "2026-06-25",
+  "by_prediction": {
+    "prediction.1508cdb4fd03cc56": [
+      {
+        "actor": "product lead ng managed-offering sa isang IT-services o security-platform vendor",
+        "job": "Pagbubuo ng autonomous-pentest agent sa isang paulit-ulit na managed SKU na may presyo, scoping, at safe-harbor na termino bago ang fall procurement window.",
+        "outcome": "Isang pinangalanan at always-on na managed autonomous-pentesting tier na may sariling SKU at presyo, ibinebenta bilang tuloy-tuloy na alok hindi isang one-off na engagement.",
+        "motivation": "Kunin ang paulit-ulit na kita sa offensive-security at i-differentiate ang delivery stack habang lumilipat ang autonomous red-teaming mula research curiosity patungo sa nabibiling serbisyo.",
+        "task": {
+          "who": "Managed-services product at offering-management team ng vendor",
+          "what": "Tukuyin ang SKU, presyo, at scoping para sa managed pentest tier",
+          "where": "Proseso ng service-catalog, procurement, at delivery-stack productization",
+          "when": "Ngayon hanggang Q4 2026, bago ang fall procurement window",
+          "why": "Ibenta ang autonomous pentesting bilang paulit-ulit na managed revenue",
+          "how": "Partner-integrated autonomous platform na binalot sa isang managed-service SKU"
+        }
+      },
+      {
+        "actor": "platform at delivery-integration lead ng autonomous-offensive-security startup",
+        "job": "Pagpapatibay ng autonomous pentest platform para sa tuloy-tuloy, multi-tenant na operasyon ng kliyente at pagkabit nito sa delivery stack ng isang partner vendor sa production scale.",
+        "outcome": "Isang tuloy-tuloy na offensive-testing platform na nakakabit sa stack ng isang incumbent vendor, handang sumuporta sa isang pinangalanang always-on na managed tier.",
+        "motivation": "Gawing paulit-ulit na enterprise distribution ang strategic investment at partnership, na pinatutunayan ang always-on machine-scale red-teaming nang lampas sa conference demos.",
+        "task": {
+          "who": "Platform-engineering at partner-integration team ng startup",
+          "what": "Patibayin ang agent para sa tuloy-tuloy na multi-tenant na operasyon ng kliyente",
+          "where": "Delivery stack ng partner vendor at testing environments ng kliyente",
+          "when": "Ngayon hanggang Q4 2026, matapos ang pagsasara ng Series C extension",
+          "why": "Paganahin ang always-on na operasyon na puwedeng i-productize ng isang vendor",
+          "how": "Continuous offensive-testing pipeline na nakakabit sa pamamagitan ng partnership API"
+        }
+      }
+    ],
+    "prediction.18ba4b3ebe2d6bba": [
+      {
+        "actor": "custom-silicon program lead ng isang frontier-model buyer",
+        "job": "Pagpapaandar ng in-house rack-scale inference accelerator mula sa architecture spec hanggang tape-out patungo sa isang pinangalanang part na may vendor per-watt claims at end-2026 deployment target.",
+        "outcome": "Isang publikong sinabing commitment o inilabas na pinangalanang buyer-designed inference ASIC, co-designed kasama ang isang merchant partner, na sasama sa OpenAI/Google/Amazon cohort bilang pang-apat na entrant.",
+        "motivation": "Hindi na kayang panindigan ang gigawatt-scale merchant-GPU inference economics; ang co-designed na accelerator kasama ang partner fabric ang napatunayang labasan para sa model roadmap.",
+        "task": {
+          "who": "Silicon-architecture at hardware-engineering program team ng buyer",
+          "what": "I-co-design at i-tape out ang isang rack-scale inference accelerator",
+          "where": "Internal na silicon program kasama ang isang merchant co-design partner",
+          "when": "Ngayon hanggang H1 2027, bago ang publikong commitment",
+          "why": "Babaan ang gigawatt-scale inference cost kumpara sa merchant-GPU economics",
+          "how": "ASIC co-design kasama ang Broadcom, Marvell, o isang foundry-fronted na house"
+        }
+      },
+      {
+        "actor": "engagement lead ng merchant ASIC co-design partner",
+        "job": "Pag-engineer ng custom inference accelerator at networking fabric ng isang frontier buyer sa isang napatunayang co-design template, na binubuo ito patungo sa isang publikong paglulunsad na may per-watt claims.",
+        "outcome": "Isang merchant-partner-co-designed na pinangalanang inference part na na-ship o sinabing commitment ng isang pang-apat na frontier buyer, na ginagaya ang Jalapeno template para sa isang bagong cohort entrant.",
+        "motivation": "Gawing paulit-ulit na marquee design win ang napatunayang Jalapeno-style na co-design demand habang dumarami ang gigawatt-scale na mga buyer na humaharap sa parehong build-versus-buy na pressure.",
+        "task": {
+          "who": "Custom-ASIC at networking-fabric engineering team ng merchant vendor",
+          "what": "Maghatid ng co-designed na accelerator at rack-scale networking fabric",
+          "where": "Engagement ng merchant ASIC house kasama ang frontier buyer",
+          "when": "Ngayon hanggang H1 2027, panahong inilaan patungo sa pinangalanang part",
+          "why": "Manalo ng paulit-ulit na marquee inference-silicon co-design contract",
+          "how": "Magagamit-uli na co-design template kasama ang partner networking fabric"
+        }
+      }
+    ],
+    "prediction.98d07cefb20b3032": [
+      {
+        "actor": "product lead ng isang agentic-coding platform",
+        "job": "Pagbubuo ng admin-side consumption-governance sa platform: per-seat at per-team token budgets, hard at soft caps, real-time usage dashboards, at autonomy-depth guardrails.",
+        "outcome": "Token budgets, caps, dashboards, at autonomy guardrails na ina-ship bilang on-by-default na feature sa enterprise tier ng isang malaking agentic-coding platform.",
+        "motivation": "Iwasan ang disadvantage sa procurement habang nagiging norm ang consumption-based pricing at hinihingi ng mga enterprise ang governed na token spend bago i-scale ang agent rollout.",
+        "task": {
+          "who": "Enterprise-tier product at engineering team ng platform",
+          "what": "Mag-ship ng default token budgets, caps, at usage dashboards",
+          "where": "Admin console ng enterprise tier ng agentic-coding platform",
+          "when": "Ngayon hanggang Q2 2027 na product-roadmap na panahon",
+          "why": "Gawing table stakes ang FinOps-for-agents para manalo sa procurement",
+          "how": "Consumption-metering, policy guardrails, at per-seat budget enforcement"
+        }
+      },
+      {
+        "actor": "enterprise FinOps-for-AI at platform-engineering lead",
+        "job": "Pagsusulat ng procurement requirements na humihingi ng platform-enforced na token discipline, pagkatapos ay pag-evaluate ng agentic-coding vendors laban sa isang governed engineering operating model bago ang scaled rollout.",
+        "outcome": "Procurement criteria na humihingi ng native budget at cap controls, na pumipilit sa mga vendor na gawing default ang consumption governance sa halip na opt-in.",
+        "motivation": "Pigilan ang per-seat token bills na umaabot sa $200-$2,000+ kada developer kada buwan, kung saan ang ungoverned na autonomy at sobrang laking context window ang nagtutulak sa pinakamabilis na pagtaas ng gastos.",
+        "task": {
+          "who": "Enterprise FinOps, procurement, at platform-engineering function",
+          "what": "Iutos ang platform-enforced na token budgets sa mga vendor evaluation",
+          "where": "Mga proseso ng procurement at RFP para sa agentic-coding tool",
+          "when": "Ngayon hanggang Q2 2027 na scaled-rollout evaluation window",
+          "why": "Ipatupad ang token discipline sa platform, hindi sa pagpipigil ng developer",
+          "how": "RFP requirements at governed engineering operating-model scorecards"
+        }
+      }
+    ]
+  }
+}

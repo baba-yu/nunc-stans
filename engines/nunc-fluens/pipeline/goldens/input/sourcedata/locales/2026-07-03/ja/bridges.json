@@ -1,0 +1,280 @@
+{
+  "date": "2026-07-03",
+  "validation_rows": [
+    {
+      "prediction_ref": {
+        "id": "prediction.5e0beac647793331",
+        "short_label": "AMD MI400 will market memory bandwidth over peak FLOPS at Advancing AI",
+        "prediction_date": "2026-07-02"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "本日のイベントカレンダーは、Moscone で 7 月 22〜23 日に開かれる AMD の Advancing AI 2026 を、直近の AI チップの起点として改めて確定させた。ここでは MI400 シリーズと Helios ラックスケールシステムが供給時期の見通しとともに示される見込みである。報道は次のアクセラレータ世代を、演算主導ではなくメモリ主導として描いており、これはまさにこの予測が見込む売り込みの姿勢と一致する。予測は AMD の公開と、8 月中旬の Half Moon Bay サミットを、安全なアクセラレータや秘匿推論の発表にふさわしい場として挙げ、素の FLOPS を前面に出す見出しよりもメモリとラックの物語を先に立てている。基調講演そのものはまだ行われておらず、メモリ帯域を FLOPS より前に押し出すという具体的な位置づけは、実際に語られたのではなく予定されている段階にとどまる。",
+      "reference_links": [
+        {
+          "label": "SemiWiki - Hot Chips 2026",
+          "url": "https://semiwiki.com/event/hot-chips-2026/"
+        },
+        {
+          "label": "AI Infra Summit - 2026 FAQs",
+          "url": "https://www.ai-infra-summit.com/faqs"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "landing",
+        "narrative": "本日のカレンダーは Advancing AI を Moscone での 7 月 22〜23 日に固定し、MI400 シリーズと Helios ラックスケールシステムが供給時期の見通しとともに示される見込みとし、次のアクセラレータ世代を素の FLOPS の見出しよりもメモリとラック主導として描く。これは想定される姿勢について、場と主体を確定させるものである。ただし基調講演そのものはまだ行われていない。",
+        "coherence": 3,
+        "remaining_gap": "基調講演はまだ数週間先であり、メモリ帯域を FLOPS より前に押し出す位置づけは、壇上で語られたのではなく予定されている段階にとどまる。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.9bc46d8a918d51a2",
+        "short_label": "AMD Instinct MI400 launches with a named ship, memory, or rack spec by Q3 2026",
+        "prediction_date": "2026-06-27"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "イベントトラッカーは、サンフランシスコの Moscone で 7 月 22〜23 日に開かれる AMD の Advancing AI 2026 を確定させ、そこで MI400 シリーズと Helios という名称のラックスケールシステムが供給時期の見通しとともに示される見込みとしている。これにより予測は、Q3 2026 の期間内に収まる確定した公開日と、名称のあるラックシステムを得ることになり、MI400 はロードマップ上の存在から、具体的な日程の定まった開示へと進んだ。具体的な出荷・メモリ・ラックの数量は基調講演まで確定しないため、これは最終仕様そのものではなく、確定した日付と名称のあるシステムである。",
+      "reference_links": [
+        {
+          "label": "SemiWiki - Hot Chips 2026",
+          "url": "https://semiwiki.com/event/hot-chips-2026/"
+        },
+        {
+          "label": "AI Infra Summit - 2026 FAQs",
+          "url": "https://www.ai-infra-summit.com/faqs"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "landing",
+        "narrative": "イベントトラッカーは Advancing AI を Moscone での 7 月 22〜23 日に固定し、MI400 シリーズと Helios という名称のラックスケールシステムが供給時期の見通しとともに示される見込みとする。これは確定した公開日を Q3 2026 の期間内にしっかり収め、名称のあるラックシステムをすでに与えており、MI400 をロードマップ上の存在から、具体的な日程の定まった開示へと進めるものである。",
+        "coherence": 4,
+        "remaining_gap": "具体的な出荷・メモリ・ラックの数量は、基調講演が実際に名称のある仕様を示すまで確定しないままである。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.cb8447f5c6e4c65d",
+        "short_label": "Agent-builder frameworks ship sandboxed MCP tool execution by default by Q1 2027",
+        "prediction_date": "2026-07-01"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "本日のニュースは直接の圧力となるシグナルである。Obsidian Security が公開した Flowise の Custom-MCP RCE(CVE-2026-40933)の実働する概念実証は、stdio トランスポートに存在する。ここではユーザーが与えたコマンドがサンドボックス化されていない子プロセスとして起動されるため、汚染されたワークフローをエクスポートしたものが、承認の確認を経ずにインポート時点で実行されてしまう。より鋭いのは、公式パッチが回避できてしまうことを研究者が示し、自己ホスト型のインストールがデフォルトのまま脆弱に留まる点である。そのため推奨される対処は、パッチを当てて待つやり方から、stdio を無効にして Server-Sent Events に切り替え、インポートした MCP 設定を信頼できないコードとして扱うやり方へと移った。連携して出された MCP のサプライチェーン勧告は、同じサンドボックス化されていないサブプロセスという根本原因を LiteLLM・Agent Zero・LangBot・Windsurf にまたがって結びつけており、これはまさにこの予測が名指しする、MCP ツール実行をデフォルトでサンドボックス化する方向への構造的な圧力である。",
+      "reference_links": [
+        {
+          "label": "NVD - CVE-2026-40933 Detail",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-40933"
+        },
+        {
+          "label": "Infosecurity Magazine - Critical Flowise Flaw Gives Attackers Full Server Control",
+          "url": "https://www.infosecurity-magazine.com/news/flowise-mcp-rce-poc/"
+        },
+        {
+          "label": "OX Security - MCP Supply Chain Advisory",
+          "url": "https://www.ox.security/blog/mcp-supply-chain-advisory-rce-vulnerabilities-across-the-ai-ecosystem/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "実働する Flowise の Custom-MCP RCE(CVE-2026-40933)は、承認の確認を経ずにインポート時点でサンドボックス化されていない子プロセスを実行し、公式パッチが回避できてしまうことも研究者が示した。連携して出された勧告は、同じサンドボックス化されていないサブプロセスという根本原因を LiteLLM・Agent Zero・LangBot・Windsurf にまたがって結びつけており、これはまさに MCP 実行をデフォルトでサンドボックス化する方向への構造的な圧力である。",
+        "coherence": 4,
+        "remaining_gap": "対処の指針は stdio を無効にする方向で一致したものの、主要なエージェントビルダーで、サンドボックス化された MCP 実行を強制的なデフォルトとして出荷したところはまだない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.a4f83081580b9a3d",
+        "short_label": "Launch-day vLLM/SGLang + Ollama support becomes open-weight MoE release bar",
+        "prediction_date": "2026-07-02"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "Bridgewater の AIA Labs と Thinking Machines Lab は、オープンウェイトの Qwen3-235B MoE ベースを専門特化で微調整したものを公開し、6 つの金融情報フィルタリングタスクにわたり平均 84.7% の精度に達した。これは最良のフロンティアモデルの 78.2% を上回り、タスクあたりの推論コストをおよそ 13.8 分の 1 に抑えつつ、誤りを 29.8% 減らしたことになる。この結果は、商用利用に耐える本格的なオープンウェイト MoE の土台として Qwen3-235B を裏づけ、自社が独自のラベルを持つ場面では、自前所有のオープンウェイトの専門特化モデルへと、内製か購入かの答えを傾ける。これは、公開と同時にそろえるサーバー実行環境とローカル実行環境の対応がオープンウェイトの最低条件になりつつある、ローカル最適化の領域に位置づけられる。ただし本日の話題は、公開時点での vLLM/SGLang と Ollama の同梱という条件そのものよりも、学習の手法と経済性に重心がある。",
+      "reference_links": [
+        {
+          "label": "Thinking Machines Lab - Learning to Replicate Expert Judgment in Financial Tasks",
+          "url": "https://thinkingmachines.ai/news/learning-to-replicate-expert-judgment-in-financial-tasks/"
+        },
+        {
+          "label": "Blockchain.News - Bridgewater Fine-Tunes Model to Beat Frontier LLMs",
+          "url": "https://blockchain.news/ainews/bridgewater-fine-tunes-model-beats-frontier-llms"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "Bridgewater と Thinking Machines によるオープンウェイトの Qwen3-235B MoE の微調整は、タスクあたりのコストをおよそ 13.8 分の 1 に抑えつつ誤りを 29.8% 減らして最良のフロンティアモデルを上回り、Qwen3-235B を本格的な商用の土台として裏づけ、この規範が位置するローカル最適化の領域において、内製か購入かの答えを自前所有のオープンウェイトの専門特化モデルへと傾ける。",
+        "coherence": 3,
+        "remaining_gap": "本日の話題は、公開時点での vLLM/SGLang と Ollama の同梱という条件そのものではなく、学習の手法と経済性に重心がある。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.551be7cada1926f6",
+        "short_label": "Commerce issues frontier-model export-control framework by Q1 2027",
+        "prediction_date": "2026-06-19"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "[REVIVED] Fable 5 の復旧をめぐる話題が、この休眠していた大穴の予測を再び動かした。米商務省は 6 月 30 日、このモデルをおよそ 19 日間停止させていた緊急輸出規制を解除した。しかもその復旧は、公開前のモデルアクセス、脅威インテリジェンスの共有、重要インフラへの参加、そして共同開発によるジェイルブレイクのリスクスコアリングの枠組みという 4 点からなる政府との取り決めと一括で示された。この出来事は、対象となるフロンティアモデルの基準と公開前レビューの仕組みを定める、任意のフロンティアモデル標準の枠組みをホワイトハウスが 7 月 7 日の週に用意しつつある、まさにそのタイミングで訪れたと明確に位置づけられている。これは、案件ごとに対応する商務省の指示を、予測が見込む持続的で公表された枠組みへと近づけるものである。ただしここで解除されたのは緊急規制であり、常設の枠組みは依然として保留のままである。",
+      "reference_links": [
+        {
+          "label": "Build Fast with AI - AI News Today July 3 2026",
+          "url": "https://www.buildfastwithai.com/blogs/ai-news-today-july-3-2026"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "landing",
+        "narrative": "商務省による 6 月 30 日の緊急規制の解除は、公開前アクセスと脅威共有からなる 4 点の取り決めと一括で示され、ホワイトハウスは対象モデルの基準と公開前レビューを定める任意のフロンティアモデル標準の枠組みを 7 月 7 日の週に公表する見込みである。これは近い将来の主体と日付を名指しし、案件ごとの指示を持続的で公表された枠組みへと近づける。",
+        "coherence": 4,
+        "remaining_gap": "解除されたのは緊急規制であり、常設の枠組みは依然として保留で、強制力のある輸出規則ではなく任意のものとして出される可能性もある。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.908f659728d5b774",
+        "short_label": "Agent-builder platforms add tenant-scoped flow authorization by Q1 2027",
+        "prediction_date": "2026-07-02"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "Flowise の Custom-MCP RCE の概念実証は、ローコードのエージェントビルダーの実行層を、現に狙われている攻撃対象領域として保ち続ける。汚染されたワークフローをインポートすると、被害者がインポートした瞬間に Flowise サーバー上でサンドボックス化されていない子プロセスが動いてしまうからである。これは、インポートされた、あるいは境界をまたぐフローが何を実行してよいかをエージェントビルダーのプラットフォーム側で取り締まるべきだという圧力を強める。これはこの予測が狙う、オブジェクトとフローの認可という同じ懸念である。証拠はインポート時のコード実行という欠陥であって、テナントをまたぐ認可の回避そのものではないため、テナント単位の認可の仕組みそのものにはならないまま、フロー単位の認可制御へ向かう方向を裏づける。",
+      "reference_links": [
+        {
+          "label": "Infosecurity Magazine - Critical Flowise Flaw Gives Attackers Full Server Control",
+          "url": "https://www.infosecurity-magazine.com/news/flowise-mcp-rce-poc/"
+        },
+        {
+          "label": "NVD - CVE-2026-40933 Detail",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-40933"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "Flowise の Custom-MCP RCE は、ローコードのエージェントビルダーの実行層を、現に狙われている攻撃対象領域として保ち続ける。汚染されたワークフローをインポートすると、被害者がインポートした瞬間にサンドボックス化されていない子プロセスが動いてしまう。これはまさに、インポートされた、あるいは境界をまたぐフローが何を実行してよいかを取り締まるべきだという構造的な圧力であり、プラットフォームをフロー単位の認可制御へと押しやる。",
+        "coherence": 3,
+        "remaining_gap": "証拠はインポート時のコード実行であって、テナントをまたぐ認可の回避ではない。テナント単位の認可をその仕組みとして出荷したものはまだ何もない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.6ba7ca6e01ab313e",
+        "short_label": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
+        "prediction_date": "2026-06-28"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "本日の話題のうち 2 つが、コーディングエージェントの権限境界を押している。OpenAI の Codex Remote の一般提供は、スマートフォン経由の RCE という懸念に対し、専用のリレーと認証済みの 1 対 1 の QR ペアリングで応え、開発マシンを公開インターネットから切り離したまま、開発者が個々の操作を遠隔で承認できるようにした。これはハーネスに組み込まれた明確なアクセスと承認のゲートである。並行して、Flowise の Custom-MCP RCE とそのパッチ回避は、ツールの配線がデフォルトでサンドボックス化されないまま動くと何が起きるかを示し、ツール・ネットワーク・データへのアクセスに対するデフォルトの権限ゲートという論拠を鋭くする。いずれもプラットフォームのデフォルトとして出荷された名称のある三点セットのゲートではないため、これは出荷済みの制御ではなく、寄り集まってくる圧力である。",
+      "reference_links": [
+        {
+          "label": "TechTimes - OpenAI Codex Remote Goes Live for All Plans",
+          "url": "https://www.techtimes.com/articles/319201/20260627/openai-codex-remote-goes-live-all-plans-phone-control-now-secured-qr-relay.htm"
+        },
+        {
+          "label": "Infosecurity Magazine - Critical Flowise Flaw Gives Attackers Full Server Control",
+          "url": "https://www.infosecurity-magazine.com/news/flowise-mcp-rce-poc/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "2 つの話題が権限境界に収束する。Codex Remote の一般提供は、認証済みで QR ペアリングされたアクセスと承認のゲートをハーネスに組み込み、開発者が個々の操作を遠隔で承認できるようにする。一方 Flowise のパッチ回避は、ツールの配線がデフォルトでサンドボックス化されないことの代償を示す。両者は合わさって、ツール・ネットワーク・データへのアクセスに対するデフォルトのゲートという論拠を鋭くする。",
+        "coherence": 3,
+        "remaining_gap": "いずれもプラットフォームのデフォルトとして出荷された名称のある三点セットのゲートではない。これは出荷済みの制御ではなく、寄り集まってくる圧力である。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.0bb5badc89f68769",
+        "short_label": "OpenAI or Google ships an agent-tuned mid-tier model by Q4 2026",
+        "prediction_date": "2026-07-01"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "OpenAI は Codex Remote をプレビューから一般提供へと移し、有料の ChatGPT の全プランで利用できるようにするとともに、Codex CLI 0.142.2 を出荷した。これはサーバーが対応していれば MCP のツール検索をデフォルトにし、DigitalOcean の Droplet ワークスペースのプラグインを追加するものである。どこからでも承認できる非同期のコーディングの流れへの後押しは、OpenAI のコーディングエージェントのスタックを製品化する側面であり、これはエージェント専用に調整した中位モデルが担うのと同じ、エージェントワークフローへの投資である。このニュースはハーネスとツールの公開であって、エージェント用途に調整された名称のある中位モデルではないため、モデルの公開そのものではなく、この見立てを後押しする勢いである。",
+      "reference_links": [
+        {
+          "label": "Releasebot - OpenAI Codex updates (Remote GA, CLI 0.142.2)",
+          "url": "https://releasebot.io/updates/openai/codex"
+        },
+        {
+          "label": "TechTimes - OpenAI Codex Remote Goes Live for All Plans",
+          "url": "https://www.techtimes.com/articles/319201/20260627/openai-codex-remote-goes-live-all-plans-phone-control-now-secured-qr-relay.htm"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "OpenAI は Codex Remote を有料の全プランで一般提供に移し、CLI 0.142.2 を出荷して MCP のツール検索をデフォルトにし、Droplet ワークスペースのプラグインを追加した。どこからでも承認できる非同期のコーディングの流れを製品化することは、エージェント専用に調整した中位モデルが担うのと同じエージェントワークフローへの投資であり、この見立ての方向を補強する。",
+        "coherence": 3,
+        "remaining_gap": "これはハーネスとツールの公開であって、エージェント用途に調整された名称のある中位モデルではない。モデルの公開そのものはまだなされていない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.7b2e55a251231fe9",
+        "short_label": "Single 24-32GB GPU fine-tuning crosses 100K-token context routine by Q2 2027",
+        "prediction_date": "2026-06-20"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "[REVIVED] Bridgewater と Thinking Machines による、オープンウェイトの Qwen3-235B ベースの微調整が、タスクあたりの推論コストをおよそ 13.8 分の 1 に抑えつつ誤りを 29.8% 減らして最良のフロンティアモデルを上回ったことは、結果を決めるのは素の規模ではなく学習の手法とデータセットであり、うまく調整したオープンウェイトのチェックポイントは、自社が独自のラベルを持つ場面での既定の内製の答えになる、というより広い見立てを復活させる。これは、長文脈の微調整を汎用の 1 枚差しハードウェアに収めることが重要になる、この予測が位置するローカル最適化の領域を補強する。実証された学習は、単一の 24〜32GB のコンシューマー GPU 上での 100K トークン文脈ではなく、ホスティングされたプラットフォーム上での 235B MoE のものであったため、復活は見立ての水準にとどまり、ハードウェアの範囲そのものを直接突くものではない。",
+      "reference_links": [
+        {
+          "label": "Thinking Machines Lab - Learning to Replicate Expert Judgment in Financial Tasks",
+          "url": "https://thinkingmachines.ai/news/learning-to-replicate-expert-judgment-in-financial-tasks/"
+        },
+        {
+          "label": "Blockchain.News - Bridgewater Fine-Tunes Model to Beat Frontier LLMs",
+          "url": "https://blockchain.news/ainews/bridgewater-fine-tunes-model-beats-frontier-llms"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "本日の Bridgewater と Thinking Machines による、オープンウェイトの Qwen3-235B の微調整が、誤りを 29.8% 減らし推論をおよそ 13.8 分の 1 に安くして最良のフロンティアモデルを上回ったことは、これが位置するローカル最適化の領域を固める。結果を決めるのは素の規模ではなく手法とデータセットであり、汎用の 1 枚差しでの長文脈の微調整を現に狙える対象として保つ。",
+        "coherence": 3,
+        "remaining_gap": "実証された学習は、単一の 24〜32GB のコンシューマー GPU 上での 100K トークン文脈ではなく、ホスティングされたプラットフォーム上での 235B MoE のものであった。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.a40a541ef73b240c",
+        "short_label": "Sub-7B open-weight reasoning models clear verified AIME-80 by Q1 2027",
+        "prediction_date": "2026-06-19"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "[REVIVED] Qwen3-235B の微調整が、テストしたすべてのフロンティアモデルを金融判断のタスクで上回り、その向上が交互ラウンドロビンのバッチング、CISPO の非対称クリッピング損失、そして昇格させた教師による方策準拠の蒸留といった、具体的な事後学習の技法に明確に帰されていることは、オープンウェイトの能力の上限を決めるのはパラメータ数ではなく事後学習の手法である、という根底の主張を復活させる。これは、小型のオープンウェイトモデルでも検証済みの難しい推論の基準を突破できると論じるために、この休眠していた予測が拠り所とする、規模より手法という同じ仕組みである。証拠は、検証済みの AIME-80 を突破するサブ 7B モデルではなく、狭い専門タスク上の大きな MoE であるため、具体的なパラメータとベンチマークの目標を突くことなく、見立ての領域を復活させる。",
+      "reference_links": [
+        {
+          "label": "Thinking Machines Lab - Learning to Replicate Expert Judgment in Financial Tasks",
+          "url": "https://thinkingmachines.ai/news/learning-to-replicate-expert-judgment-in-financial-tasks/"
+        },
+        {
+          "label": "Blockchain.News - Bridgewater Fine-Tunes Model to Beat Frontier LLMs",
+          "url": "https://blockchain.news/ainews/bridgewater-fine-tunes-model-beats-frontier-llms"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Qwen3-235B の微調整は、その向上を事後学習の手法、交互ラウンドロビンのバッチング、CISPO の非対称クリッピング損失、そして方策準拠の蒸留に明確に帰しつつ、テストしたすべてのフロンティアモデルを上回り、これが拠り所とする規模より手法という仕組みを補強する。オープンウェイトの推論能力の上限を決めるのは、パラメータ数ではなく事後学習である。",
+        "coherence": 3,
+        "remaining_gap": "証拠は、検証済みの AIME-80 を突破するサブ 7B モデルではなく、狭い専門タスク上の大きな MoE である。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.a4ee0b5435860b21",
+        "short_label": "AWS Continuum's sandbox exploit-validation goes industry baseline by H1 2027",
+        "prediction_date": "2026-06-21"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "[REVIVED] Obsidian Security が公開した Flowise の Custom-MCP RCE の実働する概念実証は、公式パッチが回避できてしまうことの実演とあわせて、この休眠していた予測が標準の段階になると論じる、まさにその種類の、機械的に扱える到達可能性と悪用可能性の証明である。つまり、静的な CVSS スコアではなく、欠陥が本当に到達可能であることを示す実働する悪用である。連携して出された MCP のサプライチェーン勧告は、同じ実演済みの悪用のパターンを一群のエージェントツールにまたがって広げ、バージョンを上げるだけでは穴はふさがらないことを浮き彫りにする。これは、名称のある脆弱性管理サービスがサンドボックスでの悪用検証を標準の段階として出荷したのではなく、セキュリティ研究者が実働する悪用検証の成果物を公開したものであるため、復活はパターンの水準にとどまる。",
+      "reference_links": [
+        {
+          "label": "Infosecurity Magazine - Critical Flowise Flaw Gives Attackers Full Server Control",
+          "url": "https://www.infosecurity-magazine.com/news/flowise-mcp-rce-poc/"
+        },
+        {
+          "label": "OX Security - MCP Supply Chain Advisory",
+          "url": "https://www.ox.security/blog/mcp-supply-chain-advisory-rce-vulnerabilities-across-the-ai-ecosystem/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Obsidian Security の実働する Flowise の Custom-MCP RCE の概念実証は、公式パッチの回避の実演とあわせて、これが標準の段階になると論じる、まさにその到達可能性と悪用可能性の成果物である。静的な CVSS スコアではなく、欠陥が本当に到達可能であることを示す実働する悪用であり、バージョンを上げるだけではふさがらない。",
+        "coherence": 4,
+        "remaining_gap": "研究者は悪用検証の成果物を公開したが、名称のある脆弱性管理サービスがサンドボックスでの悪用検証を標準の段階として出荷したわけではない。"
+      }
+    }
+  ]
+}

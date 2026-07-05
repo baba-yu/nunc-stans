@@ -1,0 +1,44 @@
+[
+  {
+    "actor": "frontier-lab finance and capital-markets lead",
+    "job": "converting OpenAI's private mega-round position into public-market-ready structure by drafting the registration and offering plan for a debut",
+    "outcome": "a filed S-1/F-1 or a formal direct-listing/IPO announcement that puts OpenAI's public-listing step on the disclosed record",
+    "motivation": "check sizes needed to keep marking the leader up now exceed what private syndicates will underwrite, forcing a move to public liquidity",
+    "task": {
+      "who": "in-house corporate-finance and capital-markets team",
+      "what": "prepare and file registration for a public debut",
+      "where": "SEC registration process and board approval path",
+      "when": "H2 2026 into Q2 2027",
+      "why": "private syndicates can no longer underwrite the mark-ups",
+      "how": "S-1/F-1 drafting with underwriter and audit support"
+    }
+  },
+  {
+    "actor": "government equity-stake deal architect",
+    "job": "structuring the roughly 5% US-government equity position as pre-listing scaffolding tied to the planned public-market debut",
+    "outcome": "a confirmed government equity agreement tied to the debut, the distinguishing sovereign-stake feature of how the listing happens",
+    "motivation": "the sovereign-stake wrapper only makes sense as pre-listing scaffolding, so nailing its terms is a gate on the debut proceeding",
+    "task": {
+      "who": "government-affairs and deal-structuring counsel",
+      "what": "negotiate and document the ~5% government equity terms",
+      "where": "US-government negotiation and shareholder-agreement drafting",
+      "when": "H2 2026 into Q2 2027",
+      "why": "the stake is the scaffolding the listing is wrapped in",
+      "how": "shareholder agreement plus regulatory sign-off"
+    }
+  },
+  {
+    "actor": "IPO underwriting and equity-capital-markets banker",
+    "job": "syndicating and pricing the frontier leader's move into public markets as the reopened exit window absorbs billion-dollar debuts",
+    "outcome": "a mandated, structured offering that carries OpenAI from the largest private position into a disclosed listing step",
+    "motivation": "the Q2 exit window reopened with 32 billion-dollar public debuts, and the cohort's anchor is the marquee mandate to win",
+    "task": {
+      "who": "equity-capital-markets syndicate desk",
+      "what": "structure, mandate and price the offering",
+      "where": "underwriting syndicate and public-market bookbuild",
+      "when": "H2 2026 into Q2 2027",
+      "why": "the reopened exit window rewards moving the anchor now",
+      "how": "bookbuilt IPO or direct-listing mechanics"
+    }
+  }
+]

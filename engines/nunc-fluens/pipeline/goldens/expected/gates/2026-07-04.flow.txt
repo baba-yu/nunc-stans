@@ -1,0 +1,19 @@
+daily-flow-check :: date=2026-07-04 (Mon-Sat)
+  repo-root: <WORK>
+
+OK news+FP markdown files (2026-07-04)
+FAIL DB population via post_update_validation (2026-07-04): 1 issue(s)
+  - post_update_validation exited 2 but produced no FAIL lines; stderr='FAIL: DB not found: <WORK>/app/data/analytics.sqlite\n'
+FAIL READMEs (3-day window including 2026-07-04): 4 issue(s)
+  - missing: README.md
+  - missing: README.ja.md
+  - missing: README.es.md
+  - missing: README.fil.md
+FAIL dashboard hygiene (manifest + assets + sqlite): 5 issue(s)
+  - missing: docs/data/manifest.json
+  - missing: docs/index.html
+  - missing: docs/assets/app.js
+  - missing: docs/assets/styles.css
+  - missing: app/data/analytics.sqlite
+
+NOT DONE — see FAIL lines above

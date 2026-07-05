@@ -1,0 +1,27 @@
+{
+  "date": "2026-06-22",
+  "technical": [
+    {
+      "lead": "Bumoto ngayon ang board ng Hyundai para bilhin ang bahagi ng SoftBank, na nagpapahalaga sa Boston Dynamics nang halos 3x",
+      "body": "Inaasahang magpupulong ang board ng Hyundai Motor ngayong araw, June 22, para aprubahan ang pagbili sa natitirang 9.65% na bahagi ng SoftBank Group sa Boston Dynamics sa halagang humigit-kumulang $325 million, na gagawing ganap na pag-aari ng Hyundai ang kompanya ng robotics na nakabase sa Waltham, Massachusetts. Lumalabas ang SoftBank sa pamamagitan ng put option mula sa kasunduan noong 2021 na nagpapahintulot dito na ibenta pabalik ang mga share kung hindi makukumpleto ng Boston Dynamics ang isang US IPO pagsapit ng June 2026. Dahil walang listing, ipinaalam ng SoftBank sa Hyundai na gagamitin nito ang karapatang iyon. Ang bagong datos ay ang valuation: ang $325 million para sa 9.65% ay nagpapahiwatig ng halos $3.37 billion na enterprise value, mahigit tatlong beses ang ~$1.1 billion na marka mula sa transaksyon ng Hyundai noong 2021 (humigit-kumulang $880 million para sa 80%). Iniulat ng Korea Economic Daily na nakatali ang konsolidasyon sa isang planong magdeploy ng humigit-kumulang 25,000 Atlas humanoid sa mga pabrika ng Hyundai mula 2028 at maaaring magbukas ng daan para sa isang IPO sa hinaharap. Ang mga termino, ang 25,000-unit na bilang, at ang botohan mismo ay ayon sa iniulat ng Korean business press at hindi pa nakumpirma ng Hyundai o SoftBank.",
+      "citations": [
+        {"label": "KED Global - Hyundai to take full ownership of Boston Dynamics in SoftBank buyout", "url": "https://www.kedglobal.com/robotics/newsView/ked202606210001"},
+        {"label": "Global Banking & Finance Review - Hyundai to buy SoftBank's remaining stake in Boston Dynamics for $325 million", "url": "https://www.globalbankingandfinance.com/hyundai-buy-softbanks-remaining-stake-boston-dynamics-325/"},
+        {"label": "Crypto Briefing - Hyundai to acquire SoftBank's remaining stake in Boston Dynamics for $325M", "url": "https://cryptobriefing.com/hyundai-acquires-softbank-boston-dynamics-stake/"}
+      ]
+    },
+    {
+      "lead": "Mga AI event na dapat pagplanuhan: bumubukas bukas ang confidential computing at offensive security",
+      "body": "Ang paparating na calendar sa tatlong sub-track, kung saan ang pinakamalapit na mga event ay isang araw na lamang ang layo at wala pang lumampas sa petsa ng pagtatapos nito. AI-security: dadaong ang Confidential Computing Summit sa June 23-24 sa SF Mint (Linux Foundation at OPAQUE, kasama ang AMD, Google, Microsoft, NVIDIA, Meta at Samsung sa mga keynote). Magho-host ang AI Tinkerers SF ng isang Offensive Security Demo Night sa June 25 na may mga live na autonomous-pentest-agent demo (sponsor XBOW). Susunod ang AI Risk Summit ng SecurityWeek sa August 11-12. Tumatakbo ang AI Summit ng Black Hat USA sa August 1-6 kasabay ng AI Village ng DEF CON. At ang OWASP Global AppSec USA ay sa November 5-6. Mainstream dev/data: nagpapatakbo ang Snowflake ng isang virtual Dev Day sa June 25. Sasakupin ng AI Engineer World's Fair ang Moscone West mula June 29 hanggang July 2 (orientation June 28), na tinatawag na pinakamalaking teknikal na AI-engineering conference na may mahigit 20 track, ~250 speaker, mga dedikadong Inference at Security track, at OpenAI, Anthropic, Google DeepMind, Amazon AGI Labs at Microsoft sa floor, kasama ang hackathon sa June 27-28. Ang GitHub Universe ay sa October 28-29 at ang AWS re:Invent ay sa November 30-December 4. AI-chip: ang Advancing AI ng AMD ay sa July 22-23 (inaasahang nakatuon sa MI400-series), Hot Chips sa August 23-25, AI Infra Summit sa September 15-17.",
+      "citations": [
+        {"label": "Linux Foundation - Confidential Computing Summit 2026 (June 23-24, San Francisco)", "url": "https://events.linuxfoundation.org/confidential-computing-summit/"},
+        {"label": "AI Engineer World's Fair 2026 (June 29-July 2, San Francisco)", "url": "https://www.ai.engineer/worldsfair/2026"},
+        {"label": "AMD - Advancing AI 2026 (July 22-23, San Francisco)", "url": "https://www.amd.com/en/corporate/events/advancing-ai.html"}
+      ]
+    }
+  ],
+  "plain": [
+    "Malapit nang ganap na ariin ng Hyundai ang robot maker na Boston Dynamics",
+    "Magsisimula ngayong linggo ang mga event sa confidential computing at security"
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "date": "2026-06-28",
+  "by_prediction": {
+    "prediction.6f3ab91c4d2e7a08": [
+      {
+        "actor": "mantenedor de conjunto de herramientas de ajuste de pesos abiertos",
+        "job": "Apresurarse a incorporar ajuste fino LoRA/QLoRA de primera clase para checkpoints de borde de menos de 1B recién publicados en cuestión de días tras el lanzamiento de sus pesos.",
+        "outcome": "Un conjunto de herramientas de ajuste de uso generalizado incorpora soporte LoRA/QLoRA en la misma semana para un modelo en dispositivo de menos de 1B publicado en este período.",
+        "motivation": "Quien incorpore primero un checkpoint de borde popular gana la audiencia de desarrolladores en dispositivo; quedarse atrás cede notoriedad a los rivales.",
+        "task": {
+          "who": "equipo de ingeniería de kernel central / cuantización",
+          "what": "añadir la vía de ajuste fino LoRA/QLoRA para el nuevo checkpoint de menos de 1B",
+          "where": "el registro de soporte de modelos y los kernels de entrenamiento del conjunto de herramientas",
+          "when": "plazo del tercer trimestre de 2026, del día cero al día siete tras cada publicación de pesos de borde",
+          "why": "igualar el tiempo de respuesta del competidor o perder la audiencia de desarrolladores en dispositivo",
+          "how": "LoRA/QLoRA sobre pesos cuantizados compatibles con llama.cpp/MLX"
+        }
+      },
+      {
+        "actor": "editor de modelos en dispositivo",
+        "job": "Publicar pesos abiertos de menos de un gigabyte desde el primer día contra toda la pila de inferencia local (llama.cpp, MLX, vLLM, SGLang, ONNX).",
+        "outcome": "Un modelo de borde de menos de 1B se publica abierto con amplia cobertura de runtimes, convirtiéndose en el objetivo obvio para soporte de ajuste inmediato.",
+        "motivation": "Maximizar la adopción y el respaldo del ecosistema a su nivel de borde eliminando toda barrera de integración en el lanzamiento.",
+        "task": {
+          "who": "equipo de lanzamiento de modelos / integración de ecosistema",
+          "what": "publicar pesos cuantizados con soporte multirruntime desde el primer día",
+          "where": "el hub de modelos más los repos de runtime llama.cpp/MLX/vLLM/SGLang/ONNX",
+          "when": "plazo del tercer trimestre de 2026, en cada evento de lanzamiento de modelo de borde",
+          "why": "eliminar la fricción de integración para que las bibliotecas de ajuste adopten de inmediato",
+          "how": "exportación GGUF/MLX/ONNX y PRs de runtime desde el primer día"
+        }
+      }
+    ],
+    "prediction.7b3e9f12c4a6d8e0": [
+      {
+        "actor": "equipo de desarrollo corporativo del fabricante rival de aceleradores",
+        "job": "Buscar y negociar una adquisición o participación de control en una startup de compilador o runtime de inferencia multifabricante para responder a la compra de Modular por Qualcomm.",
+        "outcome": "Un acuerdo anunciado de adquisición o toma de control mayoritario de una startup comparable de compilador de inferencia agnóstico al silicio antes del primer trimestre de 2027.",
+        "motivation": "Poseer una capa de cómputo portátil es ahora un requisito básico para vender inferencia empresarial frente al cierre de Nvidia con CUDA.",
+        "task": {
+          "who": "función de desarrollo corporativo / fusiones y adquisiciones",
+          "what": "Buscar, evaluar y firmar un term sheet con una startup de compilador multifabricante",
+          "where": "pipeline de operaciones y proceso de aprobación del consejo",
+          "when": "plazo de junio de 2026 a primer trimestre de 2027",
+          "why": "para no ceder a Qualcomm el relato de la portabilidad",
+          "how": "asesoría de fusiones y adquisiciones, due diligence técnica, oferta en acciones o efectivo"
+        }
+      },
+      {
+        "actor": "equipo de plataforma de software de inferencia del fabricante rival de aceleradores",
+        "job": "Especificar las capacidades de compilador agnóstico al silicio que el fabricante debe poseer para que el objetivo de desarrollo corporativo cierre una brecha real de portabilidad de CUDA.",
+        "outcome": "Un conjunto de requisitos técnicos a medida que justifica adquirir un compilador multifabricante comparable en lugar de construirlo internamente.",
+        "motivation": "Un compilador portátil neutral es el precio de admisión para las ventas de inferencia empresarial frente a Nvidia.",
+        "task": {
+          "who": "equipo de ingeniería de compilador / runtime de inferencia",
+          "what": "Definir las brechas de capacidad del compilador multifabricante y el caso de construir frente a comprar",
+          "where": "hoja de ruta interna de software y revisión de arquitectura",
+          "when": "plazo de junio de 2026 a cuarto trimestre de 2026",
+          "why": "para justificar la adquisición en lugar de ceder la portabilidad",
+          "how": "evaluación comparativa de la pila de compilador interna frente a MAX"
+        }
+      }
+    ],
+    "prediction.c5aa6ceae507d1a8": [
+      {
+        "actor": "responsable de producto de seguridad/orquestación de la plataforma de agentes de código",
+        "job": "Diseñar e incorporar un control de capacidades activado por defecto que limite la tríada letal en la capa de orquestación en lugar de filtrar el flujo de tokens.",
+        "outcome": "Un control de Regla de Dos activado por defecto, ya incorporado, que detiene una ejecución de agente para aprobación humana antes de combinar una tercera propiedad peligrosa.",
+        "motivation": "La inyección de prompts no es parcheable, así que limitar la tríada es la única defensa duradera; el volumen de advertencias y la presión competitiva obligan a las plataformas más grandes a moverse primero.",
+        "task": {
+          "who": "equipo de ingeniería de seguridad / orquestación de agentes",
+          "what": "Implementar un control de capacidades de Regla de Dos activado por defecto con pausa de aprobación humana",
+          "where": "capa de orquestación de agentes / runtime de aplicación de permisos",
+          "when": "segunda mitad de 2026 hasta el primer trimestre de 2027",
+          "why": "Denegar la combinación peligrosa, ya que la inyección no es parcheable",
+          "how": "Control de capacidades de Regla de Dos en la capa de orquestación"
+        }
+      },
+      {
+        "actor": "autor de estándares de seguridad de IA agéntica (alineado con OWASP)",
+        "job": "Publicar y refinar la guía que replantea la inyección de prompts como una propiedad estructural y no parcheable, y la asigna a las categorías agénticas.",
+        "outcome": "Una guía autorizada que señala a los agentes de código como el epicentro y prescribe la mitigación de limitar la tríada, dando a los fabricantes cobertura para incorporar el control.",
+        "motivation": "Estandarizar un patrón de mitigación duradero para que el ecosistema deje de tratar la inyección de prompts como un CVE parcheable.",
+        "task": {
+          "who": "grupo de trabajo de seguridad agéntica de OWASP / autores de estándares",
+          "what": "Publicar guía que replantea la inyección de prompts como estructural y no parcheable",
+          "where": "advertencia de IA agéntica de OWASP / marco Top 10",
+          "when": "continuo a lo largo de 2026 hasta el primer trimestre de 2027",
+          "why": "Impulsar a los fabricantes hacia límites de la tríada en la capa de orquestación",
+          "how": "Mapeo de categorías agénticas de OWASP 2.01"
+        }
+      }
+    ]
+  }
+}

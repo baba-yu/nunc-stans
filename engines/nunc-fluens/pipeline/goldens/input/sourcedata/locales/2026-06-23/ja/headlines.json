@@ -1,0 +1,50 @@
+{
+  "date": "2026-06-23",
+  "technical": [
+    {
+      "lead": "Unsloth の Dynamic GGUF が 744B GLM-5.2 を単一ワークステーションに収める",
+      "body": "Unsloth は、Z.ai が新たにオープンウェイト化した GLM-5.2 の Dynamic GGUF 量子化版を公開した。GLM-5.2 は 7,440 億パラメータの mixture-of-experts モデル（アクティブは約 40B）で、100 万トークンのコンテキストウィンドウを持ち、データセンターの外でもローカル実行できるようになった。この精度選択型の方式は、精度に敏感な層を 8 ビットまたは 16 ビットに引き上げ、残りを 1 ビットまたは 2 ビットに下げることで、1.51TB のチェックポイントを、2 ビットの UD-IQ2_M ビルドで約 239GB（84% 削減）に、1 ビットビルドでおよそ 217GB（約 86%）まで縮める。マルチ GPU クラスタではなく、メモリを多く積んだ単一ノードの 1 台に収まる大きさだ。リリースは Unsloth Studio によるローカル実行と組み合わさり、GLM-5.2 はコーディングと推論でクローズドな最前線に迫るベンチマーク結果だと位置づけられる。圧縮と品質の主張は Unsloth 自身のもので第三者による再現はなく、ここまで攻めた 1-2 ビット量子化は、メモリ削減と引き換えに無視できない精度を犠牲にする。",
+      "citations": [
+        {"label": "AIToolly - Unsloth enables local execution of GLM-5.2, a 744B-parameter open model with a 1M context window", "url": "https://aitoolly.com/ai-news/article/2026-06-23-unsloth-enables-local-execution-of-glm-52-a-744b-parameter-open-model-with-1m-context-window"}
+      ]
+    },
+    {
+      "lead": "OWASP 2.01 がエージェント型リスクを実在の CVE に結びつけ、StakeBench は安全な構成なしと結論",
+      "body": "エージェント型 AI のセキュリティをめぐる状況は、仮定の脅威から記録された事案へと移った。OWASP の State of Agentic AI Security and Governance v2.01 は 53 件のエージェント型プロジェクトを追跡し、いまやほぼすべてのリスクカテゴリを具体的な CVE・ベンダーの注意喚起・侵害報告に結びつけている。53 件のうち 28 件をコーディングエージェントと数え、セキュリティ注意喚起が最も多いリポジトリ（n8n 57、Claude Code 22、AutoGPT 15、Dify 13、Roo-Code 11）を順位づけ、7 つのプロジェクトが毎日かそれ以上の頻度で更新を出している点を指摘する。うち 1 つはおよそ 8 時間ごとで、この更新の速さが監査を難しくする。OWASP はプロンプトインジェクションを、エージェント型アプリケーション向けの Top 10 の 10 カテゴリのうち 6 つに対応づけている。これとは別の学術ベンチマーク StakeBench は、南洋理工大学・ST Engineering・IBM Research・UIUC によるもので、3,168 回の敵対的試行を実施し、間接的なプロンプトインジェクションの成功率は 41.67% から 68.16%、直接攻撃は 79% 超に達し、テストしたすべての構成でこうなり、堅牢な振る舞いの領域に収まったものはなかったと示した。土台となるモデルを入れ替えると、間接インジェクションの成功率が最大 26.49 ポイント動いた。Semantic Kernel のようなフレームワークでのインジェクションがホストレベルの RCE にまで発展しうるという Microsoft の以前の開示が、ベンダー側の現実を裏打ちする。",
+      "citations": [
+        {"label": "Microsoft Security - When prompts become shells: RCE vulnerabilities in AI agent frameworks", "url": "https://www.microsoft.com/en-us/security/blog/2026/05/07/prompts-become-shells-rce-vulnerabilities-ai-agent-frameworks/"},
+        {"label": "CSO Online - Prompt injection breaks today's AI agents, study warns (StakeBench)", "url": "https://www.csoonline.com/article/4184455/prompt-injection-breaks-todays-ai-agents-study-warns.html"}
+      ]
+    },
+    {
+      "lead": "コーディングエージェントのハーネスが、既定で最小権限の実行へと収れんする",
+      "body": "オープンなコーディングエージェントのハーネスは、派手な新機能ではなくセキュリティ強化を出してきた。OpenClaw の 2026.6.x 系の 6 月リリースは、vCard や位置ピンを使ったインジェクションといった具体的な悪用経路をふさぎ、Docker サンドボックスの境界を厳しくし、Browser の CDP エンドポイント検証を追加し、SSH トンネルのチェックをループバックに固定したままにし、安全でない長さのチャット・ツール・パッケージ・レスポンスを拒否し始めた。あわせて OpenRouter の初期設定を正規のフローとして組み込んだ。NVIDIA の NemoClaw は、Hermes や OpenClaw のような常時稼働エージェントを OpenShell サンドボックス内で動かすためのオープンなリファレンススタックで、ルーティングされた推論とライフサイクル管理の周りで、サンドボックスの強化・認証情報の取り扱い・より厳しいネットワークポリシーの既定値を優先する。Nous Research の Hermes Agent も同じ方向で、明示的に承認された環境変数だけをサブプロセスに渡す MCP の認証情報フィルタリングに加え、認証情報の伏せ字化・SSRF 対策・MCP 設定に対する Tirith の事前実行スキャンを備える。一貫しているのは、各ハーネスが自らの呼び出し可能な機能群を主要な攻撃対象領域とみなす点で、プロンプトインジェクションがエージェント型リスクの中心だとする OWASP と StakeBench の知見と符合する。",
+      "citations": [
+        {"label": "The New Stack - 'An agent is an LLM and a harness': what NVIDIA really thinks about OpenClaw (NemoClaw)", "url": "https://thenewstack.io/nvidia-openclaw-agent-blueprints/"},
+        {"label": "innFactory - OpenClaw vs. Hermes Agent: comparison of the two dominant AI agent frameworks of 2026", "url": "https://innfactory.ai/en/blog/openclaw-vs-hermes-agent-comparison/"}
+      ]
+    },
+    {
+      "lead": "Confidential Computing Summit が本日開幕、攻撃的セキュリティの夜は 6 月 25 日",
+      "body": "AI セキュリティの予定がいま始まる。Confidential Computing Summit は 6 月 23-24 日に San Francisco Mint で開かれ、主催は Linux Foundation と OPAQUE、AI の主権・エージェントのセキュリティ・知的財産の保護・検証可能な実行環境・コンフィデンシャル AI のワークロードがテーマだ。登壇者は Amazon・AMD・Google・Meta・Microsoft・NVIDIA・Samsung Electronics・TII・UC Berkeley から。AI Tinkerers San Francisco は 6 月 25 日に Offensive Security Demo Night を開催し、自律的なペネトレーションテストを行うエージェントのライブデモを披露する。スポンサーは XBOW。さらに先では、Black Hat USA の AI Summit が 8 月 1-6 日にラスベガスで DEF CON の AI Village と並行して開かれ、SecurityWeek の AI Risk Summit が 8 月 11-12 日に Half Moon Bay で続き、OWASP Global AppSec USA が 11 月 5-6 日にサンフランシスコで、Zenity の AI Agent Security Summit シリーズも引き続き注目対象だ。",
+      "citations": [
+        {"label": "Confidential Computing Summit 2026 schedule (June 23-24, San Francisco Mint)", "url": "https://ccsummit2026.sched.com/"},
+        {"label": "XBOW - Offensive AI in Practice (sponsor of the AI Tinkerers SF Offensive Security Demo Night, June 25)", "url": "https://xbow.com/offensive-ai-in-practice-workshop"}
+      ]
+    },
+    {
+      "lead": "Snowflake Dev Day（6 月 25 日）から AI Engineer World's Fair へ",
+      "body": "主流の開発者・データ系の予定が今週を埋める。Snowflake は 6 月 25 日にオンラインの Dev Day を開き、著名な 2 講演に加えてエージェント型 AI のハンズオンラボを行う。AI Engineer World's Fair は Moscone West を会場に、メインプログラムが 6 月 29 日から 7 月 2 日まで行われ（任意参加の New Engineer Orientation は 6 月 28 日）、その前に公式の AIE World's Fair Hackathon が Cerebral Valley と組んで 6 月 27-28 日に開かれる。さらに先では、GitHub Universe が 10 月 28-29 日に戻り、AWS re:Invent が 11 月 30 日から 12 月 4 日までラスベガスで開かれる。AI チップのトラックでは、AMD の Advancing AI 2026 が 7 月 22-23 日に Moscone で予定され（Instinct MI400 シリーズが焦点と見られ、基調講演は 7 月 23 日）、Hot Chips 2026 が 8 月 23-25 日に Stanford で、AI Infra Summit が 9 月 15-17 日に Santa Clara Convention Center で開かれる。",
+      "citations": [
+        {"label": "Snowflake Dev Day - Americas Virtual (June 25, 2026)", "url": "https://www.snowflake.com/en/dev-day/americas-virtual/"}
+      ]
+    }
+  ],
+  "plain": [
+    "Unsloth が 744B の AI モデルを 1 台のワークステーションに収める",
+    "OWASP と新しい研究、AI エージェントはいまだインジェクションに陥落すると指摘",
+    "コーディングエージェントのツールが、既定で自らのサンドボックスを厳しくする",
+    "コンフィデンシャルコンピューティングとセキュリティのイベントが今週始まる",
+    "Snowflake Dev Day と AI Engineer World's Fair が今週開催"
+  ]
+}

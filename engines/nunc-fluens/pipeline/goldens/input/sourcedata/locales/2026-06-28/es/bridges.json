@@ -1,0 +1,193 @@
+{
+  "date": "2026-06-28",
+  "validation_rows": [
+    {
+      "prediction_ref": {
+        "id": "prediction.6f3ab91c4d2e7a08",
+        "short_label": "Sub-gigabyte on-device LLM gains same-week Unsloth tuning support by Q3 2026",
+        "prediction_date": "2026-06-28"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "Las dos noticias principales de hoy son las señales de origen sobre las que se construye esta tesis. El LFM2.5-230M de Liquid AI, publicado el 27 de junio, es un modelo solo de texto de 230 millones de parámetros que distribuye en Hugging Face puntos de control base y ajustados por instrucciones con pesos abiertos, con soporte de ejecución desde el primer día para llama.cpp, MLX, vLLM, SGLang y ONNX, un tamaño de 293-375 MB en 4 bits y 213 tokens por segundo en un Galaxy S25 Ultra: un modelo en dispositivo por debajo del gigabyte que llega junto a toda la pila de inferencia local el mismo día. La señal emparejada es la v0.1.471-beta de Unsloth (18 de junio), que añadió soporte de primera clase para LoRA/QLoRA del GLM-5.2 de Z.ai apenas dos días después de su publicación con pesos abiertos del 16 de junio, además de la predicción multitoken de Gemma 4 y DiffusionGemma, lo que demuestra el estrechamiento del plazo entre publicación y ajuste que la predicción extrapola al nivel del borde. El umbral falsable de la predicción: un modelo en dispositivo por debajo de 1B publicado en este período obtiene soporte de ajuste fino LoRA/QLoRA en un kit de ajuste convencional dentro de la misma semana en que se publican sus pesos. La distancia hasta el umbral: hoy aporta la publicación del modelo de borde (LFM2.5-230M) y el plazo de dos días ya probado en la frontera, pero todavía no un kit convencional que incorpore el ajuste en la misma semana para ese punto de control específico por debajo de 1B.",
+      "reference_links": [
+        {
+          "label": "MarkTechPost - Liquid AI ships LFM2.5-230M with llama.cpp, MLX, vLLM, SGLang, and ONNX support for on-device inference",
+          "url": "https://www.marktechpost.com/2026/06/27/liquid-ai-ships-lfm2-5-230m-with-llama-cpp-mlx-vllm-sglang-and-onnx-support-for-on-device-inference/"
+        },
+        {
+          "label": "Hugging Face - LiquidAI/LFM2.5-230M model card",
+          "url": "https://huggingface.co/LiquidAI/LFM2.5-230M"
+        },
+        {
+          "label": "GitHub - unslothai/unsloth release v0.1.471-beta (June 18 2026)",
+          "url": "https://github.com/unslothai/unsloth/releases/tag/v0.1.471-beta"
+        }
+      ],
+      "bridge": {
+        "narrative": "El LFM2.5-230M de Liquid AI, del 27 de junio, sitúa un modelo en dispositivo por debajo del gigabyte junto a toda la pila de inferencia local el mismo día, mientras que la v0.1.471-beta de Unsloth añadió LoRA/QLoRA para GLM-5.2 apenas dos días después de la publicación de sus pesos. Juntos, la publicación de borde y el plazo de dos días ya probado en la frontera convierten la extrapolación al ajuste de borde en la misma semana en el siguiente paso natural.",
+        "support_dimension": "because",
+        "coherence": 4,
+        "remaining_gap": "Ningún kit convencional ha incorporado todavía el ajuste LoRA/QLoRA en la misma semana para este punto de control en dispositivo específico por debajo de 1B."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.7b3e9f12c4a6d8e0",
+        "short_label": "Rival accelerator vendor buys a CUDA-agnostic inference compiler by Q1 2027",
+        "prediction_date": "2026-06-28"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "La noticia empresarial principal de hoy es el detonante de esta tesis. El acuerdo de Qualcomm del 24 de junio para adquirir Modular -la startup detrás del lenguaje Mojo y del motor de inferencia MAX, que ejecuta el mismo código de modelo en chips de Nvidia, AMD, Intel y Qualcomm sin reescrituras por procesador- se reporta como una operación de unos 3.920 millones de dólares íntegramente en acciones, cuyo cierre se espera para la segunda mitad de 2026, y se lee explícitamente como un movimiento contra el bloqueo de CUDA de Nvidia en la inferencia empresarial. El propio comunicado de Qualcomm plantea el objetivo como una capa de cómputo independiente del silicio que abarque dispositivos, borde y centros de datos. La adquisición llega con dos señales que la refuerzan: el envío comprometido de silicio personalizado a un hiperescalador líder antes de fin de año y conversaciones reportadas con Tenstorrent por 8.000-10.000 millones de dólares, que en conjunto comprometen unos 14.000 millones hacia un rival de pila completa y conjunto de instrucciones abierto frente a Nvidia. El umbral falsable de la predicción: al menos un comprador rival de aceleradores (AMD, Intel o el brazo de silicio de un hiperescalador) responde adquiriendo o tomando una participación de control en una startup comparable de compilador o entorno de ejecución de inferencia multifabricante. La distancia hasta el umbral: hoy aporta el acuerdo catalizador entre Qualcomm y Modular, que retira el mayor activo de compilador neutral, pero no se ha anunciado ninguna contraadquisición rival.",
+      "reference_links": [
+        {
+          "label": "Qualcomm - Qualcomm to Acquire Modular (press release, June 24 2026)",
+          "url": "https://investor.qualcomm.com/news-events/press-releases/news-details/2026/Qualcomm-to-Acquire-Modular/default.aspx"
+        },
+        {
+          "label": "Tech Startups - Qualcomm acquires AI startup Modular in $4 billion deal to challenge Nvidia's CUDA dominance",
+          "url": "https://techstartups.com/2026/06/24/qualcomm-acquires-ai-startup-modular-in-4-billion-deal-to-challenge-nvidias-cuda-dominance/"
+        }
+      ],
+      "bridge": {
+        "narrative": "La adquisición por Qualcomm el 24 de junio de Modular, por unos 3.920 millones de dólares, retira del tablero el mayor compilador de inferencia neutral y multifabricante, y se lee explícitamente como un golpe contra el bloqueo de CUDA. Esa retirada es la fuerza estructural que la predicción señala: una vez capturado el activo dominante independiente del silicio, los compradores rivales enfrentan presión para asegurar por su cuenta una independencia comparable de entorno de ejecución.",
+        "support_dimension": "because",
+        "coherence": 4,
+        "remaining_gap": "Ningún comprador rival ha anunciado todavía una contraadquisición de una startup comparable de compilador o entorno de ejecución multifabricante."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.c5aa6ceae507d1a8",
+        "short_label": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
+        "prediction_date": "2026-06-28"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "La noticia de seguridad principal de hoy es la premisa arquitectónica sobre la que descansa esta tesis. La versión 2.01 del informe State of Agentic AI Security and Governance del OWASP GenAI Security Project replantea la inyección de prompts: de ser un CVE más pasa a ser una restricción de diseño. Es la articulación universal que conecta la mayoría de los incidentes de IA agéntica y ahora se asigna a seis de las diez categorías del Top 10 de OWASP para Aplicaciones Agénticas. Como un modelo trata el prompt del sistema, la solicitud del usuario y el texto recuperado como un único flujo de tokens indiferenciado, no hay forma fiable de marcar los tokens como órdenes frente a datos, de modo que la falla se mitiga con presupuestos de diseño, no se parchea: el informe se apoya en el lethal trifecta de Simon Willison y en la Agents Rule of Two de Meta. Y lo crucial: señala a los agentes de programación como el epicentro: 28 de 53 proyectos agénticos rastreados son agentes de programación, y los repositorios con más advisories son n8n (57), Claude Code (22), AutoGPT (15), Dify (13) y Roo-Code (11). El umbral falsable de la predicción: al menos una plataforma líder de agentes de programación incorpora, activada por defecto, una compuerta de capacidades que impone una restricción Rule-of-Two -como mucho dos de entre acceso a datos privados, exposición a contenido no confiable y comunicación externa antes de pausar para aprobación humana-. La distancia hasta el umbral: hoy aporta el argumento de que es imposible de parchear por diseño y la designación del epicentro, pero ninguna plataforma ha incorporado una compuerta trifecta activada por defecto.",
+      "reference_links": [
+        {
+          "label": "OWASP GenAI Security Project - State of Agentic AI Security and Governance 2.01",
+          "url": "https://genai.owasp.org/resource/state-of-agentic-ai-security-and-governance/"
+        },
+        {
+          "label": "Simon Willison - The lethal trifecta for AI agents: private data, untrusted content, and external communication",
+          "url": "https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/"
+        }
+      ],
+      "bridge": {
+        "narrative": "El replanteamiento de OWASP del 28 de junio convierte la inyección de prompts en una restricción de diseño imposible de parchear, asignada a seis de diez categorías agénticas, y señala a los agentes de programación como el epicentro, con Claude Code, n8n y AutoGPT encabezando el recuento de advisories. Eso fuerza la conclusión sobre la que descansa la predicción: las defensas deben ser presupuestos de capacidades en la capa de orquestación, justamente la compuerta Rule-of-Two que la tesis espera que una plataforma incorpore activada por defecto.",
+        "support_dimension": "because",
+        "coherence": 4,
+        "remaining_gap": "Ninguna plataforma de agentes de programación ha incorporado una compuerta de capacidades trifecta activada por defecto; el informe aporta la justificación y la designación del epicentro, pero no un mecanismo de imposición ya activado por defecto."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.3abbcb892f7919d6",
+        "short_label": "Frontier-class open-weight LLM runs single-node under 256GB by Q4 2026",
+        "prediction_date": "2026-06-23"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "La noticia de Unsloth de hoy incide en la mitad de esta tesis referida a la frontera de pesos abiertos. La v0.1.471-beta de Unsloth añadió soporte completo para el GLM-5.2 de Z.ai -la mezcla de expertos con licencia MIT de unos 753.000 millones de parámetros que encabezó los benchmarks de programación agéntica este mes- en todos los niveles de razonamiento, dos días después de su publicación del 16 de junio, junto con Gemma 4 y un algoritmo mejorado de ajuste automático de memoria al que se atribuyen aproximadamente 3 veces más de contexto utilizable, además de fiabilidad en paralelismo de tensores y compatibilidad con vLLM 0.22+. La relevancia está en que la ola de frontera de pesos abiertos (GLM-5.2 a escala MoE, con enrutamiento disperso de parámetros activos) es exactamente la clase que esta predicción espera que pase a poder ejecutarse en un solo nodo: una MoE dispersa de 753.000 millones de parámetros activa solo una fracción de los pesos por token, y las herramientas de eficiencia de memoria que Unsloth está distribuyendo son del tipo que empuja a un modelo así hacia un margen de un solo nodo por debajo de 256GB. La distancia hasta el umbral: hoy documenta la cobertura del kit de ajuste y las mejoras de memoria, no una ejecución en un solo nodo, demostrada de forma independiente, de un modelo de pesos abiertos de clase frontera por debajo de 256GB. El contacto es el hilo de la frontera de pesos abiertos y la eficiencia de memoria, no un tamaño medido en un solo nodo.",
+      "reference_links": [
+        {
+          "label": "GitHub - unslothai/unsloth release v0.1.471-beta (June 18 2026)",
+          "url": "https://github.com/unslothai/unsloth/releases/tag/v0.1.471-beta"
+        },
+        {
+          "label": "DataCamp - GLM-5.2: Features, Setup, Benchmarks, and Model Switching Guide",
+          "url": "https://www.datacamp.com/blog/glm-5-2"
+        }
+      ],
+      "bridge": {
+        "narrative": "La beta de Unsloth del 18 de junio incorpora soporte completo para GLM-5.2 -una MoE dispersa de unos 753.000 millones de parámetros que activa solo una fracción de los pesos por token- junto con un algoritmo de ajuste automático de memoria al que se atribuyen aproximadamente 3 veces más de contexto utilizable, justamente la escala de la frontera de pesos abiertos y las herramientas de eficiencia de memoria que empujan a un modelo así hacia un margen de un solo nodo por debajo de 256GB.",
+        "support_dimension": "because",
+        "coherence": 3,
+        "remaining_gap": "No hay una ejecución en un solo nodo, demostrada de forma independiente, de un modelo de pesos abiertos de frontera por debajo de 256GB; hoy se muestra la cobertura de ajuste y las mejoras de memoria, no un tamaño medido."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.3a5fa9315f58608d",
+        "short_label": "Agentic coding platforms ship token budgets and caps as default by Q2 2027",
+        "prediction_date": "2026-06-25"
+      },
+      "today_relevance": 2,
+      "evidence_summary": "El informe de OWASP de hoy incide en esta tesis más por la presión general sobre la postura por defecto que por el presupuesto de tokens en concreto. El replanteamiento de la versión 2.01 de OWASP señala a los agentes de programación como el epicentro del riesgo de IA agéntica -28 de 53 proyectos agénticos rastreados son agentes de programación, con Claude Code, AutoGPT, Dify y Roo-Code entre los repositorios con más advisories- y sostiene que las mitigaciones duraderas son presupuestos de diseño en la capa de orquestación, y no el filtrado del flujo de tokens. Ese argumento de que las plataformas de agentes de programación deben añadir salvaguardas activadas por defecto en la capa de orquestación es la misma presión competitiva y de advisories que esta predicción espera que impulse los presupuestos y límites de tokens por defecto, ya que los bucles autónomos sin límite forman parte del mismo conjunto de riesgos de ejecución no controlada. La distancia hasta el umbral: el informe de hoy aborda la compuerta de capacidades frente al lethal trifecta, no los límites de coste o de presupuesto de tokens; ninguna plataforma de agentes de programación incorporó hoy presupuestos o límites de tokens por defecto. El contacto es la presión compartida hacia salvaguardas activadas por defecto, no una publicación de presupuesto.",
+      "reference_links": [
+        {
+          "label": "OWASP GenAI Security Project - State of Agentic AI Security and Governance 2.01",
+          "url": "https://genai.owasp.org/resource/state-of-agentic-ai-security-and-governance/"
+        }
+      ],
+      "bridge": {
+        "narrative": "La v0.1.471-beta de Unsloth, del 18 de junio, añade cobertura completa de GLM-5.2 dos días después de que esa mezcla de expertos con licencia MIT de unos 753.000 millones de parámetros se publicara, además de un algoritmo de ajuste automático de memoria al que se atribuyen aproximadamente 3 veces más de contexto utilizable. Una MoE dispersa activa solo una fracción de los pesos por token, y justamente estas herramientas de eficiencia de memoria son las que empujan a un modelo así hacia un margen de un solo nodo por debajo de 256GB, lo que refuerza la razón de fondo de la tesis.",
+        "support_dimension": "because",
+        "coherence": 3,
+        "remaining_gap": "No hay una ejecución en un solo nodo, demostrada de forma independiente, de un modelo de pesos abiertos de clase frontera por debajo de 256GB; hoy se muestran herramientas, no un tamaño medido."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.079ca77d11decc5f",
+        "short_label": "AI accelerator ships confidential-inference tier with attestation by H1 2027",
+        "prediction_date": "2026-06-26"
+      },
+      "today_relevance": 2,
+      "evidence_summary": "Las noticias de hoy tocan esta tesis a través de la estrategia de chips de IA y el calendario de eventos. El Advancing AI 2026 de AMD está confirmado para el 22-23 de julio en Moscone, con la keynote y el foco en la serie Instinct MI400 el 23 de julio: exactamente el tipo de escenario donde aparecería una pieza de inferencia confidencial con atestación, y dentro de la ventana de esta predicción. El empuje de pila completa de Qualcomm, de unos 14.000 millones de dólares (la adquisición de Modular, las conversaciones reportadas con Tenstorrent y un envío comprometido de silicio personalizado a un hiperescalador antes de fin de año), mantiene disputada la hoja de ruta de aceleradores comerciales, el telón de fondo competitivo frente al cual se anunciaría una SKU diferenciada de inferencia confidencial. La predicción espera que un acelerador de inferencia de IA específicamente diseñado se publique o se presente con la computación confidencial como una característica nombrada y de peso: raíz de confianza en el chip, TEE-I/O que mantenga pesos y activaciones cifrados en uso a través de la frontera CPU-acelerador, y atestación de modelo firmado promocionada como un nivel nombrado. La distancia hasta el umbral: hoy da el próximo evento de AMD y el telón de fondo más amplio de la rivalidad de chips, no una pieza en distribución. Una línea genérica de computación confidencial en una hoja de especificaciones, o una oferta de VM confidencial sin TEE-I/O ni atestación de modelo, no cuenta; no se ha revelado ningún nivel nombrado de inferencia confidencial.",
+      "reference_links": [
+        {
+          "label": "AI Engineer - World's Fair 2026 program (main program June 29 - July 2, Moscone West, San Francisco)",
+          "url": "https://www.ai.engineer/worldsfair/2026/llms.md"
+        }
+      ],
+      "bridge": {
+        "narrative": "El Advancing AI 2026 de AMD (22-23 de julio, Moscone) sitúa la keynote de la serie Instinct MI400 dentro de la ventana de la predicción, el escenario natural para una pieza de inferencia confidencial, mientras que el empuje de pila completa de Qualcomm, de unos 14.000 millones de dólares, mantiene la carrera de aceleradores comerciales lo bastante disputada como para recompensar una SKU de seguridad diferenciada. Ambos son telón de fondo y escenario, no un acelerador en distribución con atestación nombrada.",
+        "support_dimension": "landing",
+        "coherence": 2,
+        "remaining_gap": "No hay una pieza en distribución con raíz de confianza en el chip, TEE-I/O y atestación de modelo firmado como un nivel nombrado; la keynote de AMD aún no ha ocurrido."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.af116b6aeee58cde",
+        "short_label": "DiffusionGemma seeds an open-weight text-diffusion training category by Q2 2027",
+        "prediction_date": "2026-06-14"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "[REVIVED] Coincidencia de palabras clave de capa 1 sobre las señales de esta fila latente -DiffusionGemma run-and-train, predicción multitoken de Gemma 4, soporte nativo de una segunda pila local de entrenamiento/inferencia, llama.cpp Ollama LM Studio MLX Axolotl TRL- frente a la noticia de Unsloth de hoy. La v0.1.471-beta de Unsloth distribuye la vía de generación de imágenes de DiffusionGemma con visualización del denoising en vivo y Gemma 4 con predicción multitoken para una inferencia aproximadamente 2 veces más rápida, extendiendo directamente la cobertura de entrenamiento/inferencia de difusión de pesos abiertos que esta predicción sigue. El umbral de la predicción es que DiffusionGemma siembre una categoría establecida de entrenamiento de difusión de texto de pesos abiertos: una segunda pila local que soporte de forma nativa el denoising de difusión-LM para ajuste fino e inferencia en hardware de borde de consumo. La beta de hoy es un paso concreto de segunda pila justo en esa dirección: un kit de ajuste convencional que incorpora soporte de primera clase para DiffusionGemma junto con la predicción multitoken de Gemma 4. La distancia hasta el umbral: la señal de hoy es la vía de generación de imágenes/denoising de DiffusionGemma dentro de la beta de un solo kit, todavía no una segunda familia independiente de difusión de texto de pesos abiertos ni una categoría de entrenamiento multipila asentada para la difusión de texto en concreto.",
+      "reference_links": [
+        {
+          "label": "GitHub - unslothai/unsloth release v0.1.471-beta (June 18 2026)",
+          "url": "https://github.com/unslothai/unsloth/releases/tag/v0.1.471-beta"
+        }
+      ],
+      "bridge": {
+        "narrative": "El Advancing AI de AMD, el 22-23 de julio, con su keynote de la serie Instinct MI400, cae de lleno dentro de la ventana de la predicción y es justamente el escenario donde aparecería una pieza de inferencia confidencial con atestación, mientras que el empuje de pila completa de Qualcomm, de unos 14.000 millones de dólares, mantiene el campo de aceleradores comerciales lo bastante disputado como para recompensar una SKU de seguridad diferenciada. Estas son las condiciones bajo las que se supera el umbral, no la superación en sí.",
+        "support_dimension": "given",
+        "coherence": 2,
+        "remaining_gap": "No se ha revelado ninguna pieza en distribución con raíz de confianza en el chip, TEE-I/O y atestación de modelo firmado promocionada como un nivel nombrado de inferencia confidencial."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.3863162bc445e548",
+        "short_label": "Local fine-tune-to-agent stack ships as a managed hyperscaler service by H2 2026",
+        "prediction_date": "2026-06-03"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "[REVIVED] Coincidencia semántica de capa 2: las señales de esta fila latente -Unsloth build, QLoRA modelo abierto pequeño, memoria de clase consumo, pipeline de ajuste fino a agente desplegado, consola gestionada de MLOps de hiperescalador- se corresponden con la noticia de Unsloth de hoy. La v0.1.471-beta estrecha el bucle de ajuste fino local con cobertura de frontera de pesos abiertos (GLM-5.2, predicción multitoken de Gemma 4, DiffusionGemma), un algoritmo de ajuste automático de memoria al que se atribuyen aproximadamente 3 veces más de contexto utilizable, soporte mejorado para Blackwell RTX 50X/60X, compatibilidad con vLLM 0.22+ y un modo de ejecución en paralelo que permite a un usuario chatear, entrenar, exportar y ejecutar recetas a la vez: la cadena de herramientas de ajuste fino a agente de clase consumo que esta predicción espera que un hiperescalador absorba en un servicio gestionado. El umbral de la predicción es que este bucle local se publique como un servicio gestionado de hiperescalador con un catálogo curado de herramientas y un generador de datos sintéticos. La distancia hasta el umbral: la señal de hoy es la maduración de un kit de código abierto en hardware de consumo, no un hiperescalador convirtiendo el bucle en producto como consola gestionada; el contacto es el hilo del pipeline de ajuste fino a agente, no el lanzamiento de un servicio gestionado.",
+      "reference_links": [
+        {
+          "label": "GitHub - unslothai/unsloth release v0.1.471-beta (June 18 2026)",
+          "url": "https://github.com/unslothai/unsloth/releases/tag/v0.1.471-beta"
+        }
+      ],
+      "bridge": {
+        "narrative": "La beta de Unsloth del 18 de junio estrecha justamente el bucle de clase consumo que esta tesis espera que un hiperescalador absorba: cobertura de frontera de pesos abiertos (GLM-5.2, predicción multitoken de Gemma 4, DiffusionGemma), un algoritmo de ajuste automático de memoria que vale aproximadamente 3 veces más de contexto, soporte para Blackwell RTX 50X/60X, compatibilidad con vLLM 0.22+ y un modo en paralelo que chatea, entrena, exporta y ejecuta recetas a la vez. La cadena de herramientas de ajuste fino a agente está madurando hacia la forma convertible en producto que asume la fuerza estructural de la predicción.",
+        "support_dimension": "because",
+        "coherence": 3,
+        "remaining_gap": "Ningún hiperescalador ha envuelto el bucle en una consola gestionada con un catálogo curado de herramientas y un generador de datos sintéticos; hoy es maduración de código abierto, no el lanzamiento de un servicio."
+      }
+    }
+  ]
+}

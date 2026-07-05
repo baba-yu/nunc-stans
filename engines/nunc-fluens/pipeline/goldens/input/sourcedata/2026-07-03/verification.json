@@ -1,0 +1,143 @@
+{
+  "date": "2026-07-03",
+  "verifications": [
+    {
+      "topic": "LLM Workflow",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "A working exploit for the Flowise Custom-MCP RCE lands as researchers show its official patch can be bypassed, keeping the agent-builder MCP layer a live attack surface",
+        "OpenAI promotes Codex Remote to general availability for every paid ChatGPT tier, turning the phone into a supervised remote for long-running coding agents"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "Flowise is named explicitly in the LLM Workflow scope row as a low-code agent/workflow builder, and the RCE bullet plus the broader MCP supply-chain advisory (LiteLLM, Agent Zero, LangBot, Windsurf) is squarely orchestration-layer news. The Codex Remote GA bullet also describes an asynchronous, approve-from-anywhere agent-pipeline loop."
+    },
+    {
+      "topic": "Multi-profiling for Local LLM (e.g. Multica)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No bullet touches multi-profiling / Multica-style local-LLM profiling. This is a news-driven-only topic with no trigger in today's set; a legitimate uncovered verdict."
+    },
+    {
+      "topic": "Agent Harness (OpenClaw, NemoClaw, Hermes Agents, etc.)",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "OpenAI promotes Codex Remote to general availability for every paid ChatGPT tier, turning the phone into a supervised remote for long-running coding agents"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "Codex CLI/Codex Remote is listed by name in the Agent Harness scope row alongside Claude Code and Cursor. A coding-agent GA with new CLI version, MCP tool-search default, and a workspace plugin is core coding-agent-harness news."
+    },
+    {
+      "topic": "Platform for Local LLM (vLLM, SGLang, etc.)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No inference-engine / serving-stack news (vLLM, SGLang, TGI, TensorRT-LLM, LiteLLM serving, etc.) appears today. Bullet 3's Tinker is a fine-tuning/training platform, not a serving runtime, so it does not satisfy this topic. Legitimately uncovered."
+    },
+    {
+      "topic": "Ecosystems for Local LLM Embedded System (Foundry Local, etc.)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No edge / on-device / NPU-runtime news (Foundry Local, Ollama, LM Studio, MLX, ExecuTorch, OpenVINO, etc.) today. Legitimately uncovered."
+    },
+    {
+      "topic": "Local LLM Models",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "Bridgewater and Thinking Machines Lab fine-tune a Qwen3-235B open-weight base past every frontier model on financial-judgment tasks at a fraction of the cost"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "The bullet centers on the open-weight Qwen3-235B base (a listed model family) and explicitly validates it as a serious open foundation for commercial fine-tuning. It is an open-weight-checkpoint story, satisfying the open-weight-release/model-card scope even though today's news is a fine-tune atop it rather than a fresh model card."
+    },
+    {
+      "topic": "Local LLM Optimization, Fine-tuning (Unsloth — every run)",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "Bridgewater and Thinking Machines Lab fine-tune a Qwen3-235B open-weight base past every frontier model on financial-judgment tasks at a fraction of the cost"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "This is a pure fine-tuning story (round-robin batching, CISPO loss, on-policy distillation on Tinker) that the bullet itself places in the local-optimization/fine-tuning lane where Unsloth operates. Judged by fine-tuning-ness, it covers the mandatory Unsloth topic even though it is not literally an Unsloth release."
+    },
+    {
+      "topic": "Ecosystems for LLM on PaaS (AWS Bedrock, Azure AI Foundry, etc.)",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "Anthropic restores Fable 5 worldwide on July 1 after a 19-day export-control suspension, shipping a >99% jailbreak classifier and a four-point government commitment"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "The Fable 5 restoration bullet is about availability of a frontier model API across AWS, Google Cloud, and Microsoft (Claude Platform API), i.e. managed/hosted-LLM-on-PaaS reachability — a hosted-frontier-API-availability event that fits the PaaS scope."
+    },
+    {
+      "topic": "AI Security",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "A working exploit for the Flowise Custom-MCP RCE lands as researchers show its official patch can be bypassed, keeping the agent-builder MCP layer a live attack surface"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "An MCP-layer RCE with a working PoC, a demonstrated patch-bypass, and a coordinated supply-chain advisory across agent tools is exactly the security-ness pattern (agent hijack, supply-chain, tool-call abuse, responsible disclosure) in the AI Security scope."
+    },
+    {
+      "topic": "CVE update on score ≥ 8.0",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "A working exploit for the Flowise Custom-MCP RCE lands as researchers show its official patch can be bypassed, keeping the agent-builder MCP layer a live attack surface"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "The bullet carries an explicit CVE (CVE-2026-40933) for an unsandboxed-child-process RCE with a full-server-control impact, meeting the CVE-tracking topic. RCE severity is consistent with the >=8.0 threshold."
+    },
+    {
+      "topic": "Hardware",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "AI events to plan around now: AMD's July 22-23 MI400 reveal leads, with a mid-August security block and a fall chip-and-dev-conference stack still ahead"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "The events bullet foregrounds AMD's Advancing AI 2026 MI400-series and Helios rack-scale reveal plus Hot Chips and the AI Infra Summit — AI-accelerator/data-center-hardware content (listed SKUs MI400/Helios). The hardware angle is carried as forward catalysts rather than a shipped chip, but the chip-ness is clearly present."
+    },
+    {
+      "topic": "Physical AI",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No robotics / humanoid / embodied-AI / VLA news today. The AI Infra Summit's physical-AI agenda is only mentioned as a future event track, not a robotics news item. Legitimately uncovered."
+    },
+    {
+      "topic": "LLM-related research and papers",
+      "semantic_verdict": "ambiguous",
+      "matching_bullets": [
+        "Bridgewater and Thinking Machines Lab fine-tune a Qwen3-235B open-weight base past every frontier model on financial-judgment tasks at a fraction of the cost"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "The Thinking Machines write-up reports concrete, named methods (interleaved round-robin batching, CISPO asymmetric-clipping loss, on-policy distillation with a promoted teacher) with quantified ablations, which reads like applied-research findings. But it is a lab technical blog framed as a product/benchmark result rather than an arXiv paper or formal publication, so its status as a research-and-papers item is borderline."
+    },
+    {
+      "topic": "Stock prices and corporate activity",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "Anthropic restores Fable 5 worldwide on July 1 after a 19-day export-control suspension, shipping a >99% jailbreak classifier and a four-point government commitment",
+        "Bridgewater and Thinking Machines Lab fine-tune a Qwen3-235B open-weight base past every frontier model on financial-judgment tasks at a fraction of the cost"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "The Fable 5 bullet reports Menlo Ventures closing a record $3B raise on the strength of an Anthropic stake worth ~$14B against a $965B valuation — a funding-round / private-valuation event. The Bridgewater x Thinking Machines bullet is corporate activity from a major hedge fund and a frontier lab. Both fit the AI-sector financial/corporate scope."
+    },
+    {
+      "topic": "Bay Area / SV AI meet-up events",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "AI events to plan around now: AMD's July 22-23 MI400 reveal leads, with a mid-August security block and a fall chip-and-dev-conference stack still ahead"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "A dedicated forward-looking events bullet covering all three mandated sub-tracks: mainstream dev/data (GitHub Universe, AWS re:Invent), AI-security (SecurityWeek AI Risk Summit, Black Hat/DEF CON AI Village, OWASP Global AppSec, Zenity AI Agent Security Summit), and AI-chip (AMD Advancing AI, Hot Chips, AI Infra Summit). Carry-forward exception applies; no fresh state-change required."
+    },
+    {
+      "topic": "Other standing-out topics",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "Anthropic restores Fable 5 worldwide on July 1 after a 19-day export-control suspension, shipping a >99% jailbreak classifier and a four-point government commitment"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "The Fable 5 restoration ties to a notable cross-cutting policy development — the lifting of emergency export controls, a four-point government arrangement, and an imminent White House voluntary frontier-model standards framework — a standing-out governance/regulatory story beyond the fixed topic rows."
+    }
+  ]
+}

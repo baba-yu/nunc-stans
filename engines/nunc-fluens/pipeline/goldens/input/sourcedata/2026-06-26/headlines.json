@@ -1,0 +1,54 @@
+{
+  "date": "2026-06-26",
+  "technical": [
+    {
+      "lead": "Feast ML feature-store ships unauthenticated RCE via gRPC registry deserialization",
+      "body": "A maximum-severity, unauthenticated remote-code-execution flaw in Feast, the open-source machine-learning feature store, was published June 24 as CVE-2026-56121, rated CVSS 9.3 (v4.0) and fixed in Feast 0.63.0. When the registry server processes a gRPC request, it base64-decodes the user_defined_function.body field of an OnDemandFeatureView spec and passes it straight to dill.loads() before any authorization check, so an attacker can submit a crafted serialized Python object with an arbitrary __reduce__ method and execute OS commands as the Feast service account with no credentials. The structural read is that the ML attack surface has dropped one layer below the model and inference engine into the data-and-metadata plumbing: a registry that ingests serialized transformation logic over the network is an unauthenticated code-execution endpoint unless deserialization is gated. Operators should treat any pre-0.63.0 deployment with a network-reachable gRPC registry as exposed, upgrade immediately, and confirm the registry is not addressable from untrusted networks.",
+      "citations": [
+        {"label": "GitHub Advisory Database - Feast unsafe deserialization allows unauthenticated RCE (CVE-2026-56121)", "url": "https://github.com/advisories/GHSA-q63x-9pfm-mjx4"},
+        {"label": "NVD - CVE-2026-56121 Detail (Feast before 0.63.0, gRPC registry deserialization RCE)", "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56121"}
+      ]
+    },
+    {
+      "lead": "Forward: a second ML registry logs a max-severity deserialization RCE by Q1 2027",
+      "body": "The Feast advisory is the structural trigger for a forward call: by Q1 2027, expect a second named open-source ML data/metadata-plane project to receive a maximum-severity (CVSS >= 9.0) advisory for an unsafe-deserialization RCE reachable over its network service before any authorization check. The class is feature stores, model and artifact registries, metadata and lineage servers, and serialized-transform endpoints — the plumbing behind production inference, not the model itself. These services ingest serialized objects (dill, pickle, joblib, cloudpickle, or equivalent) over gRPC, HTTP, or queue surfaces and hand them to a deserializer that runs attacker-controlled __reduce__ payloads as the service account, so the same primitive recurs wherever ML infra trusts serialized objects on the wire. The falsifiable core is a NAMED, distinct project — not Feast, and not a re-score or backport of CVE-2026-56121 — with its own CVE/GHSA at CVSS >= 9.0 whose root cause is unsafe deserialization of a network-supplied object on an ML registry, feature-store, or metadata endpoint. A sub-9.0 advisory, a non-ML serialization CVE, a hardening commit with no CVE, or a model-file/prompt-injection finding does not count.",
+      "citations": [
+        {"label": "GitHub Advisory Database - Feast unsafe deserialization allows unauthenticated RCE (CVE-2026-56121)", "url": "https://github.com/advisories/GHSA-q63x-9pfm-mjx4"},
+        {"label": "NVD - CVE-2026-56121 Detail (Feast before 0.63.0, gRPC registry deserialization RCE)", "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56121"}
+      ]
+    },
+    {
+      "lead": "Forward: a security vendor productizes ML deserialization scanning as a named tier by Q1 2027",
+      "body": "By Q1 2027, expect at least one named application-security or supply-chain-security platform (the Snyk / Endor Labs / JFrog / Protect AI / HiddenLayer class) to market a productized, named capability that scans the ML data-and-metadata plane for unsafe-deserialization and untrusted-serialized-object risk — pickle/dill/joblib payloads, model checkpoints, and feature-store transformation bodies — as a first-class scanner tier rather than a buried CVE-feed entry. Feast's June 24 CVE-2026-56121 is the trigger: a CVSS 9.3 unauthenticated RCE in which the registry hands a user-supplied function body straight to dill.loads() before any authorization check, proving the attack surface has moved below the model into the serialized data plane. Once a bug class has both a documented exploit trail and a network-reachable, weaponizable shape, vendors productize a dedicated detection surface rather than leaving it to generic dependency scanning. The falsifiable core is a NAMED, marketed product tier, module, or SKU whose stated scope explicitly covers ML serialized-artifact, deserialization, or model-supply-chain scanning. A generic SCA tool merely ingesting the Feast CVE, a one-off blog post, an internal demo, or a prompt-injection guardrail product does not count.",
+      "citations": [
+        {"label": "GitHub Advisory Database - Feast unsafe deserialization allows unauthenticated RCE (CVE-2026-56121)", "url": "https://github.com/advisories/GHSA-q63x-9pfm-mjx4"},
+        {"label": "NVD - CVE-2026-56121 Detail (Feast before 0.63.0, gRPC registry deserialization RCE)", "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56121"}
+      ]
+    },
+    {
+      "lead": "Forward: an AI accelerator ships a confidential-inference tier with signed-model attestation by H1 2027",
+      "body": "By H1 2027, expect a purpose-built AI inference accelerator to ship or be unveiled with confidential computing as a named, load-bearing feature of the part itself — on-die root-of-trust, TEE-I/O that keeps model weights and activations encrypted in use across the CPU-accelerator boundary, and signed-model attestation that lets a tenant cryptographically verify which weights are running before sending data — marketed as a named confidential-inference SKU or managed tier. Two structural forces close the gap: the regulated and sovereign buyers driving custom-silicon economics carry the heaviest data-residency and IP-protection requirements, and merchant accelerators already hold the primitives (NVIDIA Confidential Computing on Hopper/Blackwell, AMD SEV-SNP, Intel TDX with TEE-I/O) waiting to be productized into a named inference tier; meanwhile the agentic-AI security cycle keeps tying risk to model-supply-chain integrity, and signed-model attestation is the hardware-rooted answer to 'prove the weights I am querying are the weights I approved.' Likely disclosure venues include AMD's Advancing AI (July 22-23), Hot Chips (August 23-25), or Black Hat (August). A generic confidential-computing line on a GPU spec sheet, a research paper with no shipping part, or a confidential-VM offering without TEE-I/O or model attestation does not count.",
+      "citations": [
+        {"label": "AMD - Advancing AI 2026 (San Francisco, July 22-23)", "url": "https://www.amd.com/en/corporate/events/advancing-ai.html"},
+        {"label": "Black Hat - USA 2026 (August 1-6, Mandalay Bay, Las Vegas)", "url": "https://blackhat.com/us-26/"}
+      ]
+    },
+    {
+      "lead": "AI events to plan around now: World's Fair this weekend, chip and security calendar through summer",
+      "body": "The forward AI calendar spans all three sub-tracks, anchored this weekend by the AI Engineer World's Fair at Moscone West in San Francisco. Mainstream dev/data: the official AIE World's Fair Hackathon with Cerebral Valley fills June 27-28, an optional New Engineer Orientation runs June 28, and the main program runs June 29 through July 2 (20+ tracks, 250+ speakers); GitHub Universe returns October 28-29 and AWS re:Invent runs November 30 to December 4 in Las Vegas. AI-security: Black Hat USA 2026 runs August 1-6 at Mandalay Bay, with Summit Day (including the AI Summit) on August 4 and the main Briefings August 5-6, immediately followed by DEF CON 34 and its AI Village August 6-9; SecurityWeek's AI Risk Summit is August 11-12 at the Ritz-Carlton in Half Moon Bay; OWASP Global AppSec USA is November 5-6 in San Francisco. AI-chip/hardware: AMD's Advancing AI 2026 is July 22-23 at Moscone, with the in-person keynote and Instinct MI400-series focus on July 23; Hot Chips 2026 runs August 23-25 at Stanford; and the AI Infra Summit is September 15-17 at the Santa Clara Convention Center.",
+      "citations": [
+        {"label": "AI Engineer - World's Fair 2026 (June 29 - July 2, Moscone West, San Francisco)", "url": "https://www.ai.engineer/worldsfair/2026"},
+        {"label": "AMD - Advancing AI 2026 (San Francisco, July 22-23)", "url": "https://www.amd.com/en/corporate/events/advancing-ai.html"},
+        {"label": "Black Hat - USA 2026 (August 1-6, Mandalay Bay, Las Vegas)", "url": "https://blackhat.com/us-26/"},
+        {"label": "SecurityWeek - AI Risk Summit, August 11-12, Half Moon Bay", "url": "https://www.securityweek.com/securityweek-to-host-ai-risk-summit-august-11-12-at-the-ritz-carlton-half-moon-bay/"}
+      ]
+    }
+  ],
+  "plain": [
+    "A critical bug let hackers run code on Feast AI servers",
+    "Another AI data tool will likely be caught the same way",
+    "A security firm will sell a scanner for these AI-file bugs",
+    "AI chips will add a mode that keeps your model secret",
+    "Big AI events to plan for, from this weekend through summer"
+  ]
+}

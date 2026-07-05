@@ -1,0 +1,94 @@
+{
+  "date": "2026-07-05",
+  "technical": [
+    {
+      "lead": "Ollama 0.31 habilita la predicción multi-token para Gemma 4 en Apple Silicon",
+      "body": "Ollama publicó la <a href=\"https://ollama.com/blog/faster-gemma-4-mlx-mtp\">versión 0.31 el 1 de julio de 2026</a> con la predicción multi-token (MTP) activada por defecto para Gemma 4 en Apple Silicon, e informa de que el modelo ahora genera tokens casi un 90% más rápido de media en un benchmark de agente de código sin cambios en la salida. El mecanismo es el speculative decoding en el modelo: Gemma 4 incluye un pequeño modelo borrador que propone varios tokens siguientes y el modelo principal los verifica en una sola pasada, de modo que se obtienen varios tokens por aproximadamente el coste de uno cuando el borrador acierta. Ollama también aportó un kernel de matmul de lote pequeño al <a href=\"https://github.com/ollama/ollama/releases/tag/v0.31.1\">framework MLX</a> de Apple que descomprime cada bloque de pesos una vez y lo reutiliza en todo el lote, haciendo que las mayores multiplicaciones de matrices de Gemma 4 sean de 2x a 2,5x más rápidas en un M5 Max con nvfp4, y el kernel es reutilizable por otros modelos MLX. La serie 0.30.11-0.31 también añadió la detección de capacidad de razonamiento, hooks de instalación automática para Claude Code y opencode, la detección de drift de Codex y el soporte de CUDA sm_86, según las <a href=\"https://releasebot.io/updates/ollama\">notas de versión de Ollama</a>. Como los agentes de código llaman al modelo de forma continua y el código es inusualmente predecible, la aceptación del borrador es alta y la aceleración se acumula a lo largo de una sesión, cerrando parte de la brecha entre el rendimiento agéntico en el dispositivo y la inferencia alojada sin nuevo hardware.",
+      "citations": [
+        {
+          "label": "Blog de Ollama - Gemma 4 más rápido en MLX con predicción multi-token",
+          "url": "https://ollama.com/blog/faster-gemma-4-mlx-mtp"
+        },
+        {
+          "label": "GitHub - Versión Ollama v0.31.1",
+          "url": "https://github.com/ollama/ollama/releases/tag/v0.31.1"
+        },
+        {
+          "label": "Releasebot - Notas de versión de Ollama (junio-julio de 2026)",
+          "url": "https://releasebot.io/updates/ollama"
+        }
+      ]
+    },
+    {
+      "lead": "Together AI capta una Serie C de 800 millones de dólares a 8.300 millones, liderada por Prosperity7 de Aramco",
+      "body": "Together AI anunció una <a href=\"https://www.businesswire.com/news/home/20260701243402/en/Together-AI-Raises-$800-Million-at-$8.3-Billion-Valuation-to-Make-Frontier-AI-Accessible-to-All\">Serie C de 800 millones de dólares a una valoración post-money de 8.300 millones de dólares el 1 de julio de 2026</a>, un salto de 2,5x respecto a su Serie B de 3.300 millones de dólares de febrero de 2025 y que eleva la financiación total a 1.300 millones de dólares. La ronda fue liderada por Prosperity7 Ventures US de Aramco Ventures, con la participación de Vista Equity Partners, General Catalyst, Emergence Capital, NVIDIA, March Capital, Pegatron y S Ventures de SentinelOne, según <a href=\"https://www.datacenterdynamics.com/en/news/together-ai-raises-800m-in-series-c-funding-round/\">DataCenter Dynamics</a>. Lo que la distingue de las megarrondas de los laboratorios de frontera es dónde se sitúa el dinero: Together AI es un neocloud que entrena y sirve modelos de pesos abiertos como DeepSeek, Nemotron, MiniMax y Kimi a una fracción del coste de los modelos cerrados, y espera que su despliegue de infraestructura de GPU se multiplique por unas 50 veces a lo largo de cinco años. El director gerente de Prosperity7, Abhishek Shukla, planteó que la empresa se encamina hacia los mercados públicos. La señal para los equipos que eligen un proveedor de inferencia es que la capa de alojamiento de modelos abiertos se está capitalizando ahora como una plataforma duradera por derecho propio, junto a pares como Fireworks y Baseten, con la pregunta abierta de si la inferencia de modelos abiertos con GPU propias puede seguir abaratando las API de frontera alojadas igualándolas en latencia.",
+      "citations": [
+        {
+          "label": "Business Wire - Together AI capta 800M de dólares a una valoración de 8.300M",
+          "url": "https://www.businesswire.com/news/home/20260701243402/en/Together-AI-Raises-$800-Million-at-$8.3-Billion-Valuation-to-Make-Frontier-AI-Accessible-to-All"
+        },
+        {
+          "label": "DataCenter Dynamics - Together AI capta 800m de dólares en una ronda de financiación Serie C",
+          "url": "https://www.datacenterdynamics.com/en/news/together-ai-raises-800m-in-series-c-funding-round/"
+        }
+      ]
+    },
+    {
+      "lead": "Jim Keller de Tenstorrent niega las conversaciones de compra con Qualcomm, enfriando un acuerdo de 8.000-10.000 millones de dólares",
+      "body": "En un evento de prensa en Tokio, el CEO de Tenstorrent, Jim Keller, dijo el 30 de junio de 2026 y reiteró hasta el 3 de julio que la startup de chips de IA no está en conversaciones de adquisición con Qualcomm, contradiciendo directamente un informe de mediados de junio, originado en The Information y recogido por Reuters, según el cual Qualcomm sopesaba una compra total por un importe informado de 8.000 a 10.000 millones de dólares, según <a href=\"https://www.gurufocus.com/news/8938157/tenstorrent-ceo-denies-qualcomm-acquisition-talks-amid-focus-on-ai-development\">GuruFocus</a>. Keller dijo que la empresa se centra en construir su propio negocio, incluida la licencia de IP y el trabajo de IA escalable de gama alta anclado en Japón, dejando la puerta abierta a alianzas. El desmentido importa porque elimina, por ahora, una vía de consolidación que habría integrado a una de las pocas casas creíbles de IP de aceleradores basada en RISC-V en un incumbente de SoC móviles, y llega mientras Tenstorrent está a mitad de camino en un puente hacia la IPO y una vía de S-1 confidencial en lugar de ponerse en venta. Para los compradores que evalúan el campo de aceleradores distintos de NVIDIA, la conclusión es que la hoja de ruta del rack Galaxy de Tenstorrent y su modelo de licencia de IP siguen en una trayectoria independiente. La lectura más amplia es que la carrera por el ancho de banda de memoria y los ASIC de inferencia es ahora lo bastante valiosa como para que los rumores de adquisición muevan los mercados, y sin embargo los principales independientes están eligiendo salidas a bolsa antes que la venta.",
+      "citations": [
+        {
+          "label": "GuruFocus - El CEO de Tenstorrent niega las conversaciones de adquisición con Qualcomm",
+          "url": "https://www.gurufocus.com/news/8938157/tenstorrent-ceo-denies-qualcomm-acquisition-talks-amid-focus-on-ai-development"
+        }
+      ]
+    },
+    {
+      "lead": "Stathera cierra una Serie B de 55M de dólares para timing de silicio por MEMS en centros de datos de IA",
+      "body": "Stathera, con sede en Montreal, anunció una <a href=\"https://www.prnewswire.com/news-releases/stathera-announces-us55-million-series-b-to-scale-silicon-timing-and-accelerate-next-generation-ai-data-center-solutions-302813712.html\">Serie B sobresuscrita de 55 millones de dólares el 30 de junio de 2026</a>, liderada por el nuevo inversor Maverick Silicon con la participación de Celesta Capital, BDC Capital, MediaTek Innovation Fund, TXC Corporation y Ultratech Capital Partners, elevando la financiación total a 75 millones de dólares, según <a href=\"https://www.citybiz.co/article/867841/stathera-raises-55-million-series-b-to-expand-silicon-timing-for-ai-data-centers/\">citybiz</a>. Stathera construye timing de precisión basado en MEMS sobre una arquitectura propietaria DualMode que reemplaza los osciladores de cuarzo tradicionales con timing de semiconductor, afirmando huellas aproximadamente un 85% más pequeñas más una mejor resistencia a golpes y vibraciones. La ronda impulsará la producción en masa de su cartera de segunda generación de 32,768 kHz, abrirá una oficina en Silicon Valley para captar clientes hyperscale y financiará una plataforma GEN3 dirigida a relojes de comunicaciones, empresa y centros de datos de IA, con las primeras muestras para clientes previstas para 2028. La empresa cifra la oportunidad de sincronización temporal en centros de datos de IA en unos 1.500 millones de dólares acumulados hasta 2030 dentro de un mercado de timing de 11.000 millones de dólares anuales. La razón por la que una startup de relojes aparece en un informe de IA es que, a medida que los clústeres de aceleradores escalan a decenas de miles de GPU, el timing preciso y resiliente entre nodos se vuelve una restricción real sobre la interconexión y el rendimiento. Con un horizonte de muestreo en 2028, esto es una apuesta direccional más que un producto en producción, pero marca el timing como una partida nombrada en las construcciones de centros de datos de IA.",
+      "citations": [
+        {
+          "label": "PR Newswire - Stathera anuncia una Serie B de 55M de dólares para timing de silicio en centros de datos de IA",
+          "url": "https://www.prnewswire.com/news-releases/stathera-announces-us55-million-series-b-to-scale-silicon-timing-and-accelerate-next-generation-ai-data-center-solutions-302813712.html"
+        },
+        {
+          "label": "citybiz - Stathera capta una Serie B de 55M de dólares para ampliar el timing de silicio en centros de datos de IA",
+          "url": "https://www.citybiz.co/article/867841/stathera-raises-55-million-series-b-to-expand-silicon-timing-for-ai-data-centers/"
+        }
+      ]
+    },
+    {
+      "lead": "La Geneva AI Week y un meetup de AI Tinkerers en SF abren un otoño cargado de eventos",
+      "body": "El catalizador más cercano es la <a href=\"https://unrot.co/blogs/today-top-10-ai-news-july-3-2026\">Geneva AI Week, del 6 al 10 de julio de 2026</a> en el centro Palexpo, que abre con el Diálogo Global de la ONU sobre Gobernanza de la IA (6-7 de julio) y enlaza con la ITU AI for Good Summit (7-10 de julio), donde una nueva Comisión AI for Good de la ONU copresidida por Marc Benioff de Salesforce y Paul Kagame de Ruanda, con la presencia de Jensen Huang, Andy Jassy, Brad Smith y Jack Clark de Anthropic, celebra su primera reunión el 8 de julio. Para los residentes del Área de la Bahía, <a href=\"https://sf.aitinkerers.org/\">AI Tinkerers San Francisco</a> organiza un meetup de ingeniería GTM el 8 de julio. En la vía de hardware, la serie MI400 Instinct de AMD y el sistema a escala de rack \"Helios\" siguen siendo el catalizador estrella del segundo semestre de 2026, siendo la reunión confirmada más cercana <a href=\"https://hotchips.org/\">Hot Chips 2026</a> en Stanford del 23 al 25 de agosto (la inscripción anticipada cierra el 31 de julio) y la <a href=\"https://www.ai-infra-summit.com/agenda\">AI Infra Summit</a> en Santa Clara del 15 al 17 de septiembre. El bloque de seguridad de IA se concentra entre principios y mediados de agosto: la <a href=\"https://www.airisksummit.com/agenda\">AI Risk Summit</a> de SecurityWeek es del 11 al 12 de agosto en Half Moon Bay, Black Hat USA y el AI Village de DEF CON 34 aterrizan en Las Vegas, y OWASP Global AppSec USA le sigue en San Francisco del 5 al 6 de noviembre. En la vía de empresa, <a href=\"https://ai4.io/\">Ai4 2026</a> se celebra del 4 al 6 de agosto en Las Vegas, con GitHub Universe del 28 al 29 de octubre y AWS re:Invent del 30 de noviembre al 4 de diciembre. Las dos acciones inmediatas son las sesiones de Ginebra del 6 al 10 de julio para gobernanza y el meetup de AI Tinkerers SF del 8 de julio para los residentes; la AI Risk Summit de agosto y Hot Chips son los siguientes escenarios naturales para anuncios de inferencia confidencial y aceleradores seguros.",
+      "citations": [
+        {
+          "label": "unrot.co - Top 10 noticias de IA del 3 de julio de 2026 (Geneva AI Week, Comisión AI for Good de la ONU)",
+          "url": "https://unrot.co/blogs/today-top-10-ai-news-july-3-2026"
+        },
+        {
+          "label": "AI Tinkerers San Francisco",
+          "url": "https://sf.aitinkerers.org/"
+        },
+        {
+          "label": "Hot Chips 2026 (23-25 de agosto, Stanford)",
+          "url": "https://hotchips.org/"
+        },
+        {
+          "label": "SecurityWeek AI Risk Summit 2026 (11-12 de agosto, Half Moon Bay)",
+          "url": "https://www.airisksummit.com/agenda"
+        },
+        {
+          "label": "Ai4 2026 (4-6 de agosto, Las Vegas)",
+          "url": "https://ai4.io/"
+        }
+      ]
+    }
+  ],
+  "plain": [
+    "Ollama hace que un modelo Gemma local corra casi un 90% más rápido",
+    "Together AI capta 800M de dólares para servir modelos abiertos",
+    "Tenstorrent niega que Qualcomm la esté comprando",
+    "Una startup de chips capta 55M de dólares para relojes de centros de datos de IA",
+    "Grandes eventos de IA arrancan esta semana en Ginebra"
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "support_dimension": "because",
+  "narrative": "June 25's XBOW-backed Offensive Security Demo Night, with agents that chain recon, build a working exploit, and execute it to prove reachability, supplies exactly the machine-built proof-of-exploit substrate that makes validation-by-construction credible to replicate across vendors, and the August Black Hat and DEF CON calendar keeps that tooling in front of buyers.",
+  "coherence": 3,
+  "remaining_gap": "Demo-night tooling is offensive attacker-side and conference-stage; no defensive code-security vendor has shipped a sandbox proof-of-exploit gate as baseline."
+}

@@ -1,0 +1,45 @@
+{
+  "prediction_id": "prediction.94703faa1b26ba42",
+  "judgements": [
+    {
+      "prediction_id": "prediction.94703faa1b26ba42",
+      "stream": "reasoning",
+      "entry_id": "prediction.94703faa1b26ba42",
+      "verdict": "fresh",
+      "reason": "The because precondition (managed inference inherits Python deserialization risk at the multi-tenant boundary, per Unit 42 Pickle-in-the-Middle on Vertex AI) was reinforced, not aged, this week. The 2026-06-26 Feast CVE-2026-56121 bridge (dill.loads() before any auth check -> unauthenticated RCE on the ML data/metadata plane, observed_relevance 5) is a textbook on-thesis incident strengthening the same default-shipment pressure the reasoning anticipates. Landing is H1 2027 (target 2027-01-01..2027-06-30), so no managed-serving changelog/bulletin shipping safe-serialization defaults was due yet; absence is on-schedule, not a miss. given/so_that/landing all hold verbatim.",
+      "cross_stream_evidence": ["bridge:validation.fec3fd937fa1ce8c"],
+      "proposed_action": "noop",
+      "confidence": 0.86
+    },
+    {
+      "prediction_id": "prediction.94703faa1b26ba42",
+      "stream": "bridge",
+      "entry_id": "prediction.94703faa1b26ba42",
+      "verdict": "fresh",
+      "reason": "Bridge set is coherent and correctly scoped. The 2026-06-27 Langflow IDOR / AutoGPT SSRF bridge (validation.a0147f9f8234ab21, relevance 2) is honestly self-limiting -- it explicitly flags itself as thematic-only because those are authz-bypass/SSRF flaws, not the unsafe-deserialization class that defines this bar, so it does not overstate support. The relevance_drift gate likely fired on this week's relevance-2 thematic readings (6/27 Langflow, 6/21 life-science artifact benchmark) diluting against the on-class relevance-5 (6/26 Feast); that is dispersion in incidental neighbors, not invalidation. No bridge carries support_direction contradict; nothing undermines the because precondition.",
+      "cross_stream_evidence": ["bridge:validation.fec3fd937fa1ce8c", "bridge:validation.a0147f9f8234ab21"],
+      "proposed_action": "noop",
+      "confidence": 0.82
+    },
+    {
+      "prediction_id": "prediction.94703faa1b26ba42",
+      "stream": "needs",
+      "entry_id": "prediction.94703faa1b26ba42",
+      "verdict": "fresh",
+      "reason": "All three Needs (hyperscaler model-serving security engineer shipping safe-handling defaults; safe-serialization/provenance maintainer maturing safetensors-class + signing; standards/guidance body codifying non-executable serialization + caller-ownership) remain the unfulfilled actor coalition for an H1-2027 landing. No bridge this week documents any of these actors having delivered, so no task.status should flip to done. The Feast and Langflow incidents are demand-side pressure on these actors, not supply-side deliverables, so the coalition still stands forward-looking and intact.",
+      "cross_stream_evidence": ["bridge:validation.fec3fd937fa1ce8c"],
+      "proposed_action": "noop",
+      "confidence": 0.84
+    },
+    {
+      "prediction_id": "prediction.94703faa1b26ba42",
+      "stream": "readings",
+      "entry_id": "prediction.94703faa1b26ba42",
+      "verdict": "fresh",
+      "reason": "No upstream chain edge in prediction_chain landed or got contradicted this week that would shorten or weaken the H1-2027 landing window. The Feast-driven sibling predictions surfaced in 6/26 news (ML registry second max-severity deserialization RCE by Q1 2027; security vendor ships ML deserialization scanning tier by Q1 2027) are convergent same-class theses, not contradicting upstreams; if anything they are candidate equivalent/related edges to add, but no existing reading is now wrong. No retire/rewrite warranted.",
+      "cross_stream_evidence": ["bridge:validation.fec3fd937fa1ce8c"],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    }
+  ]
+}

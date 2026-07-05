@@ -1,0 +1,193 @@
+{
+  "date": "2026-06-23",
+  "validation_rows": [
+    {
+      "prediction_ref": {
+        "id": "prediction.04f4d9d539cf6341",
+        "short_label": "Coding-agent harnesses adopt default-deny toolset gating as standard by H1 2027",
+        "prediction_date": "2026-06-20"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "Today's coding-agent harness story is a direct pulse on this thesis: the open harnesses shipped security hardening over feature flash and are converging on least-privilege-by-default execution. OpenClaw's June 2026.6.x releases patched vCard and location-pin injection, tightened Docker sandbox boundaries, added Browser CDP endpoint validation, kept SSH tunnel checks pinned to loopback, and began rejecting unsafe chat, tool, package, and response lengths. NVIDIA's NemoClaw prioritizes sandbox hardening, credential handling, and stricter network-policy defaults around OpenShell sandboxes, and Nous Research's Hermes Agent adds MCP credential filtering that hands subprocesses only explicitly approved environment variables. The reporting's explicit throughline -- harnesses treating their own tool-calling surface as the primary attack surface -- is the default-deny toolset gating this prediction names, reinforced by OWASP and StakeBench finding prompt injection the dominant agentic risk. The gap to the falsifiable bar: these are incremental per-release hardening steps, not yet a tagged stable release whose shipped default profile denies tool calls out-of-box on a clean install with no operator configuration.",
+      "reference_links": [
+        {
+          "label": "The New Stack - 'An agent is an LLM and a harness': what NVIDIA really thinks about OpenClaw (NemoClaw)",
+          "url": "https://thenewstack.io/nvidia-openclaw-agent-blueprints/"
+        },
+        {
+          "label": "innFactory - OpenClaw vs. Hermes Agent: comparison of the two dominant AI agent frameworks of 2026",
+          "url": "https://innfactory.ai/en/blog/openclaw-vs-hermes-agent-comparison/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Today's open harnesses converge on least-privilege execution: OpenClaw patched injection vectors and tightened sandbox boundaries, NemoClaw defaults to stricter network policy, and Hermes filters MCP credentials to approved env vars. The reporting's throughline -- harnesses treating their own tool-calling surface as the primary attack surface -- is exactly the default-deny gating this prediction names, echoed by OWASP and StakeBench injection findings.",
+        "coherence": 5,
+        "remaining_gap": "These are incremental per-release hardening steps, not a tagged stable release whose shipped default profile denies tool calls out-of-box on a clean install with no operator configuration."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.adbdf490706f8fc3",
+        "short_label": "Agent meta-harness becomes the cross-vendor policy plane for agents by H1 2027",
+        "prediction_date": "2026-06-15"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "Today's harness coverage supports the meta-harness thesis from the supply side: NVIDIA's NemoClaw is an open reference stack for running always-on agents like Hermes and OpenClaw inside its OpenShell sandboxes, packaging routed inference, lifecycle management, credential handling, and stricter network-policy defaults around a hardened blueprint that wraps multiple third-party agent frameworks. That is precisely the cross-vendor wrapper layer this prediction tracks -- a common control plane sitting above heterogeneous agents and enforcing sandbox, network, and credential policy uniformly. Nous Research's Hermes Agent moving the same direction (MCP credential filtering, SSRF protection, a Tirith pre-execution scan over the MCP configuration) shows the policy primitives standardizing across vendors. The match stays one step short of the landing: NemoClaw is a single vendor's reference blueprint and the harnesses are converging on a shared design pattern, not yet an adopted cross-vendor policy plane that competing agent makers route through as the interoperable enforcement layer.",
+      "reference_links": [
+        {
+          "label": "The New Stack - 'An agent is an LLM and a harness': what NVIDIA really thinks about OpenClaw (NemoClaw)",
+          "url": "https://thenewstack.io/nvidia-openclaw-agent-blueprints/"
+        },
+        {
+          "label": "innFactory - OpenClaw vs. Hermes Agent: comparison of the two dominant AI agent frameworks of 2026",
+          "url": "https://innfactory.ai/en/blog/openclaw-vs-hermes-agent-comparison/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "NemoClaw is an open reference stack wrapping multiple third-party agent frameworks inside OpenShell sandboxes, packaging routed inference, lifecycle, credential handling, and stricter network policy -- precisely the cross-vendor wrapper enforcing sandbox, network, and credential policy uniformly above heterogeneous agents. Hermes moving the same direction (MCP credential filtering, SSRF protection, a Tirith pre-execution scan) shows the policy primitives standardizing across vendors.",
+        "coherence": 4,
+        "remaining_gap": "NemoClaw is one vendor's reference blueprint and harnesses are converging on a shared pattern, not yet an adopted cross-vendor policy plane that competing agent makers route through."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.f492c98e68ae3d89",
+        "short_label": "Inline MCP-channel policy enforcement ships as a platform default by Q1 2027",
+        "prediction_date": "2026-06-16"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "Today's harness hardening lands squarely on this prediction's inline-MCP-policy thesis. Nous Research's Hermes Agent now ships MCP credential filtering that hands subprocesses only explicitly approved environment variables, plus credential redaction, SSRF protection, and a Tirith pre-execution security scan run over the MCP configuration before each run -- enforcement that sits in the MCP channel itself rather than in an external gateway. NVIDIA's NemoClaw reinforces the same axis with credential handling and stricter network-policy defaults around routed inference. That is the inline, per-call MCP-channel policy enforcement the prediction expects to become a shipped default, and the OWASP/StakeBench evidence that prompt injection is the dominant agentic risk supplies the catalyst. Still short of the bar: Hermes' MCP filtering and pre-execution scan are one harness's hardening features, not yet inline MCP-channel policy enforcement enabled by default on a broad platform, and the Tirith scan is pre-execution rather than continuous in-channel mediation.",
+      "reference_links": [
+        {
+          "label": "innFactory - OpenClaw vs. Hermes Agent: comparison of the two dominant AI agent frameworks of 2026",
+          "url": "https://innfactory.ai/en/blog/openclaw-vs-hermes-agent-comparison/"
+        },
+        {
+          "label": "The New Stack - 'An agent is an LLM and a harness': what NVIDIA really thinks about OpenClaw (NemoClaw)",
+          "url": "https://thenewstack.io/nvidia-openclaw-agent-blueprints/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Hermes now ships MCP credential filtering that hands subprocesses only approved env vars, plus credential redaction, SSRF protection, and a Tirith pre-execution scan over the MCP configuration -- enforcement sitting in the MCP channel itself, not an external gateway. NemoClaw reinforces the same axis with credential handling and stricter network defaults, and OWASP/StakeBench injection findings supply the catalyst.",
+        "coherence": 4,
+        "remaining_gap": "These are one harness's hardening features, not yet inline MCP-channel enforcement enabled by default on a broad platform; the Tirith scan is pre-execution, not continuous in-channel mediation."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.c349283881f8339b",
+        "short_label": "Confidential-GPU attestation lands as a cloud-AI contract term by Q2 2027",
+        "prediction_date": "2026-06-14"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "Today's events calendar puts the Confidential Computing Summit open now, running June 23-24 at the San Francisco Mint, organized by the Linux Foundation and OPAQUE around AI sovereignty, agent security, IP protection, verifiable environments, and confidential-AI workloads, with speakers from Amazon, AMD, Google, Meta, Microsoft, NVIDIA, Samsung Electronics, TII and UC Berkeley. That is the exact GPU-and-hyperscaler cohort whose attestation primitives this prediction expects to harden into a procurable cloud-AI contract term, convening on precisely the confidential-AI and verifiable-environment agenda that drives the thesis -- and now opening today rather than a day out, the soonest anchor among the week's three security sub-tracks. The relevance is on venue and live momentum, not the landing itself: a summit on the calendar surfaces the vendors and the demand framing but is not a published attestation clause, SLA, or contracted procurement term, and no cloud provider or buyer has yet committed confidential-GPU attestation as a default deal term on data-jurisdiction grounds.",
+      "reference_links": [
+        {
+          "label": "Confidential Computing Summit 2026 schedule (June 23-24, San Francisco Mint)",
+          "url": "https://ccsummit2026.sched.com/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "The Confidential Computing Summit opens today at the SF Mint, convening Amazon, AMD, Google, Meta, Microsoft, NVIDIA and Samsung around AI sovereignty, verifiable environments and confidential-AI workloads. That is precisely the GPU-and-hyperscaler cohort and demand framing whose attestation primitives would harden into a procurable cloud-AI contract term, and it is the soonest-anchored of the week's security tracks.",
+        "coherence": 3,
+        "remaining_gap": "A summit surfaces vendors and demand, not a published attestation clause; no provider or buyer has committed confidential-GPU attestation as a default deal term."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.9a362f2b1ba5b64a",
+        "short_label": "Enterprises self-host open-weight code models over hosted China APIs by Q2 2027",
+        "prediction_date": "2026-06-18"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "Today's lead directly advances the self-host-over-China-API thesis on its hardest axis -- making a Chinese frontier-class open-weight model runnable on owned hardware. Unsloth published Dynamic GGUF quantizations of Z.ai's newly open-weighted GLM-5.2, a 744-billion-parameter mixture-of-experts model with a one-million-token context window, shrinking the 1.51TB checkpoint to about 239GB for the 2-bit build and roughly 217GB for the 1-bit build, small enough for a high-memory single-node workstation rather than a multi-GPU cluster, with local execution through Unsloth Studio. GLM-5.2 is positioned as benchmarking near the closed frontier on coding and reasoning, so the practical alternative to calling a hosted Chinese coding API is now self-hosting the same weights locally -- exactly the substitution the prediction tracks, and the data-locality logic strengthens against the same day's OWASP/StakeBench agentic-security findings. The gap: this is a quantization-and-tooling enablement with compression and quality claims that are Unsloth's own and unverified, not yet documented enterprise adoption choosing self-hosted GLM-class weights over hosted China APIs at scale.",
+      "reference_links": [
+        {
+          "label": "AIToolly - Unsloth enables local execution of GLM-5.2, a 744B-parameter open model with a 1M context window",
+          "url": "https://aitoolly.com/ai-news/article/2026-06-23-unsloth-enables-local-execution-of-glm-52-a-744b-parameter-open-model-with-1m-context-window"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Unsloth's Dynamic GGUF quantization shrinks Z.ai's open-weight GLM-5.2, a 744B-parameter MoE benchmarking near the closed frontier, from a 1.51TB checkpoint to roughly 217-239GB, runnable on a single high-memory workstation via Unsloth Studio. That removes the multi-GPU-cluster barrier, making self-hosting frontier-class Chinese weights a practical substitute for calling a hosted China coding API.",
+        "coherence": 4,
+        "remaining_gap": "Compression and quality claims are Unsloth's own and unverified; no documented enterprise yet chooses self-hosted GLM-class weights over hosted China APIs at scale."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.a96ff0bdaae351aa",
+        "short_label": "Open-weight coding model tops 85 on Terminal-Bench 2.1 by Q4 2026",
+        "prediction_date": "2026-06-18"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "Today's GLM-5.2 release bears on the open-weight-coding-capability thesis. Z.ai's newly open-weighted GLM-5.2 is a 744-billion-parameter mixture-of-experts model that Unsloth positions as benchmarking near the closed frontier on coding and reasoning, now made locally runnable via Dynamic GGUF quantization. A frontier-class open-weight model claiming near-frontier coding performance is the kind of release that keeps the open tier on the trajectory toward topping a high coding-agent benchmark bar, which is the capability ceiling this prediction tracks. The match is on direction and capability framing, not the falsifiable measurement: the coding-strength claim is Unsloth's and Z.ai's own positioning, not an independently reproduced score, and there is no published Terminal-Bench 2.1 result for GLM-5.2 -- and aggressive 1-2 bit quantization trades measurable accuracy, so a self-hosted build may not even retain the unquantized model's coding ceiling.",
+      "reference_links": [
+        {
+          "label": "AIToolly - Unsloth enables local execution of GLM-5.2, a 744B-parameter open model with a 1M context window",
+          "url": "https://aitoolly.com/ai-news/article/2026-06-23-unsloth-enables-local-execution-of-glm-52-a-744b-parameter-open-model-with-1m-context-window"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Z.ai's newly open-weighted GLM-5.2, a 744B-parameter MoE Unsloth positions as benchmarking near the closed frontier on coding and reasoning and now locally runnable via Dynamic GGUF quantization, is the kind of frontier-class open-weight release that keeps the open tier on trajectory toward topping a high coding-agent benchmark bar.",
+        "coherence": 2,
+        "remaining_gap": "Coding strength is vendor positioning, not an independent Terminal-Bench 2.1 score; aggressive 1-2 bit quantization trades accuracy and may erode the coding ceiling."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.a4ee0b5435860b21",
+        "short_label": "AWS Continuum's sandbox exploit-validation goes industry baseline by H1 2027",
+        "prediction_date": "2026-06-21"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "Two of today's threads touch the prove-the-finding-by-running-it thesis. The events calendar lists AI Tinkerers San Francisco hosting an Offensive Security Demo Night on June 25 with live autonomous-pentesting-agent demos sponsored by XBOW, ahead of Black Hat USA's AI Summit and DEF CON's AI Village in August -- agents that chain reconnaissance, build a working exploit, and execute it to demonstrate reachability, which is Continuum's sandbox exploit-validation move generalized to a vendor field. In parallel, StakeBench ran 3,168 adversarial trials and found indirect prompt-injection success of 41.67-68.16% and direct attacks above 79% across every tested configuration, the kind of run-the-attack empirical validation that pushes the industry toward proof-of-exploit gates over static flagging. The relevance is on momentum and adjacency, not the landing: a demo night is conference-stage validation and StakeBench is an academic benchmark, neither is the defensive exploit-validation pipeline becoming an industry baseline across named code-security vendors, and the demo-night framing points at offensive attacker tooling rather than the defensive proof-of-exploit gate the prediction names.",
+      "reference_links": [
+        {
+          "label": "XBOW - Offensive AI in Practice (sponsor of the AI Tinkerers SF Offensive Security Demo Night, June 25)",
+          "url": "https://xbow.com/offensive-ai-in-practice-workshop"
+        },
+        {
+          "label": "CSO Online - Prompt injection breaks today's AI agents, study warns (StakeBench)",
+          "url": "https://www.csoonline.com/article/4184455/prompt-injection-breaks-todays-ai-agents-study-warns.html"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Today's signals push toward proof-of-exploit gating: the June 25 XBOW-sponsored Offensive Security Demo Night runs agents that chain recon, build a working exploit, and execute it to prove reachability, while StakeBench's 3,168 adversarial trials supply the run-the-attack empiricism that erodes static flagging. Both are momentum and adjacency, not yet the defensive validation pipeline becoming baseline.",
+        "coherence": 3,
+        "remaining_gap": "A demo night is offensive conference-stage tooling and StakeBench is an academic benchmark; neither is a defensive exploit-validation gate adopted across named code-security vendors."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.20260420-2",
+        "short_label": "\"Agent-in-the-Loop Secret Exfiltration\" tops CIS / OWASP risk lists",
+        "prediction_date": "2026-04-20"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "[REVIVED] Layer 1 keyword hit (OWASP, indirect prompt injection, Claude Code, secret leakage, CI agents) and Layer 2 semantic match against today's agentic-security headlines. OWASP's State of Agentic AI Security and Governance v2.01 now ties nearly every risk category to concrete CVEs, vendor advisories, and breach reports, ranks the repositories carrying the most advisories with Claude Code at 22, and maps prompt injection to six of its ten Top 10 categories for agentic applications -- the connective attack vector across most incidents. StakeBench's finding that no tested configuration resists prompt injection, plus Microsoft's disclosure that injection in frameworks like Semantic Kernel can escalate to host-level RCE, frames credential and secret exposure through agent tool-calling as a documented, list-topping category. Nous Research's Hermes Agent responding with MCP credential filtering, credential redaction, and SSRF protection shows the secret-exfiltration risk is now first-class enough to drive harness defaults. The gap to the dormant prediction's exact bar: OWASP ranks prompt injection as the dominant category but does not name 'Agent-in-the-Loop Secret Exfiltration' as a standalone top-ranked CIS/OWASP risk-list entry; the match is on the secret-leakage-via-agent threat being top-tier, not the specific label.",
+      "reference_links": [
+        {
+          "label": "CSO Online - Prompt injection breaks today's AI agents, study warns (StakeBench)",
+          "url": "https://www.csoonline.com/article/4184455/prompt-injection-breaks-todays-ai-agents-study-warns.html"
+        },
+        {
+          "label": "Microsoft Security - When prompts become shells: RCE vulnerabilities in AI agent frameworks",
+          "url": "https://www.microsoft.com/en-us/security/blog/2026/05/07/prompts-become-shells-rce-vulnerabilities-ai-agent-frameworks/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "OWASP's Agentic AI Security v2.01 ties risk categories to concrete CVEs and advisories, ranks Claude Code at 22 advisories, and maps prompt injection to six of its ten Top 10 categories; StakeBench finds no configuration resists injection and Microsoft shows injection escalating to host-level RCE. Hermes Agent's MCP credential filtering shows secret-exfiltration is now first-class enough to set harness defaults.",
+        "coherence": 4,
+        "remaining_gap": "OWASP ranks prompt injection dominant but does not name 'Agent-in-the-Loop Secret Exfiltration' as a standalone top-ranked CIS/OWASP entry; the match is on the threat being top-tier, not the exact label."
+      }
+    }
+  ]
+}

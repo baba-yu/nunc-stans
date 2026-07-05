@@ -1,0 +1,30 @@
+[
+  {
+    "actor": "ML-supply-chain security researcher hunting deserialization-RCE primitives",
+    "job": "Auditing open-source ML registries, feature stores, and metadata servers for network-reachable pre-auth deserialization sinks and weaponizing a __reduce__ payload into a reproducible RCE.",
+    "outcome": "A coordinated disclosure on a named, distinct ML data/metadata-plane project yielding a CVSS 9.0+ CVE/GHSA whose root cause is unauthenticated deserialization of a network-supplied object.",
+    "motivation": "The Feast CVE-2026-56121 pattern advertises an easy, high-severity, repeatable bug class; researchers chase the credit, bounty, and conference-talk value of the next one.",
+    "task": {
+      "who": "Independent or vendor offensive-research team triaging ML-infra serialized-object endpoints",
+      "what": "Find and weaponize a pre-auth deserialization sink into RCE",
+      "where": "A second project's gRPC/HTTP/queue registry or feature-store service",
+      "when": "From the June 24 Feast advisory through Q1 2027, while the pattern is fresh",
+      "why": "Prove the deserialization-RCE class recurs and earn disclosure credit",
+      "how": "dill/pickle/joblib payload audit, fuzzing, and coordinated CVE/GHSA filing"
+    }
+  },
+  {
+    "actor": "Open-source ML-infra maintainer of a feature store or model/artifact registry",
+    "job": "Shipping and extending a registry that accepts serialized transformation logic over the network and hands it to a deserializer, keeping the unsafe-on-the-wire primitive in production by default.",
+    "outcome": "A still-deployed network service that deserializes attacker-controllable serialized objects pre-auth, leaving the exact sink a researcher can convert into the next 9.0+ advisory.",
+    "motivation": "Backward compatibility, developer ergonomics, and feature velocity keep pickle/dill-style serialization on the wire because safe-format migration is disruptive and unfunded.",
+    "task": {
+      "who": "Core maintainers and contributors of the registry/feature-store project",
+      "what": "Ingest and deserialize network-supplied serialized transform bodies",
+      "where": "The project's registry/metadata server request-handling path",
+      "when": "Across the current release cycle, today through Q1 2027",
+      "why": "Preserve compatibility and ergonomics over safe-by-default deserialization",
+      "how": "dill/pickle/cloudpickle/joblib decode of objects received over gRPC/HTTP/queue"
+    }
+  }
+]

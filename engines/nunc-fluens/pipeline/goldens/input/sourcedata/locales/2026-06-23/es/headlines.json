@@ -1,0 +1,50 @@
+{
+  "date": "2026-06-23",
+  "technical": [
+    {
+      "lead": "Dynamic GGUF de Unsloth mete el GLM-5.2 de 744B en una sola estación de trabajo",
+      "body": "Unsloth publicó cuantizaciones Dynamic GGUF del GLM-5.2 de Z.ai, recién publicado con pesos abiertos: un modelo de mezcla de expertos de 744 mil millones de parámetros (unos 40B activos) con una ventana de contexto de un millón de tokens, lo que lo hace ejecutable localmente fuera de un centro de datos. El esquema de precisión selectiva sube a 8 o 16 bits las capas sensibles a la precisión mientras lleva el resto a 1 o 2 bits, reduciendo el punto de control de 1,51TB a unos 239GB para la compilación de 2 bits UD-IQ2_M (una reducción del 84%) y a unos 217GB para la compilación de 1 bit (alrededor del 86%) — lo bastante pequeño para una máquina de un solo nodo con mucha memoria en lugar de un clúster con varias GPU. El lanzamiento se acompaña de ejecución local vía Unsloth Studio y posiciona el GLM-5.2 como cercano a la frontera cerrada en programación y razonamiento según los benchmarks. Las afirmaciones de compresión y calidad son propias de Unsloth, no reproducidas de forma independiente, y la cuantización a 1-2 bits con esta agresividad sigue sacrificando una precisión medible a cambio del ahorro de memoria.",
+      "citations": [
+        {"label": "AIToolly - Unsloth enables local execution of GLM-5.2, a 744B-parameter open model with a 1M context window", "url": "https://aitoolly.com/ai-news/article/2026-06-23-unsloth-enables-local-execution-of-glm-52-a-744b-parameter-open-model-with-1m-context-window"}
+      ]
+    },
+    {
+      "lead": "OWASP 2.01 vincula el riesgo agéntico con CVEs reales; StakeBench no halla configuración segura",
+      "body": "El panorama de seguridad de la IA agéntica pasó de las amenazas hipotéticas a los incidentes documentados. El State of Agentic AI Security and Governance v2.01 de OWASP hace seguimiento a 53 proyectos agénticos y ahora vincula casi todas las categorías de riesgo con CVEs concretas, avisos de proveedores e informes de brechas; cuenta 28 de los 53 como agentes de programación, clasifica los repositorios con más avisos de seguridad (n8n 57, Claude Code 22, AutoGPT 15, Dify 13, Roo-Code 11) y señala siete proyectos que publican actualizaciones a diario o más rápido — uno cada unas ocho horas, una rotación que dificulta la auditoría. Asocia la inyección de prompts a seis de sus diez categorías del Top 10 para aplicaciones agénticas. Un benchmark académico aparte, StakeBench, de Nanyang Technological University, ST Engineering, IBM Research y UIUC, realizó 3.168 pruebas adversarias y halló un éxito de inyección indirecta de prompts del 41,67% al 68,16% y ataques directos por encima del 79% en todas las configuraciones probadas, sin que ninguna alcanzara la región de comportamiento robusto; cambiar el modelo subyacente movió el éxito de inyección indirecta hasta 26,49 puntos. La divulgación previa de Microsoft de que la inyección en marcos como Semantic Kernel puede escalar a RCE a nivel de host subraya la realidad del lado de los proveedores.",
+      "citations": [
+        {"label": "Microsoft Security - When prompts become shells: RCE vulnerabilities in AI agent frameworks", "url": "https://www.microsoft.com/en-us/security/blog/2026/05/07/prompts-become-shells-rce-vulnerabilities-ai-agent-frameworks/"},
+        {"label": "CSO Online - Prompt injection breaks today's AI agents, study warns (StakeBench)", "url": "https://www.csoonline.com/article/4184455/prompt-injection-breaks-todays-ai-agents-study-warns.html"}
+      ]
+    },
+    {
+      "lead": "Los harnesses de agentes de programación convergen en la ejecución con mínimo privilegio por defecto",
+      "body": "Los harnesses abiertos de agentes de programación lanzaron refuerzo de seguridad por encima de novedades llamativas. Los lanzamientos 2026.6.x de junio de OpenClaw parchearon vías de explotación concretas — inyección por vCard y por marcador de ubicación — endurecieron los límites del sandbox de Docker, añadieron validación del endpoint Browser CDP, mantuvieron las comprobaciones del túnel SSH fijadas al loopback y empezaron a rechazar longitudes inseguras de chat, herramientas, paquetes y respuestas, junto con una incorporación de OpenRouter de primera clase. El NemoClaw de NVIDIA, una pila de referencia abierta para ejecutar agentes siempre activos como Hermes y OpenClaw dentro de sandboxes OpenShell, prioriza el refuerzo del sandbox, el manejo de credenciales y valores por defecto más estrictos de política de red en torno a la inferencia enrutada y la gestión del ciclo de vida. El Hermes Agent de Nous Research va en la misma línea con un filtrado de credenciales MCP que entrega a los subprocesos solo las variables de entorno aprobadas explícitamente, además de redacción de credenciales, protección contra SSRF y un escaneo previo a la ejecución con Tirith sobre la configuración MCP. El hilo común: los harnesses tratan su propia superficie de invocación de herramientas como la principal superficie de ataque, en línea con el hallazgo de OWASP y StakeBench de que la inyección de prompts es el riesgo agéntico dominante.",
+      "citations": [
+        {"label": "The New Stack - 'An agent is an LLM and a harness': what NVIDIA really thinks about OpenClaw (NemoClaw)", "url": "https://thenewstack.io/nvidia-openclaw-agent-blueprints/"},
+        {"label": "innFactory - OpenClaw vs. Hermes Agent: comparison of the two dominant AI agent frameworks of 2026", "url": "https://innfactory.ai/en/blog/openclaw-vs-hermes-agent-comparison/"}
+      ]
+    },
+    {
+      "lead": "La Confidential Computing Summit abre hoy; noche de seguridad ofensiva el 25 de junio",
+      "body": "El calendario de seguridad de la IA abre ahora. La Confidential Computing Summit se celebra del 23 al 24 de junio en la San Francisco Mint, organizada por la Linux Foundation y OPAQUE en torno a la soberanía de la IA, la seguridad de agentes, la protección de propiedad intelectual, los entornos verificables y las cargas de trabajo de IA confidencial, con ponentes de Amazon, AMD, Google, Meta, Microsoft, NVIDIA, Samsung Electronics, TII y UC Berkeley. AI Tinkerers San Francisco organiza una Offensive Security Demo Night el 25 de junio con demos en vivo de agentes autónomos de pentesting respaldada por el patrocinador XBOW. Más adelante, el AI Summit de Black Hat USA se celebra del 1 al 6 de agosto en Las Vegas junto con el AI Village de DEF CON, el AI Risk Summit de SecurityWeek sigue el 11 y 12 de agosto en Half Moon Bay, OWASP Global AppSec USA es el 5 y 6 de noviembre en San Francisco, y la serie AI Agent Security Summit de Zenity sigue en la lista de seguimiento.",
+      "citations": [
+        {"label": "Confidential Computing Summit 2026 schedule (June 23-24, San Francisco Mint)", "url": "https://ccsummit2026.sched.com/"},
+        {"label": "XBOW - Offensive AI in Practice (sponsor of the AI Tinkerers SF Offensive Security Demo Night, June 25)", "url": "https://xbow.com/offensive-ai-in-practice-workshop"}
+      ]
+    },
+    {
+      "lead": "El Snowflake Dev Day del 25 de junio antecede a la AI Engineer World's Fair",
+      "body": "El calendario mainstream de dev y data completa la semana. Snowflake celebra un Dev Day virtual el 25 de junio con dos charlas de figuras destacadas más un laboratorio práctico de IA agéntica. La AI Engineer World's Fair toma Moscone West con la programación principal del 29 de junio al 2 de julio (orientación opcional New Engineer Orientation el 28 de junio), precedida por el AIE World's Fair Hackathon oficial con Cerebral Valley el 27 y 28 de junio. Más adelante, GitHub Universe vuelve el 28 y 29 de octubre y AWS re:Invent se celebra del 30 de noviembre al 4 de diciembre en Las Vegas. En el track de chips de IA, el Advancing AI 2026 de AMD está previsto para el 22 y 23 de julio en Moscone (se espera el foco en la serie Instinct MI400, keynote el 23 de julio), Hot Chips 2026 se celebra del 23 al 25 de agosto en Stanford, y el AI Infra Summit es del 15 al 17 de septiembre en el Santa Clara Convention Center.",
+      "citations": [
+        {"label": "Snowflake Dev Day - Americas Virtual (June 25, 2026)", "url": "https://www.snowflake.com/en/dev-day/americas-virtual/"}
+      ]
+    }
+  ],
+  "plain": [
+    "Unsloth mete un modelo de IA de 744B en una sola estación de trabajo",
+    "OWASP y un nuevo estudio dicen que los agentes de IA aún caen ante la inyección",
+    "Las herramientas de agentes de programación refuerzan sus sandboxes por defecto",
+    "Los eventos de confidential computing y seguridad arrancan esta semana",
+    "El Snowflake Dev Day y la AI Engineer World's Fair esta semana"
+  ]
+}

@@ -1,0 +1,242 @@
+{
+  "date": "2026-06-26",
+  "validation_rows": [
+    {
+      "prediction_ref": {
+        "id": "prediction.625a7234dd6e9ed1",
+        "short_label": "ML registry servers log a second max-severity deserialization RCE by Q1 2027",
+        "prediction_date": "2026-06-26"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "Ang Feast CVE-2026-56121 RCE noong June 24 ang nagpasimuno na origin signal para sa thesis na ito. Isang kritikal at unauthenticated na remote-code-execution na depekto sa Feast, ang open-source na machine-learning feature store, ang inilathala noong June 24 bilang CVE-2026-56121, na binigyan ng CVSS 9.3 (v4.0) at inayos sa Feast 0.63.0. Kapag pinoproseso ng registry server ang isang gRPC request, base64-decode nito ang user_defined_function.body field ng isang OnDemandFeatureView spec at ipinapasa ito diretso sa dill.loads() bago ang anumang authorization check, kaya maaaring magsumite ang isang umaatake ng isang ginawang serialized na Python object na may arbitraryong __reduce__ method at magpatakbo ng OS commands bilang Feast service account nang walang anumang credential. Ang istruktural na pagbasa ng ulat ngayon ay siya mismong premise ng prediksyon: bumaba ng isang antas ang ML attack surface sa ibaba ng modelo at inference engine papunta sa data-and-metadata na imprastruktura. Ang isang registry na tumatanggap ng serialized na transformation logic sa network ay isang unauthenticated na code-execution endpoint maliban kung may gate ang deserialization, at paulit-ulit na lumilitaw ang parehong primitive saanman magtiwala ang ML infra sa serialized na object sa network. Ang puwang papunta sa falsifiable na bar: hinihingi ng prediksyon ang isang pangalawa, PINANGALANAN, at naiibang proyekto (hindi Feast, hindi isang re-score o backport ng CVE-2026-56121) na tumanggap ng sariling CVE/GHSA sa CVSS >= 9.0 na ang ugat na sanhi ay unsafe deserialization ng isang object na galing sa network sa isang ML registry, feature-store, o metadata endpoint. Nagbibigay ang araw na ito ng unang pagkakataon at ng istruktural na trigger. Hindi pa dumarating ang pag-ulit na magpapatunay na totoo ang klase.",
+      "reference_links": [
+        {
+          "label": "GitHub Advisory Database - Feast unsafe deserialization allows unauthenticated RCE (CVE-2026-56121)",
+          "url": "https://github.com/advisories/GHSA-q63x-9pfm-mjx4"
+        },
+        {
+          "label": "NVD - CVE-2026-56121 Detail (Feast before 0.63.0, gRPC registry deserialization RCE)",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56121"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Ang CVE-2026-56121 ng Feast ang nagpasimuno na unang pagkakataon: isang CVSS 9.3 na unauthenticated RCE kung saan ibinibigay ng gRPC registry ang isang base64-decoded na feature-view body sa dill.loads() bago ang anumang auth check. Pinatutunayan nito ang premise ng thesis na bumaba na ang ML attack surface papunta sa data-and-metadata na antas, kung saan ang anumang registry na nagtitiwala sa serialized na object sa network ay isang code-execution endpoint.",
+        "coherence": 4,
+        "remaining_gap": "Kailangan ng isang pangalawa at naiibang pinangalanang proyekto na magkaroon ng sariling CVSS >=9.0 deserialization CVE sa isang ML registry o feature-store endpoint; nagbibigay lamang ang araw na ito ng unang pagkakataon."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.7b31cbaef01800e6",
+        "short_label": "Security vendor ships ML deserialization scanning as a named tier by Q1 2027",
+        "prediction_date": "2026-06-26"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "Ang Feast CVE-2026-56121 RCE noong June 24 ang istruktural na trigger na pinaghahawakan ng thesis na ito. Ang maximum-severity (CVSS 9.3 v4.0) na unauthenticated RCE -- kung saan base64-decode ng Feast registry server ang isang user-supplied na feature-view function body at ibinibigay ito diretso sa dill.loads() bago ang anumang authorization check -- ay nagpapatunay na lumipat ang attack surface ng isang antas pababa sa modelo at inference engine papunta sa ML na imprastruktura na tumatanggap ng serialized na logic sa network. Iyan ang parehong unsafe-deserialization na primitive (mga pickle/dill/joblib payload, model checkpoint, feature-store transformation body) na inaasahan ng prediksyon na gagawing produkto ng isang pinangalanang application-security o supply-chain-security na platform (ang klase ng Snyk / Endor Labs / JFrog / Protect AI / HiddenLayer) bilang isang first-class na scanner tier. Sa sandaling magkaroon ang isang klase ng bug ng parehong dokumentadong exploit trail at isang network-reachable at maaaring gamiting sandata na hugis, kadalasang ginagawang produkto ng mga vendor ang isang dedikadong detection na kakayahan sa halip na ipaubaya ito sa pangkalahatang dependency scanning. Ang puwang papunta sa bar: ang falsifiable na core ay isang PINANGALANAN at namamarketing na product tier, module, o SKU na ang nakasaad na saklaw ay tahasang sumasaklaw sa ML serialized-artifact, deserialization, o model-supply-chain na pag-scan -- inanunsyo sa vendor docs, isang release, o isang launch. Ang araw na ito ay ang nag-tigger na CVE, hindi isang inilabas na produkto; hindi nabibilang ang isang pangkalahatang SCA tool na basta tumatanggap ng Feast CVE, isang isahang blog post, o isang prompt-injection guardrail na produkto.",
+      "reference_links": [
+        {
+          "label": "GitHub Advisory Database - Feast unsafe deserialization allows unauthenticated RCE (CVE-2026-56121)",
+          "url": "https://github.com/advisories/GHSA-q63x-9pfm-mjx4"
+        },
+        {
+          "label": "NVD - CVE-2026-56121 Detail (Feast before 0.63.0, gRPC registry deserialization RCE)",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56121"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Ang maximum-severity na unauthenticated RCE ng Feast ay nagbibigay sa klase ng unsafe-deserialization na bug ng isang dokumentadong exploit trail at isang network-reachable at maaaring gamiting sandata na hugis. Iyan ang istruktural na drayber ng merkado: sa sandaling ang isang primitive ay parehong maaaring i-exploit at paulit-ulit sa pickle, dill, joblib at model artifact, kadalasang ginagawang produkto ng application-security at supply-chain na mga vendor ang isang dedikadong detection na kakayahan sa halip na ipaubaya ito sa pangkalahatang dependency scanning.",
+        "coherence": 4,
+        "remaining_gap": "Kailangan ng isang pinangalanan at namamarketing na vendor tier o SKU na tahasang sumasaklaw sa ML serialized-artifact o deserialization na pag-scan; ang araw na ito ay ang nag-trigger na CVE, hindi isang inilabas na produkto."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.079ca77d11decc5f",
+        "short_label": "AI accelerator ships confidential-inference tier with attestation by H1 2027",
+        "prediction_date": "2026-06-26"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "Nagbibigay ang ulat ngayon ng parehong istruktural na trigger at ng mga lugar ng disclosure na pinaikutan ng thesis na ito. Pinatatalas ng Feast CVE-2026-56121 RCE noong June 24 ang kaso ng model-supply-chain-integrity na pinangalanan ng prediksyon: patuloy na iniuugnay ng agentic-AI security cycle ang panganib sa mga na-poison na checkpoint at unauthenticated na registry, at ang signed-model attestation ang sagot na nakabatay sa hardware sa 'patunayan na ang weights na tinatanong ko ay ang weights na aking inaprubahan.' Sa panig ng mga lugar, ang paparating na kalendaryo ng AI-chip at AI-security ay tahasang pinapangalanan ang mga yugto kung saan lilitaw ang isang confidential-inference na bahagi -- ang Advancing AI 2026 ng AMD (July 22-23 sa Moscone, kung saan nakatuon ang in-person keynote at ang Instinct MI400-series sa July 23) at ang Black Hat USA 2026 (August 1-6 sa Mandalay Bay, AI Summit noong August 4) ang malamang na mga lugar ng disclosure ng prediksyon. Inaasahan ng prediksyon na ang isang AI inference accelerator na ginawa para sa layuning ito ay ilalabas o ilalantad na may confidential computing bilang isang pinangalanan at mahalagang tampok -- on-die root-of-trust, TEE-I/O na nagpapanatiling naka-encrypt ang weights at activations habang ginagamit sa kabuuan ng hangganan ng CPU-accelerator, at signed-model attestation -- na namamarketing bilang isang pinangalanang confidential-inference na SKU o managed tier. Ang puwang papunta sa bar: nagbibigay ang araw na ito ng trigger at ng kalendaryo, hindi ng isang inilalabas na bahagi. Hindi nabibilang ang isang pangkalahatang confidential-computing na linya sa isang GPU spec sheet, isang research paper, o isang confidential-VM na alok na walang TEE-I/O o model attestation; hindi pa nilalantad ang pinangalanang confidential-inference na tier.",
+      "reference_links": [
+        {
+          "label": "AMD - Advancing AI 2026 (San Francisco, July 22-23)",
+          "url": "https://www.amd.com/en/corporate/events/advancing-ai.html"
+        },
+        {
+          "label": "Black Hat - USA 2026 (August 1-6, Mandalay Bay, Las Vegas)",
+          "url": "https://blackhat.com/us-26/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "Pinatatalas ng registry RCE ng Feast ang kaso ng model-supply-chain-integrity, na ginagawang sagot ang hardware-rooted na signed-model attestation sa pagpapatunay na ang weights na tinatanong ay ang weights na inaprubahan. Dahil sa pagbabalangkas na ito ng banta kasama ang isang paparating na kalendaryo na pinapangalanan ang malamang na mga yugto ng disclosure, ang Advancing AI 2026 ng AMD (July 22-23) at ang Black Hat USA 2026 (August 1-6), malamang na lilitaw ang isang confidential-inference na bahagi sa loob ng panahong ito.",
+        "coherence": 3,
+        "remaining_gap": "Kailangan ng isang inilalabas na AI accelerator na namamarketing na may TEE-I/O at signed-model attestation bilang isang pinangalanang confidential-inference na tier; nagbibigay lamang ang araw na ito ng backdrop ng banta at ng ritmo ng mga lugar."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.94703faa1b26ba42",
+        "short_label": "Managed model-serving platforms default to safe artifact handling by H1 2027",
+        "prediction_date": "2026-06-17"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "Ang Feast CVE-2026-56121 RCE noong June 24 ang pinakamalakas na isahang kumpirmasyon ng banta na pinagtatayuan ng depensibong prediksyon na ito. Base64-decode ng Feast registry server ang isang user-supplied na feature-view function body at ipinapasa ito diretso sa dill.loads() bago ang anumang authorization check, na nagbubunga ng isang unauthenticated na CVSS 9.3 RCE bilang ang service account -- isang halimbawa mula sa aklat ng unsafe artifact handling sa data-and-metadata na antas ng ML na hino-host ng mga managed model-serving at feature-store na platform. Pinaghahawakan ng prediksyon na ililipat ng mga managed serving platform ang safe artifact handling -- gated o sandboxed na deserialization, signed/provenance-checked na artifact, safe-by-default na format -- mula sa isang opt-in na flag papunta sa default ng platform. Ang advisory ngayon ay ang uri ng maximum-severity at madaling gamiting sandata na insidente na sa kasaysayan ay nagtutulak sa default na paglabas na iyon: sinasabihan ang mga operator na ituring na nakalantad ang anumang pre-0.63.0 na network-reachable na gRPC registry, na siya mismong presyur na nagtutulak sa mga managed platform na huminto na sa pagtitiwala sa serialized na object sa network bilang default. Ang puwang papunta sa bar: sinusuri ang prediksyon sa pamamagitan ng isang pinangalanang managed model-serving na platform na ginagawang default na inilalabas ang safe artifact handling, at nagbibigay ang araw na ito ng nagbibigay-pwersang kahinaan sa isang open-source na bahagi sa halip na isang pagbabago sa default-handling ng managed platform. Ang depensibong landing -- isang platform na ginagawang default na naka-on ang safe handling -- ay hindi pa nilalantad.",
+      "reference_links": [
+        {
+          "label": "GitHub Advisory Database - Feast unsafe deserialization allows unauthenticated RCE (CVE-2026-56121)",
+          "url": "https://github.com/advisories/GHSA-q63x-9pfm-mjx4"
+        },
+        {
+          "label": "NVD - CVE-2026-56121 Detail (Feast before 0.63.0, gRPC registry deserialization RCE)",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56121"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Ang CVE-2026-56121 ng Feast ang halimbawa mula sa aklat ng unsafe-artifact-handling na insidente na inaasahan ng depensibong thesis na ito: isang feature-view body na na-deserialize sa pamamagitan ng dill.loads() bago ang anumang auth check, na nagbubunga ng unauthenticated RCE sa data-and-metadata na antas ng ML na hino-host ng mga managed serving at feature-store na platform. Ang isang maximum-severity at madaling gamiting sandata na advisory ang siya mismong presyur na sa kasaysayan ay nagtutulak sa mga platform na huminto na sa pagtitiwala sa serialized na object sa network bilang default.",
+        "coherence": 4,
+        "remaining_gap": "Kailangan ng isang pinangalanang managed model-serving na platform na maglalabas ng gated deserialization o signed-artifact handling bilang default nito; ang araw na ito ay ang nagbibigay-pwersang kahinaan sa isang open-source na bahagi, hindi isang pagbabago sa default ng platform."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.3d03e9edeb3b854c",
+        "short_label": "Hyperscaler ships TEE-I/O confidential frontier-model inference by Q1 2027",
+        "prediction_date": "2026-06-22"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "Pinatitibay ng balita ngayon ang thesis na ito mula sa parehong panig ng banta at ng mga lugar. Patuloy na iniuugnay ng Feast CVE-2026-56121 RCE noong June 24 ang agentic-AI security cycle sa model-supply-chain integrity -- mga unauthenticated na registry na nagbibigay ng serialized na object sa isang deserializer -- na siyang parehong klase ng panganib na nilalayong pigilan ng confidential inference at attestation sa pamamagitan ng pagpapanatiling naka-encrypt ang weights at activations habang ginagamit at pagpapatunay kung aling modelo ang tumatakbo. Pinapangalanan ng paparating na kalendaryo ang mga lugar kung saan malamang na lilitaw ang isang TEE-I/O confidential-inference na alok: ang Advancing AI 2026 ng AMD (July 22-23 sa Moscone, Instinct MI400-series keynote noong July 23) at ang Black Hat USA 2026 (August 1-6, AI Summit noong August 4) ay nasa loob mismo ng panahon ng prediksyong ito. Ang falsifiable na target ng prediksyon ay isang hyperscaler na naglalabas ng confidential frontier-model inference na may TEE-I/O -- naka-encrypt-habang-ginagamit na weights at activations sa kabuuan ng hangganan ng CPU-accelerator -- bilang isang magagamit na alok. Ang puwang papunta sa bar: nagbibigay ang araw na ito ng backdrop ng banta at ng ritmo ng paparating na mga lugar, hindi ng isang paglulunsad ng confidential-inference ng hyperscaler; walang pinangalanang cloud na naglantad ng isang TEE-I/O confidential frontier-model inference na tier sa ulat ngayon.",
+      "reference_links": [
+        {
+          "label": "AMD - Advancing AI 2026 (San Francisco, July 22-23)",
+          "url": "https://www.amd.com/en/corporate/events/advancing-ai.html"
+        },
+        {
+          "label": "Black Hat - USA 2026 (August 1-6, Mandalay Bay, Las Vegas)",
+          "url": "https://blackhat.com/us-26/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "Patuloy na iniuugnay ng Feast registry deserialization RCE ang agentic-AI cycle sa model-supply-chain integrity, ang parehong klase ng panganib na pinipigilan ng confidential inference at attestation sa pamamagitan ng pagpapanatiling naka-encrypt ang weights at activations habang ginagamit. Ang Advancing AI 2026 ng AMD (July 22-23) at ang Black Hat USA (August 1-6) ay nasa loob mismo ng panahong ito bilang malamang na mga lugar ng disclosure, na nagbibigay ng katwiran ng banta at ng tiyempo sa halip na isang paglulunsad.",
+        "coherence": 3,
+        "remaining_gap": "Walang pinangalanang cloud na naglantad ng isang TEE-I/O confidential frontier-model inference na tier; nagbibigay ang araw na ito ng backdrop ng banta at ng ritmo ng mga lugar, hindi ng isang inilalabas na alok."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.c349283881f8339b",
+        "short_label": "Confidential-GPU attestation lands as a cloud-AI contract term by Q2 2027",
+        "prediction_date": "2026-06-14"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "Hinahawakan ng balita ngayon ang thesis na ito sa parehong sinulid ng confidential-compute at attestation na pinaaagos ng sariwang confidential-inference na prediksyon ngayon. Ang Feast CVE-2026-56121 RCE noong June 24 -- isang unauthenticated na registry deserialization RCE sa imprastruktura ng ML -- ang siya mismong presyur ng model-supply-chain-integrity na nagiging dahilan upang ang hardware-rooted na attestation ('patunayan na tunay at hindi binago ang weights at ang node') ay isang kinakailangan na antas ng kontrata sa halip na isang developer-preview na flag. Pinatitibay ng paparating na kalendaryo ang tiyempo: ang Advancing AI 2026 ng AMD (July 22-23) at ang Black Hat USA 2026 (August 1-6, AI Summit noong August 4) ay mga lugar kung saan kadalasang inilalantad at ginagawang produkto ang confidential-GPU attestation at mga kakayahan ng TEE-I/O. Ang falsifiable na target ng prediksyon ay ang paglitaw ng confidential-GPU attestation bilang isang nakakontrata at maaaring i-audit na termino ng cloud-AI procurement -- hindi isang linya ng marketing. Ang puwang papunta sa bar: nagbibigay ang araw na ito ng katwiran ng banta at ng ritmo ng mga lugar, hindi ng isang nilantad na termino ng kontrata; walang kasunduan sa cloud-AI na pinapangalanan ang confidential-GPU attestation bilang isang clause sa procurement na lumitaw sa ulat ngayon.",
+      "reference_links": [
+        {
+          "label": "AMD - Advancing AI 2026 (San Francisco, July 22-23)",
+          "url": "https://www.amd.com/en/corporate/events/advancing-ai.html"
+        },
+        {
+          "label": "Black Hat - USA 2026 (August 1-6, Mandalay Bay, Las Vegas)",
+          "url": "https://blackhat.com/us-26/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "Ang isang unauthenticated na registry deserialization RCE sa imprastruktura ng ML ang siya mismong presyur ng model-supply-chain na nagtutulak sa hardware-rooted na attestation mula sa isang developer-preview na flag papunta sa isang kinakailangan na antas ng kontrata. Ang Advancing AI 2026 ng AMD (July 22-23) at ang Black Hat USA (August 1-6) ay mga lugar kung saan inilalantad at ginagawang produkto ang confidential-GPU attestation at mga kakayahan ng TEE-I/O, na pinatitibay ang tiyempo para sa thesis na ito.",
+        "coherence": 3,
+        "remaining_gap": "Walang kasunduan sa cloud-AI na pinapangalanan ang confidential-GPU attestation bilang isang clause sa procurement ngayon; katwiran lamang ng banta at ritmo ng mga lugar ang naroon, hindi isang nakakontratang termino."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.a943725fb4046b01",
+        "short_label": "An autonomous-pentest vendor lands a named enterprise/gov deal by Q1 2027",
+        "prediction_date": "2026-06-22"
+      },
+      "today_relevance": 2,
+      "evidence_summary": "Hinahawakan ng balita ngayon ang thesis na ito sa konteksto ng kalendaryo lamang, hindi sa isang sariwang senyales ng kasunduan. Patuloy na inilalatag ng paparating na kalendaryo ng AI-security ang autonomous offensive na mga kasangkapan sa harap ng mga mamimili sa enterprise at gobyerno: ang Black Hat USA 2026 (August 1-6 sa Mandalay Bay, kasama ang AI Summit sa Summit Day noong August 4 at ang Briefings noong August 5-6), ang DEF CON 34 at ang AI Village nito (August 6-9), at ang AI Risk Summit ng SecurityWeek (August 11-12, Half Moon Bay) ay ang mga pangunahing yugto kung saan nililigawan ng mga autonomous-pentest na vendor ang mga mamimili bago ang panahon ng procurement sa taglagas. Ngunit iyan ay ritmo ng mga lugar, hindi isang transaksyon. Ang falsifiable na target ng prediksyon ay isang pinangalanang kasunduan ng customer sa enterprise o gobyerno para sa isang autonomous-pentest na vendor, at walang ganoong kontrata na dala ng ulat ngayon -- walang pinangalanang mamimili, walang nilantad na engagement. Ang puwang papunta sa bar ay ang buong kasunduan: nagbibigay lamang ang araw na ito ng kalendaryo ng kumperensya na bumabalangkas kung kailan maaaring ianunsyo ang ganoong kasunduan.",
+      "reference_links": [
+        {
+          "label": "Black Hat - USA 2026 (August 1-6, Mandalay Bay, Las Vegas)",
+          "url": "https://blackhat.com/us-26/"
+        },
+        {
+          "label": "SecurityWeek - AI Risk Summit, August 11-12, Half Moon Bay",
+          "url": "https://www.securityweek.com/securityweek-to-host-ai-risk-summit-august-11-12-at-the-ritz-carlton-half-moon-bay/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "none",
+        "narrative": "Nagbibigay lamang ang ulat ngayon ng pagkakatabi sa kalendaryo, hindi ng isang senyales ng kasunduan. Ang Black Hat USA (August 1-6, AI Summit noong August 4), ang AI Village ng DEF CON 34 (August 6-9), at ang AI Risk Summit ng SecurityWeek (August 11-12) ay ang mga pangunahing yugto kung saan nililigawan ng mga autonomous-pentest na vendor ang mga mamimili sa enterprise at gobyerno bago ang panahon ng procurement sa taglagas. Iyan ay ritmo ng mga lugar, hindi isang transaksyon.",
+        "coherence": 2,
+        "remaining_gap": "Walang pinangalanang mamimili sa enterprise o gobyerno, walang nilantad na engagement; dala lamang ng araw na ito ang kalendaryo ng kumperensya na bumabalangkas kung kailan maaaring ianunsyo ang ganoong kasunduan."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.47a4eb0e8d95b76d",
+        "short_label": "Autonomous pentest agents ship as named managed tier by Q4 2026",
+        "prediction_date": "2026-06-25"
+      },
+      "today_relevance": 2,
+      "evidence_summary": "Naaapektuhan ng balita ngayon ang thesis na ito sa pamamagitan lamang ng kalendaryo ng kaganapan ng AI-security, hindi sa pamamagitan ng isang paglulunsad ng produkto. Ang Black Hat USA 2026 (August 1-6, kasama ang AI Summit sa Summit Day noong August 4) at ang AI Village ng DEF CON 34 (August 6-9) ang nagbibigay sa autonomous offensive-security na mga ahente ng kanilang unang pangunahing yugto ng mga mamimili sa enterprise sa taong ito bago ang panahon ng procurement sa taglagas, at pinananatili ng AI Risk Summit ng SecurityWeek (August 11-12, Half Moon Bay) ang kategorya sa harap ng mga mamimili sa panig ng panganib. Binabalangkas ng ritmong iyon kung kailan maaaring imarketing ang isang pinangalanang managed tier, ngunit hindi iyan ang tier mismo. Ang falsifiable na target ng prediksyon ay hindi bababa sa isang pangunahing services o security-platform na vendor na namamarketing ng isang autonomous-pentesting na ahente bilang isang pinangalanan at tuloy-tuloy na tumatakbong managed tier na may sariling SKU at pagpepresyo bago ang Q4 2026. Ang puwang papunta sa bar: nagpapakita lamang ang araw na ito ng kalendaryo ng kumperensya, hindi ng isang pinangalanan at self-serve na managed na produkto; maaaring panatilihing nakagate ang mga ahenteng ito sa likod ng mga human-supervised na pilot ang mga alalahanin sa liability at scoping, at itulak ang anumang paglulunsad lampas sa panahon.",
+      "reference_links": [
+        {
+          "label": "Black Hat - USA 2026 (August 1-6, Mandalay Bay, Las Vegas)",
+          "url": "https://blackhat.com/us-26/"
+        },
+        {
+          "label": "SecurityWeek - AI Risk Summit, August 11-12, Half Moon Bay",
+          "url": "https://www.securityweek.com/securityweek-to-host-ai-risk-summit-august-11-12-at-the-ritz-carlton-half-moon-bay/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "none",
+        "narrative": "Hindi makabuluhang isinusulong ng ulat ngayon ang thesis na ito. Ang tanging ugnayan ay ritmo ng mga lugar: ang AI Summit ng Black Hat USA (Aug 4) at ang AI Village ng DEF CON 34 (Aug 6-9) ay naglalatag ng autonomous offensive-security na mga ahente sa harap ng mga mamimili sa taglagas. Binabalangkas niyan kung kailan maaaring imarketing ang isang pinangalanang managed tier, ngunit walang vendor na naglabas o nagpresyo ng isang tuloy-tuloy na tumatakbong autonomous-pentest na SKU ngayon.",
+        "coherence": 2,
+        "remaining_gap": "Walang pinangalanan at self-serve na managed autonomous-pentest na tier na may sariling SKU at pagpepresyo; maaaring panatilihin itong nakagate ng liability at scoping sa likod ng mga supervised na pilot."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.3e6e8b6ae1e7c76e",
+        "short_label": "AI-agent procurement adds a numeric prompt-injection-resistance bar by Q2 2027",
+        "prediction_date": "2026-06-23"
+      },
+      "today_relevance": 2,
+      "evidence_summary": "Hinahawakan ng balita ngayon ang thesis na ito sa pagkakatabi at sa mga lugar, hindi sa isang pagbabago sa procurement-spec. Pinananatiling buhay ng Feast CVE-2026-56121 RCE noong June 24 ang mas malawak na pamamarka ng agentic-AI attack-surface -- isang unauthenticated na code-execution na daan sa imprastruktura ng ML -- na siyang uri ng insidente na nagpapalakas sa pangangailangan sa panig ng mamimili para sa masusukat na mga bar ng seguridad sa AI procurement, bagaman ito ay isang deserialization na depekto sa halip na isang prompt-injection. Pinapangalanan ng paparating na kalendaryo ang forum ng application-security kung saan pinagtatalunan at kino-codify ang ganoong mga pamantayan ng procurement: ang OWASP Global AppSec USA (November 5-6 sa San Francisco) ay nasa loob mismo ng panahon ng prediksyon, kasama ang mas malawak na track ng AI-security sa Black Hat at DEF CON. Ang falsifiable na target ng prediksyon ay ang pagdaragdag ng AI-agent procurement ng isang numeric na bar ng prompt-injection-resistance -- isang nasusukat na threshold sa isang kinakailangan sa pagbili. Ang puwang papunta sa bar ay halos ang buong claim: nagbibigay ang araw na ito ng pampamagat na presyur ng seguridad at ng kaugnay na lugar ng pamantayan, hindi ng isang dokumento ng procurement na tumutukoy sa isang numeric na threshold ng prompt-injection-resistance.",
+      "reference_links": [
+        {
+          "label": "Black Hat - USA 2026 (August 1-6, Mandalay Bay, Las Vegas)",
+          "url": "https://blackhat.com/us-26/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "none",
+        "narrative": "Hindi makabuluhang isinusulong ng balita ngayon ang thesis na ito. Pinananatiling buhay ng Feast deserialization RCE ang pamamarka ng agentic-AI attack-surface at nagpapalakas sa pangangailangan ng mamimili para sa masusukat na mga bar ng seguridad, ngunit ito ay hindi isang prompt-injection na depekto, at ang OWASP Global AppSec USA (Nov 5-6) ay konteksto lamang ng lugar. Walang dokumento ng procurement na tumutukoy sa isang numeric na threshold ng prompt-injection-resistance ang lumitaw.",
+        "coherence": 2,
+        "remaining_gap": "Ang buong claim: walang kinakailangan sa pagbili na nagdaragdag ng isang nasusukat na bar ng prompt-injection-resistance; nagbibigay ang araw na ito ng pampamagat na presyur at isang lugar ng pamantayan, hindi isang procurement spec."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.f492c98e68ae3d89",
+        "short_label": "Inline MCP-channel policy enforcement ships as a platform default by Q1 2027",
+        "prediction_date": "2026-06-16"
+      },
+      "today_relevance": 1,
+      "evidence_summary": "Bahagya lamang hinahawakan ng balita ngayon ang thesis na ito ng agentic-security-hardening. Ang Feast CVE-2026-56121 RCE noong June 24 ay nasa parehong malawak na pamilya ng unauthenticated at network-reachable na mga kakayahan ng code-execution sa imprastruktura ng AI na nag-uudyok sa inline policy enforcement sa mga channel ng ahente at tool, ngunit ito ay isang deserialization na depekto sa isang ML feature-store registry, hindi isang isyu ng MCP-channel, at walang sinasabi tungkol sa mga default ng MCP policy-enforcement. Walang senyales na partikular sa MCP sa ulat ngayon -- walang platform na nag-e-enable ng inline MCP-channel policy enforcement, at walang pagbabago ng vendor sa mga default ng channel. Ang falsifiable na target ng prediksyon ay isang platform na naglalabas ng inline MCP-channel policy enforcement na naka-on bilang default, na hindi tinatalakay ng balita ngayon; nakatakda ang kaugnayan sa pangkalahatang pampamagat na pagkakatabi sa attack surface ng imprastruktura ng AI.",
+      "reference_links": [],
+      "bridge": {
+        "support_dimension": "none",
+        "narrative": "Hindi isinusulong ng balita ngayon ang thesis na ito. Ang Feast RCE ay nasa parehong malawak na pamilya ng unauthenticated at network-reachable na mga kakayahan ng code-execution sa imprastruktura ng AI, ngunit ito ay isang feature-store deserialization na depekto, hindi isang isyu ng MCP-channel, at walang sinasabi tungkol sa mga default ng MCP policy-enforcement. Walang platform na nag-enable ng inline MCP-channel policy enforcement at walang vendor na nagbago ng mga default ng channel.",
+        "coherence": 1,
+        "remaining_gap": "Anumang senyales na partikular sa MCP: isang platform na naglalabas ng inline MCP-channel policy enforcement na naka-on bilang default; nag-aalok lamang ang araw na ito ng bahagyang pagkakatabi sa parehong-pamilyang attack surface."
+      }
+    }
+  ]
+}

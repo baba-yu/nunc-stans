@@ -1,0 +1,137 @@
+{
+  "date": "2026-07-04",
+  "by_prediction": {
+    "prediction.2445276f6f0458c1": [
+      {
+        "actor": "responsable de infraestructura de entrenamiento en un laboratorio de IA de silicio doméstico",
+        "job": "levantar un clúster completo de entrenamiento y servicio en ASIC no NVIDIA y ejecutar en él un entrenamiento casi frontera de extremo a extremo durante el plazo disponible",
+        "outcome": "un modelo casi frontera open-weight entrenado por completo en aceleradores domésticos, publicado con una tarjeta de modelo que documenta el entrenamiento solo en ASIC",
+        "motivation": "los controles de exportación hacen que la asignación de NVIDIA sea poco fiable, así que demostrar que una pila doméstica completa funciona elimina la dependencia del laboratorio del silicio restringido por EE. UU.",
+        "task": {
+          "who": "equipos de ingeniería de clústeres y de entrenamiento de modelos dentro del laboratorio",
+          "what": "ejecutar un entrenamiento casi frontera de extremo a extremo en ASIC no NVIDIA",
+          "where": "un clúster de entrenamiento de aceleradores domésticos (Ascend, Cambricon o piezas propias)",
+          "when": "de julio de 2026 al Q2 2027",
+          "why": "escapar del condicionamiento a la asignación de NVIDIA restringida por EE. UU.",
+          "how": "pila de entrenamiento en ASIC Huawei Ascend / Cambricon / de fabricación propia"
+        }
+      },
+      {
+        "actor": "equipo de la pila de software de un proveedor de aceleradores de IA doméstico",
+        "job": "endurecer el compilador, los kernels y las bibliotecas de comunicación colectiva para que un MoE de más de 1 billón se entrene y sirva de forma fiable en sus ASIC sin NVIDIA de por medio",
+        "outcome": "una pila de software de ASIC de nivel de producción lo bastante madura como para que un laboratorio externo complete un entrenamiento frontera de extremo a extremo declarado",
+        "motivation": "la prueba de existencia de LongCat-2.0 convierte su silicio en un sustituto creíble de NVIDIA solo si la cadena de herramientas soporta de forma fiable las cargas MoE a escala frontera",
+        "task": {
+          "who": "ingenieros de compilador, kernel y biblioteca de comunicación del acelerador",
+          "what": "endurecer la cadena de herramientas de entrenamiento para cargas MoE de más de 1 billón",
+          "where": "las capas de software de compilador, kernel y comunicación colectiva del ASIC",
+          "when": "del H2 2026 a principios de 2027",
+          "why": "hacer del silicio doméstico un sustrato fiable de entrenamiento frontera",
+          "how": "SDK del proveedor más bibliotecas de comunicación colectiva ajustadas para MoE"
+        }
+      },
+      {
+        "actor": "autor de la tarjeta de modelo y del informe técnico de un laboratorio open-weight",
+        "job": "documentar el sustrato de entrenamiento de forma explícita —tipo de acelerador, escala del clúster y pipeline de extremo a extremo— en la tarjeta de modelo en lugar de dejarlo a la inferencia de los observadores",
+        "outcome": "una tarjeta de modelo o informe técnico publicado que declara el entrenamiento en ASIC no NVIDIA como una afirmación divulgada y de peso",
+        "motivation": "la predicción solo se cumple con una divulgación explícita, y documentar la independencia de cómputo es en sí mismo la señal diferenciadora que el laboratorio quiere difundir",
+        "task": {
+          "who": "personal de comunicación de investigación y documentación del laboratorio",
+          "what": "divulgar el sustrato de entrenamiento en ASIC no NVIDIA en la tarjeta de modelo",
+          "where": "la tarjeta de modelo / informe técnico publicado en el lanzamiento",
+          "when": "en el lanzamiento, dentro del plazo que termina en el Q2 2027",
+          "why": "hacer de la independencia de cómputo una afirmación explícita y defendible",
+          "how": "sección estructurada de sustrato de entrenamiento en la tarjeta de modelo"
+        }
+      }
+    ],
+    "prediction.995ca26eda650543": [
+      {
+        "actor": "responsable de finanzas y mercados de capitales de un laboratorio frontera",
+        "job": "convertir la posición de mega-ronda privada de OpenAI en una estructura lista para el mercado público redactando el plan de registro y de oferta para un debut",
+        "outcome": "una presentación S-1/F-1 o un anuncio formal de cotización directa/IPO que deja el paso de OpenAI hacia la cotización pública en el registro divulgado",
+        "motivation": "los tamaños de cheque necesarios para seguir revalorizando al líder superan ya lo que los sindicatos privados están dispuestos a suscribir, forzando un movimiento hacia la liquidez pública",
+        "task": {
+          "who": "equipo interno de finanzas corporativas y mercados de capitales",
+          "what": "preparar y presentar el registro para un debut público",
+          "where": "proceso de registro ante la SEC y vía de aprobación del consejo",
+          "when": "del H2 2026 al Q2 2027",
+          "why": "los sindicatos privados ya no pueden suscribir las revalorizaciones",
+          "how": "redacción de S-1/F-1 con apoyo de suscriptores y auditoría"
+        }
+      },
+      {
+        "actor": "arquitecto del acuerdo de participación de capital gubernamental",
+        "job": "estructurar la posición de capital de en torno al 5% del gobierno de EE. UU. como andamiaje previo a la cotización ligado al debut previsto en el mercado público",
+        "outcome": "un acuerdo confirmado de capital gubernamental ligado al debut, el rasgo distintivo de participación soberana de cómo ocurre la cotización",
+        "motivation": "el envoltorio de participación soberana solo tiene sentido como andamiaje previo a la cotización, así que fijar sus términos es una condición para que el debut avance",
+        "task": {
+          "who": "asesoría de asuntos gubernamentales y de estructuración del acuerdo",
+          "what": "negociar y documentar los términos del ~5% de capital gubernamental",
+          "where": "negociación con el gobierno de EE. UU. y redacción del acuerdo de accionistas",
+          "when": "del H2 2026 al Q2 2027",
+          "why": "la participación es el andamiaje en el que se envuelve la cotización",
+          "how": "acuerdo de accionistas más visto bueno regulatorio"
+        }
+      },
+      {
+        "actor": "banquero de suscripción de IPO y de mercados de capitales de renta variable",
+        "job": "sindicar y fijar el precio del movimiento del líder frontera hacia los mercados públicos mientras la ventana de salidas reabierta absorbe debuts de miles de millones de dólares",
+        "outcome": "una oferta mandatada y estructurada que lleva a OpenAI desde la mayor posición privada hacia un paso de cotización divulgado",
+        "motivation": "la ventana de salidas del Q2 reabrió con 32 debuts públicos de miles de millones de dólares, y el ancla del grupo es el mandato estrella por ganar",
+        "task": {
+          "who": "mesa de sindicación de mercados de capitales de renta variable",
+          "what": "estructurar, mandatar y fijar el precio de la oferta",
+          "where": "sindicato de suscripción y bookbuild del mercado público",
+          "when": "del H2 2026 al Q2 2027",
+          "why": "la ventana de salidas reabierta premia mover al ancla ahora",
+          "how": "mecánica de IPO con bookbuild o de cotización directa"
+        }
+      }
+    ],
+    "prediction.ae0caf312eefab98": [
+      {
+        "actor": "ingeniero de plataforma de una IDE de agentes de programación",
+        "job": "rediseñar la ruta de escritura de archivos del agente para que cada escritura se resuelva canónicamente y se rechace cuando cae fuera de la raíz del proyecto, publicado como valor por defecto",
+        "outcome": "una versión de la IDE que impone el confinamiento a la raíz del workspace —resolución canónica de rutas, rechazo de enlaces simbólicos, escrituras denegadas por defecto fuera del proyecto— sin ningún atajo de la solicitud de aprobación",
+        "motivation": "dos RCE sin clic con CVSS 9.8 en un editor emblemático demuestran que el confinamiento del sistema de archivos es imprescindible, no un extra deseable, así que debe cerrarse toda la clase",
+        "task": {
+          "who": "equipos de ingeniería de seguridad del runtime del agente y de la IDE",
+          "what": "imponer escrituras del agente con ruta canónica, rechazo de enlaces simbólicos y denegación por defecto",
+          "where": "la ruta de escritura de archivos y de ejecución de herramientas del agente en el editor",
+          "when": "de julio de 2026 al Q1 2027",
+          "why": "impedir que el contenido ingerido escriba fuera del workspace",
+          "how": "resolución canónica de rutas más rechazo de enlaces simbólicos en el momento de la escritura"
+        }
+      },
+      {
+        "actor": "coautor del marco de gravedad de jailbreaks de seguridad de agentes",
+        "job": "codesarrollar un marco preliminar de gravedad de jailbreaks y un alcance de recompensa que clasifique los cyber-jailbreaks y convierta el escape del sandbox del sistema de archivos en una gravedad puntuada y divulgable",
+        "outcome": "un marco de gravedad compartido y una vía de divulgación estructurada que trata las escrituras de escape del workspace como una clase de vulnerabilidad calificada, orientando a los proveedores hacia el fortalecimiento en lugar de los parches aislados",
+        "motivation": "un estándar de gravedad coordinado convierte las RCE aisladas de IDE en una clase reconocida contra la que los proveedores deben diseñar, en vez de parchear de forma reactiva",
+        "task": {
+          "who": "equipo de seguridad de Anthropic con AWS, Microsoft y Google",
+          "what": "publicar el marco de gravedad de jailbreaks y la recompensa acotada",
+          "where": "programa de recompensas en HackerOne y marco de gravedad codesarrollado",
+          "when": "de julio de 2026 al Q1 2027",
+          "why": "hacer del escape del sandbox una clase puntuada que impulse el fortalecimiento por defecto",
+          "how": "rúbrica de gravedad codesarrollada con grandes proveedores de nube y de modelos"
+        }
+      },
+      {
+        "actor": "laboratorio ofensivo de investigación de seguridad de herramientas de IA",
+        "job": "cazar RCE de escape de sandbox sin clic en los editores de agentes y divulgarlas con PoC reproducibles que señalen el confinamiento del sistema de archivos como la propiedad ausente",
+        "outcome": "CVE divulgados contra una IDE de programación mainstream que convierten una debilidad abstracta del límite de herramientas en un exploit vivo y parcheado en torno al cual el ecosistema debe diseñar sus valores por defecto",
+        "motivation": "demostrar el mismo escape contra una IDE de primer nivel, y no solo contra un constructor low-code de nicho, fuerza el confinamiento de opcional a valor por defecto publicado",
+        "task": {
+          "who": "analistas de investigación de vulnerabilidades y de divulgación coordinada",
+          "what": "encontrar y divulgar RCE de escape del workspace sin clic",
+          "where": "editores de agentes de programación y sus rutas de ingesta de herramientas",
+          "when": "el plazo desde la divulgación hasta el Q1 2027",
+          "why": "hacer del confinamiento algo imprescindible demostrando el exploit vivo",
+          "how": "PoC reproducible mediante abuso de salto de directorio y resolución de enlaces simbólicos"
+        }
+      }
+    ]
+  }
+}

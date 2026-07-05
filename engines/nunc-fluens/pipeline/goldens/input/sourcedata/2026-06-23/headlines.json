@@ -1,0 +1,50 @@
+{
+  "date": "2026-06-23",
+  "technical": [
+    {
+      "lead": "Unsloth Dynamic GGUF shrinks 744B GLM-5.2 onto a single workstation",
+      "body": "Unsloth published Dynamic GGUF quantizations of Z.ai's newly open-weighted GLM-5.2, a 744-billion-parameter mixture-of-experts model (about 40B active) with a one-million-token context window, making it runnable locally outside a datacenter. The selective-precision scheme upcasts accuracy-sensitive layers to 8- or 16-bit while pushing the rest to 1- or 2-bit, shrinking the 1.51TB checkpoint to about 239GB for the 2-bit UD-IQ2_M build (an 84% reduction) and roughly 217GB for the 1-bit build (about 86%) — small enough for a high-memory single-node box rather than a multi-GPU cluster. The release pairs with local execution via Unsloth Studio and positions GLM-5.2 as benchmarking near the closed frontier on coding and reasoning. The compression and quality claims are Unsloth's own, not independently reproduced, and 1-2 bit quantization at this aggression still trades measurable accuracy for the memory savings.",
+      "citations": [
+        {"label": "AIToolly - Unsloth enables local execution of GLM-5.2, a 744B-parameter open model with a 1M context window", "url": "https://aitoolly.com/ai-news/article/2026-06-23-unsloth-enables-local-execution-of-glm-52-a-744b-parameter-open-model-with-1m-context-window"}
+      ]
+    },
+    {
+      "lead": "OWASP 2.01 ties agentic risk to real CVEs; StakeBench finds no safe setup",
+      "body": "The agentic-AI security picture shifted from hypothetical threats to documented incidents. OWASP's State of Agentic AI Security and Governance v2.01 tracks 53 agentic projects and now ties nearly every risk category to concrete CVEs, vendor advisories, and breach reports; it counts 28 of the 53 as coding agents, ranks the repositories carrying the most security advisories (n8n 57, Claude Code 22, AutoGPT 15, Dify 13, Roo-Code 11), and flags seven projects shipping updates daily or faster — one roughly every eight hours, a churn rate that complicates auditing. It maps prompt injection to six of its ten Top 10 categories for agentic applications. A separate academic benchmark, StakeBench, from Nanyang Technological University, ST Engineering, IBM Research and UIUC, ran 3,168 adversarial trials and found indirect prompt-injection success of 41.67% to 68.16% and direct attacks above 79% across every tested configuration, with none landing in the robust-behavior region; swapping the underlying model moved indirect-injection success by up to 26.49 points. Microsoft's earlier disclosure that injection in frameworks like Semantic Kernel can escalate to host-level RCE underscores the vendor-side reality.",
+      "citations": [
+        {"label": "Microsoft Security - When prompts become shells: RCE vulnerabilities in AI agent frameworks", "url": "https://www.microsoft.com/en-us/security/blog/2026/05/07/prompts-become-shells-rce-vulnerabilities-ai-agent-frameworks/"},
+        {"label": "CSO Online - Prompt injection breaks today's AI agents, study warns (StakeBench)", "url": "https://www.csoonline.com/article/4184455/prompt-injection-breaks-todays-ai-agents-study-warns.html"}
+      ]
+    },
+    {
+      "lead": "Coding-agent harnesses converge on least-privilege-by-default execution",
+      "body": "The open coding-agent harnesses shipped security hardening over feature flash. OpenClaw's June 2026.6.x releases patched concrete exploit paths — vCard and location-pin injection — tightened Docker sandbox boundaries, added Browser CDP endpoint validation, kept SSH tunnel checks pinned to loopback, and began rejecting unsafe chat, tool, package, and response lengths, alongside first-class OpenRouter onboarding. NVIDIA's NemoClaw, an open reference stack for running always-on agents like Hermes and OpenClaw inside OpenShell sandboxes, prioritizes sandbox hardening, credential handling, and stricter network-policy defaults around routed inference and lifecycle management. Nous Research's Hermes Agent leans the same way with MCP credential filtering that hands subprocesses only explicitly approved environment variables, plus credential redaction, SSRF protection, and a Tirith pre-execution scan over the MCP configuration. The throughline: the harnesses treat their own tool-calling surface as the primary attack surface, lining up with the OWASP and StakeBench finding that prompt injection is the dominant agentic risk.",
+      "citations": [
+        {"label": "The New Stack - 'An agent is an LLM and a harness': what NVIDIA really thinks about OpenClaw (NemoClaw)", "url": "https://thenewstack.io/nvidia-openclaw-agent-blueprints/"},
+        {"label": "innFactory - OpenClaw vs. Hermes Agent: comparison of the two dominant AI agent frameworks of 2026", "url": "https://innfactory.ai/en/blog/openclaw-vs-hermes-agent-comparison/"}
+      ]
+    },
+    {
+      "lead": "Confidential Computing Summit opens today; offensive-security night June 25",
+      "body": "The AI-security calendar opens now. The Confidential Computing Summit runs June 23-24 at the San Francisco Mint, organized by the Linux Foundation and OPAQUE around AI sovereignty, agent security, IP protection, verifiable environments, and confidential-AI workloads, with speakers from Amazon, AMD, Google, Meta, Microsoft, NVIDIA, Samsung Electronics, TII and UC Berkeley. AI Tinkerers San Francisco hosts an Offensive Security Demo Night on June 25 with live autonomous-pentesting-agent demos backed by sponsor XBOW. Further out, Black Hat USA's AI Summit runs August 1-6 in Las Vegas alongside DEF CON's AI Village, SecurityWeek's AI Risk Summit follows August 11-12 at Half Moon Bay, OWASP Global AppSec USA is November 5-6 in San Francisco, and Zenity's AI Agent Security Summit series stays on the watch list.",
+      "citations": [
+        {"label": "Confidential Computing Summit 2026 schedule (June 23-24, San Francisco Mint)", "url": "https://ccsummit2026.sched.com/"},
+        {"label": "XBOW - Offensive AI in Practice (sponsor of the AI Tinkerers SF Offensive Security Demo Night, June 25)", "url": "https://xbow.com/offensive-ai-in-practice-workshop"}
+      ]
+    },
+    {
+      "lead": "Snowflake Dev Day June 25 leads into the AI Engineer World's Fair",
+      "body": "The mainstream dev and data calendar fills out the week. Snowflake runs a virtual Dev Day on June 25 with two luminary talks plus a hands-on agentic-AI lab. The AI Engineer World's Fair takes over Moscone West with main programming June 29 through July 2 (optional New Engineer Orientation June 28), preceded by the official AIE World's Fair Hackathon with Cerebral Valley on June 27-28. Looking further out, GitHub Universe returns October 28-29 and AWS re:Invent runs November 30 to December 4 in Las Vegas. On the AI-chip track, AMD's Advancing AI 2026 is set for July 22-23 at Moscone (Instinct MI400-series focus expected, keynote July 23), Hot Chips 2026 runs August 23-25 at Stanford, and the AI Infra Summit is September 15-17 at the Santa Clara Convention Center.",
+      "citations": [
+        {"label": "Snowflake Dev Day - Americas Virtual (June 25, 2026)", "url": "https://www.snowflake.com/en/dev-day/americas-virtual/"}
+      ]
+    }
+  ],
+  "plain": [
+    "Unsloth squeezes a 744B AI model onto one workstation",
+    "OWASP and a new study say AI agents still fall to injection",
+    "Coding-agent tools tighten their own sandboxes by default",
+    "Confidential computing and security events start this week",
+    "Snowflake Dev Day and the AI Engineer World's Fair this week"
+  ]
+}

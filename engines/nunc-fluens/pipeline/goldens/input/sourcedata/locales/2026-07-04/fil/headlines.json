@@ -1,0 +1,53 @@
+{
+  "date": "2026-07-04",
+  "technical": [
+    {
+      "lead": "Ini-open-source ng Meituan ang LongCat-2.0, isang 1.6T na coding MoE na sinanay sa Chinese ASIC",
+      "body": "Inilabas ng Meituan ang <a href=\"https://venturebeat.com/technology/meituan-open-sources-longcat-2-0-the-1-6t-near-frontier-agentic-coding-model-thats-been-leading-openrouter-trained-entirely-on-chinese-chips\">LongCat-2.0</a> noong June 30, 2026, isang 1.6-trilyong-parameter na mixture-of-experts model na may humigit-kumulang 48B na parameter na na-activate bawat token at isang native na one-million-token na context window, inilathala sa GitHub at Hugging Face sa ilalim ng permissive na MIT license. Ayon sa <a href=\"https://www.opensourceforu.com/2026/06/meituan-open-sources-longcat-2-0-under-mit-license/\">Open Source For You</a>, sinanay at pinaandar ang model nang buo sa isang cluster ng mahigit 50,000 Chinese-made na ASIC na walang kahit isang NVIDIA GPU sa daloy, at nagpapakilala ito ng isang LongCat Sparse Attention scheme na naka-tune para sa long-context agentic na workloads. Sa coding, umiiskor ito ng 59.5 sa SWE-bench Pro, bahagyang nangunguna sa 58.6 ng GPT-5.5, at nakapaggugol na ito ng humigit-kumulang dalawang buwan bilang ang anonymous na \"Owl Alpha\" checkpoint sa global top three ng OpenRouter bago ibinunyag ang pinagmulan nito. Ang mas matalas na senyales ay hindi na naka-gate sa access sa US-restricted na silicon ang open-weight frontier.",
+      "citations": [
+        {"label": "VentureBeat - Meituan open sources LongCat-2.0, trained entirely on Chinese chips", "url": "https://venturebeat.com/technology/meituan-open-sources-longcat-2-0-the-1-6t-near-frontier-agentic-coding-model-thats-been-leading-openrouter-trained-entirely-on-chinese-chips"},
+        {"label": "Open Source For You - Meituan Open Sources LongCat-2.0 Under MIT License", "url": "https://www.opensourceforu.com/2026/06/meituan-open-sources-longcat-2-0-under-mit-license/"}
+      ]
+    },
+    {
+      "lead": "Dalawang CVSS 9.8 na zero-click sandbox-escape na depekto ang tumama sa Cursor coding IDE",
+      "body": "Binunyag ng Cato AI Labs ang isang pares ng kritikal na remote-code-execution na depekto sa Cursor AI coding IDE noong July 1, 2026, na sinaklaw ng <a href=\"https://thehackernews.com/2026/07/critical-cursor-flaws-could-let-prompt.html\">The Hacker News</a>, na nagpapahintulot sa panlabas na content na gawing armas ang prompt injection tungo sa isang ganap na sandbox escape nang walang click ng user. Ang <a href=\"https://nvd.nist.gov/vuln/detail/CVE-2026-50548\">CVE-2026-50548</a> (CVSS 9.8, isang CWE-22 path traversal) ay inaabuso ang optional na working_directory parameter para makapagsulat ng file ang isang malisyosong agent sa labas ng nilalayong workspace, samantalang ang <a href=\"https://nvd.nist.gov/vuln/detail/CVE-2026-50549\">CVE-2026-50549</a> (CVSS 9.8 din) ay sinasamantala ang isang symlink-resolution na fallback na nagpapahintulot sa mga write na mapunta sa labas ng hangganan ng proyekto; pareho itong inayos sa Cursor 3.0. Dahil ang trigger ay content na dinisenyo para tanggapin ng agent, ang isang na-poison na README, web page, o tool response ay makapagpapatakbo ng command nang walang anumang approval prompt, na naglilipat sa agent-tooling na RCE surface mula sa mga niche low-code builder patungo sa mainstream editor na pinatatakbo ng mga developer laban sa untrusted na repositoryo araw-araw. Ang agarang aksyon ay tiyakin na nasa Cursor 3.0 o mas bago ang bawat install, dahil nananatiling nasasamantala by default ang mas lumang build.",
+      "citations": [
+        {"label": "The Hacker News - Critical Cursor Flaws Could Let Prompt Injection Escape Sandbox", "url": "https://thehackernews.com/2026/07/critical-cursor-flaws-could-let-prompt.html"},
+        {"label": "NVD - CVE-2026-50548 Detail", "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-50548"},
+        {"label": "NVD - CVE-2026-50549 Detail", "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-50549"}
+      ]
+    },
+    {
+      "lead": "Naghatid ang Anthropic ng Enterprise spend caps at nagbukas ng Fable 5 jailbreak bounty",
+      "body": "Kasunod ng pandaigdigang pagbabalik ng Fable 5 ngayong linggo, kumilos ang Anthropic sa dalawang harapan noong July 3, 2026, ayon sa <a href=\"https://www.buildfastwithai.com/blogs/ai-news-today-july-4-2026\">July 4 news roundup</a>. Una, nagkaroon ang Claude Enterprise ng mga admin cost-governance na kontrol na nakatutok sa lumalobong agent token bill: organization-, team-, at department-level na spend caps, model-level na access entitlements bawat user o group, isang usage-analytics dashboard na may export at Analytics API, agent-effort na kontrol, at real-time na spend alert, na tahasang ibinalangkas laban sa enterprise \"tokenmaxxing\" at sumasagot sa babala ng Gartner na maaaring makasabay sa suweldo ng developer ang gastos sa token ng coding agent. Pangalawa, naglunsad ang Anthropic ng isang pormal na HackerOne bug-bounty program na saklaw nang makitid sa Fable 5 cyber-jailbreak bypasses, na ipinares ito sa isang early-draft na jailbreak-severity na framework na binuo kasama ang AWS, Microsoft, at Google na umiiskor sa mga insidente batay sa accessibility ng atake at potensyal na pinsala. Kasama na ngayon sa access sa top model ang parehong cost controls na kailangan ng mga enterprise para mag-deploy ng agent sa laki at ang disclosure machinery na hiningi ng government restoration deal.",
+      "citations": [
+        {"label": "Build Fast with AI - AI News Today July 4 2026", "url": "https://www.buildfastwithai.com/blogs/ai-news-today-july-4-2026"}
+      ]
+    },
+    {
+      "lead": "Umabot ang global venture funding sa record na $510B sa H1 2026, dalawang lab ang kumuha ng 43%",
+      "body": "Ipinapakita ng first-half 2026 funding analysis ng Crunchbase na umabot sa record na $510 bilyon ang global startup investment, na lumalampas na sa $440 bilyong inilagay sa buong 2025 at nagtatakda ng all-time high para sa kahit anong kalahating taon, ayon sa <a href=\"https://news.crunchbase.com/venture/global-startup-exits-ipo-ma-soar-ai-q2-h1-2026/\">Crunchbase News</a>. Ang konsentrasyon ang kapansin-pansing bahagi: magkasamang sinipsip ng OpenAI at Anthropic ang $217 bilyon, o 43% ng lahat ng venture dollar sa kalahating taon, kaya dalawang kompanya ang kumuha ng halos kalahati ng global startup funding. Ang quarterly split ay $305 bilyon sa Q1 (ang pinakamalaking isahang quarter kailanman) at $205 bilyon sa Q2 sa mahigit 5,000 na startup, at malakas na bumalik ang mga exit na may 32 na venture-backed na kompanyang naging pampubliko lampas sa $1 bilyong valuation sa Q2 lamang. Dumarating ang ulat sa parehong linggo na isinara ng Menlo Ventures ang pinakamalaki nitong $3 bilyong raise sa lakas ng Anthropic stake nito, at kasabay ng ulat na naglutang ang OpenAI ng pagbibigay sa gobyerno ng US ng humigit-kumulang 5% na equity position bago ang isang binalak na public debut. Ang istruktural na pagbasa ay hindi na isang tema lamang sa loob ng venture ang AI; sa H1 2026 ito na ang mayorya nito.",
+      "citations": [
+        {"label": "Crunchbase News - Global Startup Investment Hit Record $510B In H1 2026", "url": "https://news.crunchbase.com/venture/global-startup-exits-ipo-ma-soar-ai-q2-h1-2026/"}
+      ]
+    },
+    {
+      "lead": "Nangunguna ang July 22-23 MI400 reveal ng AMD sa isang siksik na AI event calendar",
+      "body": "Ang pinakamalapit na AI-chip catalyst ay ang Advancing AI 2026 ng AMD sa July 22-23 sa Moscone sa San Francisco, kung saan inaasahan ang MI400 series at ang \"Helios\" rack-scale system kasama ang mga availing timeline; sa parehong hardware track, tatakbo ang <a href=\"https://hotchips.org/about/\">Hot Chips 2026</a> sa Memorial Auditorium ng Stanford sa August 23-25 at susunod ang <a href=\"https://www.ai-infra-summit.com/agenda\">AI Infra Summit</a> sa Santa Clara sa September 15-17. Nagpupumpon sa maaga hanggang gitna ng August ang AI-security block: tatakbo ang <a href=\"https://www.airisksummit.com/agenda\">AI Risk Summit</a> ng SecurityWeek sa August 11-12 sa Ritz-Carlton sa Half Moon Bay, samantalang daratal sa Las Vegas ang Black Hat USA at ang AI Village ng DEF CON 34 sa maagang August at susunod ang OWASP Global AppSec USA sa San Francisco sa November 5-6, kung saan tuwirang may kaugnayan ang agent-security series ng Zenity dahil sa Cursor sandbox-escape CVEs ngayong linggo. Bago sa kalendaryo, tatakbo ang <a href=\"https://ai4.io/\">Ai4 2026</a> sa August 4-6 sa Las Vegas; sa mainstream dev track, nakatakda ang GitHub Universe sa October 28-29 at ang AWS re:Invent sa November 30 hanggang December 4. Ang dalawang pinakamalapit na aksyon ay ang pagrehistro para sa July 22 AMD keynote at sa August 11-12 AI Risk Summit.",
+      "citations": [
+        {"label": "Hot Chips 2026", "url": "https://hotchips.org/about/"},
+        {"label": "AI Infra Summit 2026", "url": "https://www.ai-infra-summit.com/agenda"},
+        {"label": "SecurityWeek AI Risk Summit 2026 (Aug 11-12, Half Moon Bay)", "url": "https://www.airisksummit.com/agenda"},
+        {"label": "Ai4 2026 (Aug 4-6, Las Vegas)", "url": "https://ai4.io/"}
+      ]
+    }
+  ],
+  "plain": [
+    "Ini-open-source ng Meituan ang isang malaking coding model sa Chinese chips",
+    "Dalawang kritikal na zero-click na depekto ang tumama sa Cursor coding tool",
+    "Nagdagdag ang Anthropic ng AI spend caps at isang jailbreak bug bounty",
+    "Nakalikom ang mga AI startup ng record na $510B, kalahati sa dalawang lab",
+    "Nangunguna ang July chip reveal ng AMD sa isang siksik na AI event season"
+  ]
+}

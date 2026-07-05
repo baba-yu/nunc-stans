@@ -1,0 +1,53 @@
+{
+  "date": "2026-06-23",
+  "sections": [
+    {
+      "category": "Unsloth ships Dynamic GGUF builds that squeeze Z.ai's 744B GLM-5.2 onto a workstation, cutting a 1.51TB model to roughly 217-239GB",
+      "bullets": [
+        {
+          "body": "Unsloth published Dynamic GGUF quantizations of Z.ai's newly open-weighted GLM-5.2, a 744-billion-parameter mixture-of-experts model (about 40 billion active parameters) with a one-million-token context window, making it runnable locally outside a datacenter. The new artifact is a selective-precision quantization scheme that upcasts the layers most sensitive to accuracy to 8- or 16-bit while pushing the rest down to 1- or 2-bit, which shrinks the full 1.51TB checkpoint to about 239GB for the 2-bit UD-IQ2_M build (an 84% reduction) and roughly 217GB for the 1-bit build (about 86%), small enough to fit a high-memory single-node workstation rather than a multi-GPU cluster. Unsloth pairs the GGUF release with local-execution support through its Unsloth Studio web interface and positions GLM-5.2 as benchmarking near the closed frontier on coding and reasoning. The compression ratios and quality claims are Unsloth's own and have not been independently reproduced, and 1-2 bit quantization at this aggression still trades measurable accuracy for the memory savings. This extends Unsloth's recent run of memory-efficiency work onto a brand-new 744B open model rather than just its own fine-tuning stack. <a href=\"https://aitoolly.com/ai-news/article/2026-06-23-unsloth-enables-local-execution-of-glm-52-a-744b-parameter-open-model-with-1m-context-window\">AIToolly - Unsloth enables local execution of GLM-5.2, a 744B-parameter open model with a 1M context window</a>",
+          "citations": [
+            {"label": "AIToolly - Unsloth enables local execution of GLM-5.2, a 744B-parameter open model with a 1M context window", "url": "https://aitoolly.com/ai-news/article/2026-06-23-unsloth-enables-local-execution-of-glm-52-a-744b-parameter-open-model-with-1m-context-window"}
+          ]
+        }
+      ]
+    },
+    {
+      "category": "Fresh agentic-AI security evidence: OWASP's 2026 report now catalogs real CVEs and breaches, while a new academic benchmark finds no agent configuration that resists prompt injection",
+      "bullets": [
+        {
+          "body": "The agentic-AI security picture moved from cataloging hypothetical threats to documenting shipped incidents. OWASP's updated State of Agentic AI Security and Governance (version 2.01) tracks 53 agentic projects and now ties nearly every category of agentic risk to concrete CVEs, vendor advisories, and breach reports rather than plausible scenarios; it counts 28 of those 53 projects as coding agents, ranks the repositories carrying the most security advisories (n8n at 57, Claude Code at 22, AutoGPT at 15, Dify at 13, Roo-Code at 11), and notes seven projects ship updates daily or faster, with one averaging a release roughly every eight hours, a churn rate that itself complicates auditing. OWASP maps prompt injection to six of the ten categories in its Top 10 for Agentic Applications, framing it as the connective attack vector across most incidents. A separate academic benchmark, StakeBench, from researchers at Nanyang Technological University, ST Engineering, IBM Research and the University of Illinois Urbana-Champaign, ran 3,168 adversarial trials and found indirect prompt-injection success rates of 41.67% to 68.16% and direct attacks above 79% across every tested configuration, with no configuration landing in the benchmark's robust-behavior region; the same work showed model choice mattered materially, with one platform's indirect-injection success rising by up to 26.49 percentage points when swapping the underlying model. The vendor side keeps surfacing concrete instances too, including Microsoft's earlier disclosure that prompt injection in agent frameworks such as Semantic Kernel could escalate into host-level remote code execution. <a href=\"https://www.microsoft.com/en-us/security/blog/2026/05/07/prompts-become-shells-rce-vulnerabilities-ai-agent-frameworks/\">Microsoft Security - When prompts become shells: RCE vulnerabilities in AI agent frameworks</a> <a href=\"https://www.csoonline.com/article/4184455/prompt-injection-breaks-todays-ai-agents-study-warns.html\">CSO Online - Prompt injection breaks today's AI agents, study warns (StakeBench)</a>",
+          "citations": [
+            {"label": "Microsoft Security - When prompts become shells: RCE vulnerabilities in AI agent frameworks", "url": "https://www.microsoft.com/en-us/security/blog/2026/05/07/prompts-become-shells-rce-vulnerabilities-ai-agent-frameworks/"},
+            {"label": "CSO Online - Prompt injection breaks today's AI agents, study warns (StakeBench)", "url": "https://www.csoonline.com/article/4184455/prompt-injection-breaks-todays-ai-agents-study-warns.html"}
+          ]
+        }
+      ]
+    },
+    {
+      "category": "Coding-agent harnesses keep hardening the sandbox: OpenClaw's June releases patch new injection paths and NVIDIA's NemoClaw pushes managed, network-policy-gated execution",
+      "bullets": [
+        {
+          "body": "The open coding-agent harnesses shipped another round of security hardening rather than feature flash. OpenClaw's June 2026.6.x releases patched concrete exploit paths, including vCard and location-pin injection, tightened Docker sandbox boundaries, added Browser CDP endpoint validation, kept SSH tunnel checks pinned to loopback, and began rejecting unsafe chat, tool, package, and response lengths, alongside making OpenRouter onboarding a first-class setup flow. NVIDIA's NemoClaw, an open reference stack for running always-on agents like Hermes and OpenClaw inside its OpenShell sandboxes, is prioritizing sandbox hardening, credential handling, and stricter network-policy defaults, packaging routed inference and lifecycle management around a hardened blueprint. Nous Research's Hermes Agent leans the same direction with MCP credential filtering that hands subprocesses only explicitly approved environment variables, plus credential redaction, SSRF protection, and a Tirith pre-execution security scan over the MCP configuration before each run. The throughline is least-privilege-by-default execution: the harnesses are converging on treating their own tool-calling surface as the primary attack surface, which lines up with the OWASP and StakeBench findings that prompt injection is the dominant agentic risk. <a href=\"https://thenewstack.io/nvidia-openclaw-agent-blueprints/\">The New Stack - 'An agent is an LLM and a harness': what NVIDIA really thinks about OpenClaw (NemoClaw)</a> <a href=\"https://innfactory.ai/en/blog/openclaw-vs-hermes-agent-comparison/\">innFactory - OpenClaw vs. Hermes Agent: comparison of the two dominant AI agent frameworks of 2026</a>",
+          "citations": [
+            {"label": "The New Stack - 'An agent is an LLM and a harness': what NVIDIA really thinks about OpenClaw (NemoClaw)", "url": "https://thenewstack.io/nvidia-openclaw-agent-blueprints/"},
+            {"label": "innFactory - OpenClaw vs. Hermes Agent: comparison of the two dominant AI agent frameworks of 2026", "url": "https://innfactory.ai/en/blog/openclaw-vs-hermes-agent-comparison/"}
+          ]
+        }
+      ]
+    },
+    {
+      "category": "AI events to plan around now: the confidential-computing summit opens today and the offensive-security and dev-conference tracks land this week, with the chip and security calendar running into the fall",
+      "bullets": [
+        {
+          "body": "The forward calendar across all three sub-tracks, with the soonest items now open or days away. AI-security and confidential computing: the Confidential Computing Summit opens today and runs June 23-24 at the San Francisco Mint, organized by the Linux Foundation and OPAQUE around AI sovereignty, agent security, IP protection, verifiable environments, and confidential-AI workloads, with speakers from Amazon, AMD, Google, Meta, Microsoft, NVIDIA, Samsung Electronics, TII and UC Berkeley; AI Tinkerers San Francisco hosts an Offensive Security Demo Night on June 25 with live autonomous-pentesting-agent demos backed by sponsor XBOW; further out, Black Hat USA's AI Summit runs August 1-6 in Las Vegas alongside DEF CON's AI Village, SecurityWeek's AI Risk Summit follows August 11-12 at Half Moon Bay, OWASP Global AppSec USA is November 5-6 in San Francisco, and Zenity's AI Agent Security Summit series stays on the watch list. Mainstream dev/data: Snowflake runs a virtual Dev Day on June 25 (two luminary talks plus a hands-on agentic-AI lab), the AI Engineer World's Fair takes over Moscone West with main programming June 29 through July 2 (optional New Engineer Orientation June 28), preceded by the official AIE World's Fair Hackathon with Cerebral Valley on June 27-28, and GitHub Universe returns October 28-29 with AWS re:Invent November 30 to December 4 in Las Vegas. AI-chip/hardware: AMD's Advancing AI 2026 is set for July 22-23 at Moscone (Instinct MI400-series focus expected, keynote July 23), Hot Chips 2026 runs August 23-25 at Stanford, and the AI Infra Summit is September 15-17 at the Santa Clara Convention Center. <a href=\"https://ccsummit2026.sched.com/\">Confidential Computing Summit 2026 schedule (June 23-24, San Francisco Mint)</a> <a href=\"https://xbow.com/offensive-ai-in-practice-workshop\">XBOW - Offensive AI in Practice (sponsor of the AI Tinkerers SF Offensive Security Demo Night, June 25)</a> <a href=\"https://www.snowflake.com/en/dev-day/americas-virtual/\">Snowflake Dev Day - Americas Virtual (June 25, 2026)</a>",
+          "citations": [
+            {"label": "Confidential Computing Summit 2026 schedule (June 23-24, San Francisco Mint)", "url": "https://ccsummit2026.sched.com/"},
+            {"label": "XBOW - Offensive AI in Practice (sponsor of the AI Tinkerers SF Offensive Security Demo Night, June 25)", "url": "https://xbow.com/offensive-ai-in-practice-workshop"},
+            {"label": "Snowflake Dev Day - Americas Virtual (June 25, 2026)", "url": "https://www.snowflake.com/en/dev-day/americas-virtual/"}
+          ]
+        }
+      ]
+    }
+  ]
+}

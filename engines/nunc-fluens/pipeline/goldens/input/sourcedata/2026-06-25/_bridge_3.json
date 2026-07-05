@@ -1,0 +1,6 @@
+{
+  "support_dimension": "so_that",
+  "narrative": "Today's OpenAI-Broadcom Jalapeno unveil shows exactly the consequence the Corsair-class deployment prediction (June 17) anticipates: dedicated inference silicon booking a named, dated large-scale landing -- OpenAI's gigawatt-scale deployment targeted by end of 2026 over Broadcom's Tomahawk fabric -- rather than a generic merchant-GPU buy, even though Jalapeno is a buyer-designed ASIC, not a merchant vendor part.",
+  "coherence": 3,
+  "remaining_gap": "Jalapeno is OpenAI's own co-designed ASIC, not a merchant Corsair-class vendor booking a named hyperscaler customer; the falsifiable target remains unmet."
+}

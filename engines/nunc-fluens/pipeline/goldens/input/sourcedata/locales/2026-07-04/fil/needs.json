@@ -1,0 +1,137 @@
+{
+  "date": "2026-07-04",
+  "by_prediction": {
+    "prediction.2445276f6f0458c1": [
+      {
+        "actor": "lead ng training-infrastructure ng domestic-silicon AI lab",
+        "job": "nagtatayo ng isang buong non-NVIDIA ASIC na training-and-serving cluster at nagpapatakbo ng isang end-to-end na near-frontier na training run dito sa loob ng panahong inilaan",
+        "outcome": "isang open-weight near-frontier model na sinanay nang buo sa mga domestic accelerator, inilabas na may model card na nagdodokumento ng ASIC-only na training run",
+        "motivation": "ginagawang hindi maaasahan ng export controls ang NVIDIA allocation, kaya inaalis ng pagpapatunay na gumagana ang isang buong domestic stack ang pagkabatak ng lab sa US-restricted na silicon",
+        "task": {
+          "who": "mga team ng cluster-engineering at model-training sa loob ng lab",
+          "what": "magpatakbo ng end-to-end na near-frontier training sa non-NVIDIA ASIC",
+          "where": "isang domestic-accelerator na training cluster (Ascend, Cambricon, o in-house na parte)",
+          "when": "July 2026 hanggang Q2 2027",
+          "why": "makatakas sa pagka-gate sa US-restricted na NVIDIA allocation",
+          "how": "Huawei Ascend / Cambricon / in-house na ASIC training stack"
+        }
+      },
+      {
+        "actor": "team ng software-stack ng domestic AI-accelerator vendor",
+        "job": "pinapatibay ang compiler, kernels, at collective-communication libraries para maasahang masanay at maipatakbo ang isang 1T-plus na MoE sa kanilang mga ASIC nang walang NVIDIA sa daloy",
+        "outcome": "isang production-grade na ASIC software stack na sapat nang mature para makatapos ang isang panlabas na lab ng isang binunyag na end-to-end na frontier training run",
+        "motivation": "ginagawang isang kapani-paniwalang kapalit sa NVIDIA ang kanilang silicon ng existence proof ng LongCat-2.0 lamang kung maaasahang sinusuportahan ng toolchain ang frontier-scale na MoE workloads",
+        "task": {
+          "who": "mga engineer ng accelerator compiler, kernel, at communication-library",
+          "what": "patibayin ang training toolchain para sa 1T-plus na MoE workloads",
+          "where": "ang mga software layer ng compiler, kernel, at collective-comm ng ASIC",
+          "when": "H2 2026 patungo sa maagang 2027",
+          "why": "gawing isang maaasahang frontier-training substrate ang domestic silicon",
+          "how": "vendor SDK kasama ang MoE-tuned na collective-communication libraries"
+        }
+      },
+      {
+        "actor": "may-akda ng model-card at technical-report ng open-weight lab",
+        "job": "tahasang idinodokumento ang training substrate — uri ng accelerator, laki ng cluster, at end-to-end na pipeline — sa model card sa halip na iwan itong hinuha lamang ng mga tagamasid",
+        "outcome": "isang inilathalang model card o technical report na nagsasaad ng non-NVIDIA ASIC na training run bilang isang binunyag, load-bearing na claim",
+        "motivation": "nagtatagumpay lamang ang panghula sa tahasang pagbubunyag, at ang pagdodokumento ng compute-independence ang mismong nakababukod na senyales na gustong ipahayag ng lab",
+        "task": {
+          "who": "staff ng research-communications at dokumentasyon sa lab",
+          "what": "ibunyag ang non-NVIDIA ASIC na training substrate sa model card",
+          "where": "ang model card / technical report na ipinadala sa release",
+          "when": "sa release, sa loob ng panahong nagtatapos sa Q2 2027",
+          "why": "gawing isang tahasang, maipagtatanggol na claim ang compute-independence",
+          "how": "isang structured na training-substrate na seksyon sa model card"
+        }
+      }
+    ],
+    "prediction.995ca26eda650543": [
+      {
+        "actor": "lead ng finance at capital-markets ng frontier-lab",
+        "job": "ginagawang public-market-ready na istruktura ang pribadong mega-round na posisyon ng OpenAI sa pamamagitan ng pag-draft ng registration at offering plan para sa isang debut",
+        "outcome": "isang inihaing S-1/F-1 o isang pormal na direct-listing/IPO na anunsyo na naglalagay sa binunyag na rekord ng hakbang ng OpenAI sa public listing",
+        "motivation": "lumalampas na ngayon sa kaya ng mga pribadong syndicate ang laki ng tsekeng kailangan para patuloy na itaas ang marka ng lider, na nagpipilit ng paglipat sa pampublikong likididad",
+        "task": {
+          "who": "in-house na team ng corporate-finance at capital-markets",
+          "what": "ihanda at ihain ang registration para sa isang public debut",
+          "where": "proseso ng SEC registration at landas ng pag-apruba ng board",
+          "when": "H2 2026 patungo sa Q2 2027",
+          "why": "hindi na kayang i-underwrite ng mga pribadong syndicate ang mga mark-up",
+          "how": "S-1/F-1 drafting na may suporta ng underwriter at audit"
+        }
+      },
+      {
+        "actor": "arkitekto ng deal sa equity stake ng gobyerno",
+        "job": "binubuo ang humigit-kumulang 5% na equity position ng gobyerno ng US bilang pre-listing na scaffolding na nakatali sa binalak na public-market na debut",
+        "outcome": "isang kumpirmadong kasunduan sa equity ng gobyerno na nakatali sa debut, ang nakababukod na sovereign-stake na tampok ng kung paano nangyayari ang listing",
+        "motivation": "may katuturan lamang ang sovereign-stake na balot bilang pre-listing na scaffolding, kaya ang pagtapos ng mga tuntunin nito ay isang gate sa pagtuloy ng debut",
+        "task": {
+          "who": "counsel ng government-affairs at deal-structuring",
+          "what": "makipag-usap at idokumento ang ~5% na tuntunin ng equity ng gobyerno",
+          "where": "negosasyon sa gobyerno ng US at pag-draft ng shareholder-agreement",
+          "when": "H2 2026 patungo sa Q2 2027",
+          "why": "ang stake ang scaffolding na binabalutan ng listing",
+          "how": "shareholder agreement kasama ang regulatory sign-off"
+        }
+      },
+      {
+        "actor": "banker ng IPO underwriting at equity-capital-markets",
+        "job": "sina-syndicate at pino-presyuhan ang paglipat ng lider ng frontier patungo sa pampublikong merkado habang sinisipsip ng muling bumukas na exit window ang mga bilyong-dolyar na debut",
+        "outcome": "isang mandated, structured na offering na naghahatid sa OpenAI mula sa pinakamalaking pribadong posisyon patungo sa isang binunyag na hakbang sa listing",
+        "motivation": "muling bumukas ang Q2 exit window na may 32 na bilyong-dolyar na public debut, at ang anchor ng cohort ang marquee mandate na dapat panalunin",
+        "task": {
+          "who": "syndicate desk ng equity-capital-markets",
+          "what": "buuin, i-mandate at presyuhan ang offering",
+          "where": "underwriting syndicate at public-market na bookbuild",
+          "when": "H2 2026 patungo sa Q2 2027",
+          "why": "ginagantimpalaan ng muling bumukas na exit window ang paglipat ng anchor ngayon",
+          "how": "mekanika ng bookbuilt na IPO o direct-listing"
+        }
+      }
+    ],
+    "prediction.ae0caf312eefab98": [
+      {
+        "actor": "platform engineer ng coding-agent IDE",
+        "job": "muling isinasaayos ang agent file-write na daan para canonically resolve ang bawat write at tanggihan kapag napunta ito sa labas ng project root, ipinadala bilang default",
+        "outcome": "isang IDE release na nagpapatupad ng workspace-root confinement — canonical path resolution, pagtanggi sa symlink, default-deny na writes sa labas ng proyekto — nang walang approval prompt na bypass",
+        "motivation": "pinatutunayan ng dalawang CVSS 9.8 na zero-click RCE sa isang flagship editor na table-stakes ang filesystem confinement, hindi isang nice-to-have, kaya dapat isara ang buong klase",
+        "task": {
+          "who": "mga team ng agent-runtime at IDE security engineering",
+          "what": "ipatupad ang canonical-path, symlink-tanggi na default-deny na agent writes",
+          "where": "ang agent file-write at tool-execution na daan ng editor",
+          "when": "July 2026 hanggang Q1 2027",
+          "why": "pigilan ang dinatnang content sa pagsusulat sa labas ng workspace",
+          "how": "canonical path resolution kasama ang pagtanggi sa symlink sa oras ng write"
+        }
+      },
+      {
+        "actor": "co-author ng agent-security jailbreak-severity na framework",
+        "job": "kasamang binubuo ang isang maagang jailbreak-severity na framework at bounty scope na nag-uuri sa cyber-jailbreaks at gumagawa sa filesystem sandbox escape bilang isang scored, disclosable na severity",
+        "outcome": "isang ibinahaging severity na framework at structured disclosure na daan na tumuturing sa workspace-escape na writes bilang isang rated na uri ng vulnerability, na nag-aakay sa mga vendor patungo sa hardening sa halip na mga isahang patch",
+        "motivation": "ginagawang isang kinikilalang klase na dapat disenyuhang labanan ng mga vendor ng isang coordinated na severity standard ang mga hiwalay na IDE RCE, hindi patch nang reaktibo",
+        "task": {
+          "who": "security team ng Anthropic kasama ang AWS, Microsoft, at Google",
+          "what": "maglathala ng jailbreak-severity na framework at saklaw na bounty",
+          "where": "HackerOne bounty program at kasamang binuong severity framework",
+          "when": "July 2026 hanggang Q1 2027",
+          "why": "gawing isang scored na klase ang sandbox escape na nagtutulak sa default na hardening",
+          "how": "severity rubric na binuo kasama ng malalaking cloud at model vendor"
+        }
+      },
+      {
+        "actor": "offensive AI-tooling na security research lab",
+        "job": "humahanap ng zero-click sandbox-escape na RCE sa mga agent editor at binubunyag ang mga ito nang may reproducible na PoC na tumutukoy sa filesystem confinement bilang ang nawawalang katangian",
+        "outcome": "mga binunyag na CVE laban sa isang mainstream coding IDE na nagpapalit sa isang abstract na tool-boundary na kahinaan patungo sa isang buháy, na-patch na exploit na dapat disenyuhang labanan ng ecosystem sa mga default nito",
+        "motivation": "ang pagpapatunay ng parehong pagtakas laban sa isang top-tier na IDE, hindi lamang isang niche low-code builder, ay pumipilit sa confinement mula optional patungo sa ipinadalang default",
+        "task": {
+          "who": "mga analyst ng vulnerability research at coordinated-disclosure",
+          "what": "hanapin at ibunyag ang zero-click na workspace-escape na RCE",
+          "where": "mga coding-agent na editor at ang kanilang tool-ingestion na daan",
+          "when": "ang panahon mula pagbubunyag hanggang Q1 2027",
+          "why": "gawing table-stakes ang confinement sa pamamagitan ng pagpapatunay ng buháy na exploit",
+          "how": "reproducible na PoC sa pamamagitan ng path-traversal at symlink-resolution na pang-aabuso"
+        }
+      }
+    ]
+  }
+}

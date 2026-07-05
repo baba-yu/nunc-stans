@@ -1,0 +1,48 @@
+{
+  "prediction_id": "prediction.52add1fe9732a4ff",
+  "judgements": [
+    {
+      "prediction_id": "prediction.52add1fe9732a4ff",
+      "stream": "reasoning",
+      "entry_id": "prediction.52add1fe9732a4ff",
+      "verdict": "fresh",
+      "reason": "Trigger landed_this_week but the landing window is Q2 2027 (target_end 2027-06-30), ~10 months out and unreached. This week the Hyundai full-buyout of Boston Dynamics bridges (validation.351e3c9faa8166a0 2026-06-22 rel=4 support=because; validation.3603df22ed07c10e 2026-06-19 support=given) STRENGTHEN reasoning.because by showing a high-volume automaker committing balance-sheet weight to a ~25,000-unit in-house humanoid deployment from 2028 - the integrated-cohort pattern the thesis predicts. But the 06-19 bridge notes Hyundai is absorbing an asset it already controlled, not a fresh program with the disclosed prototype + cost-down target the prediction requires, so the formal landing condition is NOT yet met. Reasoning because/given/so_that/landing remain accurate and forward-valid; no reframe needed.",
+      "cross_stream_evidence": [
+        "bridge:validation.351e3c9faa8166a0",
+        "bridge:validation.3603df22ed07c10e"
+      ],
+      "proposed_action": "noop",
+      "confidence": 0.82
+    },
+    {
+      "prediction_id": "prediction.52add1fe9732a4ff",
+      "stream": "bridge",
+      "entry_id": "prediction.52add1fe9732a4ff",
+      "verdict": "fresh",
+      "reason": "Four bridges (06-07 BYD confirmation rel=5, 06-19 + 06-22 Hyundai/Boston Dynamics, 06-24 Automate 2026 NVIDIA Humanoid Pavilion rel=3) are coherent, recent, correctly support-dimensioned (because/given), and non-contradicting. They accumulate supporting evidence toward the Q2 2027 landing without any support_direction=contradict signal. No bridge needs rewrite or retirement.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.52add1fe9732a4ff",
+      "stream": "needs",
+      "entry_id": "prediction.52add1fe9732a4ff",
+      "verdict": "fresh",
+      "reason": "All three needs (engineering lead, supply-chain manager, executive sponsor) carry Q2 2027 targets and remain forward-looking. No actor has delivered the working prototype + in-house BoM + on-record cost-down disclosure that would flip a need to done; the Hyundai buyout is an ownership consolidation, not a fresh integrated-program deliverable against these needs. Need-set unchanged.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.52add1fe9732a4ff",
+      "stream": "readings",
+      "entry_id": "prediction.52add1fe9732a4ff",
+      "verdict": "fresh",
+      "reason": "No new prediction_chain or prediction_relations edges surfaced this week, no upstream landing/contradiction in the chain, and last-4-days news (06-25..06-28) shows no humanoid/automaker headlines. Nothing to add or prune in the readings stream.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    }
+  ]
+}

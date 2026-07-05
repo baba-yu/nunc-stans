@@ -1,0 +1,45 @@
+{
+  "generated_for": "2026-06-25",
+  "storylines": [
+    {
+      "storyline_label": "Unsloth Dynamic GGUF squeezes Z.ai's 744B open-weight GLM-5.2 onto a single workstation (1.51TB checkpoint cut to ~217-239GB)",
+      "last_seen_date": "2026-06-23",
+      "last_state_change_kind": "New artifact (June 23): Unsloth published Dynamic GGUF quantizations of Z.ai's open-weight GLM-5.2 (744B MoE, ~40B active, 1M context); selective-precision scheme shrank the 1.51TB checkpoint to ~239GB (2-bit UD-IQ2_M, 84% cut) and ~217GB (1-bit, ~86%), single-node runnable, paired with Unsloth Studio; claims are Unsloth's own, unreproduced. NOTE for today (3+ days old, not re-run June 24): a fresh continuation needs a NEW concrete artifact/number — an independent reproduction publishing accuracy retention, a new quant build/tag, the same treatment on a different model, or a named third party running it. A restatement of the same June 23 builds with no new fact must be DROPPED as hold-steady under ADR-002 Rule 2."
+    },
+    {
+      "storyline_label": "Agentic-AI security moves from hypothetical to documented: OWASP State of Agentic AI Security & Governance v2.01 ties risks to real CVEs + StakeBench finds no injection-robust configuration",
+      "last_seen_date": "2026-06-23",
+      "last_state_change_kind": "New artifacts (June 23): OWASP v2.01 tracks 53 agentic projects, ties risk categories to concrete CVEs/advisories/breaches, ranks most-advisory repos (n8n 57, Claude Code 22, AutoGPT 15, Dify 13, Roo-Code 11), maps prompt injection to 6 of its Top-10; StakeBench (NTU/ST Engineering/IBM/UIUC) ran 3,168 trials, indirect-injection success 41.67-68.16%, direct >79%, none robust, up to 26.49pp model-swap shift. NOTE for today (3+ days old): a fresh continuation needs a NEW state-change — a new report version, a new named benchmark/result, a new CVE/advisory or breach, or a procurement/standards body citing a numeric bar. Re-citing the same v2.01 + StakeBench figures must be DROPPED under ADR-002 Rule 2."
+    },
+    {
+      "storyline_label": "Coding-agent harnesses converge on least-privilege-by-default execution (OpenClaw 2026.6.x patches, NVIDIA NemoClaw, Nous Hermes Agent MCP credential filtering)",
+      "last_seen_date": "2026-06-23",
+      "last_state_change_kind": "New artifacts (June 23): OpenClaw 2026.6.x patched vCard + location-pin injection, tightened Docker sandbox, added Browser CDP endpoint validation, loopback-pinned SSH checks, unsafe-length rejection; NVIDIA NemoClaw (reference stack for always-on agents in OpenShell sandboxes) prioritizes sandbox hardening + network-policy defaults; Nous Hermes Agent adds MCP credential filtering, redaction, SSRF protection, Tirith pre-exec scan. NOTE for today (3+ days old): a fresh continuation needs a NEW named release/tag whose default profile is default-deny on a clean install, not a restatement of the same hardening throughline, which must be DROPPED under ADR-002 Rule 2."
+    },
+    {
+      "storyline_label": "Sakana Fugu learned-orchestration model (routes/delegates/verifies across a swappable frontier-LLM pool) meets its first independent reality check — benchmark-parity claims vs ~30-minute coding runs",
+      "last_seen_date": "2026-06-24",
+      "last_state_change_kind": "New independent pushback (June 24): Sakana's Fugu (launched June 22, single OpenAI-compatible endpoint, a model trained to route/delegate/verify/synthesize across frontier LLMs incl. recursive self-calls; builds on ICLR 2026 TRINITY + Conductor; Fugu Ultra pitched at Fable 5 / Mythos parity on Sakana's own tables) drew Ethan Mollick's test reporting it 'incredibly slow' (~30-min runs) with output that did not match Fable, so parity scores are unreproduced. NOTE for today: a fresh continuation needs a NEW state-change — a second independent benchmark/repro, a Sakana latency-fix release, a named customer/pricing, or a competitor shipping the same router-as-a-model design. A restatement of the Mollick test must be DROPPED under ADR-002 Rule 2."
+    },
+    {
+      "storyline_label": "Micron joins Anthropic's Series H, putting all three HBM makers (Micron + Samsung + SK Hynix) inside one frontier lab's memory supply chain",
+      "last_seen_date": "2026-06-24",
+      "last_state_change_kind": "New actor entry (June 22, covered June 24): Micron-Anthropic strategic partnership bundles memory/storage co-design, multi-year HBM/DRAM/SSD allocation, internal Claude rollout, and a Micron equity investment in Anthropic's Series H ($65B raise, ~$965B post-money, closed May 28); makes all three HBM suppliers Series H participants + Anthropic infra partners. Supply value + investment size undisclosed. NOTE for today: a fresh continuation needs a NEW fact — a disclosed deal/investment figure, a new HBM-capacity or pricing data point, another lab matching the equity-for-memory pattern, or an IPO-timing confirmation. A restatement must be DROPPED under ADR-002 Rule 2."
+    },
+    {
+      "storyline_label": "Physical AI lands on the factory floor at Automate 2026: Cobot's Gen-2 Proxie ships on-robot inference with a production track record; NVIDIA-sponsored Humanoid Robot Pavilion",
+      "last_seen_date": "2026-06-24",
+      "last_state_change_kind": "New artifact (June 22, covered June 24): Collaborative Robotics' Gen-2 Proxie moves task inference fully on-robot (no cloud for core execution), ScoutSense sensor stack, moves 1,500lb carts / lifts 200lb, from $5,000/mo; Gen-1 production record 12,627 hours, 40M+ lb moved, 17M+ human steps saved. Automate 2026 (June 22-25, McCormick Place) themed physical AI with a first-time NVIDIA Humanoid Robot Pavilion (20+ platforms). NOTE for today: Automate 2026 ENDS today June 25; a fresh continuation needs a NEW state-change from the show's close or a new named humanoid/cobot ship/order/benchmark, not a restatement. Otherwise DROP under ADR-002 Rule 2."
+    },
+    {
+      "storyline_label": "Physical AI / M&A: Hyundai moves to 100% ownership of Boston Dynamics, buying SoftBank's residual 9.65% stake for ~$325M (implied ~$3.37B EV, tied to ~25,000-Atlas-by-2028 captive plan)",
+      "last_seen_date": "2026-06-22",
+      "last_state_change_kind": "Scheduled-but-unconfirmed catalyst (June 22): Hyundai board expected to vote June 22 to buy SoftBank's residual 9.65% via a 2021 put option (~$325M, implied ~$3.37B EV, ~3x the 2021 ~$1.1B mark), Korea Economic Daily tying it to ~25,000 Atlas by 2028; vote never publicly ratified, so June 23 + 24 cycles already DROPPED it. NOTE for today: a fresh continuation requires a NEW CONFIRMED fact — an actual board-approval/close confirmation, an official Hyundai/SoftBank statement, or a hard valuation/unit change. A still-pending/unchanged status must remain DROPPED under ADR-002 Rule 2."
+    },
+    {
+      "storyline_label": "Bay Area / SV AI-event calendar (mainstream-dev, AI-security, AI-chip tracks)",
+      "last_seen_date": "2026-06-24",
+      "last_state_change_kind": "Carry-forward events topic (ADR-002 Rules 1+2 WAIVED per the events exception; this is the ONLY topic allowed to repeat still-upcoming events). As of June 24 the forward calendar held: AI Tinkerers SF Offensive Security Demo Night (Jun 25, sponsor XBOW), Snowflake virtual Dev Day (Jun 25), AIE World's Fair Hackathon w/ Cerebral Valley (Jun 27-28), AIE World's Fair New Engineer Orientation (Jun 28), AI Engineer World's Fair (Jun 29-Jul 2, Moscone West), AMD Advancing AI (Jul 22-23, keynote Jul 23, MI400 focus), Black Hat USA AI Summit / DEF CON AI Village (Aug 1-6), SecurityWeek AI Risk Summit (Aug 11-12, Half Moon Bay), Hot Chips (Aug 23-25, Stanford), AI Infra Summit (Sep 15-17, Santa Clara), GitHub Universe (Oct 28-29), OWASP Global AppSec USA (Nov 5-6, SF), AWS re:Invent (Nov 30-Dec 4); Zenity AI Agent Security Summit series on the watch list. DROP as of TODAY June 25: Automate 2026 (Jun 22-25) and the AI Tinkerers Demo Night + Snowflake Dev Day (both Jun 25) reach their end TODAY — keep only if still attendable today, drop going forward. All three sub-tracks (mainstream dev/data, AI-security, AI-chip/hardware) must stay covered; read yesterday's events bullet from app/sourcedata/2026-06-24/news_section.json and carry forward."
+    }
+  ]
+}

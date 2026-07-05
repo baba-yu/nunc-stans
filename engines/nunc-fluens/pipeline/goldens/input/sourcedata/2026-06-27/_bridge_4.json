@@ -1,0 +1,6 @@
+{
+  "support_dimension": "because",
+  "narrative": "The June 26 AutoGPT SSRF bypass (CVE-2026-56663) feeds the network-gating half of the OpenClaw default-deny prediction (Jun 23): a fetch primitive reaching cloud metadata and internal services is exactly the egress that should be off out-of-box, and the fix's advice to constrain outbound egress is the manual version of the expected default. The in-the-wild Langflow IDOR reinforces the same object-and-execution gating pressure.",
+  "coherence": 3,
+  "remaining_gap": "Threat case sits in peer projects; no OpenClaw release shipping default-deny tool and network gating out-of-box appears today."
+}

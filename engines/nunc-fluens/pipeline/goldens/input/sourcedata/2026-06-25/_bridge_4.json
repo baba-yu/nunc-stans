@@ -1,0 +1,6 @@
+{
+  "support_dimension": "given",
+  "narrative": "Revived from the dormant pool, the training-versus-inference SKU split prediction (Apr 22) gains structural reinforcement from today's Jalapeno unveil: OpenAI frames it as an 'Intelligence Processor' purpose-built for inference rather than training, placed alongside the Google TPU and Amazon Trainium lineage -- the dual-track custom-silicon force the prediction names, a buyer designing a dedicated inference SKU separate from training silicon.",
+  "coherence": 3,
+  "remaining_gap": "Jalapeno establishes the inference-SKU half from a frontier buyer, but no hyperscaler has publicly delineated a paired two-SKU training-versus-inference custom line."
+}

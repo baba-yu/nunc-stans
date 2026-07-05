@@ -1,0 +1,14 @@
+{
+  "id": "prediction.c5d53ae94581ec63",
+  "scope_hint": "tech",
+  "title": "ML registry servers log a second max-severity deserialization RCE by Q1 2027",
+  "body": "A second named open-source ML data/metadata-plane project will receive a maximum-severity (CVSS >= 9.0) advisory for an unsafe-deserialization remote-code-execution flaw reachable over its network service before any authorization check, by Q1 2027. The class is feature stores, model and artifact registries, metadata/lineage servers, and serialized-transform endpoints — the plumbing that sits behind production inference, not the model or inference engine itself. The structural read from the June 24 Feast advisory (CVE-2026-56121, CVSS 9.3) is that this layer is a soft target by construction: it ingests serialized transformation logic (dill/pickle, joblib, cloudpickle, or equivalent) over gRPC/HTTP/queue surfaces and hands it to a deserializer that executes attacker-controlled __reduce__ payloads as the service account, with no credential required. The same primitive recurs wherever ML infra trusts serialized objects on the wire. The falsifiable core is a NAMED, distinct project (not Feast, and not a re-score or backport of CVE-2026-56121) with its own CVE/GHSA assigned at CVSS >= 9.0 whose root cause is unsafe deserialization of a network-supplied object on an ML registry/feature-store/metadata endpoint. What does NOT count: a non-ML serialization CVE, a sub-9.0 advisory, a hardening commit or proactive 'we removed pickle' changelog with no assigned CVE, or a prompt-injection / model-file (e.g. unsafe model-format) finding. This is the data-and-metadata-plane mirror of the standing malicious-ML-tooling thesis: until deserialization on these endpoints is auth-gated, sandboxed, or replaced with a safe format by default, the answer is the same zero-trust attestation posture, and the recurrence is the evidence the class is real rather than a one-off.",
+  "reasoning": {
+    "because": "Feast's June 24 CVE-2026-56121 (CVSS 9.3) is unauth dill.loads RCE on the registry gRPC endpoint",
+    "given": "Feature stores, registries, and metadata servers deserialize network-supplied objects pre-auth",
+    "so_that": "the same unsafe-deserialization RCE primitive recurs in a second named ML data/metadata-plane project",
+    "landing": "Second distinct ML-registry deserialization RCE at CVSS >= 9.0 by Q1 2027",
+    "plain_language": "An AI tool that stores data was hackable because it trusted code sent to it. Soon another similar tool will be caught the same way."
+  },
+  "summary": "Feast's June 24 CVE-2026-56121 (CVSS 9.3) was an unauthenticated deserialization RCE on its feature-store registry endpoint. Because ML registries and metadata servers decode serialized objects from the network pre-auth, expect a second named project to log a similar 9.0+ RCE advisory by Q1 2027."
+}

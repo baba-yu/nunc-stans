@@ -1,0 +1,44 @@
+[
+  {
+    "actor": "enterprise applied-ML lead sitting on proprietary expert-labeled data",
+    "job": "copying the published recipe to fine-tune an open-weight MoE base on their in-house domain labels for a target vertical benchmark",
+    "outcome": "a domain-tuned open-MoE specialist that beats a generic frontier API on the firm's vertical task at lower per-task cost",
+    "motivation": "owning proprietary labels plus a reproducible recipe makes build cheaper and better than paying frontier API per-task rates",
+    "task": {
+      "who": "in-house applied-ML / model-optimization team",
+      "what": "fine-tune open-weight MoE on proprietary domain labels",
+      "where": "internal training stack against a vertical benchmark",
+      "when": "July 2026 through Q2 2027",
+      "why": "beat frontier APIs on the vertical at a cost discount",
+      "how": "round-robin batching, CISPO loss, on-policy distillation recipe"
+    }
+  },
+  {
+    "actor": "open-weight-model research lab publishing reproducible fine-tune recipes",
+    "job": "packaging training recipes and expert-labeled fine-tune results into clean templates any firm can copy for its own domain",
+    "outcome": "more published open-MoE fine-tune results beating frontier APIs on specific verticals at large cost discounts",
+    "motivation": "demonstrating recipe-over-scale wins establishes their platform and methods as the default build path for domain specialists",
+    "task": {
+      "who": "post-training research and applied-science team",
+      "what": "publish reproducible open-MoE fine-tune benchmark results",
+      "where": "papers, model cards, and hosted training platforms",
+      "when": "the coming months into Q2 2027",
+      "why": "prove domain recipe beats base-model scale generically",
+      "how": "on-policy distillation with periodically promoted teacher"
+    }
+  },
+  {
+    "actor": "local-optimization tooling maintainer for open-weight fine-tuning",
+    "job": "productizing the recipe primitives so any enterprise dataset owner can run domain fine-tunes cheaply without bespoke infrastructure",
+    "outcome": "tooling that makes copying the round-robin/CISPO/distillation template a turnkey path for domain dataset owners",
+    "motivation": "the local-optimization lane grows as more firms tune open-weight specialists instead of buying frontier APIs",
+    "task": {
+      "who": "open-source library engineering and developer-experience team",
+      "what": "ship efficient fine-tuning primitives for open-weight MoE",
+      "where": "open-source training libraries and optimization toolchains",
+      "when": "July 2026 through Q2 2027",
+      "why": "lower the barrier to domain fine-tuning over frontier APIs",
+      "how": "memory- and cost-efficient training kernels and recipes"
+    }
+  }
+]

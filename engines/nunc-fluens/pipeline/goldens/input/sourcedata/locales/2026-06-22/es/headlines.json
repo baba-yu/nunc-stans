@@ -1,0 +1,27 @@
+{
+  "date": "2026-06-22",
+  "technical": [
+    {
+      "lead": "El consejo de Hyundai vota hoy comprar a SoftBank, valorando Boston Dynamics ~3x",
+      "body": "Se espera que Hyundai Motor convoque hoy, 22 de junio, una reunión del consejo para aprobar la compra del 9,65 % restante de SoftBank Group en Boston Dynamics por unos $325 millones, lo que convertiría a la firma de robótica de Waltham, Massachusetts, en una filial de propiedad total de Hyundai. SoftBank sale vía una opción de venta del acuerdo de 2021 que le permitía revender las acciones si Boston Dynamics no había completado una IPO estadounidense para junio de 2026; sin cotización, SoftBank notificó a Hyundai que la ejercería. El dato nuevo es la valoración: $325 millones por el 9,65 % implica un valor de empresa de unos $3,37 mil millones, más de tres veces la marca de ~$1,1 mil millones de la transacción de Hyundai de 2021 (unos $880 millones por el 80 %). Korea Economic Daily informa que la consolidación está ligada a un plan para desplegar unos 25.000 humanoides Atlas en las fábricas de Hyundai desde 2028 y podría allanar el camino a una futura IPO. Los términos, la cifra de 25.000 unidades y la votación misma son según informa la prensa económica coreana y aún no están confirmados por Hyundai ni SoftBank.",
+      "citations": [
+        {"label": "KED Global - Hyundai to take full ownership of Boston Dynamics in SoftBank buyout", "url": "https://www.kedglobal.com/robotics/newsView/ked202606210001"},
+        {"label": "Global Banking & Finance Review - Hyundai to buy SoftBank's remaining stake in Boston Dynamics for $325 million", "url": "https://www.globalbankingandfinance.com/hyundai-buy-softbanks-remaining-stake-boston-dynamics-325/"},
+        {"label": "Crypto Briefing - Hyundai to acquire SoftBank's remaining stake in Boston Dynamics for $325M", "url": "https://cryptobriefing.com/hyundai-acquires-softbank-boston-dynamics-stake/"}
+      ]
+    },
+    {
+      "lead": "Eventos de IA en el radar: la computación confidencial y la seguridad ofensiva abren mañana",
+      "body": "El calendario por delante abarca tres sub-vertientes, con los eventos más próximos a un día de distancia y ninguno pasada su fecha de cierre. Seguridad de IA: la Confidential Computing Summit aterriza el 23 y 24 de junio en la SF Mint (Linux Foundation y OPAQUE, con AMD, Google, Microsoft, NVIDIA, Meta y Samsung en las keynotes); AI Tinkerers SF organiza una Offensive Security Demo Night el 25 de junio con demos en vivo de agentes de pentesting autónomo (patrocina XBOW); el AI Risk Summit de SecurityWeek sigue el 11 y 12 de agosto; el AI Summit de Black Hat USA se celebra del 1 al 6 de agosto junto al AI Village de DEF CON; y OWASP Global AppSec USA es el 5 y 6 de noviembre. Dev/data mainstream: Snowflake celebra un Dev Day virtual el 25 de junio; la AI Engineer World's Fair toma Moscone West del 29 de junio al 2 de julio (orientación el 28 de junio), anunciada como la mayor conferencia técnica de ingeniería de IA con más de 20 vertientes, ~250 ponentes, vertientes dedicadas de Inference y Security, y OpenAI, Anthropic, Google DeepMind, Amazon AGI Labs y Microsoft presentes, con el hackatón el 27 y 28 de junio; GitHub Universe es el 28 y 29 de octubre y AWS re:Invent del 30 de noviembre al 4 de diciembre. Chips de IA: Advancing AI de AMD es el 22 y 23 de julio (se espera foco en la serie MI400), Hot Chips del 23 al 25 de agosto, la AI Infra Summit del 15 al 17 de septiembre.",
+      "citations": [
+        {"label": "Linux Foundation - Confidential Computing Summit 2026 (June 23-24, San Francisco)", "url": "https://events.linuxfoundation.org/confidential-computing-summit/"},
+        {"label": "AI Engineer World's Fair 2026 (June 29-July 2, San Francisco)", "url": "https://www.ai.engineer/worldsfair/2026"},
+        {"label": "AMD - Advancing AI 2026 (July 22-23, San Francisco)", "url": "https://www.amd.com/en/corporate/events/advancing-ai.html"}
+      ]
+    }
+  ],
+  "plain": [
+    "Hyundai a punto de poseer por completo al fabricante de robots Boston Dynamics",
+    "Los eventos de computación confidencial y seguridad arrancan esta semana"
+  ]
+}

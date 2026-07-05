@@ -1,0 +1,137 @@
+{
+  "date": "2026-06-23",
+  "by_prediction": {
+    "prediction.7c1a3f9b2e6d04a8": [
+      {
+        "actor": "líder de ingeniería de un toolkit de cuantización de pesos abiertos",
+        "job": "Publicar recetas GGUF reproducibles de precisión selectiva por debajo de 2 bits que metan un modelo de pesos abiertos de más de 700B en 256GB o menos de memoria de un solo nodo",
+        "outcome": "Una receta de cuantización publicada y reproducible que ejecute un modelo de pesos abiertos de clase frontera en un solo nodo de estación de trabajo con menos de 256GB de memoria combinada",
+        "motivation": "Ser dueño de la receta canónica de inferencia local para el nivel abierto más pesado impulsa la adopción y consolida el toolkit como el estándar en las instalaciones",
+        "task": {
+          "who": "el equipo de ingeniería de cuantización y kernels del toolkit",
+          "what": "Refinar la receta de cuantización selectiva por debajo de 2 bits y publicarla",
+          "where": "El pipeline de compilación Dynamic GGUF y un lanzamiento público en un hub de modelos",
+          "when": "Desde ahora hasta el Q4 2026",
+          "why": "Una receta reproducible es lo que lleva el nivel más pesado a las instalaciones propias",
+          "how": "Cuantización GGUF de precisión selectiva por debajo de 2 bits con pasos documentados"
+        }
+      },
+      {
+        "actor": "reproductor y evaluador independiente de inferencia local",
+        "job": "Reejecutar de forma independiente la receta publicada en hardware propio y medir la retención de precisión en un benchmark público en lugar de un autoinforme del proveedor",
+        "outcome": "Una reproducción de terceros que confirme la ejecución en un solo nodo por debajo de 256GB, con la retención de precisión en un benchmark público publicada abiertamente",
+        "motivation": "Las cifras de compresión y calidad del proveedor son autoinformadas y no verificadas, así que una confirmación independiente y creíble es lo que la comunidad cree",
+        "task": {
+          "who": "un investigador independiente o un evaluador de la comunidad de LLM locales",
+          "what": "Reproducir la ejecución y publicar las puntuaciones de retención de precisión",
+          "where": "Una estación de trabajo propia de un solo nodo y un arnés de benchmark público",
+          "when": "Tras la publicación de la receta y hasta el Q4 2026",
+          "why": "Las cifras de calidad autoinformadas necesitan verificación independiente para generar confianza",
+          "how": "Benchmark público de programación y razonamiento sobre la compilación cuantizada"
+        }
+      },
+      {
+        "actor": "líder de lanzamiento de un modelo de pesos abiertos de clase frontera",
+        "job": "Publicar un punto de control y pesos de mezcla de expertos de más de 700B casi de frontera y de pesos abiertos que la receta de cuantización pueda comprimir y ejecutar en un solo nodo",
+        "outcome": "Un punto de control de clase frontera de pesos abiertos disponible cuyos pesos publicados permitan un despliegue cuantizado en un solo nodo por debajo de 256GB",
+        "motivation": "Los lanzamientos abiertos que demostrablemente corren en hardware propio impulsan el alcance del ecosistema y diferencian al laboratorio frente a rivales de frontera cerrados y solo en la nube",
+        "task": {
+          "who": "la función de lanzamiento de pesos abiertos y publicación de modelos del laboratorio",
+          "what": "Publicar abiertamente los pesos de mezcla de expertos de clase frontera en precisión completa",
+          "where": "Un hub público de modelos y los canales de lanzamiento del laboratorio",
+          "when": "Antes y durante 2026 hasta el Q4",
+          "why": "Los pesos abiertos son la entrada bruta que necesita la receta de cuantización",
+          "how": "Lanzamiento de un punto de control de pesos abiertos en un formato de inferencia estándar"
+        }
+      }
+    ],
+    "prediction.7c1f4a9e3b6d20f8": [
+      {
+        "actor": "líder de investigación de benchmarks de seguridad agéntica",
+        "job": "Publicar y mantener un benchmark citable de inyección de prompts con umbrales numéricos de aprobado que la compra pueda referenciar textualmente en un contrato",
+        "outcome": "Un benchmark con nombre propio y una tasa máxima declarada de éxito de inyección que un comprador pueda citar como umbral de aceptación de aprobado/reprobado",
+        "motivation": "Un benchmark solo importa si los compradores adoptan su cifra; una cita en una compra es la prueba de que movió el mercado",
+        "task": {
+          "who": "el equipo de evaluación adversaria y metodología del benchmark",
+          "what": "Definir y publicar umbrales numéricos de aprobado para el éxito de inyección",
+          "where": "Un benchmark académico-industrial como el lanzamiento de resultados de StakeBench",
+          "when": "Desde el lanzamiento de las 3.168 pruebas, durante 2026 y hasta principios de 2027",
+          "why": "Un umbral numérico citable permite a los compradores reemplazar la prosa del proveedor",
+          "how": "Suite estandarizada de pruebas adversarias con puntuación publicada de tasa de éxito"
+        }
+      },
+      {
+        "actor": "responsable de estándares de compra de IA agéntica empresarial o gubernamental",
+        "job": "Reescribir un control de compra de IA agéntica para exigir una puntuación cuantificada de resistencia a la inyección de prompts en lugar de la prosa de autodeclaración del proveedor",
+        "outcome": "Un control de compra, control de marco o certificación que nombre una tasa máxima numérica de éxito de inyección como aprobado/reprobado",
+        "motivation": "Un rastro de incidentes más un benchmark hace que la autodeclaración del proveedor sea indefendible ante auditores y comités de riesgo",
+        "task": {
+          "who": "la función de política de compra y arquitectura de seguridad del comprador",
+          "what": "Escribir un umbral numérico de resistencia a la inyección en el control",
+          "where": "El marco de adquisición y certificación de IA agéntica de la organización",
+          "when": "Durante 2026 y hasta el Q2 2027 a medida que maduran los benchmarks",
+          "why": "Los criterios de aceptación auditables reemplazan las afirmaciones de mejor esfuerzo infalsables",
+          "how": "Citar un benchmark con nombre propio o un tope máximo de tasa de éxito de inyección"
+        }
+      },
+      {
+        "actor": "editor de un marco de seguridad de IA agéntica",
+        "job": "Mapear CVEs documentadas de inyección de prompts e informes de brechas a controles de marco para que el riesgo se convierta en un criterio de aceptación medible y certificable",
+        "outcome": "Un control de marco que traduce el rastro de incidentes en un requisito cuantificado y auditable de resistencia a la inyección que los compradores puedan adoptar",
+        "motivation": "Vincular los riesgos con CVEs concretas y benchmarks da al marco la autoridad para exigir cifras, no promesas",
+        "task": {
+          "who": "el grupo de trabajo de gobernanza de IA agéntica del organismo de estándares",
+          "what": "Mapear los incidentes de inyección de prompts a un control cuantificado",
+          "where": "Un marco de gobernanza de seguridad de IA agéntica al estilo OWASP",
+          "when": "Desde el lanzamiento de la v2.01, durante 2026 hacia el Q2 2027",
+          "why": "La evidencia concreta de CVEs justifica un umbral de certificación medible",
+          "how": "Mapeo de CVE a control más umbrales de benchmark referenciados"
+        }
+      }
+    ],
+    "prediction.a7f3c9d1e6b4280f": [
+      {
+        "actor": "mantenedor de seguridad de un harness abierto de agente de programación",
+        "job": "Invertir el perfil por defecto del harness para que una instalación limpia deniegue las invocaciones de herramientas, la red saliente y las credenciales MCP salvo concesión explícita de un operador",
+        "outcome": "Un lanzamiento estable etiquetado cuyo changelog indique que el control de capacidades, de red y de credenciales MCP está habilitado por defecto en una instalación limpia",
+        "motivation": "El refuerzo llegó por partes en 2026.6.x mientras el control de acceso siguió siendo opcional, dejando las instalaciones nuevas expuestas al riesgo de inyección documentado",
+        "task": {
+          "who": "los mantenedores principales de seguridad y responsables de lanzamiento del proyecto del harness",
+          "what": "Hacer del mínimo privilegio el perfil de ejecución por defecto de fábrica",
+          "where": "La configuración por defecto del harness y la rama de lanzamiento estable",
+          "when": "Desde los parches de junio 2026.6.x hasta el Q4 2026",
+          "why": "El control de acceso opcional deja las instalaciones limpias sin protección por defecto",
+          "how": "Cambio de configuración a denegación por defecto más actualización de changelog y documentación"
+        }
+      },
+      {
+        "actor": "autor de estándares y benchmarks de seguridad agéntica",
+        "job": "Publicar la evidencia convergente que vincula las categorías de riesgo de agentes con CVEs y demuestra que ninguna configuración de agente resiste la inyección de prompts, forzando la defensa hacia la capa del harness",
+        "outcome": "Informes autorizados y puntuaciones de benchmark que hacen de los valores por defecto de mínimo privilegio la base esperada para los harnesses de agentes de programación",
+        "motivation": "Si la capa del modelo no puede resistir la inyección, la capa del harness debe asumir la defensa, y ese argumento debe exponerse públicamente",
+        "task": {
+          "who": "el grupo de trabajo agéntico de OWASP y los investigadores del benchmark StakeBench",
+          "what": "Publicar clasificaciones de riesgo vinculadas a CVEs y puntuaciones de resistencia a la inyección",
+          "where": "El informe agéntico 2026 de OWASP y los resultados de StakeBench",
+          "when": "Durante 2026, antes de la ventana de lanzamiento del Q4",
+          "why": "La evidencia presiona a los mantenedores a lanzar el control de acceso por defecto",
+          "how": "Suites de pruebas de inyección de prompts indirecta y directa contra configuraciones de agente"
+        }
+      },
+      {
+        "actor": "equipo de ingeniería de una plataforma rival de harness reforzado",
+        "job": "Lanzar valores por defecto más estrictos de política de red y filtrado de credenciales MCP en torno a su sandbox para que un harness competidor consiga primero el control por defecto",
+        "outcome": "Un lanzamiento en la misma dirección que aplica por defecto el control de red y de credenciales, validando el mínimo privilegio por defecto en toda la categoría de harnesses",
+        "motivation": "Ser el primero en lanzar el mínimo privilegio por defecto otorga credibilidad de seguridad frente al supuesto primer candidato en un campo convergente",
+        "task": {
+          "who": "los equipos de ingeniería de los harnesses NemoClaw y Hermes Agent",
+          "what": "Habilitar por defecto la política de red y el filtrado de credenciales MCP",
+          "where": "Las capas de sandbox previas a la ejecución OpenShell y Tirith",
+          "when": "Durante el plazo de 2026 hacia el Q4 2026",
+          "why": "Lanzar primero el control por defecto otorga liderazgo en seguridad",
+          "how": "Protección contra SSRF más escaneo previo a la ejecución con Tirith como valores por defecto"
+        }
+      }
+    ]
+  }
+}

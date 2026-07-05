@@ -1,0 +1,16 @@
+{
+  "date": "2026-06-26",
+  "vs_date": "2026-06-25",
+  "items": [
+    {
+      "kind": "new",
+      "headline": "Feastの機械学習フィーチャーストアに、最高深刻度かつ認証不要のRCE（CVE-2026-56121）",
+      "diff_narrative": "6月25日には前触れのなかった、まったく新しい最重要のセキュリティ記事だ。昨日の構成は、OpenAIとBroadcomのカスタム推論アクセラレータJalapeno（6月25日）と、Gartnerによるエージェント型コーディングの採算予測（6月25日）を筆頭に据えていたが、いずれも本日新たな状態変化を生まなかったため、今回の回からは外れる。本日の契機は、オープンソースの機械学習フィーチャーストアであるFeastに見つかった、重大かつ認証不要のリモートコード実行の欠陥だ。6月24日にCVE-2026-56121として公開され、v4.0でCVSS 9.3（v3.1の尺度では9.8）と評価され、Feast 0.63.0で修正されている。仕組みは、データ層に組み込まれた安全でないデシリアライズの罠だ。レジストリサーバーがgRPCリクエストを処理する際、OnDemandFeatureView仕様のuser_defined_function.bodyフィールドをbase64でデコードし、認可チェックを一切経ずにそのままdill.loads()へ渡してしまう。そのため攻撃者は、任意の__reduce__メソッドを仕込んだシリアライズ済みPythonオブジェクトを送り込み、認証情報なしでFeastのサービスアカウント権限としてOSコマンドを実行できる。構造的に読み取れるのは、攻撃対象領域がモデルや推論エンジンより一段下、すなわち本番のフィーチャーパイプラインを支えるMLのデータとメタデータの配管部分へ移ったということだ。ネットワーク経由でシリアライズされた変換ロジックを取り込むレジストリは、デシリアライズが認可で守られない限り、実質的に認証不要のコード実行エンドポイントとなる。base64で包んだpickleを公開RPC経由で送り込む仕組みはよく知られ、武器化も容易なため、運用者は、ネットワークから到達可能なgRPCエンドポイントを持つ0.63.0より前のあらゆる構成を露出状態とみなし、ただちにアップグレードし、レジストリが信頼できないネットワークから到達不能であることを確認すべきだ。"
+    },
+    {
+      "kind": "continuing",
+      "headline": "ベイエリア／シリコンバレーのAIイベントの日程が前進。AI Engineer World's Fairが最も近い起点に",
+      "diff_narrative": "今後を見通す3トラックのイベント項目は6月25日から引き継がれ、日程が進んだ。見出しの変化は、昨日のリストの先頭にあったイベントが終了に至り、今後の見通しから外れたことだ。Automate 2026（McCormick Placeで6月25日まで開催）、AI Tinkerers SFのOffensive Security Demo Night、SnowflakeのオンラインによるDev Day（いずれも6月25日）は、6月26日時点ですべて日付を過ぎている。これらが外れたことで、最も近い起点は、今週末にサンフランシスコのMoscone Westで開幕するAI Engineer World's Fairとなる。Cerebral Valleyとの共催による公式のAIE World's Fair Hackathonが6月27〜28日を埋め、任意参加のNew Engineer Orientationが6月28日に行われ、本編は6月29日から7月2日まで開催される（20を超えるトラック、250名以上の登壇者）。その先の日程は、3つのサブトラックすべてで変わらない。主流の開発／データ系には引き続きGitHub Universe（10月28〜29日）とAWS re:Invent（11月30日〜12月4日、ラスベガス）が並ぶ。AIセキュリティ系には引き続きBlack Hat USA 2026（8月1〜6日、Mandalay Bay、Summit Dayの8月4日にAI Summit、Briefingsは8月5〜6日）、DEF CON 34とそのAI Village（8月6〜9日）、SecurityWeekのAI Risk Summit（8月11〜12日、Half Moon Bay）、OWASP Global AppSec USA（11月5〜6日、サンフランシスコ）が並び、ZenityのAI Agent Security Summitシリーズも注視リストに載っている。AIチップ／ハードウェア系には引き続きAMDのAdvancing AI 2026（7月22〜23日、Moscone、Instinct MI400シリーズの基調講演は7月23日）、Hot Chips 2026（8月23〜25日、Stanford）、AI Infra Summit（9月15〜17日、Santa Clara）が並ぶ。3つのサブトラックはいずれも引き続き網羅されている。"
+    }
+  ]
+}

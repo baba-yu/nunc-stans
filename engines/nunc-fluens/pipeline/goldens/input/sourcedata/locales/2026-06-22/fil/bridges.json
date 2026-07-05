@@ -1,0 +1,122 @@
+{
+  "date": "2026-06-22",
+  "validation_rows": [
+    {
+      "prediction_ref": {
+        "id": "prediction.ef0bb943bcd4a5d3",
+        "short_label": "Rival humanoid maker lands $500M-plus chip-and-cloud strategic round by Q4 2026",
+        "prediction_date": "2026-06-18"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "Boboto ngayon, June 22, ang board ng Hyundai upang bilhin ang natitirang 9.65% ng SoftBank sa Boston Dynamics sa halagang humigit-kumulang $325 million. Nagpapahiwatig ito ng ~$3.37 billion na enterprise value na nag-re-rate sa humanoid maker tungo sa halos tatlong beses ng marka nito noong 2021. Dinadala nito ang kompanya nang buo sa loob ng isang strategic owner na may kapital at sariling demand upang pondohan ang roadmap nito. Iyon ang direksiyon ng kapital-at-strategic-backing-na-nagtutuon-sa-mga-humanoid-platform na sinusubaybayan ng hulang ito. Isang malakas-ang-kapital na industrial sponsor ang naglalagay ng siyam na digit sa likod ng isang humanoid program na nakatali sa pagdedeploy ng ~25,000 yunit ng Atlas factory mula 2028. Ngunit istruktural ang pagtutugma, hindi ang pinangalanang landing. Isa itong buong buyout ng isang captive subsidiary, hindi isang $500M-plus na external strategic round papasok sa isang magkaribal na pure-play, at walang chip-and-cloud syndicate ng uring tinutukoy ng hula.",
+      "reference_links": [
+        {
+          "label": "KED Global - Hyundai to take full ownership of Boston Dynamics in SoftBank buyout",
+          "url": "https://www.kedglobal.com/robotics/newsView/ked202606210001"
+        },
+        {
+          "label": "Global Banking & Finance Review - Hyundai to buy SoftBank's remaining stake in Boston Dynamics for $325 million",
+          "url": "https://www.globalbankingandfinance.com/hyundai-buy-softbanks-remaining-stake-boston-dynamics-325/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "Isang malakas-ang-kapital na industrial owner ang naglalagay ng siyam na digit sa likod ng Boston Dynamics sa ~$3.37 billion na re-rating. Kinokonsolida nito ang buong kontrol upang pondohan ang isang 25,000-yunit na Atlas factory roadmap. Iyon ang kapital na nagtutuon sa mga humanoid platform na sinusubaybayan ng tesis, kung saan dumadaloy ang strategic money sa kung sino man ang makakaya ng unit economics.",
+        "coherence": 3,
+        "remaining_gap": "Isa itong buong buyout ng isang captive subsidiary, hindi isang $500M-plus na external strategic round papasok sa isang magkaribal na pure-play na suportado ng isang chip-and-cloud syndicate."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.d15f8427132cce7b",
+        "short_label": "A frontier AI lab files a public S-1 and prices its IPO by Q2 2027",
+        "prediction_date": "2026-06-12"
+      },
+      "today_relevance": 2,
+      "evidence_summary": "Ang Hyundai-SoftBank buyout na iniulat ngayon ay umiikot sa isang IPO clock. Ang paglabas ng SoftBank ay isang put option mula sa deal noong 2021 na nagpahintulot dito na ibenta pabalik ang natitirang mga share nito sa Boston Dynamics kung hindi nakatapos ng US IPO ang kompanya bago ang June 2026, at dahil walang listing ay ipinaalam nito sa Hyundai na gagamitin niya ito. Ibinabalangkas ng Korean business press ang buong pagmamay-ari bilang pagbubukas din ng landas upang pabilisin ang isang hinaharap na IPO ng Boston Dynamics. Tematiko lamang ang kaugnayan nito sa hulang ito, sa thread ng IPO-timing-at-exit-discipline na ibinabahagi nito. Isang frontier-class na pribadong kompanya ang humaharap sa isang matigas na liquidity-window deadline. Ngunit mahina at di-tumpak ang pagtutugma. Ang Boston Dynamics ay isang robotics maker, hindi isang frontier AI lab, ang balita ay isang put-option trigger ng namis na IPO sa halip na isang na-price na S-1, at walang anuman ngayon ang nagdadala sa anumang pinangalanang frontier lab tungo sa isang public filing.",
+      "reference_links": [
+        {
+          "label": "KED Global - Hyundai to take full ownership of Boston Dynamics in SoftBank buyout",
+          "url": "https://www.kedglobal.com/robotics/newsView/ked202606210001"
+        },
+        {
+          "label": "Crypto Briefing - Hyundai to acquire SoftBank's remaining stake in Boston Dynamics for $325M",
+          "url": "https://cryptobriefing.com/hyundai-acquires-softbank-boston-dynamics-stake/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "Pumuputok ang paglabas ng SoftBank dahil hindi naabot ng Boston Dynamics ang deadline na US-IPO-bago-ang-June-2026 na nakapaloob sa deal noong 2021. Ibinabalangkas ang buong pagmamay-ari bilang pagbubukas ng landas upang pabilisin ang isang susunod na listing. Buhay na paalala ito na isang matigas na IPO clock at exit discipline ang namamahala sa mga frontier-class na pribadong kompanya sa paraang ipinapalagay ng tesis.",
+        "coherence": 2,
+        "remaining_gap": "Ang Boston Dynamics ay isang robotics maker, hindi isang frontier AI lab, at ito ay isang put-option trigger ng namis na IPO sa halip na isang na-price na S-1 mula sa isang pinangalanang lab."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.c349283881f8339b",
+        "short_label": "Confidential-GPU attestation lands as a cloud-AI contract term by Q2 2027",
+        "prediction_date": "2026-06-14"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "Inilalagay ng kalendaryo ng mga kaganapan ngayon ang Confidential Computing Summit sa San Francisco Mint sa June 23-24, isang araw na lamang ang layo, na may mga keynote sa confidential-AI at data-sovereignty na nagtatampok sa AMD, Google, Microsoft, NVIDIA, Meta at Samsung sa ilalim ng Linux Foundation at OPAQUE. Iyon ang tiyak na grupo ng GPU at hyperscaler na ang mga attestation primitive ay inaasahan ng hulang ito na titigas tungo sa isang nabibiling cloud-AI contract term. Nagtitipon sila sa eksaktong agenda ng confidential-AI at data-sovereignty na nagtutulak ng tesis, ang pinakamaagang anchor sa tatlong security sub-track ngayon. Nasa venue at malapit-nang momentum ang kaugnayan, hindi sa landing mismo. Inilalantad ng isang summit sa kalendaryo ang mga vendor at ang pagbabalangkas ng demand, ngunit hindi ito isang nailathalang attestation clause, SLA o nakontratang procurement term, at wala pang cloud provider o mamimili ang nangakong gawing default deal term ang confidential-GPU attestation sa batayan ng data-jurisdiction.",
+      "reference_links": [
+        {
+          "label": "Linux Foundation - Confidential Computing Summit 2026 (June 23-24, San Francisco)",
+          "url": "https://events.linuxfoundation.org/confidential-computing-summit/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "Isang araw na lamang ang layo, magtitipon sa Confidential Computing Summit ang eksaktong grupo ng GPU at hyperscaler na inaasahan ng tesis, sina AMD, NVIDIA, Google, Microsoft, Meta at Samsung, sa isang agenda ng confidential-AI at data-sovereignty. Iyon ang istrukturang puwersang kailangang lumago bago tumigas ang mga garantiya ng attestation tungo sa isang nabibiling cloud-AI deal term.",
+        "coherence": 4,
+        "remaining_gap": "Inilalantad ng isang summit sa kalendaryo ang mga vendor at demand, hindi isang nailathalang attestation clause. Wala pang provider o mamimili ang nangakong gawing default deal term ito sa batayan ng data-jurisdiction."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.a4ee0b5435860b21",
+        "short_label": "AWS Continuum's sandbox exploit-validation goes industry baseline by H1 2027",
+        "prediction_date": "2026-06-21"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "Inililista ng kalendaryo ng mga kaganapan ngayon ang AI Tinkerers San Francisco na magdaraos ng isang Offensive Security Demo Night sa June 25 na may mga live na demo ng autonomous-pentesting-agent na sinusuportahan ng XBOW, bago ang Black Hat USA AI Summit at DEF CON AI Village sa Agosto. Iyon ang parehong patunayan-ang-natuklasan-sa-pamamagitan-ng-pagpapatakbo na kakayahang sinusubaybayan ng hulang ito. Mga agent na nagdurugtong ng reconnaissance, gumagawa ng gumaganang exploit at nagpapatakbo nito upang ipakita ang reachability sa halip na basta lang magbandera ng posibleng kahinaan. Iyon mismo ang galaw ng sandbox exploit-validation ng Continuum na pinalawak tungo sa isang vendor field. Ngunit nasa momentum at katabihan ang kaugnayan, hindi sa landing. Ang isang demo night ay validation sa conference stage, hindi ang defensive exploit-validation pipeline na nagiging industry baseline sa mga pinangalanang code-security vendor, at ang offensive-pentest na pagbabalangkas dito ay tumutukoy sa attacker tooling sa halip na sa defensive proof-of-exploit gate na pinangalanan ng hula.",
+      "reference_links": [
+        {
+          "label": "AI Engineer World's Fair 2026 (June 29-July 2, San Francisco)",
+          "url": "https://www.ai.engineer/worldsfair/2026"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "Ilang araw na lamang ang layo, naglalagay ang isang Offensive Security Demo Night ng mga autonomous agent sa entablado na nagdurugtong ng recon, gumagawa ng gumaganang exploit at nagpapatakbo nito upang patunayan ang reachability. Iyon ang patunayan-ang-natuklasan-sa-pamamagitan-ng-pagpapatakbo na kakayahang kinikilala ng tesis, na nagpapalawak sa galaw ng sandbox exploit-validation ng Continuum tungo sa isang mapagkumpitensiyang vendor field bago ang Black Hat window sa Agosto.",
+        "coherence": 3,
+        "remaining_gap": "Ang isang demo night ay validation sa conference stage, hindi ang defensive exploit-validation gate na nagiging industry baseline sa mga pinangalanang code-security vendor. Offensive tooling ang pagbabalangkas dito."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.52add1fe9732a4ff",
+        "short_label": "Automaker-built humanoid programs add a second high-volume entrant by Q2 2027",
+        "prediction_date": "2026-06-07"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "[REVIVED] Ang Hyundai-SoftBank buyout ngayon, na iniulat na nakatali sa isang planong magdeploy ng humigit-kumulang 25,000 Atlas humanoid sa sariling mga pabrika ng Hyundai mula 2028, ay isang tuwirang senyales sa natutulog na tesis na ito na ang mga vertically integrated na automaker ay maglalabas ng high-volume na humanoid program sa sarili nilang pundasyon ng motor, baterya at supply chain. Sa pagkuha ng buong pagmamay-ari sa Boston Dynamics sa ipinahihiwatig na ~$3.37 billion na halaga at pagtanggal sa friction ng minority-shareholder sa paligid ng captive-deployment roadmap, ipinoposisyon ng Hyundai ang sarili bilang eksaktong automaker-anchored at in-house-fleet na humanoid entrant na inasahan ng hula kasabay ng Tesla at BYD. Malakas ang pagtutugma sa istrukturang pag-angkin ngunit bahagya sa falsifiable na bar. Ang balita ay isang konsolidasyon ng pagmamay-ari at isang nakasaad na 2028 unit target, hindi ang on-record na pagsisiwalat ng eksekutibo ng isang gumaganang prototype at production cost-down mula sa isang naiibang pangalawang automaker na kinakailangan ng hula, at ang Hyundai/Boston Dynamics ay isang umiiral na program sa halip na isang bagong pangalawang entrant.",
+      "reference_links": [
+        {
+          "label": "KED Global - Hyundai to take full ownership of Boston Dynamics in SoftBank buyout",
+          "url": "https://www.kedglobal.com/robotics/newsView/ked202606210001"
+        },
+        {
+          "label": "Global Banking & Finance Review - Hyundai to buy SoftBank's remaining stake in Boston Dynamics for $325 million",
+          "url": "https://www.globalbankingandfinance.com/hyundai-buy-softbanks-remaining-stake-boston-dynamics-325/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Kinukuha ng Hyundai ang buong pagmamay-ari sa Boston Dynamics nang tahasan upang magpatakbo ng humigit-kumulang 25,000 Atlas unit sa sarili nitong mga planta mula 2028. Isang vertically integrated na automaker na inilalaan ang bigat ng supply-chain at balance-sheet nito sa isang high-volume na in-house humanoid program. Iyon mismo ang automaker-anchored na pattern ng deployment na sinasabi ng tesis na dadami.",
+        "coherence": 4,
+        "remaining_gap": "Kinokonsolida nito ang isang umiiral na program sa halip na isiwalat ang isang bagong pangalawang entrant na may gumaganang prototype at production cost-down target sa rekord, gaya ng kinakailangan ng bar ng hula."
+      }
+    }
+  ]
+}

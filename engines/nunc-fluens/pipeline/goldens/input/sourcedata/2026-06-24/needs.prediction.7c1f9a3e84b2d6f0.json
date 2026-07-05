@@ -1,0 +1,44 @@
+[
+  {
+    "actor": "AI benchmark maintainer",
+    "job": "Revising a widely-cited orchestration leaderboard's reporting schema to capture per-task wall-clock and cost alongside accuracy scores.",
+    "outcome": "A published benchmark column that formalizes latency/cost-per-task as a standard reported axis for multi-model orchestration parity claims.",
+    "motivation": "Accuracy-only tables let router-as-a-model systems claim frontier parity while hiding a ~30-minute wall-clock tax, eroding the benchmark's credibility.",
+    "task": {
+      "who": "Benchmark methodology and harness-engineering team",
+      "what": "Add per-task time-to-completion and cost columns to scoring",
+      "where": "The leaderboard's evaluation harness and results schema",
+      "when": "Between June 2026 and Q1 2027, ahead of the next benchmark refresh",
+      "why": "So parity claims cannot hide a wall-clock tax",
+      "how": "Instrumented per-task timers plus a standardized cost-per-task rubric"
+    }
+  },
+  {
+    "actor": "Independent model evaluator",
+    "job": "Running real-world end-to-end tests of orchestration models on practical tasks and publishing wall-clock observations that contradict accuracy-parity claims.",
+    "outcome": "Widely-cited evidence that orchestration latency is material, pressuring evaluators and vendors to adopt time-to-completion disclosure.",
+    "motivation": "Vendor leaderboards overstate practical usefulness; surfacing the wall-clock gap protects readers and builds the evaluator's authority.",
+    "task": {
+      "who": "The independent evaluator and their testing workflow",
+      "what": "Time end-to-end runs on standard practical task suites",
+      "where": "Personal shader, interactive-scene, and reasoning test setups",
+      "when": "Through the runway from June 2026 into early 2027",
+      "why": "To prove accuracy parity hides a wall-clock tax",
+      "how": "Stopwatch-style end-to-end timing on repeatable task batteries"
+    }
+  },
+  {
+    "actor": "Orchestration-vendor product lead",
+    "job": "Pricing and positioning a learned-router product against frontier models, deciding whether to publish wall-clock SLAs to defend parity claims.",
+    "outcome": "A vendor-published time-to-completion or wall-clock SLA that makes latency a disclosed, contractual reporting axis.",
+    "motivation": "Independent tests undercut bare accuracy-parity marketing; disclosing SLAs reframes the slower-but-better tradeoff as a feature buyers can underwrite.",
+    "task": {
+      "who": "Vendor product and developer-relations team",
+      "what": "Define and publish per-task wall-clock SLA tiers",
+      "where": "Product pricing pages, model cards, and docs",
+      "when": "Across the runway from launch through Q1 2027",
+      "why": "To defend parity claims against latency criticism",
+      "how": "Tier-based latency targets backed by internal benchmark telemetry"
+    }
+  }
+]

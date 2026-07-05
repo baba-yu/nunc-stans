@@ -1,0 +1,43 @@
+{
+  "date": "2026-06-27",
+  "sections": [
+    {
+      "category": "Lumipat ang ML attack surface mula teorya patungong live na pananamantala: pinaputok sa wild ang isang cross-tenant na depekto sa Langflow agent builder",
+      "bullets": [
+        {
+          "body": "Noong June 25, iniulat ng Sysdig Threat Research Team ang unang kilalang in-the-wild na pananamantala sa CVE-2026-55255, isang cross-tenant na insecure-direct-object-reference (IDOR) na depekto sa Langflow, ang sikat na open-source na visual builder para sa mga LLM agent at pipeline. Ang vulnerability na ito, may rating na CVSS 9.9 at naayos sa Langflow 1.9.1, ay nasa get_flow_by_id_or_endpoint_name helper: kapag niresolba ang isang flow gamit ang UUID, walang isinasagawang owner check ang database lookup, kaya maaaring patakbuhin ng sinumang authenticated user ang flow ng ibang tenant sa pamamagitan lang ng pagbibigay ng flow ID nito sa /api/v1/responses endpoint (CWE-639, authorization bypass sa pamamagitan ng isang user-controlled key). Ang nagpapatingkad sa telemetry ng Sysdig ay ang chaining: unang tinawag ng isang operator ang GET /api/v1/flows/ para anihin ang mga flow ID na inihahayag ng endpoint na iyon, pagkatapos ay mga dalawampung segundo ang lumipas bago niya niwagi ang mga eksaktong ID na iyon bilang model parameter sa POST /api/v1/responses kasama ang input na \"leak api keys\". Sa parehong instance, pinatakbo rin niya ang mas lumang unauthenticated RCE na CVE-2026-33017 (CVSS 9.3, nasa Known Exploited Vulnerabilities catalog na ng CISA). Ipinagpapatuloy ng structural na pagbasa ang pattern na lumitaw sa ML feature-store layer kanina ngayong linggo: ang malambot na sikmura ng mga agent platform ay ang orchestration at metadata plane, kung saan ang isang authorization gap sa isang flow-execution endpoint ay nagpapalit sa isang multi-tenant agent builder tungong cross-customer data-exfiltration primitive. Dapat mag-upgrade na ngayon ang mga operator ng anumang pre-1.9.1 Langflow at ipalagay na inaani na ang mga nakalantad na flow ID. <a href=\"https://webflow.sysdig.com/blog/understanding-langflow-cve-2026-55255-and-why-higher-cvss-vulnerabilities-arent-always-the-most-exploited\">Sysdig - Understanding Langflow CVE-2026-55255, and why higher-CVSS vulnerabilities aren't always the most exploited</a> <a href=\"https://github.com/advisories/GHSA-qrpv-q767-xqq2\">GitHub Advisory Database - Langflow IDOR in /api/v1/responses lets authenticated attackers run another user's flow (CVE-2026-55255)</a> <a href=\"https://advisories.gitlab.com/pypi/langflow/CVE-2026-55255/\">GitLab Advisory Database - CVE-2026-55255 Langflow IDOR (CVSS 9.9, fixed in 1.9.1)</a>",
+          "citations": [
+            {"label": "Sysdig - Understanding Langflow CVE-2026-55255, and why higher-CVSS vulnerabilities aren't always the most exploited", "url": "https://webflow.sysdig.com/blog/understanding-langflow-cve-2026-55255-and-why-higher-cvss-vulnerabilities-arent-always-the-most-exploited"},
+            {"label": "GitHub Advisory Database - Langflow IDOR in /api/v1/responses lets authenticated attackers run another user's flow (CVE-2026-55255)", "url": "https://github.com/advisories/GHSA-qrpv-q767-xqq2"},
+            {"label": "GitLab Advisory Database - CVE-2026-55255 Langflow IDOR (CVSS 9.9, fixed in 1.9.1)", "url": "https://advisories.gitlab.com/pypi/langflow/CVE-2026-55255/"}
+          ]
+        }
+      ]
+    },
+    {
+      "category": "Lumitaw sa AutoGPT ang isang SSRF-protection bypass na naglalantad ng mga internal na serbisyo sa likod ng agent runner",
+      "bullets": [
+        {
+          "body": "Inilathala noong June 26 bilang CVE-2026-56663 ang isang bagong high-severity na depekto sa AutoGPT, ang open-source na platform para sa pagbuo, pag-deploy, at pagpapatakbo ng tuluy-tuloy na AI agent. May rating itong CVSS 8.5 at naayos sa AutoGPT 0.6.52. Ang bug ay isang bypass ng mga server-side-request-forgery (SSRF) na proteksyon ng AutoGPT: hindi nahahawakan nang tama ng SendWebRequestBlock na ginagamit ng mga agent para sa mga outbound na HTTP call ang mga IPv4-mapped na IPv6 address, kaya nabibigo itong i-validate ang ilang IP range. Dahil dito, makakabuo ang isang authenticated user ng isang request na lumulusot sa internal-IP filter at umaabot sa mga serbisyo sa private network ng host. Dahil ang nagkaproblemang block ay isang general-purpose na web-request primitive na nakakabit sa mga agent workflow, ang praktikal na epekto ay maaaring maakay ang agent ng isang tenant para suriin o kunin ang laman ng mga internal endpoint na hindi dapat maabot, gaya ng cloud metadata services, internal admin panel, at database. Binanggit ng entry sa NVD na hindi pa nagdaragdag ng sariling enrichment ang NIST at umaasa muna ito sa pagtatasa ng GitHub CNA. Malinis na halimbawa ang item na ito kung bakit patuloy na nakakakuha ng CVE ang agent-execution layer: ang isang block na ang buong trabaho ay kumuha ng arbitrary na URL para sa agent ay isang SSRF surface mismo, at sapat na ang isang parsing gap sa address normalization para muling buksan ito. Dapat mag-upgrade ang mga operator na nagpapatakbo ng AutoGPT na mas mababa sa 0.6.52, at limitahan ang outbound egress mula sa agent runner. <a href=\"https://nvd.nist.gov/vuln/detail/CVE-2026-56663\">NVD - CVE-2026-56663 Detail (AutoGPT SSRF-protection bypass via IPv4-mapped IPv6 addresses, fixed in 0.6.52)</a>",
+          "citations": [
+            {"label": "NVD - CVE-2026-56663 Detail (AutoGPT SSRF-protection bypass via IPv4-mapped IPv6 addresses, fixed in 0.6.52)", "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56663"}
+          ]
+        }
+      ]
+    },
+    {
+      "category": "Mga AI event na dapat planuhin ngayon: live na ang AI Engineer World's Fair weekend, habang umaabot hanggang tag-araw at taglagas ang mga chip at security na petsa",
+      "bullets": [
+        {
+          "body": "Ang forward calendar sa lahat ng tatlong sub-track, na nakatuon ngayong weekend sa AI Engineer World's Fair sa San Francisco. Mainstream dev/data: nagaganap na ngayon ang AIE World's Fair Hackathon, na isinasagawa kasama ang Cerebral Valley (June 27-28, 9am-5pm, may temang recursive self-improvement, mahigit $10,000 ang premyo), tatakbo ang New Engineer Orientation sa Linggo, June 28, at tatakbo ang pangunahing programa mula June 29 hanggang July 2 sa Moscone West (mahigit 20 track, 250+ na speaker); mas malayo pa, babalik ang GitHub Universe sa October 28-29 at tatakbo ang AWS re:Invent mula November 30 hanggang December 4 sa Las Vegas. AI-security: tatakbo ang Black Hat USA 2026 sa Mandalay Bay sa Las Vegas sa simula ng August, na may AI Summit sa Summit Day at ang pangunahing Briefings kaagad pagkatapos, na sinusundan ng DEF CON 34 at ang AI Village nito sa Las Vegas sa parehong linggo; ang AI Risk Summit ng SecurityWeek ay August 11-12 sa Ritz-Carlton sa Half Moon Bay; ang OWASP Global AppSec USA ay November 5-6 sa San Francisco; at ang AI Agent Security Summit ng Zenity, pagkatapos ng San Francisco stop nito noong May, ay nagpapatuloy sa 2026 series nito sa mga karagdagang lungsod kabilang ang New York at Asia, kaya nananatili ito sa watch list. AI-chip/hardware: ang Advancing AI 2026 ng AMD ay July 22-23 sa Moscone sa San Francisco, na may keynote at focus sa Instinct MI400-series sa July 23; tatakbo ang Hot Chips 2026 sa August 23-25 sa Memorial Auditorium ng Stanford; at ang AI Infra Summit ay September 15-17 sa Santa Clara Convention Center. <a href=\"https://www.ai.engineer/worldsfair/2026\">AI Engineer - World's Fair 2026 (hackathon June 27-28; main program June 29 - July 2, Moscone West, San Francisco)</a> <a href=\"https://blackhat.com/us-26/ai-summit.html\">Black Hat - USA 2026 AI Summit (Mandalay Bay, Las Vegas, early August)</a> <a href=\"https://zenity.io/resources/events/ai-agent-security-summit-2026\">Zenity - AI Agent Security Summit 2026 global series</a> <a href=\"https://www.amd.com/en/corporate/events/advancing-ai.html\">AMD - Advancing AI 2026 (San Francisco, July 22-23)</a>",
+          "citations": [
+            {"label": "AI Engineer - World's Fair 2026 (hackathon June 27-28; main program June 29 - July 2, Moscone West, San Francisco)", "url": "https://www.ai.engineer/worldsfair/2026"},
+            {"label": "Black Hat - USA 2026 AI Summit (Mandalay Bay, Las Vegas, early August)", "url": "https://blackhat.com/us-26/ai-summit.html"},
+            {"label": "Zenity - AI Agent Security Summit 2026 global series", "url": "https://zenity.io/resources/events/ai-agent-security-summit-2026"},
+            {"label": "AMD - Advancing AI 2026 (San Francisco, July 22-23)", "url": "https://www.amd.com/en/corporate/events/advancing-ai.html"}
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "date": "2026-07-03",
+  "technical": [
+    {
+      "lead": "OpenAI moves Codex Remote to GA across all paid ChatGPT tiers",
+      "body": "OpenAI promoted Codex Remote out of preview to general availability on June 25, 2026, opening phone-based control of long-running coding sessions to every paid ChatGPT plan — Plus, Pro, Business, Enterprise, and Education — per the tracked <a href=\"https://releasebot.io/updates/openai/codex\">Codex release log</a>. From the ChatGPT mobile app a developer can start or continue work on a connected Mac or Windows host, watch progress, and approve individual actions remotely. The launch swaps the earlier remote-shell approach for a purpose-built relay with authenticated one-to-one QR pairing between each device and host, keeping the development box off the public internet while remaining reachable, as detailed in <a href=\"https://www.techtimes.com/articles/319201/20260627/openai-codex-remote-goes-live-all-plans-phone-control-now-secured-qr-relay.htm\">TechTimes' coverage</a>. The same window shipped Codex CLI 0.142.2, which makes MCP tool search the default when a server supports it and adds a DigitalOcean Droplet workspace plugin. The combination pushes the coding-agent harness toward a fully asynchronous, approve-from-anywhere loop rather than a terminal-bound one.",
+      "citations": [
+        {"label": "Releasebot - OpenAI Codex updates (Remote GA, CLI 0.142.2)", "url": "https://releasebot.io/updates/openai/codex"},
+        {"label": "TechTimes - OpenAI Codex Remote Goes Live for All Plans", "url": "https://www.techtimes.com/articles/319201/20260627/openai-codex-remote-goes-live-all-plans-phone-control-now-secured-qr-relay.htm"}
+      ]
+    },
+    {
+      "lead": "Anthropic restores Fable 5 worldwide with a >99% jailbreak classifier",
+      "body": "Anthropic brought Fable 5 back globally on July 1, 2026, a day after the US Department of Commerce lifted on June 30 the emergency export controls that had suspended the model for roughly 19 days following an Amazon-discovered jailbreak, per a <a href=\"https://www.buildfastwithai.com/blogs/ai-news-today-july-3-2026\">roundup of the July 3 news cycle</a>. The model is again available on Claude.ai, the Claude Platform API, Claude Code, and Claude Cowork across AWS, Google Cloud, and Microsoft, with a fresh classifier Anthropic says blocks the specific jailbreak with better than 99% effectiveness, at the cost of routing some legitimate security-adjacent coding queries to Opus 4.8. The restoration came with a four-point government arrangement: pre-release model access, rapid threat-intelligence sharing, critical-infrastructure participation, and co-development of a jailbreak risk-scoring scheme. It lands beside a milestone for Anthropic's largest backer: <a href=\"https://menlovc.com/perspective/menlo-turns-50-and-announces-3b-in-fresh-capital-to-go-all-in-on-ai/\">Menlo Ventures</a> closed a $3B raise, its largest ever, on the strength of an Anthropic stake now worth about $14B.",
+      "citations": [
+        {"label": "Build Fast with AI - AI News Today July 3 2026", "url": "https://www.buildfastwithai.com/blogs/ai-news-today-july-3-2026"},
+        {"label": "Menlo Ventures - Menlo Turns 50 and Announces $3B in Fresh Capital", "url": "https://menlovc.com/perspective/menlo-turns-50-and-announces-3b-in-fresh-capital-to-go-all-in-on-ai/"}
+      ]
+    },
+    {
+      "lead": "Bridgewater and Thinking Machines fine-tune Qwen3-235B past frontier models",
+      "body": "Bridgewater's AIA Labs and Mira Murati's Thinking Machines Lab published results on June 30, 2026 showing a specialized fine-tune of the open-weight <a href=\"https://thinkingmachines.ai/news/learning-to-replicate-expert-judgment-in-financial-tasks/\">Qwen3-235B base</a> reaching 84.7% average accuracy across six information-filtering tasks, versus 78.2% for the best frontier model tested — a 29.8% reduction in errors. The model was trained on Thinking Machines' Tinker platform using Bridgewater's proprietary expert-labeled financial data, with the gains attributed to interleaved round-robin batching (+12.1%), a CISPO loss with asymmetric clipping (+10.1%), and on-policy distillation with a periodically promoted teacher (+3.1%). The team reports the model runs at roughly 13.8x lower inference cost per task than the frontier alternatives, as <a href=\"https://blockchain.news/ainews/bridgewater-fine-tunes-model-beats-frontier-llms\">independent coverage</a> noted. It is a clean data point for the thesis that a well-tuned open-weight checkpoint plus high-quality domain labels beats generic frontier scale on a narrow expert task.",
+      "citations": [
+        {"label": "Thinking Machines Lab - Learning to Replicate Expert Judgment in Financial Tasks", "url": "https://thinkingmachines.ai/news/learning-to-replicate-expert-judgment-in-financial-tasks/"},
+        {"label": "Blockchain.News - Bridgewater Fine-Tunes Model to Beat Frontier LLMs", "url": "https://blockchain.news/ainews/bridgewater-fine-tunes-model-beats-frontier-llms"}
+      ]
+    },
+    {
+      "lead": "Working exploit bypasses the patch for Flowise Custom-MCP RCE CVE-2026-40933",
+      "body": "Obsidian Security released a working proof-of-concept for <a href=\"https://nvd.nist.gov/vuln/detail/CVE-2026-40933\">CVE-2026-40933</a>, a remote-code-execution flaw in Flowise's Custom MCP tool that ships with the low-code agent builder used by more than 52,000 GitHub-starred deployments. As <a href=\"https://www.infosecurity-magazine.com/news/flowise-mcp-rce-poc/\">Infosecurity Magazine</a> details, the bug lives in the stdio transport, which launches a user-supplied command as an unsandboxed child process on the Flowise server, so a poisoned exported workflow file executes commands automatically the moment a victim imports it — no approval prompt required. Self-hosted open-source and enterprise installs stay vulnerable by default even on the current version, and researchers demonstrated that the official patch can be circumvented, so a version bump alone does not close the hole. The disclosure sits inside a broader stdio-command-injection pattern that a coordinated <a href=\"https://www.ox.security/blog/mcp-supply-chain-advisory-rce-vulnerabilities-across-the-ai-ecosystem/\">MCP supply-chain advisory</a> traced across LiteLLM, Agent Zero, LangBot, and Windsurf. The recommended mitigation is to disable the stdio transport in favor of Server-Sent Events and treat any imported MCP configuration as untrusted code.",
+      "citations": [
+        {"label": "NVD - CVE-2026-40933 Detail", "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-40933"},
+        {"label": "Infosecurity Magazine - Critical Flowise Flaw Gives Attackers Full Server Control", "url": "https://www.infosecurity-magazine.com/news/flowise-mcp-rce-poc/"},
+        {"label": "OX Security - MCP Supply Chain Advisory", "url": "https://www.ox.security/blog/mcp-supply-chain-advisory-rce-vulnerabilities-across-the-ai-ecosystem/"}
+      ]
+    },
+    {
+      "lead": "AMD's July 22-23 MI400 reveal leads a dense AI event calendar",
+      "body": "The nearest AI-chip catalyst is AMD's Advancing AI 2026 on July 22-23 at Moscone in San Francisco, where the MI400 series and \"Helios\" rack-scale system are expected with availability timelines; on the same hardware track, <a href=\"https://semiwiki.com/event/hot-chips-2026/\">Hot Chips</a> runs at Stanford's Memorial Auditorium on August 23-25 and the <a href=\"https://www.ai-infra-summit.com/faqs\">AI Infra Summit</a> follows in Santa Clara on September 15-17. The AI-security block clusters in mid-August: SecurityWeek's <a href=\"https://www.prnewswire.com/news-releases/securityweek-to-host-ai-risk-summit-august-11-12-at-the-ritz-carlton-half-moon-bay-ca-302783094.html\">AI Risk Summit</a> runs August 11-12 at the Ritz-Carlton in Half Moon Bay, while Black Hat USA and DEF CON 34's AI Village land in Las Vegas in early August and OWASP Global AppSec USA follows in San Francisco on November 5-6. Zenity's AI Agent Security Summit series continues its global stops for teams focused on agent hijack and MCP-layer defense, directly relevant given this week's Flowise MCP exploit. On the mainstream dev track, GitHub Universe is set for October 28-29 and AWS re:Invent for November 30 to December 4. The two nearest actions are registering for the July 22 AMD keynote and the August 11-12 AI Risk Summit.",
+      "citations": [
+        {"label": "SemiWiki - Hot Chips 2026", "url": "https://semiwiki.com/event/hot-chips-2026/"},
+        {"label": "PR Newswire - SecurityWeek to Host AI Risk Summit August 11-12", "url": "https://www.prnewswire.com/news-releases/securityweek-to-host-ai-risk-summit-august-11-12-at-the-ritz-carlton-half-moon-bay-ca-302783094.html"},
+        {"label": "AI Infra Summit - 2026 FAQs", "url": "https://www.ai-infra-summit.com/faqs"}
+      ]
+    }
+  ],
+  "plain": [
+    "Codex Remote leaves preview for all paid ChatGPT plans",
+    "Anthropic brings Fable 5 back worldwide after 19 days",
+    "A tuned open model beats top AI on finance tasks",
+    "New exploit keeps a patched agent-builder flaw live",
+    "AMD's July chip reveal leads a packed AI event season"
+  ]
+}

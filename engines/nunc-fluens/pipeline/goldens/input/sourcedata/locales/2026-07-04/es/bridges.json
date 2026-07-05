@@ -1,0 +1,443 @@
+{
+  "date": "2026-07-04",
+  "validation_rows": [
+    {
+      "prediction_ref": {
+        "id": "prediction.9bc46d8a918d51a2",
+        "short_label": "AMD Instinct MI400 launches with a named ship, memory, or rack spec by Q3 2026",
+        "prediction_date": "2026-06-27"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "El repaso de eventos de IA de hoy mantiene Advancing AI 2026 de AMD el 22 y 23 de julio en el Moscone como el catalizador de chips más cercano, con la serie MI400 y el sistema a escala de rack Helios con nombre esperados junto a plazos de disponibilidad. Eso coloca una fecha firme de presentación de lleno dentro de la ventana del Q3 2026 y ya aporta un sistema de rack con nombre, así que el MI400 sigue siendo una divulgación programada con una franja concreta en el calendario más que una línea de hoja de ruta. Las cifras concretas de envío, memoria y rack siguen sin confirmarse hasta la ponencia, así que esto es una fecha firme y un sistema con nombre más que la especificación entregada.",
+      "reference_links": [
+        {
+          "label": "Hot Chips 2026",
+          "url": "https://hotchips.org/about/"
+        },
+        {
+          "label": "AI Infra Summit 2026",
+          "url": "https://www.ai-infra-summit.com/agenda"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "El repaso de eventos de hoy mantiene Advancing AI fijado al 22 y 23 de julio en el Moscone como el catalizador de chips más cercano, de lleno dentro de la ventana del Q3, y ya nombra el sistema a escala de rack Helios. Esa franja firme en el calendario y ese rack con nombre son justo el montaje de compromiso verificable en el que se apoya la presentación, aunque las cifras concretas de envío, memoria y rack siguen sin confirmarse hasta la ponencia.",
+        "coherence": 4,
+        "remaining_gap": "La ponencia tiene que entregar de verdad una ventana de disponibilidad general con nombre, una cifra de memoria o una especificación de rack, no un adelanto sin especificaciones."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.5e0beac647793331",
+        "short_label": "AMD MI400 will market memory bandwidth over peak FLOPS at Advancing AI",
+        "prediction_date": "2026-07-02"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "El calendario de eventos vuelve a fijar Advancing AI 2026 de AMD el 22 y 23 de julio en el Moscone como el catalizador de aceleradores más cercano, planteando la serie MI400 y el sistema a escala de rack Helios como las presentaciones destacadas con plazos de disponibilidad, y señalando la ponencia más la cumbre de riesgo de IA del 11 y 12 de agosto como escenarios naturales para anuncios de aceleradores seguros e inferencia confidencial. Eso mantiene el relato de memoria y rack en cola por delante de un titular de FLOPS brutos, que es exactamente la postura de marketing que anticipa esta predicción. La ponencia no ha ocurrido, así que el planteamiento concreto de ancho de banda de memoria por encima de FLOPS está programado más que entregado en el escenario.",
+      "reference_links": [
+        {
+          "label": "Hot Chips 2026",
+          "url": "https://hotchips.org/about/"
+        },
+        {
+          "label": "SecurityWeek AI Risk Summit 2026 (Aug 11-12, Half Moon Bay)",
+          "url": "https://www.airisksummit.com/agenda"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "so_that",
+        "narrative": "El calendario vuelve a fijar Advancing AI el 22 y 23 de julio y plantea la serie MI400 más el sistema a escala de rack Helios como las presentaciones destacadas con plazos de disponibilidad, manteniendo un relato de memoria y rack en cola por delante de un titular de FLOPS brutos. Esa es la postura de marketing que anticipa esta predicción, pero hoy se centra en la fecha del evento más que en cualquier planteamiento de ancho de banda de memoria por encima de FLOPS entregado en el escenario.",
+        "coherence": 3,
+        "remaining_gap": "La propia ponencia tiene que abrir con el ancho de banda de memoria o la capacidad HBM por encima de los FLOPS máximos como la especificación destacada."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.cb8447f5c6e4c65d",
+        "short_label": "Agent-builder frameworks ship sandboxed MCP tool execution by default by Q1 2027",
+        "prediction_date": "2026-07-01"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "La divulgación de Cursor de hoy es una señal de presión directa y extiende el hilo de ejecución de herramientas de agentes desde los constructores de bajo código de nicho hasta el IDE convencional. Cato AI Labs publicó dos RCE de escape de entorno aislado sin clic con CVSS 9.8 en el IDE de código Cursor, ambos corregidos en Cursor 3.0: un cruce de rutas a través del parámetro opcional working_directory y un repliegue de resolución de enlaces simbólicos, y en ambos casos el contenido que el agente está diseñado para ingerir, un README envenenado, un resultado de búsqueda web o una respuesta de herramienta MCP, se convierte en una escritura arbitraria fuera del espacio de trabajo sin ninguna solicitud de aprobación. La cobertura plantea esto como el mismo fallo de límite de ejecución de herramientas visto recientemente en Flowise y Langflow, ahora demostrado contra un editor de primer nivel que los desarrolladores ejecutan a diario contra repositorios no confiables, que es exactamente la presión estructural hacia la ejecución de herramientas y de MCP aislada por defecto que nombra esta predicción.",
+      "reference_links": [
+        {
+          "label": "The Hacker News - Critical Cursor Flaws Could Let Prompt Injection Escape Sandbox",
+          "url": "https://thehackernews.com/2026/07/critical-cursor-flaws-could-let-prompt.html"
+        },
+        {
+          "label": "NVD - CVE-2026-50548 Detail",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-50548"
+        },
+        {
+          "label": "NVD - CVE-2026-50549 Detail",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-50549"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Cato AI Labs divulgó dos RCE sin clic con CVSS 9.8 en Cursor, donde una respuesta de herramienta MCP ingerida o un README envenenado provocan una escritura arbitraria fuera del espacio de trabajo sin solicitud alguna. Eso extiende el mismo fallo de límite de ejecución de herramientas con privilegios de host que hay detrás de los CVE de Flowise y Langflow, de los constructores de nicho a un IDE emblemático, la presión estructural exacta hacia la ejecución de MCP aislada por defecto.",
+        "coherence": 4,
+        "remaining_gap": "La evidencia es un RCE en un IDE, no un framework constructor de agentes importante entregando de verdad la ejecución de MCP aislada y de mínimo privilegio activada por defecto."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.69439c5e138d13eb",
+        "short_label": "Coding IDEs make workspace-confined agent file writes the default by Q1 2027",
+        "prediction_date": "2026-07-04"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "La noticia de hoy es la evidencia de origen de esta predicción nueva. Cato AI Labs divulgó dos RCE de escape de entorno aislado sin clic en Cursor, ambos con CVSS 9.8 y corregidos en Cursor 3.0: CVE-2026-50548, un cruce de rutas a través del parámetro opcional working_directory, y CVE-2026-50549, un repliegue de resolución de enlaces simbólicos que permite que las escrituras escapen del límite del proyecto. Como el disparador es contenido que el agente está diseñado para ingerir, un README, una página web o una respuesta de herramienta envenenados provocan una escritura arbitraria fuera del espacio de trabajo sin ninguna solicitud de aprobación, llevando el problema de confinamiento del sistema de archivos del agente de un constructor de bajo código de nicho al editor emblemático. Anthropic montó simultáneamente un programa de recompensas en HackerOne acotado a jailbreaks cibernéticos de Fable 5 y un marco temprano de severidad de jailbreaks codesarrollado con AWS, Microsoft y Google, lo que señala que la respuesta del lado del proveedor es endurecimiento más divulgación estructurada en lugar de parches sueltos, que es el acoplamiento de la divulgación que impulsa el endurecimiento en el que se apoya esta predicción.",
+      "reference_links": [
+        {
+          "label": "The Hacker News - Critical Cursor Flaws Could Let Prompt Injection Escape Sandbox",
+          "url": "https://thehackernews.com/2026/07/critical-cursor-flaws-could-let-prompt.html"
+        },
+        {
+          "label": "NVD - CVE-2026-50549 Detail",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-50549"
+        },
+        {
+          "label": "Build Fast with AI - AI News Today July 4 2026",
+          "url": "https://www.buildfastwithai.com/blogs/ai-news-today-july-4-2026"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Los dos RCE sin clic de Cursor, donde un README o una respuesta de herramienta ingeridos escriben fuera del espacio de trabajo sin solicitud, son justo el escape de nivel emblemático en el que se apoya este pronóstico, llevando el confinamiento del sistema de archivos de opcional a requisito básico y emparejando la corrección con una divulgación estructurada entre proveedores que empuja el endurecimiento por toda la categoría.",
+        "coherence": 4,
+        "remaining_gap": "Ningún editor convencional ha entregado todavía el confinamiento del espacio de trabajo con denegación por defecto, ruta canónica y rechazo de enlaces simbólicos como comportamiento por defecto permanente."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.b29d00f310d8ad2c",
+        "short_label": "Second open-weight frontier model discloses non-NVIDIA ASIC training by Q2 2027",
+        "prediction_date": "2026-07-04"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "La noticia de hoy es la prueba de existencia sobre la que se construye esta predicción nueva. Meituan publicó LongCat-2.0 el 30 de junio bajo MIT, una mezcla de expertos de codificación con agentes de 1,6 billones de parámetros con unos 48B activos por token y un contexto nativo de un millón de tokens, y la afirmación que lo sostiene es el sustrato de entrenamiento: el modelo se construyó y sirvió de extremo a extremo en un clúster de más de 50.000 ASIC de fabricación china sin ninguna GPU de NVIDIA en el bucle, mientras superaba por poco a GPT-5.5 en SWE-bench Pro por 59,5 a 58,6 y pasaba unos dos meses de forma anónima en el top tres global de OpenRouter como Owl Alpha. Eso convierte una única prueba en una plantilla reproducible y aplica la misma presión de control de exportaciones a cualquier otro laboratorio que opere dentro del régimen de suministro restringido, que es exactamente la trayectoria de independencia de cómputo que esta predicción extiende hacia una segunda ejecución de entrenamiento sin NVIDIA divulgada de forma independiente. Lo que falta es la segunda ficha de modelo independiente que documente su propia ejecución de extremo a extremo sin NVIDIA.",
+      "reference_links": [
+        {
+          "label": "VentureBeat - Meituan open sources LongCat-2.0, trained entirely on Chinese chips",
+          "url": "https://venturebeat.com/technology/meituan-open-sources-longcat-2-0-the-1-6t-near-frontier-agentic-coding-model-thats-been-leading-openrouter-trained-entirely-on-chinese-chips"
+        },
+        {
+          "label": "Open Source For You - Meituan Open Sources LongCat-2.0 Under MIT License",
+          "url": "https://www.opensourceforu.com/2026/06/meituan-open-sources-longcat-2-0-under-mit-license/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "LongCat-2.0 de Meituan, con licencia MIT, una MoE de 1,6 billones de parámetros construida de extremo a extremo sobre más de 50.000 ASIC chinos sin NVIDIA en el bucle mientras supera por poco a GPT-5.5 en SWE-bench Pro, es la prueba de existencia que este pronóstico extiende, convirtiendo una única ejecución casi de frontera en una plantilla reproducible que los laboratorios sujetos a control de exportaciones se ven presionados a copiar.",
+        "coherence": 4,
+        "remaining_gap": "Sigue ausente un segundo modelo de pesos abiertos independiente que documente en su ficha su propia ejecución de entrenamiento de extremo a extremo sin NVIDIA."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.d6fc36093d611e94",
+        "short_label": "OpenAI files a public-listing step with a US-government stake by Q2 2027",
+        "prediction_date": "2026-07-04"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "La noticia de hoy es el telón de fondo directo de esta predicción nueva. El análisis del primer semestre de 2026 de Crunchbase muestra que la financiación de capital de riesgo global alcanzó un récord de 510.000 millones de dólares, con OpenAI y Anthropic absorbiendo por sí solas 217.000 millones, o el 43% de cada dólar de riesgo del semestre, y 32 empresas respaldadas por capital de riesgo saliendo a bolsa por encima de una valoración de 1.000 millones en el Q2 conforme reabría la ventana de salidas. El informe señala que OpenAI planteó dar al gobierno de EE. UU. una posición accionarial de aproximadamente el 5% antes de un debut planeado en el mercado público, y llega la misma semana en que Menlo Ventures cerró su mayor ronda de la historia, de 3.000 millones, sobre su participación en Anthropic. Una concentración tan extrema es difícil de sostener en megarondas privadas, lo que empuja al líder de frontera hacia la liquidez pública envuelta en una estructura inusual de participación soberana, exactamente el andamiaje previo a la cotización que anticipa esta predicción. Lo que aún falta es un paso concreto divulgado, un S-1 o F-1, un anuncio formal de cotización o un acuerdo confirmado de participación gubernamental vinculado al debut.",
+      "reference_links": [
+        {
+          "label": "Crunchbase News - Global Startup Investment Hit Record $510B In H1 2026",
+          "url": "https://news.crunchbase.com/venture/global-startup-exits-ipo-ma-soar-ai-q2-h1-2026/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "El recuento del primer semestre de Crunchbase informa de que OpenAI planteó una posición accionarial del gobierno de EE. UU. de aproximadamente el 5% antes de un debut público planeado, la premisa precisa de participación soberana que nombra este pronóstico, en un contexto de concentración donde dos laboratorios se llevaron el 43% de los dólares de riesgo, una presión de marcado difícil de sostener en privado que apunta al líder hacia la liquidez pública.",
+        "coherence": 4,
+        "remaining_gap": "Falta un paso concreto divulgado, un S-1 o F-1 presentado, un anuncio formal de cotización o un acuerdo confirmado de participación gubernamental."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.a4f83081580b9a3d",
+        "short_label": "Launch-day vLLM/SGLang + Ollama support becomes open-weight MoE release bar",
+        "prediction_date": "2026-07-02"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "LongCat-2.0 de Meituan, con licencia MIT, llega como una MoE de pesos abiertos autoalojable y creíble en la cúspide del rango de tamaño, un modelo de 1,6 billones de parámetros con unos 48B activos por token, un contexto nativo de un millón de tokens y un esquema propio de atención dispersa LongCat afinado para sesiones largas de agentes, publicado en GitHub y Hugging Face. La cobertura lo sitúa junto a las familias de MoE dispersas como Qwen, DeepSeek y Mistral 3 de la semana pasada como el conjunto de referencia sobre el que los equipos se estandarizan, que es la vía de la optimización local donde la cobertura de runtime de servicio y de runtime local en el momento del lanzamiento se está convirtiendo en el mínimo de los pesos abiertos. La noticia de hoy se centra en el sustrato de entrenamiento y en la ventaja en SWE-bench Pro sobre GPT-5.5 más que en el propio mínimo concreto de empaquetado con vLLM/SGLang más Ollama en el momento del lanzamiento, así que refuerza la dirección sin confirmar la norma de soporte de servicio con nombre.",
+      "reference_links": [
+        {
+          "label": "VentureBeat - Meituan open sources LongCat-2.0, trained entirely on Chinese chips",
+          "url": "https://venturebeat.com/technology/meituan-open-sources-longcat-2-0-the-1-6t-near-frontier-agentic-coding-model-thats-been-leading-openrouter-trained-entirely-on-chinese-chips"
+        },
+        {
+          "label": "Open Source For You - Meituan Open Sources LongCat-2.0 Under MIT License",
+          "url": "https://www.opensourceforu.com/2026/06/meituan-open-sources-longcat-2-0-under-mit-license/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "El recuento del primer semestre de Crunchbase informa de que OpenAI planteó una participación del gobierno de EE. UU. de aproximadamente el 5% antes de un debut planeado, la semilla exacta que nombra esta predicción, en un contexto de un semestre récord de 510.000 millones donde OpenAI y Anthropic absorbieron el 43% de todos los dólares de riesgo, una concentración demasiado extrema para seguir marcándola en privado y que empuja al laboratorio ancla hacia la liquidez pública.",
+        "coherence": 4,
+        "remaining_gap": "Todavía no hay ningún S-1/F-1 presentado, anuncio formal de cotización ni acuerdo confirmado de participación gubernamental vinculado al debut."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.81e76659807bd1fc",
+        "short_label": "MCP stdio transport turns off-by-default across agent frameworks by Q1 2027",
+        "prediction_date": "2026-07-03"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "La divulgación de Cursor de hoy mantiene el transporte de ejecución de herramientas como un frente de ataque activo y lo amplía más allá del caso stdio de Flowise de ayer. Cato AI Labs publicó dos RCE sin clic con CVSS 9.8 en Cursor, ambos corregidos en Cursor 3.0, donde una respuesta de herramienta MCP, un README envenenado o un resultado de búsqueda web que el agente ingiere provocan una escritura arbitraria fuera del espacio de trabajo sin ninguna solicitud de aprobación mediante un cruce de rutas en working_directory y un repliegue de resolución de enlaces simbólicos. La cobertura vincula esto con las recientes divulgaciones de Flowise y Langflow como un solo patrón, el límite de ejecución de herramientas más que el modelo, donde las pilas de agentes convierten texto controlado por el atacante en acceso al shell, que es la presión estructural para endurecer o desactivar el transporte no confiable por defecto que nombra esta predicción. La evidencia es un RCE por contenido ingerido en un IDE convencional más que un framework desactivando explícitamente el transporte stdio por defecto, así que refuerza la dirección sin ser ese cambio de configuración.",
+      "reference_links": [
+        {
+          "label": "The Hacker News - Critical Cursor Flaws Could Let Prompt Injection Escape Sandbox",
+          "url": "https://thehackernews.com/2026/07/critical-cursor-flaws-could-let-prompt.html"
+        },
+        {
+          "label": "NVD - CVE-2026-50548 Detail",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-50548"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "LongCat-2.0 de Meituan, con licencia MIT, una MoE dispersa de 1,6 billones de parámetros, llega a la cúspide del rango de tamaño junto a las familias Qwen, DeepSeek y Mistral 3 que esta predicción cita como el conjunto de referencia convergente sobre el que los equipos se estandarizan, reforzando la vía de la optimización local donde la cobertura de servicio en el momento del lanzamiento se está convirtiendo en el mínimo de los pesos abiertos.",
+        "coherence": 3,
+        "remaining_gap": "La noticia se centra en el sustrato de entrenamiento y en la ventaja en SWE-bench, no en el empaquetado confirmado con vLLM/SGLang más Ollama en el momento del lanzamiento."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.3a5fa9315f58608d",
+        "short_label": "Agentic coding platforms ship token budgets and caps as default by Q2 2027",
+        "prediction_date": "2026-06-25"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "El movimiento de Anthropic de hoy es un acierto casi directo. Claude Enterprise ganó un conjunto de controles administrativos de gobernanza de costes dirigidos de lleno a las facturas de tokens de agentes descontroladas: topes de gasto a nivel de organización, equipo y departamento, permisos de acceso a modelos por usuario o grupo, un panel de analítica de uso con exportación y una API de analítica, controles de esfuerzo del agente y alertas de gasto en tiempo real. La función se plantea explícitamente frente al tokenmaxxing empresarial, citando a compradores que agotan un presupuesto anual de IA en cuestión de meses, y se presenta como respuesta directa a la advertencia de Gartner de que el gasto en tokens de los agentes de código podría rivalizar con los salarios de los desarrolladores. Eso es una plataforma de agentes importante entregando presupuestos de tokens, topes y controles de esfuerzo como gobernanza administrativa de primer nivel, el mecanismo exacto que nombra esta predicción, aunque los controles son configurados por el administrador de la empresa más que entregados activados por defecto para cada nivel.",
+      "reference_links": [
+        {
+          "label": "Build Fast with AI - AI News Today July 4 2026",
+          "url": "https://www.buildfastwithai.com/blogs/ai-news-today-july-4-2026"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "Dos RCE sin clic con CVSS 9.8 en Cursor, corregidos en la 3.0, permiten que una respuesta de herramienta MCP o un README envenenado provoquen escrituras fuera del espacio de trabajo sin solicitud, extendiendo el mismo patrón de límite de ejecución de herramientas del caso stdio de Flowise a un IDE convencional y afilando la presión para endurecer o desactivar el transporte no confiable por defecto.",
+        "coherence": 4,
+        "remaining_gap": "Esto es un RCE por contenido ingerido, no un framework desactivando explícitamente el transporte stdio de MCP por defecto."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.9a362f2b1ba5b64a",
+        "short_label": "Enterprises self-host open-weight code models over hosted China APIs by Q2 2027",
+        "prediction_date": "2026-06-18"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "LongCat-2.0 de Meituan afina el argumento de construir y autoalojar modelos de codificación de pesos abiertos de laboratorios chinos. Se publica bajo la permisiva licencia MIT en GitHub y Hugging Face con los pesos completos, una MoE de 1,6 billones de parámetros que supera por poco a GPT-5.5 en SWE-bench Pro por 59,5 a 58,6, y se ganó unos dos meses en el top tres global de OpenRouter de forma anónima como Owl Alpha antes de que se divulgara su origen, así que los desarrolladores lo valoraron por sus méritos antes de que se le atribuyera un país de origen. Para los equipos que se estandarizan sobre pesos abiertos autoalojados, esa es una alternativa creíble en la cúspide del rango a una API alojada en China, que permite a una empresa llevar los pesos a casa en lugar de enrutar el código a través del endpoint de un proveedor, que es el giro exacto de autoalojar en lugar de usar API alojada que nombra esta predicción. La noticia es una publicación de pesos abiertos y un benchmark más que una decisión documentada de autoalojamiento frente a API por parte de una empresa, así que refuerza el impulsor sin ser en sí el dato de adopción.",
+      "reference_links": [
+        {
+          "label": "VentureBeat - Meituan open sources LongCat-2.0, trained entirely on Chinese chips",
+          "url": "https://venturebeat.com/technology/meituan-open-sources-longcat-2-0-the-1-6t-near-frontier-agentic-coding-model-thats-been-leading-openrouter-trained-entirely-on-chinese-chips"
+        },
+        {
+          "label": "Open Source For You - Meituan Open Sources LongCat-2.0 Under MIT License",
+          "url": "https://www.opensourceforu.com/2026/06/meituan-open-sources-longcat-2-0-under-mit-license/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "LongCat-2.0 de Meituan, con licencia MIT, aporta justo el catalizador en el que se apoya esta postura: un modelo de codificación chino de pesos abiertos en la cúspide del rango, autoalojable con los pesos completos en GitHub y Hugging Face, que supera por poco a GPT-5.5 en SWE-bench Pro tras dos meses anónimos en el top tres de OpenRouter. Los equipos ya pueden llevar los pesos a casa en lugar de enrutar código sensible a través de una API alojada en el extranjero.",
+        "coherence": 3,
+        "remaining_gap": "Ninguna empresa o framework con nombre ha publicado todavía una política de autoalojamiento que cite la jurisdicción de los datos por encima de una API alojada en China."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.b7574191009318a9",
+        "short_label": "Menlo Ventures deploys $3B raise into a dedicated AI fund vehicle by Q1 2027",
+        "prediction_date": "2026-07-03"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "El recuento del primer semestre de Crunchbase de hoy llega la misma semana en que Menlo Ventures cerró su mayor ronda de la historia, de 3.000 millones de dólares, sobre la fortaleza de su participación en Anthropic, el evento de capital concreto que rastrea esta predicción, y lo sitúa dentro de un semestre récord de 510.000 millones en el que OpenAI y Anthropic absorbieron por sí solas 217.000 millones, o el 43% de todos los dólares de riesgo. Esa concentración es precisamente el telón de fondo que empujaría a una firma que se apoya en una participación desmesurada en un laboratorio de frontera a montar un vehículo de IA dedicado para desplegar el capital fresco en la misma cohorte. El informe confirma que la ronda se cerró pero todavía no describe un vehículo de fondo de IA dedicado con nombre ni su despliegue, así que el hecho de financiación está en mano mientras la estructura del vehículo que nombra esta predicción sigue pendiente.",
+      "reference_links": [
+        {
+          "label": "Crunchbase News - Global Startup Investment Hit Record $510B In H1 2026",
+          "url": "https://news.crunchbase.com/venture/global-startup-exits-ipo-ma-soar-ai-q2-h1-2026/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "El recuento del primer semestre de Crunchbase confirma la premisa que lo sostiene: Menlo cerró su mayor ronda de la historia, de 3.000 millones, sobre la fortaleza de su participación en Anthropic, situándose dentro de un semestre récord de 510.000 millones donde OpenAI y Anthropic absorbieron por sí solas el 43% de todos los dólares de riesgo. Esa concentración es precisamente lo que empujaría a una firma que defiende una posición desmesurada en un laboratorio de frontera a montar un vehículo de IA dedicado.",
+        "coherence": 4,
+        "remaining_gap": "El informe confirma la ronda pero no nombra ningún vehículo de fondo de IA dedicado ni su despliegue, la estructura sobre la que gira esta predicción."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.908f659728d5b774",
+        "short_label": "Agent-builder platforms add tenant-scoped flow authorization by Q1 2027",
+        "prediction_date": "2026-07-02"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "Los RCE de escape de entorno aislado de Cursor mantienen la capa de ejecución de herramientas de agentes como un frente de ataque activo y la trasladan a un editor convencional: el contenido que el agente está diseñado para ingerir, un README envenenado, un resultado de búsqueda web o una respuesta de herramienta MCP, provoca una escritura arbitraria fuera del espacio de trabajo sin ninguna solicitud de aprobación mediante un cruce de rutas en working_directory y un repliegue de resolución de enlaces simbólicos. Eso refuerza la presión para que las plataformas de agentes controlen qué está autorizado a tocar un flujo ingerido o que cruza límites, la misma preocupación de autorización de objetos y flujos a la que apunta esta predicción. La evidencia es un escape de ejecución de código y escritura de archivos más que una elusión de autorización entre inquilinos en concreto, así que apoya la dirección hacia controles de autorización a nivel de flujo sin ser en sí un mecanismo de autorización acotado por inquilino.",
+      "reference_links": [
+        {
+          "label": "The Hacker News - Critical Cursor Flaws Could Let Prompt Injection Escape Sandbox",
+          "url": "https://thehackernews.com/2026/07/critical-cursor-flaws-could-let-prompt.html"
+        },
+        {
+          "label": "NVD - CVE-2026-50548 Detail",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-50548"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "Los RCE de escape de entorno aislado de Cursor mantienen la capa de ejecución de herramientas de agentes como un frente de ataque activo y la trasladan a un editor convencional, donde el contenido ingerido provoca una escritura arbitraria fuera del espacio de trabajo sin ninguna solicitud de aprobación. Eso afila la presión para que las plataformas de agentes controlen qué está autorizado a tocar un flujo que cruza límites, la preocupación de autorización de objetos y flujos a la que apunta esta predicción.",
+        "coherence": 3,
+        "remaining_gap": "La evidencia es un escape de entorno aislado con escritura de archivos, no la elusión de autorización IDOR entre inquilinos ni la autorización de flujos por inquilino entregada que nombra esta predicción."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.6ba7ca6e01ab313e",
+        "short_label": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
+        "prediction_date": "2026-06-28"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "Dos de los hilos de hoy presionan sobre el límite de capacidades del agente de código. Los RCE sin clic de Cursor, donde el contenido ingerido provoca una escritura arbitraria fuera del espacio de trabajo sin ninguna solicitud de aprobación, afilan el argumento a favor de una puerta de capacidades por defecto sobre el acceso a herramientas, sistema de archivos y datos en el editor que los desarrolladores usan a diario. En paralelo, Anthropic montó un programa de recompensas en HackerOne acotado a jailbreaks cibernéticos de Fable 5 más un marco temprano de severidad de jailbreaks codesarrollado con AWS, Microsoft y Google, lo que señala que la respuesta del lado del proveedor es un endurecimiento estructurado en lugar de parches sueltos. Ninguno es una puerta trifecta con nombre sobre el acceso a herramientas, red y datos entregada como valor por defecto de plataforma, así que esto es presión convergente más que un control entregado.",
+      "reference_links": [
+        {
+          "label": "The Hacker News - Critical Cursor Flaws Could Let Prompt Injection Escape Sandbox",
+          "url": "https://thehackernews.com/2026/07/critical-cursor-flaws-could-let-prompt.html"
+        },
+        {
+          "label": "Build Fast with AI - AI News Today July 4 2026",
+          "url": "https://www.buildfastwithai.com/blogs/ai-news-today-july-4-2026"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "so_that",
+        "narrative": "Los escapes sin clic de Cursor de hoy permiten que el contenido ingerido, un README o una respuesta de herramienta MCP envenenados, escriba fuera del espacio de trabajo sin aprobación, afilando el argumento para que las plataformas controlen qué puede tocar un flujo ingerido o que cruza límites. Eso empuja hacia la autorización a nivel de flujo, pero el fallo es un escape de ejecución de código y escritura de archivos en una estación de trabajo, no la elusión entre inquilinos en la que se apoya esta tesis.",
+        "coherence": 3,
+        "remaining_gap": "No hay ningún IDOR multiinquilino ni ninguna plataforma que entregue autorización por flujo acotada por inquilino; la evidencia es un escape en una sola estación de trabajo, no aislamiento entre inquilinos."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.d15f8427132cce7b",
+        "short_label": "A frontier AI lab files a public S-1 and prices its IPO by Q2 2027",
+        "prediction_date": "2026-06-12"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "[REVIVED] El análisis del primer semestre de Crunchbase de hoy reactiva esta apuesta arriesgada e inactiva: informa de que OpenAI planteó dar al gobierno de EE. UU. una posición accionarial de aproximadamente el 5% antes de un debut planeado en el mercado público, y plantea un semestre récord de 510.000 millones en el que OpenAI y Anthropic por sí solas se llevaron 217.000 millones, o el 43% de todos los dólares de riesgo, con 32 empresas respaldadas por capital de riesgo saliendo a bolsa por encima de una valoración de 1.000 millones en el Q2 conforme reabría la ventana de salidas. Ese es el mismo mecanismo de megaronda privada a liquidez pública en el que se apoya esta predicción, ahora ligado al laboratorio ancla del sector y a un matiz concreto de participación soberana. Lo que se reactivó aquí es el reporte de un arreglo planteado más que un S-1 o F-1 público presentado con un rango de precios, así que la reactivación es a nivel de montaje y la presentación real que nombra esta predicción sigue pendiente.",
+      "reference_links": [
+        {
+          "label": "Crunchbase News - Global Startup Investment Hit Record $510B In H1 2026",
+          "url": "https://news.crunchbase.com/venture/global-startup-exits-ipo-ma-soar-ai-q2-h1-2026/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "so_that",
+        "narrative": "Dos hilos convergen en el límite de capacidades del agente de código. Los escapes sin clic de Cursor, donde el contenido ingerido escribe fuera del espacio de trabajo sin aprobación, afilan el argumento a favor de una puerta por defecto sobre el acceso a herramientas, sistema de archivos y datos; el programa de recompensas y el marco de severidad de Anthropic señalan un endurecimiento estructurado en lugar de parches sueltos. Ninguno entrega la puerta trifecta con nombre activada por defecto, así que esto es presión creciente, no el mecanismo.",
+        "coherence": 3,
+        "remaining_gap": "Ninguna plataforma de agente de código entrega una puerta Regla de Dos activada por defecto que se detenga a pedir aprobación cuando se alcanza la trifecta letal de acceso a herramientas, red y datos."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.a96ff0bdaae351aa",
+        "short_label": "Open-weight coding model tops 85 on Terminal-Bench 2.1 by Q4 2026",
+        "prediction_date": "2026-06-18"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "[REVIVED] LongCat-2.0 de Meituan reactiva esta tesis inactiva de codificación de pesos abiertos: una MoE de 1,6 billones de parámetros con licencia permisiva MIT de un laboratorio chino que puntúa 59,5 en SWE-bench Pro, apenas por delante del 58,6 de GPT-5.5, y que pasó unos dos meses anónimos en el top tres global de OpenRouter como Owl Alpha antes de que se divulgara su origen. Esa es la misma trayectoria de los laboratorios de codificación de pesos abiertos cerrando la brecha en la que se apoya esta predicción, mostrando un punto de control totalmente abierto compitiendo en la cúspide de un benchmark de codificación difícil. La cifra reportada es de SWE-bench Pro más que el objetivo concreto de superar 85 en Terminal-Bench 2.1 que nombra esta predicción, así que la reactivación es a nivel de la vía del benchmark más que un acierto directo en el listón declarado.",
+      "reference_links": [
+        {
+          "label": "VentureBeat - Meituan open sources LongCat-2.0, trained entirely on Chinese chips",
+          "url": "https://venturebeat.com/technology/meituan-open-sources-longcat-2-0-the-1-6t-near-frontier-agentic-coding-model-thats-been-leading-openrouter-trained-entirely-on-chinese-chips"
+        },
+        {
+          "label": "Open Source For You - Meituan Open Sources LongCat-2.0 Under MIT License",
+          "url": "https://www.opensourceforu.com/2026/06/meituan-open-sources-longcat-2-0-under-mit-license/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "El recuento del primer semestre de Crunchbase reactiva esta tesis: OpenAI planteó dar al gobierno de EE. UU. una participación de aproximadamente el 5% antes de un debut público planeado, dentro de un semestre récord de 510.000 millones donde dos laboratorios se llevaron el 43% de los dólares de riesgo y 32 firmas cotizaron por encima de mil millones en el Q2. Ese es el mecanismo de megaronda privada a liquidez pública en el que se apoya esto, ahora sobre el laboratorio ancla.",
+        "coherence": 4,
+        "remaining_gap": "Lo que salió a la luz es un arreglo planteado, no un S-1 o F-1 público y no confidencial presentado con un rango de precios ni una oferta fijada en NYSE/Nasdaq."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.7b2e55a251231fe9",
+        "short_label": "Single 24-32GB GPU fine-tuning crosses 100K-token context routine by Q2 2027",
+        "prediction_date": "2026-06-20"
+      },
+      "today_relevance": 2,
+      "evidence_summary": "[REVIVED] LongCat-2.0 de Meituan, una MoE de 1,6 billones de parámetros con licencia MIT construida de extremo a extremo sobre ASIC chinos que supera por poco a GPT-5.5 en SWE-bench Pro, mantiene viva la vía de la optimización local y la independencia de cómputo en la que se sitúa esta predicción: el relato del sustrato de entrenamiento es que la capacidad casi de frontera ya no depende de una asignación concreta de aceleradores, y su contexto nativo de un millón de tokens subraya que el manejo de contexto largo es ya un requisito básico. Eso refuerza la tesis más amplia más que el margen de hardware concreto. El sistema demostrado es un modelo de 1,6 billones entrenado en un clúster de 50.000 ASIC, el extremo opuesto de la escala a una sola GPU de consumo de 24-32GB encajando ajuste fino de contexto de 100K tokens, así que la reactivación es a nivel de tesis y no toca el objetivo declarado de hardware de una sola tarjeta.",
+      "reference_links": [
+        {
+          "label": "VentureBeat - Meituan open sources LongCat-2.0, trained entirely on Chinese chips",
+          "url": "https://venturebeat.com/technology/meituan-open-sources-longcat-2-0-the-1-6t-near-frontier-agentic-coding-model-thats-been-leading-openrouter-trained-entirely-on-chinese-chips"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "LongCat-2.0 de Meituan, una mezcla de expertos MIT de 1,6 billones entrenada de extremo a extremo sobre ASIC chinos mientras supera por poco a GPT-5.5 en SWE-bench Pro, mantiene viva la vía de la independencia de cómputo y la optimización local y trata el contexto de un millón de tokens como un requisito básico. Pero es un clúster de 50.000 chips entrenando un modelo casi de frontera, la escala opuesta a una sola tarjeta de consumo, así que mueve la tesis circundante, no la trayectoria de encaje en memoria de una sola GPU.",
+        "coherence": 2,
+        "remaining_gap": "No hay ninguna optimización de encaje en memoria ni una receta documentada que encaje 100K de contexto usable en una sola GPU de consumo de 24-32GB."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.a40a541ef73b240c",
+        "short_label": "Sub-7B open-weight reasoning models clear verified AIME-80 by Q1 2027",
+        "prediction_date": "2026-06-19"
+      },
+      "today_relevance": 2,
+      "evidence_summary": "[REVIVED] La publicación de LongCat-2.0 bajo MIT, que supera por poco a GPT-5.5 en SWE-bench Pro tras dos meses anónimos en el top tres global de OpenRouter, reactiva la afirmación subyacente de que los puntos de control de pesos abiertos pueden competir con los mejores modelos de frontera cerrados en benchmarks difíciles y específicos de la tarea, el mismo mecanismo de paridad de pesos abiertos en el que se apoya esta predicción inactiva para argumentar que los modelos pequeños de pesos abiertos pueden superar un listón de razonamiento verificado. La evidencia es una MoE de 1,6 billones de parámetros encabezando un benchmark de codificación más que un modelo por debajo de 7B superando el AIME-80 verificado, así que reactiva la vía de la capacidad de pesos abiertos sin tocar el objetivo concreto de parámetros y benchmark que nombra esta predicción.",
+      "reference_links": [
+        {
+          "label": "VentureBeat - Meituan open sources LongCat-2.0, trained entirely on Chinese chips",
+          "url": "https://venturebeat.com/technology/meituan-open-sources-longcat-2-0-the-1-6t-near-frontier-agentic-coding-model-thats-been-leading-openrouter-trained-entirely-on-chinese-chips"
+        },
+        {
+          "label": "Open Source For You - Meituan Open Sources LongCat-2.0 Under MIT License",
+          "url": "https://www.opensourceforu.com/2026/06/meituan-open-sources-longcat-2-0-under-mit-license/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "LongCat-2.0 de Meituan, con licencia MIT, superó por poco a GPT-5.5 en SWE-bench Pro tras dos meses anónimos en el top tres global de OpenRouter, valorado por sus méritos antes de que saliera a la luz su origen. Eso refuerza la premisa de que los pesos abiertos pueden competir con la mejor frontera cerrada en un benchmark difícil, pero la demostración es un modelo de codificación de 1,6 billones, no un modelo por debajo de 7B verificado en AIME.",
+        "coherence": 2,
+        "remaining_gap": "No hay ningún modelo de pesos abiertos por debajo de 7B con una puntuación AIME en los 80 corroborada en una tabla de clasificación independiente de terceros o una reproducción."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.a4ee0b5435860b21",
+        "short_label": "AWS Continuum's sandbox exploit-validation goes industry baseline by H1 2027",
+        "prediction_date": "2026-06-21"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "[REVIVED] La divulgación por parte de Cato AI Labs de dos RCE de escape de entorno aislado sin clic con CVSS 9.8 en Cursor, ambos demostrados como escapes completos del entorno aislado y corregidos en Cursor 3.0, es una prueba de alcanzabilidad y explotabilidad relevante para máquinas exactamente del tipo que esta predicción inactiva sostiene que se convertirá en una etapa de referencia: investigación que muestra que un fallo es un escape sin clic genuino, no una mera puntuación CVSS estática, con las versiones antiguas dejadas explotables por defecto hasta que se actualizan. La cobertura lo vincula con las recientes divulgaciones de Flowise y Langflow como un solo patrón de exploit demostrado a través del límite de las herramientas de agentes. Esto es un laboratorio de seguridad publicando un hallazgo funcional de validación de exploits más que un servicio de gestión de vulnerabilidades con nombre entregando la validación de exploits en entorno aislado como una etapa estándar, así que la reactivación es a nivel de patrón.",
+      "reference_links": [
+        {
+          "label": "The Hacker News - Critical Cursor Flaws Could Let Prompt Injection Escape Sandbox",
+          "url": "https://thehackernews.com/2026/07/critical-cursor-flaws-could-let-prompt.html"
+        },
+        {
+          "label": "NVD - CVE-2026-50549 Detail",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-50549"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "so_that",
+        "narrative": "Cato AI Labs publicó dos fallos de Cursor con CVSS 9.8 demostrados como escapes completos del entorno aislado, no meras puntuaciones estáticas, vinculados a Flowise y Langflow como un solo patrón explotable. Eso refleja la lógica de validación por construcción, probando que un hallazgo es genuinamente alcanzable en lugar de clasificarlo. Pero es un laboratorio publicando un exploit funcional, no un proveedor entregando la validación de exploits en entorno aislado como una etapa.",
+        "coherence": 3,
+        "remaining_gap": "No hay ningún proveedor adicional con nombre de seguridad de IA o ASPM que documente la prueba automatizada de exploit en entorno aislado como una etapa de validación entregada."
+      }
+    }
+  ]
+}

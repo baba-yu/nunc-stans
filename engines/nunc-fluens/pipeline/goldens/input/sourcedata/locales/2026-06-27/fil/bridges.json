@@ -1,0 +1,247 @@
+{
+  "date": "2026-06-27",
+  "validation_rows": [
+    {
+      "prediction_ref": {
+        "id": "prediction.f52aeb7468446ca2",
+        "short_label": "Multi-tenant agent builders draw a 9.0+ cross-tenant authz CVE by Q1 2027",
+        "prediction_date": "2026-06-27"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "Ang pangunahing kuwento ngayon ang nagpasimuno na origin signal at ang lagda ng klase na pinagbabatayan ng thesis na ito. Ang Langflow cross-tenant IDOR na lumitaw sa totoong mundo ay ang CVE-2026-55255, isang CVSS 9.9 na insecure-direct-object-reference (CWE-639) sa isang flow-execution endpoint: nireresolba ng get_flow_by_id_or_endpoint_name helper ang isang flow sa pamamagitan ng UUID nang walang owner check, kaya maaaring patakbuhin ng sinumang authenticated na user ang flow ng ibang tenant sa pamamagitan ng /api/v1/responses. Ang ulat ng Sysdig noong June 25 ang unang kilalang pagsasamantala sa totoong mundo, at ipinapakita ng telemetry ang isang operator na kumukuha ng mga flow ID mula sa GET /api/v1/flows/ at pagkatapos ay inuulit ang mga ito ~20 segundo mamaya sa POST /api/v1/responses na may input na 'leak api keys,' sa isang instance na nagpapatakbo rin ng KEV-listed na RCE na CVE-2026-33017. Ang istruktural na pagbasa ng ulat ngayon ay siya mismong premise ng prediksyon: ang mahinang bahagi ng mga multi-tenant agent platform ay ang orchestration at authorization plane -- mga malabo at madaling anihing flow/run/workspace ID, isang ibinabahaging execution endpoint, at mga owner check na ipinapaubaya sa UI sa halip na ipatupad sa server kada object -- at paulit-ulit na lumilitaw ang parehong arkitekturang pattern sa buong n8n / Flowise / Dify / LangGraph Platform / CrewAI na klase ng kapantay. Ang puwang papunta sa falsifiable na bar: hinihingi ng prediksyon ang isang PANGALAWA at naiibang pinangalanang platform sa kategoryang ito (hindi Langflow) na tumanggap ng isang CVSS >= 9.0 na advisory na ang ugat na sanhi ay cross-tenant authorization, broken-object-level access, o IDOR, mas mainam na may ebidensya ng pagsasamantala sa totoong mundo o CISA-KEV. Nagbibigay ang araw na ito ng unang pagkakataon at ng istruktural na trigger. Hindi pa dumarating ang pag-ulit na magpapatunay na totoo ang klase.",
+      "reference_links": [
+        {
+          "label": "Sysdig - Pag-unawa sa Langflow CVE-2026-55255, at kung bakit hindi laging ang mas mataas na CVSS na vulnerability ang pinaka-pinagsasamantalahan",
+          "url": "https://webflow.sysdig.com/blog/understanding-langflow-cve-2026-55255-and-why-higher-cvss-vulnerabilities-arent-always-the-most-exploited"
+        },
+        {
+          "label": "GitHub Advisory Database - Langflow IDOR sa /api/v1/responses na nagbibigay-daan sa mga authenticated na umaatake na patakbuhin ang flow ng ibang user (CVE-2026-55255)",
+          "url": "https://github.com/advisories/GHSA-qrpv-q767-xqq2"
+        },
+        {
+          "label": "GitLab Advisory Database - CVE-2026-55255 Langflow IDOR (CVSS 9.9, inayos sa 1.9.1)",
+          "url": "https://advisories.gitlab.com/pypi/langflow/CVE-2026-55255/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Ang Langflow cross-tenant IDOR (CVE-2026-55255, CVSS 9.9) na lumitaw sa totoong mundo noong June 25 ang nagpasimuno na origin signal: isang flow na nireresolba sa malabong UUID na may mga owner check na ipinapaubaya sa UI sa isang ibinabahaging execution endpoint. Iyan mismo ang mahinang bahagi ng orchestration plane na pinagbabatayan ng thesis ng Multi-tenant agent builders na authz-CVE (Jun 27), at paulit-ulit na lumilitaw ang pattern sa buong n8n/Flowise/Dify.",
+        "coherence": 4,
+        "remaining_gap": "Kailangan pa rin ng isang pangalawa at naiibang pinangalanang platform na magkaroon ng CVSS >= 9.0 na cross-tenant authz, BOLA, o IDOR na advisory; nagbibigay lamang ang araw na ito ng unang pagkakataon, hindi ng pag-ulit na magpapatunay sa klase."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.1e6f56222db35798",
+        "short_label": "Major AI-agent platform ships zero-trust controls as default-on by Q2 2027",
+        "prediction_date": "2026-06-27"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "Ang dalawang security advisory ngayon ang istruktural na hindi maiiwasang puwersa na pinagbubuo ng depensibong thesis na ito. Pinatutunayan ng Langflow cross-tenant IDOR (CVE-2026-55255, CVSS 9.9), na may unang pagsasamantala sa totoong mundo na iniulat ng Sysdig noong June 25, na umaalis ang orchestration plane nang walang deny-by-default na per-tenant authorization: nireresolba ng get_flow_by_id_or_endpoint_name ang isang flow sa UUID nang walang owner check. Pinatutunayan ng AutoGPT SSRF-protection bypass (CVE-2026-56663, CVSS 8.5, inayos sa 0.6.52, inilathala June 26) na umaalis ang execution plane nang walang SSRF-hardened na tool-call at egress na default: ang SendWebRequestBlock na ginagamit ng mga agent para sa papalabas na HTTP call ay mali ang paghawak sa mga IPv4-mapped IPv6 address, na muling nagbubukas sa internal-IP filter para maabot ng isang agent ang cloud metadata, mga internal admin panel, at mga database. Magkasama silang bumubuo sa eksaktong kaso ng prediksyon -- ang isang fetch-arbitrary-URL block ay sa likas na disenyo isang SSRF surface, at ang isang flow na nireresolba sa malabong ID ay sa likas na disenyo isang cross-tenant surface, maliban kung ang authorization at egress ay naka-gate bilang default. Ang falsifiable na target ng prediksyon ay hindi bababa sa isang major na AI-agent platform, orchestration vendor, o agentic IDE na maglalabas ng zero-trust controls bilang default-on sa isang pinangalanang release: deny-by-default na per-tenant object-level authorization at/o default outbound-egress allowlisting na may SSRF-hardened na block. Ang puwang papunta sa bar: hindi nabibilang ang isang blog post, isang opt-in toggle, isang one-off na CVE patch, o isang pangako sa roadmap -- at nagbibigay lamang ang araw na ito ng mga nag-uudyok na CVE, hindi ng isang default-posture na release.",
+      "reference_links": [
+        {
+          "label": "Sysdig - Pag-unawa sa Langflow CVE-2026-55255, at kung bakit hindi laging ang mas mataas na CVSS na vulnerability ang pinaka-pinagsasamantalahan",
+          "url": "https://webflow.sysdig.com/blog/understanding-langflow-cve-2026-55255-and-why-higher-cvss-vulnerabilities-arent-always-the-most-exploited"
+        },
+        {
+          "label": "NVD - CVE-2026-56663 Detail (AutoGPT SSRF-protection bypass sa pamamagitan ng IPv4-mapped IPv6 addresses, inayos sa 0.6.52)",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56663"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Ang dalawang advisory ng iisang linggo ang hindi maiiwasang puwersa sa likod ng thesis na zero-trust-default-on (Jun 27): pinatutunayan ng IDOR ng Langflow (CVSS 9.9) na umaalis ang orchestration plane nang walang deny-by-default na per-tenant authorization, at pinatutunayan ng SSRF bypass ng AutoGPT (CVE-2026-56663, CVSS 8.5) na umaalis ang execution plane nang walang egress-hardened na tool call. Ang isang fetch-arbitrary-URL block at isang flow na may malabong ID ay mga SSRF at cross-tenant surface maliban kung naka-gate bilang default.",
+        "coherence": 4,
+        "remaining_gap": "Kulang pa rin ng isang major na platform na maglalabas ng deny-by-default authorization at/o SSRF-hardened egress allowlisting sa isang pinangalanang release; nagbibigay ang araw na ito ng mga nag-uudyok na CVE, hindi ng isang default-posture na release."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.9bc46d8a918d51a2",
+        "short_label": "AMD Instinct MI400 launches with a named ship, memory, or rack spec by Q3 2026",
+        "prediction_date": "2026-06-27"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "Ang kalendaryo ng mga kaganapan ngayon ang nagbibigay ng may-petsa at pinangalanang katalista na pinaiikot ng thesis na ito. Kumpirmado ang Advancing AI 2026 ng AMD para sa July 22-23 sa Moscone sa San Francisco, kung saan nakatakda ang keynote at ang pokus sa Instinct MI400-series sa July 23 -- isang lugar ng paglulunsad na partikular na ginawa para ilagay sa rekord ang isang merchant-accelerator roadmap laban sa Nvidia. Ang falsifiable na target ng prediksyon ay sa kaganapan ay pormal na ilulunsad at idedetalye ng AMD ang MI400 datacenter-accelerator series na may hindi bababa sa isang PINANGALANAN at masusuring commitment, hindi isang teaser: isang nakasaad na general-availability o volume-ship window, isang pinangalanang high-bandwidth-memory na kapasidad o bandwidth figure, isang pinangalanang rack-scale platform (isang Helios-class rack system), at/o isang pinangalanang hyperscaler o frontier-lab na pangakong deployment. Sinusundan nito ang nakatayong thesis na ang malakihang training at inference ay nananatili sa hyperscaler-class na merchant accelerator, kaya ang mapagkumpitensyang bahagi na gumagalaw sa cloud ay ang merchant-accelerator roadmap kasama ang mga memory at rack spec at pinangalanang pangako ng customer. Ang puwang papunta sa bar: nagbibigay ang araw na ito ng may-petsang lugar, hindi ng spec sa entablado. Hindi nabibilang ang isang teaser slide na walang spec, isang roadmap chart na walang GA window, isang muling pag-anunsyo ng nakaraang henerasyong MI355X / MI350 na linya, o isang hindi kumpirmadong leak -- masusuri lamang ang kuwalipikadong pinangalanang commitment pagkatapos ng keynote sa July 23.",
+      "reference_links": [
+        {
+          "label": "AMD - Advancing AI 2026 (San Francisco, July 22-23)",
+          "url": "https://www.amd.com/en/corporate/events/advancing-ai.html"
+        },
+        {
+          "label": "AI Engineer - World's Fair 2026 (hackathon June 27-28; pangunahing programa June 29 - July 2, Moscone West, San Francisco)",
+          "url": "https://www.ai.engineer/worldsfair/2026"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "landing",
+        "narrative": "Ang may-petsang katalista para sa thesis ng paglulunsad ng AMD Instinct MI400 (Jun 27) ay nasa rekord na: kumpirmado ang Advancing AI 2026 sa July 22-23 sa Moscone, na may keynote ng MI400-series sa July 23 -- isang lugar na ginawa para ilagay ang isang merchant-accelerator roadmap laban sa Nvidia, sa loob ng window ng Q3 2026. Nakahanda na ang setup para sa isang pinangalanang ship, memory, o rack na commitment.",
+        "coherence": 4,
+        "remaining_gap": "Masusuri lamang ang isang pinangalanang spec (GA window, HBM na kapasidad, Helios-class rack, o hyperscaler deployment) pagkatapos ng keynote sa July 23; hindi mabibilang ang isang teaser na walang spec o muling pag-anunsyo ng MI355X."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.04f4d9d539cf6341",
+        "short_label": "Coding-agent harnesses adopt default-deny toolset gating as standard by H1 2027",
+        "prediction_date": "2026-06-20"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "Ang dalawang advisory ngayon ay direkta at sa-totoong-mundong ebidensya para sa banta na sinasagot ng default-deny na thesis na ito. Ipinapakita ng Langflow cross-tenant IDOR (CVE-2026-55255, CVSS 9.9) na lumitaw sa totoong mundo ayon sa ulat ng Sysdig noong June 25 ang isang agent-execution endpoint na nagpapatakbo ng flow ng ibang tenant nang walang owner check, at ipinapakita ng AutoGPT SSRF bypass (CVE-2026-56663, CVSS 8.5, inayos sa 0.6.52) ang isang general-purpose na web-request block na nakakabit sa mga agent workflow na umaabot sa mga internal service na hindi dapat hawakan ng agent. Pareho silang siya mismong open-permission na failure mode na inaasahan ng prediksyon na isasara ng mga harness: ang isang fetch-arbitrary-URL primitive at isang malawak na sakop na execution endpoint ay delikado dahil mismo ang toolset at egress ay pinapayagan bilang default sa halip na naka-gate. Sinasabi ng prediksyon na gagawin ng mga coding-agent harness na pamantayang postura ang default-deny toolset gating -- naka-off ang mga tool at network egress hanggang sa tahasang paganahin kada gawain. Ang puwang papunta sa bar: nagbibigay ang araw na ito ng mga nag-uudyok na CVE sa mga agent platform, hindi ng isang harness na naglalabas ng default-deny toolset gating bilang pamantayan nito. Ang sariling remedyo ng AutoGPT ay isang one-off na SSRF patch kasama ang isang tagubilin sa operator na hadlangan ang papalabas na egress, na siyang manual na bersyon ng default na inaasahan ng prediksyon na magiging pamantayan -- hindi ang default mismo.",
+      "reference_links": [
+        {
+          "label": "Sysdig - Pag-unawa sa Langflow CVE-2026-55255, at kung bakit hindi laging ang mas mataas na CVSS na vulnerability ang pinaka-pinagsasamantalahan",
+          "url": "https://webflow.sysdig.com/blog/understanding-langflow-cve-2026-55255-and-why-higher-cvss-vulnerabilities-arent-always-the-most-exploited"
+        },
+        {
+          "label": "NVD - CVE-2026-56663 Detail (AutoGPT SSRF-protection bypass sa pamamagitan ng IPv4-mapped IPv6 addresses, inayos sa 0.6.52)",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56663"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Pinapatunayan ng dalawang advisory ang banta na sinasagot ng thesis ng default-deny toolset-gating (Jun 20): nagpapatakbo ang IDOR ng Langflow ng flow ng ibang tenant sa isang malawak na endpoint, at hinahayaan ng SSRF bypass ng AutoGPT (CVE-2026-56663) ang isang fetch-arbitrary-URL block na umabot sa mga internal service -- pareho silang delikado dahil ang mga tool at egress ay pinapayagan bilang default sa halip na naka-gate kada gawain. Ang ayos ng AutoGPT na patch-kasama-payo-sa-egress ay ang manual na bersyon ng default na iyon.",
+        "coherence": 3,
+        "remaining_gap": "Walang coding-agent harness na naglabas ng default-deny toolset gating bilang pamantayang postura nito ngayon; ang ebidensya ay mga nag-uudyok na CVE at isang one-off na patch, hindi ang default mismo na nagiging pamantayan."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.f3f7e18b691f1c39",
+        "short_label": "OpenClaw ships default-deny tool and network gating out-of-box by Q4 2026",
+        "prediction_date": "2026-06-23"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "Ang advisory ng AutoGPT ngayon ay tahasang nasa-thesis para sa kalahating network-gating ng prediksyon na ito. Ang CVE-2026-56663 (CVSS 8.5, inayos sa 0.6.52) ay isang bypass ng mga proteksyong SSRF ng AutoGPT: mali ang paghawak ng SendWebRequestBlock sa mga IPv4-mapped IPv6 address at hindi nito napapatunayan ang ilang IP range, kaya kayang talunin ng isang authenticated na user ang internal-IP filter at maabot ang mga serbisyo ng pribadong network -- cloud metadata, mga internal admin panel, mga database. Ang payo sa ayos -- mag-upgrade at hadlangan ang papalabas na egress mula sa agent runner -- ay siya mismong default-deny na network posture na inaasahan ng prediksyon na ilalabas ng isang agent harness out-of-box sa halip na ipaubaya sa mga operator. Pinapatibay ng Langflow cross-tenant IDOR na lumitaw sa totoong mundo ang parehong mas malawak na presyur sa mga agent platform na mag-gate bilang default sa hangganan ng object at execution. Ang falsifiable na target ng prediksyon ay partikular na ang OpenClaw na naglalabas ng default-deny tool at network gating out-of-box. Ang puwang papunta sa bar: nagbibigay ang araw na ito ng kaso ng banta sa mga kapantay na proyekto (AutoGPT, Langflow), hindi ng isang release ng OpenClaw; walang lumalabas na default-deny na release ng OpenClaw sa ulat ngayon.",
+      "reference_links": [
+        {
+          "label": "NVD - CVE-2026-56663 Detail (AutoGPT SSRF-protection bypass sa pamamagitan ng IPv4-mapped IPv6 addresses, inayos sa 0.6.52)",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56663"
+        },
+        {
+          "label": "Sysdig - Pag-unawa sa Langflow CVE-2026-55255, at kung bakit hindi laging ang mas mataas na CVSS na vulnerability ang pinaka-pinagsasamantalahan",
+          "url": "https://webflow.sysdig.com/blog/understanding-langflow-cve-2026-55255-and-why-higher-cvss-vulnerabilities-arent-always-the-most-exploited"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Ang AutoGPT SSRF bypass noong June 26 (CVE-2026-56663) ay nagpapakain sa kalahating network-gating ng prediksyon ng OpenClaw default-deny (Jun 23): ang isang fetch primitive na umaabot sa cloud metadata at mga internal service ay siya mismong egress na dapat naka-off out-of-box, at ang payo ng ayos na hadlangan ang papalabas na egress ay ang manual na bersyon ng inaasahang default. Pinapatibay ng Langflow IDOR sa totoong mundo ang parehong presyur sa pag-gate ng object at execution.",
+        "coherence": 3,
+        "remaining_gap": "Nasa mga kapantay na proyekto ang kaso ng banta; walang release ng OpenClaw na naglalabas ng default-deny tool at network gating out-of-box ang lumalabas ngayon."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.079ca77d11decc5f",
+        "short_label": "AI accelerator ships confidential-inference tier with attestation by H1 2027",
+        "prediction_date": "2026-06-26"
+      },
+      "today_relevance": 2,
+      "evidence_summary": "Ang balita ngayon ay dumadampi sa thesis na ito pangunahin sa pamamagitan ng kalendaryo ng mga lugar ng AI-chip, na may mahinang pampatibay sa panig ng banta. Ang Advancing AI 2026 ng AMD (July 22-23 sa Moscone, kasama ang keynote at pokus sa Instinct MI400-series sa July 23) ay siya mismong uri ng entablado kung saan lilitaw ang isang confidential-inference na bahagi na may attestation, at nasa loob ito ng window ng prediksyong ito. Sa panig ng banta, pinananatili ng Langflow IDOR sa totoong mundo at ng AutoGPT SSRF bypass ang agentic-AI security cycle na nakatali sa integridad at paghihiwalay ng anumang tumatakbo sa AI infrastructure, ang malawak na alalahanin na sinasagot ng hardware-rooted na confidential inference at signed-model attestation -- bagama't walang isa sa mga CVE ang isang accelerator o attestation na kuwento. Inaasahan ng prediksyon na isang layuning-binuo na AI inference accelerator ang ilalabas o ilalantad na may confidential computing bilang isang pinangalanan at sentral na tampok: on-die root-of-trust, TEE-I/O na nagpapanatiling naka-encrypt ang weights at activations habang ginagamit sa buong CPU-accelerator boundary, at signed-model attestation, na minamarketing bilang isang pinangalanang confidential-inference na SKU o tier. Ang puwang papunta sa bar: nagbibigay ang araw na ito ng paparating na lugar ng AMD at backdrop ng banta lamang, hindi ng isang inilalabas na bahagi. Hindi nabibilang ang isang generic na linya ng confidential-computing sa spec sheet ng isang GPU, isang research paper, o isang confidential-VM na alok na walang TEE-I/O o model attestation; hindi pa naihahayag ang pinangalanang confidential-inference na tier.",
+      "reference_links": [
+        {
+          "label": "AMD - Advancing AI 2026 (San Francisco, July 22-23)",
+          "url": "https://www.amd.com/en/corporate/events/advancing-ai.html"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "Ang Advancing AI 2026 ng AMD (July 22-23, Moscone, keynote ng MI400-series sa July 23) ay nasa loob ng window para sa prediksyon ng confidential-inference-tier (Jun 26) at siya mismong uri ng entablado kung saan lilitaw ang isang bahagi na may on-die root-of-trust, TEE-I/O, at signed-model attestation. Pinananatiling malakas ng Langflow IDOR sa totoong mundo at ng AutoGPT SSRF ang mga alalahanin sa integridad ng anumang tumatakbo, bagama't walang isa man dito ang isang accelerator o attestation na kuwento.",
+        "coherence": 2,
+        "remaining_gap": "Isang paparating na lugar at backdrop ng banta lamang ngayon; walang inilalabas na bahagi na may pinangalanang confidential-inference na tier o attestation ang naihayag."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.94703faa1b26ba42",
+        "short_label": "Managed model-serving platforms default to safe artifact handling by H1 2027",
+        "prediction_date": "2026-06-17"
+      },
+      "today_relevance": 2,
+      "evidence_summary": "Ang balita ngayon ay may kinalaman sa thesis na ito sa tema sa halip na sa isang pagbabago ng default-handling. Ang Langflow cross-tenant IDOR na lumitaw sa totoong mundo at ang AutoGPT SSRF bypass ay parehong nagpapakita na ang plumbing ng agent platform -- mga execution endpoint, mga fetch primitive -- ay umaalis na unsafe-by-default at tumitigas lamang pagkatapos ng isang maximum-severity na insidente, na siyang parehong presyur ng default-shipment na inaasahan ng prediksyong ito na aabot sa mga managed model-serving platform. Ngunit ang mga CVE ngayon ay isang authorization-bypass na IDOR at isang SSRF bypass, hindi ang unsafe-artifact-deserialization na klase (pickle/dill, model checkpoint, feature-store body) na bumubuo sa bar ng prediksyong ito, kaya ang ugnayan ay sa tema sa halip na direkta. Sinasabi ng prediksyon na ililipat ng mga managed serving platform ang safe artifact handling -- gated o sandboxed na deserialization, signed/provenance-checked na artifact, safe-by-default na format -- mula sa isang opt-in flag papunta sa default ng platform. Ang puwang papunta sa bar: hindi nagbibigay ang araw na ito ni ng isang deserialization na insidente ni ng isang pagbabago ng default-handling ng managed platform; hindi pa naihahayag ang depensibong dapat mangyari -- isang pinangalanang platform na nagpapagana ng safe artifact handling bilang default.",
+      "reference_links": [
+        {
+          "label": "Sysdig - Pag-unawa sa Langflow CVE-2026-55255, at kung bakit hindi laging ang mas mataas na CVSS na vulnerability ang pinaka-pinagsasamantalahan",
+          "url": "https://webflow.sysdig.com/blog/understanding-langflow-cve-2026-55255-and-why-higher-cvss-vulnerabilities-arent-always-the-most-exploited"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Ipinapakita ng Langflow IDOR sa totoong mundo at ng AutoGPT SSRF na ang plumbing ng agent platform ay umaalis na unsafe-by-default at tumitigas lamang pagkatapos ng isang maximum-severity na insidente, ang parehong presyur ng default-shipment na inaasahan ng prediksyon ng safe-artifact-handling (Jun 17) na aabot sa mga managed model-serving platform. Ngunit parehong authorization-bypass at request-forgery na depekto ang mga ito, hindi ang unsafe-deserialization na klase (pickle, dill, model checkpoint) na bumubuo sa bar na ito, kaya nananatiling pang-tema lamang ang ugnayan.",
+        "coherence": 2,
+        "remaining_gap": "Walang deserialization na insidente at walang pagbabago ng default ng managed platform ngayon; walang pinangalanang platform na nagpapagana ng safe artifact handling bilang default ang naihayag."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.3e6e8b6ae1e7c76e",
+        "short_label": "AI-agent procurement adds a numeric prompt-injection-resistance bar by Q2 2027",
+        "prediction_date": "2026-06-23"
+      },
+      "today_relevance": 2,
+      "evidence_summary": "Ang balita ngayon ay dumadampi sa thesis na ito sa pagiging katabi at sa lugar, hindi sa isang pagbabago ng procurement-spec. Pinananatili ng Langflow IDOR na lumitaw sa totoong mundo at ng AutoGPT SSRF bypass na malakas ang tibok ng agentic-AI attack surface -- unauthenticated na cross-tenant flow execution at isang agent fetch primitive na umaabot sa mga internal service -- na siyang uri ng daloy ng insidente na nagpapakain sa hinihingi ng mga mamimili para sa masusukat na mga security bar sa AI-agent procurement. Nasa forward na kalendaryo ang kaugnay na standards forum: nasa loob ng window ng prediksyon ang OWASP Global AppSec USA (November 5-6 sa San Francisco), kasama ang mga AI-security track ng Black Hat at DEF CON. Ngunit ang mga ito ay mga authorization at request-forgery na depekto sa halip na prompt-injection, kaya pahilis ang ugnayan sa partikular na bar ng prediksyong ito. Ang falsifiable na target ng prediksyon ay ang AI-agent procurement na nagdaragdag ng isang numeric na prompt-injection-resistance bar -- isang quantified na threshold sa isang kinakailangan sa pagbili. Ang puwang papunta sa bar ay halos ang buong claim: nagbibigay ang araw na ito ng pang-temang presyur sa seguridad at ng kaugnay na lugar ng standards, hindi ng isang dokumento ng procurement na nagtutukoy ng isang numeric na prompt-injection-resistance threshold.",
+      "reference_links": [
+        {
+          "label": "Sysdig - Pag-unawa sa Langflow CVE-2026-55255, at kung bakit hindi laging ang mas mataas na CVSS na vulnerability ang pinaka-pinagsasamantalahan",
+          "url": "https://webflow.sysdig.com/blog/understanding-langflow-cve-2026-55255-and-why-higher-cvss-vulnerabilities-arent-always-the-most-exploited"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Pinananatiling malakas ng Langflow IDOR sa totoong mundo noong June 25 at ng AutoGPT SSRF bypass ang tibok ng agentic attack surface, ang presyur mula sa panig ng mamimili na nagpapakain sa hinihinging masusukat na mga security bar. Nasa loob ng window ang OWASP Global AppSec USA (Nov 5-6, SF). Ngunit ang mga ito ay mga authorization at request-forgery na depekto, hindi prompt-injection, kaya pahilis ang ugnayan sa numeric-resistance na bar.",
+        "coherence": 2,
+        "remaining_gap": "Walang dokumento ng procurement na nagtutukoy ng isang numeric na prompt-injection-resistance threshold; nagbibigay ang araw na ito ng pang-temang presyur at isang lugar ng standards, hindi ng bar mismo."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.b1fc4c7fdc0c17fe",
+        "short_label": "AI inference proxies gain named CISA KEV-timeline governance by Q2 2027",
+        "prediction_date": "2026-06-10"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "[REVIVED] Layer-1 keyword match sa mga signal ng dormant row na ito -- SSRF, MCP-server, AI inference proxies / LLM gateway bilang isang pinangalanang klase ng software, KEV-timeline remediation -- laban sa balita ngayon. Ang AutoGPT SSRF-protection bypass (CVE-2026-56663, CVSS 8.5, inayos sa 0.6.52) ay siya mismong SSRF-on-an-agent-gateway na primitive na sinusubaybayan ng prediksyong ito: isang general-purpose na web-request block na umaabot sa mga internal service sa pamamagitan ng isang puwang sa pag-parse ng IPv4-mapped-IPv6, na ang remedyo ay hadlangan ang papalabas na egress -- ang eksaktong postura ng paghihigpit sa pagkakalantad sa internet na inaasahan ng prediksyon na maitatakda bilang pinangalanang governance. Pinapatibay ng Langflow cross-tenant IDOR na lumitaw sa totoong mundo (CVE-2026-55255, CVSS 9.9), na ikinabit sa parehong instance kasama ang dating CISA-KEV-listed na RCE na CVE-2026-33017, ang sinulid ng KEV-timeline nang direkta: ang agent-orchestration/proxy layer ay gumagawa ng maximum-severity at aktibong pinagsasamantalahang mga CVE ng uri na umaakit ng mga listing sa CISA-KEV at mga operational directive. Ang falsifiable na target ng prediksyon ay ang mga AI inference proxy / LLM gateway / MCP server na nagkakaroon ng pinangalanang governance ng klase ng software sa isang remediation timeline na tulad ng CISA-KEV -- mas mainam na isang magkasanib na publikasyon ng CISA-NSA o isang nagbubuklod na operational directive. Ang puwang papunta sa bar: nagbibigay ang araw na ito ng mga bagong CVE sa eksaktong klaseng ito (isa na ikinabit sa isang KEV-listed na RCE), hindi ng isang pinangalanang instrumento ng governance na nagtatakda sa klase ng software.",
+      "reference_links": [
+        {
+          "label": "NVD - CVE-2026-56663 Detail (AutoGPT SSRF-protection bypass sa pamamagitan ng IPv4-mapped IPv6 addresses, inayos sa 0.6.52)",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56663"
+        },
+        {
+          "label": "Sysdig - Pag-unawa sa Langflow CVE-2026-55255, at kung bakit hindi laging ang mas mataas na CVSS na vulnerability ang pinaka-pinagsasamantalahan",
+          "url": "https://webflow.sysdig.com/blog/understanding-langflow-cve-2026-55255-and-why-higher-cvss-vulnerabilities-arent-always-the-most-exploited"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Ang AutoGPT SSRF bypass (CVE-2026-56663, inayos sa 0.6.52) ay siya mismong SSRF-on-an-agent-gateway na primitive na sinusubaybayan ng June 10 na thesis na ito, na inaayos sa pamamagitan ng paghadlang sa papalabas na egress. Pinapatibay ng Langflow cross-tenant IDOR na lumitaw sa totoong mundo (CVE-2026-55255, CVSS 9.9), na ikinabit sa instance kasama ang KEV-listed na RCE na CVE-2026-33017, ang sinulid ng KEV-timeline: ang proxy layer ay gumagawa ng aktibong pinagsasamantalahang maximum-severity na mga CVE.",
+        "coherence": 4,
+        "remaining_gap": "Mga bagong CVE sa klaseng ito, isa na ikinabit sa isang KEV-listed na RCE, ngunit walang pinangalanang instrumento ng governance na nagtatakda sa mga AI inference proxy bilang isang klase ng software."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.488b349d322d5c4a",
+        "short_label": "Agent-framework SQL tools ship read-only-by-default execution guards by Q1 2027",
+        "prediction_date": "2026-06-05"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "[REVIVED] Layer-2 semantic match: ang mga signal ng dormant row na ito -- prompt injection arbitrary execution, framework execution-wrapper enforcement, least-privilege read-only-by-default na credential -- ay direktang tumutugma sa mga CVE ng agent-execution-layer ngayon. Ang Langflow cross-tenant IDOR na lumitaw sa totoong mundo (CVE-2026-55255, CVSS 9.9, get_flow_by_id_or_endpoint_name na walang owner check) at ang AutoGPT SSRF bypass (CVE-2026-56663, CVSS 8.5, isang fetch primitive na umaabot sa mga internal service) ay parehong pagkakataon ng parehong ugat na sanhi na tinutugunan ng depensibong sagot ng prediksyong ito: nagpapatakbo ang mga agent framework ng malawak na sakop na operasyon nang walang least-privilege at deny-by-default na guard sa execution wrapper. Ang partikular na dapat mangyari sa prediksyon ay ang mga agent-framework SQL tool na naglalabas ng read-only-by-default at parser-validated na SELECT-only na execution guard na may write/DDL opt-in -- ang SQL na katumbas ng per-object authorization at egress gating na ipinapanawagan ng mga CVE ngayon. Ang puwang papunta sa bar: ang mga depekto ngayon ay isang IDOR at isang SSRF sa halip na isang text-to-SQL injection, at walang agent SQL toolkit na naglabas ng read-only-by-default na guard ngayon; ang ugnayan ay ang ibinabahaging istruktural na argumento ng default-deny-execution, hindi isang release ng SQL tool.",
+      "reference_links": [
+        {
+          "label": "Sysdig - Pag-unawa sa Langflow CVE-2026-55255, at kung bakit hindi laging ang mas mataas na CVSS na vulnerability ang pinaka-pinagsasamantalahan",
+          "url": "https://webflow.sysdig.com/blog/understanding-langflow-cve-2026-55255-and-why-higher-cvss-vulnerabilities-arent-always-the-most-exploited"
+        },
+        {
+          "label": "NVD - CVE-2026-56663 Detail (AutoGPT SSRF-protection bypass sa pamamagitan ng IPv4-mapped IPv6 addresses, inayos sa 0.6.52)",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56663"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Ang Langflow cross-tenant IDOR na lumitaw sa totoong mundo (CVE-2026-55255, walang owner check) at ang AutoGPT SSRF bypass (CVE-2026-56663) ay parehong nag-uugat sa sanhi na tinutugunan ng June 5 na thesis na ito: nagpapatakbo ang mga agent framework ng malawak na sakop na operasyon nang walang least-privilege at deny-by-default na guard sa execution wrapper. Ang read-only-by-default at SELECT-only na SQL guard ay ang parehong istruktural na argumento na inilapat sa SQL tool.",
+        "coherence": 3,
+        "remaining_gap": "Ang mga depekto ngayon ay isang IDOR at isang SSRF, hindi text-to-SQL injection, at walang agent SQL toolkit na naglabas ng read-only-by-default na guard."
+      }
+    }
+  ]
+}

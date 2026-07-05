@@ -1,0 +1,31 @@
+{
+  "date": "2026-07-03",
+  "vs_date": "2026-07-02",
+  "items": [
+    {
+      "kind": "new",
+      "headline": "OpenAI promotes Codex Remote to general availability across every paid ChatGPT tier",
+      "diff_narrative": "No Codex or OpenAI-harness item appeared on yesterday's slate, which led with the confirmed Langflow exploitation and a run of open-weight and hardware stories. Today opens a net-new agent-harness thread: OpenAI moved Codex Remote out of preview to general availability on June 25, extending phone-based control of long-running coding sessions to Plus, Pro, Business, Enterprise, and Education, and shipped Codex CLI 0.142.2 with MCP tool search on by default and a DigitalOcean Droplet workspace plugin. The fresh angle is the security design that answers the obvious phone-driven-RCE objection — the launch swaps the earlier remote-shell approach for a purpose-built relay with authenticated one-to-one QR pairing, keeping the dev box off the public internet. It sharpens the same background-execution-with-human-checkpoints convergence that Cursor cloud agents and Claude Code subagents represent, now at a GA tier rather than a Pro-only experiment."
+    },
+    {
+      "kind": "new",
+      "headline": "Anthropic restores Fable 5 worldwide with a >99% jailbreak classifier and a four-point government commitment",
+      "diff_narrative": "Yesterday's slate carried no Anthropic item at all, and the prior Anthropic thread earlier in the week centered on Sonnet 5 and the Claude Science harness rather than any suspension. Today is a distinct restoration story: Anthropic brought Fable 5 back globally on July 1, a day after Commerce lifted the emergency export controls on June 30 that had suspended the model for roughly 19 days over an Amazon-discovered jailbreak. The net-new substance is that access is now explicitly coupled to a security-and-disclosure regime — a fresh classifier that blocks the specific jailbreak with better than 99% effectiveness (at the cost of routing some security-adjacent coding queries to Opus 4.8), plus a four-point government arrangement covering pre-release access, threat-intelligence sharing, critical-infrastructure participation, and a co-developed jailbreak risk-scoring scheme. It lands alongside a backer milestone absent yesterday: Menlo Ventures closed a $3B raise, its largest ever, on an Anthropic stake now worth about $14B against a $965B valuation."
+    },
+    {
+      "kind": "new",
+      "headline": "Bridgewater and Thinking Machines fine-tune Qwen3-235B past every frontier model on financial-judgment tasks",
+      "diff_narrative": "Yesterday's open-weight column was the Mistral 3 family launch — a breadth-of-lineup release framed around licensing and local-runtime fit. Today swaps in a sharper fine-tuning result on a different base: Bridgewater's AIA Labs and Thinking Machines Lab published on June 30 a specialized fine-tune of the open-weight Qwen3-235B reaching 84.7% average accuracy across six information-filtering tasks versus 78.2% for the best frontier model, a 29.8% error reduction, at roughly 13.8x lower inference cost per task. The net-new angle beyond yesterday's model-availability framing is the recipe-and-economics evidence: trained on the Tinker platform with proprietary expert-labeled data, with gains attributed to interleaved round-robin batching, a CISPO asymmetric-clipping loss, and on-policy distillation with a promoted teacher. It extends the week's open-weight thread from cataloging new checkpoints into a concrete build-versus-buy data point in the local-optimization and fine-tuning lane where Unsloth operates."
+    },
+    {
+      "kind": "updated",
+      "headline": "Working exploit for the Flowise Custom-MCP RCE lands with a demonstrated patch bypass",
+      "diff_narrative": "This evolves the agent-tooling RCE cluster that yesterday's Langflow IDOR story anchored. Yesterday's sharpening was the first observed in-the-wild exploitation of a Langflow flaw, framed around CVSS being a poor predictor of what attackers reach for. Today advances the same MCP/tool-execution boundary to a different member of the family: Obsidian Security released a working proof-of-concept for CVE-2026-40933, an RCE in Flowise's Custom MCP tool, where the stdio transport launches a user-supplied command as an unsandboxed child process so a poisoned exported workflow executes on import with no approval prompt. The fresh and more alarming beat is that a version bump does not close the hole — self-hosted installs stay vulnerable by default on the current version and researchers demonstrated the official patch can be circumvented, moving the recommended fix from patch-and-wait to disabling stdio in favor of Server-Sent Events. A coordinated MCP supply-chain advisory ties the same subprocess-injection root cause across LiteLLM, Agent Zero, LangBot, and Windsurf, widening the through-line from a single CVE to a structural MCP-wiring problem."
+    },
+    {
+      "kind": "continuing",
+      "headline": "AI events to plan around — AMD's July 22-23 MI400 reveal now leads after the World's Fair close",
+      "diff_narrative": "The events tracker carries over but shifts its lead: yesterday the AI Engineer World's Fair was closing that day, and today with it wrapped the nearest catalyst becomes AMD's Advancing AI 2026 on July 22-23 at Moscone, with the MI400 series and Helios rack-scale system expected. The forward calendar is otherwise carried intact across the three sub-tracks — chip (Hot Chips August 23-25, AI Infra Summit September 15-17), AI-security (SecurityWeek's AI Risk Summit August 11-12 in Half Moon Bay, Black Hat and DEF CON 34's AI Village in early August, OWASP Global AppSec November 5-6), and mainstream dev (GitHub Universe October 28-29, AWS re:Invent November 30 to December 4). The two nearest actions narrow to registering for the July 22 AMD keynote and the August 11-12 AI Risk Summit. The agent-security tie-in is reinforced rather than restated: Zenity's AI Agent Security Summit series is flagged as directly relevant given this week's Flowise MCP exploit, and both the AMD reveal and the Half Moon Bay summit are called out as natural venues for secure-accelerator and confidential-inference announcements."
+    }
+  ]
+}

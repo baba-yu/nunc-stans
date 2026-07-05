@@ -1,0 +1,45 @@
+{
+  "prediction_id": "prediction.4ecb84808c9acc3f",
+  "judgements": [
+    {
+      "prediction_id": "prediction.4ecb84808c9acc3f",
+      "stream": "reasoning",
+      "entry_id": "prediction.4ecb84808c9acc3f",
+      "verdict": "stale",
+      "reason": "trigger=landed_this_week: the landing window (Jul 1-Sep 30 2026) opens this week and OWASP's State of Agentic AI Security and Governance v2.01 (news 2026-06-28; bridges validation.dd9de784401e0969 2026-06-23, validation.fc31743d5f2b884f 2026-06-13) now maps prompt injection to SIX of ten OWASP Top 10 for Agentic Applications categories, frames the lethal trifecta as the exfiltration mechanism, and names coding agents the epicenter (Claude Code 22 advisories). The mechanism and the agent-in-the-loop secret-exfiltration thesis are substantively confirmed on an authoritative list. But the precise landing claim - a DISTINCTLY-NAMED 'Agent-in-the-Loop Secret Exfiltration' category at the TOP of CIS/OWASP - has not literally landed: OWASP folded it into existing categories rather than codifying a new top entry, and no CIS Benchmark movement is evidenced (validation.52d23cdb672e8b70 2026-05-17 explicitly notes no list movement). Reframe reasoning.landing to credit the v2.01 six-of-ten mapping as the substantive landing while distinguishing the still-pending formal distinctly-named-category codification; window is now open, not yet closed.",
+      "cross_stream_evidence": ["bridge:validation.dd9de784401e0969", "bridge:validation.fc31743d5f2b884f", "bridge:validation.52d23cdb672e8b70"],
+      "proposed_action": "rewrite",
+      "confidence": 0.78
+    },
+    {
+      "prediction_id": "prediction.4ecb84808c9acc3f",
+      "stream": "bridge",
+      "entry_id": "prediction.4ecb84808c9acc3f",
+      "verdict": "fresh",
+      "reason": "Bridge stream is healthy and accumulating supporting evidence consistently (12 bridges, most recent validation.dd9de784401e0969 dated 2026-06-23, observed_relevance 4). Each bridge correctly distinguishes mechanism-confirmation from the not-yet-evidenced formal CIS/OWASP top-list codification, which is the honest framing. No bridge is contradicting or stale; they form a coherent historical record of the thesis maturing toward its now-open landing window. No rewrite needed.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.4ecb84808c9acc3f",
+      "stream": "needs",
+      "entry_id": "need.e3c6bb0a119dabbd",
+      "verdict": "stale",
+      "reason": "Needs -> Reasoning cross-stream: the CIS/OWASP editorial-maintainer Need (need.e3c6bb0a119dabbd, 'Draft and circulate a new top-list entry naming Agent-in-the-Loop Secret Exfiltration') is now PARTIALLY delivered. OWASP v2.01 published this month with prompt injection mapped across six of ten Top 10 agentic categories and coding agents named the epicenter (news 2026-06-28) - the editorial action of authoritative risk-list categorization has occurred, but NOT under a distinctly-named 'Agent-in-the-Loop Secret Exfiltration' label and NOT on CIS. The Need's outcome is half-met: refresh it forward to focus on (a) the still-missing distinct-category naming and (b) CIS Benchmarks movement specifically, since OWASP's structural reframing has substantively shipped. The PoC-researcher need (need.5f7c11a004b41123) remains fresh and well-supported (LiteLLM KEV, Codex CLI Mandiant-confirmed exploitation).",
+      "cross_stream_evidence": ["bridge:validation.dd9de784401e0969", "reasoning:prediction.4ecb84808c9acc3f"],
+      "proposed_action": "rewrite",
+      "confidence": 0.7
+    },
+    {
+      "prediction_id": "prediction.4ecb84808c9acc3f",
+      "stream": "readings",
+      "entry_id": "prediction.4ecb84808c9acc3f",
+      "verdict": "fresh",
+      "reason": "No new prediction_chain or prediction_relations edges surfaced this week that alter this prediction's upstream/downstream dependencies. The landing is driven by external CIS/OWASP editorial action rather than by an upstream prediction landing, so no chain-edge shortening or weakening applies. No readings update warranted.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    }
+  ]
+}

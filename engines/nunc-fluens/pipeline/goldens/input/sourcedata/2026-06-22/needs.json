@@ -1,0 +1,137 @@
+{
+  "date": "2026-06-22",
+  "by_prediction": {
+    "prediction.9a4ef78575099c38": [
+      {
+        "actor": "autonomous-pentest startup go-to-market lead",
+        "job": "Converting post-Black-Hat demo momentum into a signed, publishable enterprise or government logo deal for its continuous autonomous red-teaming product",
+        "outcome": "A publicly documented named enterprise or government customer deployment of the vendor's autonomous-pentest agent before Q1 2027 closes",
+        "motivation": "A named landing is the cheapest credibility a vendor can buy in a crowded post-Black-Hat field of comparable entrants",
+        "task": {
+          "who": "the startup's enterprise sales and customer-marketing function",
+          "what": "Negotiate a referenceable named deployment with a marquee buyer",
+          "where": "Procurement pipeline seeded at Black Hat USA / DEF CON",
+          "when": "From the June 25 demo night through Q1 2027",
+          "why": "A logo deal buys credibility over rival entrants",
+          "how": "Demo-to-procurement conversion with a public case-study commitment"
+        }
+      },
+      {
+        "actor": "autonomous-pentest startup offensive-agent engineering team",
+        "job": "Hardening its agent to autonomously chain recon, build a working exploit, run it, and document a reproducible kill-chain at product grade",
+        "outcome": "A productized offensive agent that produces verified, reproducible exploit-chains a buyer or benchmark can independently confirm",
+        "motivation": "Buyers trust proof-of-exploit over scanners, so reproducible kill-chains are the capability that justifies a paid standing product",
+        "task": {
+          "who": "the startup's offensive-agent and detection engineering team",
+          "what": "Productize autonomous recon-to-exploit kill-chain generation",
+          "where": "The vendor's continuous autonomous red-teaming platform",
+          "when": "Now through Q1 2027, building on June 25 live demos",
+          "why": "Reproducible proof-of-exploit is what buyers actually pay for",
+          "how": "LLM-driven agent that builds and detonates exploits in sandbox"
+        }
+      },
+      {
+        "actor": "enterprise or government security buyer running the pilot",
+        "job": "Running a production pilot of an autonomous-pentest vendor and agreeing to be named as a reference deployment",
+        "outcome": "A documented, named deployment that validates continuous autonomous red-teaming as a standing product, not a one-off demo",
+        "motivation": "Cutting human red-team hours fits the security budget, and being a named early adopter earns credibility and vendor leverage",
+        "task": {
+          "who": "the buyer's security operations and red-team function",
+          "what": "Pilot the autonomous agent against its own attack surface",
+          "where": "The buyer's production estate under a controlled engagement",
+          "when": "Through 2026 into Q1 2027, ahead of the landing",
+          "why": "Autonomous red-teaming cuts costly human pentest hours",
+          "how": "A scoped continuous autonomous red-teaming engagement"
+        }
+      }
+    ],
+    "prediction.9ca246725adf1b12": [
+      {
+        "actor": "captive owner-manufacturer humanoid-fleet program lead",
+        "job": "Standing up an in-house humanoid production fleet inside the manufacturer's own plants, justified against labor and downtime it already books on its own balance sheet",
+        "outcome": "A captive at-scale humanoid fleet doing real production work that is the largest publicly reported deployment by unit count by H1 2028",
+        "motivation": "Captive demand and owned unit economics let it deploy internally without waiting for a per-robot rental price the open market will bear",
+        "task": {
+          "who": "the manufacturer's automation and manufacturing-engineering deployment team",
+          "what": "Install and scale owned humanoid units onto live production lines",
+          "where": "The manufacturer's own factories and logistics facilities",
+          "when": "Through 2026-2027 ramp toward the H1 2028 landing",
+          "why": "Owned unit economics beat any open-market rental price",
+          "how": "In-house Atlas-class humanoids run on the owner's balance sheet"
+        }
+      },
+      {
+        "actor": "wholly-owned humanoid robot-maker production lead",
+        "job": "Ramping humanoid manufacturing toward the stated ~25,000-unit 2028 target to supply its parent's captive in-house fleet rather than third-party RaaS customers",
+        "outcome": "Verified at-scale unit volume exceeding low-thousands delivered into the owner's plants, making the captive fleet the largest reported paying production deployment",
+        "motivation": "As a fully absorbed subsidiary its demand is its parent's plants, so volume goes inward before any external sale",
+        "task": {
+          "who": "the robot-maker's manufacturing and supply-chain operations team",
+          "what": "Scale humanoid build rate toward the 25,000-unit target",
+          "where": "The robot-maker's production lines and parent-owned deployment sites",
+          "when": "From now through the 2028 production target window",
+          "why": "Parent's captive demand pulls volume inward first",
+          "how": "Atlas humanoid platform built for parent-owned internal deployment"
+        }
+      },
+      {
+        "actor": "strategic-acquisition corporate-development lead",
+        "job": "Executing the ownership-consolidation buyout that absorbs the robot maker whole when the venture IPO exit fails, replacing market pricing with captive ownership",
+        "outcome": "A closed acquisition that gives the owner 100% of the robot maker and the capital structure to deploy fleets internally rather than price them on the open market",
+        "motivation": "Only an owner with capital and captive demand can absorb a robot maker, and the IPO-default put-option exit makes the asset acquirable",
+        "task": {
+          "who": "the acquirer's corporate-development and M&A team",
+          "what": "Close the buyout of the financial sponsor's residual stake",
+          "where": "The robot-maker's cap table and the acquirer's balance sheet",
+          "when": "At the IPO-deadline put-option exit window, mid-2026 onward",
+          "why": "Captive ownership replaces market pricing the open market won't bear",
+          "how": "Put-option-triggered buyout of the sponsor's residual equity"
+        }
+      }
+    ],
+    "prediction.dfc8663133f5e74d": [
+      {
+        "actor": "hyperscaler confidential-AI product team",
+        "job": "Hardening a confidential-inference offering so a frontier model runs inside a hardware TEE with end-to-end TEE-I/O and customer-verifiable remote attestation",
+        "outcome": "A generally available confidential-inference service for a frontier-class model, with TEE-I/O host-to-GPU and an attestation report the customer verifies before sending prompts",
+        "motivation": "Regulated and sovereign buyers refuse a GPU they cannot attest, so confidential inference captures the highest-value, least price-sensitive workloads",
+        "task": {
+          "who": "the cloud's confidential-computing product and inference-platform engineering team",
+          "what": "Wire end-to-end TEE-I/O and attestation into a frontier-model inference service",
+          "where": "The cloud's managed inference platform and its GA release pipeline",
+          "when": "From the June 2026 summit window through Q1 2027 GA",
+          "why": "Attestable confidentiality unlocks regulated and sovereign inference demand",
+          "how": "Hardware TEE on the accelerator with attestable key release and remote-attestation reports"
+        }
+      },
+      {
+        "actor": "accelerator silicon vendor shipping TEE-I/O",
+        "job": "Moving confidential-computing modes and CPU-enclave-to-GPU-memory TEE-I/O links from demonstrable to volume so hyperscalers can build attestable inference on them",
+        "outcome": "Shipping silicon with hardware root-of-trust, attestable TEE-I/O between host CPU and GPU memory, and attestation services hyperscalers can productize",
+        "motivation": "Confidential AI is the differentiator that pulls regulated buyers onto its accelerators, so enabling attestable inference grows premium silicon demand",
+        "task": {
+          "who": "the silicon vendor's confidential-computing and platform-security engineering group",
+          "what": "Ship volume TEE-I/O links and hardware root-of-trust attestation",
+          "where": "The vendor's GPU/CPU platform, firmware, and attestation service",
+          "when": "Through H2 2026 into early 2027, building on Blackwell confidential modes",
+          "why": "Attestable accelerators win the highest-value confidential-AI workloads",
+          "how": "Hardware root-of-trust, encrypted CPU-GPU memory links, and an attestation verification service"
+        }
+      },
+      {
+        "actor": "regulated/sovereign enterprise buyer demanding attestation",
+        "job": "Specifying contractual attestation and data-residency requirements that force the cloud to prove no operator or co-tenant can read prompts or weights before any deal",
+        "outcome": "Signed commitments and design-partner pull that make verifiable confidential inference a GA procurement requirement, pulling the hyperscaler service to general availability",
+        "motivation": "Healthcare, finance, defense and EU data-residency rules bar sending sensitive prompts to an unattestable shared GPU",
+        "task": {
+          "who": "the buyer's security architecture, compliance, and procurement function",
+          "what": "Mandate verifiable attestation and residency as a purchase precondition",
+          "where": "RFPs, design-partner programs, and vendor security reviews",
+          "when": "Through the runway from mid-2026 into Q1 2027 procurement cycles",
+          "why": "Regulation forbids unattestable processing of sensitive prompts",
+          "how": "Attestation-report verification and TEE-I/O confidentiality clauses in contracts"
+        }
+      }
+    ]
+  }
+}

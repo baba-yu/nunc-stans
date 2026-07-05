@@ -1,0 +1,45 @@
+{
+  "prediction_id": "prediction.488b349d322d5c4a",
+  "judgements": [
+    {
+      "prediction_id": "prediction.488b349d322d5c4a",
+      "stream": "reasoning",
+      "entry_id": "prediction.488b349d322d5c4a",
+      "verdict": "fresh",
+      "reason": "Trigger landed_this_week but the prediction's own landing window is Q1 2027 (target_start 2027-01-01), not closing this week, so the 'did landing come true' test is premature. The thesis (>=3 agent frameworks ship read-only/SELECT-only default SQL execution) remains forward-valid and is gaining support: Flowise 3.1.0 default allowlist guard (bridge 0f791386, so_that), Databricks Unity AI Gateway contextual SQL policy as a default (e90ec8d3, given), and June 27 Langflow IDOR/AutoGPT SSRF CVEs reinforcing the deny-by-default root cause (d2dae7b1, because). Bridges themselves note the controls are still broad MCP/tool-execution rather than the specific parser-level read-only SQL default the prediction names, so the landing is not yet met. Reasoning because/given/so_that/landing all hold; no reframe needed.",
+      "cross_stream_evidence": ["bridge:validation.0f791386bd2c1c6f", "bridge:validation.d2dae7b11831688e"],
+      "proposed_action": "noop",
+      "confidence": 0.82
+    },
+    {
+      "prediction_id": "prediction.488b349d322d5c4a",
+      "stream": "bridge",
+      "entry_id": "prediction.488b349d322d5c4a",
+      "verdict": "fresh",
+      "reason": "Four recent bridges (latest 2026-06-27, observed_relevance 3-4) are coherent, correctly scoped, and span because/given/so_that dimensions. They honestly distinguish directionally-aligned platform/MCP controls from the precise parser-enforced read-only SQL default the prediction targets. No contradict signals, no stale or duplicate bridges to retire.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.488b349d322d5c4a",
+      "stream": "needs",
+      "entry_id": "prediction.488b349d322d5c4a",
+      "verdict": "fresh",
+      "reason": "All three Needs (SQL-tool maintainer ships SELECT-only default, docs maintainer elevates read-only creds to prerequisite, security researcher replays injection-to-RCE and files critical CVEs) remain forward-looking and unmet. No bridge documents a framework shipping the specific read-only SQL default that would flip a Need to done; the broad MCP guards (Flowise) are adjacent, not the named deliverable. Actor coalition unchanged.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.488b349d322d5c4a",
+      "stream": "readings",
+      "entry_id": "prediction.488b349d322d5c4a",
+      "verdict": "fresh",
+      "reason": "No chain or relation edges touch this prediction (no source/target edges found), and no upstream landing or contradiction this week alters the chain. Landing window stays Q1 2027; nothing to shorten or add.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.78
+    }
+  ]
+}

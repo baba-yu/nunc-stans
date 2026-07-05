@@ -1,0 +1,14 @@
+{
+  "id": "prediction.ae0caf312eefab98",
+  "scope_hint": "cross",
+  "title": "Coding IDEs make workspace-confined agent file writes the default by Q1 2027",
+  "body": "The two zero-click sandbox-escape RCEs Cato AI Labs disclosed in Cursor, both scored CVSS 9.8 and fixed in Cursor 3.0, land the agent-tooling remote-execution surface in the editor developers actually live in. CVE-2026-50548 is a path-traversal via the optional working_directory parameter and CVE-2026-50549 is a symlink-resolution fallback that lets writes escape the project boundary; in both cases content the agent is designed to ingest — a poisoned README, a web-search result, an MCP tool response — becomes an arbitrary write outside the workspace with no approval prompt. This is the same tool-execution-boundary failure recently seen in Flowise and Langflow, now proven against a top-tier IDE rather than a niche low-code builder, which makes filesystem confinement a table-stakes property rather than a nice-to-have. Anthropic simultaneously stood up a HackerOne bounty scoped to Fable 5 cyber-jailbreaks and an early jailbreak-severity framework co-developed with AWS, Microsoft, and Google, signaling that the vendor-side response is hardening plus structured disclosure, not one-off patches. Expect the mainstream coding-agent editors to converge on enforcing workspace-root confinement — canonical path resolution, symlink refusal, and a default-deny stance on writes outside the project — as the shipped default, closing the class rather than the individual CVE. The coupling is disclosure-drives-hardening: a live zero-click RCE in the flagship IDE tier becomes the concrete test case that pushes agent filesystem sandboxing from optional to default.",
+  "reasoning": {
+    "because": "Two CVSS 9.8 zero-click Cursor RCEs let ingested content write outside the workspace, fixed in 3.0",
+    "given": "Same tool-boundary escape seen in Flowise and Langflow now proven against a mainstream coding IDE",
+    "so_that": "Coding-agent editors ship workspace-root confinement — canonical paths, symlink refusal, default-deny writes",
+    "landing": "by Q1 2027, a leading coding IDE confines agent file writes to the workspace",
+    "plain_language": "AI code editors got hacked through files they read, so they will soon block writing outside your project by default."
+  },
+  "summary": "Cato AI Labs found two CVSS 9.8 zero-click sandbox-escape RCEs in Cursor, fixed in 3.0, where ingested content escapes the workspace via path-traversal and symlink tricks. The same escape hit Flowise and Langflow, so expect coding IDEs to confine agent file writes to the workspace by Q1 2027."
+}

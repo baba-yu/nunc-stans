@@ -1,0 +1,151 @@
+{
+  "date": "2026-07-05",
+  "by_prediction": {
+    "prediction.07e7e067c7ee7628": [
+      {
+        "actor": "director financiero de un neocloud de inferencia de modelos abiertos",
+        "job": "construir el aparato de preparación para la IPO durante el margen disponible: estados financieros plurianuales auditados, controles de reconocimiento de ingresos y el paquete de divulgación que exige un S-1 confidencial",
+        "outcome": "una presentación confidencial o pública de un S-1 que sitúa al neocloud en la vía de los mercados públicos como un paso declarado y de peso",
+        "motivation": "un plan de crecimiento de GPU de ~50x supera la capacidad de los sindicatos privados, así que acceder a la liquidez pública es la única base de capital lo bastante grande para financiar la construcción",
+        "task": {
+          "who": "la oficina del CFO, el controller y el grupo de trabajo de preparación para la IPO",
+          "what": "reunir los estados financieros auditados y redactar el paquete de divulgación del S-1",
+          "where": "la función financiera del neocloud y sus asesores externos de auditoría y legales",
+          "when": "del segundo semestre de 2026 hasta 2027, de cara a una presentación en el Q4 2027",
+          "why": "el capital privado no puede sostener una construcción de GPU de 50x",
+          "how": "estados financieros auditados por el PCAOB más el proceso de registro preliminar de un S-1 ante la SEC"
+        }
+      },
+      {
+        "actor": "banquero principal de mercados de capital de renta variable de un banco de inversión",
+        "job": "dirigir la construcción del libro previo a la IPO para el líder de inferencia de modelos abiertos: fijar el precio de la tesis del nivel de plataforma, alinear la demanda ancla y guiar la presentación del registro preliminar confidencial",
+        "outcome": "un registro preliminar confidencial presentado o un anuncio formal de listado, convirtiendo el planteamiento de la IPO en un paso concreto y declarado de mercado público",
+        "motivation": "asegurar la colocación del ancla de una categoría de plataforma recién capitalizada es un mandato estrella, y la tabla de accionistas a escala soberana señala una salida a bolsa financiable",
+        "task": {
+          "who": "los equipos de mercados de capital de renta variable y de banca de cobertura tecnológica",
+          "what": "estructurar la oferta y presentar el registro preliminar confidencial",
+          "where": "la mesa de ECM de los suscriptores principales y el canal de registro preliminar de SEC EDGAR",
+          "when": "el margen disponible hasta 2027, antes de un paso de listado en el Q4 2027",
+          "why": "convertir el planteamiento de IPO de los inversores en un paso presentado de mercado público",
+          "how": "declaración de registro preliminar confidencial más construcción institucional del libro"
+        }
+      },
+      {
+        "actor": "director gerente de un inversor de crecimiento a escala soberana en el consejo del neocloud",
+        "job": "conducir a la empresa hacia la liquidez pública desde el consejo: impulsar los hitos de preparación para la IPO, la construcción de gobernanza y el calendario de salida en el que se basa su cheque de etapa tardía previa a la liquidez",
+        "outcome": "un compromiso a nivel de consejo e intención declarada que llevan al neocloud del comentario sobre la IPO a la maquinaria formal de salida a bolsa",
+        "motivation": "su capital de etapa tardía está fijado para una salida pública a corto plazo, así que materializar esa liquidez exige llevar a la empresa a la vía de listado ahora",
+        "task": {
+          "who": "el director gerente del inversor de crecimiento y sus representantes en el consejo",
+          "what": "impulsar los hitos de preparación para la IPO y la construcción de gobernanza hacia un listado",
+          "where": "el consejo del neocloud y sus comités de auditoría y gobernanza",
+          "when": "el margen de diecisiete y más meses tras la ronda de julio de 2026",
+          "why": "el capital de etapa tardía está fijado para una salida pública a corto plazo",
+          "how": "hoja de ruta de preparación para la IPO ordenada por el consejo y reestructuración de gobernanza"
+        }
+      }
+    ],
+    "prediction.185982a6cad19655": [
+      {
+        "actor": "mantenedor de un segundo runtime de LLM local que llega a los usuarios finales",
+        "job": "activar el speculative decoding con borrador emparejado o en el modelo como la vía por defecto para una familia popular de pesos abiertos, incluyendo un borrador y un kernel que funcionan para que los usuarios nunca toquen un parámetro",
+        "outcome": "una versión del runtime cuyas notas cambian el speculative decoding a activado por defecto para al menos una familia popular de modelos de pesos abiertos, con una salida byte a byte idéntica",
+        "motivation": "la aceleración de ~90% en agentes de código sin coste de precisión de Ollama fija un listón competitivo; activarla por defecto cierra la brecha de rendimiento entre lo local y lo alojado sin nuevo silicio",
+        "task": {
+          "who": "los mantenedores del motor de inferencia del runtime y del empaquetado de modelos",
+          "what": "activar por defecto el speculative decoding con borrador emparejado para una familia popular abierta",
+          "where": "la vía de inferencia por defecto del runtime y los manifiestos de modelos incluidos",
+          "when": "de julio de 2026 hasta el Q2 2027",
+          "why": "igualar la aceleración gratuita y sin coste de precisión de Ollama como base competitiva",
+          "how": "modelo borrador incluido más kernel de matmul de lote pequeño incorporado upstream"
+        }
+      },
+      {
+        "actor": "equipo de lanzamiento de una familia de modelos de pesos abiertos",
+        "job": "publicar un modelo borrador pequeño y compatible junto a los pesos principales y validar una salida verificada byte a byte idéntica, para que un runtime pueda activar el speculative decoding por defecto sin riesgo de precisión",
+        "outcome": "un lanzamiento de familia de modelos que incluye un checkpoint borrador compatible probado para dar un speculative decoding sin coste de precisión, listo para que un runtime lo active por defecto",
+        "motivation": "las familias que incluyen un borrador listo para usar obtienen una inferencia local más rápida y se convierten en la familia por la que los runtimes optan para activar la aceleración por defecto",
+        "task": {
+          "who": "el personal de entrenamiento de modelos e ingeniería de lanzamiento del laboratorio",
+          "what": "publicar y validar un checkpoint borrador compatible con los pesos principales",
+          "where": "el lanzamiento de la familia de modelos y su configuración de inferencia publicada",
+          "when": "el margen previo al cambio a por defecto de un runtime en el Q2 2027",
+          "why": "permitir que los runtimes activen el speculative decoding por defecto sin pérdida de precisión",
+          "how": "modelo borrador coentrenado o destilado con pruebas de aceptación verificadas"
+        }
+      },
+      {
+        "actor": "contribuidor de un kernel de speculative decoding a runtimes locales",
+        "job": "endurecer e incorporar upstream el kernel reutilizable de matmul de lote pequeño y la vía de borrador-verificación para que el speculative decoding sea portable entre modelos MLX (o GGUF) en lugar de ajustado por modelo",
+        "outcome": "un kernel de speculative decoding de uso general y fusionado que cualquier modelo de pesos abiertos en el runtime pueda usar, eliminando la ingeniería por modelo que bloquea la activación por defecto",
+        "motivation": "un kernel portable y sin coste de precisión es lo que convierte el speculative decoding de un opt-in avanzado en un valor por defecto que un segundo runtime puede publicar con seguridad",
+        "task": {
+          "who": "contribuidores de ingeniería de kernels del runtime y de MLX/llama.cpp",
+          "what": "incorporar upstream un kernel reutilizable de matmul de lote pequeño con borrador-verificación",
+          "where": "el kernel de inferencia compartido del runtime y las bibliotecas del framework",
+          "when": "del segundo semestre de 2026 a principios de 2027",
+          "why": "hacer que la aceleración sin coste de precisión sea lo bastante portable para activarla por defecto",
+          "how": "kernel de matmul de lote pequeño para MLX fusionado upstream para cualquier modelo"
+        }
+      }
+    ],
+    "prediction.3842041e6c053a30": [
+      {
+        "actor": "fundador y responsable financiero de una startup de silicio para centros de datos de IA distinto de la GPU",
+        "job": "dirigir una ronda institucional dedicada para silicio de timing, interconexión o sincronización, presentada como una partida diferenciada de infraestructura de centros de datos de IA y no como pegamento de commodity",
+        "outcome": "una ronda institucional nombrada y sobresuscrita (o una presentación de S-1) que financia una capa de silicio para centros de datos de IA distinta de la GPU comercializada como su propia categoría independiente de infraestructura",
+        "motivation": "el timing y la interconexión entre nodos se vuelven restricciones reales con decenas de miles de aceleradores, así que una tesis financiada por separado atrae capital especialista y una valoración independiente",
+        "task": {
+          "who": "el equipo fundador más el personal de finanzas y relaciones con inversores de la startup de silicio",
+          "what": "cerrar una ronda institucional dedicada para una capa de silicio de centros de datos distinta de la GPU",
+          "where": "un proceso de captación de silicio especialista y su presentación que define la categoría",
+          "when": "del segundo semestre de 2026 hasta 2027",
+          "why": "financiar una plataforma a escala GEN para una restricción diferenciada de centros de datos de IA",
+          "how": "VC especialistas en silicio más participantes corporativos estratégicos y una tesis de categoría"
+        }
+      },
+      {
+        "actor": "socio de un fondo de capital riesgo especialista en silicio que suscribe la tesis distinta de la GPU",
+        "job": "originar, hacer due diligence y liderar rondas en silicio de timing, interconexión y sincronización como subcapas de infraestructura de IA valoradas por separado, construyendo las tesis que las valoran aparte de la GPU",
+        "outcome": "una ronda institucional liderada en un proveedor de silicio para centros de datos de IA distinto de la GPU, suscrita explícitamente como una categoría independiente de infraestructura con su propia tesis de fondo dedicada",
+        "motivation": "el dolor visible de escalar el timing y la interconexión más una oportunidad de sincronización de la clase de 1.500 millones de dólares vuelven estas subcapas apuestas financiables por separado y de alto retorno que un fondo generalista de GPU pasa por alto",
+        "task": {
+          "who": "los socios de inversión y el equipo de due diligence de un fondo especialista en silicio",
+          "what": "liderar una ronda que valora una capa de silicio distinta de la GPU como una categoría diferenciada",
+          "where": "el pipeline de operaciones, el proceso de due diligence y el comité de inversiones del fondo",
+          "when": "el margen entre hoy y 2027",
+          "why": "capturar una subcapa de infraestructura de IA valorada por separado antes que los generalistas",
+          "how": "due diligence especialista en silicio más coinversores estratégicos y un fondo dedicado"
+        }
+      },
+      {
+        "actor": "CEO y equipo de mercados de capital de una casa independiente de IP de aceleradores",
+        "job": "mantener a una empresa de IP de aceleradores RISC-V en una vía de capitalización independiente — rechazar la adquisición, dirigir un puente hacia la IPO y un S-1 confidencial — sin integrarse en un incumbente",
+        "outcome": "una casa líder de aceleradores independiente que sigue siendo independiente a través de una salida a bolsa (puente hacia la IPO y S-1 confidencial) en lugar de ser absorbida por la consolidación",
+        "motivation": "una vía pública independiente preserva una alternativa creíble de aceleradores distintos de la GPU y captura una valoración independiente que los fundadores juzgan mayor que una compra",
+        "task": {
+          "who": "el director ejecutivo más el personal de finanzas y mercados de capital de la casa de IP",
+          "what": "avanzar un puente hacia la IPO y un S-1 confidencial mientras se rechaza una compra",
+          "where": "preparación privada de mercados de capital y presentaciones confidenciales de valores",
+          "when": "del segundo semestre de 2026 a 2027",
+          "why": "mantener una alternativa de aceleradores independiente en una vía pública autónoma",
+          "how": "financiación de puente hacia la IPO más un S-1 confidencial en lugar de una adquisición"
+        }
+      },
+      {
+        "actor": "arquitecto de relojes e interconexión de centros de datos hyperscale",
+        "job": "especificar el timing y la interconexión precisos entre nodos para clústeres que escalan a decenas de miles de GPU, convirtiendo la sincronización en una restricción nombrada y con proveedor",
+        "outcome": "especificaciones publicadas de timing e interconexión de clústeres que nombran la sincronización como una restricción dura, creando una demanda con proveedor que vuelve financiable por separado una capa de silicio distinta de la GPU",
+        "motivation": "el desfase de reloj y el jitter de interconexión limitan el rendimiento efectivo a escala de clúster, así que los arquitectos deben cualificar silicio de timing e interconexión dedicado, no pegamento secundario",
+        "task": {
+          "who": "los equipos de arquitectura de sistemas e infraestructura de centros de datos de un hyperscaler",
+          "what": "especificar y cualificar silicio de timing e interconexión entre nodos para grandes clústeres",
+          "where": "arquitecturas de referencia de clústeres y programas de cualificación de componentes",
+          "when": "el margen de construcción de 2026-2027",
+          "why": "evitar que la sincronización limite el rendimiento a escala de decenas de miles de GPU",
+          "how": "cualificación de timing por MEMS e interconexión frente a requisitos a escala de clúster"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "date": "2026-06-27",
+  "by_prediction": {
+    "prediction.2d6b8e0a4c1f9357": [
+      {
+        "actor": "agent-platform security product manager",
+        "job": "Driving a deny-by-default per-tenant authorization layer into the orchestration plane so flows authenticate and authorize before execution in a named release.",
+        "outcome": "A named release ships per-tenant flow-/object-level authz as default-on, closing cross-tenant IDOR gaps without any opt-in flag.",
+        "motivation": "Live-exploited CVSS 9.9 cross-tenant IDOR in Langflow proves the orchestration layer ships insecure-by-default and threatens enterprise trust.",
+        "task": {
+          "who": "the platform security and authorization engineering sub-team",
+          "what": "Add deny-by-default per-tenant authorization checks before flow execution",
+          "where": "in the agent-orchestration runtime's flow-resolution and execution path",
+          "when": "from now through the Q2 2027 runway",
+          "why": "to close cross-tenant IDOR gaps proven by live exploitation",
+          "how": "owner-scoped authz middleware enforced on every flow resolution"
+        }
+      },
+      {
+        "actor": "agentic platform networking/egress engineer",
+        "job": "Building default outbound-egress allowlisting with SSRF-hardened tool-call and web-request blocks so outbound requests are gated before leaving the runner.",
+        "outcome": "A named release defaults to egress allowlisting with SSRF-resistant URL parsing, blocking internal-IP fetches from agent tool calls by default.",
+        "motivation": "AutoGPT's CVSS 8.5 SSRF bypass shows arbitrary-URL fetch blocks are SSRF surfaces unless egress is locked down by construction.",
+        "task": {
+          "who": "the runner sandbox and networking engineering sub-team",
+          "what": "Ship default-on egress allowlist and SSRF-safe URL validation",
+          "where": "in the agent runner's tool-call and web-request execution layer",
+          "when": "during the runway between mid-2026 and Q2 2027",
+          "why": "to stop internal-IP SSRF via arbitrary-URL fetch primitives",
+          "how": "allowlist gate plus canonical IPv6-aware IP filtering"
+        }
+      }
+    ],
+    "prediction.7f3a9c2e1b8d4056": [
+      {
+        "actor": "agent-platform security researcher",
+        "job": "Hunting cross-tenant IDOR and broken-object-level-access bugs across the n8n/Flowise/Dify/LangGraph/CrewAI agent-builder class using the Langflow CVE as a template.",
+        "outcome": "A CVSS >=9.0 cross-tenant authorization/IDOR advisory filed against a non-Langflow agent builder, ideally with in-the-wild or CISA-KEV evidence.",
+        "motivation": "The Langflow CVE-2026-55255 pattern is a reusable class signature; replicating it across peers yields high-severity, high-visibility disclosures.",
+        "task": {
+          "who": "vulnerability research / bug-bounty team",
+          "what": "Probe flow-resolution and run-execution endpoints for missing owner checks",
+          "where": "Self-hosted and SaaS instances of peer agent builders",
+          "when": "Runway from June 2026 through Q1 2027",
+          "why": "Replicate the Langflow IDOR class across the category",
+          "how": "Harvest opaque flow/run IDs; replay cross-tenant requests"
+        }
+      },
+      {
+        "actor": "agent-orchestration platform engineer",
+        "job": "Shipping and extending multi-tenant flow/run/workspace features on a shared execution endpoint while deferring ownership checks to UI or route prefix rather than the object boundary.",
+        "outcome": "A live, exploitable cross-tenant access path on a peer platform that a researcher can later disclose as a >=9.0 IDOR advisory.",
+        "motivation": "Velocity and feature parity pressure favor opaque-ID, shared-endpoint patterns; per-object authz is deferred as non-blocking hardening.",
+        "task": {
+          "who": "core platform / backend engineering team",
+          "what": "Build flow-resolution and run endpoints keyed on opaque IDs",
+          "where": "Shared multi-tenant execution and orchestration plane",
+          "when": "Ongoing release cycles through Q1 2027",
+          "why": "Ship multi-tenant features fast at category parity",
+          "how": "Opaque UUID lookup with owner checks deferred to UI"
+        }
+      }
+    ],
+    "prediction.9a1c5f7b3e2d8046": [
+      {
+        "actor": "merchant-accelerator datacenter-GPU launch product manager",
+        "job": "Finalizing the MI400-series launch package and locking which checkable spec, GA window, or HBM figure goes on the Advancing AI keynote slides.",
+        "outcome": "A formally launched MI400 with at least one named, checkable commitment, a ship window, memory spec, rack, or customer, on the record on stage.",
+        "motivation": "AMD must answer Nvidia's roadmap on stage with hard merchant-accelerator specs to hold credibility with hyperscaler buyers.",
+        "task": {
+          "who": "AMD Instinct datacenter-GPU product-marketing and launch team",
+          "what": "Lock MI400 launch claims and keynote spec slides",
+          "where": "Advancing AI 2026 keynote prep at Moscone, San Francisco",
+          "when": "now through July 23 2026 keynote runway",
+          "why": "to put a checkable MI400 commitment on the record",
+          "how": "internal launch-readiness review and keynote slide sign-off"
+        }
+      },
+      {
+        "actor": "rack-scale AI systems platform engineer",
+        "job": "Productizing the Helios-class rack-scale platform around MI400 so a named rack system and its specs are demo-ready for the keynote.",
+        "outcome": "A named Helios-class rack-scale platform spec disclosed at the event, satisfying the prediction's rack-system qualifying commitment.",
+        "motivation": "Rack-scale platforms, not bare chips, are what hyperscalers buy, so a named rack proves AMD ships deployable systems.",
+        "task": {
+          "who": "AMD data-center systems and Helios rack-platform engineering",
+          "what": "Validate and spec the Helios MI400 rack platform",
+          "where": "AMD systems labs and Advancing AI demo floor",
+          "when": "now through the July 22-23 2026 event runway",
+          "why": "to disclose a named deployable rack-scale platform",
+          "how": "rack bring-up, integration testing, and platform validation"
+        }
+      },
+      {
+        "actor": "hyperscaler or frontier-lab AI-infrastructure co-design partner",
+        "job": "Closing an MI400 deployment commitment with AMD that can be named on stage as a customer adoption datapoint at the keynote.",
+        "outcome": "A named hyperscaler or frontier-lab MI400 deployment commitment announced on stage, satisfying the named-customer qualifying commitment.",
+        "motivation": "A second merchant-accelerator source diversifies supply and pricing leverage against Nvidia for large-scale training and inference.",
+        "task": {
+          "who": "hyperscaler or frontier-lab AI-infrastructure procurement and co-design team",
+          "what": "Finalize a nameable MI400 deployment commitment",
+          "where": "AMD-customer co-design and procurement negotiations",
+          "when": "now through the July 23 2026 keynote runway",
+          "why": "to secure a second large-scale merchant accelerator source",
+          "how": "joint roadmap alignment and purchase-commitment negotiation"
+        }
+      }
+    ]
+  }
+}

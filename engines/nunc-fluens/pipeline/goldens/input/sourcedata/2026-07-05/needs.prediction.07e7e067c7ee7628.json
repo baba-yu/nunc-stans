@@ -1,0 +1,44 @@
+[
+  {
+    "actor": "open-model inference neocloud chief financial officer",
+    "job": "building the IPO-readiness apparatus during the runway: audited multi-year financials, revenue-recognition controls, and the disclosure package a confidential S-1 requires",
+    "outcome": "a confidential or public S-1 filing that puts the neocloud onto the public-market path as a disclosed, load-bearing step",
+    "motivation": "a ~50x GPU-growth plan outgrows private syndicates, so tapping public liquidity is the only capital base large enough to fund the buildout",
+    "task": {
+      "who": "the CFO office, controller, and IPO-readiness working group",
+      "what": "assemble audited financials and draft the S-1 disclosure package",
+      "where": "the neocloud's finance function and its outside audit and legal advisors",
+      "when": "H2 2026 through 2027, ahead of a Q4 2027 filing",
+      "why": "private capital cannot underwrite a 50x GPU buildout",
+      "how": "PCAOB-audited financials plus SEC S-1 draft-registration process"
+    }
+  },
+  {
+    "actor": "investment-bank equity capital markets lead banker",
+    "job": "running the pre-IPO book-build for the open-model inference leader: pricing the platform-tier thesis, lining up cornerstone demand, and shepherding the confidential draft-registration filing",
+    "outcome": "a filed confidential draft registration or a formal listing announcement, converting the IPO framing into a concrete disclosed public-market step",
+    "motivation": "underwriting the anchor of a newly-capitalized platform category is a marquee mandate, and the sovereign-scale cap table signals a fundable public offering",
+    "task": {
+      "who": "the equity capital markets and technology-coverage banking teams",
+      "what": "structure the offering and file the confidential draft registration",
+      "where": "the lead underwriters' ECM desk and the SEC EDGAR draft-registration channel",
+      "when": "the runway into 2027, before a Q4 2027 listing step",
+      "why": "convert investor IPO framing into a filed public-market step",
+      "how": "confidential draft-registration statement plus institutional book-build"
+    }
+  },
+  {
+    "actor": "sovereign-scale growth investor managing director on the neocloud board",
+    "job": "steering the company toward public liquidity from the board: pushing IPO-readiness milestones, governance build-out, and the exit timeline their late-stage pre-liquidity check is premised on",
+    "outcome": "board-level commitment and disclosed intent that moves the neocloud from IPO commentary into the formal public-listing machinery",
+    "motivation": "their late-stage capital is priced for a near-term public exit, so realizing that liquidity requires driving the company onto the listing path now",
+    "task": {
+      "who": "the growth investor's managing director and their board representatives",
+      "what": "drive IPO-readiness milestones and governance build-out toward a listing",
+      "where": "the neocloud board and its audit and governance committees",
+      "when": "the seventeen-plus-month runway following the July 2026 round",
+      "why": "late-stage capital is priced for a near-term public exit",
+      "how": "board-mandated IPO-readiness roadmap and governance restructuring"
+    }
+  }
+]

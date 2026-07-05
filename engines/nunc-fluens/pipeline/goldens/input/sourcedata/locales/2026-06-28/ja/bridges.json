@@ -1,0 +1,193 @@
+{
+  "date": "2026-06-28",
+  "validation_rows": [
+    {
+      "prediction_ref": {
+        "id": "prediction.6f3ab91c4d2e7a08",
+        "short_label": "Sub-gigabyte on-device LLM gains same-week Unsloth tuning support by Q3 2026",
+        "prediction_date": "2026-06-28"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "本日の主要2件は、この仮説の土台となる起点シグナルである。Liquid AIが6月27日に公開したLFM2.5-230Mは、2億3000万パラメータのテキスト専用モデルで、オープンウェイトのベースモデルと指示チューニング済みチェックポイントをHugging Faceで配布する。公開初日からllama.cpp、MLX、vLLM、SGLang、ONNXのランタイムに対応し、4ビット時のサイズは293〜375MB、Galaxy S25 Ultra上で毎秒213トークンを記録する。1ギガバイト未満のオンデバイスモデルが、初日からローカル推論スタック一式に対応して登場した形だ。対をなすシグナルがUnslothのv0.1.471-beta(6月18日)で、Z.aiのGLM-5.2向けのLoRA/QLoRA対応を、6月16日のオープンウェイト公開からわずか2日後に一級対応として追加した。あわせてGemma 4のマルチトークン予測とDiffusionGemmaにも対応し、公開からチューニングまでの間隔が縮まっている様子を示している。この予測が外挿するのは、まさにこの流れをエッジ層へ広げた姿だ。予測の反証ライン:今期に公開された1B未満のオンデバイスモデルが、ウェイト公開と同じ週のうちに主流のチューニングツールキットでLoRA/QLoRAのファインチューニング対応を得る。ラインまでの隔たり:本日はエッジ向けの公開(LFM2.5-230M)と、フロンティアで実証された2日という間隔を提供したが、その特定の1B未満チェックポイントについて主流ツールキットが同じ週に対応した事実はまだない。",
+      "reference_links": [
+        {
+          "label": "MarkTechPost - Liquid AI ships LFM2.5-230M with llama.cpp, MLX, vLLM, SGLang, and ONNX support for on-device inference",
+          "url": "https://www.marktechpost.com/2026/06/27/liquid-ai-ships-lfm2-5-230m-with-llama-cpp-mlx-vllm-sglang-and-onnx-support-for-on-device-inference/"
+        },
+        {
+          "label": "Hugging Face - LiquidAI/LFM2.5-230M model card",
+          "url": "https://huggingface.co/LiquidAI/LFM2.5-230M"
+        },
+        {
+          "label": "GitHub - unslothai/unsloth release v0.1.471-beta (June 18 2026)",
+          "url": "https://github.com/unslothai/unsloth/releases/tag/v0.1.471-beta"
+        }
+      ],
+      "bridge": {
+        "narrative": "Liquid AIが6月27日に公開したLFM2.5-230Mは、1ギガバイト未満のオンデバイスモデルを初日からローカル推論スタック一式に対応させて投入した。一方でUnslothのv0.1.471-betaは、ウェイト公開のわずか2日後にGLM-5.2向けのLoRA/QLoRAを追加した。このエッジ向けの公開と、実証された2日という間隔が重なることで、同じ週にエッジ層をチューニングするという外挿が、自然な次の一歩になる。",
+        "support_dimension": "because",
+        "coherence": 4,
+        "remaining_gap": "この特定の1B未満オンデバイスチェックポイントについて、同じ週のLoRA/QLoRAチューニングに対応した主流ツールキットはまだない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.7b3e9f12c4a6d8e0",
+        "short_label": "Rival accelerator vendor buys a CUDA-agnostic inference compiler by Q1 2027",
+        "prediction_date": "2026-06-28"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "本日の主要ビジネス案件が、この仮説の引き金となる契機だ。Qualcommが6月24日に合意したModularの買収は、約39億2000万ドルの全株式取引で、2026年下半期の完了が見込まれている。Modularは、Mojo言語と、Nvidia・AMD・Intel・Qualcommの各チップでプロセッサごとの書き換えなしに同じモデルコードを動かすMAX推論エンジンを手がけるスタートアップだ。この取引は、企業向け推論におけるNvidiaのCUDA囲い込みへの一手とはっきり読み取れる。Qualcomm自身の発表も、その狙いをデバイス・エッジ・データセンターをまたぐシリコン非依存の計算層と位置づけている。この買収には、相互に補強し合う2つのシグナルが伴う。年内に大手ハイパースケーラーへ独自シリコンを供給する約束と、80億〜100億ドル規模と報じられるTenstorrentとの協議だ。あわせて約140億ドルを、フルスタックでオープンな命令セットを掲げるNvidia対抗勢力の構築に振り向ける形になる。予測の反証ライン:少なくとも1社の競合アクセラレータ買い手(AMD、Intel、またはハイパースケーラーのシリコン部門)が、同等のベンダー横断型の推論コンパイラまたはランタイムのスタートアップを買収するか支配権を握ることで応じる。ラインまでの隔たり:本日は、最大の中立的コンパイラ資産を市場から取り除くQualcomm・Modular取引という触媒を提供したが、競合による対抗買収はまだ発表されていない。",
+      "reference_links": [
+        {
+          "label": "Qualcomm - Qualcomm to Acquire Modular (press release, June 24 2026)",
+          "url": "https://investor.qualcomm.com/news-events/press-releases/news-details/2026/Qualcomm-to-Acquire-Modular/default.aspx"
+        },
+        {
+          "label": "Tech Startups - Qualcomm acquires AI startup Modular in $4 billion deal to challenge Nvidia's CUDA dominance",
+          "url": "https://techstartups.com/2026/06/24/qualcomm-acquires-ai-startup-modular-in-4-billion-deal-to-challenge-nvidias-cuda-dominance/"
+        }
+      ],
+      "bridge": {
+        "narrative": "Qualcommが6月24日に約39億2000万ドルでModularを買収したことで、最大の中立的なベンダー横断型推論コンパイラが市場から消え、CUDA囲い込みへの一撃とはっきり読み取れる。この除去こそ、予測が指し示す構造的な力だ。シリコン非依存の支配的資産がいったん押さえられると、競合の買い手は同等のランタイム独立性を自ら確保しなければならない圧力に直面する。",
+        "support_dimension": "because",
+        "coherence": 4,
+        "remaining_gap": "同等のベンダー横断型コンパイラまたはランタイムのスタートアップを対抗買収すると発表した競合の買い手はまだない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.c5aa6ceae507d1a8",
+        "short_label": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
+        "prediction_date": "2026-06-28"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "本日のセキュリティ主要案件は、この仮説が立脚する設計上の前提だ。OWASP GenAI Security Projectのバージョン2.01「State of Agentic AI Security and Governance」は、プロンプトインジェクションを単なるCVEから設計上の制約へと捉え直す。これはエージェント型AIの事案の大半をつなぐ共通の継ぎ手であり、いまやOWASPのTop 10 for Agentic Applicationsの10カテゴリのうち6つに対応づけられる。モデルはシステムプロンプト・ユーザー要求・取得テキストを区別のない一連のトークン列として扱うため、トークンをコマンドとデータに確実に区別する手立てがない。したがってこの欠陥はパッチで塞ぐのではなく、設計上の予算で抑える。報告書はSimon Willisonのlethal trifectaと、MetaのAgents Rule of Twoに依拠している。重要なのは、報告書がコーディングエージェントを震源地と名指ししている点だ。追跡対象53件のエージェント型プロジェクトのうち28件がコーディングエージェントで、勧告が最も多いリポジトリはn8n(57件)、Claude Code(22件)、AutoGPT(15件)、Dify(13件)、Roo-Code(11件)である。予測の反証ライン:少なくとも1つの主要コーディングエージェントのプラットフォームが、Rule-of-Twoの制約を強制するデフォルト有効の機能ゲートを出荷する。すなわち、プライベートデータへのアクセス、信頼できないコンテンツへの接触、外部通信のうち最大2つまでを許し、それを超える前に人間の承認を求めて停止する。ラインまでの隔たり:本日は設計上パッチ不能とする論拠と震源地の名指しを提供したが、デフォルト有効のtrifectaゲートを出荷したプラットフォームはまだない。",
+      "reference_links": [
+        {
+          "label": "OWASP GenAI Security Project - State of Agentic AI Security and Governance 2.01",
+          "url": "https://genai.owasp.org/resource/state-of-agentic-ai-security-and-governance/"
+        },
+        {
+          "label": "Simon Willison - The lethal trifecta for AI agents: private data, untrusted content, and external communication",
+          "url": "https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/"
+        }
+      ],
+      "bridge": {
+        "narrative": "OWASPの6月28日の捉え直しは、プロンプトインジェクションをパッチ不能な設計上の制約とし、10あるエージェント型カテゴリのうち6つに対応づける。さらにコーディングエージェントを震源地と名指しし、勧告件数ではClaude Code、n8n、AutoGPTが上位を占める。これは予測が立脚する結論を強いる。すなわち、防御はオーケストレーション層の機能予算でなければならず、それはまさに、プラットフォームがデフォルト有効で出荷すると本仮説が見込むRule-of-Twoゲートそのものだ。",
+        "support_dimension": "because",
+        "coherence": 4,
+        "remaining_gap": "デフォルト有効のtrifecta機能ゲートを出荷したコーディングエージェントのプラットフォームはまだない。報告書は論拠と震源地の名指しは提供したが、出荷済みの強制デフォルトは提供していない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.3abbcb892f7919d6",
+        "short_label": "Frontier-class open-weight LLM runs single-node under 256GB by Q4 2026",
+        "prediction_date": "2026-06-23"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "本日のUnsloth案件は、この仮説のうちオープンウェイトのフロンティア側に関わる。Unslothのv0.1.471-betaは、Z.aiのGLM-5.2への完全対応を追加した。GLM-5.2はMITライセンスの約7530億パラメータのMixture-of-Expertsで、今月エージェント型コーディングのベンチマークで首位に立ったモデルだ。全推論レベルにわたる対応が、6月16日の公開から2日後に、Gemma 4や、使える文脈長を約3倍に伸ばすとされる自動フィットのメモリアルゴリズム、テンソル並列の信頼性、vLLM 0.22+互換とあわせて加わった。関わりは、フロンティアのオープンウェイトの波(疎な活性パラメータルーティングを伴うMoEスケールのGLM-5.2)が、まさにこの予測が単一ノードで動かせるようになると見込む層である点だ。疎な7530億パラメータのMoEはトークンごとにウェイトの一部しか活性化せず、Unslothが出荷しているメモリ効率化ツールは、そうしたモデルを256GB未満の単一ノードの枠へ押し進める類のものだ。ラインまでの隔たり:本日はチューニングツールキットの対応範囲とメモリ改善を記録したが、フロンティア級オープンウェイトモデルを256GB未満の単一ノードで動かした独立した実証はない。接点はオープンウェイトのフロンティアとメモリ効率化の筋であって、計測された単一ノードのサイズではない。",
+      "reference_links": [
+        {
+          "label": "GitHub - unslothai/unsloth release v0.1.471-beta (June 18 2026)",
+          "url": "https://github.com/unslothai/unsloth/releases/tag/v0.1.471-beta"
+        },
+        {
+          "label": "DataCamp - GLM-5.2: Features, Setup, Benchmarks, and Model Switching Guide",
+          "url": "https://www.datacamp.com/blog/glm-5-2"
+        }
+      ],
+      "bridge": {
+        "narrative": "Unslothの6月18日betaは、トークンごとにウェイトの一部しか活性化しない疎な約7530億のMoEであるGLM-5.2への完全対応を、使える文脈長を約3倍に伸ばすとされる自動フィットのメモリアルゴリズムとあわせて投入した。これはまさに、そうしたモデルを256GB未満の単一ノードの枠へ押し進める、オープンウェイトのフロンティアスケールとメモリ効率化ツールだ。",
+        "support_dimension": "because",
+        "coherence": 3,
+        "remaining_gap": "フロンティアのオープンウェイトモデルを256GB未満の単一ノードで動かした独立した実証はない。本日はチューニング対応とメモリ向上を示したが、計測されたサイズは示していない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.3a5fa9315f58608d",
+        "short_label": "Agentic coding platforms ship token budgets and caps as default by Q2 2027",
+        "prediction_date": "2026-06-25"
+      },
+      "today_relevance": 2,
+      "evidence_summary": "本日のOWASP報告書は、トークン予算そのものというより、デフォルト姿勢への広い圧力という形でこの仮説に関わる。OWASPの2.01での捉え直しは、コーディングエージェントをエージェント型AIリスクの震源地と名指しする。追跡対象53件のエージェント型プロジェクトのうち28件がコーディングエージェントで、勧告が最も多いリポジトリにはClaude Code、AutoGPT、Dify、Roo-Codeが含まれる。そして、持続的な緩和策はトークン列のフィルタリングではなくオーケストレーション層の設計予算だと論じる。コーディングエージェントのプラットフォームがオーケストレーション層でデフォルト有効のガードレールを加えなければならないというこの議論は、この予測がトークン予算と上限のデフォルト化を促すと見込むのと同じ、競争上かつ勧告上の圧力だ。際限のない自律ループは、同じ制御不能な実行リスクの一部だからだ。ラインまでの隔たり:本日の報告書はlethal trifectaに対する機能ゲートを扱っており、コストやトークン予算の上限ではない。本日トークン予算や上限をデフォルトとして出荷したエージェント型コーディングプラットフォームはない。接点は、共有されるデフォルト有効ガードレールの圧力であって、予算化のリリースではない。",
+      "reference_links": [
+        {
+          "label": "OWASP GenAI Security Project - State of Agentic AI Security and Governance 2.01",
+          "url": "https://genai.owasp.org/resource/state-of-agentic-ai-security-and-governance/"
+        }
+      ],
+      "bridge": {
+        "narrative": "Unslothの6月18日のv0.1.471-betaは、MITライセンスの約7530億のMixture-of-Expertsの公開から2日後にGLM-5.2への完全対応を加え、さらに使える文脈長を約3倍に伸ばすとされる自動フィットのメモリアルゴリズムを追加した。疎なMoEはトークンごとにウェイトの一部しか活性化せず、まさにこのメモリ効率化ツールが、そうしたモデルを256GB未満の単一ノードの枠へ押し進める。これが本仮説の根底にある理由を補強する。",
+        "support_dimension": "because",
+        "coherence": 3,
+        "remaining_gap": "フロンティア級オープンウェイトモデルを256GB未満の単一ノードで動かした独立した実証はない。本日はツールを示したが、計測されたサイズは示していない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.079ca77d11decc5f",
+        "short_label": "AI accelerator ships confidential-inference tier with attestation by H1 2027",
+        "prediction_date": "2026-06-26"
+      },
+      "today_relevance": 2,
+      "evidence_summary": "本日のニュースは、AIチップ戦略と会場カレンダーを通じてこの仮説に触れる。AMDのAdvancing AI 2026は7月22〜23日にMosconeで開催が確定し、基調講演とInstinct MI400シリーズの焦点は7月23日だ。これはまさに、認証付きの機密推論パーツが姿を見せそうな舞台であり、この予測の期間内に収まる。Qualcommの約140億ドルのフルスタック攻勢(Modularの買収、報じられるTenstorrentとの協議、年内に約束されたハイパースケーラー向け独自シリコンの供給)は、マーチャント型アクセラレータのロードマップを争われた状態に保つ。これは、差別化された機密推論SKUが発表される競争上の背景だ。予測が見込むのは、専用設計のAI推論アクセラレータが、機密計算を名指しされた中核機能として出荷または披露されることだ。すなわち、オンダイのroot-of-trust、CPU・アクセラレータ境界をまたいで使用中のウェイトと活性を暗号化したまま保つTEE-I/O、そして名指しされた階層として打ち出される署名付きモデルのアテステーションである。ラインまでの隔たり:本日は来たるAMDの会場とチップ競争の広い背景を与えたが、出荷されるパーツではない。仕様書上の一般的な機密計算の項目や、TEE-I/Oやモデルのアテステーションを欠く機密VMの提供では数えられない。名指しされた機密推論階層はまだ開示されていない。",
+      "reference_links": [
+        {
+          "label": "AI Engineer - World's Fair 2026 program (main program June 29 - July 2, Moscone West, San Francisco)",
+          "url": "https://www.ai.engineer/worldsfair/2026/llms.md"
+        }
+      ],
+      "bridge": {
+        "narrative": "AMDのAdvancing AI 2026(7月22〜23日、Moscone)は、Instinct MI400シリーズの基調講演を予測の期間内に置き、機密推論パーツにふさわしい舞台となる。一方でQualcommの約140億ドルのフルスタック攻勢は、マーチャント型アクセラレータ競争を、差別化されたセキュリティSKUに報いるだけの争われた状態に保つ。いずれも背景と会場であって、名指しのアテステーションを備えた出荷アクセラレータではない。",
+        "support_dimension": "landing",
+        "coherence": 2,
+        "remaining_gap": "オンダイのroot-of-trust、TEE-I/O、署名付きモデルのアテステーションを名指しされた階層として備えた出荷パーツはない。AMDの基調講演はまだ行われていない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.af116b6aeee58cde",
+        "short_label": "DiffusionGemma seeds an open-weight text-diffusion training category by Q2 2027",
+        "prediction_date": "2026-06-14"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "[REVIVED] この休眠行のシグナル(DiffusionGemmaの実行と学習、Gemma 4のマルチトークン予測、2つ目のローカル学習・推論スタックでのネイティブ対応、llama.cpp・Ollama・LM Studio・MLX・Axolotl・TRL)が、本日のUnsloth案件に対してレイヤー1のキーワード一致を示した。Unslothのv0.1.471-betaは、ライブの除去過程の可視化を伴うDiffusionGemmaの画像生成パスと、推論を約2倍に高速化するマルチトークン予測付きのGemma 4を出荷し、この予測が追うオープンウェイトの拡散モデルの学習・推論対応をそのまま広げる。予測のラインは、DiffusionGemmaが確立したオープンウェイトのテキスト拡散学習カテゴリの種をまくことだ。すなわち、コンシューマー向けエッジハードウェアでのファインチューニングと推論に向けて、拡散LMの除去過程をネイティブに支える2つ目のローカルスタックである。本日のbetaは、まさにその方向への具体的な2つ目のスタックの一歩だ。主流のチューニングツールキットが、Gemma 4のマルチトークン予測とあわせてDiffusionGemmaへの一級対応を実現した。ラインまでの隔たり:本日のシグナルは、あるツールキットのbeta内でのDiffusionGemmaの画像生成・除去過程パスであって、独立した2つ目のオープンウェイトのテキスト拡散ファミリーや、テキスト拡散に特化して落ち着いた複数スタックの学習カテゴリではまだない。",
+      "reference_links": [
+        {
+          "label": "GitHub - unslothai/unsloth release v0.1.471-beta (June 18 2026)",
+          "url": "https://github.com/unslothai/unsloth/releases/tag/v0.1.471-beta"
+        }
+      ],
+      "bridge": {
+        "narrative": "AMDのAdvancing AIは7月22〜23日に開かれ、Instinct MI400シリーズの基調講演とともに予測の期間内にぴたりと収まる。これはまさに、認証付きの機密推論パーツが姿を見せそうな舞台だ。一方でQualcommの約140億ドルのフルスタック攻勢は、マーチャント型アクセラレータの分野を、差別化されたセキュリティSKUに報いるだけの争われた状態に保つ。これらはラインが満たされる条件であって、満たすこと自体ではない。",
+        "support_dimension": "given",
+        "coherence": 2,
+        "remaining_gap": "オンダイのroot-of-trust、TEE-I/O、署名付きモデルのアテステーションを、名指しされた機密推論階層として打ち出す出荷パーツはまだ開示されていない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.3863162bc445e548",
+        "short_label": "Local fine-tune-to-agent stack ships as a managed hyperscaler service by H2 2026",
+        "prediction_date": "2026-06-03"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "[REVIVED] レイヤー2の意味的一致:この休眠行のシグナル(Unslothのビルド、小型オープンモデルのQLoRA、コンシューマー級のメモリ、ファインチューニングからデプロイ済みエージェントへのパイプライン、マネージドなハイパースケーラーのMLOpsコンソール)が、本日のUnsloth案件に対応づけられる。v0.1.471-betaは、フロンティアのオープンウェイト対応(GLM-5.2、Gemma 4のマルチトークン予測、DiffusionGemma)、使える文脈長を約3倍に伸ばすとされる自動フィットのメモリアルゴリズム、強化されたBlackwell RTX 50X/60X対応、vLLM 0.22+互換、そしてユーザーがチャット・学習・エクスポート・レシピ実行を同時に行える並列実行モードによって、ローカルのファインチューニングループを引き締める。これは、この予測がハイパースケーラーによってマネージドサービスへ取り込まれると見込む、コンシューマー級のファインチューニングからエージェントへのツールチェーンだ。予測のラインは、このローカルループが、整理されたツールカタログと合成データ生成器を備えたマネージドなハイパースケーラーサービスとして出荷されることだ。ラインまでの隔たり:本日のシグナルはコンシューマーハードウェア上のオープンソースツールキットの成熟であって、ハイパースケーラーがこのループをマネージドコンソールとして製品化したものではない。接点はファインチューニングからエージェントへのパイプラインの筋であって、マネージドサービスの立ち上げではない。",
+      "reference_links": [
+        {
+          "label": "GitHub - unslothai/unsloth release v0.1.471-beta (June 18 2026)",
+          "url": "https://github.com/unslothai/unsloth/releases/tag/v0.1.471-beta"
+        }
+      ],
+      "bridge": {
+        "narrative": "Unslothの6月18日betaは、この仮説がハイパースケーラーに取り込まれると見込む、まさにそのコンシューマー級のループを引き締める。フロンティアのオープンウェイト対応(GLM-5.2、Gemma 4のマルチトークン予測、DiffusionGemma)、文脈長を約3倍に伸ばす価値のある自動フィットのメモリアルゴリズム、Blackwell RTX 50X/60X対応、vLLM 0.22+互換、そしてチャット・学習・エクスポート・レシピ実行を一度にこなす並列モードだ。ファインチューニングからエージェントへのツールチェーンは、予測の構造的な力が前提とする製品化可能な形へと成熟しつつある。",
+        "support_dimension": "because",
+        "coherence": 3,
+        "remaining_gap": "整理されたツールカタログと合成データ生成器を備えたマネージドコンソールでこのループを包んだハイパースケーラーはない。本日はオープンソースの成熟であって、サービスの立ち上げではない。"
+      }
+    }
+  ]
+}

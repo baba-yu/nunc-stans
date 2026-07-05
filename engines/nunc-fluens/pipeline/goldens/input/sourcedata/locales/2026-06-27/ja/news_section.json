@@ -1,0 +1,43 @@
+{
+  "date": "2026-06-27",
+  "sections": [
+    {
+      "category": "MLの攻撃対象領域が理論から実戦の悪用へ：エージェント構築ツールLangflowのテナント横断の欠陥が実環境で突かれる",
+      "bullets": [
+        {
+          "body": "6月25日、Sysdigの脅威リサーチチームは、CVE-2026-55255が実環境で悪用された初の既知事例を報告した。これは、LLMエージェントとパイプラインを組むための人気オープンソースのビジュアル構築ツールLangflowに存在する、テナント横断の安全でない直接オブジェクト参照（IDOR）の欠陥だ。CVSS 9.9と評価され、Langflow 1.9.1で修正されている。問題はget_flow_by_id_or_endpoint_nameというヘルパーにある。フローがUUIDで解決されるとき、データベース照会が所有者チェックを一切行わないため、認証済みのユーザーは誰でも、そのフローIDを/api/v1/responsesエンドポイントに渡すだけで別テナントのフローを実行できてしまう（CWE-639、ユーザー制御のキーによる認可バイパス）。Sysdigのテレメトリで注目すべきは、その連鎖のさせ方だ。あるオペレーターはまずGET /api/v1/flows/を呼び出し、そのエンドポイントが開示するフローIDを収集した。そして約20秒後、それらのIDをそのままmodelパラメーターとしてPOST /api/v1/responsesに渡し、入力に「leak api keys」を指定して再生した。さらに同じインスタンスに対して、認証不要の旧来のRCEであるCVE-2026-33017（CVSS 9.3、すでにCISAの既知悪用脆弱性カタログに掲載済み）も実行していた。構造的に読み取れるのは、今週前半にMLのフィーチャーストア層で顕在化したのと同じ流れが続いているということだ。エージェント基盤の弱点は、オーケストレーションとメタデータの層にある。フロー実行エンドポイントの認可の隙間ひとつで、マルチテナントのエージェント構築ツールが、顧客をまたいでデータを抜き取る手段に変わってしまう。1.9.1より前のLangflowを運用している者は、いますぐアップグレードし、露出したフローIDはすでに採取されているものとみなすべきだ。 <a href=\"https://webflow.sysdig.com/blog/understanding-langflow-cve-2026-55255-and-why-higher-cvss-vulnerabilities-arent-always-the-most-exploited\">Sysdig - Langflowの脆弱性CVE-2026-55255を読み解く：CVSSの高さが必ずしも悪用されやすさを意味しない理由</a> <a href=\"https://github.com/advisories/GHSA-qrpv-q767-xqq2\">GitHub Advisory Database - Langflowの/api/v1/responsesにおけるIDOR、認証済み攻撃者が他ユーザーのフローを実行できる（CVE-2026-55255）</a> <a href=\"https://advisories.gitlab.com/pypi/langflow/CVE-2026-55255/\">GitLab Advisory Database - CVE-2026-55255 LangflowのIDOR（CVSS 9.9、1.9.1で修正）</a>",
+          "citations": [
+            {"label": "Sysdig - Understanding Langflow CVE-2026-55255, and why higher-CVSS vulnerabilities aren't always the most exploited", "url": "https://webflow.sysdig.com/blog/understanding-langflow-cve-2026-55255-and-why-higher-cvss-vulnerabilities-arent-always-the-most-exploited"},
+            {"label": "GitHub Advisory Database - Langflow IDOR in /api/v1/responses lets authenticated attackers run another user's flow (CVE-2026-55255)", "url": "https://github.com/advisories/GHSA-qrpv-q767-xqq2"},
+            {"label": "GitLab Advisory Database - CVE-2026-55255 Langflow IDOR (CVSS 9.9, fixed in 1.9.1)", "url": "https://advisories.gitlab.com/pypi/langflow/CVE-2026-55255/"}
+          ]
+        }
+      ]
+    },
+    {
+      "category": "AutoGPTにSSRF防御の回避が見つかり、エージェント実行基盤の背後にある内部サービスが露出する",
+      "bullets": [
+        {
+          "body": "継続的に動くAIエージェントを構築・配備・実行するためのオープンソース基盤AutoGPTに、新たな高深刻度の欠陥が見つかり、6月26日にCVE-2026-56663として公開された。CVSS 8.5と評価され、AutoGPT 0.6.52で修正されている。これは、AutoGPTのサーバーサイドリクエストフォージェリ（SSRF）防御を回避するバグだ。エージェントが外向きのHTTP呼び出しに使うSendWebRequestBlockが、IPv4射影IPv6アドレスの扱いを誤り、特定のIP範囲を検証できていない。そのため認証済みのユーザーは、内部IPフィルターをくぐり抜けるリクエストを組み立て、ホストのプライベートネットワーク上のサービスに到達できる。問題のブロックは、エージェントのワークフローに組み込まれた汎用のWebリクエスト部品であるため、実際の影響としては、テナントのエージェントが、本来は到達できないはずの内部エンドポイント、すなわちクラウドのメタデータサービスや内部の管理画面、データベースなどを探ったり引き出したりするよう仕向けられてしまう。NVDの項目には、NIST独自の補強情報はまだ追加されておらず、GitHub CNAの評価に依拠していると記されている。この件は、エージェント実行層がなぜCVEを引き寄せ続けるのかを示す分かりやすい例だ。任意のURLをエージェントの代わりに取得することだけを役目とするブロックは、その仕組み上どうしてもSSRFの入り口になり、アドレス正規化における解析の隙間ひとつで再び口が開いてしまう。0.6.52より前のAutoGPTを運用している者は、アップグレードし、エージェント実行基盤からの外向き通信を絞り込むべきだ。 <a href=\"https://nvd.nist.gov/vuln/detail/CVE-2026-56663\">NVD - CVE-2026-56663の詳細（IPv4射影IPv6アドレスを介したAutoGPTのSSRF防御回避、0.6.52で修正）</a>",
+          "citations": [
+            {"label": "NVD - CVE-2026-56663 Detail (AutoGPT SSRF-protection bypass via IPv4-mapped IPv6 addresses, fixed in 0.6.52)", "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56663"}
+          ]
+        }
+      ]
+    },
+    {
+      "category": "いま予定に入れておきたいAIイベント：AI Engineer World's Fairの週末が開幕、チップとセキュリティの日程は夏から秋まで続く",
+      "bullets": [
+        {
+          "body": "3つのサブトラックすべてにまたがる今後の日程で、その起点はこの週末にサンフランシスコで開かれるAI Engineer World's Fairだ。主流の開発／データ系では、Cerebral Valleyとの共催によるAIE World's Fair Hackathonがいままさに進行中だ（6月27〜28日、午前9時〜午後5時、再帰的自己改善をテーマに、賞金総額1万ドル超）。任意参加のNew Engineer Orientationは日曜の6月28日に行われ、本編は6月29日から7月2日までMoscone Westで開催される（20を超えるトラック、250名以上の登壇者）。さらに先では、GitHub Universeが10月28〜29日に再び開かれ、AWS re:Inventがラスベガスで11月30日から12月4日まで行われる。AIセキュリティ系では、Black Hat USA 2026が8月初旬にラスベガスのMandalay Bayで開かれ、Summit DayにAI Summit、その直後に本編のBriefingsが続く。さらに同じ週に、ラスベガスでDEF CON 34とそのAI Villageが開催される。SecurityWeekのAI Risk Summitは8月11〜12日にHalf Moon BayのRitz-Carltonで、OWASP Global AppSec USAは11月5〜6日にサンフランシスコで開かれる。ZenityのAI Agent Security Summitは、5月のサンフランシスコ開催の後、ニューヨークやアジアを含む追加都市で2026年シリーズを続けており、引き続き注視リストに載っている。AIチップ／ハードウェア系では、AMDのAdvancing AI 2026が7月22〜23日にサンフランシスコのMosconeで開かれ、基調講演とInstinct MI400シリーズに焦点を当てた回が7月23日に行われる。Hot Chips 2026は8月23〜25日にStanfordのMemorial Auditoriumで、AI Infra Summitは9月15〜17日にSanta Clara Convention Centerで開催される。 <a href=\"https://www.ai.engineer/worldsfair/2026\">AI Engineer - World's Fair 2026（ハッカソン6月27〜28日、本編6月29日〜7月2日、Moscone West、サンフランシスコ）</a> <a href=\"https://blackhat.com/us-26/ai-summit.html\">Black Hat - USA 2026 AI Summit（Mandalay Bay、ラスベガス、8月初旬）</a> <a href=\"https://zenity.io/resources/events/ai-agent-security-summit-2026\">Zenity - AI Agent Security Summit 2026 グローバルシリーズ</a> <a href=\"https://www.amd.com/en/corporate/events/advancing-ai.html\">AMD - Advancing AI 2026（サンフランシスコ、7月22〜23日）</a>",
+          "citations": [
+            {"label": "AI Engineer - World's Fair 2026 (hackathon June 27-28; main program June 29 - July 2, Moscone West, San Francisco)", "url": "https://www.ai.engineer/worldsfair/2026"},
+            {"label": "Black Hat - USA 2026 AI Summit (Mandalay Bay, Las Vegas, early August)", "url": "https://blackhat.com/us-26/ai-summit.html"},
+            {"label": "Zenity - AI Agent Security Summit 2026 global series", "url": "https://zenity.io/resources/events/ai-agent-security-summit-2026"},
+            {"label": "AMD - Advancing AI 2026 (San Francisco, July 22-23)", "url": "https://www.amd.com/en/corporate/events/advancing-ai.html"}
+          ]
+        }
+      ]
+    }
+  ]
+}

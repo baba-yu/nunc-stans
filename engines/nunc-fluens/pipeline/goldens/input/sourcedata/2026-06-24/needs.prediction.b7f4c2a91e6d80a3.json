@@ -1,0 +1,30 @@
+[
+  {
+    "actor": "rival frontier-lab corporate-development lead",
+    "job": "Negotiating a strategic equity stake in a high-bandwidth-memory supplier bundled with a multi-year HBM/DRAM allocation to lock training-scale capacity.",
+    "outcome": "A disclosed strategic-investment-plus-multi-year-allocation deal between a non-Anthropic lab and at least one of the three HBM makers.",
+    "motivation": "Avoid spot-market HBM exposure and match Anthropic's durable, equity-coupled lock on the binding constraint for AI training and inference scale.",
+    "task": {
+      "who": "Lab's corporate-development and supply-chain finance team",
+      "what": "Draft equity-plus-allocation term sheet with an HBM maker",
+      "where": "Strategic-investment and supply-contract negotiations with a memory vendor",
+      "when": "Today through Q4 2026, ahead of memory-vendor public listings",
+      "why": "Lock HBM capacity more durably than purchase orders allow",
+      "how": "Pre-IPO strategic investment round plus multi-year supply-allocation contract"
+    }
+  },
+  {
+    "actor": "HBM-supplier strategic-accounts and capital lead",
+    "job": "Structuring an equity-plus-supply allocation that anchors a frontier-lab customer ahead of an expected Q4 2026 public listing, converting offtake into an ownership tie.",
+    "outcome": "A signed strategic-investment-plus-allocation agreement giving a non-Anthropic lab committed HBM capacity in exchange for an equity stake.",
+    "motivation": "Secure anchor demand and balance-sheet capital before listing, diversifying beyond a single lab's allocation while monetizing scarce HBM supply.",
+    "task": {
+      "who": "Supplier's strategic-accounts, treasury, and capacity-planning teams",
+      "what": "Allocate multi-year HBM capacity tied to an equity investment",
+      "where": "Memory-vendor sales, finance, and fab capacity-planning processes",
+      "when": "Today through Q4 2026, pre-public-listing window",
+      "why": "Lock anchor demand and capital ahead of the IPO",
+      "how": "Equity-coupled supply allocation against reserved fab output"
+    }
+  }
+]

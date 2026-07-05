@@ -1,0 +1,30 @@
+[
+  {
+    "actor": "open-weight tuning-toolkit maintainer",
+    "job": "Racing to land first-class LoRA/QLoRA fine-tuning for newly dropped sub-1B edge checkpoints within days of their weight release.",
+    "outcome": "A mainstream tuning toolkit ships same-week LoRA/QLoRA support for a sub-1B on-device model published this cycle.",
+    "motivation": "Whoever lands a popular edge checkpoint first wins the on-device developer audience; lagging cedes mindshare to rivals.",
+    "task": {
+      "who": "core kernel / quantization engineering team",
+      "what": "add LoRA/QLoRA fine-tuning path for new sub-1B checkpoint",
+      "where": "the toolkit's model-support registry and training kernels",
+      "when": "Q3 2026 runway, day-zero to day-seven after each edge weight drop",
+      "why": "match competitor turnaround or lose the on-device dev audience",
+      "how": "LoRA/QLoRA on llama.cpp/MLX-compatible quantized weights"
+    }
+  },
+  {
+    "actor": "on-device model publisher",
+    "job": "Shipping sub-gigabyte open weights launch-day against the full local-inference stack (llama.cpp, MLX, vLLM, SGLang, ONNX).",
+    "outcome": "A sub-1B edge model lands open with broad runtime coverage, making it the obvious target for immediate tuning support.",
+    "motivation": "Maximize adoption and ecosystem pickup of its edge tier by removing every integration barrier at launch.",
+    "task": {
+      "who": "model release / ecosystem integration team",
+      "what": "publish quantized weights with launch-day multi-runtime support",
+      "where": "model hub plus llama.cpp/MLX/vLLM/SGLang/ONNX runtime repos",
+      "when": "Q3 2026 runway, at each edge-model release event",
+      "why": "remove integration friction so tuning libraries adopt immediately",
+      "how": "launch-day GGUF/MLX/ONNX export and runtime PRs"
+    }
+  }
+]

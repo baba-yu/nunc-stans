@@ -1,0 +1,107 @@
+{
+  "date": "2026-07-05",
+  "sections": [
+    {
+      "category": "Ini-on ng Ollama 0.31 ang multi-token prediction para sa Gemma 4, na pinapaikli ang lokal na Apple-Silicon generation nang halos 90% at itinutulak ang speedup sa mga coding agent",
+      "bullets": [
+        {
+          "body": "Nag-ship ang Ollama ng <a href=\"https://ollama.com/blog/faster-gemma-4-mlx-mtp\">version 0.31 noong July 1, 2026</a> na may multi-token prediction (MTP) na naka-enable by default para sa Gemma 4 sa Apple Silicon, at nag-uulat ng Gemma 4 na bumubuo na ngayon ng mga token nang halos 90% mas mabilis sa karaniwan sa isang coding-agent benchmark, nang walang pagbabago sa output ng modelo. Ang mekanismo ay speculative decoding na ginawa in-model: ang Gemma 4 ay may kasamang maliit at mabilis na draft model na nagmumungkahi ng susunod na ilang token, at vine-verify ng main model ang mungkahi sa iisang pass at pinapanatili ang anumang sinasang-ayunan nito, kaya maraming token ang lumalapag sa halos halaga ng isa tuwing tama ang draft. Nag-ambag ang Ollama ng bagong small-batch matmul kernel sa <a href=\"https://github.com/ollama/ollama/releases/tag/v0.31.1\">MLX framework</a> ng Apple na binabasa at ina-unpack ang bawat block ng weights nang isang beses at muling ginagamit ito sa buong batch sa halip na muling basahin bawat token; sa isang M5 Max na may nvfp4 quantization ginagawa niyan ang pinakamalalaking matrix multiplication ng Gemma 4 na 2x hanggang 2.5x mas mabilis, at magagamit ang kernel sa ibang MLX model, hindi lang Gemma. Ni-refresh din ng release ang bundled na llama.cpp engine sa build 9840, at ang kalapit na 0.30.11-0.31 train ay nagdagdag ng thinking-capability detection, mga auto-installation hook para sa Claude Code at opencode, Codex model-drift detection, at CUDA sm_86 support, ayon sa <a href=\"https://releasebot.io/updates/ollama\">Ollama release notes</a>. Ang dahilan kung bakit mahalaga ito lampas sa isang benchmark line ay dahil patuloy na tinatawag ng mga coding agent ang modelo habang binabasa nila ang mga file at nagpapatakbo ng mga tool, at hindi karaniwang predictable ang code, puno ng closing brackets at inuulit na identifier, kaya madalas tinatanggap ang mga mungkahi ng draft model at nag-iipon ang aksilerasyon sa buong agent session. Para sa sinumang nagpapatakbo ng mga local model sa likod ng isang OpenAI-compatible endpoint sa isang Mac, ang praktikal na basa ay na ang on-device agentic throughput ay isinara lang ang isang makabuluhang bahagi ng agwat sa hosted inference nang walang bagong hardware.",
+          "citations": [
+            {
+              "label": "Ollama Blog - Faster Gemma 4 on MLX with multi-token prediction",
+              "url": "https://ollama.com/blog/faster-gemma-4-mlx-mtp"
+            },
+            {
+              "label": "GitHub - Ollama v0.31.1 release",
+              "url": "https://github.com/ollama/ollama/releases/tag/v0.31.1"
+            },
+            {
+              "label": "Releasebot - Ollama release notes (June-July 2026)",
+              "url": "https://releasebot.io/updates/ollama"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category": "Nakakuha ang Together AI ng $800M Series C sa $8.3B na valuation na pinangunahan ng Prosperity7 ng Aramco, na tinatatakan ang open-model inference layer, hindi lang ang mga frontier lab, bilang kung saan humahabol ang kapital ng scale",
+      "bullets": [
+        {
+          "body": "Inanunsyo ng Together AI ang isang <a href=\"https://www.businesswire.com/news/home/20260701243402/en/Together-AI-Raises-$800-Million-at-$8.3-Billion-Valuation-to-Make-Frontier-AI-Accessible-to-All\">$800 million Series C sa isang $8.3 billion post-money valuation noong July 1, 2026</a>, isang 2.5x na step-up mula sa February 2025 Series B nito na nagbigay-halaga sa kompanya sa $3.3 billion, na nagdadala ng kabuuang funding sa $1.3 billion. Ang round ay pinangunahan ng diversified program na Prosperity7 Ventures US ng Aramco Ventures, kasama ang partisipasyon ng Vista Equity Partners, General Catalyst, Emergence Capital, NVIDIA, March Capital, Pegatron, at S Ventures ng SentinelOne, ayon sa <a href=\"https://www.datacenterdynamics.com/en/news/together-ai-raises-800m-in-series-c-funding-round/\">DataCenter Dynamics</a>. Ang ikinaiiba nito sa mga frontier-lab mega-round ay kung saan nakaupo ang pera sa stack: ang Together AI ay isang neocloud na nagti-train at nagse-serve ng open-weight models tulad ng DeepSeek, Nemotron, MiniMax, at Kimi sa isang maliit na bahagi ng gastos ng closed-model, at sinasabi nitong inaasahang lalaki ang GPU-infrastructure footprint nito nang halos 50-fold sa susunod na limang taon. Iniharap ng Prosperity7 managing director na si Abhishek Shukla ang kompanya bilang patungo sa public markets, na umaalingawngaw sa parehong IPO gravity na humihila sa mga lab mismo. Ang senyales para sa mga team na pumipili ng inference vendor ay na ang open-model hosting layer ay kinakapitalize na ngayon bilang isang matibay na platform sa sarili nitong karapatan sa halip na isang manipis na commodity reseller, kasama ang mga katulad na Fireworks at Baseten na nakakuha ng kani-kanilang malalaking round ngayong cycle. Ang competitive na tanong na pinopondohan nito ay kung kayang panatilihin ng owned-GPU open-model inference ang pag-undercut sa hosted frontier APIs sa presyo habang tinutumbasan sila sa latency habang patuloy na isinasara ng open weights na sine-serve nito ang capability gap.",
+          "citations": [
+            {
+              "label": "Business Wire - Together AI Raises $800M at $8.3B Valuation",
+              "url": "https://www.businesswire.com/news/home/20260701243402/en/Together-AI-Raises-$800-Million-at-$8.3-Billion-Valuation-to-Make-Frontier-AI-Accessible-to-All"
+            },
+            {
+              "label": "DataCenter Dynamics - Together AI raises 00m in Series C funding round",
+              "url": "https://www.datacenterdynamics.com/en/news/together-ai-raises-800m-in-series-c-funding-round/"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category": "Tahasang itinatanggi ng Tenstorrent CEO na si Jim Keller ang usapin ng buyout ng Qualcomm, na nagpapalamig sa isang naiulat na $8-10B na deal at nagsesenyas na balak ng RISC-V accelerator startup na manatiling independiyente sa buong IPO run nito",
+      "bullets": [
+        {
+          "body": "Sa pagsasalita sa isang media event sa Tokyo, sinabi ng Tenstorrent CEO na si Jim Keller noong June 30, 2026 at inulit hanggang July 3 na ang AI-chip startup ay wala sa mga usapin ng acquisition sa Qualcomm, na direktang sinasagot ang isang mid-June na ulat, na nagmula sa The Information at kinuha ng Reuters, na tinitimbang ng Qualcomm ang isang buong buyout sa naiulat na $8 billion hanggang $10 billion, ayon sa <a href=\"https://www.gurufocus.com/news/8938157/tenstorrent-ceo-denies-qualcomm-acquisition-talks-amid-focus-on-ai-development\">GuruFocus</a>. Sinabi ni Keller na nakatuon ang kompanya sa pagtatayo ng sarili nitong negosyo, kabilang ang IP licensing at high-end scalable AI work na nakabatay sa Japan, habang iniiwang bukas ang pinto sa mga partnership, na binabanggit na nakikipag-usap ang Tenstorrent sa maraming kompanya sa mga strategic area at na tumaas ang gana para sa malalaking deal sa buong sektor. Mahalaga ang pagtanggi dahil inaalis nito, kahit sa ngayon, ang isang consolidation path na sana ay nagsanib sa isa sa iilang kapani-paniwalang RISC-V-based na accelerator IP house sa isang mobile-SoC incumbent, at lumalapag ito habang ang Tenstorrent ay nasa kalagitnaan ng isang IPO bridge at confidential S-1 track sa halip na ibenta ang sarili. Para sa mga mamimili na sumusuri sa non-NVIDIA accelerator field, ang praktikal na aral ay na ang Galaxy rack roadmap at IP-licensing model ng Tenstorrent ay nananatili sa isang independiyenteng trajektorya sa halip na isang Qualcomm integration timeline. Ang mas malawak na basa ay na ang memory-bandwidth at inference-ASIC race ay sapat nang mahalaga ngayon kaya igagalaw ng mga tsismis ng acquisition ang mga market, ngunit ang mga nangungunang independiyente ay pumipili ng public offerings sa halip na pagbebenta.",
+          "citations": [
+            {
+              "label": "GuruFocus - Tenstorrent CEO Denies Qualcomm Acquisition Talks",
+              "url": "https://www.gurufocus.com/news/8938157/tenstorrent-ceo-denies-qualcomm-acquisition-talks-amid-focus-on-ai-development"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category": "Isinara ng Stathera ang isang oversubscribed na $55M Series B para sa MEMS silicon timing, na tumataya na papalitan ng mga AI data center ang quartz clocks ng semiconductor timing habang ang synchronization ay nagiging bottleneck",
+      "bullets": [
+        {
+          "body": "Inanunsyo ng Montreal-based na Stathera ang isang <a href=\"https://www.prnewswire.com/news-releases/stathera-announces-us55-million-series-b-to-scale-silicon-timing-and-accelerate-next-generation-ai-data-center-solutions-302813712.html\">oversubscribed na $55 million Series B noong June 30, 2026</a>, pinangunahan ng bagong investor na Maverick Silicon kasama ang partisipasyon ng Celesta Capital, BDC Capital, MediaTek Innovation Fund, TXC Corporation, at Ultratech Capital Partners, na nagdadala ng kabuuang funding sa $75 million, ayon sa <a href=\"https://www.citybiz.co/article/867841/stathera-raises-55-million-series-b-to-expand-silicon-timing-for-ai-data-centers/\">citybiz</a>. Bumubuo ang Stathera ng MEMS-based precision timing sa isang proprietary na DualMode architecture na pumapalit sa mga legacy quartz oscillator ng semiconductor timing, na inaangkin ang humigit-kumulang 85% na mas maliit na footprint kasama ang mas mahusay na shock at vibration resilience, at gagamitin nito ang round para ipaandar ang mass production ng second-generation 32.768 kHz portfolio nito, magbukas ng Silicon Valley office para akitin ang mga hyperscale at data-center customer, at pondohan ang isang bagong GEN3 platform na direktang nakatuon sa communications, enterprise, at AI data-center clocks, na ang unang customer samples ay tina-target para sa 2028. Iniharap ng kompanya ang communications-and-data-center segment bilang ang pinakamabilis-na-lumalaking bahagi ng isang $11 billion na taunang timing market, at tinatasa ang AI-data-center time-synchronization opportunity sa halos $1.5 billion nang cumulative hanggang 2030. Ang dahilan kung bakit lumitaw ang isang clock startup sa isang AI briefing ay dahil habang lumalaki ang mga accelerator cluster sa sampu-sampung libong GPU, ang tumpak at matatag na timing sa mga node ay nagiging tunay na hadlang sa interconnect at throughput, ang parehong infrastructure layer na lalong tina-target ng mga pondong tulad ng Maverick Silicon. Isa itong early-stage na silikon na may 2028 sampling horizon, kaya isa itong pustang directional sa halip na isang shipping product, ngunit tinatatakan nito ang timing bilang isang pinangalanang line item sa mga AI-datacenter buildout sa halip na isang afterthought.",
+          "citations": [
+            {
+              "label": "PR Newswire - Stathera Announces US$55M Series B for AI Data Center Silicon Timing",
+              "url": "https://www.prnewswire.com/news-releases/stathera-announces-us55-million-series-b-to-scale-silicon-timing-and-accelerate-next-generation-ai-data-center-solutions-302813712.html"
+            },
+            {
+              "label": "citybiz - Stathera Raises $55M Series B to Expand Silicon Timing for AI Data Centers",
+              "url": "https://www.citybiz.co/article/867841/stathera-raises-55-million-series-b-to-expand-silicon-timing-for-ai-data-centers/"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category": "Mga AI event na dapat planuhin ngayon: binubuksan ng Geneva AI Week at isang AI Tinkerers SF meetup ang linggong ito, habang nagsisiksik sa likuran nila ang mga hardware, security, at dev-conference track hanggang sa fall",
+      "bullets": [
+        {
+          "body": "Ang pinakamalapit na bagay sa kalendaryo ay nasa Geneva: <a href=\"https://unrot.co/blogs/today-top-10-ai-news-july-3-2026\">tatakbo ang Geneva AI Week July 6-10, 2026</a> sa Palexpo convention center, na magbubukas sa UN Global Dialogue on AI Governance (July 6-7) at gugulong tungo sa ITU AI for Good Summit (July 7-10), kung saan ang isang bagong-launch na UN AI for Good Commission, na co-chaired nina Marc Benioff ng Salesforce at Paul Kagame ng Rwanda at may kaupuang sina Jensen Huang, Andy Jassy, Brad Smith, at Jack Clark ng Anthropic, ay magdaraos ng unang pulong nito noong July 8. Para sa mga taga-Bay Area, ang <a href=\"https://sf.aitinkerers.org/\">AI Tinkerers San Francisco</a> ay magho-host ng susunod na meetup nito noong July 8 (isang GTM-engineering track kasama ang Attio), ang karaniwang tatlong-oras na format ng working demos mula sa mga lokal na builder. Sa AI-chip at hardware track, ang MI400 Instinct series ng AMD at \"Helios\" rack-scale system ang nananatiling marquee na 2H-2026 catalyst na dapat bantayan, habang ang pinakamalapit na kumpirmadong hardware na pagtitipon ay ang <a href=\"https://hotchips.org/\">Hot Chips 2026</a> sa Memorial Auditorium ng Stanford noong August 23-25 (magsasara ang early registration sa July 31), na ang <a href=\"https://www.ai-infra-summit.com/agenda\">AI Infra Summit</a> sa Santa Clara noong September 15-17 ay nasa likuran nito. Ang AI-security block ay nagsisiksik sa unang-hanggang-gitnang Agosto: ang <a href=\"https://www.airisksummit.com/agenda\">AI Risk Summit</a> ng SecurityWeek ay August 11-12 sa Ritz-Carlton sa Half Moon Bay, lalapag ang Black Hat USA at AI Village ng DEF CON 34 sa Las Vegas sa unang bahagi ng Agosto, at susunod ang OWASP Global AppSec USA sa San Francisco noong November 5-6; ipinagpapatuloy ng AI Agent Security Summit series ng Zenity ang mga hinto nito para sa mga team na nakatuon sa agent-hijack at MCP-layer defense. Nasa enterprise track din, tatakbo ang <a href=\"https://ai4.io/\">Ai4 2026</a> noong August 4-6 sa Las Vegas at ang ACM AI Leadership Summit ay August 30 hanggang September 2 sa Atlanta, kasama ang GitHub Universe noong October 28-29 at ang AWS re:Invent November 30 hanggang December 4 sa Las Vegas. Ang dalawang agarang aksyon ay ang pagpunta sa July 6-10 Geneva sessions kung governance ang beat mo at ang July 8 AI Tinkerers SF meetup kung lokal ka; ang August AI Risk Summit at Hot Chips ang mga natural na susunod na venue para sa mga anunsyo ng confidential-inference at secure-accelerator.",
+          "citations": [
+            {
+              "label": "unrot.co - Top 10 AI News July 3 2026 (Geneva AI Week, UN AI for Good Commission)",
+              "url": "https://unrot.co/blogs/today-top-10-ai-news-july-3-2026"
+            },
+            {
+              "label": "AI Tinkerers San Francisco",
+              "url": "https://sf.aitinkerers.org/"
+            },
+            {
+              "label": "Hot Chips 2026 (Aug 23-25, Stanford)",
+              "url": "https://hotchips.org/"
+            },
+            {
+              "label": "SecurityWeek AI Risk Summit 2026 (Aug 11-12, Half Moon Bay)",
+              "url": "https://www.airisksummit.com/agenda"
+            },
+            {
+              "label": "Ai4 2026 (Aug 4-6, Las Vegas)",
+              "url": "https://ai4.io/"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

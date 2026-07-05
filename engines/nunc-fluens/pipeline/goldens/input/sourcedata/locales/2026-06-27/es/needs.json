@@ -1,0 +1,109 @@
+{
+  "date": "2026-06-27",
+  "by_prediction": {
+    "prediction.2d6b8e0a4c1f9357": [
+      {
+        "actor": "gerente de producto de seguridad de plataforma de agentes",
+        "job": "Impulsar una capa de autorización por inquilino con denegación por defecto en el plano de orquestación para que los flujos se autentiquen y autoricen antes de ejecutarse en una versión con nombre.",
+        "outcome": "Una versión con nombre lanza la autorización por inquilino a nivel de flujo/objeto activada por defecto, cerrando las brechas de IDOR entre inquilinos sin ninguna opción que haya que habilitar.",
+        "motivation": "El IDOR entre inquilinos CVSS 9.9 de Langflow explotado en vivo prueba que la capa de orquestación se lanza insegura por defecto y amenaza la confianza empresarial.",
+        "task": {
+          "who": "el subequipo de seguridad de plataforma e ingeniería de autorización",
+          "what": "Añadir comprobaciones de autorización por inquilino con denegación por defecto antes de la ejecución del flujo",
+          "where": "en la ruta de resolución y ejecución de flujos del entorno de ejecución de orquestación de agentes",
+          "when": "desde ahora a lo largo del plazo hasta el Q2 2027",
+          "why": "para cerrar las brechas de IDOR entre inquilinos probadas por la explotación en vivo",
+          "how": "middleware de autorización con alcance de propietario aplicado en cada resolución de flujo"
+        }
+      },
+      {
+        "actor": "ingeniero de red/salida de plataforma agéntica",
+        "job": "Construir una lista de permitidos de tráfico saliente por defecto con bloques de llamada a herramientas y de solicitud web endurecidos contra SSRF para que las solicitudes salientes se controlen antes de abandonar el ejecutor.",
+        "outcome": "Una versión con nombre adopta por defecto la lista de permitidos de salida con análisis de URL resistente a SSRF, bloqueando por defecto las recuperaciones a IP internas desde las llamadas a herramientas del agente.",
+        "motivation": "La evasión SSRF CVSS 8.5 de AutoGPT muestra que los bloques de recuperación de URL arbitrarias son superficies de SSRF salvo que la salida esté bloqueada por construcción.",
+        "task": {
+          "who": "el subequipo de ingeniería de sandbox del ejecutor y de red",
+          "what": "Lanzar una lista de permitidos de salida activada por defecto y una validación de URL segura ante SSRF",
+          "where": "en la capa de ejecución de llamadas a herramientas y de solicitud web del ejecutor de agentes",
+          "when": "durante el plazo entre mediados de 2026 y el Q2 2027",
+          "why": "para frenar el SSRF a IP internas mediante primitivas de recuperación de URL arbitrarias",
+          "how": "control de lista de permitidos más filtrado de IP canónico consciente de IPv6"
+        }
+      }
+    ],
+    "prediction.7f3a9c2e1b8d4056": [
+      {
+        "actor": "investigador de seguridad de plataforma de agentes",
+        "job": "Cazar fallos de IDOR entre inquilinos y de acceso roto a nivel de objeto en la clase de constructores de agentes n8n/Flowise/Dify/LangGraph/CrewAI usando el CVE de Langflow como plantilla.",
+        "outcome": "Un aviso de autorización/IDOR entre inquilinos con CVSS >=9.0 presentado contra un constructor de agentes distinto de Langflow, idealmente con evidencia en la práctica o de CISA-KEV.",
+        "motivation": "El patrón del CVE-2026-55255 de Langflow es una firma de clase reutilizable; replicarlo en los pares produce divulgaciones de gravedad alta y alta visibilidad.",
+        "task": {
+          "who": "equipo de investigación de vulnerabilidades / bug bounty",
+          "what": "Sondear los endpoints de resolución de flujos y de ejecución en busca de comprobaciones de propiedad ausentes",
+          "where": "Instancias autoalojadas y SaaS de constructores de agentes pares",
+          "when": "Plazo desde junio de 2026 hasta el Q1 2027",
+          "why": "Replicar la clase de IDOR de Langflow en toda la categoría",
+          "how": "Recolectar ID opacos de flujo/ejecución; reproducir solicitudes entre inquilinos"
+        }
+      },
+      {
+        "actor": "ingeniero de plataforma de orquestación de agentes",
+        "job": "Lanzar y ampliar funciones multiinquilino de flujo/ejecución/espacio de trabajo en un endpoint de ejecución compartido mientras delega las comprobaciones de propiedad a la interfaz o al prefijo de ruta en lugar de al límite del objeto.",
+        "outcome": "Una ruta de acceso entre inquilinos en vivo y explotable en una plataforma par que un investigador pueda divulgar más tarde como un aviso de IDOR de >=9.0.",
+        "motivation": "La presión por velocidad y paridad de funciones favorece los patrones de ID opaco y endpoint compartido; la autorización por objeto se aplaza como endurecimiento no bloqueante.",
+        "task": {
+          "who": "equipo de ingeniería de backend / plataforma central",
+          "what": "Construir endpoints de resolución de flujos y de ejecución basados en ID opacos",
+          "where": "Plano de ejecución y orquestación multiinquilino compartido",
+          "when": "Ciclos de versión continuos hasta el Q1 2027",
+          "why": "Lanzar funciones multiinquilino rápido a la par de la categoría",
+          "how": "Búsqueda por UUID opaco con comprobaciones de propiedad delegadas a la interfaz"
+        }
+      }
+    ],
+    "prediction.9a1c5f7b3e2d8046": [
+      {
+        "actor": "gerente de producto de lanzamiento de GPU de centro de datos de acelerador comercial",
+        "job": "Cerrar el paquete de lanzamiento de la serie MI400 y fijar qué especificación verificable, ventana de disponibilidad general o cifra de HBM va en las diapositivas de la keynote de Advancing AI.",
+        "outcome": "Un MI400 lanzado formalmente con al menos un compromiso con nombre y verificable, una ventana de envío, especificación de memoria, rack o cliente, registrado en el escenario.",
+        "motivation": "AMD debe responder a la hoja de ruta de Nvidia en el escenario con especificaciones duras de acelerador comercial para mantener la credibilidad ante los compradores hiperescaladores.",
+        "task": {
+          "who": "equipo de marketing de producto y lanzamiento de GPU de centro de datos Instinct de AMD",
+          "what": "Fijar las afirmaciones de lanzamiento del MI400 y las diapositivas de especificaciones de la keynote",
+          "where": "Preparación de la keynote de Advancing AI 2026 en el Moscone, San Francisco",
+          "when": "desde ahora hasta el plazo de la keynote del 23 de julio de 2026",
+          "why": "para dejar registrado un compromiso verificable del MI400",
+          "how": "revisión interna de preparación del lanzamiento y aprobación de las diapositivas de la keynote"
+        }
+      },
+      {
+        "actor": "ingeniero de plataforma de sistemas de IA a escala de rack",
+        "job": "Productizar la plataforma a escala de rack de clase Helios en torno al MI400 para que un sistema de rack con nombre y sus especificaciones estén listos para demostrarse en la keynote.",
+        "outcome": "Una especificación de plataforma a escala de rack de clase Helios con nombre divulgada en el evento, satisfaciendo el compromiso de sistema de rack que exige la predicción.",
+        "motivation": "Las plataformas a escala de rack, no los chips sueltos, son lo que compran los hiperescaladores, así que un rack con nombre prueba que AMD entrega sistemas desplegables.",
+        "task": {
+          "who": "ingeniería de sistemas de centro de datos y de plataforma de rack Helios de AMD",
+          "what": "Validar y especificar la plataforma de rack Helios MI400",
+          "where": "Laboratorios de sistemas de AMD y zona de demostración de Advancing AI",
+          "when": "desde ahora hasta el plazo del evento del 22 al 23 de julio de 2026",
+          "why": "para divulgar una plataforma a escala de rack desplegable con nombre",
+          "how": "puesta en marcha del rack, pruebas de integración y validación de la plataforma"
+        }
+      },
+      {
+        "actor": "socio de codiseño de infraestructura de IA hiperescalador o de laboratorio puntero",
+        "job": "Cerrar con AMD un compromiso de despliegue del MI400 que pueda nombrarse en el escenario como un dato de adopción de cliente en la keynote.",
+        "outcome": "Un compromiso de despliegue del MI400 con un hiperescalador o laboratorio puntero con nombre anunciado en el escenario, satisfaciendo el compromiso de cliente con nombre que cuenta.",
+        "motivation": "Una segunda fuente de acelerador comercial diversifica el suministro y la palanca de precios frente a Nvidia para el entrenamiento y la inferencia a gran escala.",
+        "task": {
+          "who": "equipo de compras y codiseño de infraestructura de IA del hiperescalador o laboratorio puntero",
+          "what": "Cerrar un compromiso de despliegue del MI400 nombrable",
+          "where": "Negociaciones de codiseño y compras entre AMD y el cliente",
+          "when": "desde ahora hasta el plazo de la keynote del 23 de julio de 2026",
+          "why": "para asegurar una segunda fuente de acelerador comercial a gran escala",
+          "how": "alineación de hoja de ruta conjunta y negociación del compromiso de compra"
+        }
+      }
+    ]
+  }
+}

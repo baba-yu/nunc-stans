@@ -1,0 +1,14 @@
+{
+  "id": "prediction.2445276f6f0458c1",
+  "scope_hint": "tech",
+  "title": "Second open-weight frontier model discloses non-NVIDIA ASIC training by Q2 2027",
+  "body": "Meituan's LongCat-2.0, a 1.6-trillion-parameter agentic-coding MoE released under MIT on June 30, was built and served end-to-end on a cluster of more than 50,000 Chinese-made ASICs with no NVIDIA GPUs in the loop, and it edges GPT-5.5 on SWE-bench Pro (59.5 to 58.6) after two anonymous months in OpenRouter's global top three. The load-bearing claim is not the benchmark but the training substrate: a near-frontier model can now be produced without US-restricted silicon. That converts a single existence proof into a reproducible template, and the same export-control pressure that motivated it applies to every other lab operating inside or adjacent to the restricted-supply regime, alongside the domestic-accelerator programs (Huawei Ascend, Cambricon, and the in-house parts behind checkpoints such as the Qwen and DeepSeek families) already scaling for exactly this workload. Expect a second, independent open-weight near-frontier model to ship with a disclosed end-to-end training run on non-NVIDIA accelerators, documented in its own model card or technical report rather than inferred by observers. The differentiator moves from who holds NVIDIA allocation to who can stand up a full domestic-silicon training-and-serving stack, so the open-weight frontier stops being gated on American accelerators and the compute-independence trajectory reads as a durable pattern, not a Meituan one-off.",
+  "reasoning": {
+    "because": "1.6T MoE LongCat-2.0 trained on 50k+ Chinese ASICs, no NVIDIA, edged GPT-5.5 on SWE-bench Pro",
+    "given": "Export controls plus proven ASIC-training viability push labs to copy the no-US-silicon stack",
+    "so_that": "A second lab publishes an open-weight near-frontier model with a disclosed end-to-end non-NVIDIA ASIC training run",
+    "landing": "by Q2 2027; a second vendor's model or tech report documents ASIC-only training",
+    "plain_language": "Another team will train and release a top-tier open AI model entirely on non-Nvidia chips, proving the first was not a fluke."
+  },
+  "summary": "Meituan's LongCat-2.0, a 1.6T-parameter agentic-coding MoE, trained end-to-end on 50k+ Chinese ASICs with no NVIDIA GPUs, edging GPT-5.5 on SWE-bench Pro. Non-US-silicon training is now reproducible, so expect a second open-weight near-frontier model to disclose non-NVIDIA ASIC training by Q2 2027."
+}

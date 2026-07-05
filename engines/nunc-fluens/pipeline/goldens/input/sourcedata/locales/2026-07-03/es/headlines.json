@@ -1,0 +1,54 @@
+{
+  "date": "2026-07-03",
+  "technical": [
+    {
+      "lead": "OpenAI lleva Codex Remote a GA en todos los niveles de pago de ChatGPT",
+      "body": "OpenAI promocionó Codex Remote de la fase de vista previa a disponibilidad general el 25 de junio de 2026, abriendo el control desde el móvil de sesiones de programación de larga duración a todos los planes de pago de ChatGPT —Plus, Pro, Business, Enterprise y Education— según el <a href=\"https://releasebot.io/updates/openai/codex\">registro de versiones de Codex</a> monitorizado. Desde la app móvil de ChatGPT, quien desarrolla puede iniciar o continuar trabajo en un host Mac o Windows conectado, seguir el progreso y aprobar acciones individuales de forma remota. El lanzamiento sustituye el anterior enfoque de shell remoto por un relé específico con emparejamiento QR autenticado uno a uno entre cada dispositivo y host, manteniendo la máquina de desarrollo fuera de la internet pública sin dejar de ser accesible, como detalla <a href=\"https://www.techtimes.com/articles/319201/20260627/openai-codex-remote-goes-live-all-plans-phone-control-now-secured-qr-relay.htm\">la cobertura de TechTimes</a>. En la misma ventana llegó Codex CLI 0.142.2, que hace de la búsqueda de herramientas MCP el valor por defecto cuando un servidor lo soporta y añade un plugin de workspace de DigitalOcean Droplet. La combinación empuja el harness del agente de programación hacia un bucle plenamente asíncrono, de aprobación desde cualquier lugar, en lugar de uno atado al terminal.",
+      "citations": [
+        {"label": "Releasebot - OpenAI Codex updates (Remote GA, CLI 0.142.2)", "url": "https://releasebot.io/updates/openai/codex"},
+        {"label": "TechTimes - OpenAI Codex Remote Goes Live for All Plans", "url": "https://www.techtimes.com/articles/319201/20260627/openai-codex-remote-goes-live-all-plans-phone-control-now-secured-qr-relay.htm"}
+      ]
+    },
+    {
+      "lead": "Anthropic restaura Fable 5 en todo el mundo con un clasificador de jailbreak con >99% de eficacia",
+      "body": "Anthropic devolvió Fable 5 a nivel global el 1 de julio de 2026, un día después de que el Departamento de Comercio de EE. UU. levantara el 30 de junio los controles de exportación de emergencia que habían suspendido el modelo durante unos 19 días tras un jailbreak descubierto por Amazon, según un <a href=\"https://www.buildfastwithai.com/blogs/ai-news-today-july-3-2026\">resumen del ciclo de noticias del 3 de julio</a>. El modelo vuelve a estar disponible en Claude.ai, la Claude Platform API, Claude Code y Claude Cowork en AWS, Google Cloud y Microsoft, con un nuevo clasificador que, según Anthropic, bloquea el jailbreak específico con una eficacia superior al 99%, a costa de derivar algunas consultas legítimas de programación cercanas a la seguridad hacia Opus 4.8. La restauración vino con un acuerdo gubernamental de cuatro puntos: acceso a modelos antes de su publicación, intercambio rápido de inteligencia de amenazas, participación en infraestructura crítica y codesarrollo de un esquema de puntuación de riesgo de jailbreak. Coincide con un hito para el mayor respaldo de Anthropic: <a href=\"https://menlovc.com/perspective/menlo-turns-50-and-announces-3b-in-fresh-capital-to-go-all-in-on-ai/\">Menlo Ventures</a> cerró una ronda de $3B, la mayor de su historia, apoyada en una participación en Anthropic ahora valorada en unos $14B.",
+      "citations": [
+        {"label": "Build Fast with AI - AI News Today July 3 2026", "url": "https://www.buildfastwithai.com/blogs/ai-news-today-july-3-2026"},
+        {"label": "Menlo Ventures - Menlo Turns 50 and Announces $3B in Fresh Capital", "url": "https://menlovc.com/perspective/menlo-turns-50-and-announces-3b-in-fresh-capital-to-go-all-in-on-ai/"}
+      ]
+    },
+    {
+      "lead": "Bridgewater y Thinking Machines afinan Qwen3-235B por encima de los modelos frontera",
+      "body": "AIA Labs de Bridgewater y el Thinking Machines Lab de Mira Murati publicaron resultados el 30 de junio de 2026 que muestran un fine-tune especializado de la base open-weight <a href=\"https://thinkingmachines.ai/news/learning-to-replicate-expert-judgment-in-financial-tasks/\">Qwen3-235B</a> alcanzando un 84,7% de exactitud media en seis tareas de filtrado de información, frente al 78,2% del mejor modelo frontera probado —una reducción de errores del 29,8%—. El modelo se entrenó en la plataforma Tinker de Thinking Machines con datos financieros propietarios etiquetados por expertos de Bridgewater, y las ganancias se atribuyen al batching round-robin intercalado (+12,1%), a una pérdida CISPO con recorte asimétrico (+10,1%) y a la destilación on-policy con un profesor promovido periódicamente (+3,1%). El equipo reporta que el modelo se ejecuta a un coste de inferencia por tarea aproximadamente 13,8x menor que las alternativas frontera, como señaló <a href=\"https://blockchain.news/ainews/bridgewater-fine-tunes-model-beats-frontier-llms\">cobertura independiente</a>. Es un dato limpio para la tesis de que un checkpoint open-weight bien afinado más etiquetas de dominio de alta calidad supera a la escala frontera genérica en una tarea de experto estrecha.",
+      "citations": [
+        {"label": "Thinking Machines Lab - Learning to Replicate Expert Judgment in Financial Tasks", "url": "https://thinkingmachines.ai/news/learning-to-replicate-expert-judgment-in-financial-tasks/"},
+        {"label": "Blockchain.News - Bridgewater Fine-Tunes Model to Beat Frontier LLMs", "url": "https://blockchain.news/ainews/bridgewater-fine-tunes-model-beats-frontier-llms"}
+      ]
+    },
+    {
+      "lead": "Un exploit funcional elude el parche de la RCE de Custom-MCP de Flowise CVE-2026-40933",
+      "body": "Obsidian Security publicó una prueba de concepto funcional para <a href=\"https://nvd.nist.gov/vuln/detail/CVE-2026-40933\">CVE-2026-40933</a>, un fallo de ejecución remota de código en la herramienta Custom MCP de Flowise que se distribuye con el constructor de agentes low-code usado por más de 52.000 despliegues con estrella en GitHub. Como detalla <a href=\"https://www.infosecurity-magazine.com/news/flowise-mcp-rce-poc/\">Infosecurity Magazine</a>, el fallo reside en el transporte stdio, que lanza un comando suministrado por el usuario como un proceso hijo sin sandbox en el servidor de Flowise, de modo que un archivo de flujo exportado y envenenado ejecuta comandos automáticamente en cuanto una víctima lo importa —sin ninguna solicitud de aprobación—. Las instalaciones open-source autoalojadas y las de empresa siguen siendo vulnerables por defecto incluso en la versión actual, y quienes investigan demostraron que el parche oficial puede sortearse, así que un simple salto de versión no cierra el agujero. La divulgación se enmarca en un patrón más amplio de inyección de comandos por stdio que un <a href=\"https://www.ox.security/blog/mcp-supply-chain-advisory-rce-vulnerabilities-across-the-ai-ecosystem/\">aviso coordinado de la cadena de suministro de MCP</a> rastreó en LiteLLM, Agent Zero, LangBot y Windsurf. La mitigación recomendada es desactivar el transporte stdio en favor de Server-Sent Events y tratar cualquier configuración MCP importada como código no confiable.",
+      "citations": [
+        {"label": "NVD - CVE-2026-40933 Detail", "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-40933"},
+        {"label": "Infosecurity Magazine - Critical Flowise Flaw Gives Attackers Full Server Control", "url": "https://www.infosecurity-magazine.com/news/flowise-mcp-rce-poc/"},
+        {"label": "OX Security - MCP Supply Chain Advisory", "url": "https://www.ox.security/blog/mcp-supply-chain-advisory-rce-vulnerabilities-across-the-ai-ecosystem/"}
+      ]
+    },
+    {
+      "lead": "La presentación del MI400 de AMD el 22-23 de julio encabeza un denso calendario de eventos de IA",
+      "body": "El catalizador de chips de IA más cercano es Advancing AI 2026 de AMD, el 22-23 de julio en el Moscone de San Francisco, donde se espera la serie MI400 y el sistema a escala de rack \"Helios\" con calendarios de disponibilidad; en la misma línea de hardware, <a href=\"https://semiwiki.com/event/hot-chips-2026/\">Hot Chips</a> se celebra en el Memorial Auditorium de Stanford del 23 al 25 de agosto y el <a href=\"https://www.ai-infra-summit.com/faqs\">AI Infra Summit</a> le sigue en Santa Clara del 15 al 17 de septiembre. El bloque de seguridad de IA se concentra a mediados de agosto: el <a href=\"https://www.prnewswire.com/news-releases/securityweek-to-host-ai-risk-summit-august-11-12-at-the-ritz-carlton-half-moon-bay-ca-302783094.html\">AI Risk Summit</a> de SecurityWeek se celebra del 11 al 12 de agosto en el Ritz-Carlton de Half Moon Bay, mientras que Black Hat USA y el AI Village de DEF CON 34 llegan a Las Vegas a principios de agosto y OWASP Global AppSec USA sigue en San Francisco el 5-6 de noviembre. La serie AI Agent Security Summit de Zenity continúa sus paradas globales para los equipos centrados en el secuestro de agentes y la defensa a nivel de MCP, algo directamente relevante dado el exploit MCP de Flowise de esta semana. En la línea de desarrollo mainstream, GitHub Universe está previsto para el 28-29 de octubre y AWS re:Invent para el 30 de noviembre al 4 de diciembre. Las dos acciones más cercanas son registrarse para el keynote de AMD del 22 de julio y para el AI Risk Summit del 11-12 de agosto.",
+      "citations": [
+        {"label": "SemiWiki - Hot Chips 2026", "url": "https://semiwiki.com/event/hot-chips-2026/"},
+        {"label": "PR Newswire - SecurityWeek to Host AI Risk Summit August 11-12", "url": "https://www.prnewswire.com/news-releases/securityweek-to-host-ai-risk-summit-august-11-12-at-the-ritz-carlton-half-moon-bay-ca-302783094.html"},
+        {"label": "AI Infra Summit - 2026 FAQs", "url": "https://www.ai-infra-summit.com/faqs"}
+      ]
+    }
+  ],
+  "plain": [
+    "Codex Remote sale de vista previa para todos los planes de pago de ChatGPT",
+    "Anthropic devuelve Fable 5 al mundo tras 19 días",
+    "Un modelo abierto afinado supera a las mejores IAs en tareas financieras",
+    "Un nuevo exploit mantiene vivo un fallo ya parcheado en un constructor de agentes",
+    "La presentación de chip de AMD en julio encabeza una temporada cargada de eventos de IA"
+  ]
+}

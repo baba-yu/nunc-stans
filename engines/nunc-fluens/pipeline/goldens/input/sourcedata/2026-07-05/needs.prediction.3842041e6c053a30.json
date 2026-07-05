@@ -1,0 +1,58 @@
+[
+  {
+    "actor": "non-GPU AI-datacenter silicon startup founder and finance lead",
+    "job": "running a dedicated institutional raise for timing, interconnect, or synchronization silicon, pitched as a distinct AI-datacenter infrastructure line item, not commodity glue",
+    "outcome": "a named, oversubscribed institutional round (or S-1 filing) that finances a non-GPU AI-datacenter silicon layer marketed as its own standalone infrastructure category",
+    "motivation": "cross-node timing and interconnect become real constraints at tens of thousands of accelerators, so a separately-funded thesis attracts specialist capital and a standalone valuation",
+    "task": {
+      "who": "founding team plus finance and investor-relations staff at the silicon startup",
+      "what": "close a dedicated institutional round for a non-GPU datacenter silicon layer",
+      "where": "a specialist-silicon fundraising process and its category-defining deck",
+      "when": "H2 2026 through 2027",
+      "why": "fund a GEN-scale platform for a distinct AI-datacenter constraint",
+      "how": "specialist silicon VCs plus strategic corporate participants and a category thesis"
+    }
+  },
+  {
+    "actor": "specialist-silicon venture fund partner underwriting the non-GPU thesis",
+    "job": "sourcing, diligencing, and leading rounds into timing, interconnect, and synchronization silicon as separately-valued AI-infrastructure sub-layers, building the theses that price them apart from the GPU",
+    "outcome": "a led institutional round in a non-GPU AI-datacenter silicon supplier, underwritten explicitly as a standalone infrastructure category with its own dedicated fund thesis",
+    "motivation": "visible timing-and-interconnect scaling pain plus a $1.5B-class synchronization opportunity make these sub-layers separately-financeable, high-return bets a generalist GPU fund overlooks",
+    "task": {
+      "who": "investment partners and diligence team at a silicon-specialist fund",
+      "what": "lead a round pricing a non-GPU silicon layer as a distinct category",
+      "where": "the fund's deal pipeline, diligence process, and investment committee",
+      "when": "the runway between today and 2027",
+      "why": "capture a separately-valued AI-infrastructure sub-layer before generalists do",
+      "how": "silicon-specialist diligence plus strategic co-investors and a dedicated fund"
+    }
+  },
+  {
+    "actor": "independent accelerator-IP house CEO and capital-markets team",
+    "job": "keeping a RISC-V accelerator-IP company on a standalone-capitalization path — declining acquisition, running an IPO bridge and confidential S-1 — not folding into an incumbent",
+    "outcome": "a leading independent accelerator house that stays independent through a public listing (IPO bridge and confidential S-1) instead of being absorbed by consolidation",
+    "motivation": "an independent public path preserves a credible non-GPU accelerator alternative and captures a standalone valuation the founders judge larger than a buyout",
+    "task": {
+      "who": "chief executive plus finance and capital-markets staff at the IP house",
+      "what": "advance an IPO bridge and confidential S-1 while declining a buyout",
+      "where": "private capital-markets prep and confidential securities filings",
+      "when": "H2 2026 into 2027",
+      "why": "keep an independent accelerator alternative on a standalone public path",
+      "how": "IPO-bridge financing plus a confidential S-1 rather than an acquisition"
+    }
+  },
+  {
+    "actor": "hyperscale datacenter clock-and-interconnect architect",
+    "job": "specifying precise cross-node timing and interconnect for clusters scaling to tens of thousands of GPUs, turning synchronization into a named, sourced constraint",
+    "outcome": "published cluster timing and interconnect specifications that name synchronization as a hard constraint, creating sourced demand that makes a non-GPU silicon layer separately-financeable",
+    "motivation": "clock skew and interconnect jitter cap effective throughput at cluster scale, so architects must qualify dedicated timing and interconnect silicon, not afterthought glue",
+    "task": {
+      "who": "datacenter systems and infrastructure architecture teams at a hyperscaler",
+      "what": "specify and qualify cross-node timing and interconnect silicon for large clusters",
+      "where": "cluster reference architectures and component qualification programs",
+      "when": "the 2026-2027 buildout runway",
+      "why": "keep synchronization from capping throughput at tens-of-thousands-of-GPU scale",
+      "how": "MEMS-timing and interconnect qualification against cluster-scale requirements"
+    }
+  }
+]

@@ -1,0 +1,44 @@
+[
+  {
+    "actor": "coding-agent IDE platform engineer",
+    "job": "reworking the agent file-write path so every write canonically resolves and is rejected when it lands outside the project root, shipped as the default",
+    "outcome": "an IDE release enforcing workspace-root confinement — canonical path resolution, symlink refusal, default-deny writes outside the project — with no approval prompt bypass",
+    "motivation": "two CVSS 9.8 zero-click RCEs in a flagship editor prove filesystem confinement is table-stakes, not a nice-to-have, so the whole class must close",
+    "task": {
+      "who": "agent-runtime and IDE security engineering teams",
+      "what": "enforce canonical-path, symlink-refusing default-deny agent writes",
+      "where": "the editor's agent file-write and tool-execution path",
+      "when": "July 2026 through Q1 2027",
+      "why": "stop ingested content from writing outside the workspace",
+      "how": "canonical path resolution plus symlink refusal at write time"
+    }
+  },
+  {
+    "actor": "agent-security jailbreak-severity framework co-author",
+    "job": "co-developing an early jailbreak-severity framework and bounty scope that classifies cyber-jailbreaks and makes filesystem sandbox escape a scored, disclosable severity",
+    "outcome": "a shared severity framework and structured disclosure path that treats workspace-escape writes as a rated vulnerability class, steering vendors toward hardening over one-off patches",
+    "motivation": "a coordinated severity standard turns isolated IDE RCEs into a recognized class vendors must design against, not patch reactively",
+    "task": {
+      "who": "Anthropic security team with AWS, Microsoft, and Google",
+      "what": "publish jailbreak-severity framework and scoped bounty",
+      "where": "HackerOne bounty program and co-developed severity framework",
+      "when": "July 2026 into Q1 2027",
+      "why": "make sandbox escape a scored class driving default hardening",
+      "how": "severity rubric co-developed with major cloud and model vendors"
+    }
+  },
+  {
+    "actor": "offensive AI-tooling security research lab",
+    "job": "hunting zero-click sandbox-escape RCEs across agent editors and disclosing them with reproducible PoCs that name filesystem confinement as the missing property",
+    "outcome": "disclosed CVEs against a mainstream coding IDE that convert an abstract tool-boundary weakness into a live, patched exploit the ecosystem must design defaults around",
+    "motivation": "proving the same escape against a top-tier IDE, not just a niche low-code builder, forces confinement from optional to shipped default",
+    "task": {
+      "who": "vulnerability research and coordinated-disclosure analysts",
+      "what": "find and disclose zero-click workspace-escape RCEs",
+      "where": "coding-agent editors and their tool-ingestion paths",
+      "when": "the runway from disclosure through Q1 2027",
+      "why": "make confinement table-stakes by proving the live exploit",
+      "how": "reproducible PoC via path-traversal and symlink-resolution abuse"
+    }
+  }
+]

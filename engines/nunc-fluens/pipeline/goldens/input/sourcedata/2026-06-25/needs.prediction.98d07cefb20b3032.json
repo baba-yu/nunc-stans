@@ -1,0 +1,30 @@
+[
+  {
+    "actor": "agentic-coding platform product lead",
+    "job": "Building admin-side consumption-governance into the platform: per-seat and per-team token budgets, hard and soft caps, real-time usage dashboards, and autonomy-depth guardrails.",
+    "outcome": "Token budgets, caps, dashboards, and autonomy guardrails shipped as on-by-default features in a major agentic-coding platform's enterprise tier.",
+    "motivation": "Avoid a procurement disadvantage as consumption-based pricing becomes the norm and enterprises require governed token spend before scaling agent rollout.",
+    "task": {
+      "who": "Platform's enterprise-tier product and engineering team",
+      "what": "Ship default token budgets, caps, and usage dashboards",
+      "where": "Admin console of the agentic-coding platform's enterprise tier",
+      "when": "Today through Q2 2027 product-roadmap runway",
+      "why": "Make FinOps-for-agents table stakes to win procurement",
+      "how": "Consumption-metering, policy guardrails, and per-seat budget enforcement"
+    }
+  },
+  {
+    "actor": "enterprise FinOps-for-AI and platform-engineering lead",
+    "job": "Writing procurement requirements that demand platform-enforced token discipline, then evaluating agentic-coding vendors against a governed engineering operating model before scaled rollout.",
+    "outcome": "Procurement criteria requiring native budget and cap controls, which force vendors to make consumption governance default rather than opt-in.",
+    "motivation": "Curb per-seat token bills running $200-$2,000+ per developer monthly, where ungoverned autonomy and bloated context windows drive the steepest cost escalation.",
+    "task": {
+      "who": "Enterprise FinOps, procurement, and platform-engineering function",
+      "what": "Mandate platform-enforced token budgets in vendor evaluations",
+      "where": "Agentic-coding tool procurement and RFP processes",
+      "when": "Today through Q2 2027 scaled-rollout evaluation window",
+      "why": "Enforce token discipline in the platform, not developer restraint",
+      "how": "RFP requirements and governed engineering operating-model scorecards"
+    }
+  }
+]

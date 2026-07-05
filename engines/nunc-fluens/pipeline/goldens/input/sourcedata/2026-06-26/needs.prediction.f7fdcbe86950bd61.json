@@ -1,0 +1,30 @@
+[
+  {
+    "actor": "AI-accelerator silicon vendor confidential-computing product lead",
+    "job": "Productizing the existing TEE-I/O and on-die root-of-trust primitives into a named, inference-specific confidential tier with signed-model attestation, rather than a developer-preview flag.",
+    "outcome": "A named confidential-inference accelerator SKU where encrypted-in-use weights and tenant-verifiable model attestation are the marketed feature of the part itself.",
+    "motivation": "Differentiate beyond performance-per-watt as inference silicon commoditizes, and capture regulated and sovereign buyers whose data-residency and IP-protection needs are unmet by a generic confidential-computing checkbox.",
+    "task": {
+      "who": "Vendor's security-silicon and accelerator product-management teams",
+      "what": "Productize TEE-I/O plus attestation into a named inference tier",
+      "where": "Accelerator roadmap, silicon security block, and SKU launch process",
+      "when": "Today through H1 2027, targeting AMD Advancing AI, Hot Chips, or a hyperscaler launch",
+      "why": "Convert latent confidential-computing primitives into a sellable confidentiality feature",
+      "how": "On-die root-of-trust plus TEE-I/O with signed-model attestation flow"
+    }
+  },
+  {
+    "actor": "Cloud confidential-inference managed-tier product team",
+    "job": "Wrapping merchant accelerator confidential-computing primitives and a signed-model attestation service into a tenant-facing managed inference tier that proves which weights are running before data is sent.",
+    "outcome": "A named managed confidential-inference tier marketed on encrypted-in-use weights plus cryptographic, tenant-verifiable attestation of the deployed model.",
+    "motivation": "Win regulated, sovereign, and IP-sensitive workloads by answering 'prove the weights I am querying are the weights I approved' with a hardware-rooted, audited offering.",
+    "task": {
+      "who": "Cloud provider's confidential-computing and AI-platform product team",
+      "what": "Package attested encrypted-in-use inference as a managed tier",
+      "where": "Managed-inference service catalog and attestation verification pipeline",
+      "when": "Today through H1 2027, ahead of a hyperscaler launch venue",
+      "why": "Convert hardware confidentiality primitives into a procurable trust guarantee",
+      "how": "Attestation service over NVIDIA Confidential Computing, SEV-SNP, or TDX TEE-I/O"
+    }
+  }
+]

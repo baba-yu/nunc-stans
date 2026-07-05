@@ -1,0 +1,8 @@
+{
+  "prediction_id": "prediction.4ecb84808c9acc3f",
+  "stream": "needs",
+  "entry_id": "CIS Benchmarks / OWASP Top 10 risk-list editorial maintainer",
+  "applied": true,
+  "origin_date": "2026-04-20",
+  "reason": "Editorial-maintainer Need delivered (task.status=done) on OWASP State of Agentic AI Security and Governance v2.01 shipping 2026-06-28; added NEXT-phase ranking/adoption Need."
+}

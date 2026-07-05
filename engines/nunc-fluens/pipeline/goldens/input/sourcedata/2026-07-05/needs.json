@@ -1,0 +1,151 @@
+{
+  "date": "2026-07-05",
+  "by_prediction": {
+    "prediction.07e7e067c7ee7628": [
+      {
+        "actor": "open-model inference neocloud chief financial officer",
+        "job": "building the IPO-readiness apparatus during the runway: audited multi-year financials, revenue-recognition controls, and the disclosure package a confidential S-1 requires",
+        "outcome": "a confidential or public S-1 filing that puts the neocloud onto the public-market path as a disclosed, load-bearing step",
+        "motivation": "a ~50x GPU-growth plan outgrows private syndicates, so tapping public liquidity is the only capital base large enough to fund the buildout",
+        "task": {
+          "who": "the CFO office, controller, and IPO-readiness working group",
+          "what": "assemble audited financials and draft the S-1 disclosure package",
+          "where": "the neocloud's finance function and its outside audit and legal advisors",
+          "when": "H2 2026 through 2027, ahead of a Q4 2027 filing",
+          "why": "private capital cannot underwrite a 50x GPU buildout",
+          "how": "PCAOB-audited financials plus SEC S-1 draft-registration process"
+        }
+      },
+      {
+        "actor": "investment-bank equity capital markets lead banker",
+        "job": "running the pre-IPO book-build for the open-model inference leader: pricing the platform-tier thesis, lining up cornerstone demand, and shepherding the confidential draft-registration filing",
+        "outcome": "a filed confidential draft registration or a formal listing announcement, converting the IPO framing into a concrete disclosed public-market step",
+        "motivation": "underwriting the anchor of a newly-capitalized platform category is a marquee mandate, and the sovereign-scale cap table signals a fundable public offering",
+        "task": {
+          "who": "the equity capital markets and technology-coverage banking teams",
+          "what": "structure the offering and file the confidential draft registration",
+          "where": "the lead underwriters' ECM desk and the SEC EDGAR draft-registration channel",
+          "when": "the runway into 2027, before a Q4 2027 listing step",
+          "why": "convert investor IPO framing into a filed public-market step",
+          "how": "confidential draft-registration statement plus institutional book-build"
+        }
+      },
+      {
+        "actor": "sovereign-scale growth investor managing director on the neocloud board",
+        "job": "steering the company toward public liquidity from the board: pushing IPO-readiness milestones, governance build-out, and the exit timeline their late-stage pre-liquidity check is premised on",
+        "outcome": "board-level commitment and disclosed intent that moves the neocloud from IPO commentary into the formal public-listing machinery",
+        "motivation": "their late-stage capital is priced for a near-term public exit, so realizing that liquidity requires driving the company onto the listing path now",
+        "task": {
+          "who": "the growth investor's managing director and their board representatives",
+          "what": "drive IPO-readiness milestones and governance build-out toward a listing",
+          "where": "the neocloud board and its audit and governance committees",
+          "when": "the seventeen-plus-month runway following the July 2026 round",
+          "why": "late-stage capital is priced for a near-term public exit",
+          "how": "board-mandated IPO-readiness roadmap and governance restructuring"
+        }
+      }
+    ],
+    "prediction.185982a6cad19655": [
+      {
+        "actor": "second local-LLM runtime maintainer shipping to end users",
+        "job": "wiring paired-draft or in-model speculative decoding on as the default path for a popular open-weight family, bundling a working draft and kernel so users never touch a flag",
+        "outcome": "a runtime release whose notes flip speculative decoding to on-by-default for at least one popular open-weight model family, with byte-identical output",
+        "motivation": "Ollama's accuracy-neutral ~90% coding-agent speedup sets a competitive bar; defaulting it on closes the on-device-to-hosted throughput gap without new silicon",
+        "task": {
+          "who": "runtime inference-engine and model-packaging maintainers",
+          "what": "default-enable paired-draft speculative decoding for a popular open family",
+          "where": "the runtime's default inference path and bundled model manifests",
+          "when": "July 2026 through Q2 2027",
+          "why": "match Ollama's free accuracy-neutral speedup as a competitive baseline",
+          "how": "bundled draft model plus upstreamed small-batch matmul kernel"
+        }
+      },
+      {
+        "actor": "open-weight model-family release team",
+        "job": "shipping a matched small draft model alongside the main weights and validating byte-identical verified output, so a runtime can enable speculative decoding by default without accuracy risk",
+        "outcome": "a model-family release that includes a compatible draft checkpoint proven to give accuracy-neutral speculative decoding, ready for a runtime to default on",
+        "motivation": "families that ship a drop-in draft get faster local inference and become the family runtimes choose to default the speedup on for",
+        "task": {
+          "who": "model-training and release-engineering staff at the lab",
+          "what": "ship and validate a matched draft checkpoint with main weights",
+          "where": "the model-family release and its published inference config",
+          "when": "the runway before a runtime's Q2 2027 default flip",
+          "why": "let runtimes default speculative decoding on with no accuracy loss",
+          "how": "co-trained or distilled draft model with verified acceptance testing"
+        }
+      },
+      {
+        "actor": "speculative-decoding kernel contributor to local runtimes",
+        "job": "hardening and upstreaming the reusable small-batch matmul kernel and draft-verify path so speculative decoding is portable across MLX (or GGUF) models rather than tuned per model",
+        "outcome": "a merged, general-purpose speculative-decoding kernel any open-weight model on the runtime can use, removing the per-model engineering that blocks default-on",
+        "motivation": "a portable accuracy-neutral kernel is what converts speculative decoding from an advanced opt-in into a default a second runtime can safely ship",
+        "task": {
+          "who": "runtime and MLX/llama.cpp kernel-engineering contributors",
+          "what": "upstream a reusable small-batch draft-verify matmul kernel",
+          "where": "the runtime's shared inference kernel and framework libraries",
+          "when": "H2 2026 into early 2027",
+          "why": "make the accuracy-neutral speedup portable enough to default on",
+          "how": "small-batch MLX matmul kernel merged upstream for any model"
+        }
+      }
+    ],
+    "prediction.3842041e6c053a30": [
+      {
+        "actor": "non-GPU AI-datacenter silicon startup founder and finance lead",
+        "job": "running a dedicated institutional raise for timing, interconnect, or synchronization silicon, pitched as a distinct AI-datacenter infrastructure line item, not commodity glue",
+        "outcome": "a named, oversubscribed institutional round (or S-1 filing) that finances a non-GPU AI-datacenter silicon layer marketed as its own standalone infrastructure category",
+        "motivation": "cross-node timing and interconnect become real constraints at tens of thousands of accelerators, so a separately-funded thesis attracts specialist capital and a standalone valuation",
+        "task": {
+          "who": "founding team plus finance and investor-relations staff at the silicon startup",
+          "what": "close a dedicated institutional round for a non-GPU datacenter silicon layer",
+          "where": "a specialist-silicon fundraising process and its category-defining deck",
+          "when": "H2 2026 through 2027",
+          "why": "fund a GEN-scale platform for a distinct AI-datacenter constraint",
+          "how": "specialist silicon VCs plus strategic corporate participants and a category thesis"
+        }
+      },
+      {
+        "actor": "specialist-silicon venture fund partner underwriting the non-GPU thesis",
+        "job": "sourcing, diligencing, and leading rounds into timing, interconnect, and synchronization silicon as separately-valued AI-infrastructure sub-layers, building the theses that price them apart from the GPU",
+        "outcome": "a led institutional round in a non-GPU AI-datacenter silicon supplier, underwritten explicitly as a standalone infrastructure category with its own dedicated fund thesis",
+        "motivation": "visible timing-and-interconnect scaling pain plus a $1.5B-class synchronization opportunity make these sub-layers separately-financeable, high-return bets a generalist GPU fund overlooks",
+        "task": {
+          "who": "investment partners and diligence team at a silicon-specialist fund",
+          "what": "lead a round pricing a non-GPU silicon layer as a distinct category",
+          "where": "the fund's deal pipeline, diligence process, and investment committee",
+          "when": "the runway between today and 2027",
+          "why": "capture a separately-valued AI-infrastructure sub-layer before generalists do",
+          "how": "silicon-specialist diligence plus strategic co-investors and a dedicated fund"
+        }
+      },
+      {
+        "actor": "independent accelerator-IP house CEO and capital-markets team",
+        "job": "keeping a RISC-V accelerator-IP company on a standalone-capitalization path — declining acquisition, running an IPO bridge and confidential S-1 — not folding into an incumbent",
+        "outcome": "a leading independent accelerator house that stays independent through a public listing (IPO bridge and confidential S-1) instead of being absorbed by consolidation",
+        "motivation": "an independent public path preserves a credible non-GPU accelerator alternative and captures a standalone valuation the founders judge larger than a buyout",
+        "task": {
+          "who": "chief executive plus finance and capital-markets staff at the IP house",
+          "what": "advance an IPO bridge and confidential S-1 while declining a buyout",
+          "where": "private capital-markets prep and confidential securities filings",
+          "when": "H2 2026 into 2027",
+          "why": "keep an independent accelerator alternative on a standalone public path",
+          "how": "IPO-bridge financing plus a confidential S-1 rather than an acquisition"
+        }
+      },
+      {
+        "actor": "hyperscale datacenter clock-and-interconnect architect",
+        "job": "specifying precise cross-node timing and interconnect for clusters scaling to tens of thousands of GPUs, turning synchronization into a named, sourced constraint",
+        "outcome": "published cluster timing and interconnect specifications that name synchronization as a hard constraint, creating sourced demand that makes a non-GPU silicon layer separately-financeable",
+        "motivation": "clock skew and interconnect jitter cap effective throughput at cluster scale, so architects must qualify dedicated timing and interconnect silicon, not afterthought glue",
+        "task": {
+          "who": "datacenter systems and infrastructure architecture teams at a hyperscaler",
+          "what": "specify and qualify cross-node timing and interconnect silicon for large clusters",
+          "where": "cluster reference architectures and component qualification programs",
+          "when": "the 2026-2027 buildout runway",
+          "why": "keep synchronization from capping throughput at tens-of-thousands-of-GPU scale",
+          "how": "MEMS-timing and interconnect qualification against cluster-scale requirements"
+        }
+      }
+    ]
+  }
+}

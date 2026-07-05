@@ -1,0 +1,151 @@
+{
+  "date": "2026-07-05",
+  "by_prediction": {
+    "prediction.07e7e067c7ee7628": [
+      {
+        "actor": "chief financial officer ng open-model inference neocloud",
+        "job": "pagtatayo ng IPO-readiness apparatus sa panahong inilaan: audited multi-year financials, revenue-recognition controls, at ang disclosure package na kailangan ng isang confidential S-1",
+        "outcome": "isang confidential o public na S-1 filing na naglalagay sa neocloud sa public-market path bilang isang na-disclose, load-bearing na hakbang",
+        "motivation": "ang ~50x na GPU-growth plan ay lumalampas sa mga private syndicate, kaya ang pag-tap sa public liquidity ang tanging capital base na sapat na laki para pondohan ang buildout",
+        "task": {
+          "who": "ang CFO office, controller, at IPO-readiness working group",
+          "what": "tipunin ang audited financials at i-draft ang S-1 disclosure package",
+          "where": "ang finance function ng neocloud at ang panlabas nitong audit at legal advisors",
+          "when": "H2 2026 hanggang 2027, bago ang isang Q4 2027 filing",
+          "why": "hindi kayang i-underwrite ng private capital ang isang 50x na GPU buildout",
+          "how": "PCAOB-audited financials kasama ang SEC S-1 draft-registration process"
+        }
+      },
+      {
+        "actor": "lead banker sa equity capital markets ng investment bank",
+        "job": "pagpapatakbo ng pre-IPO book-build para sa open-model inference leader: pagpe-presyo sa platform-tier thesis, paglilinya ng cornerstone demand, at pag-shepherd sa confidential draft-registration filing",
+        "outcome": "isang na-file na confidential draft registration o isang pormal na listing announcement, na nagko-convert sa IPO framing tungo sa konkreto, na-disclose na public-market na hakbang",
+        "motivation": "ang pag-underwrite sa anchor ng isang bagong-kapitalize na kategorya ng platform ay isang marquee mandate, at ang sovereign-scale cap table ay nagsesenyas ng isang mapopondohang public offering",
+        "task": {
+          "who": "ang mga banking team sa equity capital markets at technology-coverage",
+          "what": "i-structure ang offering at i-file ang confidential draft registration",
+          "where": "ang ECM desk ng mga lead underwriter at ang SEC EDGAR draft-registration channel",
+          "when": "ang panahong inilaan hanggang 2027, bago ang isang Q4 2027 listing step",
+          "why": "i-convert ang investor IPO framing tungo sa isang na-file na public-market na hakbang",
+          "how": "confidential draft-registration statement kasama ang institutional book-build"
+        }
+      },
+      {
+        "actor": "managing director ng sovereign-scale growth investor sa board ng neocloud",
+        "job": "pagpapatnubay sa kompanya tungo sa public liquidity mula sa board: pagtutulak ng IPO-readiness milestones, governance build-out, at ang exit timeline na batayan ng kanilang late-stage pre-liquidity na check",
+        "outcome": "board-level na pangako at na-disclose na intensyon na naglilipat sa neocloud mula sa IPO commentary tungo sa pormal na public-listing machinery",
+        "motivation": "ang kanilang late-stage capital ay pini-price para sa isang near-term public exit, kaya ang pagsasakatuparan ng liquidity na iyon ay nangangailangan ng pagtutulak sa kompanya tungo sa listing path ngayon",
+        "task": {
+          "who": "ang managing director ng growth investor at ang kanilang mga board representative",
+          "what": "itulak ang IPO-readiness milestones at governance build-out tungo sa isang listing",
+          "where": "ang board ng neocloud at ang audit at governance committees nito",
+          "when": "ang labimpito-plus-buwang panahong inilaan kasunod ng July 2026 round",
+          "why": "ang late-stage capital ay pini-price para sa isang near-term public exit",
+          "how": "board-mandated na IPO-readiness roadmap at governance restructuring"
+        }
+      }
+    ],
+    "prediction.185982a6cad19655": [
+      {
+        "actor": "maintainer ng pangalawang local-LLM runtime na nagshi-ship sa mga end user",
+        "job": "pag-wire ng paired-draft o in-model speculative decoding bilang default path para sa isang popular na open-weight family, na nagbe-bundle ng gumaganang draft at kernel para hindi na hawakan ng mga user ang isang flag",
+        "outcome": "isang runtime release na ini-flip ng notes nito ang speculative decoding sa on-by-default para sa hindi bababa sa isang popular na open-weight model family, na may byte-identical na output",
+        "motivation": "ang accuracy-neutral na ~90% coding-agent speedup ng Ollama ay nagtatakda ng competitive bar; ang pag-default nito ay nagsasara ng on-device-to-hosted throughput gap nang walang bagong silikon",
+        "task": {
+          "who": "mga maintainer ng runtime inference-engine at model-packaging",
+          "what": "gawing default-enable ang paired-draft speculative decoding para sa isang popular na open family",
+          "where": "ang default inference path ng runtime at ang mga bundled na model manifest",
+          "when": "July 2026 hanggang Q2 2027",
+          "why": "tumbasan ang libreng accuracy-neutral na speedup ng Ollama bilang isang competitive baseline",
+          "how": "bundled na draft model kasama ang upstreamed na small-batch matmul kernel"
+        }
+      },
+      {
+        "actor": "release team ng open-weight model-family",
+        "job": "pagshi-ship ng katugmang maliit na draft model kasama ng main weights at pag-validate ng byte-identical na verified output, para maka-enable ang isang runtime ng speculative decoding by default nang walang accuracy risk",
+        "outcome": "isang model-family release na kasama ang isang compatible na draft checkpoint na napatunayang nagbibigay ng accuracy-neutral na speculative decoding, handa para i-default ng isang runtime",
+        "motivation": "ang mga family na nagshi-ship ng drop-in na draft ay nakakakuha ng mas mabilis na local inference at nagiging ang family na pinipili ng mga runtime para i-default ang speedup",
+        "task": {
+          "who": "mga staff sa model-training at release-engineering sa lab",
+          "what": "i-ship at i-validate ang isang katugmang draft checkpoint kasama ang main weights",
+          "where": "ang model-family release at ang nailathala nitong inference config",
+          "when": "ang panahong inilaan bago ang Q2 2027 default flip ng isang runtime",
+          "why": "hayaan ang mga runtime na i-default ang speculative decoding nang walang accuracy loss",
+          "how": "co-trained o distilled na draft model na may verified acceptance testing"
+        }
+      },
+      {
+        "actor": "kontribyutor ng speculative-decoding kernel sa mga local runtime",
+        "job": "pagpapatibay at pag-upstream ng reusable na small-batch matmul kernel at draft-verify path para maging portable ang speculative decoding sa mga MLX (o GGUF) model sa halip na tuned bawat model",
+        "outcome": "isang merged, general-purpose na speculative-decoding kernel na magagamit ng anumang open-weight model sa runtime, na inaalis ang per-model engineering na humaharang sa default-on",
+        "motivation": "isang portable na accuracy-neutral na kernel ang nagko-convert sa speculative decoding mula sa isang advanced na opt-in tungo sa isang default na maaaring ligtas na i-ship ng pangalawang runtime",
+        "task": {
+          "who": "mga kontribyutor sa runtime at MLX/llama.cpp kernel-engineering",
+          "what": "i-upstream ang isang reusable na small-batch draft-verify matmul kernel",
+          "where": "ang shared inference kernel ng runtime at mga framework library",
+          "when": "H2 2026 hanggang unang bahagi ng 2027",
+          "why": "gawing sapat na portable ang accuracy-neutral na speedup para i-default",
+          "how": "small-batch MLX matmul kernel na merged upstream para sa anumang model"
+        }
+      }
+    ],
+    "prediction.3842041e6c053a30": [
+      {
+        "actor": "founder at finance lead ng non-GPU AI-datacenter silicon startup",
+        "job": "pagpapatakbo ng isang nakatuong institutional raise para sa timing, interconnect, o synchronization silikon, na iniharap bilang isang natatanging AI-datacenter infrastructure line item, hindi commodity glue",
+        "outcome": "isang pinangalanang, oversubscribed na institutional round (o S-1 filing) na pumopondo sa isang non-GPU AI-datacenter silicon layer na nima-market bilang sarili nitong standalone infrastructure na kategorya",
+        "motivation": "ang cross-node timing at interconnect ay nagiging tunay na hadlang sa sampu-sampung libong accelerator, kaya ang isang hiwalay na pinondohang thesis ay umaakit ng specialist capital at isang standalone na valuation",
+        "task": {
+          "who": "founding team kasama ang finance at investor-relations staff sa silicon startup",
+          "what": "isara ang isang nakatuong institutional round para sa isang non-GPU datacenter silicon layer",
+          "where": "isang specialist-silicon fundraising process at ang category-defining deck nito",
+          "when": "H2 2026 hanggang 2027",
+          "why": "pondohan ang isang GEN-scale platform para sa isang natatanging AI-datacenter na hadlang",
+          "how": "specialist silicon VCs kasama ang strategic corporate participants at isang category thesis"
+        }
+      },
+      {
+        "actor": "partner ng specialist-silicon venture fund na nag-a-underwrite sa non-GPU thesis",
+        "job": "pag-source, pag-diligence, at pangunguna ng mga round tungo sa timing, interconnect, at synchronization silikon bilang hiwalay na binaluwarteng AI-infrastructure sub-layer, na binubuo ang mga thesis na nagpe-presyo sa kanila nang hiwalay sa GPU",
+        "outcome": "isang pinangunahang institutional round sa isang non-GPU AI-datacenter silicon supplier, na tahasang na-underwrite bilang isang standalone infrastructure na kategorya na may sarili nitong nakatuong fund thesis",
+        "motivation": "ang nakikitang timing-and-interconnect scaling pain kasama ang isang $1.5B-class na synchronization opportunity ay ginagawang hiwalay-na-mapopondohan, mataas-na-return na pusta ang mga sub-layer na ito na hindi napapansin ng isang generalist GPU fund",
+        "task": {
+          "who": "mga investment partner at diligence team sa isang silicon-specialist fund",
+          "what": "pangunahan ang isang round na nagpe-presyo sa isang non-GPU silicon layer bilang isang natatanging kategorya",
+          "where": "ang deal pipeline, diligence process, at investment committee ng fund",
+          "when": "ang panahong inilaan sa pagitan ng ngayon at 2027",
+          "why": "makuha ang isang hiwalay na binaluwarteng AI-infrastructure sub-layer bago ang mga generalist",
+          "how": "silicon-specialist diligence kasama ang strategic co-investors at isang nakatuong fund"
+        }
+      },
+      {
+        "actor": "CEO at capital-markets team ng independiyenteng accelerator-IP house",
+        "job": "pagpapanatili ng isang RISC-V accelerator-IP company sa isang standalone-capitalization na landas — pagtanggi sa acquisition, pagpapatakbo ng IPO bridge at confidential S-1 — hindi ang pagsanib sa isang incumbent",
+        "outcome": "isang nangungunang independiyenteng accelerator house na nananatiling independiyente sa pamamagitan ng public listing (IPO bridge at confidential S-1) sa halip na masipsip ng consolidation",
+        "motivation": "ang isang independiyenteng public na landas ay nagpapanatili ng isang kapani-paniwalang non-GPU accelerator alternative at kumukuha ng isang standalone na valuation na sa hatol ng mga founder ay mas malaki kaysa sa isang buyout",
+        "task": {
+          "who": "chief executive kasama ang finance at capital-markets staff sa IP house",
+          "what": "isulong ang isang IPO bridge at confidential S-1 habang tinatanggihan ang isang buyout",
+          "where": "private capital-markets prep at confidential securities filings",
+          "when": "H2 2026 hanggang 2027",
+          "why": "panatilihin ang isang independiyenteng accelerator alternative sa isang standalone public na landas",
+          "how": "IPO-bridge financing kasama ang isang confidential S-1 sa halip na isang acquisition"
+        }
+      },
+      {
+        "actor": "hyperscale datacenter clock-and-interconnect architect",
+        "job": "pag-espesipika ng tumpak na cross-node timing at interconnect para sa mga cluster na lumalaki sa sampu-sampung libong GPU, na ginagawang isang pinangalanan, sourced na hadlang ang synchronization",
+        "outcome": "nailathalang cluster timing at interconnect specifications na nagpapangalan sa synchronization bilang isang matigas na hadlang, na lumilikha ng sourced demand na ginagawang hiwalay-na-mapopondohan ang isang non-GPU silicon layer",
+        "motivation": "ang clock skew at interconnect jitter ay nagtatakda ng limitasyon sa epektibong throughput sa cluster scale, kaya kailangang i-qualify ng mga architect ang nakatuong timing at interconnect silikon, hindi afterthought glue",
+        "task": {
+          "who": "mga team sa datacenter systems at infrastructure architecture sa isang hyperscaler",
+          "what": "i-espesipika at i-qualify ang cross-node timing at interconnect silikon para sa malalaking cluster",
+          "where": "cluster reference architectures at component qualification programs",
+          "when": "ang 2026-2027 buildout na panahong inilaan",
+          "why": "pigilan ang synchronization na magtakda ng limitasyon sa throughput sa sampu-sampung-libong-GPU na scale",
+          "how": "MEMS-timing at interconnect qualification laban sa cluster-scale requirements"
+        }
+      }
+    ]
+  }
+}

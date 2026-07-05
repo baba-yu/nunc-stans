@@ -1,0 +1,14 @@
+{
+  "id": "prediction.a7f3c9d1e6b4280f",
+  "scope_hint": "cross",
+  "title": "OpenClaw ships default-deny tool and network gating out-of-box by Q4 2026",
+  "body": "A named open coding-agent harness ships least-privilege execution as the shipped out-of-box default rather than an opt-in flag by Q4 2026. The most probable first mover is OpenClaw: its June 2026.6.x releases already patched concrete injection paths, tightened Docker sandbox boundaries, added Browser CDP endpoint validation, pinned SSH tunnel checks to loopback, and began rejecting unsafe tool, package, and response lengths. The prediction calls for the next step: a fresh stable release whose default profile denies tool calls, outbound network access, and MCP credential exposure unless an operator explicitly grants them, so that a clean install runs sandboxed-and-gated with no extra configuration. NVIDIA's NemoClaw (stricter network-policy defaults around OpenShell sandboxes) and Nous Research's Hermes Agent (MCP credential filtering, SSRF protection, and a Tirith pre-execution scan) are the same-direction alternatives that could land first. The catalyst is the converging security evidence: OWASP's 2026 agentic report ties nearly every risk category to real CVEs and ranks Claude Code among the most advisory-laden coding-agent repos, while StakeBench found no tested agent configuration resists prompt injection (41-68% indirect, above 79% direct). When the model layer cannot be made robust, the harness layer carries the defense, and least-privilege only works as a default. Verification: a tagged release or its changelog/docs stating that capability, network, or MCP-credential gating is enabled by default on a fresh install, not behind an opt-in setting.",
+  "reasoning": {
+    "because": "OpenClaw 2026.6.x already hardened sandbox, CDP, SSH, and length limits, but gating stays opt-in.",
+    "given": "StakeBench shows no agent config resists prompt injection, so defense must move to the harness.",
+    "so_that": "a clean install of a named harness runs sandboxed and capability-gated with zero extra operator configuration.",
+    "landing": "A named coding-agent harness defaults to capability gating by Q4 2026.",
+    "plain_language": "A popular coding robot will block its own risky actions by default, so you stay safe without changing any settings."
+  },
+  "summary": "An open coding-agent harness, likely OpenClaw, is predicted to ship least-privilege execution as the out-of-box default by Q4 2026, gating tool calls, network access, and MCP credentials unless granted. The driver is evidence no agent setup resists prompt injection, moving defense to the harness."
+}

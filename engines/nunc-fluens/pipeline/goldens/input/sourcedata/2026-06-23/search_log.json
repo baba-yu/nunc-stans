@@ -1,0 +1,152 @@
+{
+  "date": "2026-06-23",
+  "topics": [
+    {
+      "topic": "LLM Workflow",
+      "searched": true,
+      "hits": 1,
+      "promoted_to_bullet": false,
+      "reason_dropped": "No fresh June 21-23 state-change in workflow/orchestration platforms (Mistral Workflows, n8n, LangFlow, Temporal, Dust.tt). n8n surfaced only as a high-advisory-count coding-agent repo inside the OWASP report, which is captured by the AI Security bullet."
+    },
+    {
+      "topic": "Multi-profiling for Local LLM (e.g. Multica)",
+      "searched": true,
+      "hits": 0,
+      "promoted_to_bullet": false,
+      "reason_dropped": "News-driven only; no Multica or multi-profiling local-LLM news today, and nothing elsewhere referenced it."
+    },
+    {
+      "topic": "Agent Harness (OpenClaw, NemoClaw, Hermes Agents, etc.)",
+      "searched": true,
+      "hits": 3,
+      "promoted_to_bullet": true,
+      "reason_dropped": ""
+    },
+    {
+      "topic": "Platform for Local LLM (vLLM, SGLang, etc.)",
+      "searched": true,
+      "hits": 2,
+      "promoted_to_bullet": false,
+      "reason_dropped": "Only comparison/benchmark roundups updated mid-June (vLLM vs SGLang, MTP speculative decoding landed in mainline back in May); no fresh June 21-23 named release tag or shipped artifact to anchor a state-change bullet."
+    },
+    {
+      "topic": "Ecosystems for Local LLM Embedded System (Foundry Local, etc.)",
+      "searched": true,
+      "hits": 2,
+      "promoted_to_bullet": false,
+      "reason_dropped": "Foundry Local (GA earlier, Windows ML auto-select across DirectML/CUDA/QNN/CPU), Ollama MLX (0.19/0.20.4), and AMD Lemonade NPU work are all pre-June-21; no fresh dated state-change this window."
+    },
+    {
+      "topic": "Local LLM Models",
+      "searched": true,
+      "hits": 3,
+      "promoted_to_bullet": false,
+      "reason_dropped": "GLM-5.2 (Z.ai), Nemotron 3 Ultra (NVIDIA), MiniMax M3, VibeThinker-3B, Kimi K2.7 are all earlier-June releases. GLM-5.2 is surfaced today via the Unsloth Dynamic GGUF artifact (Optimization/Fine-tuning bullet) rather than as a net-new model drop, so no separate model-release bullet to avoid duplicating the Unsloth bullet."
+    },
+    {
+      "topic": "Local LLM Optimization, Fine-tuning (Unsloth - every run)",
+      "searched": true,
+      "hits": 2,
+      "promoted_to_bullet": true,
+      "reason_dropped": ""
+    },
+    {
+      "topic": "Ecosystems for LLM on PaaS (AWS Bedrock, Azure AI Foundry, etc.)",
+      "searched": true,
+      "hits": 1,
+      "promoted_to_bullet": false,
+      "reason_dropped": "AWS New York Summit agent stack (AWS Context / Continuum / Bedrock AgentCore Guardrails) is in the prior-3-day digest (last seen June 21); no fresh June 21-23 state-change on managed-inference/hosted-LLM platforms today, so dropped under continuation cap + Rule 2."
+    },
+    {
+      "topic": "AI Security",
+      "searched": true,
+      "hits": 5,
+      "promoted_to_bullet": true,
+      "reason_dropped": ""
+    },
+    {
+      "topic": "AI Security - Zero-trust based access control for agentic AI",
+      "searched": true,
+      "hits": 2,
+      "promoted_to_bullet": true,
+      "reason_dropped": "Covered via the Agent Harness bullet (Hermes MCP credential filtering / least-privilege defaults, NemoClaw network-policy gating) and the AI Security bullet (OWASP Top 10 for Agentic Applications)."
+    },
+    {
+      "topic": "AI Security - Monitor and manage AI agent behavior",
+      "searched": true,
+      "hits": 3,
+      "promoted_to_bullet": true,
+      "reason_dropped": "Covered via the AI Security bullet (OWASP v2.01 incident cataloging, StakeBench adversarial monitoring) and Agent Harness bullet (Tirith pre-exec scan, runtime sandbox boundaries)."
+    },
+    {
+      "topic": "CVE update on score >= 8.0",
+      "searched": true,
+      "hits": 3,
+      "promoted_to_bullet": false,
+      "reason_dropped": "Surveyed June Patch Tuesday (record 206 CVEs; CVSS 9.8 RCEs CVE-2026-45657 Windows Kernel, CVE-2026-47291 HTTP.sys, CVE-2026-44815 DHCP Client; M365 Copilot RCE CVE-2026-45497) and AI-agent CVEs (Cursor CVE-2026-22708, MCP RCE). All pre-June-21 disclosures with no fresh June 21-23 high-score addition; the agentic-AI security angle is carried by the AI Security bullet instead."
+    },
+    {
+      "topic": "Hardware",
+      "searched": true,
+      "hits": 2,
+      "promoted_to_bullet": false,
+      "reason_dropped": "NVIDIA RTX Spark PC superchip (Computex, June 1) and Meta-NVIDIA Vera Rubin buildout are early-June; no fresh June 21-23 accelerator/data-center state-change. AI-security-SoC standing watch (Axiado AX3080 TCU, $100M round) checked: latest milestones are Dec 2025 / Computex 2025 with no new June 21-23 shipping signal."
+    },
+    {
+      "topic": "Physical AI",
+      "searched": true,
+      "hits": 4,
+      "promoted_to_bullet": false,
+      "reason_dropped": "Hyundai/Boston Dynamics SoftBank 9.65% buyout (digest, scheduled June 22 board vote) checked per watch item: NO confirmed June 22 board approval/close - all sources trace to June 19-20 reporting of the scheduled vote, and the 'completes acquisition' headlines on hyundai.com and bostondynamics.com resolve to the 2021 deal. Status still pending/unchanged, so DROPPED under Rule 2. Tesla Optimus Gen 3 / Figure 03 / BMW Spartanburg deployments are all earlier-June with no fresh dated state-change today."
+    },
+    {
+      "topic": "LLM-related research and papers",
+      "searched": true,
+      "hits": 3,
+      "promoted_to_bullet": false,
+      "reason_dropped": "Recent arXiv (Reasoning Structure of LLMs 2606.03883; StakeBench 2606.13385; agentic-RL papers) surveyed. StakeBench is folded into the AI Security bullet as its load-bearing artifact; no standalone non-security paper rose to a fresh-enough, high-impact state-change to warrant a separate research bullet this window."
+    },
+    {
+      "topic": "Stock prices and corporate activity (frontier labs, hyperscalers, chip vendors)",
+      "searched": true,
+      "hits": 3,
+      "promoted_to_bullet": false,
+      "reason_dropped": "SpaceX/xAI debut (~$1.77T, June 12), Anthropic confidential S-1 (post $65B Series H, ~$965B), OpenAI S-1-in-progress targeting Sept all pre-June-21; no fresh June 21-23 pricing/filing/analyst-action state-change today."
+    },
+    {
+      "topic": "Business plan",
+      "searched": true,
+      "hits": 1,
+      "promoted_to_bullet": false,
+      "reason_dropped": "No fresh June 21-23 business-model/commercial-plan announcement distinct from the carried-over IPO/funding threads above."
+    },
+    {
+      "topic": "Application fields",
+      "searched": true,
+      "hits": 2,
+      "promoted_to_bullet": false,
+      "reason_dropped": "Confidential-AI / on-device coding-agent application themes appear inside the events and harness bullets; no standalone fresh application-field state-change today."
+    },
+    {
+      "topic": "Applied research",
+      "searched": true,
+      "hits": 2,
+      "promoted_to_bullet": true,
+      "reason_dropped": "Applied-research signal (StakeBench adversarial agent benchmark; OWASP incident cataloging) is carried by the AI Security bullet."
+    },
+    {
+      "topic": "Bay Area / SV AI meet-up events",
+      "searched": true,
+      "hits": 6,
+      "promoted_to_bullet": true,
+      "reason_dropped": ""
+    },
+    {
+      "topic": "Other standing-out topics",
+      "searched": true,
+      "hits": 2,
+      "promoted_to_bullet": false,
+      "reason_dropped": "Apple Siri-as-agent, Gemini Live Translate, Moonshot Kimi Work multi-agent desktop surfaced as ambient roundup items; none with a fresh June 21-23 hard state-change strong enough to displace the four chosen bullets under the anti-inertia soft-5 target."
+    }
+  ]
+}

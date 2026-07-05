@@ -1,0 +1,47 @@
+{
+  "date": "2026-06-23",
+  "predictions": [
+    {
+      "id": "prediction.7c1a3f9b2e6d04a8",
+      "scope_hint": "tech",
+      "title": "Tatakbo ang frontier-class open-weight LLM sa single-node nang wala sa 256GB pagsapit ng Q4 2026",
+      "body": "Isang frontier-class open-weight na modelo (isang release na halos kapantay ng closed-source frontier sa coding at reasoning sa benchmarking, sa klase ng GLM-5.2 / 700B-plus mixture-of-experts) ang magiging napatunayang napapatakbo sa isang high-memory na workstation node na may 256GB o mas kaunti pang pinagsamang memory pagsapit ng katapusan ng Q4 2026, sa pamamagitan ng agresibong sub-2-bit selective-precision quantization, na may inilathalang nareproduce na recipe at quality na sinusukat sa isang public benchmark sa halip na sa vendor self-report. Naipasiksik na ng Dynamic GGUF builds ng Unsloth ang 744B GLM-5.2 ng Z.ai mula sa isang 1.51TB na checkpoint tungo sa humigit-kumulang 217-239GB, ngunit ang mga numero ng compression at quality na iyon ay pag-aari mismo ng Unsloth at hindi pa napapatunayan, at ang 1-2 bit quantization sa ganitong tindi ay nagpapalit ng masusukat na accuracy kapalit ng memory. Lalapag ang prediksyon kapag may kahit isang ganitong recipe na nareproduce nang independyente at nailathala ang accuracy retention nito, na nagpapatunay na tumawid na ang pinakamabigat na tier ng open-weight mula sa teritoryo ng multi-GPU cluster tungo sa single-node, on-prem na abot. Hinahasa nito ang umiiral na pagkakahati: ang advanced o peak-quality na gawa ay dumadaan pa rin sa cloud API, samantalang ang pang-araw-araw at privacy-sensitive na workload ay lalong napapatakbo nang lokal sa sariling hardware.",
+      "reasoning": {
+        "because": "Pinaliit ng Unsloth ang 1.51TB na 744B GLM-5.2 tungo sa ~217-239GB gamit ang selective sub-2-bit quantization.",
+        "given": "Patuloy na binababa ng selective-precision quant ang memory ng open-weight nang mas mabilis kaysa paglaki ng modelo.",
+        "so_that": "Maaaring mag-self-host ang mga team ng halos-frontier na modelo sa sariling single-node hardware para sa pang-araw-araw, privacy-sensitive na gawa.",
+        "landing": "Nareproduce na sub-256GB single-node run, nailathala ang accuracy, pagsapit ng Q4 2026.",
+        "plain_language": "Pagsapit ng huling bahagi ng 2026, isa sa pinakamalalaking top-tier open na AI model ang tatakbo sa isang malakas na computer, hindi sa isang server farm."
+      },
+      "summary": "Pinaisiksik ng Unsloth ang 744B GLM-5.2 ng Z.ai mula 1.51TB tungo sa humigit-kumulang 217-239GB gamit ang sub-2-bit selective-precision quantization. Pagsapit ng Q4 2026, tatakbo sa single-node nang wala sa 256GB ang isang frontier-class open-weight na modelo na may nareproduce na recipe at nailathalang accuracy, na naglalagay sa pinakamabibigat na open na modelo sa loob ng on-prem na abot."
+    },
+    {
+      "id": "prediction.a7f3c9d1e6b4280f",
+      "scope_hint": "cross",
+      "title": "Maglalabas ang OpenClaw ng default-deny tool at network gating out-of-box pagsapit ng Q4 2026",
+      "body": "Isang pinangalanang open coding-agent harness ang maglalabas ng least-privilege execution bilang shipped out-of-box default sa halip na opt-in flag pagsapit ng Q4 2026. Ang pinakatiyak na unang gagalaw ay ang OpenClaw: ina-patch na ng Hunyo 2026.6.x releases nito ang konkretong mga injection path, hinigpitan ang mga hangganan ng Docker sandbox, nagdagdag ng Browser CDP endpoint validation, ipinin sa loopback ang mga SSH tunnel check, at sinimulang tanggihan ang hindi ligtas na haba ng tool, package, at response. Hinihingi ng prediksyon ang susunod na hakbang: isang bagong stable release na ang default profile ay tumatanggi sa mga tool call, papalabas na network access, at pagkalantad ng MCP credential maliban kung tahasang ibibigay ng isang operator, kaya ang isang malinis na install ay tatakbong sandboxed-and-gated nang walang dagdag na configuration. Ang NemoClaw ng NVIDIA (mas mahigpit na network-policy defaults sa paligid ng OpenShell sandboxes) at ang Hermes Agent ng Nous Research (MCP credential filtering, SSRF protection, at isang Tirith pre-execution scan) ay mga kapareho ng direksyon na alternatibo na maaaring lumapag muna. Ang katalista ay ang nagtatagpong ebidensya sa seguridad: iniuugnay ng 2026 agentic report ng OWASP ang halos bawat kategorya ng panganib sa totoong mga CVE at iniranggo ang Claude Code kasama ang mga coding-agent repo na may pinakamaraming advisory, samantalang natagpuan ng StakeBench na walang na-test na agent configuration ang nakakalaban sa prompt injection (41-68% indirect, higit sa 79% direct). Kapag hindi mapatatatag ang model layer, ang harness layer ang nagdadala ng depensa, at ang least-privilege ay gumagana lamang bilang isang default. Beripikasyon: isang tagged release o ang changelog/docs nito na nagsasabing ang capability, network, o MCP-credential gating ay naka-enable bilang default sa isang malinis na install, hindi nasa likod ng isang opt-in setting.",
+      "reasoning": {
+        "because": "Pinatatag na ng OpenClaw 2026.6.x ang sandbox, CDP, SSH, at length limits, ngunit nananatiling opt-in ang gating.",
+        "given": "Ipinapakita ng StakeBench na walang agent config na lumalaban sa prompt injection, kaya dapat lumipat ang depensa sa harness.",
+        "so_that": "Tatakbong sandboxed at capability-gated ang isang malinis na install ng pinangalanang harness nang walang dagdag na configuration mula sa operator.",
+        "landing": "Magde-default ang isang pinangalanang coding-agent harness sa capability gating pagsapit ng Q4 2026.",
+        "plain_language": "Isang sikat na coding robot ang haharang sa sarili nitong mapanganib na aksyon bilang default, kaya mananatili kang ligtas nang hindi binabago ang anumang setting."
+      },
+      "summary": "Isang open coding-agent harness, malamang ang OpenClaw, ang inaasahang maglalabas ng least-privilege execution bilang out-of-box default pagsapit ng Q4 2026, na nagti-gate sa mga tool call, network access, at MCP credential maliban kung ibinigay. Ang nagtutulak nito ay ang ebidensyang walang agent setup na lumalaban sa prompt injection, na naglilipat ng depensa sa harness."
+    },
+    {
+      "id": "prediction.7c1f4a9e3b6d20f8",
+      "scope_hint": "business",
+      "title": "Magdaragdag ang AI-agent procurement ng numerikong prompt-injection-resistance bar pagsapit ng Q2 2027",
+      "body": "Isang standards body, regulator, o malaking enterprise/government na mamimili ang magbabanggit ng isang quantified na prompt-injection-resistance score bilang isang nakasaad, pass/fail na kinakailangan sa isang agentic-AI procurement gate, framework control, o certification. Ang katalista ay ang paglipat ngayong panahon mula teoretikal tungo sa nasusukat: iniuugnay na ngayon ng State of Agentic AI Security and Governance v2.01 ng OWASP ang halos bawat kategorya ng agentic na panganib sa konkretong mga CVE, vendor advisory, at breach report, na iniranggo ang mga repositoryo na may pinakamaraming advisory (n8n 57, Claude Code 22, AutoGPT 15, Dify 13, Roo-Code 11) at iniuugnay ang prompt injection sa anim sa sampung kategorya ng Top 10 nito. Kaalinsabay, ang StakeBench benchmark (Nanyang Technological University, ST Engineering, IBM Research, at University of Illinois Urbana-Champaign) ay nagpatakbo ng 3,168 adversarial trial at natagpuan ang success ng indirect injection na 41.67%-68.16% at direct attack na higit sa 79% sa bawat na-test na configuration, na walang nakapasok sa robust-behavior region. Kapag ang isang uri ng atake ay may dokumentadong serye ng insidente at isang inilathalang benchmark na may numerikong pass threshold, hihinto na ang mga mamimili sa pagtanggap ng vendor self-attestation at sisimulan nilang isulat ang isang nasusukat na bar sa mga kontrata. Asahan na ang unang ganitong gate ay magbabanggit ng isang pinangalanang benchmark o isang numerikong maximum na injection-success rate sa halip na hilingin sa mga vendor na 'pababain ang prompt injection' sa prosa. Ginagawa nitong isang auditable na acceptance criterion ang resistensya, hindi isang best-effort na pahayag, at nagbibigay ng downstream na gagamit sa mga numero ng OWASP/StakeBench.",
+      "reasoning": {
+        "because": "Iniuugnay na ngayon ng OWASP v2.01 ang agentic na panganib sa totoong mga CVE at walang natagpuang robust config ang 3,168 trial ng StakeBench",
+        "given": "ang isang uri ng atake na may serye ng insidente kasama ang isang numerikong benchmark ay lumalampas sa vendor-prose na mitigasyon",
+        "so_that": "isang mamimili o framework ang magsusulat ng numerikong injection-resistance bar sa isang gate, na pinapalitan ang self-attestation ng isang audit",
+        "landing": "Lilitaw ang unang pinangalanang numerikong injection-resistance procurement gate pagsapit ng Q2 2027",
+        "plain_language": "Sisimulan ng mga mamimili na hingin na pumasa ang mga AI agent sa isang totoong score para sa paglaban sa mga mapanlinlang na input, hindi lang mangakong hinahawakan nila ang mga ito."
+      },
+      "summary": "Iniuugnay ng 2026 report ng OWASP ang agentic na panganib sa totoong mga CVE, at walang natagpuang agent configuration ang StakeBench na lumalaban sa prompt injection. Dahil may serye ng insidente at isang numerikong benchmark na, isang standards body o malaking mamimili ang magsusulat ng isang quantified na injection-resistance threshold sa isang procurement gate pagsapit ng Q2 2027."
+    }
+  ]
+}

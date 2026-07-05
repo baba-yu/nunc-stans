@@ -1,0 +1,31 @@
+{
+  "date": "2026-06-28",
+  "vs_date": "2026-06-27",
+  "items": [
+    {
+      "kind": "new",
+      "headline": "Liquid AI publica un modelo de borde de 230M con soporte de vLLM y SGLang desde el primer día",
+      "diff_narrative": "Las noticias de ayer giraban por completo en torno a CVEs de plataformas de agentes explotados en vivo (el IDOR entre inquilinos de Langflow, el bypass de SSRF de AutoGPT). Hoy se abre un hilo nuevo sin antecedente del día anterior: el LFM2.5-230M de Liquid AI del 27 de junio, un modelo solo de texto de menos de un gigabyte cuyo titular es que los mismos motores de servicio compatibles con OpenAI usados en el centro de datos (vLLM, SGLang) más llama.cpp, MLX y ONNX son ahora sus objetivos desde el primer día, reduciendo el lapso entre los runtimes de borde y las pilas de inferencia de nivel clúster. Es un giro temático claro desde los incidentes de seguridad hacia el relato del rendimiento en dispositivo de pesos abiertos."
+    },
+    {
+      "kind": "new",
+      "headline": "Qualcomm compra el compilador de inferencia Modular y acecha a Tenstorrent",
+      "diff_narrative": "Un nuevo elemento de negocio/hardware sin equivalente ayer. La adquisición de Modular por ~$3,92B íntegramente en acciones por parte de Qualcomm el 24 de junio (el motor de inferencia multifabricante MAX), combinada con conversaciones reportadas de $8-10B con Tenstorrent y un envío comprometido de silicio personalizado a un hyperscaler antes de fin de año, ensambla un desafío de pila completa de unos $14B al cierre de Nvidia con CUDA. Donde las noticias de ayer se quedaban en la capa de vulnerabilidades, hoy se añade la capa estratégica de fusiones y adquisiciones de la misma pila de IA agéntica."
+    },
+    {
+      "kind": "new",
+      "headline": "Unsloth v0.1.471-beta integra GLM-5.2, Gemma 4 y DiffusionGemma en el ajuste fino",
+      "diff_narrative": "Surgido hoy y ausente ayer: la beta de Unsloth del 18 de junio añade ajuste fino de primera clase para la ola de pesos abiertos (GLM-5.2, predicción multitoken de Gemma 4, DiffusionGemma) apenas dos días después de la publicación de GLM-5.2 el 16 de junio. Se combina con el elemento de Liquid AI para enmarcar un tiempo de respuesta cada vez más corto entre lanzamiento y ajuste, un ángulo de herramientas que el día anterior no cubría."
+    },
+    {
+      "kind": "new",
+      "headline": "OWASP replantea la inyección de prompts como una propiedad estructural y no parcheable de la IA agéntica",
+      "diff_narrative": "Hoy se eleva el relato de seguridad desde los CVEs individuales de ayer hasta una tesis arquitectónica. Donde el 27 de junio se documentaron dos fallos concretos de plataformas de agentes como instancias de un flanco débil de orquestación, el informe 2.01 de OWASP generaliza la afirmación: la inyección de prompts es la 'articulación universal' que se asigna a seis de diez categorías agénticas, mitigada con presupuestos de diseño (la tríada letal, la Regla de Dos para Agentes) en lugar de parchearse, con los agentes de código señalados como el epicentro (28 de 53 proyectos rastreados; n8n, Claude Code, AutoGPT, Dify y Roo-Code con más advertencias). Lleva adelante la lectura estructural del día anterior, pero la formula como una restricción de diseño no parcheable en lugar de un hallazgo por incidente."
+    },
+    {
+      "kind": "continuing",
+      "headline": "Eventos de IA que planificar desde ya: el programa principal de la World's Fair abre esta semana",
+      "diff_narrative": "El rastreador de eventos continúa en los tres subtramos pero avanza su calendario. Ayer la AI Engineer World's Fair se enmarcaba como un fin de semana en vivo (hackathon del 27-28 de junio, orientación del domingo); hoy esos preliminares se marcan como pasados y el programa principal (29 de junio - 2 de julio, Moscone West) es el anclaje activo, ahora reportado con ~29 tracks, ~300 ponentes y más de 6.000 asistentes frente a los más de 20 tracks y más de 250 ponentes de ayer. Hoy también se añade el papel de OWASP Global AppSec USA y se mantienen las fechas permanentes de seguridad y chips de IA (Black Hat, DEF CON, AI Risk Summit, AMD Advancing AI, Hot Chips, AI Infra Summit), descartando solo los elementos del fin de semana cuya fecha ya pasó."
+    }
+  ]
+}

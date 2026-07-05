@@ -1,0 +1,30 @@
+[
+  {
+    "actor": "agent-platform security researcher",
+    "job": "Hunting cross-tenant IDOR and broken-object-level-access bugs across the n8n/Flowise/Dify/LangGraph/CrewAI agent-builder class using the Langflow CVE as a template.",
+    "outcome": "A CVSS >=9.0 cross-tenant authorization/IDOR advisory filed against a non-Langflow agent builder, ideally with in-the-wild or CISA-KEV evidence.",
+    "motivation": "The Langflow CVE-2026-55255 pattern is a reusable class signature; replicating it across peers yields high-severity, high-visibility disclosures.",
+    "task": {
+      "who": "vulnerability research / bug-bounty team",
+      "what": "Probe flow-resolution and run-execution endpoints for missing owner checks",
+      "where": "Self-hosted and SaaS instances of peer agent builders",
+      "when": "Runway from June 2026 through Q1 2027",
+      "why": "Replicate the Langflow IDOR class across the category",
+      "how": "Harvest opaque flow/run IDs; replay cross-tenant requests"
+    }
+  },
+  {
+    "actor": "agent-orchestration platform engineer",
+    "job": "Shipping and extending multi-tenant flow/run/workspace features on a shared execution endpoint while deferring ownership checks to UI or route prefix rather than the object boundary.",
+    "outcome": "A live, exploitable cross-tenant access path on a peer platform that a researcher can later disclose as a >=9.0 IDOR advisory.",
+    "motivation": "Velocity and feature parity pressure favor opaque-ID, shared-endpoint patterns; per-object authz is deferred as non-blocking hardening.",
+    "task": {
+      "who": "core platform / backend engineering team",
+      "what": "Build flow-resolution and run endpoints keyed on opaque IDs",
+      "where": "Shared multi-tenant execution and orchestration plane",
+      "when": "Ongoing release cycles through Q1 2027",
+      "why": "Ship multi-tenant features fast at category parity",
+      "how": "Opaque UUID lookup with owner checks deferred to UI"
+    }
+  }
+]

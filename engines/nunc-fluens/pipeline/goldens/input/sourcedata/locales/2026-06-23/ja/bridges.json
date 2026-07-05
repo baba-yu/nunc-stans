@@ -1,0 +1,193 @@
+{
+  "date": "2026-06-23",
+  "validation_rows": [
+    {
+      "prediction_ref": {
+        "id": "prediction.04f4d9d539cf6341",
+        "short_label": "Coding-agent harnesses adopt default-deny toolset gating as standard by H1 2027",
+        "prediction_date": "2026-06-20"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "本日のコーディングエージェントのハーネス関連の動きは、この見立てを直接裏付けるシグナルだ。オープンなハーネス各社は、目立つ新機能よりもセキュリティ強化を優先して出荷し、既定で最小権限のみを与える実行方式へと収束しつつある。OpenClaw の 2026 年 6 月（2026.6.x）リリースは、vCard と位置ピンを使った注入を修正し、Docker サンドボックスの境界を厳格化し、Browser の CDP エンドポイント検証を追加し、SSH トンネルの検査をループバックに固定したままにし、安全でないチャット・ツール・パッケージ・応答の長さを拒否し始めた。NVIDIA の NemoClaw は、OpenShell サンドボックス周りでサンドボックス強化・認証情報の取り扱い・より厳格なネットワークポリシーの既定値を優先している。Nous Research の Hermes Agent は、明示的に承認した環境変数だけをサブプロセスに渡す MCP 認証情報フィルタリングを追加した。一連の報道に通底するのは、ハーネス自身が呼び出すツール群こそ最大の攻撃対象領域だと捉える姿勢であり、これはこの予測が指す既定拒否のツールセット制御そのものだ。OWASP と StakeBench がプロンプト注入をエージェント領域で最も大きなリスクと位置づけたことも、これを補強している。反証ラインまでの隔たりはこうだ。これらはリリースごとの段階的な強化に過ぎず、運用者が何も設定しないクリーンインストールの状態で、出荷時の既定プロファイルがツール呼び出しを拒否するような、タグ付けされた安定版リリースにはまだ至っていない。",
+      "reference_links": [
+        {
+          "label": "The New Stack - 'An agent is an LLM and a harness': what NVIDIA really thinks about OpenClaw (NemoClaw)",
+          "url": "https://thenewstack.io/nvidia-openclaw-agent-blueprints/"
+        },
+        {
+          "label": "innFactory - OpenClaw vs. Hermes Agent: comparison of the two dominant AI agent frameworks of 2026",
+          "url": "https://innfactory.ai/en/blog/openclaw-vs-hermes-agent-comparison/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "本日のオープンなハーネス各社は最小権限での実行へ収束している。OpenClaw は注入経路を修正してサンドボックス境界を厳格化し、NemoClaw はより厳格なネットワークポリシーを既定とし、Hermes は MCP 認証情報を承認済みの環境変数だけに絞り込む。一連の報道に通底するのは、ハーネス自身が呼び出すツール群こそ最大の攻撃対象領域だと捉える姿勢であり、これはこの予測が指す既定拒否の制御そのものだ。OWASP と StakeBench の注入に関する調査結果も、これを裏付けている。",
+        "coherence": 5,
+        "remaining_gap": "これらはリリースごとの段階的な強化であって、運用者が何も設定しないクリーンインストールの状態で、出荷時の既定プロファイルがツール呼び出しを拒否するような、タグ付けされた安定版リリースではまだない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.adbdf490706f8fc3",
+        "short_label": "Agent meta-harness becomes the cross-vendor policy plane for agents by H1 2027",
+        "prediction_date": "2026-06-15"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "本日のハーネス報道は、供給側からメタハーネスの見立てを裏付けている。NVIDIA の NemoClaw は、Hermes や OpenClaw のような常時稼働エージェントを自社の OpenShell サンドボックス内で動かすためのオープンな参照スタックであり、ルーティングされた推論・ライフサイクル管理・認証情報の取り扱い・より厳格なネットワークポリシーの既定値を、複数のサードパーティ製エージェントフレームワークを包み込む強化済みのブループリントとしてまとめている。これはまさにこの予測が追う「ベンダー横断の包み込み層」、すなわち多様なエージェントの上位に位置し、サンドボックス・ネットワーク・認証情報のポリシーを一律に適用する共通の制御基盤だ。Nous Research の Hermes Agent も同じ方向に進んでおり（MCP 認証情報フィルタリング、SSRF 対策、MCP 設定に対する Tirith の実行前スキャン）、ポリシーの基本部品がベンダー間で標準化しつつあることを示す。ただし、この一致は到達点には一歩届かない。NemoClaw は単一ベンダーの参照ブループリントであり、ハーネス各社は共通の設計パターンに収束しつつあるものの、競合するエージェント開発各社が相互運用可能な適用層として実際に通すような、採用済みのベンダー横断ポリシー基盤にはまだなっていない。",
+      "reference_links": [
+        {
+          "label": "The New Stack - 'An agent is an LLM and a harness': what NVIDIA really thinks about OpenClaw (NemoClaw)",
+          "url": "https://thenewstack.io/nvidia-openclaw-agent-blueprints/"
+        },
+        {
+          "label": "innFactory - OpenClaw vs. Hermes Agent: comparison of the two dominant AI agent frameworks of 2026",
+          "url": "https://innfactory.ai/en/blog/openclaw-vs-hermes-agent-comparison/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "NemoClaw は、複数のサードパーティ製エージェントフレームワークを OpenShell サンドボックス内に包み込むオープンな参照スタックであり、ルーティングされた推論・ライフサイクル・認証情報の取り扱い・より厳格なネットワークポリシーをまとめている。これはまさに、多様なエージェントの上位でサンドボックス・ネットワーク・認証情報のポリシーを一律に適用する、ベンダー横断の包み込み層だ。Hermes も同じ方向に進んでおり（MCP 認証情報フィルタリング、SSRF 対策、Tirith の実行前スキャン）、ポリシーの基本部品がベンダー間で標準化しつつあることを示す。",
+        "coherence": 4,
+        "remaining_gap": "NemoClaw は単一ベンダーの参照ブループリントであり、ハーネス各社は共通パターンに収束しつつあるが、競合するエージェント開発各社が実際に通す採用済みのベンダー横断ポリシー基盤にはまだなっていない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.f492c98e68ae3d89",
+        "short_label": "Inline MCP-channel policy enforcement ships as a platform default by Q1 2027",
+        "prediction_date": "2026-06-16"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "本日のハーネス強化は、この予測が掲げる「MCP チャネル内でのインラインなポリシー適用」の見立てに真正面から当てはまる。Nous Research の Hermes Agent は、明示的に承認した環境変数だけをサブプロセスに渡す MCP 認証情報フィルタリングに加え、認証情報の伏字化・SSRF 対策・各実行前に MCP 設定に対して走らせる Tirith の実行前セキュリティスキャンを出荷するようになった。これは外部のゲートウェイではなく、MCP チャネルそのものの内側で行う適用だ。NVIDIA の NemoClaw も、ルーティングされた推論まわりでの認証情報の取り扱いとより厳格なネットワークポリシーの既定値によって、同じ軸を補強する。これこそ、この予測が出荷時の既定になると見込む、呼び出しごとのインラインな MCP チャネル内ポリシー適用であり、プロンプト注入がエージェント領域で最大のリスクだとする OWASP/StakeBench の証拠がその引き金を供給する。ただし、まだ反証ラインには届かない。Hermes の MCP フィルタリングと実行前スキャンは一つのハーネスの強化機能であって、広いプラットフォーム上で既定有効になったインラインな MCP チャネル内ポリシー適用にはまだなっておらず、Tirith のスキャンも継続的なチャネル内での仲介ではなく実行前のものにとどまる。",
+      "reference_links": [
+        {
+          "label": "innFactory - OpenClaw vs. Hermes Agent: comparison of the two dominant AI agent frameworks of 2026",
+          "url": "https://innfactory.ai/en/blog/openclaw-vs-hermes-agent-comparison/"
+        },
+        {
+          "label": "The New Stack - 'An agent is an LLM and a harness': what NVIDIA really thinks about OpenClaw (NemoClaw)",
+          "url": "https://thenewstack.io/nvidia-openclaw-agent-blueprints/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Hermes は、承認済みの環境変数だけをサブプロセスに渡す MCP 認証情報フィルタリングに加え、認証情報の伏字化・SSRF 対策・MCP 設定に対する Tirith の実行前スキャンを出荷するようになった。これは外部のゲートウェイではなく、MCP チャネルそのものの内側で行う適用だ。NemoClaw も認証情報の取り扱いとより厳格なネットワークの既定値で同じ軸を補強し、OWASP/StakeBench の注入に関する調査結果がその引き金を供給する。",
+        "coherence": 4,
+        "remaining_gap": "これらは一つのハーネスの強化機能であって、広いプラットフォーム上で既定有効になったインラインな MCP チャネル内での適用にはまだなっていない。Tirith のスキャンも継続的なチャネル内での仲介ではなく、実行前のものだ。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.c349283881f8339b",
+        "short_label": "Confidential-GPU attestation lands as a cloud-AI contract term by Q2 2027",
+        "prediction_date": "2026-06-14"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "本日のイベント予定表には、Confidential Computing Summit がいま開幕中と並ぶ。6 月 23〜24 日にサンフランシスコの San Francisco Mint で、Linux Foundation と OPAQUE の主催により、AI 主権・エージェントのセキュリティ・知的財産保護・検証可能な実行環境・機密 AI ワークロードをテーマに開催され、Amazon・AMD・Google・Meta・Microsoft・NVIDIA・Samsung Electronics・TII・UC Berkeley から講演者が登壇する。これはまさに、この予測が調達可能なクラウド AI の契約条項へと固まっていくと見込む、GPU 勢とハイパースケーラー勢の顔ぶれであり、その見立てを駆動する機密 AI と検証可能な実行環境のまさにその議題で集う。しかも今週のセキュリティ系 3 トラックの中で最も早く、明日ではなく本日開幕する直近の足がかりだ。関連性は会場とその場の勢いにあって、到達点そのものではない。予定表に載ったサミットはベンダーと需要側の語り口を浮かび上がらせはするが、公表された認証条項でも SLA でも契約済みの調達条件でもなく、データの管轄地を理由として機密 GPU の認証(アテステーション)を既定の取引条件として確約したクラウド事業者や購入者はまだいない。",
+      "reference_links": [
+        {
+          "label": "Confidential Computing Summit 2026 schedule (June 23-24, San Francisco Mint)",
+          "url": "https://ccsummit2026.sched.com/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "Confidential Computing Summit が本日 San Francisco Mint で開幕し、Amazon・AMD・Google・Meta・Microsoft・NVIDIA・Samsung が AI 主権・検証可能な実行環境・機密 AI ワークロードをテーマに集う。これはまさに、その認証(アテステーション)の基本部品が調達可能なクラウド AI の契約条項へと固まっていく、GPU 勢とハイパースケーラー勢の顔ぶれと需要側の語り口であり、今週のセキュリティ系トラックの中で最も早い足がかりだ。",
+        "coherence": 3,
+        "remaining_gap": "サミットはベンダーと需要を浮かび上がらせるが、公表された認証条項ではない。機密 GPU の認証を既定の取引条件として確約した事業者や購入者はまだいない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.9a362f2b1ba5b64a",
+        "short_label": "Enterprises self-host open-weight code models over hosted China APIs by Q2 2027",
+        "prediction_date": "2026-06-18"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "本日の主役の話題は、「中国 API を呼ぶより自前ホスト」という見立てを、その最も難しい軸で直接前進させる。すなわち、中国のフロンティア級オープンウェイトモデルを自社所有のハードウェア上で動かせるようにすることだ。Unsloth は、Z.ai が新たにオープンウェイト化した GLM-5.2 ── 7,440 億パラメータ、100 万トークンのコンテキスト窓を持つ混合エキスパート(MoE)モデル ── の Dynamic GGUF 量子化版を公開した。1.51TB のチェックポイントを 2 ビット版で約 239GB、1 ビット版でおよそ 217GB まで縮め、マルチ GPU クラスタではなく大容量メモリを積んだ単一ノードのワークステーションに収まる大きさにし、Unsloth Studio によるローカル実行を可能にした。GLM-5.2 はコーディングと推論でクローズドなフロンティアに迫るベンチマーク水準と位置づけられており、ホスト型の中国製コーディング API を呼ぶ現実的な代替手段が、いまや同じ重みをローカルで自前ホストすることになった。これはまさにこの予測が追う置き換えであり、データの所在地に関する論理も、同じ日の OWASP/StakeBench のエージェントセキュリティに関する調査結果を前に強まる。隔たりはこうだ。これは量子化とツール整備による実現であって、その圧縮率や品質に関する主張は Unsloth 自身のもので未検証であり、ホスト型の中国 API より自前ホストの GLM 級の重みを大規模に選ぶという、文書化された企業導入はまだない。",
+      "reference_links": [
+        {
+          "label": "AIToolly - Unsloth enables local execution of GLM-5.2, a 744B-parameter open model with a 1M context window",
+          "url": "https://aitoolly.com/ai-news/article/2026-06-23-unsloth-enables-local-execution-of-glm-52-a-744b-parameter-open-model-with-1m-context-window"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Unsloth の Dynamic GGUF 量子化は、Z.ai のオープンウェイト GLM-5.2 ── クローズドなフロンティアに迫るベンチマーク水準の 7,440 億パラメータ MoE ── を、1.51TB のチェックポイントからおよそ 217〜239GB まで縮め、Unsloth Studio を介して大容量メモリの単一ワークステーションで動かせるようにする。これによりマルチ GPU クラスタという壁が取り払われ、フロンティア級の中国製の重みを自前ホストすることが、ホスト型の中国製コーディング API を呼ぶ現実的な代替手段になる。",
+        "coherence": 4,
+        "remaining_gap": "圧縮率と品質に関する主張は Unsloth 自身のもので未検証だ。ホスト型の中国 API より自前ホストの GLM 級の重みを大規模に選ぶ企業は、まだ文書化されていない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.a96ff0bdaae351aa",
+        "short_label": "Open-weight coding model tops 85 on Terminal-Bench 2.1 by Q4 2026",
+        "prediction_date": "2026-06-18"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "本日の GLM-5.2 公開は、オープンウェイトのコーディング能力に関する見立てに関わってくる。Z.ai が新たにオープンウェイト化した GLM-5.2 は 7,440 億パラメータの混合エキスパート(MoE)モデルで、Unsloth はこれをコーディングと推論でクローズドなフロンティアに迫るベンチマーク水準と位置づけ、Dynamic GGUF 量子化によっていまやローカルで動かせるようにした。フロンティアに迫るコーディング性能をうたうフロンティア級のオープンウェイトモデルは、オープン層を、コーディングエージェント向けの高いベンチマークの基準を超える軌道に乗せ続ける類の公開であり、これはこの予測が追う能力の上限にあたる。一致しているのは方向性と能力の語り口であって、反証可能な測定値ではない。コーディングの強さに関する主張は Unsloth と Z.ai 自身の位置づけであって、第三者が再現したスコアではなく、GLM-5.2 について公表された Terminal-Bench 2.1 の結果もない。さらに、積極的な 1〜2 ビット量子化は測定可能な精度と引き換えになるため、自前ホストのビルドは元の非量子化モデルのコーディング上限すら保てないかもしれない。",
+      "reference_links": [
+        {
+          "label": "AIToolly - Unsloth enables local execution of GLM-5.2, a 744B-parameter open model with a 1M context window",
+          "url": "https://aitoolly.com/ai-news/article/2026-06-23-unsloth-enables-local-execution-of-glm-52-a-744b-parameter-open-model-with-1m-context-window"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Z.ai が新たにオープンウェイト化した GLM-5.2 は、Unsloth がコーディングと推論でクローズドなフロンティアに迫るベンチマーク水準と位置づけ、Dynamic GGUF 量子化でいまやローカルで動かせる 7,440 億パラメータ MoE だ。これは、オープン層をコーディングエージェント向けの高いベンチマークの基準を超える軌道に乗せ続ける類の、フロンティア級オープンウェイトの公開だ。",
+        "coherence": 2,
+        "remaining_gap": "コーディングの強さはベンダーの位置づけであって、第三者による Terminal-Bench 2.1 のスコアではない。積極的な 1〜2 ビット量子化は精度と引き換えになり、コーディングの上限を損ないかねない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.a4ee0b5435860b21",
+        "short_label": "AWS Continuum's sandbox exploit-validation goes industry baseline by H1 2027",
+        "prediction_date": "2026-06-21"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "本日の話題のうち二つが、「実際に動かして指摘を証明する」という見立てに触れる。イベント予定表には、AI Tinkerers San Francisco が 6 月 25 日に Offensive Security Demo Night を主催し、XBOW 提供のもとで自律型ペネトレーションテストエージェントのライブデモを行うと載っている。これは 8 月の Black Hat USA の AI Summit と DEF CON の AI Village に先立つもので、偵察を連鎖させ、動く攻撃コードを組み立て、それを実行して到達可能性を実証するエージェントだ。これは Continuum のサンドボックス上での攻撃実証による検証の手法を、ベンダーの分野に一般化したものにあたる。並行して、StakeBench は 3,168 件の敵対的試行を走らせ、間接的なプロンプト注入の成功率が 41.67〜68.16%、直接攻撃が試したすべての構成で 79% を超えることを見いだした。これは攻撃を実際に走らせる類の実証であり、業界を静的なフラグ付けから攻撃実証ゲートへと押しやる。関連性は勢いと隣接性にあって、到達点ではない。デモナイトはカンファレンス壇上での実証であり、StakeBench は学術的なベンチマークであって、いずれも、名の知れたコードセキュリティベンダー各社にまたがって業界標準となる防御側の攻撃実証パイプラインそのものではない。さらにデモナイトの語り口は、この予測が指す防御側の攻撃実証ゲートではなく、攻撃側のツールを指している。",
+      "reference_links": [
+        {
+          "label": "XBOW - Offensive AI in Practice (sponsor of the AI Tinkerers SF Offensive Security Demo Night, June 25)",
+          "url": "https://xbow.com/offensive-ai-in-practice-workshop"
+        },
+        {
+          "label": "CSO Online - Prompt injection breaks today's AI agents, study warns (StakeBench)",
+          "url": "https://www.csoonline.com/article/4184455/prompt-injection-breaks-todays-ai-agents-study-warns.html"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "本日のシグナルは攻撃実証ゲートへと押しやる。6 月 25 日の XBOW 提供 Offensive Security Demo Night では、偵察を連鎖させ、動く攻撃コードを組み立て、それを実行して到達可能性を証明するエージェントが走る。一方で StakeBench の 3,168 件の敵対的試行は、攻撃を実際に走らせる実証を供給し、静的なフラグ付けを掘り崩す。いずれも勢いと隣接性であって、防御側の検証パイプラインが業界標準になったわけではまだない。",
+        "coherence": 3,
+        "remaining_gap": "デモナイトは攻撃側のカンファレンス壇上のツールであり、StakeBench は学術的なベンチマークだ。いずれも、名の知れたコードセキュリティベンダー各社で採用された防御側の攻撃実証ゲートではない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.20260420-2",
+        "short_label": "\"Agent-in-the-Loop Secret Exfiltration\" tops CIS / OWASP risk lists",
+        "prediction_date": "2026-04-20"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "[REVIVED] レイヤー 1 のキーワード一致（OWASP、間接的なプロンプト注入、Claude Code、機密情報の漏えい、CI エージェント）と、本日のエージェントセキュリティ系の見出しに対するレイヤー 2 の意味的一致。OWASP の State of Agentic AI Security and Governance v2.01 は、ほぼすべてのリスク区分を具体的な CVE・ベンダー勧告・侵害報告に結び付け、最も多くの勧告を抱えるリポジトリを順位付けし（Claude Code は 22 件）、プロンプト注入をエージェント向けアプリケーションの Top 10 区分のうち 6 つに対応付けている ── ほとんどの事案を貫く攻撃手口だ。StakeBench が、試したどの構成もプロンプト注入に耐えないと見いだしたこと、そして Microsoft が Semantic Kernel のようなフレームワークでの注入がホストレベルの RCE にまで拡大しうると開示したことが、エージェントのツール呼び出しを通じた認証情報・機密情報の露出を、文書化された上位区分として枠づける。Nous Research の Hermes Agent が MCP 認証情報フィルタリング・認証情報の伏字化・SSRF 対策で応じていることは、機密情報の持ち出しリスクが、いまやハーネスの既定を動かすほど一級の扱いになったことを示す。休眠していた予測の正確な基準までの隔たりはこうだ。OWASP はプロンプト注入を最大の区分と位置づけてはいるが、「Agent-in-the-Loop Secret Exfiltration」を CIS/OWASP のリスク一覧の単独最上位項目として名指してはいない。一致しているのは、エージェントを介した機密漏えいという脅威が最上位であることであって、その特定の名称ではない。",
+      "reference_links": [
+        {
+          "label": "CSO Online - Prompt injection breaks today's AI agents, study warns (StakeBench)",
+          "url": "https://www.csoonline.com/article/4184455/prompt-injection-breaks-todays-ai-agents-study-warns.html"
+        },
+        {
+          "label": "Microsoft Security - When prompts become shells: RCE vulnerabilities in AI agent frameworks",
+          "url": "https://www.microsoft.com/en-us/security/blog/2026/05/07/prompts-become-shells-rce-vulnerabilities-ai-agent-frameworks/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "OWASP の Agentic AI Security v2.01 は、リスク区分を具体的な CVE と勧告に結び付け、Claude Code を 22 件の勧告で順位付けし、プロンプト注入を Top 10 区分のうち 6 つに対応付ける。StakeBench はどの構成も注入に耐えないと見いだし、Microsoft は注入がホストレベルの RCE にまで拡大することを示す。Hermes Agent の MCP 認証情報フィルタリングは、機密情報の持ち出しが、いまやハーネスの既定を定めるほど一級の扱いになったことを示す。",
+        "coherence": 4,
+        "remaining_gap": "OWASP はプロンプト注入を最大の区分と位置づけるが、「Agent-in-the-Loop Secret Exfiltration」を CIS/OWASP の単独最上位項目として名指してはいない。一致しているのは脅威が最上位であることで、正確な名称ではない。"
+      }
+    }
+  ]
+}

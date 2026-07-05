@@ -1,0 +1,14 @@
+{
+  "id": "prediction.7c41f9a2e8b6d503",
+  "scope_hint": "cross",
+  "title": "General-purpose mobile cobots cross 100K production-operation hours by H1 2027",
+  "body": "Collaborative Robotics' second-generation Proxie debut at Automate 2026 moved general-purpose mobile manipulation from demonstration to a quantified operating record: on-robot task inference with no cloud dependency for core execution, a $5,000-per-month price, and a first-generation track record of 12,627 logged hours, more than 40 million pounds moved, and over 17 million human steps saved across hospitals, manufacturing, and logistics on 16-hour shifts. The prediction is that at least one general-purpose mobile-cobot vendor publishes a cumulative cross-customer fleet operating record exceeding 100,000 production hours, framed as a deployment metric rather than a pilot or demo. The pivot the launch surfaces is that physical-AI vendors are competing on audited hours-in-operation and dollars-of-material-moved instead of show-floor capability clips; once one general-purpose platform anchors marketing on a six-figure fleet-hours number, monthly-subscription pricing turns operating hours into the unit buyers underwrite and rivals are pulled onto the same scoreboard. This is a productized-deployment claim, distinct from a hardware-supply or orchestration-reliability call.",
+  "reasoning": {
+    "because": "Cobot's Gen-2 Proxie launch anchored on a 12,627-hour, 40M-lb first-gen production record, not demos",
+    "given": "$5K/month pricing makes audited fleet operating-hours the unit buyers underwrite, pulling rivals on",
+    "so_that": "A general-purpose mobile-cobot vendor publishes a cross-customer fleet record above 100,000 production-operation hours",
+    "landing": "by H1 2027; one general-purpose mobile-cobot vendor, fleet-hours disclosure",
+    "plain_language": "Factory robots now brag about real hours worked, not demos; soon one will pass 100,000 hours across customers."
+  },
+  "summary": "Cobot's Gen-2 Proxie launch at Automate 2026 anchored on a first-gen operating record (12,627 hours, 40M+ pounds moved) and $5K/month pricing. Expect a general-purpose mobile-cobot vendor to publish a cross-customer fleet record above 100,000 production-operation hours by H1 2027."
+}

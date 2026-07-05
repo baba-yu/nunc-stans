@@ -1,0 +1,14 @@
+{
+  "id": "prediction.185982a6cad19655",
+  "scope_hint": "tech",
+  "title": "Local-LLM runtimes ship in-model speculative decoding on by default by Q2 2027",
+  "body": "Ollama 0.31, released July 1, turned on multi-token prediction for Gemma 4 on Apple Silicon by default: the model ships a small draft that proposes several tokens, the main model verifies them in one pass and keeps what it agrees with, and Ollama measured Gemma 4 generating nearly 90% faster on a coding-agent benchmark with byte-identical output. Crucially this is a default, not a tuning flag, and the small-batch MLX matmul kernel Ollama upstreamed is usable by any MLX model rather than just Gemma. The mechanism is the sort of change that spreads across a runtime field once one shipping implementation proves the accuracy-neutral speedup: draft-model speculative decoding has existed as an opt-in in llama.cpp, vLLM, and MLX-LM for a while, but wiring it on out of the box, with a bundled draft and a working kernel, is what converts a benchmark into a default users never touch. Coding agents make the payoff structural because they call the model continuously over highly predictable text, so accepted drafts compound over a session. Expect a second mainstream local runtime shipping to end users, LM Studio, llama.cpp-based desktops, MLX-LM, or vLLM's local mode, to make in-model or paired-draft speculative decoding the default path for at least one popular open-weight model family rather than an advanced setting, closing more of the on-device-to-hosted throughput gap without new silicon.",
+  "reasoning": {
+    "because": "Ollama 0.31 shipped Gemma 4 MTP on by default, ~90% faster on coding agents, output unchanged",
+    "given": "Speculative decoding ships as opt-in in rival runtimes; accuracy-neutral wins spread once defaulted",
+    "so_that": "A second mainstream local runtime defaults speculative decoding on for a popular open-weight model family",
+    "landing": "by Q2 2027; a second end-user runtime's release notes flip it to on-by-default",
+    "plain_language": "Ollama made a local model run much faster for free by guessing several words ahead, so other apps will soon do the same by default."
+  },
+  "summary": "Ollama 0.31 turned multi-token prediction on by default for Gemma 4 on Apple Silicon, generating ~90% faster with identical output. Since draft-model speculative decoding is already opt-in elsewhere, expect a second mainstream local runtime to default it on for a popular open family by Q2 2027."
+}

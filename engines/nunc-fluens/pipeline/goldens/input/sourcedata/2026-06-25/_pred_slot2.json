@@ -1,0 +1,14 @@
+{
+  "id": "prediction.98d07cefb20b3032",
+  "scope_hint": "business",
+  "title": "Agentic coding platforms ship token budgets and caps as default by Q2 2027",
+  "body": "Major agentic-coding platforms (the Cursor / Claude Code / Codex CLI class of autonomous developer-loop tools and their enterprise tiers) will ship admin-side consumption-governance controls — per-seat and per-team token budgets, hard and soft caps, real-time usage dashboards, and policy guardrails on autonomy depth and context-window size — as default, on-by-default features rather than opt-in add-ons. Gartner's June 24 note put quotable thresholds on the cost curve (23% of tech leaders already spend $200-$500 per developer per month on tokens, 6% pay more than $2,000) and named the steepest escalation as coming from ungoverned autonomy, bloated context windows, and missing usage feedback. That diagnosis is itself the product spec: when the cost center is per-seat token bills and the failure mode is the absence of structured feedback, the competitive and procurement pressure pushes vendors to make the FinOps-for-agents layer table stakes. Enterprises evaluating scaled agent rollout will increasingly require a governed engineering operating model — token discipline enforced in the platform, not left to individual developer restraint — and vendors that lack native budget and cap controls will be at a procurement disadvantage as consumption-based pricing becomes the norm for the category.",
+  "reasoning": {
+    "because": "Gartner's June 24 note ties the steepest agentic-coding cost escalation to ungoverned autonomy",
+    "given": "Consumption pricing makes per-seat token bills the cost center, so control must live in the platform",
+    "so_that": "Vendors make token budgets, caps, dashboards, and autonomy guardrails default to win enterprise procurement at scale",
+    "landing": "by Q2 2027; >=2 major agentic-coding platforms ship default budgets and caps",
+    "plain_language": "AI coding tools cost a lot per person, so the apps will add built-in spending limits and dashboards to keep bills from blowing up."
+  },
+  "summary": "Gartner's June 24 note pins the steepest agentic-coding cost escalation on ungoverned autonomy. Expect major agentic-coding platforms to make token budgets, caps, dashboards, and autonomy guardrails default features by Q2 2027, as enterprises require governed spend before scaling agent rollout."
+}

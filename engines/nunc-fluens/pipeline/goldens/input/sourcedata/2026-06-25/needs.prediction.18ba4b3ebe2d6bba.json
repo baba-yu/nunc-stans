@@ -1,0 +1,30 @@
+[
+  {
+    "actor": "frontier-model buyer custom-silicon program lead",
+    "job": "Driving an in-house rack-scale inference accelerator from architecture spec through tape-out toward a named part with vendor per-watt claims and an end-2026 deployment target.",
+    "outcome": "A publicly committed or unveiled named buyer-designed inference ASIC, co-designed with a merchant partner, joining the OpenAI/Google/Amazon cohort as the fourth entrant.",
+    "motivation": "Gigawatt-scale merchant-GPU inference economics are untenable; a co-designed accelerator plus partner fabric is the proven escape hatch for the model roadmap.",
+    "task": {
+      "who": "Buyer's silicon-architecture and hardware-engineering program team",
+      "what": "Co-design and tape out a rack-scale inference accelerator",
+      "where": "Internal silicon program with a merchant co-design partner",
+      "when": "Today through H1 2027, ahead of the public commitment",
+      "why": "Cut gigawatt-scale inference cost versus merchant-GPU economics",
+      "how": "ASIC co-design with Broadcom, Marvell, or a foundry-fronted house"
+    }
+  },
+  {
+    "actor": "merchant ASIC co-design partner engagement lead",
+    "job": "Engineering a frontier buyer's custom inference accelerator plus networking fabric on a proven co-design template, packaging it toward a public unveiling with per-watt claims.",
+    "outcome": "A merchant-partner-co-designed named inference part shipped or committed by a fourth frontier buyer, replicating the Jalapeno template for a new cohort entrant.",
+    "motivation": "Convert proven Jalapeno-style co-design demand into a repeat marquee design win as more gigawatt-scale buyers face the same build-versus-buy squeeze.",
+    "task": {
+      "who": "Merchant vendor's custom-ASIC and networking-fabric engineering team",
+      "what": "Deliver co-designed accelerator and rack-scale networking fabric",
+      "where": "Merchant ASIC house engagement with the frontier buyer",
+      "when": "Today through H1 2027, runway to the named part",
+      "why": "Win a repeat marquee inference-silicon co-design contract",
+      "how": "Reusable co-design template plus partner networking fabric"
+    }
+  }
+]

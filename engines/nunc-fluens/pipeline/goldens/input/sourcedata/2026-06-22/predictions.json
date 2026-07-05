@@ -1,0 +1,47 @@
+{
+  "date": "2026-06-22",
+  "predictions": [
+    {
+      "id": "prediction.9ca246725adf1b12",
+      "scope_hint": "business",
+      "title": "Captive in-house fleets will lead paid humanoid deployment by H1 2028",
+      "body": "The signal in Hyundai's move to buy out SoftBank's residual 9.65% of Boston Dynamics for a reported ~$325M is not the price but the structure: a financial sponsor took a put-option exit when the venture-default endpoint (a US IPO by June 2026) failed to arrive, and the strategic owner that actually needs the robots absorbed the whole company instead of letting the market price it. That inverts the prevailing humanoid narrative, in which independent pure-plays (Figure, Agility, Apptronik, 1X, Tesla's Optimus as a product line) race to be the first to sell robots-as-a-service to third parties. The contrarian claim here is that the first humanoid deployments crossing into genuine paid, at-scale industrial production will instead be captive — robots a manufacturer builds or wholly owns and runs inside its own plants on its own balance sheet — because a captive owner can justify the unit economics against labor and downtime it already books, without needing a per-robot rental price the open market will bear. Concretely and falsifiably: by the first half of 2028, the largest publicly reported humanoid deployment doing real production work (not pilots, not demos) measured by unit count will be a captive in-house fleet operated by the manufacturer that owns the robot maker — Hyundai/Boston Dynamics Atlas being the leading candidate against its stated ~25,000-unit 2028 target — rather than any third-party robots-as-a-service contract sold by an independent vendor to an unaffiliated customer. The mechanism is ownership consolidation plus put-option discipline: when the IPO exit closes, sponsors leave, and the only buyers with both the capital and the captive demand to absorb a humanoid maker are the automakers and logistics giants that will deploy internally first and sell externally only later. The prediction fails if, by mid-2028, the single largest verified paying humanoid production deployment is a third-party RaaS contract from an independent vendor to a customer that does not own the vendor, or if no deployment exceeds low-thousands of units at all.",
+      "reasoning": {
+        "because": "SoftBank took its put-option exit and Hyundai absorbed 100% of Boston Dynamics rather than IPO it",
+        "given": "only captive owners have both the capital to buy a robot maker and the in-house demand to run it",
+        "so_that": "the first at-scale paid humanoid production fleets are captive in-house deployments, not third-party RaaS sales",
+        "landing": "By H1 2028 the largest paid humanoid fleet is captive (Hyundai/Atlas lead)",
+        "plain_language": "The first big working robot fleets will be ones carmakers own and run in their own factories, not rented out to others."
+      },
+      "summary": "Hyundai buying out SoftBank's residual Boston Dynamics stake shows sponsors exiting and owners absorbing robot makers whole. The prediction: by H1 2028 the largest verified paying humanoid production fleet is captive, run in-house by its owner-maker (Hyundai/Atlas the lead), not third-party RaaS."
+    },
+    {
+      "id": "prediction.dfc8663133f5e74d",
+      "scope_hint": "cross",
+      "title": "Hyperscaler ships TEE-I/O confidential frontier-model inference by Q1 2027",
+      "body": "Confidential-computing modes already exist on NVIDIA's Blackwell, and the Confidential Computing Summit lands June 23-24 at the San Francisco Mint with confidential-AI and data-sovereignty keynotes from AMD, Google, Microsoft, NVIDIA, Meta and Samsung, signaling that the hard parts (TEE-I/O links between CPU enclaves and GPU memory, attestable key release, hardware root-of-trust on the accelerator) are now demonstrable rather than theoretical. This prediction holds that the intersection crosses from feature to shipping default in the post-summit window: by the first quarter of 2027 at least one major hyperscaler (AWS, Azure, Google Cloud or Oracle) will make generally available a confidential-inference offering for a frontier-class model in which the customer's prompts and the model weights are processed inside a hardware Trusted Execution Environment with end-to-end TEE-I/O between host and GPU and a remote-attestation report the customer can verify before sending data, marketed explicitly as confidential AI rather than a preview or a CPU-only enclave. The driver is regulated and sovereign demand: healthcare, finance, defense and EU data-residency customers will not send sensitive prompts to a shared GPU they cannot attest, so the cloud that can prove cryptographically that neither the operator nor a co-tenant can read the prompt or exfiltrate the weights captures the most valuable, least price-sensitive inference workloads, and the silicon to back that claim is now in volume. The forecast is falsified if, by the end of Q1 2027, no named hyperscaler has moved such a TEE-I/O frontier-model inference service to general availability and all offerings remain in limited preview, CPU-enclave-only, or restricted to non-frontier models.",
+      "reasoning": {
+        "because": "Blackwell already ships confidential-computing modes with attestable TEE-I/O between host CPU and GPU memory",
+        "given": "regulated and sovereign buyers refuse to send sensitive prompts to a GPU they cannot cryptographically attest",
+        "so_that": "the cloud that can prove no operator or co-tenant reads the prompt or weights wins the highest-value inference workloads",
+        "landing": "A hyperscaler makes TEE-I/O frontier-model confidential inference GA by Q1 2027",
+        "plain_language": "Soon a big cloud will let you run a top AI model on hardware that proves nobody, not even the cloud, can read your data."
+      },
+      "summary": "NVIDIA Blackwell already ships confidential-computing modes, and TEE-I/O between CPU and GPU is now demonstrable. The prediction: by Q1 2027 a major hyperscaler makes confidential inference for a frontier model generally available, with end-to-end TEE-I/O and verifiable attestation."
+    },
+    {
+      "id": "prediction.9a4ef78575099c38",
+      "scope_hint": "business",
+      "title": "An autonomous-pentest vendor lands a named enterprise/gov deal by Q1 2027",
+      "body": "Autonomous offensive-security agents are moving from conference stage to commercial product: AI Tinkerers San Francisco is hosting an Offensive Security Demo Night on June 25 with live autonomous-pentesting-agent demos sponsored by XBOW, and the Black Hat USA AI Summit plus the DEF CON AI Village run August 1-6, giving vendors a marquee window to convert demos into procurement. The distinguishing capability is no longer scanning but synthesis: agents that autonomously chain reconnaissance, build a working exploit, run it to prove reachability, and document a reproducible kill-chain. This prediction holds that the offensive side of that thread crosses into commercial deployment rather than staying a defensive validation feature: by the end of the first quarter of 2027, at least one autonomous-pentesting or continuous-autonomous-red-teaming vendor (XBOW, Horizon3, RunSybil, or a comparable entrant) will publicly document either a named enterprise or government customer deployment, or a verified, reproducible exploit-chain benchmark result on a third-party target set, positioning continuous autonomous red-teaming as a standing product capability rather than a one-off demo. The mechanism is that buyers already trust scanners far less than a proof-of-exploit, security budgets reward tools that cut human red-team hours, and a public benchmark or logo deal is the cheapest credibility a vendor can buy in a crowded post-Black-Hat field, so the incentive to publish a named landing is structural. The claim is falsified if, by March 31 2027, no autonomous-pentest vendor has publicly documented a named enterprise/government deployment or a verified reproducible exploit-chain benchmark, and continuous autonomous red-teaming remains demo-only.",
+      "reasoning": {
+        "because": "Live autonomous-pentest demos (XBOW, June 25) now chain recon, build, and run a working exploit",
+        "given": "buyers trust proof-of-exploit over scanners and budgets reward cutting human red-team hours",
+        "so_that": "a vendor publishes a named enterprise/gov landing or a verified exploit-chain benchmark for credibility",
+        "landing": "An autonomous-pentest vendor documents a named deal or benchmark by Q1 2027",
+        "plain_language": "Soon a real company will sell AI that hacks into systems for you and proves it works."
+      },
+      "summary": "Autonomous offensive-security agents that build and run working exploits are moving from demo to product. The prediction: by Q1 2027 an autonomous-pentest vendor documents a named enterprise or government deployment, or a verified reproducible exploit-chain benchmark."
+    }
+  ]
+}

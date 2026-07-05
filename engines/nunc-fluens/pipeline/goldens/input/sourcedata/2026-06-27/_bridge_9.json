@@ -1,0 +1,6 @@
+{
+  "support_dimension": "because",
+  "narrative": "The Langflow cross-tenant IDOR fired in the wild (CVE-2026-55255, no owner check) and the AutoGPT SSRF bypass (CVE-2026-56663) both stem from the root cause this June 5 thesis answers: agent frameworks execute broadly-scoped operations without least-privilege, deny-by-default guards at the execution wrapper. Read-only-by-default SELECT-only SQL guards are the same structural argument applied to the SQL tool.",
+  "coherence": 3,
+  "remaining_gap": "Today's flaws are an IDOR and an SSRF, not text-to-SQL injection, and no agent SQL toolkit shipped read-only-by-default guards."
+}

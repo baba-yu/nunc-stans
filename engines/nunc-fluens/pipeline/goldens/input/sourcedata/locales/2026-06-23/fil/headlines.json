@@ -1,0 +1,50 @@
+{
+  "date": "2026-06-23",
+  "technical": [
+    {
+      "lead": "Pinapasiksik ng Unsloth Dynamic GGUF ang 744B GLM-5.2 sa isang workstation",
+      "body": "Naglathala ang Unsloth ng Dynamic GGUF quantizations ng bagong open-weight na GLM-5.2 ng Z.ai, isang mixture-of-experts na modelong may 744 bilyong parameter (mga 40B active) at isang one-million-token na context window, kaya napapatakbo ito nang lokal sa labas ng datacenter. Ang selective-precision scheme ay nag-uupcast sa mga accuracy-sensitive na layer tungo sa 8- o 16-bit habang ibinababa ang iba pa tungo sa 1- o 2-bit, na binababa ang 1.51TB na checkpoint tungo sa mga 239GB para sa 2-bit UD-IQ2_M build (84% na pagbaba) at humigit-kumulang 217GB para sa 1-bit build (mga 86%), sapat na maliit para sa isang high-memory na single-node box sa halip na isang multi-GPU cluster. Pinagsasama ang release sa local execution sa pamamagitan ng Unsloth Studio at itinuturing ang GLM-5.2 bilang halos kapantay ng closed frontier sa coding at reasoning sa benchmarking. Ang mga claim sa compression at quality ay pag-aari mismo ng Unsloth, hindi nareproduce nang independyente, at ang 1-2 bit quantization sa ganitong tindi ay nagpapalit pa rin ng masusukat na accuracy kapalit ng tipid sa memory.",
+      "citations": [
+        {"label": "AIToolly - Unsloth enables local execution of GLM-5.2, a 744B-parameter open model with a 1M context window", "url": "https://aitoolly.com/ai-news/article/2026-06-23-unsloth-enables-local-execution-of-glm-52-a-744b-parameter-open-model-with-1m-context-window"}
+      ]
+    },
+    {
+      "lead": "Iniuugnay ng OWASP 2.01 ang agentic na panganib sa totoong mga CVE; walang ligtas na setup na natagpuan ng StakeBench",
+      "body": "Lumipat ang larawan ng seguridad ng agentic AI mula sa teoretikal na mga banta tungo sa dokumentadong mga insidente. Sinusubaybayan ng State of Agentic AI Security and Governance v2.01 ng OWASP ang 53 agentic na proyekto at iniuugnay na ngayon ang halos bawat kategorya ng panganib sa konkretong mga CVE, vendor advisory, at breach report. Binibilang nito ang 28 sa 53 bilang coding agent, iniranggo ang mga repositoryo na may pinakamaraming security advisory (n8n 57, Claude Code 22, AutoGPT 15, Dify 13, Roo-Code 11), at binanggit ang pitong proyekto na naglalabas ng update araw-araw o mas mabilis pa, isa humigit-kumulang bawat walong oras, isang bilis ng pagbabago na nagpapahirap sa pag-audit. Iniuugnay nito ang prompt injection sa anim sa sampung kategorya ng Top 10 nito para sa agentic na aplikasyon. Isang hiwalay na academic benchmark, ang StakeBench, mula sa Nanyang Technological University, ST Engineering, IBM Research at UIUC, ay nagpatakbo ng 3,168 adversarial trial at natagpuan ang success ng indirect prompt-injection na 41.67% hanggang 68.16% at direct attack na higit sa 79% sa bawat na-test na configuration, na walang nakapasok sa robust-behavior region. Ang pagpapalit ng nasa ilalim na modelo ay nagpagalaw sa success ng indirect injection nang hanggang 26.49 point. Binibigyang-diin ng naunang disclosure ng Microsoft na ang injection sa mga framework gaya ng Semantic Kernel ay maaaring umabot tungo sa host-level RCE ang realidad sa panig ng vendor.",
+      "citations": [
+        {"label": "Microsoft Security - When prompts become shells: RCE vulnerabilities in AI agent frameworks", "url": "https://www.microsoft.com/en-us/security/blog/2026/05/07/prompts-become-shells-rce-vulnerabilities-ai-agent-frameworks/"},
+        {"label": "CSO Online - Prompt injection breaks today's AI agents, study warns (StakeBench)", "url": "https://www.csoonline.com/article/4184455/prompt-injection-breaks-todays-ai-agents-study-warns.html"}
+      ]
+    },
+    {
+      "lead": "Nagtatagpo ang mga coding-agent harness sa least-privilege-by-default na execution",
+      "body": "Naglabas ang open coding-agent harnesses ng security hardening sa halip na bagong feature. Ina-patch ng Hunyo 2026.6.x releases ng OpenClaw ang konkretong mga exploit path -- vCard at location-pin injection -- hinigpitan ang mga hangganan ng Docker sandbox, nagdagdag ng Browser CDP endpoint validation, pinanatiling naka-pin sa loopback ang mga SSH tunnel check, at sinimulang tanggihan ang hindi ligtas na haba ng chat, tool, package, at response, kasabay ng first-class na OpenRouter onboarding. Ang NemoClaw ng NVIDIA, isang open reference stack para sa pagpapatakbo ng always-on na mga agent gaya ng Hermes at OpenClaw sa loob ng OpenShell sandboxes, ay nagbibigay-priyoridad sa sandbox hardening, paghawak ng credential, at mas mahigpit na network-policy defaults sa paligid ng routed inference at lifecycle management. Pareho ang direksyon ng Hermes Agent ng Nous Research gamit ang MCP credential filtering na nagbibigay sa mga subprocess ng tahasang aprobadong environment variable lamang, kasama ang credential redaction, SSRF protection, at isang Tirith pre-execution scan sa MCP configuration. Ang pangunahing daloy: itinuturing ng mga harness ang sarili nilang tool-calling surface bilang ang pangunahing attack surface, na tumutugma sa natuklasan ng OWASP at StakeBench na ang prompt injection ang nangingibabaw na agentic na panganib.",
+      "citations": [
+        {"label": "The New Stack - 'An agent is an LLM and a harness': what NVIDIA really thinks about OpenClaw (NemoClaw)", "url": "https://thenewstack.io/nvidia-openclaw-agent-blueprints/"},
+        {"label": "innFactory - OpenClaw vs. Hermes Agent: comparison of the two dominant AI agent frameworks of 2026", "url": "https://innfactory.ai/en/blog/openclaw-vs-hermes-agent-comparison/"}
+      ]
+    },
+    {
+      "lead": "Bumubukas ngayong araw ang Confidential Computing Summit; offensive-security night sa Hunyo 25",
+      "body": "Bumubukas na ngayon ang kalendaryo ng AI-security. Tumatakbo ang Confidential Computing Summit Hunyo 23-24 sa San Francisco Mint, inorganisa ng Linux Foundation at OPAQUE sa paligid ng AI sovereignty, agent security, IP protection, verifiable environments, at confidential-AI workloads, kasama ang mga tagapagsalita mula sa Amazon, AMD, Google, Meta, Microsoft, NVIDIA, Samsung Electronics, TII at UC Berkeley. Magho-host ang AI Tinkerers San Francisco ng isang Offensive Security Demo Night sa Hunyo 25 na may live na demo ng autonomous-pentesting-agent na suportado ng sponsor na XBOW. Mas malayo pa, tatakbo ang AI Summit ng Black Hat USA sa Agosto 1-6 sa Las Vegas kasabay ng AI Village ng DEF CON, susunod ang AI Risk Summit ng SecurityWeek sa Agosto 11-12 sa Half Moon Bay, ang OWASP Global AppSec USA ay sa Nobyembre 5-6 sa San Francisco, at nananatili sa watch list ang AI Agent Security Summit series ng Zenity.",
+      "citations": [
+        {"label": "Confidential Computing Summit 2026 schedule (June 23-24, San Francisco Mint)", "url": "https://ccsummit2026.sched.com/"},
+        {"label": "XBOW - Offensive AI in Practice (sponsor of the AI Tinkerers SF Offensive Security Demo Night, June 25)", "url": "https://xbow.com/offensive-ai-in-practice-workshop"}
+      ]
+    },
+    {
+      "lead": "Inuuna ng Snowflake Dev Day sa Hunyo 25 ang AI Engineer World's Fair",
+      "body": "Pinupuno ng mainstream dev at data na kalendaryo ang linggo. Nagpapatakbo ang Snowflake ng virtual na Dev Day sa Hunyo 25 na may dalawang luminary talk kasama ang isang hands-on agentic-AI lab. Kinukuha ng AI Engineer World's Fair ang Moscone West na may pangunahing programa mula Hunyo 29 hanggang Hulyo 2 (opsyonal na New Engineer Orientation sa Hunyo 28), na inuna ng opisyal na AIE World's Fair Hackathon kasama ang Cerebral Valley sa Hunyo 27-28. Sa mas malayo, babalik ang GitHub Universe sa Oktubre 28-29 at tatakbo ang AWS re:Invent sa Nobyembre 30 hanggang Disyembre 4 sa Las Vegas. Sa AI-chip track, nakatakda ang Advancing AI 2026 ng AMD sa Hulyo 22-23 sa Moscone (inaasahang nakatuon sa Instinct MI400-series, keynote sa Hulyo 23), tatakbo ang Hot Chips 2026 sa Agosto 23-25 sa Stanford, at ang AI Infra Summit ay sa Setyembre 15-17 sa Santa Clara Convention Center.",
+      "citations": [
+        {"label": "Snowflake Dev Day - Americas Virtual (June 25, 2026)", "url": "https://www.snowflake.com/en/dev-day/americas-virtual/"}
+      ]
+    }
+  ],
+  "plain": [
+    "Pinapasiksik ng Unsloth ang 744B AI model sa isang workstation",
+    "Ayon sa OWASP at isang bagong pag-aaral, bumabagsak pa rin ang mga AI agent sa injection",
+    "Hinihigpitan ng mga coding-agent tool ang sarili nilang sandbox bilang default",
+    "Magsisimula ngayong linggo ang confidential computing at security events",
+    "Snowflake Dev Day at ang AI Engineer World's Fair ngayong linggo"
+  ]
+}

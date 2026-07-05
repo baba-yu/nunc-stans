@@ -1,0 +1,6 @@
+{
+  "support_dimension": "given",
+  "narrative": "The Feast registry deserialization RCE keeps the agentic-AI cycle tied to model-supply-chain integrity, the same risk class confidential inference and attestation contain by keeping weights and activations encrypted in use. AMD's Advancing AI 2026 (July 22-23) and Black Hat USA (August 1-6) sit squarely in this window as plausible disclosure venues, supplying threat rationale and timing rather than a launch.",
+  "coherence": 3,
+  "remaining_gap": "No named cloud has disclosed a TEE-I/O confidential frontier-model inference tier; today gives threat backdrop and venue cadence, not a shipping offering."
+}

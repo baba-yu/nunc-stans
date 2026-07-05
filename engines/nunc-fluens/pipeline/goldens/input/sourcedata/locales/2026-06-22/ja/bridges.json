@@ -1,0 +1,122 @@
+{
+  "date": "2026-06-22",
+  "validation_rows": [
+    {
+      "prediction_ref": {
+        "id": "prediction.ef0bb943bcd4a5d3",
+        "short_label": "Rival humanoid maker lands $500M-plus chip-and-cloud strategic round by Q4 2026",
+        "prediction_date": "2026-06-18"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "Hyundaiの取締役会は本日6月22日、SoftBankが保有するBoston Dynamics株の残り9.65%を約$325Mで買い取る議案を採決する見込みである。これはおおよそ~$3.37Bの企業価値を示唆し、このヒューマノイドメーカーを2021年時点の評価のおよそ3倍へと再評価するとともに、ロードマップに資金を投じる資本と社内需要を持つ戦略的オーナーの傘下へ同社を完全に取り込む。これは本予測が追う、資本と戦略的後ろ盾がヒューマノイドのプラットフォームに集まっていくという方向そのものである。すなわち、潤沢な資金を持つ産業界のスポンサーが、2028年からのAtlas工場展開（約25,000台規模）に結びついたヒューマノイドの取り組みに9桁の資金を投じている。ただし一致は構造的なものであって、名指しした到達点ではない。これは社内子会社の完全買収であって、純粋なヒューマノイド専業の競合に$500M超の外部戦略ラウンドが入るものではなく、本予測が指すチップとクラウドのシンジケートも存在しない。",
+      "reference_links": [
+        {
+          "label": "KED Global - Hyundai to take full ownership of Boston Dynamics in SoftBank buyout",
+          "url": "https://www.kedglobal.com/robotics/newsView/ked202606210001"
+        },
+        {
+          "label": "Global Banking & Finance Review - Hyundai to buy SoftBank's remaining stake in Boston Dynamics for $325 million",
+          "url": "https://www.globalbankingandfinance.com/hyundai-buy-softbanks-remaining-stake-boston-dynamics-325/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "潤沢な資金を持つ産業界のオーナーが、~$3.37Bへの再評価でBoston Dynamicsに9桁の資金を投じ、25,000台規模のAtlas工場ロードマップに資金を投じるべく完全支配へと統合しつつある。これは本持論が追う、ヒューマノイドのプラットフォームに資本が集まる動きであり、戦略的な資金は単位あたりの採算を引き受けられる相手へと流れていく。",
+        "coherence": 3,
+        "remaining_gap": "これは社内子会社の完全買収であって、チップとクラウドのシンジケートが後ろ盾となる純粋なヒューマノイド専業の競合に$500M超の外部戦略ラウンドが入るものではない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.d15f8427132cce7b",
+        "short_label": "A frontier AI lab files a public S-1 and prices its IPO by Q2 2027",
+        "prediction_date": "2026-06-12"
+      },
+      "today_relevance": 2,
+      "evidence_summary": "本日報じられたHyundaiとSoftBankの買収は、IPOの期限を起点に動いている。SoftBankの撤退は2021年の取引に組み込まれたプットオプションによるもので、Boston Dynamicsが2026年6月までに米国でのIPOを完了していなければ、残る株式を売り戻せる仕組みだった。上場がないままSoftBankは権利を行使するとHyundaiに通知した。韓国の経済紙は、完全所有化が将来のBoston DynamicsのIPOを加速する道筋も開くものと位置づけている。本予測への関係は主題上のものにとどまり、両者が共有する、IPOのタイミングと撤退の規律という筋にかかわる。すなわち、厳しい流動性の窓という期限に直面するフロンティア級の非公開企業である。ただし一致は弱く、的を外している。Boston DynamicsはロボットメーカーであってフロンティアAIラボではなく、このニュースは値付けされたS-1ではなく、IPO未達によるプットオプションの行使であり、本日はいかなる名指しのフロンティアラボも公開申請へ動かしてはいない。",
+      "reference_links": [
+        {
+          "label": "KED Global - Hyundai to take full ownership of Boston Dynamics in SoftBank buyout",
+          "url": "https://www.kedglobal.com/robotics/newsView/ked202606210001"
+        },
+        {
+          "label": "Crypto Briefing - Hyundai to acquire SoftBank's remaining stake in Boston Dynamics for $325M",
+          "url": "https://cryptobriefing.com/hyundai-acquires-softbank-boston-dynamics-stake/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "SoftBankの撤退は、Boston Dynamicsが2021年の取引に織り込まれた「2026年6月までの米国IPO」という期限を達成できなかったために発動する。そして完全所有化は、後の上場を加速する道筋を開くものと位置づけられている。これは、厳しいIPOの期限と撤退の規律がフロンティア級の非公開企業を律するという、本持論が前提とする力を生きた形で思い起こさせる。",
+        "coherence": 2,
+        "remaining_gap": "Boston DynamicsはロボットメーカーであってフロンティアAIラボではなく、これは名指しのラボによる値付けされたS-1ではなく、IPO未達によるプットオプションの行使である。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.c349283881f8339b",
+        "short_label": "Confidential-GPU attestation lands as a cloud-AI contract term by Q2 2027",
+        "prediction_date": "2026-06-14"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "本日のイベントカレンダーには、サンフランシスコ造幣局でのConfidential Computing Summitが6月23〜24日と、いまや数日後に控えている。Linux FoundationとOPAQUEの主催のもと、AMD・Google・Microsoft・NVIDIA・Meta・Samsungが登壇する秘匿AIとデータ主権の基調講演が並ぶ。これはまさに、そのアテステーション基盤が調達可能なクラウドAIの契約条項へと固まることを本予測が見込んでいる、GPUとハイパースケーラーの各社であり、本持論を駆動する秘匿AIとデータ主権という議題そのもののもとに集う。しかも本日の三つのセキュリティ・サブトラックのなかで最も早い拠り所である。関係しているのは開催の場と目前に迫った勢いであって、到達点そのものではない。カレンダー上のサミットはベンダーと需要の枠組みを表に出すが、公開されたアテステーション条項でもSLAでも契約上の調達条件でもなく、いかなるクラウド事業者も購入者も、データ管轄を理由に秘匿GPUのアテステーションを既定の取引条件としてまだ確約していない。",
+      "reference_links": [
+        {
+          "label": "Linux Foundation - Confidential Computing Summit 2026 (June 23-24, San Francisco)",
+          "url": "https://events.linuxfoundation.org/confidential-computing-summit/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "数日後、本持論が依拠するGPUとハイパースケーラーの各社——AMD・NVIDIA・Google・Microsoft・Meta・Samsung——が、秘匿AIとデータ主権の議題のもとConfidential Computing Summitに集う。これは、アテステーションの保証が調達可能なクラウドAIの取引条件へと固まる前に成熟しなければならない構造的な引力である。",
+        "coherence": 4,
+        "remaining_gap": "カレンダー上のサミットはベンダーと需要を表に出すが、公開されたアテステーション条項ではない。いかなる事業者も購入者も、データ管轄を理由にこれを既定の取引条件としてまだ確約していない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.a4ee0b5435860b21",
+        "short_label": "AWS Continuum's sandbox exploit-validation goes industry baseline by H1 2027",
+        "prediction_date": "2026-06-21"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "本日のイベントカレンダーには、AI Tinkerers San Franciscoが6月25日に主催するOffensive Security Demo Nightが挙がっている。XBOWの協賛で自律型ペネトレーションテストのエージェントの実演がライブで行われ、8月のBlack Hat USA AI SummitとDEF CON AI Villageに先立つものだ。これは本予測が追うのと同じ、「実際に動かして発見を証明する」能力である。すなわち、偵察を連ねて実際に動く攻撃コードを組み立て、それを実行して到達可能性を示すエージェントであり、ありうる弱点を指摘するだけにとどまらない。これはまさにContinuumのサンドボックス攻撃コード検証の手立てを、競合するベンダー領域へ一般化したものだ。ただし関係しているのは勢いと隣接であって、到達点ではない。デモナイトはあくまで会場の壇上での実証であって、防御側の攻撃コード検証パイプラインが名指しのコードセキュリティ各社にわたって業界標準になる動きではない。しかもここでの攻撃側ペネトレーションテストという枠組みは、本予測が指す防御側の攻撃証明ゲートではなく、攻撃者向けのツールを指している。",
+      "reference_links": [
+        {
+          "label": "AI Engineer World's Fair 2026 (June 29-July 2, San Francisco)",
+          "url": "https://www.ai.engineer/worldsfair/2026"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "数日後、Offensive Security Demo Nightが、偵察を連ねて実際に動く攻撃コードを組み立て、それを実行して到達可能性を証明する自律エージェントを壇上に上げる。これは本持論が評価する「実際に動かして発見を証明する」能力であり、Continuumのサンドボックス攻撃コード検証の手立てを、8月のBlack Hatの時期に先立って競合するベンダー領域へ一般化するものだ。",
+        "coherence": 3,
+        "remaining_gap": "デモナイトはあくまで会場の壇上での実証であって、防御側の攻撃コード検証ゲートが名指しのコードセキュリティ各社にわたって業界標準になる動きではない。ここでの枠組みは攻撃側のツールである。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.52add1fe9732a4ff",
+        "short_label": "Automaker-built humanoid programs add a second high-volume entrant by Q2 2027",
+        "prediction_date": "2026-06-07"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "[REVIVED] 本日のHyundaiとSoftBankの買収は、2028年からHyundai自社の工場群に約25,000台のAtlasヒューマノイドを展開する計画に結びつくと報じられており、垂直統合された自動車メーカーが自社のモーター・電池・サプライチェーンの土台の上に大量導入のヒューマノイドの取り組みを擁するという、この休眠中の持論への直接の裏づけである。Boston Dynamicsを~$3.37B相当の評価で完全所有化し、社内導入のロードマップをめぐる少数株主との摩擦を取り除くことで、Hyundaiはまさに、TeslaやBYDと並んで本予測が見込んでいた、自動車メーカーを軸とし自社フリートで運用するヒューマノイドの参入者として位置づけられる。一致は構造的な主張については強いが、反証可能な基準については部分的である。このニュースは所有の統合と表明された2028年の台数目標であって、本予測が要求する、別個の第二の自動車メーカーによる、動作するプロトタイプと量産コスト低減の公的な経営陣の開示ではなく、HyundaiとBoston Dynamicsは新たな第二の参入者ではなく既存の取り組みである。",
+      "reference_links": [
+        {
+          "label": "KED Global - Hyundai to take full ownership of Boston Dynamics in SoftBank buyout",
+          "url": "https://www.kedglobal.com/robotics/newsView/ked202606210001"
+        },
+        {
+          "label": "Global Banking & Finance Review - Hyundai to buy SoftBank's remaining stake in Boston Dynamics for $325 million",
+          "url": "https://www.globalbankingandfinance.com/hyundai-buy-softbanks-remaining-stake-boston-dynamics-325/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Hyundaiは、2028年から自社工場群で約25,000台のAtlasを運用するためにこそ、Boston Dynamicsを完全所有化しようとしている。これは垂直統合された自動車メーカーが、サプライチェーンとバランスシートの重みを大量導入の社内ヒューマノイドの取り組みに投じるものであり、本持論が増えていくと述べる、自動車メーカーを軸とした導入の型そのものである。",
+        "coherence": 4,
+        "remaining_gap": "これは既存の取り組みを統合するものであって、本予測の基準が要求する、動作するプロトタイプと量産コスト低減の目標を公的に示した新たな第二の参入者の開示ではない。"
+      }
+    }
+  ]
+}

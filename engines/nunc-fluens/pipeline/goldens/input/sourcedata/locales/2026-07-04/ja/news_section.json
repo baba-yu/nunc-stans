@@ -1,0 +1,66 @@
+{
+  "date": "2026-07-04",
+  "sections": [
+    {
+      "category": "Meituan が LongCat-2.0 をオープンソース化。中国製 ASIC 上でエンドツーエンドに学習した 1.6 兆パラメータのエージェント型コーディング MoE で、SWE-bench Pro で GPT-5.5 をわずかに上回る",
+      "bullets": [
+        {
+          "body": "Meituan は 2026 年 6 月 30 日、<a href=\"https://venturebeat.com/technology/meituan-open-sources-longcat-2-0-the-1-6t-near-frontier-agentic-coding-model-thats-been-leading-openrouter-trained-entirely-on-chinese-chips\">LongCat-2.0</a> を公開しました。1.6 兆パラメータの mixture-of-experts モデルで、トークンあたり約 48B パラメータが活性化し、ネイティブで 100 万トークンのコンテキストウィンドウを備え、寛容な MIT ライセンスのもとで GitHub、Hugging Face、および自社プラットフォームに公開されました。目を引く構造上の主張は学習スタックにあります。このモデルは 5 万台を超える中国製 ASIC のクラスタ上で、NVIDIA GPU を一切介さずにエンドツーエンドで構築・提供されました。Meituan はこれを、近フロンティア級のエージェント型モデルが米国の輸出規制下にあるシリコンなしでいまや作れることの証しと位置づけています。<a href=\"https://www.opensourceforu.com/2026/06/meituan-open-sources-longcat-2-0-under-mit-license/\">Open Source For You</a> によります。コーディングでは SWE-bench Pro で 59.5 を記録し、GPT-5.5 の 58.6 をわずかに上回ります。さらに、実際の開発セッションを占める長コンテキストのエージェント型ワークロードに合わせて調整した LongCat Sparse Attention の仕組みを導入しています。このモデルは突如現れた新参ではありません。およそ 2 か月にわたり匿名の「Owl Alpha」チェックポイントとして OpenRouter の世界トップ 3 にランクインしており、Meituan が名前と生産国を明かす前に、開発者はその実力を評価していました。自己ホスト型のオープンウェイトを標準に据えようとするチームにとって、LongCat-2.0 は、Qwen、DeepSeek、先週の Mistral 3 といったスパース MoE の一族と並んで、規模帯の最上位に位置する信頼できる MIT ライセンスの選択肢として登場します。計算資源の輸出規制の筋を追う人にとってより鋭いシグナルは、オープンウェイトのフロンティアがもはや米国製アクセラレータへのアクセスに縛られていないということです。",
+          "citations": [
+            {"label": "VentureBeat - Meituan open sources LongCat-2.0, trained entirely on Chinese chips", "url": "https://venturebeat.com/technology/meituan-open-sources-longcat-2-0-the-1-6t-near-frontier-agentic-coding-model-thats-been-leading-openrouter-trained-entirely-on-chinese-chips"},
+            {"label": "Open Source For You - Meituan Open Sources LongCat-2.0 Under MIT License", "url": "https://www.opensourceforu.com/2026/06/meituan-open-sources-longcat-2-0-under-mit-license/"}
+          ]
+        }
+      ]
+    },
+    {
+      "category": "Cato AI Labs が Cursor に CVSS 9.8 のゼロクリック・サンドボックス脱出の欠陥を 2 件公表し、エージェントツールの RCE の攻撃対象領域を、ローコード構築ツールから主流のコーディング IDE へと移す",
+      "bullets": [
+        {
+          "body": "Cato AI Labs は、AI コーディング IDE の Cursor に存在する重大なリモートコード実行の欠陥 2 件を公表しました。2026 年 7 月 1 日に公開され、<a href=\"https://thehackernews.com/2026/07/critical-cursor-flaws-could-let-prompt.html\">The Hacker News</a> が伝えています。いずれの不具合も、外部コンテンツがプロンプトインジェクションを武器化し、ユーザーのクリックなしに完全なサンドボックス脱出へと持ち込めるものです。<a href=\"https://nvd.nist.gov/vuln/detail/CVE-2026-50548\">CVE-2026-50548</a>（CVSS 9.8、CWE-22 のパストラバーサル）は、任意指定の working_directory パラメータを悪用し、悪意あるエージェントが意図したワークスペースの外に任意のファイルを書き込めるようにします。一方 <a href=\"https://nvd.nist.gov/vuln/detail/CVE-2026-50549\">CVE-2026-50549</a>（同じく CVSS 9.8）は、シンボリックリンク解決のフォールバックを悪用し、書き込みをプロジェクトの境界の外へ着地させます。いずれも Cursor 3.0 で修正済みです。攻撃の経路は、セキュリティチームが今週ずっと警告してきたのと同じパターンですが、狙いはまったく異なります。Flowise や Langflow のようなニッチなローコードのエージェント構築ツールではなく、開発者が信頼できないリポジトリ、Web 検索結果、MCP サーバーに対して日々動かす、主流のエディタを直撃します。引き金になるのはエージェントが取り込むように設計されているコンテンツそのものであるため、汚染された README、Web ページ、ツールの応答が、承認プロンプトなしにコマンド実行を引き起こせます。実務上の対応は待ったなしです。旧バージョンは既定で悪用可能なままなので、すべての Cursor のインストールが 3.0 以降であることを確認してください。最近の Flowise と Langflow の公表と通底する筋は、エージェントスタックが攻撃者の制御下にあるテキストをシェルアクセスへと変え続けるのは、モデルではなくツール実行の境界だ、ということです。",
+          "citations": [
+            {"label": "The Hacker News - Critical Cursor Flaws Could Let Prompt Injection Escape Sandbox", "url": "https://thehackernews.com/2026/07/critical-cursor-flaws-could-let-prompt.html"},
+            {"label": "NVD - CVE-2026-50548 Detail", "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-50548"},
+            {"label": "NVD - CVE-2026-50549 Detail", "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-50549"}
+          ]
+        }
+      ]
+    },
+    {
+      "category": "Anthropic が Claude Enterprise に支出上限と分析機能を出荷し、Fable 5 のサイバー・ジェイルブレイク向けに HackerOne のバウンティを開設。最上位モデルへのアクセスを開示体制と結び付ける",
+      "bullets": [
+        {
+          "body": "今週の Fable 5 の世界的な復旧に続き、Anthropic は 2026 年 7 月 3 日、先月の政府との取り決めを具体的な製品へと転換する二つの動きを見せました。<a href=\"https://www.buildfastwithai.com/blogs/ai-news-today-july-4-2026\">7 月 4 日のニュースまとめ</a>によります。第一に、Claude Enterprise が、暴走しがちなエージェントのトークン請求に真正面から狙いを定めた管理者向けのコスト統制機能を得ました。組織・チーム・部門の各単位での支出上限、ユーザーやグループごとのモデル単位のアクセス権、エクスポートと Analytics API を備えた利用分析ダッシュボード、エージェントの労力の制御、そしてリアルタイムの支出アラートです。この機能は、企業における「tokenmaxxing」に対する明確な対抗策として位置づけられ、購入者が年間の AI 予算を数か月で使い果たす事例を引き合いに出しています。これは、コーディングエージェントのトークン支出が開発者の給与に匹敵しかねないという Gartner の警告への直接の答えでもあります。第二に、Anthropic は Fable 5 のサイバー・ジェイルブレイク回避に絞った正式な HackerOne のバグバウンティプログラムを立ち上げ、敵対的な研究ではなく体系立った責任ある開示の経路を作りました。あわせて、AWS、Microsoft、Google と共同開発した初期草案のジェイルブレイク重大度の枠組みも組み合わせており、これは攻撃の到達しやすさと被害の可能性でインシデントを採点します。合わさった効果として、Anthropic の最上位モデルへのアクセスは、いまやエージェントを大規模に展開するために企業が必要とするコスト統制の機構と、政府による復旧の取り決めが求めた開示の機構の両方をひとまとまりで伴います。すでに本番で Claude を運用しているチームにとって、当面の一手は、エージェントのワークロードを拡大する前に支出上限とモデルのアクセス権を組み込むことです。",
+          "citations": [
+            {"label": "Build Fast with AI - AI News Today July 4 2026", "url": "https://www.buildfastwithai.com/blogs/ai-news-today-july-4-2026"}
+          ]
+        }
+      ]
+    },
+    {
+      "category": "Crunchbase の 2026 年上半期の集計が、世界のベンチャー投資を過去最高の $510B と示し、そのうち OpenAI と Anthropic の 2 社だけで 43% を占める。AI 資本がどこまで集中したかを数値で裏付ける",
+      "bullets": [
+        {
+          "body": "Crunchbase は 2026 年上半期の資金調達分析を公開し、世界のスタートアップ投資が過去最高の $510B に達したことを示しました。これはすでに 2025 年通年で投じられた $440B を上回り、半期として観測史上の最高値を記録しています。<a href=\"https://news.crunchbase.com/venture/global-startup-exits-ipo-ma-soar-ai-q2-h1-2026/\">Crunchbase News</a> によります。際立つのは集中の数字です。OpenAI と Anthropic の合計で $217B、すなわち上半期のベンチャー資金全体の 43% を占め、2 社が世界のスタートアップ資金のおよそ半分を吸収したことになります。四半期の内訳は Q1 が $305B（単一四半期として過去最大）、Q2 が 5,000 社超のスタートアップにわたって $205B で、イグジットも勢いを取り戻しました。Q2 だけで 32 社のベンチャー支援企業が $1B 超の評価額で上場しています。この報告は、Menlo Ventures が Anthropic 株の持ち分を背景に自社史上最大の $3B の調達を完了したのと同じ週に到来しました。あわせて、OpenAI が計画中の株式公開を前に、米政府におよそ 5% の出資枠を与えることを打診したとの報道も出ています。いずれも、資本を先細りするフロンティアラボの集団へ流し込む市場と符合します。AI セクターの資金調達の構図を読む人にとって、注視すべきデータ点は、同じ集団が私募のメガラウンドから IPO へと移るにつれ、その集中がどこまで持続するかです。構造的な読み筋は、AI がもはやベンチャーの一つのテーマではなく、2026 年上半期にはその大半だった、ということです。",
+          "citations": [
+            {"label": "Crunchbase News - Global Startup Investment Hit Record $510B In H1 2026", "url": "https://news.crunchbase.com/venture/global-startup-exits-ipo-ma-soar-ai-q2-h1-2026/"}
+          ]
+        }
+      ]
+    },
+    {
+      "category": "いま計画に組み込むべき AI イベント。AMD の 7 月 22〜23 日の MI400 披露が最も近い起爆剤で、その後ろに 8 月上旬のセキュリティ・ラスベガスの集まりと、秋のチップ・開発スタックが控える",
+      "bullets": [
+        {
+          "body": "最も近い AI チップの起爆剤は、依然としてサンフランシスコの Moscone で 7 月 22〜23 日に開かれる AMD の Advancing AI 2026 で、MI400 シリーズと「Helios」ラックスケールシステムが提供時期とともに見込まれています。ハードウェアのトラックのさらに先では、<a href=\"https://hotchips.org/about/\">Hot Chips 2026</a> がスタンフォードの Memorial Auditorium で 8 月 23〜25 日に開かれ、<a href=\"https://www.ai-infra-summit.com/agenda\">AI Infra Summit</a> がサンタクララで 9 月 15〜17 日に、コンピュート・AI データセンター・フィジカル AI を議題として続きます。AI セキュリティの枠は 8 月上旬から中旬に集まります。SecurityWeek の <a href=\"https://www.airisksummit.com/agenda\">AI Risk Summit</a> は Half Moon Bay の Ritz-Carlton で 8 月 11〜12 日に開かれ、Black Hat USA と DEF CON 34 の AI Village が 8 月上旬にラスベガスで、OWASP Global AppSec USA がサンフランシスコで 11 月 5〜6 日に続きます。Zenity の AI Agent Security Summit シリーズは、エージェントの乗っ取りと MCP レイヤーの防御に取り組むチーム向けに世界各地での開催を続けており、今週の Cursor のサンドボックス脱出の CVE を踏まえれば直接に関わりがあります。計画者にとって新たにカレンダーに加わったものとして、企業 AI のリーダーが集う最大の催しとされる <a href=\"https://ai4.io/\">Ai4 2026</a> が 8 月 4〜6 日にラスベガスで、ACM AI Leadership Summit が 8 月 30 日〜9 月 2 日にアトランタで予定されています。主流の開発・データのトラックでは、GitHub Universe が 10 月 28〜29 日、AWS re:Invent が 11 月 30 日〜12 月 4 日にラスベガスで開かれます。最も近い二つの行動は、7 月 22 日の AMD 基調講演と 8 月 11〜12 日の AI Risk Summit への登録です。いずれも、AMD の披露とあわせて、安全なアクセラレータや秘匿推論の発表にふさわしい場です。",
+          "citations": [
+            {"label": "Hot Chips 2026", "url": "https://hotchips.org/about/"},
+            {"label": "AI Infra Summit 2026", "url": "https://www.ai-infra-summit.com/agenda"},
+            {"label": "SecurityWeek AI Risk Summit 2026 (Aug 11-12, Half Moon Bay)", "url": "https://www.airisksummit.com/agenda"},
+            {"label": "Ai4 2026 (Aug 4-6, Las Vegas)", "url": "https://ai4.io/"}
+          ]
+        }
+      ]
+    }
+  ]
+}

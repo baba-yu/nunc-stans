@@ -1,0 +1,21 @@
+{
+  "date": "2026-06-22",
+  "vs_date": "2026-06-21",
+  "items": [
+    {
+      "kind": "new",
+      "headline": "Hyundai 取締役会、SoftBank の最後の Boston Dynamics 株買い取りを採決へ",
+      "diff_narrative": "6月21日に対応するものがない純然たる新規リードで、昨日 AWS Summit NYC のエージェント統制スタック（Context、Continuum、AgentCore Guardrails）が占めていた首位を取る。その AWS の話題は、OpenAI の有益特性 RL と LifeSciBench のリードとともに前の期間のものであり、再掲しない。新たな契機は予定されたイベントだ。Hyundai Motor は本日6月22日に取締役会を開き、SoftBank Group が持つ Boston Dynamics の残り9.65%を約$325Mで買い取ることを承認する見通しで、これにより Waltham のロボティクス企業は完全子会社になる。SoftBank の退出は、2021年の取引で得たプットオプションによるもので、Boston Dynamics が2026年6月までに米国 IPO を完了しなければ残りの株式を売り戻せる権利だ。上場がないため、行使すると Hyundai に通知した。買い取りが浮かび上がらせる新たな事実は評価額だ。9.65%で$325Mということは企業価値はおよそ$3.37Bとなり、Hyundai 当初の2021年の取引時の約$1.1B（80%に対して約$880M）の3倍を超える。デモから有償の工場作業へと進むヒューマノイドプラットフォームの、具体的な再評価だ。韓国の経済紙は、この統合を2028年から自社各工場に Atlas ヒューマノイドを約25,000台導入する Hyundai の計画と、将来の IPO への道を開くことに結びつけている。取引条件、25,000台という数字、そして採決そのものは報じられたもので、Hyundai や SoftBank はまだ確認していない。"
+    },
+    {
+      "kind": "continuing",
+      "headline": "ベイエリア/SV の AI イベントカレンダーが前進する",
+      "diff_narrative": "先々を見据えた3トラックのイベント項目が6月21日から引き継がれ、カレンダーは進み、まだ終了日を過ぎたものはないため、この回で落ちた項目はない。最も近い起点はいまや Confidential Computing Summit で、わずか1日後の6月23-24日にサンフランシスコの Mint で開催される（Linux Foundation と OPAQUE、AMD、Google、Microsoft、NVIDIA、Meta、Samsung の名が挙がる）。続いて Snowflake のバーチャル Dev Day と、XBOW がスポンサーの AI Tinkerers Offensive Security Demo Night（ともに6月25日）、そして AI Engineer World's Fair（6月29日-7月2日、任意の6月28日オリエンテーション、Cerebral Valley のハッカソンは6月27-28日）。さらに先のカレンダーは変わらない。AMD Advancing AI（7月22-23日、基調講演は7月23日）、Black Hat USA の AI Summit（8月1-6日）、SecurityWeek の AI Risk Summit（8月11-12日）、Hot Chips（8月23-25日）、AI Infra Summit（9月15-17日）、GitHub Universe（10月28-29日）、OWASP Global AppSec USA（11月5-6日）、AWS re:Invent（11月30日-12月4日）。Zenity の AI Agent Security Summit シリーズは引き続き注視対象で、3つのサブトラックはいずれもカバーされ続けている。"
+    },
+    {
+      "kind": "updated",
+      "headline": "予測セットが自社内製ヒューマノイドフリート、TEE-I/O 機密推論、自律ペンテストの商用化へ切り替わる",
+      "diff_narrative": "3つの予測はいずれも純然たる新規で、6月21日のセットは退く。昨日の予測（AWS Continuum のサンドボックス攻撃検証が業界標準になり、3つ以上の名のある AI コードセキュリティベンダーが H1 2027 までに自動の実証攻撃を出荷すること、フロンティアラボが H1 2027 までに頑健性の向上に結びついた有益特性または人格レベルの RL ポストトレーニング段階を文書化すること、名のあるライフサイエンスエージェントが H2 2027 までに LifeSciBench の成果物とテキストの差を10ポイント未満に縮めること）は、それぞれの元となった話題（Continuum、OpenAI の有益特性 RL の成果、GPT-Rosalind の LifeSciBench の崖）とともにすべて落ちる。本日の3つは新しいリードとイベントカレンダーを追う。Hyundai/Boston Dynamics の買い取りから、H1 2028 までに検証された有償ヒューマノイド生産フリートの最大が、第三者向けロボット・アズ・ア・サービス契約ではなく、オーナー兼メーカーが運用する自社内製の導入（Hyundai/Atlas が先頭）になること。Confidential Computing Summit から、Q1 2027 までに主要ハイパースケーラーが、ホスト CPU と GPU の間のエンドツーエンドの TEE-I/O と検証可能なリモート構成証明を備えた、フロンティア級モデル向けの機密推論を一般提供すること。そして XBOW の Offensive Security Demo Night と Black Hat の期間から、Q1 2027 までに自律ペンテストベンダーが、名のある企業または政府の導入か、検証済みで再現可能な攻撃連鎖のベンチマークを公に文書化すること。"
+    }
+  ]
+}

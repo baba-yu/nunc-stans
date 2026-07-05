@@ -1,0 +1,26 @@
+{
+  "prediction.5e0beac647793331": {
+    "support_dimension": "landing",
+    "narrative": "Today's roundup still names the MI400 series and the Helios rack-scale system as the marquee second-half catalyst, but it rolls the nearest stage forward to the July 6-10 Geneva sessions rather than the Advancing AI keynote. The memory-bandwidth-over-FLOPS marketing posture has no confirmed near-term venue and no delivered framing, so the anticipated headline-spec choice stays a calendar mention, not evidence.",
+    "coherence": 2,
+    "remaining_gap": "Needs a confirmed Advancing AI slot and actual MI400 launch messaging that foregrounds memory bandwidth over peak FLOPS."
+  },
+  "prediction.d7abb993513f7449": {
+    "support_dimension": "because",
+    "narrative": "Keller's June 30 denial of the Qualcomm buyout, reiterated into July 3, keeps Tenstorrent mid-stride on an IPO bridge and confidential S-1 track, with the Galaxy roadmap and IP-licensing model independent. Choosing a public offering over a sale as acquisition appetite rises is the force sustaining the anchor-S-1 mechanism, though only at the intent-and-track level rather than a landed filing.",
+    "coherence": 3,
+    "remaining_gap": "Needs a public, non-confidential S-1 actually filed as the first of the comparable AI-chip set, not a reaffirmed confidential track."
+  },
+  "prediction.d15f8427132cce7b": {
+    "support_dimension": "given",
+    "narrative": "Together's $800 million Series C came with lead investor Prosperity7 framing the company as headed for public markets, which the reporting calls the same IPO gravity pulling on the frontier labs, alongside a 2.5x step-up and a footprint private syndicates stop underwriting. That is the private-mega-round-to-public-liquidity condition this thesis leans on, surfacing one layer below the labs.",
+    "coherence": 2,
+    "remaining_gap": "Needs a frontier lab, not a neocloud, filing a public non-confidential S-1 with a stated price range."
+  },
+  "prediction.82599b6cfd05751b": {
+    "support_dimension": "because",
+    "narrative": "Ollama 0.31 turned on multi-token prediction for Gemma 4 by default and generates tokens 90% faster on a coding benchmark with unchanged output, plus a kernel making its largest matmuls 2x-2.5x faster on an M5 Max. Because coding agents call the model continuously over predictable code, accepted drafts compound, narrowing the on-device-versus-hosted gap driving local agents to undercut cloud APIs.",
+    "coherence": 3,
+    "remaining_gap": "Needs a measured share of developers actually switching off cloud-only APIs, not a throughput gain for one model family."
+  }
+}

@@ -1,0 +1,123 @@
+{
+  "date": "2026-06-26",
+  "verifications": [
+    {
+      "topic": "LLM Workflow",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "Neither bullet is an agent/workflow/pipeline orchestration platform; the only workflow-platform signal in window was the Flowise/Langflow MCP RCE cluster, which the writer correctly routes to AI Security/CVE rather than a Workflow product state-change."
+    },
+    {
+      "topic": "Multi-profiling for Local LLM (e.g. Multica)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "News-driven-only topic; no bullet references Multica or any sibling multi-profiling activity, so searched=true/hits=0/no-bullet is the expected alignment."
+    },
+    {
+      "topic": "Agent Harness (OpenClaw, NemoClaw, Hermes Agents, etc.)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No bullet is a coding agent / agentic IDE / autonomous dev-tool state-change; the June 23 OpenClaw/NemoClaw/Hermes hardening throughline sits in the prior-3-day digest with no fresh June 24-26 release, matching the writer's report."
+    },
+    {
+      "topic": "Platform for Local LLM (vLLM, SGLang, etc.)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "Neither bullet is an inference-engine / serving-stack release; the writer reports no fresh June 24-26 vLLM/SGLang/TGI state-change, which aligns."
+    },
+    {
+      "topic": "Ecosystems for Local LLM Embedded System (Foundry Local, etc.)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No edge / on-device LLM runtime or NPU-SDK artifact appears in either bullet; the writer's report of only comparison content in window is consistent with no coverage."
+    },
+    {
+      "topic": "Local LLM Models",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No open-weight model release / model card belongs to either bullet; the nearest releases are all outside the June 24-26 window, matching the writer's drop under ADR-002 Rule 2."
+    },
+    {
+      "topic": "Local LLM Optimization, Fine-tuning (Unsloth — every run)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "Mandatory Unsloth search was performed (searched=true) with no fresh June 24-26 artifact to promote; per the constant-coverage rule this is a consistent searched-nothing-to-promote outcome, not an overreport."
+    },
+    {
+      "topic": "Ecosystems for LLM on PaaS (AWS Bedrock, Azure AI Foundry, etc.)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "Neither bullet is a managed-inference / hosted-LLM-API announcement; the writer reports searched=true/hits=0 with no Bedrock/Azure/Vertex/sibling state-change in window, which aligns."
+    },
+    {
+      "topic": "AI Security",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "Maximum-severity RCE lands in the ML feature-store layer: Feast registry server ships unauthenticated remote code execution"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "The Feast CVE-2026-56121 bullet is squarely AI-security news (unauthenticated RCE in the ML feature-store data plane, an unsafe-deserialization / supply-chain primitive), and the writer reports this topic promoted_to_bullet=true."
+    },
+    {
+      "topic": "CVE update on score ≥ 8.0",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "Maximum-severity RCE lands in the ML feature-store layer: Feast registry server ships unauthenticated remote code execution"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "CVE-2026-56121 is rated CVSS 9.3 (v4.0) / 9.8 (v3.1), well above the 8.0 threshold, and is the center of the Feast bullet; the writer reports this topic promoted_to_bullet=true."
+    },
+    {
+      "topic": "Hardware",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No AI-accelerator / chip / data-center-hardware state-change anchors a bullet; AMD Advancing AI / MI400 appears only as an upcoming item inside the events bullet, not as a Hardware state-change, matching the writer's report."
+    },
+    {
+      "topic": "Physical AI",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No robotics / embodied-AI artifact belongs to either bullet; the writer reports the prior digest's robotics items with no fresh June 24-26 ship/order/benchmark, which aligns."
+    },
+    {
+      "topic": "LLM-related research and papers",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "Neither bullet is a standout arxiv / research-paper artifact; the writer reports nothing rising to a bullet in window, which is consistent."
+    },
+    {
+      "topic": "Stock prices and corporate activity",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No financial / M&A / funding / analyst-action state-change appears in either bullet; the writer reports all relevant items outside the June 24-26 window, which aligns."
+    },
+    {
+      "topic": "Bay Area / SV AI meet-up events",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "AI events to plan around now: AI Engineer World's Fair opens this weekend, with the chip and security calendar running through the summer"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "The events bullet is a forward-looking, user-attendable AI events calendar covering all three mandated sub-tracks (mainstream dev, AI-security, AI-chip); under the carry-forward exception this is covered/consistent even with no fresh state-change, and the writer reports promoted_to_bullet=true."
+    },
+    {
+      "topic": "Other standing-out topics",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No standout topic outside the enumerated categories appears in either bullet; the writer reports none in window, which aligns."
+    }
+  ]
+}

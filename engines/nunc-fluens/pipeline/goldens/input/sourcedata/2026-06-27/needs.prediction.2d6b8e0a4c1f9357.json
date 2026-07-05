@@ -1,0 +1,30 @@
+[
+  {
+    "actor": "agent-platform security product manager",
+    "job": "Driving a deny-by-default per-tenant authorization layer into the orchestration plane so flows authenticate and authorize before execution in a named release.",
+    "outcome": "A named release ships per-tenant flow-/object-level authz as default-on, closing cross-tenant IDOR gaps without any opt-in flag.",
+    "motivation": "Live-exploited CVSS 9.9 cross-tenant IDOR in Langflow proves the orchestration layer ships insecure-by-default and threatens enterprise trust.",
+    "task": {
+      "who": "the platform security and authorization engineering sub-team",
+      "what": "Add deny-by-default per-tenant authorization checks before flow execution",
+      "where": "in the agent-orchestration runtime's flow-resolution and execution path",
+      "when": "from now through the Q2 2027 runway",
+      "why": "to close cross-tenant IDOR gaps proven by live exploitation",
+      "how": "owner-scoped authz middleware enforced on every flow resolution"
+    }
+  },
+  {
+    "actor": "agentic platform networking/egress engineer",
+    "job": "Building default outbound-egress allowlisting with SSRF-hardened tool-call and web-request blocks so outbound requests are gated before leaving the runner.",
+    "outcome": "A named release defaults to egress allowlisting with SSRF-resistant URL parsing, blocking internal-IP fetches from agent tool calls by default.",
+    "motivation": "AutoGPT's CVSS 8.5 SSRF bypass shows arbitrary-URL fetch blocks are SSRF surfaces unless egress is locked down by construction.",
+    "task": {
+      "who": "the runner sandbox and networking engineering sub-team",
+      "what": "Ship default-on egress allowlist and SSRF-safe URL validation",
+      "where": "in the agent runner's tool-call and web-request execution layer",
+      "when": "during the runway between mid-2026 and Q2 2027",
+      "why": "to stop internal-IP SSRF via arbitrary-URL fetch primitives",
+      "how": "allowlist gate plus canonical IPv6-aware IP filtering"
+    }
+  }
+]

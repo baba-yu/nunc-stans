@@ -1,0 +1,6 @@
+{
+  "support_dimension": "because",
+  "narrative": "Feast's CVE-2026-56121 is the precipitating first instance: a CVSS 9.3 unauthenticated RCE where the gRPC registry hands a base64-decoded feature-view body to dill.loads() before any auth check. That confirms the thesis premise that the ML attack surface has dropped into the data-and-metadata plane, where any registry trusting serialized objects on the wire is a code-execution endpoint.",
+  "coherence": 4,
+  "remaining_gap": "Needs a second, distinct named project to draw its own CVSS >=9.0 deserialization CVE on an ML registry or feature-store endpoint; today supplies only the first instance."
+}

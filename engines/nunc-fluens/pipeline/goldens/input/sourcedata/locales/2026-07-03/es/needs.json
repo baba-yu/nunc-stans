@@ -1,0 +1,137 @@
+{
+  "date": "2026-07-03",
+  "by_prediction": {
+    "prediction.0cbb02dafcbc3e36": [
+      {
+        "actor": "mantenedor del núcleo de un framework de agentes",
+        "job": "rediseñar los valores por defecto del transporte MCP para que las configuraciones importadas pasen por un canal aislado en lugar de generar un proceso hijo stdio sin sandbox",
+        "outcome": "versión del framework publicada donde la ejecución MCP por stdio es opt-in tras una solicitud de confianza o un sandbox, con aislamiento tipo SSE como valor por defecto de fábrica",
+        "motivation": "la PoC de la RCE de Flowise más una elusión de parche demostrada prueban que stdio es un riesgo estructural que un simple salto de versión no puede solucionar",
+        "task": {
+          "who": "mantenedores de transporte y de respuesta de seguridad",
+          "what": "condicionar la ejecución MCP por stdio a una solicitud de confianza o un sandbox",
+          "where": "capa de transporte del cliente MCP y ruta de importación de configuración",
+          "when": "julio de 2026 a Q1 2027",
+          "why": "impedir que un archivo de configuración se convierta silenciosamente en acceso a shell",
+          "how": "SSE o un transporte igualmente aislado por defecto"
+        }
+      },
+      {
+        "actor": "coordinador del aviso de seguridad de la cadena de suministro de MCP",
+        "job": "documentar el patrón compartido de comando-no-validado-a-subproceso en LiteLLM, Agent Zero, LangBot, Windsurf y afines, y emitir una guía de fortalecimiento convergente",
+        "outcome": "aviso coordinado que designa como palanca única de fortalecimiento el desactivar stdio en favor de SSE y tratar la configuración MCP importada como código no confiable",
+        "motivation": "la misma clase de exploit resistente a parches abarca muchas herramientas de agentes, así que las correcciones por proyecto necesitan una instrucción única entre frameworks sobre la que estandarizar",
+        "task": {
+          "who": "investigadores de coordinación de vulnerabilidades y divulgación",
+          "what": "publicar una guía convergente de fortalecimiento para desactivar stdio",
+          "where": "aviso coordinado multi-proveedor de la cadena de suministro de MCP",
+          "when": "junio de 2026 a Q4 2026",
+          "why": "dar a los mantenedores una palanca obvia contra el patrón compartido",
+          "how": "aviso entre frameworks que cita el patrón de inyección común"
+        }
+      },
+      {
+        "actor": "redactor del marco de estándares de modelos frontera",
+        "job": "ensamblar una línea base voluntaria de seguridad de agentes que convierta el exploit stdio vivo y resistente a parches en el caso de prueba concreto en torno al cual se escriben las primeras normas",
+        "outcome": "marco de estándares voluntario que cita el transporte MCP aislado como una expectativa base de fortalecimiento para los frameworks de agentes conformes",
+        "motivation": "una clase de exploit activa que llega mientras se redactan las normas da a la línea base un requisito de fortalecimiento ya hecho y defendible sobre el que anclarse",
+        "task": {
+          "who": "personal de política y estándares de modelos frontera de la Casa Blanca",
+          "what": "anclar la línea base de seguridad de agentes en el transporte MCP aislado",
+          "where": "publicación del marco voluntario de estándares de modelos frontera",
+          "when": "semana del 7 de julio de 2026 hacia el Q1 2027",
+          "why": "seguridad-impulsa-política: el exploit vivo se convierte en el caso de prueba de la norma",
+          "how": null
+        }
+      }
+    ],
+    "prediction.788b3c0d5220ead0": [
+      {
+        "actor": "responsable de formación de fondos y GP de una firma de capital riesgo",
+        "job": "estructurar la ronda cerrada de $3B en un vehículo dedicado a IA para absorber una posición ancla desmesurada en un laboratorio frontera",
+        "outcome": "un fondo de crecimiento/oportunidades de IA con nombre propio o una asignación de tesis de IA diferenciada, formalizado y empezando a desplegarse",
+        "motivation": "una sola participación de ~$14B empequeñece los tamaños de fondo previos y no puede alojarse dentro de un buque insignia generalista indiferenciado",
+        "task": {
+          "who": "socios gestores, CFO del fondo y asesoría de constitución",
+          "what": "levantar una estructura de fondo dedicada a IA",
+          "where": "redacción del LPA del fondo, reasignación de LP y documentos de cierre",
+          "when": "julio de 2026 hasta el Q1 2027",
+          "why": "absorber el riesgo de concentración de la posición ancla desmesurada",
+          "how": "vehículo de crecimiento/oportunidades con nombre propio o asignación de IA diferenciada"
+        }
+      },
+      {
+        "actor": "equipo de estrategia de capital y cómputo del laboratorio frontera anclado",
+        "job": "ejecutar ciclos de cómputo intensivos en capital y rondas de seguimiento que den a los inversores concentrados de etapa tardía una razón para formalizar un vehículo de IA",
+        "outcome": "oportunidades de financiación de seguimiento y de laboratorios adyacentes en las que el nuevo fondo de IA pueda desplegarse durante el plazo disponible",
+        "motivation": "el laboratorio necesita inversores capaces de respaldar el cómputo frontera a través del escrutinio regulatorio y de valoraciones al alza",
+        "task": {
+          "who": "funciones de finanzas, desarrollo corporativo y planificación de cómputo del laboratorio",
+          "what": "recaudar y estructurar financiación de seguimiento para cómputo frontera",
+          "where": "rondas de financiación de etapa tardía y negociaciones con socios de cómputo",
+          "when": "julio de 2026 hasta el Q1 2027",
+          "why": "asegurar inversores concentrados capaces de financiar ciclos de cómputo",
+          "how": "rondas de etapa tardía ligadas a compromisos de construcción de cómputo"
+        }
+      },
+      {
+        "actor": "órgano redactor de política y estándares de modelos frontera",
+        "job": "finalizar un marco de estándares y divulgación de modelos frontera que eleve la prima de los inversores capaces de respaldar el escrutinio regulatorio",
+        "outcome": "un marco de estándares publicado que favorece a los vehículos de IA concentrados y de etapa tardía frente a las carteras semilla de spray-and-pray",
+        "motivation": "acoplar el acceso al modelo puntero a un régimen de seguridad y divulgación fuerza el capital hacia inversores conformes de laboratorios frontera",
+        "task": {
+          "who": "grupo de trabajo ejecutivo de estándares y divulgación de modelos frontera",
+          "what": "publicar el marco de estándares y divulgación de modelos frontera",
+          "where": "publicación del marco de estándares de modelos frontera de la Casa Blanca",
+          "when": "semana del 7 de julio de 2026 hacia el Q1 2027",
+          "why": "elevar la prima de los respaldos conformes de laboratorios frontera",
+          "how": "régimen gubernamental de estándares de seguridad y divulgación"
+        }
+      }
+    ],
+    "prediction.f4118d6655c86297": [
+      {
+        "actor": "responsable de ML aplicado en empresa con datos propietarios etiquetados por expertos",
+        "job": "copiar la receta publicada para afinar una base MoE open-weight con sus etiquetas de dominio internas para un benchmark vertical objetivo",
+        "outcome": "un especialista MoE abierto afinado para el dominio que supera a una API frontera genérica en la tarea vertical de la firma a un coste por tarea menor",
+        "motivation": "poseer etiquetas propietarias más una receta reproducible hace que construir sea más barato y mejor que pagar las tarifas por tarea de una API frontera",
+        "task": {
+          "who": "equipo interno de ML aplicado / optimización de modelos",
+          "what": "afinar un MoE open-weight con etiquetas de dominio propietarias",
+          "where": "stack de entrenamiento interno contra un benchmark vertical",
+          "when": "julio de 2026 hasta el Q2 2027",
+          "why": "superar a las APIs frontera en el vertical con un descuento de coste",
+          "how": "receta de batching round-robin, pérdida CISPO y destilación on-policy"
+        }
+      },
+      {
+        "actor": "laboratorio de investigación de modelos open-weight que publica recetas de fine-tune reproducibles",
+        "job": "empaquetar recetas de entrenamiento y resultados de fine-tune con etiquetas de expertos en plantillas limpias que cualquier firma pueda copiar para su propio dominio",
+        "outcome": "más resultados publicados de fine-tunes MoE abiertos que superan a las APIs frontera en verticales específicos con grandes descuentos de coste",
+        "motivation": "demostrar victorias de receta-sobre-escala establece su plataforma y sus métodos como la vía de construcción por defecto para los especialistas de dominio",
+        "task": {
+          "who": "equipo de investigación post-entrenamiento y de ciencia aplicada",
+          "what": "publicar resultados de benchmark reproducibles de fine-tunes MoE abiertos",
+          "where": "papers, tarjetas de modelo y plataformas de entrenamiento alojadas",
+          "when": "los próximos meses hacia el Q2 2027",
+          "why": "probar que la receta de dominio supera genéricamente a la escala del modelo base",
+          "how": "destilación on-policy con un profesor promovido periódicamente"
+        }
+      },
+      {
+        "actor": "mantenedor de herramientas de optimización local para el fine-tuning open-weight",
+        "job": "productivizar las primitivas de la receta para que cualquier empresa dueña de un conjunto de datos pueda ejecutar fine-tunes de dominio de forma económica sin infraestructura a medida",
+        "outcome": "herramientas que convierten la copia de la plantilla round-robin/CISPO/destilación en una vía llave en mano para los dueños de conjuntos de datos de dominio",
+        "motivation": "el terreno de la optimización local crece a medida que más firmas afinan especialistas open-weight en lugar de comprar APIs frontera",
+        "task": {
+          "who": "equipo de ingeniería y experiencia de desarrollador de bibliotecas open-source",
+          "what": "publicar primitivas de fine-tuning eficientes para MoE open-weight",
+          "where": "bibliotecas de entrenamiento open-source y cadenas de herramientas de optimización",
+          "when": "julio de 2026 hasta el Q2 2027",
+          "why": "reducir la barrera al fine-tuning de dominio frente a las APIs frontera",
+          "how": "kernels y recetas de entrenamiento eficientes en memoria y coste"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,137 @@
+{
+  "date": "2026-06-23",
+  "by_prediction": {
+    "prediction.7c1a3f9b2e6d04a8": [
+      {
+        "actor": "engineering lead ng open-weight quantization toolkit",
+        "job": "Paglalabas ng nareproduce na sub-2-bit selective-precision GGUF recipes na nagpapakasya sa isang 700B-plus open-weight na modelo sa 256GB o mas kaunti pang single-node memory",
+        "outcome": "Isang inilathala, nareproduce na quantization recipe na nagpapatakbo ng frontier-class open-weight na modelo sa isang workstation node nang wala sa 256GB na pinagsamang memory",
+        "motivation": "Ang pagkakaroon ng tipikal na local-inference recipe para sa pinakamabigat na open na tier ay nagtutulak ng adopsyon at nagpapatibay sa toolkit bilang pamantayan sa on-prem",
+        "task": {
+          "who": "ang quantization at kernel engineering team ng toolkit",
+          "what": "Pinuhin ang selective sub-2-bit quant recipe at ilathala ito",
+          "where": "Dynamic GGUF build pipeline at public model-hub release",
+          "when": "Mula ngayon hanggang Q4 2026",
+          "why": "Isang nareproduce na recipe ang tumatawid sa pinakamabigat na tier tungo sa on-prem",
+          "how": "Selective-precision sub-2-bit GGUF quantization na may dokumentadong mga hakbang"
+        }
+      },
+      {
+        "actor": "independyenteng local-inference reproducer at benchmarker",
+        "job": "Independyenteng muling pagpapatakbo ng inilathalang recipe sa sariling hardware at pagsukat ng accuracy retention sa isang public benchmark sa halip na sa vendor self-report",
+        "outcome": "Isang third-party na reproduksyon na nagpapatunay sa sub-256GB single-node run na may nailathalang public-benchmark accuracy retention nang lantaran",
+        "motivation": "Ang mga numero ng compression at quality ng vendor ay self-reported at hindi napapatunayan, kaya ang kapani-paniwalang independyenteng kumpirmasyon ang pinagkakatiwalaan ng komunidad",
+        "task": {
+          "who": "isang independyenteng mananaliksik o local-LLM community benchmarker",
+          "what": "Reproduce ang run at ilathala ang mga accuracy-retention score",
+          "where": "Sariling single-node workstation at isang public benchmark harness",
+          "when": "Pagkatapos ng paglathala ng recipe hanggang Q4 2026",
+          "why": "Kailangan ng independyenteng beripikasyon ang mga self-reported na quality number para mapagkatiwalaan",
+          "how": "Public coding at reasoning benchmark sa quantized build"
+        }
+      },
+      {
+        "actor": "release lead ng frontier-class open-weight na modelo",
+        "job": "Paglalabas ng halos-frontier na 700B-plus mixture-of-experts open-weight na checkpoint at weights na maaaring i-compress at patakbuhin ng quantization recipe sa single-node",
+        "outcome": "Isang available na open-weight frontier-class na checkpoint na ang inilabas na weights ay nagpapagana ng sub-256GB single-node quantized deployment",
+        "motivation": "Ang mga open na release na napapatunayang tumatakbo sa sariling hardware ay nagtutulak ng abot sa ecosystem at naghihiwalay sa lab laban sa closed cloud-only frontier na karibal",
+        "task": {
+          "who": "ang open-weight release at model-publishing na function ng lab",
+          "what": "Ilathala nang lantaran ang full-precision frontier-class MoE weights",
+          "where": "Public model hub at ang mga release channel ng lab",
+          "when": "Bago at sa buong 2026 hanggang Q4",
+          "why": "Ang open weights ang hilaw na input na kailangan ng quantization recipe",
+          "how": "Open-weight checkpoint release sa isang karaniwang inference format"
+        }
+      }
+    ],
+    "prediction.7c1f4a9e3b6d20f8": [
+      {
+        "actor": "research lead ng agentic-security benchmark",
+        "job": "Paglalathala at pagpapanatili ng isang nababanggit na prompt-injection benchmark na may numerikong pass threshold na maaaring banggitin nang tahasan ng procurement sa isang kontrata",
+        "outcome": "Isang pinangalanang benchmark na may nakasaad na maximum injection-success rate na maaaring banggitin ng isang mamimili bilang isang pass/fail acceptance bar",
+        "motivation": "May saysay lamang ang isang benchmark kung gagamitin ito ng mga mamimili; ang isang procurement citation ang patunay na napagalaw nito ang merkado",
+        "task": {
+          "who": "ang adversarial-evaluation at methodology team ng benchmark",
+          "what": "Tukuyin at ilathala ang numerikong injection-success pass thresholds",
+          "where": "Isang academic-industry benchmark gaya ng results release ng StakeBench",
+          "when": "Mula sa 3,168-trial na release hanggang 2026 patungong unang bahagi ng 2027",
+          "why": "Ang isang nababanggit na numerikong bar ang nagpapahintulot sa mga mamimili na palitan ang vendor prose",
+          "how": "Standardized adversarial trial suite na may inilathalang success-rate scoring"
+        }
+      },
+      {
+        "actor": "standards owner ng enterprise o government agentic-AI procurement",
+        "job": "Muling pagsulat ng isang agentic-AI procurement gate upang humingi ng isang quantified na prompt-injection-resistance score sa halip na prosa ng vendor self-attestation",
+        "outcome": "Isang procurement gate, framework control, o certification na nagbabanggit ng isang numerikong maximum injection-success rate bilang pass/fail",
+        "motivation": "Ang isang serye ng insidente kasama ang isang benchmark ay nagpapawalang-bisa sa vendor self-attestation sa harap ng mga auditor at risk committee",
+        "task": {
+          "who": "ang procurement policy at security-architecture na function ng mamimili",
+          "what": "Isulat ang isang numerikong injection-resistance threshold sa gate",
+          "where": "Ang agentic-AI acquisition at certification framework ng organisasyon",
+          "when": "Sa buong 2026 hanggang Q2 2027 habang nahihinog ang mga benchmark",
+          "why": "Pinapalitan ng auditable na acceptance criteria ang hindi mapatunayang best-effort na pahayag",
+          "how": "Banggitin ang isang pinangalanang benchmark o maximum injection-success-rate cap"
+        }
+      },
+      {
+        "actor": "editor ng agentic-AI security framework",
+        "job": "Pag-uugnay ng dokumentadong mga prompt-injection CVE at breach report sa mga framework control upang maging isang nasusukat, certifiable na acceptance criterion ang panganib",
+        "outcome": "Isang framework control na nagsasalin ng serye ng insidente tungo sa isang quantified, auditable na injection-resistance requirement na maaaring gamitin ng mga mamimili",
+        "motivation": "Ang pag-uugnay ng mga panganib sa konkretong mga CVE at benchmark ay nagbibigay sa framework ng awtoridad na humingi ng mga numero, hindi mga pangako",
+        "task": {
+          "who": "ang agentic-AI governance working group ng standards body",
+          "what": "Iugnay ang mga prompt-injection na insidente sa isang quantified na control",
+          "where": "Isang OWASP-style na agentic-AI security governance framework",
+          "when": "Mula sa v2.01 release sa buong 2026 patungong Q2 2027",
+          "why": "Binibigyang-katwiran ng konkretong CVE evidence ang isang nasusukat na certification bar",
+          "how": "CVE-to-control mapping kasama ang mga binanggit na benchmark threshold"
+        }
+      }
+    ],
+    "prediction.a7f3c9d1e6b4280f": [
+      {
+        "actor": "security maintainer ng open coding-agent harness",
+        "job": "Pagbabaligtad sa default profile ng harness upang ang isang malinis na install ay tumanggi sa mga tool call, papalabas na network, at MCP credential maliban kung tahasang ibibigay ng isang operator",
+        "outcome": "Isang tagged stable release na ang changelog ay nagsasabing ang capability, network, at MCP-credential gating ay naka-enable bilang default sa isang malinis na install",
+        "motivation": "Lumapag ang hardening nang paunti-unti sa 2026.6.x habang nanatiling opt-in ang gating, kaya naiwang nakalantad ang mga malinis na install sa dokumentadong panganib ng injection",
+        "task": {
+          "who": "ang core security maintainers at release owners ng proyekto ng harness",
+          "what": "Gawing default execution profile na inilalabas ang least-privilege",
+          "where": "Ang default config at stable release branch ng harness",
+          "when": "Mula sa mga Hunyo 2026.6.x patch hanggang Q4 2026",
+          "why": "Naiiwang hindi protektado bilang default ang mga malinis na install ng opt-in gating",
+          "how": "Pagbaligtad sa default-deny config kasama ang update sa changelog at docs"
+        }
+      },
+      {
+        "actor": "may-akda ng agentic-security standards at benchmark",
+        "job": "Paglalathala ng nagtatagpong ebidensya na nag-uugnay sa mga kategorya ng panganib ng agent sa mga CVE at nagpapatunay na walang agent config na lumalaban sa prompt injection, na pumupwersa sa depensa tungo sa harness layer",
+        "outcome": "Awtoritatibong mga report at benchmark score na ginagawang inaasahang baseline ang least-privilege defaults para sa mga coding-agent harness",
+        "motivation": "Kung hindi makakalaban ang model layer sa injection, dapat dalhin ng harness layer ang depensa, at dapat ipakita nang lantaran ang kasong iyon",
+        "task": {
+          "who": "ang OWASP agentic working group at ang mga StakeBench benchmark researcher",
+          "what": "Ilathala ang CVE-linked na risk ranking at injection-resistance score",
+          "where": "2026 agentic report ng OWASP at mga resulta ng StakeBench",
+          "when": "Sa buong 2026 bago ang Q4 release window",
+          "why": "Pinipilit ng ebidensya ang mga maintainer na maglabas ng gating bilang default",
+          "how": "Indirect at direct prompt-injection test suite laban sa mga agent config"
+        }
+      },
+      {
+        "actor": "engineering team ng karibal na hardened-harness platform",
+        "job": "Paglalabas ng mas mahigpit na network-policy at MCP-credential-filtering defaults sa paligid ng kanilang sandbox upang ang isang karibal na harness ang unang maglabas ng default gating",
+        "outcome": "Isang kapareho ng direksyon na release na nagde-default sa network at credential gating, na nagpapatunay sa least-privilege-by-default sa buong kategorya ng harness",
+        "motivation": "Ang pagiging unang maglabas ng default least-privilege ay nagkakamit ng kredibilidad sa seguridad laban sa pinaghihinalaang unang gagalaw sa isang nagtatagpong larangan",
+        "task": {
+          "who": "ang engineering team ng NemoClaw at Hermes Agent na harness",
+          "what": "Default na i-enable ang network policy at MCP credential filtering",
+          "where": "OpenShell at Tirith pre-execution na sandbox layer",
+          "when": "Sa panahong inilaan ng 2026 patungong Q4 2026",
+          "why": "Ang unang maglabas ng default gating ang nakakakuha ng pamumuno sa seguridad",
+          "how": "SSRF protection kasama ang Tirith pre-execution scan bilang mga default"
+        }
+      }
+    ]
+  }
+}

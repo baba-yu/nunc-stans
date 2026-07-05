@@ -1,0 +1,54 @@
+{
+  "date": "2026-07-03",
+  "technical": [
+    {
+      "lead": "OpenAI が Codex Remote を、すべての有料 ChatGPT プランで GA に移行",
+      "body": "OpenAI は 2026 年 6 月 25 日、Codex Remote をプレビューから一般提供（GA）へ格上げし、長時間の実行になるコーディングセッションのスマートフォンからの操作を、すべての有料 ChatGPT プラン（Plus、Pro、Business、Enterprise、Education）に開放しました。追跡された<a href=\"https://releasebot.io/updates/openai/codex\">Codex のリリースログ</a>によるものです。ChatGPT のモバイルアプリから、開発者は接続済みの Mac または Windows ホスト上で作業を開始・継続し、進捗を見守り、個々の操作を遠隔で承認できます。今回のローンチは、従来のリモートシェル方式を、デバイスとホストを 1 対 1 で認証する QR ペアリングを備えた専用リレーへと置き換え、開発マシンを公開インターネットから切り離したまま到達可能に保っています。詳細は<a href=\"https://www.techtimes.com/articles/319201/20260627/openai-codex-remote-goes-live-all-plans-phone-control-now-secured-qr-relay.htm\">TechTimes の報道</a>にあります。同じ時期に Codex CLI 0.142.2 も出荷され、サーバーが対応していれば MCP のツール検索を既定にし、DigitalOcean Droplet のワークスペースプラグインを追加しました。この組み合わせは、コーディングエージェントのハーネスを、端末に縛られたものではなく、完全に非同期でどこからでも承認できるループへと押し進めます。",
+      "citations": [
+        {"label": "Releasebot - OpenAI Codex updates (Remote GA, CLI 0.142.2)", "url": "https://releasebot.io/updates/openai/codex"},
+        {"label": "TechTimes - OpenAI Codex Remote Goes Live for All Plans", "url": "https://www.techtimes.com/articles/319201/20260627/openai-codex-remote-goes-live-all-plans-phone-control-now-secured-qr-relay.htm"}
+      ]
+    },
+    {
+      "lead": "Anthropic が 99% 超のジェイルブレイク分類器とともに Fable 5 を世界的に復旧",
+      "body": "Anthropic は 2026 年 7 月 1 日、Fable 5 を世界的に復旧させました。米商務省が 6 月 30 日に、Amazon が発見したジェイルブレイクを受けておよそ 19 日間このモデルを停止させていた緊急輸出規制を解除した翌日のことです。<a href=\"https://www.buildfastwithai.com/blogs/ai-news-today-july-3-2026\">7 月 3 日のニュースまとめ</a>によります。このモデルは AWS、Google Cloud、Microsoft 上の Claude.ai、Claude Platform API、Claude Code、Claude Cowork で再び利用可能になり、Anthropic が言うところの当該ジェイルブレイクを 99% を超える有効性で遮断する新しい分類器を備えます。ただしその代償として、セキュリティに隣接する正当なコーディングの問い合わせの一部は Opus 4.8 に振り向けられます。復旧には 4 項目の政府との取り決めが伴いました。公開前のモデルアクセス、迅速な脅威インテリジェンスの共有、重要インフラへの参画、そしてジェイルブレイクのリスクスコアリング手法の共同開発です。これは Anthropic 最大の出資者にとっての節目と並んで起きています。<a href=\"https://menlovc.com/perspective/menlo-turns-50-and-announces-3b-in-fresh-capital-to-go-all-in-on-ai/\">Menlo Ventures</a> は、いまや約 $14B の価値を持つ Anthropic 株を背景に、自社史上最大の $3B の調達を完了しました。",
+      "citations": [
+        {"label": "Build Fast with AI - AI News Today July 3 2026", "url": "https://www.buildfastwithai.com/blogs/ai-news-today-july-3-2026"},
+        {"label": "Menlo Ventures - Menlo Turns 50 and Announces $3B in Fresh Capital", "url": "https://menlovc.com/perspective/menlo-turns-50-and-announces-3b-in-fresh-capital-to-go-all-in-on-ai/"}
+      ]
+    },
+    {
+      "lead": "Bridgewater と Thinking Machines が Qwen3-235B を微調整し、フロンティアモデルを上回る",
+      "body": "Bridgewater の AIA Labs と Mira Murati の Thinking Machines Lab は 2026 年 6 月 30 日、オープンウェイトの <a href=\"https://thinkingmachines.ai/news/learning-to-replicate-expert-judgment-in-financial-tasks/\">Qwen3-235B ベース</a>を特化的に微調整したモデルが、6 つの情報フィルタリングタスクで平均 84.7% の精度に達し、検証した最良のフロンティアモデルの 78.2% を上回る 29.8% のエラー削減を示した結果を公開しました。このモデルは Thinking Machines の Tinker プラットフォーム上で、Bridgewater の独自の専門家ラベル付き金融データを用いて学習され、その改善はラウンドロビン方式のインターリーブ・バッチング（+12.1%）、非対称クリッピングを備えた CISPO 損失（+10.1%）、定期的に昇格させる教師を用いたオンポリシー蒸留（+3.1%）に帰せられます。チームによれば、このモデルはフロンティアの代替に比べてタスクあたりの推論コストがおよそ 13.8 分の 1 で動作するとされ、<a href=\"https://blockchain.news/ainews/bridgewater-fine-tunes-model-beats-frontier-llms\">独立した報道</a>もこれを伝えています。これは、よく調整されたオープンウェイトのチェックポイントに質の高いドメインラベルを組み合わせれば、狭い専門タスクで汎用のフロンティア規模を上回るというテーゼの、明快な裏付けです。",
+      "citations": [
+        {"label": "Thinking Machines Lab - Learning to Replicate Expert Judgment in Financial Tasks", "url": "https://thinkingmachines.ai/news/learning-to-replicate-expert-judgment-in-financial-tasks/"},
+        {"label": "Blockchain.News - Bridgewater Fine-Tunes Model to Beat Frontier LLMs", "url": "https://blockchain.news/ainews/bridgewater-fine-tunes-model-beats-frontier-llms"}
+      ]
+    },
+    {
+      "lead": "動作する悪用が、Flowise の Custom-MCP RCE（CVE-2026-40933）のパッチを回避",
+      "body": "Obsidian Security は、<a href=\"https://nvd.nist.gov/vuln/detail/CVE-2026-40933\">CVE-2026-40933</a> に対する動作する概念実証を公開しました。これは、GitHub スター 52,000 超のデプロイで使われるローコードのエージェント構築ツール Flowise に付属する Custom MCP ツールのリモートコード実行の欠陥です。<a href=\"https://www.infosecurity-magazine.com/news/flowise-mcp-rce-poc/\">Infosecurity Magazine</a> が詳しく伝えるとおり、この不具合は stdio トランスポートに存在し、ユーザーが与えたコマンドを Flowise サーバー上でサンドボックス化されていない子プロセスとして起動します。そのため、汚染されたエクスポート済みワークフローファイルは、被害者が取り込んだ瞬間に自動でコマンドを実行してしまい、承認プロンプトは一切要りません。自己ホスト型のオープンソース版も企業版も、現行バージョンでも既定で脆弱なままであり、公式パッチを回避できることも研究者が実証したため、バージョンを上げるだけでは穴は塞がりません。今回の公表は、協調的な <a href=\"https://www.ox.security/blog/mcp-supply-chain-advisory-rce-vulnerabilities-across-the-ai-ecosystem/\">MCP サプライチェーン勧告</a>が LiteLLM、Agent Zero、LangBot、Windsurf にわたって跡付けた、より広い stdio コマンドインジェクションのパターンの内側にあります。推奨される緩和策は、stdio トランスポートを無効にして Server-Sent Events を用い、取り込んだ MCP 設定はいずれも信頼できないコードとして扱うことです。",
+      "citations": [
+        {"label": "NVD - CVE-2026-40933 Detail", "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-40933"},
+        {"label": "Infosecurity Magazine - Critical Flowise Flaw Gives Attackers Full Server Control", "url": "https://www.infosecurity-magazine.com/news/flowise-mcp-rce-poc/"},
+        {"label": "OX Security - MCP Supply Chain Advisory", "url": "https://www.ox.security/blog/mcp-supply-chain-advisory-rce-vulnerabilities-across-the-ai-ecosystem/"}
+      ]
+    },
+    {
+      "lead": "AMD の 7 月 22〜23 日の MI400 披露が、密な AI イベントの並びを先導",
+      "body": "最も近い AI チップの起爆剤は、サンフランシスコの Moscone で 7 月 22〜23 日に開かれる AMD の Advancing AI 2026 で、MI400 シリーズと「Helios」ラックスケールシステムが提供時期とともに見込まれています。同じハードウェアのトラックでは、<a href=\"https://semiwiki.com/event/hot-chips-2026/\">Hot Chips</a> がスタンフォードの Memorial Auditorium で 8 月 23〜25 日に、<a href=\"https://www.ai-infra-summit.com/faqs\">AI Infra Summit</a> がサンタクララで 9 月 15〜17 日に続きます。AI セキュリティの枠は 8 月中旬に集まります。SecurityWeek の <a href=\"https://www.prnewswire.com/news-releases/securityweek-to-host-ai-risk-summit-august-11-12-at-the-ritz-carlton-half-moon-bay-ca-302783094.html\">AI Risk Summit</a> が Half Moon Bay の Ritz-Carlton で 8 月 11〜12 日に開かれ、Black Hat USA と DEF CON 34 の AI Village が 8 月上旬にラスベガスで、OWASP Global AppSec USA がサンフランシスコで 11 月 5〜6 日に続きます。Zenity の AI Agent Security Summit シリーズは、エージェントの乗っ取りと MCP レイヤーの防御に取り組むチーム向けに世界各地での開催を続けており、今週の Flowise の MCP 悪用を踏まえれば直接に関わりがあります。主流の開発トラックでは、GitHub Universe が 10 月 28〜29 日、AWS re:Invent が 11 月 30 日〜12 月 4 日に予定されています。最も近い二つの行動は、7 月 22 日の AMD 基調講演と 8 月 11〜12 日の AI Risk Summit への登録です。",
+      "citations": [
+        {"label": "SemiWiki - Hot Chips 2026", "url": "https://semiwiki.com/event/hot-chips-2026/"},
+        {"label": "PR Newswire - SecurityWeek to Host AI Risk Summit August 11-12", "url": "https://www.prnewswire.com/news-releases/securityweek-to-host-ai-risk-summit-august-11-12-at-the-ritz-carlton-half-moon-bay-ca-302783094.html"},
+        {"label": "AI Infra Summit - 2026 FAQs", "url": "https://www.ai-infra-summit.com/faqs"}
+      ]
+    }
+  ],
+  "plain": [
+    "Codex Remote がすべての有料 ChatGPT プランでプレビューを卒業",
+    "Anthropic が 19 日を経て Fable 5 を世界的に復旧",
+    "調整済みのオープンモデルが金融タスクで最上位 AI を上回る",
+    "新たな悪用が、パッチ済みのエージェント構築ツールの欠陥を生かし続ける",
+    "AMD の 7 月のチップ披露が、盛りだくさんの AI イベント期を先導"
+  ]
+}

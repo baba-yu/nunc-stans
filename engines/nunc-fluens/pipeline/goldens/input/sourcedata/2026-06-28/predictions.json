@@ -1,0 +1,47 @@
+{
+  "date": "2026-06-28",
+  "predictions": [
+    {
+      "id": "prediction.6f3ab91c4d2e7a08",
+      "scope_hint": "tech",
+      "title": "Sub-gigabyte on-device LLM gains same-week Unsloth tuning support by Q3 2026",
+      "body": "The release of Liquid AI's 230M-parameter LFM2.5 with launch-day llama.cpp, MLX, vLLM, SGLang and ONNX runtimes signals that a sub-gigabyte on-device model now ships against the full local-inference stack on day one. With Unsloth's v0.1.471-beta already landing first-class fine-tuning for frontier open weights within two days of release (GLM-5.2 on June 16, support on June 18), the same compression is coming to the edge tier. The prediction is that a sub-1B on-device model published this cycle will gain LoRA/QLoRA fine-tuning support in a mainstream tuning toolkit within the same week as its weights drop, closing the loop from open release to on-device customization. The forcing function is competitive: once one tuning library lands a popular edge checkpoint in days, the others must match the turnaround or cede the on-device developer audience.",
+      "reasoning": {
+        "because": "LFM2.5-230M shipped launch-day across llama.cpp, MLX, vLLM, SGLang and ONNX runtimes",
+        "given": "Unsloth landed GLM-5.2 fine-tuning two days after its June 16 open-weight release",
+        "so_that": "open-weight edge checkpoints get same-week tuning support, collapsing release-to-customization to days on-device",
+        "landing": "A sub-1B edge model gains same-week tuning support by Q3 2026",
+        "plain_language": "Tiny phone-sized AI models will become trainable just days after they are released."
+      },
+      "summary": "Liquid AI's 230M LFM2.5 ships launch-day across llama.cpp, MLX, vLLM, SGLang and ONNX, while Unsloth already adds frontier fine-tuning within two days of a release. Expect a sub-1B on-device model to gain same-week LoRA/QLoRA tuning support in a mainstream toolkit by Q3 2026."
+    },
+    {
+      "id": "prediction.7b3e9f12c4a6d8e0",
+      "scope_hint": "business",
+      "title": "Rival accelerator vendor buys a CUDA-agnostic inference compiler by Q1 2027",
+      "body": "Qualcomm's roughly $14B full-stack bet this week — the ~$3.92B all-stock Modular acquisition for the MAX cross-vendor inference engine, reported $8-10B Tenstorrent talks, and a committed hyperscaler custom-silicon ship before year-end — turns the portable-compiler layer into the contested ground for breaking Nvidia's CUDA lock-in. Owning a silicon-agnostic compute layer is now the price of admission for any vendor selling enterprise inference against Nvidia, and Modular was the largest neutral compiler asset on the market. Expect at least one rival accelerator buyer (AMD, Intel, or a hyperscaler's silicon arm) to respond by acquiring or taking a controlling stake in a comparable cross-vendor inference-compiler or runtime startup, rather than cede the portability narrative to Qualcomm.",
+      "reasoning": {
+        "because": "Qualcomm's $3.92B Modular buy removed the largest neutral cross-vendor inference compiler asset",
+        "given": "a silicon-agnostic compute layer is now table stakes to sell enterprise inference against CUDA",
+        "so_that": "one rival accelerator buyer acquires or takes a controlling stake in a comparable inference-compiler startup",
+        "landing": "by Q1 2027; one announced AMD/Intel/hyperscaler compiler buy or majority stake",
+        "plain_language": "Qualcomm bought the company that makes AI chips from different makers work together, so a competitor will rush to buy a similar one."
+      },
+      "summary": "Qualcomm's ~$14B push — the $3.92B Modular compiler buy, Tenstorrent talks, and hyperscaler custom silicon — makes a portable inference layer table stakes against Nvidia. A rival accelerator vendor is likely to respond by acquiring a comparable cross-vendor compiler startup."
+    },
+    {
+      "id": "prediction.c5aa6ceae507d1a8",
+      "scope_hint": "cross",
+      "title": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
+      "body": "At least one leading coding-agent platform (the category OWASP names as prompt injection's epicenter, with Claude Code, AutoGPT, Dify and Roo-Code among the most-advisoried repositories) will ship a default-on capability gate that enforces a 'Rule of Two'-style constraint: an agent run may combine at most two of private-data access, exposure to untrusted content, and external communication before it must pause for explicit human approval. The move follows OWASP's reframing of prompt injection as a structural, unpatchable property of agentic systems rather than a patchable CVE, which leaves vendors to mitigate by capping the lethal trifecta at the orchestration layer instead of filtering the token stream. Because the architectural argument denies any reliable way to separate command tokens from data tokens, the only durable defense is to deny the dangerous combination by default, and competitive pressure plus advisory volume will push the largest platforms there first.",
+      "reasoning": {
+        "because": "OWASP 2.01 maps prompt injection to 6 of 10 agentic categories and names coding agents the epicenter",
+        "given": "Injection is unpatchable, so the only durable mitigation caps the lethal trifecta at orchestration",
+        "so_that": "A coding-agent platform makes a Rule-of-Two capability gate default-on, pausing for approval on the third property",
+        "landing": "by Q1 2027; >=1 leading coding-agent platform ships a default-on trifecta gate",
+        "plain_language": "AI coding helpers can be tricked by hidden instructions, so the big tools will start blocking the risky combo unless a human says ok."
+      },
+      "summary": "OWASP now calls prompt injection a structural, unpatchable trait of agentic AI and names coding agents the epicenter. With no way to separate commands from data, vendors must cap the lethal trifecta at the orchestration layer. Expect a coding-agent platform to ship a default-on Rule-of-Two gate."
+    }
+  ]
+}

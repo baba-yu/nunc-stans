@@ -1,0 +1,45 @@
+{
+  "prediction_id": "prediction.f492c98e68ae3d89",
+  "judgements": [
+    {
+      "prediction_id": "prediction.f492c98e68ae3d89",
+      "stream": "reasoning",
+      "entry_id": "prediction.f492c98e68ae3d89",
+      "verdict": "fresh",
+      "reason": "Thesis (3rd platform ships inline MCP-channel policy enforcement as GA default by Q1 2027) is forward-looking with an 8+-month window (target 2027-01..2027-03) and stayed intact this week. The two anchoring data points (Zscaler AI Broker 6/9, Databricks Agent Bricks 6/16) are unchanged, and this week's developments reinforce the same move-the-control-point-into-the-runtime axis (Hermes MCP credential filtering/default-off gating, AWS Context runtime access control). No contradicting evidence to the because/given preconditions emerged.",
+      "cross_stream_evidence": ["bridge:validation.a3f1e464f18173a8", "bridge:validation.eed68295b6ca1f47", "bridge:validation.d3eae0f0a231f0a8"],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.f492c98e68ae3d89",
+      "stream": "bridge",
+      "entry_id": "prediction.f492c98e68ae3d89",
+      "verdict": "fresh",
+      "reason": "Bridge set is healthy. 6/23 (rel=4, support=because) and 6/20-6/21 (rel=3, support=given) actively reinforce the reasoning preconditions. The latest 6/26 bridge (rel=1, support=none) correctly records that the Feast RCE is a feature-store deserialization flaw, not an MCP-channel issue, and does NOT advance the thesis -- this is an honest no-op record, not a contradict signal, so it does not invalidate reasoning. The relevance_drift trigger most likely fired on that single low-relevance day amid otherwise strong support; no bridge carries support_direction=contradict.",
+      "cross_stream_evidence": ["bridge:validation.7d7b2854be9cb302"],
+      "proposed_action": "noop",
+      "confidence": 0.82
+    },
+    {
+      "prediction_id": "prediction.f492c98e68ae3d89",
+      "stream": "needs",
+      "entry_id": "prediction.f492c98e68ae3d89",
+      "verdict": "fresh",
+      "reason": "All three Needs (security PM shipping inline enforcement, enterprise architect creating pull demand, analyst/standards body codifying the pattern) remain open and forward-looking. No actor has delivered the named outcome -- a third major platform shipping production-ready inline MCP-channel access control as a documented GA default. Hermes and AWS Context reinforce the direction but are not the third-platform GA, so no Need status flips to done this week.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.f492c98e68ae3d89",
+      "stream": "readings",
+      "entry_id": "prediction.f492c98e68ae3d89",
+      "verdict": "fresh",
+      "reason": "No new prediction_chain or prediction_relations edges surfaced for this prediction this week, and none of the upstream/equivalent landings or contradictions that would shorten or weaken the reasoning chain occurred. The thesis is fed by independent cross-platform signals rather than a single chained upstream, so the landing window is unaffected.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    }
+  ]
+}

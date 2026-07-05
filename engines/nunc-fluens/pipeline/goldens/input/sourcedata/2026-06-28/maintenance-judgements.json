@@ -1,0 +1,502 @@
+{
+  "week_ending": "2026-06-28",
+  "judgements": [
+    {
+      "prediction_id": "prediction.36f4ab773b39713e",
+      "stream": "bridge",
+      "entry_id": "prediction.36f4ab773b39713e",
+      "verdict": "fresh",
+      "reason": "All 12 bridges supportive or partial; none contradict. Newest (Jun-25, rel 4) is strongly on-thesis. No invalidated bridge to reframe.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.36f4ab773b39713e",
+      "stream": "needs",
+      "entry_id": "prediction.36f4ab773b39713e",
+      "verdict": "fresh",
+      "reason": "All three needs (MAIA/MTIA dual-track SKU shipment, FP4/MXFP4 kernels, procurement contract split) remain open. Jalapeno is OpenAI, not a MAIA/MTIA hyperscaler delivery, so need #1 not satisfied; bridges note MAIA/MTIA dual-SKU announcement still pending. No actor delivered this week.",
+      "cross_stream_evidence": [
+        "bridge:validation.fbc14ace0c75bc59"
+      ],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.36f4ab773b39713e",
+      "stream": "readings",
+      "entry_id": "prediction.36f4ab773b39713e",
+      "verdict": "fresh",
+      "reason": "2 downstream + 4 upstream chain edges and 5 parallel relations all refreshed 2026-06-28 and remain coherent with the thesis. No upstream prediction landed or got contradicted this week, so the reasoning chain is intact and the landing window is unchanged.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.36f4ab773b39713e",
+      "stream": "reasoning",
+      "entry_id": "prediction.36f4ab773b39713e",
+      "verdict": "fresh",
+      "reason": "Thesis (custom silicon splits into training-vs-inference SKUs by H1 2027) reinforced this week: Jun-25 Jalapeno bridge (rel 4, 'given') has OpenAI frame an 'Intelligence Processor' purpose-built for inference alongside TPU/Trainium lineage. because/given/so_that all hold; landing window (H2 2026/H1 2027, $/query peak Q3 2026) still forward-looking, target Q3 2026 not yet reached. No contradicting bridge.",
+      "cross_stream_evidence": [
+        "bridge:validation.fbc14ace0c75bc59"
+      ],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.3863162bc445e548",
+      "stream": "bridge",
+      "entry_id": "prediction.3863162bc445e548",
+      "verdict": "fresh",
+      "reason": "All recent bridges (2026-06-28, 06-20, 06-16, 06-15, 06-09) are consistently rated relevance 3 and all support the thesis along because/given dimensions. They track real, accelerating progress (Unsloth June beta, Databricks Agent Bricks, Omnigent orchestration, NSA MCP guidance) toward the structural pull the prediction names. No contradict-direction bridge has appeared; the bridge set is internally consistent and current. Historical record stands as-is.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.3863162bc445e548",
+      "stream": "needs",
+      "entry_id": "prediction.3863162bc445e548",
+      "verdict": "fresh",
+      "reason": "The four Needs (hyperscaler PM bundling the console, local stack maintainer demonstrating the loop, synthetic-data vendor, MCP catalog maintainer) remain the active actor coalition. None has been fully satisfied: the 2026-06-16 Databricks bridge shows the deployment/orchestration leg shipping as managed, but the fine-tuning and synthetic-data legs are explicitly still absent, so no Need flips to done. The hyperscaler-PM Need in particular is the still-unmet keystone the landing depends on. No actor-set refresh warranted pre-window.",
+      "cross_stream_evidence": [
+        "bridge:validation.c5e0cefc0ad5349c"
+      ],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.3863162bc445e548",
+      "stream": "readings",
+      "entry_id": "prediction.3863162bc445e548",
+      "verdict": "fresh",
+      "reason": "No upstream chain edge has landed or been contradicted this week that would shorten or weaken the reasoning.landing window. The H2 2026 window remains intact and un-entered. No new equivalent/relation edge surfaced that requires importing transferable evidence. Chain state unchanged.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.78
+    },
+    {
+      "prediction_id": "prediction.3863162bc445e548",
+      "stream": "reasoning",
+      "entry_id": "prediction.3863162bc445e548",
+      "verdict": "fresh",
+      "reason": "Trigger landed_this_week mis-fires here: the landing window (H2 2026; target_start 2026-07-01) has not yet opened as of 2026-06-28, so the managed fine-tune-to-MCP-agent-to-synthetic-data service has NOT landed. The reasoning.because/given premises are being progressively confirmed, not invalidated: the 2026-06-28 bridge (rel 3) shows Unsloth's June 18 beta maturing the consumer-class loop into productizable shape, and the 2026-06-16 Databricks Agent Bricks bridge documents the deployment+governance half graduating into a shipping managed service while explicitly noting the fine-tuning and synthetic-data legs remain absent. The closed loop is not yet absorbed end-to-end, so the thesis stays live and forward-looking; no reframe needed before the window opens.",
+      "cross_stream_evidence": [
+        "bridge:validation.2146426d6c8b6323",
+        "bridge:validation.c5e0cefc0ad5349c"
+      ],
+      "proposed_action": "noop",
+      "confidence": 0.82
+    },
+    {
+      "prediction_id": "prediction.42df3be2edb72f8d",
+      "stream": "bridge",
+      "entry_id": "prediction.42df3be2edb72f8d",
+      "verdict": "fresh",
+      "reason": "The week's load-bearing event (Jalapeno, Jun 24-25) is already captured in bridge validation.767ad71c819b18cf (Jun 25, observed_relevance=2, support='none'), correctly weighed as the bearish counter-mechanism that erodes the data-center-GPU-demand share the bull case assumes, with no analyst-target or mean-target figure. The recent bridge set (Jun 07-25) is consistent with the reasoning and carries no support_direction='contradict' that would force a because reframe. No bridge gap.",
+      "cross_stream_evidence": [
+        "bridge:validation.767ad71c819b18cf",
+        "bridge:validation.56381e0e83db867c"
+      ],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.42df3be2edb72f8d",
+      "stream": "needs",
+      "entry_id": "prediction.42df3be2edb72f8d",
+      "verdict": "fresh",
+      "reason": "All three Needs (data-center ~$130B run-rate over two prints, accelerator GM defense vs inference fragmentation, hyperscaler capex backlog) still describe the open Q4-2026 preconditions. Nothing delivered or retired this week: no actor flipped to done and no Bridge documents a deliverable shipped against a task.what. Jalapeno raises pressure on the GM-defense Need (need.d9676121eaff6dfa) but that Need's outcome already explicitly covers 'inference fragmentation toward custom silicon and LPUs', so its framing holds. No coalition refresh required.",
+      "cross_stream_evidence": [
+        "bridge:validation.767ad71c819b18cf"
+      ],
+      "proposed_action": "noop",
+      "confidence": 0.78
+    },
+    {
+      "prediction_id": "prediction.42df3be2edb72f8d",
+      "stream": "readings",
+      "entry_id": "prediction.42df3be2edb72f8d",
+      "verdict": "stale",
+      "reason": "No prediction_chain or prediction_relations edges exist for this prediction, yet the Jun 24-25 Jalapeno landing puts the largest frontier-model buyer into the custom-inference-ASIC cohort (alongside Google-Broadcom TPU and Amazon Trainium) - a custom-silicon-cohort landing that is the upstream of the bearish counter-mechanism this thesis depends against. Per the Needs->Readings guidance, this is a candidate new chain edge (custom-silicon cohort expands -> downstream pressure on the GPU-demand-driven $300 mean-target thesis). Surfacing the edge would make the cross-stream linkage explicit; this is enrichment, not a correctness fix.",
+      "cross_stream_evidence": [
+        "bridge:validation.767ad71c819b18cf",
+        "news:2026-06-25 Jalapeno"
+      ],
+      "proposed_action": "rewrite",
+      "confidence": 0.55
+    },
+    {
+      "prediction_id": "prediction.42df3be2edb72f8d",
+      "stream": "reasoning",
+      "entry_id": "prediction.42df3be2edb72f8d",
+      "verdict": "fresh",
+      "reason": "Trigger landed_this_week fired off the Jun 24 OpenAI/Broadcom Jalapeno custom-inference-ASIC unveil, not off this prediction landing - its own window is Q4 2026 (target_start 2026-10-01), unresolved. Jalapeno is exactly the bearish counter-mechanism the reasoning already names ('inference fragments toward custom silicon and Groq-style LPUs ... breaks the thesis'), so it confirms rather than invalidates the because/given/so_that frame. No analyst-target revision and no data-center revenue print this week, so the falsifiable condition (mean PT > $300 after two data-center prints) is untouched. Reasoning is intact and still forward-looking.",
+      "cross_stream_evidence": [
+        "bridge:validation.767ad71c819b18cf"
+      ],
+      "proposed_action": "noop",
+      "confidence": 0.82
+    },
+    {
+      "prediction_id": "prediction.488b349d322d5c4a",
+      "stream": "bridge",
+      "entry_id": "prediction.488b349d322d5c4a",
+      "verdict": "fresh",
+      "reason": "Four recent bridges (latest 2026-06-27, observed_relevance 3-4) are coherent, correctly scoped, and span because/given/so_that dimensions. They honestly distinguish directionally-aligned platform/MCP controls from the precise parser-enforced read-only SQL default the prediction targets. No contradict signals, no stale or duplicate bridges to retire.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.488b349d322d5c4a",
+      "stream": "needs",
+      "entry_id": "prediction.488b349d322d5c4a",
+      "verdict": "fresh",
+      "reason": "All three Needs (SQL-tool maintainer ships SELECT-only default, docs maintainer elevates read-only creds to prerequisite, security researcher replays injection-to-RCE and files critical CVEs) remain forward-looking and unmet. No bridge documents a framework shipping the specific read-only SQL default that would flip a Need to done; the broad MCP guards (Flowise) are adjacent, not the named deliverable. Actor coalition unchanged.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.488b349d322d5c4a",
+      "stream": "readings",
+      "entry_id": "prediction.488b349d322d5c4a",
+      "verdict": "fresh",
+      "reason": "No chain or relation edges touch this prediction (no source/target edges found), and no upstream landing or contradiction this week alters the chain. Landing window stays Q1 2027; nothing to shorten or add.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.78
+    },
+    {
+      "prediction_id": "prediction.488b349d322d5c4a",
+      "stream": "reasoning",
+      "entry_id": "prediction.488b349d322d5c4a",
+      "verdict": "fresh",
+      "reason": "Trigger landed_this_week but the prediction's own landing window is Q1 2027 (target_start 2027-01-01), not closing this week, so the 'did landing come true' test is premature. The thesis (>=3 agent frameworks ship read-only/SELECT-only default SQL execution) remains forward-valid and is gaining support: Flowise 3.1.0 default allowlist guard (bridge 0f791386, so_that), Databricks Unity AI Gateway contextual SQL policy as a default (e90ec8d3, given), and June 27 Langflow IDOR/AutoGPT SSRF CVEs reinforcing the deny-by-default root cause (d2dae7b1, because). Bridges themselves note the controls are still broad MCP/tool-execution rather than the specific parser-level read-only SQL default the prediction names, so the landing is not yet met. Reasoning because/given/so_that/landing all hold; no reframe needed.",
+      "cross_stream_evidence": [
+        "bridge:validation.0f791386bd2c1c6f",
+        "bridge:validation.d2dae7b11831688e"
+      ],
+      "proposed_action": "noop",
+      "confidence": 0.82
+    },
+    {
+      "prediction_id": "prediction.4ecb84808c9acc3f",
+      "stream": "bridge",
+      "entry_id": "prediction.4ecb84808c9acc3f",
+      "verdict": "fresh",
+      "reason": "Bridge stream is healthy and accumulating supporting evidence consistently (12 bridges, most recent validation.dd9de784401e0969 dated 2026-06-23, observed_relevance 4). Each bridge correctly distinguishes mechanism-confirmation from the not-yet-evidenced formal CIS/OWASP top-list codification, which is the honest framing. No bridge is contradicting or stale; they form a coherent historical record of the thesis maturing toward its now-open landing window. No rewrite needed.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.4ecb84808c9acc3f",
+      "stream": "needs",
+      "entry_id": "need.e3c6bb0a119dabbd",
+      "verdict": "stale",
+      "reason": "Needs -> Reasoning cross-stream: the CIS/OWASP editorial-maintainer Need (need.e3c6bb0a119dabbd, 'Draft and circulate a new top-list entry naming Agent-in-the-Loop Secret Exfiltration') is now PARTIALLY delivered. OWASP v2.01 published this month with prompt injection mapped across six of ten Top 10 agentic categories and coding agents named the epicenter (news 2026-06-28) - the editorial action of authoritative risk-list categorization has occurred, but NOT under a distinctly-named 'Agent-in-the-Loop Secret Exfiltration' label and NOT on CIS. The Need's outcome is half-met: refresh it forward to focus on (a) the still-missing distinct-category naming and (b) CIS Benchmarks movement specifically, since OWASP's structural reframing has substantively shipped. The PoC-researcher need (need.5f7c11a004b41123) remains fresh and well-supported (LiteLLM KEV, Codex CLI Mandiant-confirmed exploitation).",
+      "cross_stream_evidence": [
+        "bridge:validation.dd9de784401e0969",
+        "reasoning:prediction.4ecb84808c9acc3f"
+      ],
+      "proposed_action": "rewrite",
+      "confidence": 0.7
+    },
+    {
+      "prediction_id": "prediction.4ecb84808c9acc3f",
+      "stream": "readings",
+      "entry_id": "prediction.4ecb84808c9acc3f",
+      "verdict": "fresh",
+      "reason": "No new prediction_chain or prediction_relations edges surfaced this week that alter this prediction's upstream/downstream dependencies. The landing is driven by external CIS/OWASP editorial action rather than by an upstream prediction landing, so no chain-edge shortening or weakening applies. No readings update warranted.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.4ecb84808c9acc3f",
+      "stream": "reasoning",
+      "entry_id": "prediction.4ecb84808c9acc3f",
+      "verdict": "stale",
+      "reason": "trigger=landed_this_week: the landing window (Jul 1-Sep 30 2026) opens this week and OWASP's State of Agentic AI Security and Governance v2.01 (news 2026-06-28; bridges validation.dd9de784401e0969 2026-06-23, validation.fc31743d5f2b884f 2026-06-13) now maps prompt injection to SIX of ten OWASP Top 10 for Agentic Applications categories, frames the lethal trifecta as the exfiltration mechanism, and names coding agents the epicenter (Claude Code 22 advisories). The mechanism and the agent-in-the-loop secret-exfiltration thesis are substantively confirmed on an authoritative list. But the precise landing claim - a DISTINCTLY-NAMED 'Agent-in-the-Loop Secret Exfiltration' category at the TOP of CIS/OWASP - has not literally landed: OWASP folded it into existing categories rather than codifying a new top entry, and no CIS Benchmark movement is evidenced (validation.52d23cdb672e8b70 2026-05-17 explicitly notes no list movement). Reframe reasoning.landing to credit the v2.01 six-of-ten mapping as the substantive landing while distinguishing the still-pending formal distinctly-named-category codification; window is now open, not yet closed.",
+      "cross_stream_evidence": [
+        "bridge:validation.dd9de784401e0969",
+        "bridge:validation.fc31743d5f2b884f",
+        "bridge:validation.52d23cdb672e8b70"
+      ],
+      "proposed_action": "rewrite",
+      "confidence": 0.78
+    },
+    {
+      "prediction_id": "prediction.52add1fe9732a4ff",
+      "stream": "bridge",
+      "entry_id": "prediction.52add1fe9732a4ff",
+      "verdict": "fresh",
+      "reason": "Four bridges (06-07 BYD confirmation rel=5, 06-19 + 06-22 Hyundai/Boston Dynamics, 06-24 Automate 2026 NVIDIA Humanoid Pavilion rel=3) are coherent, recent, correctly support-dimensioned (because/given), and non-contradicting. They accumulate supporting evidence toward the Q2 2027 landing without any support_direction=contradict signal. No bridge needs rewrite or retirement.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.52add1fe9732a4ff",
+      "stream": "needs",
+      "entry_id": "prediction.52add1fe9732a4ff",
+      "verdict": "fresh",
+      "reason": "All three needs (engineering lead, supply-chain manager, executive sponsor) carry Q2 2027 targets and remain forward-looking. No actor has delivered the working prototype + in-house BoM + on-record cost-down disclosure that would flip a need to done; the Hyundai buyout is an ownership consolidation, not a fresh integrated-program deliverable against these needs. Need-set unchanged.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.52add1fe9732a4ff",
+      "stream": "readings",
+      "entry_id": "prediction.52add1fe9732a4ff",
+      "verdict": "fresh",
+      "reason": "No new prediction_chain or prediction_relations edges surfaced this week, no upstream landing/contradiction in the chain, and last-4-days news (06-25..06-28) shows no humanoid/automaker headlines. Nothing to add or prune in the readings stream.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.52add1fe9732a4ff",
+      "stream": "reasoning",
+      "entry_id": "prediction.52add1fe9732a4ff",
+      "verdict": "fresh",
+      "reason": "Trigger landed_this_week but the landing window is Q2 2027 (target_end 2027-06-30), ~10 months out and unreached. This week the Hyundai full-buyout of Boston Dynamics bridges (validation.351e3c9faa8166a0 2026-06-22 rel=4 support=because; validation.3603df22ed07c10e 2026-06-19 support=given) STRENGTHEN reasoning.because by showing a high-volume automaker committing balance-sheet weight to a ~25,000-unit in-house humanoid deployment from 2028 - the integrated-cohort pattern the thesis predicts. But the 06-19 bridge notes Hyundai is absorbing an asset it already controlled, not a fresh program with the disclosed prototype + cost-down target the prediction requires, so the formal landing condition is NOT yet met. Reasoning because/given/so_that/landing remain accurate and forward-valid; no reframe needed.",
+      "cross_stream_evidence": [
+        "bridge:validation.351e3c9faa8166a0",
+        "bridge:validation.3603df22ed07c10e"
+      ],
+      "proposed_action": "noop",
+      "confidence": 0.82
+    },
+    {
+      "prediction_id": "prediction.94703faa1b26ba42",
+      "stream": "bridge",
+      "entry_id": "prediction.94703faa1b26ba42",
+      "verdict": "fresh",
+      "reason": "Bridge set is coherent and correctly scoped. The 2026-06-27 Langflow IDOR / AutoGPT SSRF bridge (validation.a0147f9f8234ab21, relevance 2) is honestly self-limiting -- it explicitly flags itself as thematic-only because those are authz-bypass/SSRF flaws, not the unsafe-deserialization class that defines this bar, so it does not overstate support. The relevance_drift gate likely fired on this week's relevance-2 thematic readings (6/27 Langflow, 6/21 life-science artifact benchmark) diluting against the on-class relevance-5 (6/26 Feast); that is dispersion in incidental neighbors, not invalidation. No bridge carries support_direction contradict; nothing undermines the because precondition.",
+      "cross_stream_evidence": [
+        "bridge:validation.fec3fd937fa1ce8c",
+        "bridge:validation.a0147f9f8234ab21"
+      ],
+      "proposed_action": "noop",
+      "confidence": 0.82
+    },
+    {
+      "prediction_id": "prediction.94703faa1b26ba42",
+      "stream": "needs",
+      "entry_id": "prediction.94703faa1b26ba42",
+      "verdict": "fresh",
+      "reason": "All three Needs (hyperscaler model-serving security engineer shipping safe-handling defaults; safe-serialization/provenance maintainer maturing safetensors-class + signing; standards/guidance body codifying non-executable serialization + caller-ownership) remain the unfulfilled actor coalition for an H1-2027 landing. No bridge this week documents any of these actors having delivered, so no task.status should flip to done. The Feast and Langflow incidents are demand-side pressure on these actors, not supply-side deliverables, so the coalition still stands forward-looking and intact.",
+      "cross_stream_evidence": [
+        "bridge:validation.fec3fd937fa1ce8c"
+      ],
+      "proposed_action": "noop",
+      "confidence": 0.84
+    },
+    {
+      "prediction_id": "prediction.94703faa1b26ba42",
+      "stream": "readings",
+      "entry_id": "prediction.94703faa1b26ba42",
+      "verdict": "fresh",
+      "reason": "No upstream chain edge in prediction_chain landed or got contradicted this week that would shorten or weaken the H1-2027 landing window. The Feast-driven sibling predictions surfaced in 6/26 news (ML registry second max-severity deserialization RCE by Q1 2027; security vendor ships ML deserialization scanning tier by Q1 2027) are convergent same-class theses, not contradicting upstreams; if anything they are candidate equivalent/related edges to add, but no existing reading is now wrong. No retire/rewrite warranted.",
+      "cross_stream_evidence": [
+        "bridge:validation.fec3fd937fa1ce8c"
+      ],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.94703faa1b26ba42",
+      "stream": "reasoning",
+      "entry_id": "prediction.94703faa1b26ba42",
+      "verdict": "fresh",
+      "reason": "The because precondition (managed inference inherits Python deserialization risk at the multi-tenant boundary, per Unit 42 Pickle-in-the-Middle on Vertex AI) was reinforced, not aged, this week. The 2026-06-26 Feast CVE-2026-56121 bridge (dill.loads() before any auth check -> unauthenticated RCE on the ML data/metadata plane, observed_relevance 5) is a textbook on-thesis incident strengthening the same default-shipment pressure the reasoning anticipates. Landing is H1 2027 (target 2027-01-01..2027-06-30), so no managed-serving changelog/bulletin shipping safe-serialization defaults was due yet; absence is on-schedule, not a miss. given/so_that/landing all hold verbatim.",
+      "cross_stream_evidence": [
+        "bridge:validation.fec3fd937fa1ce8c"
+      ],
+      "proposed_action": "noop",
+      "confidence": 0.86
+    },
+    {
+      "prediction_id": "prediction.af116b6aeee58cde",
+      "stream": "bridge",
+      "entry_id": "validation.009784698efcdc4e",
+      "verdict": "broken",
+      "reason": "Bridge validation.009784698efcdc4e (2026-06-28, support=given) is keyed to this DiffusionGemma text-diffusion prediction but its bridge_text is entirely about AMD MI400 confidential-inference / attestation security SKUs and Qualcomm full-stack push — evidence belonging to the secure-AI-accelerator thesis, not text-diffusion training. Mis-association data inconsistency; escalate, do not auto-fix.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.9
+    },
+    {
+      "prediction_id": "prediction.af116b6aeee58cde",
+      "stream": "needs",
+      "entry_id": "prediction.af116b6aeee58cde",
+      "verdict": "fresh",
+      "reason": "No Need delivered this week. No 2nd independent open-weight text-diffusion LM family shipped (need.0a43396a680ced81), no mainstream local stack added native text-diffusion-LM fine-tune/inference (need.76473ff10b051eab). SGLang v0.5.13 serves diffusion image/world-model families (Cosmos/FLUX.2/SANA), not a 2nd open-weight text-diffusion LM training lineage, so it does not satisfy any Need actor.",
+      "cross_stream_evidence": [
+        "bridge:validation.2bae753388ca096b"
+      ],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.af116b6aeee58cde",
+      "stream": "readings",
+      "entry_id": "prediction.af116b6aeee58cde",
+      "verdict": "fresh",
+      "reason": "No new prediction_chain source edge landed or got contradicted this week, and no new prediction_relations (equivalent) edge appeared; the reasoning chain is unchanged. No readings update warranted.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.af116b6aeee58cde",
+      "stream": "reasoning",
+      "entry_id": "prediction.af116b6aeee58cde",
+      "verdict": "fresh",
+      "reason": "Trigger fired landed_this_week but the landing window is Q2 2027 (target 2027-04-01..2027-06-30); nothing this week landed it. The because precondition (Unsloth June 12 seed) and so_that (2nd open-weight diffusion-LM family OR 2nd native local stack) are intact. On-topic bridge validation.2bae753388ca096b (SGLang v0.5.13, 2026-06-16, support=given) reinforces the given rather than contradicting it; no contradict signal arrived.",
+      "cross_stream_evidence": [
+        "bridge:validation.2bae753388ca096b",
+        "bridge:validation.fc72bff7444dd082"
+      ],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.b1fc4c7fdc0c17fe",
+      "stream": "bridge",
+      "entry_id": "prediction.b1fc4c7fdc0c17fe",
+      "verdict": "fresh",
+      "reason": "Both recent bridges are accurate, on-thesis, and correctly dimensioned. validation.3e2eee302e67cce1 (06-27, support='because', rel=4) documents continued in-the-wild max-severity CVEs on the agent-gateway/proxy layer; validation.be6641c24c3c4c74 (06-16, support='given', rel=3) documents the commercial enforcement layer (Zscaler AI Broker, Oasis NHI lifecycle) building toward the governance preconditions. Neither contradicts the reasoning; no bridge needs reframing or retraction.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.b1fc4c7fdc0c17fe",
+      "stream": "needs",
+      "entry_id": "prediction.b1fc4c7fdc0c17fe",
+      "verdict": "fresh",
+      "reason": "All three Needs (CISA cyber-governance lead -> named category guidance; joint CISA-NSA secure-AI author -> joint publication; MCP/proxy researcher -> sustained category-level CVE evidence) remain unmet and active, with target window 2027-04-01..2027-06-30 matching the prediction landing. The researcher-coalition Need is being actively satisfied in-progress (this week's bridge of fresh proxy-layer CVEs is exactly the 'sustained body of category-level evidence' it calls for), but the federal-actor Needs (CISA / CISA-NSA directive) have not delivered. No actor has shipped the category-level deliverable, so no status flips to done; the Need-set is fresh forward-looking.",
+      "cross_stream_evidence": [
+        "bridge:validation.3e2eee302e67cce1"
+      ],
+      "proposed_action": "noop",
+      "confidence": 0.84
+    },
+    {
+      "prediction_id": "prediction.b1fc4c7fdc0c17fe",
+      "stream": "readings",
+      "entry_id": "prediction.b1fc4c7fdc0c17fe",
+      "verdict": "fresh",
+      "reason": "No upstream chain edge landed or got contradicted this week that would shorten or weaken this prediction's Q2-2027 landing window. The week's developments are corroborating same-tier CVE/governance signals (already captured as bridges), not chain-source predictions resolving. No new equivalent/relation edge surfaced that transfers evidence. Readings stream needs no edit.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.b1fc4c7fdc0c17fe",
+      "stream": "reasoning",
+      "entry_id": "prediction.b1fc4c7fdc0c17fe",
+      "verdict": "fresh",
+      "reason": "Trigger 'landed_this_week' fired on the 2026-06-27 bridge landing, not on the prediction itself: reasoning.landing targets Q2 2027 (target_end_date 2027-06-30), >12 months out, so it cannot have come true yet. The thesis stays directionally on-track and is reinforced, not contradicted: the new 06-27 bridge (AutoGPT SSRF CVE-2026-56663, Langflow IDOR CVE-2026-55255 chained with KEV-listed RCE CVE-2026-33017) keeps the proxy/agent-broker tier generating actively-exploited max-severity CVEs, exactly the 'because' precondition; the 06-16 Zscaler AI Broker / Oasis bridge advances the 'given' enforcement-layer precondition. No federal category-level CISA/NSA directive has issued, so the landing remains open and unmet, as expected. because/given/so_that framing all still hold.",
+      "cross_stream_evidence": [
+        "bridge:validation.3e2eee302e67cce1",
+        "bridge:validation.be6641c24c3c4c74"
+      ],
+      "proposed_action": "noop",
+      "confidence": 0.86
+    },
+    {
+      "prediction_id": "prediction.d15f8427132cce7b",
+      "stream": "bridge",
+      "entry_id": "prediction.d15f8427132cce7b",
+      "verdict": "fresh",
+      "reason": "All 3 bridges are `support_dimension='given'` and remain valid: SpaceX June IPO (rel 4, window-open), SoftBank/Boston Dynamics IPO-clock discipline (rel 2), Anthropic Hyperliquid-proxy/governance-risk (rel 3). None is `contradict`, so none undermines reasoning.because. No new bridge landed this week (the source of the relevance_drift signal), but existing bridges still support the thesis as historical evidence. Nothing to retire.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.84
+    },
+    {
+      "prediction_id": "prediction.d15f8427132cce7b",
+      "stream": "needs",
+      "entry_id": "prediction.d15f8427132cce7b",
+      "verdict": "fresh",
+      "reason": "Both Needs are still pending and forward-looking: (1) finance/legal lead converting the confidential draft S-1 into a public non-confidential registration on EDGAR; (2) underwriting team running the book-build and pricing. Neither actor delivered this week — no Bridge documents a public S-1 or priced offering — so neither flips to done. Coalition unchanged.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.d15f8427132cce7b",
+      "stream": "readings",
+      "entry_id": "prediction.d15f8427132cce7b",
+      "verdict": "fresh",
+      "reason": "No prediction_chain edges and no prediction_relations entries exist for this prediction; nothing landed or got contradicted upstream this week to shorten/weaken the Q2 2027 landing window, and no Need was achieved that would open a new chain-edge candidate. No readings to add or revise.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.d15f8427132cce7b",
+      "stream": "reasoning",
+      "entry_id": "prediction.d15f8427132cce7b",
+      "verdict": "fresh",
+      "reason": "Long-dated thesis (target Q2 2027, ~10 months out): a frontier lab files a public S-1 and prices an IPO. This week (Jun 22-28) produced no S-1/IPO/lab-financing movement — only the unrelated Qualcomm/Modular M&A. The `because` precondition (Anthropic confidential draft S-1, OpenAI prepping) and the `given` (SpaceX June pricing reset the public-capital ceiling) both remain intact and uncontradicted. relevance_drift gate fired from absence of a fresh advancing bridge, not from any invalidating development. No reframe needed.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.86
+    },
+    {
+      "prediction_id": "prediction.f492c98e68ae3d89",
+      "stream": "bridge",
+      "entry_id": "prediction.f492c98e68ae3d89",
+      "verdict": "fresh",
+      "reason": "Bridge set is healthy. 6/23 (rel=4, support=because) and 6/20-6/21 (rel=3, support=given) actively reinforce the reasoning preconditions. The latest 6/26 bridge (rel=1, support=none) correctly records that the Feast RCE is a feature-store deserialization flaw, not an MCP-channel issue, and does NOT advance the thesis -- this is an honest no-op record, not a contradict signal, so it does not invalidate reasoning. The relevance_drift trigger most likely fired on that single low-relevance day amid otherwise strong support; no bridge carries support_direction=contradict.",
+      "cross_stream_evidence": [
+        "bridge:validation.7d7b2854be9cb302"
+      ],
+      "proposed_action": "noop",
+      "confidence": 0.82
+    },
+    {
+      "prediction_id": "prediction.f492c98e68ae3d89",
+      "stream": "needs",
+      "entry_id": "prediction.f492c98e68ae3d89",
+      "verdict": "fresh",
+      "reason": "All three Needs (security PM shipping inline enforcement, enterprise architect creating pull demand, analyst/standards body codifying the pattern) remain open and forward-looking. No actor has delivered the named outcome -- a third major platform shipping production-ready inline MCP-channel access control as a documented GA default. Hermes and AWS Context reinforce the direction but are not the third-platform GA, so no Need status flips to done this week.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.f492c98e68ae3d89",
+      "stream": "readings",
+      "entry_id": "prediction.f492c98e68ae3d89",
+      "verdict": "fresh",
+      "reason": "No new prediction_chain or prediction_relations edges surfaced for this prediction this week, and none of the upstream/equivalent landings or contradictions that would shorten or weaken the reasoning chain occurred. The thesis is fed by independent cross-platform signals rather than a single chained upstream, so the landing window is unaffected.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.f492c98e68ae3d89",
+      "stream": "reasoning",
+      "entry_id": "prediction.f492c98e68ae3d89",
+      "verdict": "fresh",
+      "reason": "Thesis (3rd platform ships inline MCP-channel policy enforcement as GA default by Q1 2027) is forward-looking with an 8+-month window (target 2027-01..2027-03) and stayed intact this week. The two anchoring data points (Zscaler AI Broker 6/9, Databricks Agent Bricks 6/16) are unchanged, and this week's developments reinforce the same move-the-control-point-into-the-runtime axis (Hermes MCP credential filtering/default-off gating, AWS Context runtime access control). No contradicting evidence to the because/given preconditions emerged.",
+      "cross_stream_evidence": [
+        "bridge:validation.a3f1e464f18173a8",
+        "bridge:validation.eed68295b6ca1f47",
+        "bridge:validation.d3eae0f0a231f0a8"
+      ],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+[
+  {
+    "actor": "autonomous-pentest startup go-to-market lead",
+    "job": "Converting post-Black-Hat demo momentum into a signed, publishable enterprise or government logo deal for its continuous autonomous red-teaming product",
+    "outcome": "A publicly documented named enterprise or government customer deployment of the vendor's autonomous-pentest agent before Q1 2027 closes",
+    "motivation": "A named landing is the cheapest credibility a vendor can buy in a crowded post-Black-Hat field of comparable entrants",
+    "task": {
+      "who": "the startup's enterprise sales and customer-marketing function",
+      "what": "Negotiate a referenceable named deployment with a marquee buyer",
+      "where": "Procurement pipeline seeded at Black Hat USA / DEF CON",
+      "when": "From the June 25 demo night through Q1 2027",
+      "why": "A logo deal buys credibility over rival entrants",
+      "how": "Demo-to-procurement conversion with a public case-study commitment"
+    }
+  },
+  {
+    "actor": "autonomous-pentest startup offensive-agent engineering team",
+    "job": "Hardening its agent to autonomously chain recon, build a working exploit, run it, and document a reproducible kill-chain at product grade",
+    "outcome": "A productized offensive agent that produces verified, reproducible exploit-chains a buyer or benchmark can independently confirm",
+    "motivation": "Buyers trust proof-of-exploit over scanners, so reproducible kill-chains are the capability that justifies a paid standing product",
+    "task": {
+      "who": "the startup's offensive-agent and detection engineering team",
+      "what": "Productize autonomous recon-to-exploit kill-chain generation",
+      "where": "The vendor's continuous autonomous red-teaming platform",
+      "when": "Now through Q1 2027, building on June 25 live demos",
+      "why": "Reproducible proof-of-exploit is what buyers actually pay for",
+      "how": "LLM-driven agent that builds and detonates exploits in sandbox"
+    }
+  },
+  {
+    "actor": "enterprise or government security buyer running the pilot",
+    "job": "Running a production pilot of an autonomous-pentest vendor and agreeing to be named as a reference deployment",
+    "outcome": "A documented, named deployment that validates continuous autonomous red-teaming as a standing product, not a one-off demo",
+    "motivation": "Cutting human red-team hours fits the security budget, and being a named early adopter earns credibility and vendor leverage",
+    "task": {
+      "who": "the buyer's security operations and red-team function",
+      "what": "Pilot the autonomous agent against its own attack surface",
+      "where": "The buyer's production estate under a controlled engagement",
+      "when": "Through 2026 into Q1 2027, ahead of the landing",
+      "why": "Autonomous red-teaming cuts costly human pentest hours",
+      "how": "A scoped continuous autonomous red-teaming engagement"
+    }
+  }
+]

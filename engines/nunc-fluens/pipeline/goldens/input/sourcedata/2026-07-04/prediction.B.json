@@ -1,0 +1,14 @@
+{
+  "id": "prediction.995ca26eda650543",
+  "scope_hint": "business",
+  "title": "OpenAI files a public-listing step with a US-government stake by Q2 2027",
+  "body": "Crunchbase's first-half 2026 tally frames the market backdrop: global venture funding hit a record $510 billion, OpenAI and Anthropic together absorbed $217 billion or 43% of every venture dollar in the half, and 32 venture-backed companies went public above a $1 billion valuation in Q2 alone as the exit window reopened. Against that, the report notes OpenAI floated giving the US government a roughly 5% equity position ahead of a planned public-market debut. Those two facts point the same way: the largest private position in the cohort is being groomed for public markets, and it is being wrapped in an unusual sovereign-stake structure that only makes sense as pre-listing scaffolding. Concentration this extreme is hard to sustain in private mega-rounds indefinitely, because the check sizes needed to keep marking the leader up eventually exceed what private syndicates will underwrite, which pushes the frontier leader toward public liquidity. Expect OpenAI to take a concrete, disclosed step onto that path within the coming quarters, an S-1 or F-1 filing, a formal direct-listing or IPO announcement, or a confirmed government equity agreement tied to the debut, rather than leaving the arrangement as unattributed reporting. The structural read is that the same capital concentration Crunchbase measured is now forcing the sector's anchor into public-market machinery, with the government-stake wrinkle as the distinguishing feature of how it happens.",
+  "reasoning": {
+    "because": "Crunchbase H1 2026 says OpenAI floated a ~5% US-government stake ahead of a planned public debut",
+    "given": "OpenAI plus Anthropic took 43% ($217B) of H1 funding, a concentration hard to keep marking privately",
+    "so_that": "OpenAI takes a disclosed public-listing step, an S-1/F-1 or IPO announcement tied to the government equity structure",
+    "landing": "OpenAI files or announces a public listing with a US-government stake by Q2 2027",
+    "plain_language": "OpenAI got so big private money cannot keep funding it, so it will likely start going public, with the government taking a small share."
+  },
+  "summary": "Crunchbase's H1 2026 report shows OpenAI and Anthropic took 43% of a record $510B in funding, and notes OpenAI floated a ~5% US-government stake ahead of a public debut. Concentration this extreme is hard to sustain privately, so OpenAI likely takes a public-listing step with the stake by Q2 2027."
+}

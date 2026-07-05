@@ -1,0 +1,14 @@
+{
+  "id": "prediction.7c1f9a3e84b2d6f0",
+  "scope_hint": "cross",
+  "title": "Orchestration benchmarks add a latency-disclosure column by Q1 2027",
+  "body": "Sakana's Fugu shipped June 22 as a learned orchestration model whose Ultra tier is pitched at Fable 5 and Mythos parity on its own coding, scientific, and reasoning tables, but within 48 hours Wharton's Ethan Mollick ran it on his standard shader and interactive-scene tests and found ~30-minute runs that were merely 'fine' and did not match Fable in practice. The gap is structural: a router-as-a-model that recursively delegates and verifies across a swappable frontier pool buys quality with wall-clock time that accuracy-only leaderboards never surface. The prediction is that independent evaluators and the orchestration vendors themselves move to publish latency and end-to-end wall-clock alongside quality scores as a standard reporting axis, so that a 'matches Fable on accuracy' claim is no longer accepted without a per-task time-to-completion disclosure. Expect at least one widely-cited benchmark or evaluator to formalize a latency/cost-per-task column for multi-model orchestration, and at least one orchestration vendor to publish wall-clock SLAs, by Q1 2027.",
+  "reasoning": {
+    "because": "Independent test of Fugu Ultra found ~30-min runs despite published Fable-5/Mythos accuracy parity",
+    "given": "Router-as-a-model trades wall-clock for quality, a tax accuracy-only leaderboards never surface",
+    "so_that": "An evaluator or vendor formalizes a latency/cost-per-task column for orchestration parity claims",
+    "landing": "by Q1 2027; a cited benchmark adds a latency column or a vendor posts an SLA",
+    "plain_language": "A new AI that hires other AIs scored high but took 30 minutes, so tests will start reporting speed, not just accuracy."
+  },
+  "summary": "After Fugu Ultra's frontier-parity claims met an independent test showing ~30-minute runs, orchestration evaluation should add wall-clock latency as a standard reported axis. At least one cited benchmark formalizes a latency column or a vendor publishes time-to-completion SLAs by Q1 2027."
+}

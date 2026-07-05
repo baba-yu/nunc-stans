@@ -1,0 +1,147 @@
+{
+  "date": "2026-07-05",
+  "verifications": [
+    {
+      "topic": "LLM Workflow",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No agent/workflow/pipeline orchestration-platform news today (no n8n, LangGraph, Temporal, LangFlow, Flowise, AutoGen Studio, agent-DAG or workflow-builder state-change). The writer reported searched=true hits=1 but explicitly logged no fresh dated release worth a bullet, and none of the five shipped bullets is an orchestration item, so this is a legitimate uncovered."
+    },
+    {
+      "topic": "Multi-profiling for Local LLM (e.g. Multica)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No multi-profiling / Multica-style local-LLM profiling bullet, and no other shipped bullet references Multica. This is a news-driven-only topic with no trigger today, so the writer's searched=false hits=0 is consistent and no underreport applies."
+    },
+    {
+      "topic": "Agent Harness (OpenClaw, NemoClaw, Hermes Agents, etc.)",
+      "semantic_verdict": "ambiguous",
+      "matching_bullets": [
+        "Ollama 0.31 turns on multi-token prediction for Gemma 4, cutting local Apple-Silicon generation by nearly 90% and pushing the speedup into coding agents"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "No net-new coding-agent / agentic-IDE release (Cursor, Cline, Aider, Windsurf, Codex) shipped July 3-5; the writer logged searched=true hits=2 but noted only aged updates. The Ollama bullet touches coding-agent-ness at the edges (auto-install hooks for Claude Code and opencode, Codex model-drift detection, and framing the MTP speedup as accelerating agent sessions), but its center is a local-runtime optimization, not a harness release, so coverage is borderline rather than a clean hit."
+    },
+    {
+      "topic": "Platform for Local LLM (vLLM, SGLang, etc.)",
+      "semantic_verdict": "ambiguous",
+      "matching_bullets": [
+        "Ollama 0.31 turns on multi-token prediction for Gemma 4, cutting local Apple-Silicon generation by nearly 90% and pushing the speedup into coding agents"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "No dedicated inference-engine / serving-stack release (vLLM, SGLang, TGI, TensorRT-LLM, LMDeploy) shipped July 3-5; the writer logged searched=true hits=1 with only benchmark churn. The Ollama 0.31 bullet is adjacent to the serving-runtime scope (Ollama serving is named in the scope row, and the bullet centers on an OpenAI-compatible local endpoint with a new MLX matmul kernel), but the story is framed as on-device/embedded runtime optimization rather than a serving-stack release, so it maps more cleanly to the embedded-system topic below than to this one."
+    },
+    {
+      "topic": "Ecosystems for Local LLM Embedded System (Foundry Local, etc.)",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "Ollama 0.31 turns on multi-token prediction for Gemma 4, cutting local Apple-Silicon generation by nearly 90% and pushing the speedup into coding agents"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "The Ollama 0.31 bullet is a core on-device / edge-LLM runtime item: multi-token prediction for Gemma 4 on Apple Silicon via a new small-batch matmul kernel contributed to Apple's MLX framework, plus a refreshed bundled llama.cpp engine. Ollama, MLX (Apple Silicon), and llama.cpp are all named in this topic's scope row. Writer's PRIMARY-BULLET searched=true hits=3 aligns exactly."
+    },
+    {
+      "topic": "Local LLM Models",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No fresh open-weight model card / new family release published July 3-5; the writer logged searched=true hits=2 but noted Zyphra ZAYA1, MiniMax M3, GLM-5.2, and Kimi K2.7 are all aged or in references. The Ollama bullet is about accelerating an existing Gemma 4, not releasing a new model, so no shipped bullet is a model-release item. Consistent."
+    },
+    {
+      "topic": "Local LLM Optimization, Fine-tuning (Unsloth — every run)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "Unsloth is the mandatory constant-coverage topic and the writer correctly reported searched=true with no NEW dated July 3-5 state-change beyond prior 07-02 v0.1.471-beta coverage, so it was dropped per anti-inertia. That is the correct constant-coverage behavior (searched, genuinely no fresh news), which is uncovered + consistent, NOT an overreport. The Ollama MTP bullet is a runtime speculative-decoding speedup, not a fine-tuning/quantization-tooling story, so it does not stand in for Unsloth here."
+    },
+    {
+      "topic": "Ecosystems for LLM on PaaS (AWS Bedrock, Azure AI Foundry, etc.)",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "Together AI raises an $800M Series C at an $8.3B valuation led by Aramco's Prosperity7, marking the open-model inference layer, not just the frontier labs, as the place capital is chasing scale"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "Together AI is named directly in this topic's scope row as a managed-inference / hosted-LLM platform, and the bullet centers on it as a neocloud that trains and serves open-weight models (DeepSeek, Nemotron, MiniMax, Kimi) as an inference-as-a-service layer, funded to grow its GPU footprint ~50x. This is squarely the hosted-LLM-API / PaaS pattern. Writer's searched=true hits=2 aligns."
+    },
+    {
+      "topic": "AI Security",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No fresh AI-security state-change shipped as a bullet July 3-5; the writer logged searched=true hits=2 but noted the LiteLLM gateway RCE cluster and the White House AI EO are April-June dated and already in references. The events bullet lists forward AI-security venues (AI Risk Summit, Black Hat, DEF CON AI Village, OWASP, Zenity) but that is event-ness, not a security incident/disclosure. No shipped bullet centers on jailbreak/guardrails/prompt-injection/agent-hijack content, so uncovered. Consistent (the writer did not claim a promoted security bullet)."
+    },
+    {
+      "topic": "CVE update on score ≥ 8.0",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No fresh CVE at CVSS >= 8.0 dated July 3-5 was promoted to a bullet; the writer logged searched=true hits=2 but noted the LiteLLM CVE-2026-42208/42271 chain and the Cursor DuneSlide CVE-2026-50548/50549 are all already covered in prior days or references. No shipped bullet carries a fresh qualifying CVE, so uncovered + consistent."
+    },
+    {
+      "topic": "Hardware",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "Tenstorrent CEO Jim Keller publicly denies Qualcomm buyout talks, cooling a reported $8-10B deal and signaling the RISC-V accelerator startup intends to stay independent through its IPO run",
+        "Stathera closes an oversubscribed $55M Series B for MEMS silicon timing, betting that AI data centers will swap quartz clocks for semiconductor timing as synchronization becomes a bottleneck"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "Two clean hardware bullets: Tenstorrent is a named RISC-V AI-accelerator chip vendor (Galaxy rack roadmap, inference-ASIC / memory-bandwidth race) in the scope row, and Stathera is AI-data-center silicon (MEMS timing for tens-of-thousands-GPU clusters, interconnect/throughput constraint), fitting the data-center-hardware / silicon scope. Writer's searched=true hits=4 (TWO BULLETS) aligns."
+    },
+    {
+      "topic": "Physical AI",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No robotics / humanoid / embodied-AI / VLA news shipped as a bullet; the writer logged searched=true hits=2 but noted Figure/BMW, Unitree R1, and X Square Robot are all aged. None of the five bullets is an embodied-AI item, so uncovered + consistent."
+    },
+    {
+      "topic": "LLM-related research and papers",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No arXiv paper / formal research publication was promoted to a bullet; the writer logged searched=true hits=2 but noted the July 1 multi-agent/VLA-CAD papers (DyTopo, AgentsCAD, CausalSteward) are incremental with no standout anchor. The Ollama MTP bullet describes an applied speculative-decoding technique but is presented as a vendor product release, not a paper, so no bullet is a research-and-papers item. Consistent."
+    },
+    {
+      "topic": "Stock prices and corporate activity",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "Together AI raises an $800M Series C at an $8.3B valuation led by Aramco's Prosperity7, marking the open-model inference layer, not just the frontier labs, as the place capital is chasing scale",
+        "Tenstorrent CEO Jim Keller publicly denies Qualcomm buyout talks, cooling a reported $8-10B deal and signaling the RISC-V accelerator startup intends to stay independent through its IPO run",
+        "Stathera closes an oversubscribed $55M Series B for MEMS silicon timing, betting that AI data centers will swap quartz clocks for semiconductor timing as synchronization becomes a bottleneck"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "Three core corporate-activity bullets: Together AI's $800M Series C at an $8.3B valuation (funding round, named investors, IPO framing), Tenstorrent's denial of a reported $8-10B Qualcomm buyout (M&A rumor, confidential S-1 / IPO bridge), and Stathera's oversubscribed $55M Series B (venture funding). All are AI-sector financing / M&A events. Writer's searched=true hits=3 aligns."
+    },
+    {
+      "topic": "Business plan / Application fields / Applied research (for above)",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "Together AI raises an $800M Series C at an $8.3B valuation led by Aramco's Prosperity7, marking the open-model inference layer, not just the frontier labs, as the place capital is chasing scale",
+        "Stathera closes an oversubscribed $55M Series B for MEMS silicon timing, betting that AI data centers will swap quartz clocks for semiconductor timing as synchronization becomes a bottleneck"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "The Together AI bullet carries an explicit business plan (a ~50x GPU-infrastructure footprint expansion over five years and a public-markets trajectory), and the Stathera bullet lays out a GEN3 data-center-timing roadmap with a named application field (AI-datacenter clocks, ~$1.5B synchronization TAM through 2030, 2028 sampling). Both satisfy the business-plan / application-fields sub-topic. Writer's searched=true hits=2 aligns."
+    },
+    {
+      "topic": "Bay Area / SV AI meet-up events",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "AI events to plan around now: Geneva AI Week and an AI Tinkerers SF meetup open this week, with the hardware, security, and dev-conference tracks stacking up behind them through the fall"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "A dedicated forward-looking events bullet covering all three mandated sub-tracks: dev/data (GitHub Universe Oct 28-29, AWS re:Invent Nov 30-Dec 4, Ai4 Aug 4-6, ACM AI Leadership Aug 30-Sep 2, plus the immediate July 8 AI Tinkerers SF meetup for Bay Area locals), AI-security (AI Risk Summit Aug 11-12, Black Hat/DEF CON 34 AI Village early Aug, OWASP Nov 5-6, Zenity AI Agent Security Summit), and AI-chip/hardware (Hot Chips Aug 23-25, AI Infra Summit Sep 15-17, AMD MI400/Helios as the 2H catalyst). All events are future-dated relative to 2026-07-05, and yesterday's still-upcoming items (Hot Chips, AI Infra Summit, AI Risk Summit, security block, GitHub Universe, re:Invent) are carried forward with none dropped. The carry-forward exception applies, so no fresh state-change is required and this is covered + consistent."
+    },
+    {
+      "topic": "Other standing-out topics",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "Together AI raises an $800M Series C at an $8.3B valuation led by Aramco's Prosperity7, marking the open-model inference layer, not just the frontier labs, as the place capital is chasing scale",
+        "Stathera closes an oversubscribed $55M Series B for MEMS silicon timing, betting that AI data centers will swap quartz clocks for semiconductor timing as synchronization becomes a bottleneck"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "Both funding bullets frame structural, cross-cutting stories beyond the fixed rows: Together AI as evidence that the open-model inference layer (not just frontier labs) is now capitalized as a durable platform, and Stathera as timing becoming a named line item in AI-datacenter buildouts rather than an afterthought. The writer's searched=true hits=2 (noting other candidates were aged/excluded for freshness) aligns with these standing-out reads."
+    }
+  ]
+}

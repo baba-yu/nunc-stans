@@ -1,0 +1,52 @@
+{
+  "date": "2026-06-27",
+  "technical": [
+    {
+      "lead": "El IDOR entre inquilinos de Langflow (CVE-2026-55255) se explota en la práctica",
+      "body": "El Threat Research Team de Sysdig informó el 25 de junio de la primera explotación conocida en la práctica de CVE-2026-55255, un fallo de referencia directa insegura a objetos entre inquilinos en Langflow, el constructor visual de código abierto para agentes de LLM. Calificada con CVSS 9.9 y corregida en 1.9.1, la vulnerabilidad reside en get_flow_by_id_or_endpoint_name: un flujo resuelto por UUID no realiza ninguna comprobación de propiedad, de modo que cualquier usuario autenticado puede ejecutar el flujo de otro inquilino a través de /api/v1/responses (CWE-639). Sysdig observó a un operador recolectar ID de flujo desde GET /api/v1/flows/ y reproducirlos unos veinte segundos después en POST /api/v1/responses con la entrada 'leak api keys', contra una instancia que también ejecutaba el RCE CVE-2026-33017 incluido en KEV. Quien opere cualquier Langflow anterior a 1.9.1 debería actualizar ya y dar por hecho que los ID de flujo expuestos ya están siendo recopilados.",
+      "citations": [
+        {"label": "Sysdig - Understanding Langflow CVE-2026-55255, and why higher-CVSS vulnerabilities aren't always the most exploited", "url": "https://webflow.sysdig.com/blog/understanding-langflow-cve-2026-55255-and-why-higher-cvss-vulnerabilities-arent-always-the-most-exploited"},
+        {"label": "GitHub Advisory Database - Langflow IDOR in /api/v1/responses lets authenticated attackers run another user's flow (CVE-2026-55255)", "url": "https://github.com/advisories/GHSA-qrpv-q767-xqq2"},
+        {"label": "GitLab Advisory Database - CVE-2026-55255 Langflow IDOR (CVSS 9.9, fixed in 1.9.1)", "url": "https://advisories.gitlab.com/pypi/langflow/CVE-2026-55255/"}
+      ]
+    },
+    {
+      "lead": "La evasión de la protección SSRF de AutoGPT (CVE-2026-56663) deja al descubierto servicios internos",
+      "body": "Un fallo de gravedad alta en AutoGPT, la plataforma de código abierto para construir y ejecutar agentes de IA continuos, se publicó el 26 de junio como CVE-2026-56663, calificado con CVSS 8.5 y corregido en 0.6.52. Evade las protecciones contra falsificación de solicitudes del lado del servidor de AutoGPT: el SendWebRequestBlock que los agentes usan para llamadas HTTP salientes gestiona mal las direcciones IPv6 con IPv4 mapeada y no valida ciertos rangos de IP, de modo que un usuario autenticado puede componer una solicitud que burla el filtro de IP internas y alcanza servicios de la red privada. Como el bloque afectado es una primitiva de recuperación de uso general integrada en los flujos de trabajo de los agentes, se puede dirigir al agente de un inquilino a sondear metadatos en la nube, paneles de administración internos o bases de datos que debían ser inalcanzables. La ficha de NVD señala que NIST aún no ha añadido su propio enriquecimiento y se apoya en la evaluación de la CNA de GitHub. Quien esté por debajo de 0.6.52 debería actualizar y restringir el tráfico saliente desde el ejecutor de agentes.",
+      "citations": [
+        {"label": "NVD - CVE-2026-56663 Detail (AutoGPT SSRF-protection bypass via IPv4-mapped IPv6 addresses, fixed in 0.6.52)", "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56663"}
+      ]
+    },
+    {
+      "lead": "Predicción: un segundo constructor de agentes recibe un CVE de autorización entre inquilinos de 9.0+ para el Q1 2027",
+      "body": "El caso de Langflow es la firma de una clase, no un hecho aislado: CVE-2026-55255 es una referencia directa insegura a objetos entre inquilinos (CWE-639) en un endpoint de ejecución de flujos, CVSS 9.9, explotada en la práctica según el informe del 25 de junio de Sysdig y encadenada con el RCE CVE-2026-33017 incluido en KEV. El mismo patrón arquitectónico se repite en los pares de la clase n8n / Flowise / Dify / LangGraph Platform / CrewAI: ID opacos y recolectables de flujo/ejecución/espacio de trabajo, un endpoint de ejecución compartido, y comprobaciones de propiedad delegadas a la interfaz en lugar de aplicadas en el servidor objeto por objeto. La predicción: para el Q1 2027 al menos OTRA plataforma con nombre de esta categoría recibe un aviso con CVSS >= 9.0 cuya causa raíz sea autorización entre inquilinos, acceso roto a nivel de objeto o IDOR, idealmente con evidencia de explotación en la práctica o de CISA-KEV. La respuesta estructural hacia la que se empuja a la categoría es un control de acceso por inquilino de confianza cero: propiedad aplicada en el límite del objeto en cada ruta de resolución de flujos y de ejecución.",
+      "citations": [
+        {"label": "Sysdig - Understanding Langflow CVE-2026-55255, and why higher-CVSS vulnerabilities aren't always the most exploited", "url": "https://webflow.sysdig.com/blog/understanding-langflow-cve-2026-55255-and-why-higher-cvss-vulnerabilities-arent-always-the-most-exploited"},
+        {"label": "GitHub Advisory Database - Langflow IDOR in /api/v1/responses lets authenticated attackers run another user's flow (CVE-2026-55255)", "url": "https://github.com/advisories/GHSA-qrpv-q767-xqq2"}
+      ]
+    },
+    {
+      "lead": "Predicción: una gran plataforma de agentes lanza controles de confianza cero activados por defecto para el Q2 2027",
+      "body": "Para el Q2 2027 al menos una gran plataforma de agentes de IA, proveedor de orquestación de agentes o IDE agéntico lanzará controles de confianza cero activados por defecto en una versión con nombre, no como una opción que haya que habilitar. El cambio de postura que cuenta es la autorización por inquilino a nivel de flujo u objeto con denegación por defecto (que cierra las brechas de IDOR entre inquilinos como la de Langflow con get_flow_by_id_or_endpoint_name, que resolvía un flujo por UUID sin comprobación de propiedad) y/o la lista de permitidos de tráfico saliente por defecto con bloques de llamada a herramientas y de solicitud web endurecidos contra SSRF (que cierran primitivas como el SendWebRequestBlock de AutoGPT, cuya brecha de análisis de IPv6 con IPv4 mapeada volvió a abrir el filtro de IP internas). El imperativo es estructural: solo esta semana se produjo un IDOR entre inquilinos CVSS 9.9 en Langflow con la primera explotación en la práctica reportada por Sysdig el 25 de junio, y una evasión de SSRF CVSS 8.5 en AutoGPT (CVE-2026-56663, corregida en 0.6.52, 26 de junio). Una entrada de blog, una opción que haya que activar, un parche puntual de un CVE o una promesa de hoja de ruta no cuentan.",
+      "citations": [
+        {"label": "Sysdig - Understanding Langflow CVE-2026-55255, and why higher-CVSS vulnerabilities aren't always the most exploited", "url": "https://webflow.sysdig.com/blog/understanding-langflow-cve-2026-55255-and-why-higher-cvss-vulnerabilities-arent-always-the-most-exploited"},
+        {"label": "NVD - CVE-2026-56663 Detail (AutoGPT SSRF-protection bypass via IPv4-mapped IPv6 addresses, fixed in 0.6.52)", "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56663"}
+      ]
+    },
+    {
+      "lead": "Predicción: AMD lanza el Instinct MI400 con una especificación con nombre para el Q3 2026",
+      "body": "El calendario de eventos de hoy confirma que el Advancing AI 2026 de AMD se celebra del 22 al 23 de julio en el Moscone de San Francisco, con la keynote y el foco en la serie Instinct MI400 el 23 de julio. La predicción: en ese evento AMD lanza formalmente y detalla la serie de aceleradores de centro de datos MI400 con al menos un compromiso CON NOMBRE y verificable, no un adelanto. Entre los compromisos que cuentan están una ventana declarada de disponibilidad general o de envío en volumen, una capacidad o cifra de ancho de banda de memoria de alto ancho de banda con nombre, una plataforma a escala de rack con nombre (un sistema de rack de clase Helios), y/o un compromiso de despliegue con un hiperescalador o laboratorio puntero con nombre. Esto sigue la tesis permanente de que el entrenamiento y la inferencia a gran escala se quedan en aceleradores comerciales de clase hiperescalador, así que el frente competitivo que mueve la nube es la hoja de ruta de aceleradores comerciales más sus especificaciones de memoria y de rack y sus compromisos de clientes con nombre. Una diapositiva de adelanto sin especificaciones, un gráfico de hoja de ruta sin ventana de disponibilidad general, o un reanuncio de la línea MI355X / MI350 de la generación anterior no cuentan.",
+      "citations": [
+        {"label": "AMD - Advancing AI 2026 (San Francisco, July 22-23)", "url": "https://www.amd.com/en/corporate/events/advancing-ai.html"},
+        {"label": "AI Engineer - World's Fair 2026 (hackathon June 27-28; main program June 29 - July 2, Moscone West, San Francisco)", "url": "https://www.ai.engineer/worldsfair/2026"}
+      ]
+    }
+  ],
+  "plain": [
+    "Un ataque en vivo golpeó a Langflow para ejecutar el agente de IA de otro usuario",
+    "Un fallo de AutoGPT deja a los agentes alcanzar servicios internos ocultos",
+    "Otro constructor de agentes recibirá probablemente el mismo fallo de acceso",
+    "Una gran plataforma de agentes activará por defecto un acceso estricto",
+    "AMD lanzará sus chips de IA MI400 en su evento de julio"
+  ]
+}

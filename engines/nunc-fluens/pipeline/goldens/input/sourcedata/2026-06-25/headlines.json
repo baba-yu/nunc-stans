@@ -1,0 +1,51 @@
+{
+  "date": "2026-06-25",
+  "technical": [
+    {
+      "lead": "OpenAI and Broadcom debut Jalapeno, OpenAI's first custom inference chip",
+      "body": "OpenAI and Broadcom unveiled Jalapeno on June 24, OpenAI's first custom inference accelerator and the first chip from a multi-year co-design effort, framed by OpenAI as an \"Intelligence Processor\" architected around its view of LLM inference rather than training. Engineering samples are already running machine-learning workloads in the lab at production target frequency and power, and OpenAI says early testing shows performance per watt \"substantially better than current state-of-the-art,\" with initial data-center deployment targeted by the end of 2026 at gigawatt scale. The platform is rack-scale, not a standalone die: Broadcom's Tomahawk fabric (rated up to 1.6 terabits per second) wires the accelerators together and Celestia is co-designing the server rack. The structural read is that the largest frontier-model buyer is now following the hyperscaler playbook of designing its own inference ASIC to escape merchant-GPU economics, placing a named OpenAI-Broadcom part alongside the Google-Broadcom TPU and Amazon Trainium lineage. The per-watt advantage is a vendor claim, not yet independently benchmarked, with a fuller technical report promised in the coming months.",
+      "citations": [
+        {"label": "SiliconANGLE - OpenAI, Broadcom debut custom Jalapeno chip for AI inference", "url": "https://siliconangle.com/2026/06/24/openai-broadcom-debut-custom-jalapeno-chip-llm-inference/"},
+        {"label": "Neowin - OpenAI and Broadcom unveil Jalapeno, a new AI chip built for LLM inference", "url": "https://www.neowin.net/news/openai-and-broadcom-unveil-jalapeo-a-new-ai-chip-built-for-llm-inference/"},
+        {"label": "Constellation Research - OpenAI, Broadcom unveil first AI inference chip", "url": "https://www.constellationr.com/insights/news/openai-broadcom-unveil-first-ai-inference-chip"}
+      ]
+    },
+    {
+      "lead": "Jalapeno may pull a fourth named buyer into the custom-inference-chip cohort",
+      "body": "The June 24 Jalapeno unveiling is the structural trigger for a forward call: by H1 2027, expect the named-buyer custom-inference-silicon cohort to gain a fourth member, with at least one additional frontier-model buyer (Anthropic, Meta, xAI, or Microsoft) publicly committing to or unveiling its own rack-scale inference accelerator co-designed with a merchant partner such as Broadcom or Marvell, joining OpenAI's Jalapeno alongside the Google-Broadcom TPU and Amazon Trainium lineage. The reasoning is that gigawatt-scale buyers cannot absorb merchant-GPU inference cost, and Jalapeno confirms a co-designed accelerator plus partner networking fabric is the proven escape hatch; once a peer-tier buyer ships a named part with vendor per-watt claims, the rest of the cohort faces the same inference-cost-versus-model-roadmap squeeze and the same template. The falsifiable core is a named part or a firm public commitment, not a vague \"exploring custom silicon\" rumor, and an extension of an existing line such as a next-gen TPU or Trainium does not count as a new entrant.",
+      "citations": [
+        {"label": "SiliconANGLE - OpenAI, Broadcom debut custom Jalapeno chip for AI inference", "url": "https://siliconangle.com/2026/06/24/openai-broadcom-debut-custom-jalapeno-chip-llm-inference/"},
+        {"label": "Constellation Research - OpenAI, Broadcom unveil first AI inference chip", "url": "https://www.constellationr.com/insights/news/openai-broadcom-unveil-first-ai-inference-chip"}
+      ]
+    },
+    {
+      "lead": "Gartner: AI coding cost could pass the average developer salary by 2028",
+      "body": "Gartner published a research note on June 24 predicting that by 2028 the cost of AI coding will surpass the average developer's salary, driven by rising LLM token consumption and the shift to consumption-based pricing for agentic coding tools. The quotable thresholds are the news: Gartner Peer Insights data cited in the note shows 23 percent of technology leaders already spend between $200 and $500 per developer per month on tokens, and 6 percent of organizations pay more than $2,000 per developer per month. Gartner warns that the steepest cost escalation comes from ungoverned autonomy in agent-driven workflows, bloated context windows, and the absence of structured feedback to optimize usage, naming the autonomous-developer-loop tools (the Cursor / Claude Code / Codex CLI class of agentic IDEs) as the per-seat cost center. The firm's explicit position reframes the productivity narrative as a governance problem: token discipline will not arise spontaneously, and organizations need a governed engineering operating model before scaled agent deployment outruns the gains. This is an analyst projection, not a shipped product, so the 2028 crossover is a forecast.",
+      "citations": [
+        {"label": "Gartner - AI coding costs will surpass the average developer's salary by 2028 as token consumption surges", "url": "https://www.gartner.com/en/newsroom/press-releases/2026-06-24-gartner-predicts-ai-coding-costs-will-surpass-average-developer-salary-by-2028-as-token-consumption-surges"}
+      ]
+    },
+    {
+      "lead": "Agentic coding tools likely to ship default token budgets and caps by Q2 2027",
+      "body": "Gartner's June 24 note, which pinned the steepest agentic-coding cost escalation on ungoverned autonomy, bloated context windows, and missing usage feedback, reads as a product spec for the category's next default feature set. Expect the major agentic-coding platforms (the Cursor / Claude Code / Codex CLI class of autonomous developer-loop tools and their enterprise tiers) to ship admin-side consumption-governance controls — per-seat and per-team token budgets, hard and soft caps, real-time usage dashboards, and policy guardrails on autonomy depth and context-window size — as on-by-default features rather than opt-in add-ons by Q2 2027. With 23 percent of tech leaders already spending $200-$500 per developer per month and 6 percent paying over $2,000, the cost center is per-seat token bills and the failure mode is the absence of structured feedback, so competitive and procurement pressure pushes vendors to make the spend-governance layer table stakes. Enterprises evaluating scaled rollout will increasingly require token discipline enforced in the platform, leaving vendors without native budget and cap controls at a procurement disadvantage.",
+      "citations": [
+        {"label": "Gartner - AI coding costs will surpass the average developer's salary by 2028 as token consumption surges", "url": "https://www.gartner.com/en/newsroom/press-releases/2026-06-24-gartner-predicts-ai-coding-costs-will-surpass-average-developer-salary-by-2028-as-token-consumption-surges"}
+      ]
+    },
+    {
+      "lead": "Autonomous pentest agents head toward a named managed tier by Q4 2026",
+      "body": "Autonomous offensive-security agents are crossing from conference demos into named, procurable enterprise services, with the AI Tinkerers SF Offensive Security Demo Night surfacing these agents this week as the forward AI-security calendar fills out. XBOW's autonomous platform — which maps application environments, probes for vulnerabilities, and chains multi-step exploitation paths at machine speed — just took a strategic Accenture Ventures investment plus a partnership to run continuous offensive testing for clients, on top of a $35M Series C extension whose backers include NVIDIA NVentures, Samsung Ventures, and SentinelOne S Ventures. That financing-and-partnership shape is the procurement signal that incumbents are wiring autonomous pentesting into delivery stacks rather than treating it as research. Black Hat USA's AI Summit (August 1-6) alongside DEF CON's AI Village give the category its first marquee enterprise-buyer stage before the fall procurement window. The forward call: by Q4 2026 at least one major services or security-platform vendor markets an autonomous-pentesting agent as a named, continuously-running managed tier with its own SKU and pricing, though liability and scoping concerns could keep these agents gated behind human-supervised pilots and push the launch past the window.",
+      "citations": [
+        {"label": "TweakTown - AMD announces Advancing AI 2026 event for July (July 22-23, San Francisco)", "url": "https://www.tweaktown.com/news/110826/amd-announces-advancing-ai-2026-event-for-july/index.html"},
+        {"label": "MLQ - AMD sets July date for Advancing AI 2026 flagship event in San Francisco", "url": "https://mlq.ai/news/v2/amd-sets-july-date-for-advancing-ai-2026-flagship-event-in-san-francisco/"}
+      ]
+    }
+  ],
+  "plain": [
+    "OpenAI and Broadcom reveal a custom AI inference chip",
+    "Another big AI lab may build its own chip next",
+    "AI coding bills may top a developer's salary by 2028",
+    "AI coding tools will add built-in spending limits",
+    "AI hacking tools head toward an always-on service"
+  ]
+}

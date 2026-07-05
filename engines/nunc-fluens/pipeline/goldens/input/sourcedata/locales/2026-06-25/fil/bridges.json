@@ -1,0 +1,218 @@
+{
+  "date": "2026-06-25",
+  "validation_rows": [
+    {
+      "prediction_ref": {
+        "id": "prediction.225d77f109a86780",
+        "short_label": "Inference-ASIC cohort gains a fourth named buyer-designed chip by H1 2027",
+        "prediction_date": "2026-06-25"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "Ang pag-unveil ng OpenAI-Broadcom Jalapeno (June 24) ang nagpasimuno na senyales para sa thesis na ito. Inilabas ng OpenAI at Broadcom ang Jalapeno, ang unang custom inference accelerator ng OpenAI at ang unang chip mula sa isang multi-year na co-design na pagsisikap. Ipinakilala ito bilang isang 'Intelligence Processor' na idinisenyo para sa LLM inference, hindi para sa training. Tumatakbo na ang engineering samples ng machine-learning workloads sa lab sa target na frequency at power para sa produksyon. Sinasabi ng OpenAI na ang performance per watt ay 'substantially better than current state-of-the-art,' at nakatakda ang unang data-center deployment sa katapusan ng 2026 sa gigawatt scale. Rack-scale ang platform: pinagdudugtong ng Tomahawk fabric ng Broadcom (hanggang 1.6 terabits per second) ang mga accelerator, at ang Celestia ang nag-co-design sa server rack. Ang istruktural na pagbasa ng ulat ngayon ay siyang premise mismo ng prediksyon. Sinusunod na ngayon ng pinakamalaking buyer ng frontier-model ang playbook ng mga hyperscaler na magdisenyo ng sariling inference ASIC upang makaalpas sa ekonomiya ng merchant-GPU, na naglalagay ng pinangalanang OpenAI-Broadcom na bahagi katabi ng lipi ng Google-Broadcom TPU at Amazon Trainium. Ang puwang papunta sa falsifiable na bar: wala pa rito ang ikaapat na miyembro ng cohort. Walang karagdagang buyer ng frontier-model (Anthropic, Meta, xAI, o Microsoft) na hayagang nangako o naglabas ng sariling rack-scale inference accelerator. Hinihingi ng falsifiable na core ang isang pinangalanang bahagi o matatag na pampublikong commitment, hindi isang tsismis na 'exploring custom silicon,' at hindi isang ekstensyon ng kasalukuyang TPU o Trainium na linya.",
+      "reference_links": [
+        {
+          "label": "SiliconANGLE - OpenAI, Broadcom debut custom Jalapeno chip for AI inference",
+          "url": "https://siliconangle.com/2026/06/24/openai-broadcom-debut-custom-jalapeno-chip-llm-inference/"
+        },
+        {
+          "label": "Neowin - OpenAI and Broadcom unveil Jalapeno, a new AI chip built for LLM inference",
+          "url": "https://www.neowin.net/news/openai-and-broadcom-unveil-jalapeo-a-new-ai-chip-built-for-llm-inference/"
+        },
+        {
+          "label": "Constellation Research - OpenAI, Broadcom unveil first AI inference chip",
+          "url": "https://www.constellationr.com/insights/news/openai-broadcom-unveil-first-ai-inference-chip"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Ang pag-unveil ng OpenAI-Broadcom Jalapeno ngayon ang precondition na pinaghahawakan ng thesis na Inference-ASIC cohort gains a fourth named buyer-designed chip by H1 2027 (2026-06-25): naglulunsad ang pinakamalaking buyer ng frontier-model ng isang pinangalanan at co-designed na inference accelerator na may partner fabric at target na deployment sa katapusan ng 2026. Pinatutunayan nito ang template ng escape-hatch na nararamdaman na ngayon ng mga kapantay na kailangang kopyahin.",
+        "coherence": 4,
+        "remaining_gap": "Walang ikaapat na buyer (Anthropic, Meta, xAI, Microsoft) na nagpangalan pa ng bahagi o gumawa ng matatag na pampublikong commitment sa sariling rack-scale inference accelerator."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.3a5fa9315f58608d",
+        "short_label": "Agentic coding platforms ship token budgets and caps as default by Q2 2027",
+        "prediction_date": "2026-06-25"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "Ang note ng Gartner tungkol sa token-economics ng agentic-coding (June 24) ang nagpasimulang senyales at parang produkto-spec na ito ng thesis. Hinuhulaan ng Gartner na pagsapit ng 2028 ay lalampas ang gastos ng AI coding sa karaniwang suweldo ng developer, dahil sa tumataas na konsumo ng LLM token at sa paglipat sa consumption-based na presyo para sa agentic coding tools. Ang mga mababanggit na threshold ang balita: 23 porsiyento ng technology leaders ay gumagastos na ng $200-$500 kada developer kada buwan sa token, at 6 porsiyento ng mga organisasyon ang nagbabayad ng higit sa $2,000 kada developer kada buwan. Itinuturo ng Gartner ang pinakamatarik na pagtaas ng gastos sa hindi napamamahalaang awtonomiya sa agent-driven na workflows, sa lumolobong context windows, at sa kawalan ng nakaayos na feedback upang i-optimize ang paggamit. Pinangalanan nito ang autonomous-developer-loop na tools (ang klase ng Cursor / Claude Code / Codex CLI na agentic IDEs) bilang sentro ng gastos kada upuan. Muling binubuo nito ang naratibo ng produktibidad bilang isang problema ng pamamahala na nangangailangan ng pinamamahalaang engineering operating model bago lampasan ng scaled agent deployment ang mga pakinabang. Ang diyagnosis na iyon ang spec para sa hinulaang default na feature set: per-seat at per-team na token budgets, hard at soft caps, real-time usage dashboards, at policy guardrails sa lalim ng awtonomiya at laki ng context-window. Ang puwang papunta sa bar: ito ay projection ng analyst, hindi isang naipadalang produkto. Wala pang malaking agentic-coding platform na naglunsad ng admin-side consumption-governance controls bilang on-by-default na feature. Kailangan ng prediksyon na gawing table stakes ng mga vendor ang spend-governance layer pagsapit ng Q2 2027.",
+      "reference_links": [
+        {
+          "label": "Gartner - AI coding costs will surpass the average developer's salary by 2028 as token consumption surges",
+          "url": "https://www.gartner.com/en/newsroom/press-releases/2026-06-24-gartner-predicts-ai-coding-costs-will-surpass-average-developer-salary-by-2028-as-token-consumption-surges"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "Ang note ng Gartner noong June 24 ang istruktural na puwersa sa likod ng Agentic coding platforms ship token budgets and caps as default by Q2 2027 (2026-06-25): sa 23 porsiyento ng mga leader na gumagastos ng $200-$500 kada developer kada buwan at sa pinakamatarik na pagtaas na nakatutok sa hindi napamamahalaang awtonomiya at lumolobong context, itinutulak ng pagipit sa gastos kada upuan ang mga vendor na gawing table stakes ang consumption-governance.",
+        "coherence": 4,
+        "remaining_gap": "Ito ay projection ng analyst; wala pang malaking platform na naglunsad ng admin-side budgets, caps, at autonomy guardrails bilang on-by-default na feature."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.47a4eb0e8d95b76d",
+        "short_label": "Autonomous pentest agents ship as named managed tier by Q4 2026",
+        "prediction_date": "2026-06-25"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "Ang senyales ng managed-tier para sa autonomous-pentest agents (June 24-25) ang nagpasimulang ebidensya para sa thesis na ito. Sa ulat ngayon, ang autonomous platform ng XBOW, na nagmamapa ng application environments, naghahanap ng mga kahinaan, at nagdurugtong ng multi-step na exploitation paths sa bilis ng makina, ay kumuha ng estratehikong pamumuhunan mula sa Accenture Ventures kasama ang isang partnership upang magpatakbo ng tuloy-tuloy na offensive testing para sa mga kliyente. Nakapatong ito sa isang $35M Series C extension na ang mga backer ay kinabibilangan ng NVIDIA NVentures, Samsung Ventures, at SentinelOne S Ventures. Ang hugis ng financing-at-partnership na iyon ang senyales ng procurement na iniuugma na ng mga incumbent ang autonomous pentesting sa kanilang delivery stacks sa halip na ituring itong pananaliksik. Pinatitibay ng paparating na AI-security na kalendaryo ang timing: inilabas ng AI Tinkerers SF Offensive Security Demo Night ang mga agent na ito ngayong linggo, at ang AI Summit ng Black Hat USA (August 1-6) kasabay ng AI Village ng DEF CON ang nagbibigay sa kategorya ng unang malaking entablado para sa enterprise-buyer bago ang procurement window sa taglagas. Ang puwang papunta sa bar: pagsapit ng Q4 2026, hinihingi ng prediksyon na may kahit isang malaking vendor ng serbisyo o security-platform na magbenta ng autonomous-pentesting agent bilang pinangalanan, tuloy-tuloy na tumatakbo na managed tier na may sariling SKU at presyo. Ipinapakita ngayon ang isang pamumuhunan-kasama-partnership at isang ritmo ng mga kumperensya, hindi pa isang pinangalanan at self-serve na managed product. Maaaring panatilihin ng alalahanin sa liability at scoping ang mga agent na ito sa likod ng human-supervised pilots at itulak ang paglulunsad lampas sa window.",
+      "reference_links": [
+        {
+          "label": "TweakTown - AMD announces Advancing AI 2026 event for July (July 22-23, San Francisco)",
+          "url": "https://www.tweaktown.com/news/110826/amd-announces-advancing-ai-2026-event-for-july/index.html"
+        },
+        {
+          "label": "MLQ - AMD sets July date for Advancing AI 2026 flagship event in San Francisco",
+          "url": "https://mlq.ai/news/v2/amd-sets-july-date-for-advancing-ai-2026-flagship-event-in-san-francisco/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "landing",
+        "narrative": "Inilalapit ng mga senyales ngayon ang Autonomous pentest agents ship as named managed tier by Q4 2026 (2026-06-25) sa window nito: ang estratehikong pamumuhunan ng Accenture Ventures sa XBOW kasama ang isang partnership para sa tuloy-tuloy na offensive testing, na nakapatong sa isang $35M Series C, ay nagpapakita na iniuugma na ng mga incumbent ang autonomous pentesting sa delivery stacks. Inihahanda ng Black Hat at DEF CON ang mga enterprise buyer bago ang procurement window sa taglagas.",
+        "coherence": 3,
+        "remaining_gap": "Ipinapakita ngayon ang financing, isang partnership, at ritmo ng mga kumperensya, hindi pa isang pinangalanan at tuloy-tuloy na tumatakbo na managed tier na may sariling SKU at presyo. Maaaring i-gate ng mga alalahanin sa liability ang paglulunsad lampas sa Q4 2026."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.98885276749e707b",
+        "short_label": "Corsair-class inference silicon books a named hyperscaler deployment by Q3 2027",
+        "prediction_date": "2026-06-17"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "Malakas na sinusuportahan ng pag-unveil ng OpenAI-Broadcom Jalapeno (June 24) ang thesis ng named-inference-silicon-deployment, bagaman sa pamamagitan ng isang buyer-designed na bahagi sa halip na isang merchant na Corsair-class na vendor. Ang Jalapeno ay isang custom inference accelerator na may kongkretong commitment sa deployment: nakatakda ang unang data-center deployment sa katapusan ng 2026 sa gigawatt scale, pinagdudugtong ng Tomahawk fabric ng Broadcom (hanggang 1.6 terabits per second) na may Celestia na nag-co-design sa rack, at ang OpenAI ang pinangalanang buyer. Iyan mismo ang hugis na inaasahan ng prediksyon: dedikadong inference silicon na nakakakuha ng pinangalanan at may petsang malakihang deployment sa halip na isang karaniwang pagbili ng merchant-GPU. Ang paparating na AI-chip na kalendaryo (AMD Advancing AI 2026 July 22-23 na may tutok sa Instinct MI400-series, Hot Chips 2026 August 23-25 sa Stanford, AI Infra Summit September 15-17 sa Santa Clara) ang nagbibigay ng ritmo ng mga venue kung saan lilitaw ang karagdagang inference-silicon bookings. Ang puwang: ang Jalapeno ay sariling co-designed ASIC ng OpenAI na inanunsyo bilang isang hinaharap na deployment, hindi isang merchant na Corsair-class na inference-silicon vendor na nakakakuha ng pinangalanang hyperscaler na customer. Ang falsifiable na target ng prediksyon ay isang Corsair-class na bahagi na may pinangalanang hyperscaler na deployment, na hindi pa ibinibigay ng balita ngayon.",
+      "reference_links": [
+        {
+          "label": "SiliconANGLE - OpenAI, Broadcom debut custom Jalapeno chip for AI inference",
+          "url": "https://siliconangle.com/2026/06/24/openai-broadcom-debut-custom-jalapeno-chip-llm-inference/"
+        },
+        {
+          "label": "Constellation Research - OpenAI, Broadcom unveil first AI inference chip",
+          "url": "https://www.constellationr.com/insights/news/openai-broadcom-unveil-first-ai-inference-chip"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "so_that",
+        "narrative": "Ipinapakita ng pag-unveil ng OpenAI-Broadcom Jalapeno ngayon ang eksaktong bunga na inaasahan ng Corsair-class deployment prediction (June 17): dedikadong inference silicon na nakakakuha ng pinangalanan at may petsang malakihang landing, ang gigawatt-scale na deployment ng OpenAI na nakatakda sa katapusan ng 2026 sa ibabaw ng Tomahawk fabric ng Broadcom, sa halip na isang karaniwang pagbili ng merchant-GPU. Ito ay totoo kahit na ang Jalapeno ay isang buyer-designed na ASIC, hindi isang bahagi ng merchant na vendor.",
+        "coherence": 3,
+        "remaining_gap": "Ang Jalapeno ay sariling co-designed ASIC ng OpenAI, hindi isang merchant na Corsair-class na vendor na nakakakuha ng pinangalanang hyperscaler na customer; nananatiling hindi natutugunan ang falsifiable na target."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.36f4ab773b39713e",
+        "short_label": "Hyperscaler custom AI silicon splits into training vs inference SKUs by H1 2027",
+        "prediction_date": "2026-04-22"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "[REVIVED] Layer 1 keyword + Layer 2 semantic na tugma laban sa ulat ng Jalapeno ngayon (Signals: training-vs-inference SKU split, Trainium, Inferentia, dual-track silicon, hyperscaler in-house silicon). Ang pag-unveil ng OpenAI-Broadcom Jalapeno (June 24) ay isang pinangalanang accelerator na hayagang inilalarawan ng OpenAI bilang isang 'Intelligence Processor' na idinisenyo para sa LLM inference, hindi para sa training. Isa itong dedikadong inference na bahagi, inilagay katabi ng lipi ng Google-Broadcom TPU at Amazon Trainium, na ang Jalapeno mismo ay inilarawan bilang unang hakbang sa isang multi-generation na compute platform. Ang inference-specific-laban-sa-training na pagbabalangkas na iyon ang eksaktong dual-track na custom-silicon split na pinangalanan ng prediksyon: isang buyer na umaalpas sa ekonomiya ng merchant-GPU sa pamamagitan ng pagdidisenyo ng isang inference SKU na hiwalay sa training silicon. Ang puwang papunta sa bar: ang Jalapeno ay isang inference na bahagi mula sa isang buyer ng frontier-model, hindi pa isang hyperscaler na hayagang naglalarawan ng dalawang-SKU na training-laban-sa-inference na linya ng custom-silicon. Kailangan ng prediksyon ang isang pinangalanang dual-track na split, at itinatatag ng senyales ngayon ang inference-SKU na kalahati ng split na iyon nang wala ang hayagang katambal na paglalahad ng training-SKU.",
+      "reference_links": [
+        {
+          "label": "SiliconANGLE - OpenAI, Broadcom debut custom Jalapeno chip for AI inference",
+          "url": "https://siliconangle.com/2026/06/24/openai-broadcom-debut-custom-jalapeno-chip-llm-inference/"
+        },
+        {
+          "label": "Constellation Research - OpenAI, Broadcom unveil first AI inference chip",
+          "url": "https://www.constellationr.com/insights/news/openai-broadcom-unveil-first-ai-inference-chip"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "Muling binuhay mula sa dormant pool, ang training-versus-inference SKU split prediction (Apr 22) ay nakakakuha ng istruktural na pampatibay mula sa pag-unveil ng Jalapeno ngayon: ibinabalangkas ito ng OpenAI bilang isang 'Intelligence Processor' na idinisenyo para sa inference at hindi sa training, inilagay katabi ng lipi ng Google TPU at Amazon Trainium. Ito ang dual-track na puwersa ng custom-silicon na pinangalanan ng prediksyon, isang buyer na nagdidisenyo ng dedikadong inference SKU na hiwalay sa training silicon.",
+        "coherence": 3,
+        "remaining_gap": "Itinatatag ng Jalapeno ang inference-SKU na kalahati mula sa isang frontier na buyer, ngunit walang hyperscaler na hayagang naglarawan ng katambal na dalawang-SKU na training-laban-sa-inference na linya."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.a943725fb4046b01",
+        "short_label": "An autonomous-pentest vendor lands a named enterprise/gov deal by Q1 2027",
+        "prediction_date": "2026-06-22"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "Direktang sinusuportahan ng senyales ng managed-tier para sa autonomous-pentest agents (June 24-25) ang thesis na ito. Sa ulat ngayon, ang XBOW, isang pinangalanang autonomous-pentest vendor na ang platform ay nagmamapa ng mga environment, naghahanap ng mga kahinaan, at nagdurugtong ng multi-step na exploitation sa bilis ng makina, ay kumuha ng estratehikong pamumuhunan mula sa Accenture Ventures kasama ang isang partnership upang magpatakbo ng tuloy-tuloy na offensive testing para sa mga kliyente. Nakapatong ito sa isang $35M Series C extension na sinuportahan ng NVIDIA NVentures, Samsung Ventures, at SentinelOne S Ventures. Ang isang partnership sa Accenture upang maghatid ng tuloy-tuloy na offensive testing ay malapit na sa hugis ng pinangalanang enterprise-engagement na inaasahan ng prediksyon, at pinananatili ng paparating na security na kalendaryo (AI Summit ng Black Hat USA August 1-6, AI Village ng DEF CON) ang atensyon ng buyer sa agentic offensive tooling. Ang puwang papunta sa bar: ang isang pamumuhunan ng Accenture Ventures kasama ang isang delivery partnership ay isang relasyong vendor-channel at isang estratehikong round, hindi pa isang ipinahayag na pinangalanang enterprise o government na kontrata ng customer. Ang falsifiable na target ng prediksyon ay isang pinangalanang enterprise o government na deal, na nilalapitan ngunit hindi pa pinatutunayan ng balita ngayon na financing-at-partnership.",
+      "reference_links": [
+        {
+          "label": "TweakTown - AMD announces Advancing AI 2026 event for July (July 22-23, San Francisco)",
+          "url": "https://www.tweaktown.com/news/110826/amd-announces-advancing-ai-2026-event-for-july/index.html"
+        },
+        {
+          "label": "MLQ - AMD sets July date for Advancing AI 2026 flagship event in San Francisco",
+          "url": "https://mlq.ai/news/v2/amd-sets-july-date-for-advancing-ai-2026-flagship-event-in-san-francisco/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "landing",
+        "narrative": "Isinusulong ng balita ng XBOW ngayon ang named-enterprise-deal prediction (June 22) sa timing at aktor: ang XBOW, isang pinangalanang autonomous-pentest vendor, ay kumuha ng estratehikong pamumuhunan mula sa Accenture Ventures kasama ang isang partnership para magpatakbo ng tuloy-tuloy na offensive testing para sa mga kliyente, na nakapatong sa isang $35M Series C mula sa NVIDIA, Samsung, at SentinelOne. Malapit na ito sa hugis ng pinangalanang engagement, at pinananatili ng AI Summit ng Black Hat na buhay ang atensyon ng buyer.",
+        "coherence": 3,
+        "remaining_gap": "Ang isang pamumuhunan ng Accenture Ventures kasama ang delivery partnership ay isang relasyong vendor-channel, hindi pa isang ipinahayag na pinangalanang enterprise o government na kontrata ng customer."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.60ff24cfe4c34842",
+        "short_label": "Intel Foundry lands a second external AI-chip customer on 18A by Q2 2027",
+        "prediction_date": "2026-06-11"
+      },
+      "today_relevance": 2,
+      "evidence_summary": "Mahina lamang ang epekto ng pag-unveil ng OpenAI-Broadcom Jalapeno (June 24) sa thesis ng Intel-Foundry-second-customer; pinatitibay nito ang backdrop ng demand para sa custom-AI-silicon nang hindi hinahawakan ang claim tungkol sa foundry-customer. Ang Jalapeno ay isa pang halimbawa ng isang hyperscale-class na buyer na nag-uutos ng custom inference ASIC na co-designed kasama ang isang merchant na partner (Broadcom) at networking fabric, na siyang fabless-AI-chip-designer na pattern na nagbibigay ng demand para sa kapasidad ng panlabas na foundry. Ngunit ang prediksyon ay partikular tungkol sa Intel Foundry na pumipirma ng pangalawang panlabas na AI-chip na customer sa 18A node, at pinangalanan ng balita ngayon ang Broadcom bilang design partner nang walang paglalahad kung aling foundry ang gumagawa ng Jalapeno. Walang senyales ng Intel Foundry sa ulat ngayon. Malaki ang puwang: nagbibigay ang araw ng tematikong demand-side na konteksto para sa custom AI silicon, hindi isang nilagdaang Intel Foundry 18A na kasunduan ng customer o paglalahad ng tape-out, na siyang falsifiable na core ng prediksyon.",
+      "reference_links": [
+        {
+          "label": "SiliconANGLE - OpenAI, Broadcom debut custom Jalapeno chip for AI inference",
+          "url": "https://siliconangle.com/2026/06/24/openai-broadcom-debut-custom-jalapeno-chip-llm-inference/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "none",
+        "narrative": "Pinatitibay ng pag-unveil ng OpenAI-Broadcom Jalapeno ngayon ang backdrop ng demand para sa custom-AI-silicon sa likod ng Intel Foundry second external AI-chip customer on 18A prediction (Jun 11), ngunit pinangalanan nito ang Broadcom bilang design partner nang walang paglalahad kung aling foundry ang gumagawa ng bahagi. Walang lumitaw na senyales ng customer ng Intel Foundry 18A ngayon.",
+        "coherence": 1,
+        "remaining_gap": "Kailangan ng isang pinangalanang pangalawang customer ng Intel Foundry 18A AI-chip o isang paglalahad ng tape-out; nagbibigay lamang ang araw ng tematikong demand-side na konteksto."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.a4ee0b5435860b21",
+        "short_label": "AWS Continuum's sandbox exploit-validation goes industry baseline by H1 2027",
+        "prediction_date": "2026-06-21"
+      },
+      "today_relevance": 2,
+      "evidence_summary": "Hinahawakan ng senyales ng managed-tier para sa autonomous-pentest agents (June 24-25) ang prove-the-finding-by-running-it na thesis sa kanugnay, hindi sa landing. Ang autonomous platform ng XBOW ay nagdurugtong ng multi-step na exploitation paths sa bilis ng makina, na bumubuo at nagpapatakbo ng gumaganang exploits upang ipakita ang reachability. Ito ang galaw ng sandbox exploit-validation ng Continuum na pinalawak sa larangan ng offensive-vendor, at pinananatili ng paparating na security na kalendaryo (AI Summit ng Black Hat USA August 1-6, AI Village ng DEF CON) ang proof-of-exploit na tooling sa harap ng mga buyer. Ang kaugnayan ay nasa momentum at kanugnay sa offensive-side, hindi sa depensibong landing. Ang senyales ngayon ay financing at partnership ng isang offensive na autonomous-pentest vendor, hindi ang depensibong exploit-validation pipeline na nagiging baseline ng industriya sa mga pinangalanang code-security na vendor. Ang puwang papunta sa bar: pinangalanan ng prediksyon ang isang depensibong sandbox proof-of-exploit gate na nagiging baseline ng industriya, at hindi isinusulong ng pagbabalangkas ng offensive-attacker-tooling ngayon ang depensibong-baseline na claim na iyon.",
+      "reference_links": [
+        {
+          "label": "TweakTown - AMD announces Advancing AI 2026 event for July (July 22-23, San Francisco)",
+          "url": "https://www.tweaktown.com/news/110826/amd-announces-advancing-ai-2026-event-for-july/index.html"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "none",
+        "narrative": "Ang pagdurugtong ng XBOW ng gumaganang exploits sa bilis ng makina ay umaalingawngaw sa galaw na patunay-sa-pagpapatakbo sa likod ng AWS Continuum sandbox exploit-validation industry-baseline prediction (Jun 21), ngunit sa kanugnay lamang sa offensive-side. Ang senyales na financing-at-partnership ngayon ay momentum ng offensive-vendor, hindi ang depensibong exploit-validation gate na nagiging baseline sa mga pinangalanang code-security na vendor.",
+        "coherence": 2,
+        "remaining_gap": "Kailangan ng mga pinangalanang depensibong code-security na vendor na nag-aampon ng sandbox proof-of-exploit gate bilang baseline; nagpapakita ngayon ng offensive na attacker tooling sa halip."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.42df3be2edb72f8d",
+        "short_label": "Nvidia mean Street price target clears $300 on data-center GPU demand by Q4 2026",
+        "prediction_date": "2026-06-06"
+      },
+      "today_relevance": 2,
+      "evidence_summary": "[REVIVED] Layer 2 semantic na tugma laban sa ulat ng Jalapeno ngayon (Signals: inference fragments custom silicon Groq-style LPU, gross-margin step-down pricing pressure, soft-landing AI-accelerator demand). Ang pag-unveil ng OpenAI-Broadcom Jalapeno (June 24) ay ang kuwento ng pag-alpas sa ekonomiya ng merchant-GPU na pinangalanan ng pangangatwiran ng prediksyon bilang isang kontra-bigat sa bull case: ang pinakamalaking buyer ng frontier-model ay nagdidisenyo ng sariling inference ASIC partikular upang umalpas sa ekonomiya ng merchant-GPU sa gigawatt scale, ang tipikal na halimbawa ng demand ng inference na lumalayo sa merchant GPUs patungo sa custom silicon. Sumasalungat iyon sa thesis ng data-center-GPU-demand na pumupundar sa isang $300-plus na mean target ng Nvidia, dahil ang isang malaking inference buyer na bumubuo ng sariling silicon ay binabawasan ang merchant-GPU inference share na ipinapalagay ng bull case. Ang kaugnayan ay nasa bearish na counter-mechanism, hindi sa isang price-target. Walang dalang Nvidia analyst-target revision ang balita ngayon, walang mean-target na pigura, at walang sell-side na aksyon. Ang puwang papunta sa bar: sinusuri ang prediksyon ng isang sell-side consensus mean target na lumalampas sa $300, na hindi tinutugunan ng ulat ngayon. Pinatatalas lamang ng Jalapeno ang panganib ng inference-fragmentation sa thesis na iyon.",
+      "reference_links": [
+        {
+          "label": "SiliconANGLE - OpenAI, Broadcom debut custom Jalapeno chip for AI inference",
+          "url": "https://siliconangle.com/2026/06/24/openai-broadcom-debut-custom-jalapeno-chip-llm-inference/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "none",
+        "narrative": "Muling binuhay mula sa dormant pool, ang Nvidia mean Street price target clears $300 prediction (Jun 06) ay nahahawakan lamang ng bearish na counter-mechanism: ipinapakita ng pag-unveil ng Jalapeno ngayon na ang pinakamalaking inference buyer ay bumubuo ng sariling silicon upang umalpas sa ekonomiya ng merchant-GPU, na binabawasan ang data-center-GPU-demand share na ipinapalagay ng $300 bull case. Walang lumitaw na analyst-target revision o mean-target na pigura ngayon.",
+        "coherence": 2,
+        "remaining_gap": "Kailangan ng isang sell-side consensus mean target na lumalampas sa $300; walang dalang Nvidia analyst na aksyon ang araw, tanging pinatalas na panganib ng inference-fragmentation."
+      }
+    }
+  ]
+}

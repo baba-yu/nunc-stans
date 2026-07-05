@@ -1,0 +1,47 @@
+{
+  "date": "2026-06-24",
+  "predictions": [
+    {
+      "id": "prediction.b7f4c2a91e6d80a3",
+      "scope_hint": "tech",
+      "title": "OpenAI locks equity-coupled HBM allocation with a memory maker by Q4 2026",
+      "body": "Micron's June 22 entry into Anthropic's Series H, bundled with a multi-year HBM/DRAM/SSD supply allocation, leaves Anthropic the only frontier lab financially coupled to all three global high-bandwidth-memory suppliers (Micron, Samsung, SK Hynix). High-bandwidth memory is the binding constraint on AI training and inference scale, and equity-plus-supply structures lock capacity ahead of expected Q4 2026 memory-vendor public listings far more durably than purchase orders. The prediction is that a rival frontier lab, most plausibly OpenAI given its scale and capital access, responds by securing its own equity-coupled HBM allocation with at least one of the three suppliers, converting the supply chain from a purchasing relationship into a contested ownership stake. The signal to watch is a disclosed strategic-investment-plus-multi-year-allocation deal between a non-Anthropic lab and an HBM maker, not a bare offtake contract.",
+      "reasoning": {
+        "because": "Micron's June 22 Series H entry ties Anthropic by equity-plus-supply to all three HBM makers at once",
+        "given": "HBM is the binding scale constraint and equity locks capacity more durably than purchase orders",
+        "so_that": "A rival lab, most plausibly OpenAI, secures its own equity-coupled HBM allocation to avoid spot-market supply",
+        "landing": "by Q4 2026; non-Anthropic lab + HBM maker disclose equity-plus-allocation deal",
+        "plain_language": "Anthropic now part-owns its ties to all three memory-chip makers. Soon a competitor like OpenAI will buy its own stake to keep up."
+      },
+      "summary": "Micron's June 22 Series H entry leaves Anthropic uniquely coupled to all three HBM makers. Because memory is the binding scale constraint and equity locks capacity more durably than purchase orders, a rival lab such as OpenAI is likely to secure its own equity-coupled HBM allocation by Q4 2026."
+    },
+    {
+      "id": "prediction.7c1f9a3e84b2d6f0",
+      "scope_hint": "cross",
+      "title": "Orchestration benchmarks add a latency-disclosure column by Q1 2027",
+      "body": "Sakana's Fugu shipped June 22 as a learned orchestration model whose Ultra tier is pitched at Fable 5 and Mythos parity on its own coding, scientific, and reasoning tables, but within 48 hours Wharton's Ethan Mollick ran it on his standard shader and interactive-scene tests and found ~30-minute runs that were merely 'fine' and did not match Fable in practice. The gap is structural: a router-as-a-model that recursively delegates and verifies across a swappable frontier pool buys quality with wall-clock time that accuracy-only leaderboards never surface. The prediction is that independent evaluators and the orchestration vendors themselves move to publish latency and end-to-end wall-clock alongside quality scores as a standard reporting axis, so that a 'matches Fable on accuracy' claim is no longer accepted without a per-task time-to-completion disclosure. Expect at least one widely-cited benchmark or evaluator to formalize a latency/cost-per-task column for multi-model orchestration, and at least one orchestration vendor to publish wall-clock SLAs, by Q1 2027.",
+      "reasoning": {
+        "because": "Independent test of Fugu Ultra found ~30-min runs despite published Fable-5/Mythos accuracy parity",
+        "given": "Router-as-a-model trades wall-clock for quality, a tax accuracy-only leaderboards never surface",
+        "so_that": "An evaluator or vendor formalizes a latency/cost-per-task column for orchestration parity claims",
+        "landing": "by Q1 2027; a cited benchmark adds a latency column or a vendor posts an SLA",
+        "plain_language": "A new AI that hires other AIs scored high but took 30 minutes, so tests will start reporting speed, not just accuracy."
+      },
+      "summary": "After Fugu Ultra's frontier-parity claims met an independent test showing ~30-minute runs, orchestration evaluation should add wall-clock latency as a standard reported axis. At least one cited benchmark formalizes a latency column or a vendor publishes time-to-completion SLAs by Q1 2027."
+    },
+    {
+      "id": "prediction.7c41f9a2e8b6d503",
+      "scope_hint": "cross",
+      "title": "General-purpose mobile cobots cross 100K production-operation hours by H1 2027",
+      "body": "Collaborative Robotics' second-generation Proxie debut at Automate 2026 moved general-purpose mobile manipulation from demonstration to a quantified operating record: on-robot task inference with no cloud dependency for core execution, a $5,000-per-month price, and a first-generation track record of 12,627 logged hours, more than 40 million pounds moved, and over 17 million human steps saved across hospitals, manufacturing, and logistics on 16-hour shifts. The prediction is that at least one general-purpose mobile-cobot vendor publishes a cumulative cross-customer fleet operating record exceeding 100,000 production hours, framed as a deployment metric rather than a pilot or demo. The pivot the launch surfaces is that physical-AI vendors are competing on audited hours-in-operation and dollars-of-material-moved instead of show-floor capability clips; once one general-purpose platform anchors marketing on a six-figure fleet-hours number, monthly-subscription pricing turns operating hours into the unit buyers underwrite and rivals are pulled onto the same scoreboard. This is a productized-deployment claim, distinct from a hardware-supply or orchestration-reliability call.",
+      "reasoning": {
+        "because": "Cobot's Gen-2 Proxie launch anchored on a 12,627-hour, 40M-lb first-gen production record, not demos",
+        "given": "$5K/month pricing makes audited fleet operating-hours the unit buyers underwrite, pulling rivals on",
+        "so_that": "A general-purpose mobile-cobot vendor publishes a cross-customer fleet record above 100,000 production-operation hours",
+        "landing": "by H1 2027; one general-purpose mobile-cobot vendor, fleet-hours disclosure",
+        "plain_language": "Factory robots now brag about real hours worked, not demos; soon one will pass 100,000 hours across customers."
+      },
+      "summary": "Cobot's Gen-2 Proxie launch at Automate 2026 anchored on a first-gen operating record (12,627 hours, 40M+ pounds moved) and $5K/month pricing. Expect a general-purpose mobile-cobot vendor to publish a cross-customer fleet record above 100,000 production-operation hours by H1 2027."
+    }
+  ]
+}

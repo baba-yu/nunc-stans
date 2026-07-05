@@ -1,0 +1,31 @@
+{
+  "date": "2026-06-26",
+  "sections": [
+    {
+      "category": "Lumitaw ang maximum-severity na RCE sa ML feature-store layer: naglulupon ang Feast registry server ng unauthenticated remote code execution",
+      "bullets": [
+        {
+          "body": "Inilathala noong June 24 bilang CVE-2026-56121 ang isang kritikal at unauthenticated na remote-code-execution na depekto sa Feast, ang open-source na machine-learning feature store, na may rating na CVSS 9.3 sa ilalim ng v4.0 scoring (9.8 sa v3.1 scale) at naayos na sa Feast 0.63.0. Ang mekanismo ay isang klasikong unsafe-deserialization na bitag na direktang nakakabit sa data plane: kapag pinoproseso ng registry server ang isang gRPC request, dini-decode nito mula sa base64 ang field na user_defined_function.body ng isang OnDemandFeatureView specification at direktang ipinapasa ito sa dill.loads() bago tumakbo ang anumang authorization check, kaya makakapagsumite ang isang umaatake ng isang ginawang serialized Python object na may dalang arbitrary na __reduce__ method at makakapagpatakbo ng operating-system commands bilang ang Feast service account nang hindi nangangailangan ng anumang credential. Ang structural na pagbasa ay lumipat ang attack surface nang isang layer pababa mula sa model at sa inference engine papunta sa ML data-and-metadata plumbing na nasa likod ng mga production feature pipeline. Sa diwa, ang isang registry component na tumatanggap ng serialized transformation logic sa network ay isang unauthenticated na code-execution endpoint maliban kung naka-gate ang deserialization. Dapat ituring ng mga operator na nakalantad ang anumang pre-0.63.0 deployment na may network-reachable na gRPC endpoint, mag-upgrade agad, at tiyaking hindi maa-address ang registry mula sa mga untrusted network, dahil maayos nang naiintindihan at madaling gawing armas ang exploit primitive (base64-wrapped pickle papunta sa isang public RPC surface). <a href=\"https://github.com/advisories/GHSA-q63x-9pfm-mjx4\">GitHub Advisory Database - pinahihintulutan ng unsafe deserialization sa Feast ang unauthenticated RCE (CVE-2026-56121)</a> <a href=\"https://nvd.nist.gov/vuln/detail/CVE-2026-56121\">NVD - Detalye ng CVE-2026-56121 (Feast bago ang 0.63.0, gRPC registry deserialization RCE)</a>",
+          "citations": [
+            {"label": "GitHub Advisory Database - Feast unsafe deserialization allows unauthenticated RCE (CVE-2026-56121)", "url": "https://github.com/advisories/GHSA-q63x-9pfm-mjx4"},
+            {"label": "NVD - CVE-2026-56121 Detail (Feast before 0.63.0, gRPC registry deserialization RCE)", "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56121"}
+          ]
+        }
+      ]
+    },
+    {
+      "category": "Mga AI event na dapat planuhin ngayon: bumubukas ngayong weekend ang AI Engineer World's Fair, habang umaabot hanggang tag-araw ang chip at security calendar",
+      "bullets": [
+        {
+          "body": "Ang forward calendar sa lahat ng tatlong sub-track, na nakatuon ngayong weekend sa AI Engineer World's Fair sa Moscone West sa San Francisco. Mainstream dev/data: pinupuno ng opisyal na AIE World's Fair Hackathon, na isinasagawa kasama ang Cerebral Valley, ang June 27-28, tatakbo ang isang opsyonal na New Engineer Orientation sa June 28, at tatakbo ang pangunahing programa mula June 29 hanggang July 2 (mahigit 20 track, 250+ na speaker); babalik ang GitHub Universe sa October 28-29 at tatakbo ang AWS re:Invent mula November 30 hanggang December 4 sa Las Vegas. AI-security: tatakbo ang Black Hat USA 2026 sa August 1-6 sa Mandalay Bay sa Las Vegas, na may Summit Day (kasama ang AI Summit track) sa August 4 at ang pangunahing Briefings sa August 5-6, na agad sinusundan ng DEF CON 34 at ang AI Village nito sa August 6-9; ang AI Risk Summit ng SecurityWeek ay isang in-person na event sa August 11-12 sa Ritz-Carlton sa Half Moon Bay; ang OWASP Global AppSec USA ay November 5-6 sa San Francisco; at nananatili sa watch list ang AI Agent Security Summit series ng Zenity. AI-chip/hardware: kumpirmado ang Advancing AI 2026 ng AMD para sa July 22-23 sa Moscone sa San Francisco, na may in-person na keynote at focus sa Instinct MI400-series sa July 23 (livestreamed sa YouTube channel ng AMD); tatakbo ang Hot Chips 2026 sa August 23-25 sa Memorial Auditorium ng Stanford; at ang AI Infra Summit ay September 15-17 sa Santa Clara Convention Center. <a href=\"https://www.ai.engineer/worldsfair/2026\">AI Engineer - World's Fair 2026 (June 29 - July 2, Moscone West, San Francisco)</a> <a href=\"https://www.amd.com/en/corporate/events/advancing-ai.html\">AMD - Advancing AI 2026 (San Francisco, July 22-23)</a> <a href=\"https://blackhat.com/us-26/\">Black Hat - USA 2026 (August 1-6, Mandalay Bay, Las Vegas)</a> <a href=\"https://www.securityweek.com/securityweek-to-host-ai-risk-summit-august-11-12-at-the-ritz-carlton-half-moon-bay/\">SecurityWeek - AI Risk Summit, August 11-12, Half Moon Bay</a>",
+          "citations": [
+            {"label": "AI Engineer - World's Fair 2026 (June 29 - July 2, Moscone West, San Francisco)", "url": "https://www.ai.engineer/worldsfair/2026"},
+            {"label": "AMD - Advancing AI 2026 (San Francisco, July 22-23)", "url": "https://www.amd.com/en/corporate/events/advancing-ai.html"},
+            {"label": "Black Hat - USA 2026 (August 1-6, Mandalay Bay, Las Vegas)", "url": "https://blackhat.com/us-26/"},
+            {"label": "SecurityWeek - AI Risk Summit, August 11-12, Half Moon Bay", "url": "https://www.securityweek.com/securityweek-to-host-ai-risk-summit-august-11-12-at-the-ritz-carlton-half-moon-bay/"}
+          ]
+        }
+      ]
+    }
+  ]
+}

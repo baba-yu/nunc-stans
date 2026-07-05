@@ -1,0 +1,31 @@
+{
+  "date": "2026-06-28",
+  "vs_date": "2026-06-27",
+  "items": [
+    {
+      "kind": "new",
+      "headline": "Liquid AI ships a 230M edge model with launch-day vLLM and SGLang support",
+      "diff_narrative": "Yesterday's news ran entirely on live-exploited agent-platform CVEs (Langflow's cross-tenant IDOR, AutoGPT's SSRF bypass). Today opens a fresh thread with no prior-day antecedent: Liquid AI's June 27 LFM2.5-230M, a sub-gigabyte text-only model whose headline is that the same OpenAI-compatible serving engines used in the data center (vLLM, SGLang) plus llama.cpp, MLX and ONNX are now its launch-day targets, collapsing the gap between edge runtimes and cluster-grade inference stacks. This is a clean topical pivot from security incidents to the open-weight on-device performance story."
+    },
+    {
+      "kind": "new",
+      "headline": "Qualcomm buys the Modular inference compiler and stalks Tenstorrent",
+      "diff_narrative": "A new business/hardware item with no equivalent yesterday. Qualcomm's June 24 ~$3.92B all-stock acquisition of Modular (the MAX cross-vendor inference engine), combined with reported $8-10B Tenstorrent talks and a committed hyperscaler custom-silicon ship before year-end, assembles a roughly $14B full-stack challenge to Nvidia's CUDA lock-in. Where yesterday's stories stayed at the vulnerability layer, today adds the strategic M&A layer of the same agentic-AI stack."
+    },
+    {
+      "kind": "new",
+      "headline": "Unsloth v0.1.471-beta folds GLM-5.2, Gemma 4 and DiffusionGemma into fine-tuning",
+      "diff_narrative": "Newly surfaced today and absent yesterday: Unsloth's June 18 beta adds first-class fine-tuning for the open-weight wave (GLM-5.2, Gemma 4 multi-token prediction, DiffusionGemma) just two days after GLM-5.2's June 16 drop. It pairs with the Liquid AI item to frame a tightening release-to-tuning turnaround, a tooling angle the prior day did not cover."
+    },
+    {
+      "kind": "new",
+      "headline": "OWASP reframes prompt injection as a structural, unpatchable property of agentic AI",
+      "diff_narrative": "Today elevates the security narrative from yesterday's individual CVEs to an architectural thesis. Where June 27 documented two specific agent-platform bugs as instances of a soft orchestration underbelly, OWASP's 2.01 report generalizes the claim: prompt injection is the 'universal joint' mapping to six of ten agentic categories, mitigated by design budgets (the lethal trifecta, Agents Rule of Two) rather than patched, with coding agents named the epicenter (28 of 53 tracked projects; n8n, Claude Code, AutoGPT, Dify and Roo-Code most-advisoried). It carries the prior day's structural read forward but states it as an unpatchable design constraint rather than a per-incident finding."
+    },
+    {
+      "kind": "continuing",
+      "headline": "AI events to plan around now: World's Fair main program opens this week",
+      "diff_narrative": "The events tracker continues across all three sub-tracks but advances its calendar. Yesterday the AI Engineer World's Fair was framed as a live weekend (hackathon June 27-28, Sunday orientation); today those preliminaries are marked passed and the main program (June 29 - July 2, Moscone West) is the active anchor, now reported at ~29 tracks, ~300 speakers and 6,000+ attendees versus yesterday's 20+ tracks and 250+ speakers. Today also adds OWASP Global AppSec USA's role and keeps the standing AI-security and AI-chip dates (Black Hat, DEF CON, AI Risk Summit, AMD Advancing AI, Hot Chips, AI Infra Summit) in place, dropping only the date-passed weekend items."
+    }
+  ]
+}

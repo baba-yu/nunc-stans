@@ -1,0 +1,95 @@
+{
+  "date": "2026-06-26",
+  "by_prediction": {
+    "prediction.c5d53ae94581ec63": [
+      {
+        "actor": "ML-supply-chain security researcher hunting deserialization-RCE primitives",
+        "job": "Auditing open-source ML registries, feature stores, and metadata servers for network-reachable pre-auth deserialization sinks and weaponizing a __reduce__ payload into a reproducible RCE.",
+        "outcome": "A coordinated disclosure on a named, distinct ML data/metadata-plane project yielding a CVSS 9.0+ CVE/GHSA whose root cause is unauthenticated deserialization of a network-supplied object.",
+        "motivation": "The Feast CVE-2026-56121 pattern advertises an easy, high-severity, repeatable bug class; researchers chase the credit, bounty, and conference-talk value of the next one.",
+        "task": {
+          "who": "Independent or vendor offensive-research team triaging ML-infra serialized-object endpoints",
+          "what": "Find and weaponize a pre-auth deserialization sink into RCE",
+          "where": "A second project's gRPC/HTTP/queue registry or feature-store service",
+          "when": "From the June 24 Feast advisory through Q1 2027, while the pattern is fresh",
+          "why": "Prove the deserialization-RCE class recurs and earn disclosure credit",
+          "how": "dill/pickle/joblib payload audit, fuzzing, and coordinated CVE/GHSA filing"
+        }
+      },
+      {
+        "actor": "Open-source ML-infra maintainer of a feature store or model/artifact registry",
+        "job": "Shipping and extending a registry that accepts serialized transformation logic over the network and hands it to a deserializer, keeping the unsafe-on-the-wire primitive in production by default.",
+        "outcome": "A still-deployed network service that deserializes attacker-controllable serialized objects pre-auth, leaving the exact sink a researcher can convert into the next 9.0+ advisory.",
+        "motivation": "Backward compatibility, developer ergonomics, and feature velocity keep pickle/dill-style serialization on the wire because safe-format migration is disruptive and unfunded.",
+        "task": {
+          "who": "Core maintainers and contributors of the registry/feature-store project",
+          "what": "Ingest and deserialize network-supplied serialized transform bodies",
+          "where": "The project's registry/metadata server request-handling path",
+          "when": "Across the current release cycle, today through Q1 2027",
+          "why": "Preserve compatibility and ergonomics over safe-by-default deserialization",
+          "how": "dill/pickle/cloudpickle/joblib decode of objects received over gRPC/HTTP/queue"
+        }
+      }
+    ],
+    "prediction.cd55acce9f1d2c13": [
+      {
+        "actor": "AI/ML-security or supply-chain-security platform product lead",
+        "job": "Carving the ML deserialization / serialized-artifact scanner out of the generic SCA feed into its own named, marketed product tier with stated scope and pricing.",
+        "outcome": "A named, marketed scanner tier or SKU whose stated scope explicitly covers ML serialized-artifact and unsafe-deserialization risk, announced in docs, a release, or a launch.",
+        "motivation": "Capture the freshly-validated attack surface as a sellable layer before rivals do, and differentiate beyond a CVE-feed entry once the deserialization-RCE pattern has a weaponizable shape.",
+        "task": {
+          "who": "Vendor's ML-security product-management and go-to-market team",
+          "what": "Define, name, and price an ML deserialization scanner tier",
+          "where": "Product catalog, release notes, and launch / docs surface",
+          "when": "Today through Q1 2027, riding the Feast-CVE attention window",
+          "why": "Turn the validated ML serialized-artifact surface into recurring revenue",
+          "how": "Package detection coverage into a first-class scanner SKU, not an SCA feed line"
+        }
+      },
+      {
+        "actor": "ML-supply-chain detection-engineering and threat-research team",
+        "job": "Building the scanners and rules that detect unsafe pickle/dill/joblib payloads, model checkpoints, and feature-store transformation bodies so the marketed tier has real coverage.",
+        "outcome": "A working ML serialized-artifact detection engine — signatures, gated-deserialization checks, and provenance signals — that backs the named scanning tier.",
+        "motivation": "The Feast CVE proves the unsafe-deserialization primitive is network-reachable below the model layer, so a credible detection surface must exist before the tier can be sold as first-class.",
+        "task": {
+          "who": "Startup's or vendor's detection-engineering and threat-research function",
+          "what": "Build detections for unsafe serialized ML artifacts and bodies",
+          "where": "Scanning pipeline across the ML data-and-metadata plane",
+          "when": "Today through Q1 2027, ahead of the productized tier launch",
+          "why": "Give the named tier real coverage of the deserialization attack class",
+          "how": "Static analysis of pickle/dill payloads plus gated-deserialization and provenance checks"
+        }
+      }
+    ],
+    "prediction.f7fdcbe86950bd61": [
+      {
+        "actor": "AI-accelerator silicon vendor confidential-computing product lead",
+        "job": "Productizing the existing TEE-I/O and on-die root-of-trust primitives into a named, inference-specific confidential tier with signed-model attestation, rather than a developer-preview flag.",
+        "outcome": "A named confidential-inference accelerator SKU where encrypted-in-use weights and tenant-verifiable model attestation are the marketed feature of the part itself.",
+        "motivation": "Differentiate beyond performance-per-watt as inference silicon commoditizes, and capture regulated and sovereign buyers whose data-residency and IP-protection needs are unmet by a generic confidential-computing checkbox.",
+        "task": {
+          "who": "Vendor's security-silicon and accelerator product-management teams",
+          "what": "Productize TEE-I/O plus attestation into a named inference tier",
+          "where": "Accelerator roadmap, silicon security block, and SKU launch process",
+          "when": "Today through H1 2027, targeting AMD Advancing AI, Hot Chips, or a hyperscaler launch",
+          "why": "Convert latent confidential-computing primitives into a sellable confidentiality feature",
+          "how": "On-die root-of-trust plus TEE-I/O with signed-model attestation flow"
+        }
+      },
+      {
+        "actor": "Cloud confidential-inference managed-tier product team",
+        "job": "Wrapping merchant accelerator confidential-computing primitives and a signed-model attestation service into a tenant-facing managed inference tier that proves which weights are running before data is sent.",
+        "outcome": "A named managed confidential-inference tier marketed on encrypted-in-use weights plus cryptographic, tenant-verifiable attestation of the deployed model.",
+        "motivation": "Win regulated, sovereign, and IP-sensitive workloads by answering 'prove the weights I am querying are the weights I approved' with a hardware-rooted, audited offering.",
+        "task": {
+          "who": "Cloud provider's confidential-computing and AI-platform product team",
+          "what": "Package attested encrypted-in-use inference as a managed tier",
+          "where": "Managed-inference service catalog and attestation verification pipeline",
+          "when": "Today through H1 2027, ahead of a hyperscaler launch venue",
+          "why": "Convert hardware confidentiality primitives into a procurable trust guarantee",
+          "how": "Attestation service over NVIDIA Confidential Computing, SEV-SNP, or TDX TEE-I/O"
+        }
+      }
+    ]
+  }
+}

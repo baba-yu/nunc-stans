@@ -1,0 +1,31 @@
+{
+  "date": "2026-06-22",
+  "sections": [
+    {
+      "category": "Hyundai's board is set to vote today on buying out SoftBank's last slice of Boston Dynamics, a deal whose price implies the humanoid maker is now worth roughly three times its 2021 valuation",
+      "bullets": [
+        {
+          "body": "Hyundai Motor is expected to convene a board meeting today, June 22, to approve the purchase of SoftBank Group's remaining 9.65% stake in Boston Dynamics for about $325 million, the scheduled catalyst that would make the Waltham, Massachusetts robotics firm a wholly owned Hyundai subsidiary. SoftBank is exiting via a put option it retained from the 2021 deal, which let it sell the remaining shares back to Hyundai if Boston Dynamics had not completed a US IPO by June 2026; with no listing in hand, SoftBank notified Hyundai it would exercise that right, and the affiliates are reported to be lining up the board approvals to close it. The new fact this buyout surfaces is valuation: $325 million for 9.65% implies a roughly $3.37 billion enterprise value for Boston Dynamics, more than three times the ~$1.1 billion mark from Hyundai's original 2021 transaction (when it paid about $880 million for 80%), a concrete re-rating of a humanoid platform that is moving from demos toward paid factory work. Korea Economic Daily reports the consolidation is tied to Hyundai's plan to deploy about 25,000 Atlas humanoid robots across its own factories from 2028 and could also clear the way to accelerate a future Boston Dynamics IPO, so full ownership removes the minority-shareholder friction around both the captive-deployment roadmap and any eventual listing. The transaction terms and the 25,000-unit figure are as reported by Korean business press and not yet confirmed by Hyundai or SoftBank, and the board vote itself had not been publicly ratified as of the latest reporting. <a href=\"https://www.kedglobal.com/robotics/newsView/ked202606210001\">KED Global - Hyundai to take full ownership of Boston Dynamics in SoftBank buyout</a> <a href=\"https://www.globalbankingandfinance.com/hyundai-buy-softbanks-remaining-stake-boston-dynamics-325/\">Global Banking & Finance Review - Hyundai to buy SoftBank's remaining stake in Boston Dynamics for $325 million</a> <a href=\"https://cryptobriefing.com/hyundai-acquires-softbank-boston-dynamics-stake/\">Crypto Briefing - Hyundai to acquire SoftBank's remaining stake in Boston Dynamics for $325M</a>",
+          "citations": [
+            {"label": "KED Global - Hyundai to take full ownership of Boston Dynamics in SoftBank buyout", "url": "https://www.kedglobal.com/robotics/newsView/ked202606210001"},
+            {"label": "Global Banking & Finance Review - Hyundai to buy SoftBank's remaining stake in Boston Dynamics for $325 million", "url": "https://www.globalbankingandfinance.com/hyundai-buy-softbanks-remaining-stake-boston-dynamics-325/"},
+            {"label": "Crypto Briefing - Hyundai to acquire SoftBank's remaining stake in Boston Dynamics for $325M", "url": "https://cryptobriefing.com/hyundai-acquires-softbank-boston-dynamics-stake/"}
+          ]
+        }
+      ]
+    },
+    {
+      "category": "AI events to plan around now: the confidential-computing and offensive-security tracks open tomorrow, then the AI Engineer World's Fair, with the chip and security calendar running into the fall",
+      "bullets": [
+        {
+          "body": "The forward calendar across all three sub-tracks, with the soonest events now a day out and nothing yet past its end date. AI-security: the Confidential Computing Summit lands June 23-24 at the San Francisco Mint (Linux Foundation and OPAQUE, with confidential-AI and data-sovereignty keynotes featuring AMD, Google, Microsoft, NVIDIA, Meta, Samsung and others); AI Tinkerers San Francisco hosts an Offensive Security Demo Night on June 25 with live autonomous-pentesting-agent demos (sponsor XBOW); SecurityWeek's AI Risk Summit follows August 11-12 at Half Moon Bay; Black Hat USA's AI Summit runs August 1-6 in Las Vegas alongside DEF CON's AI Village; and OWASP Global AppSec USA is November 5-6 in San Francisco, with Zenity's AI Agent Security Summit series still on the watch list. Mainstream dev/data: Snowflake runs a virtual Dev Day on June 25 (two luminary talks plus a hands-on agentic-AI lab); the AI Engineer World's Fair takes over Moscone West with main programming June 29 through July 2 (an optional New Engineer Orientation on June 28), billed as the largest technical AI-engineering conference with over 20 tracks, around 250 speakers, dedicated Inference and Security tracks, and OpenAI, Anthropic, Google DeepMind, Amazon AGI Labs and Microsoft on the floor, preceded by the official AIE World's Fair Hackathon with Cerebral Valley on June 27-28; further out, GitHub Universe returns October 28-29 and AWS re:Invent runs November 30 through December 4 in Las Vegas. AI-chip/hardware: AMD's Advancing AI 2026 is set for July 22-23 at Moscone (Instinct MI400-series focus expected, keynote July 23); Hot Chips 2026 runs August 23-25 at Stanford; and the AI Infra Summit is September 15-17 at the Santa Clara Convention Center. <a href=\"https://events.linuxfoundation.org/confidential-computing-summit/\">Linux Foundation - Confidential Computing Summit 2026 (June 23-24, San Francisco)</a> <a href=\"https://www.ai.engineer/worldsfair/2026\">AI Engineer World's Fair 2026 (June 29-July 2, San Francisco)</a> <a href=\"https://www.amd.com/en/corporate/events/advancing-ai.html\">AMD - Advancing AI 2026 (July 22-23, San Francisco)</a>",
+          "citations": [
+            {"label": "Linux Foundation - Confidential Computing Summit 2026 (June 23-24, San Francisco)", "url": "https://events.linuxfoundation.org/confidential-computing-summit/"},
+            {"label": "AI Engineer World's Fair 2026 (June 29-July 2, San Francisco)", "url": "https://www.ai.engineer/worldsfair/2026"},
+            {"label": "AMD - Advancing AI 2026 (July 22-23, San Francisco)", "url": "https://www.amd.com/en/corporate/events/advancing-ai.html"}
+          ]
+        }
+      ]
+    }
+  ]
+}

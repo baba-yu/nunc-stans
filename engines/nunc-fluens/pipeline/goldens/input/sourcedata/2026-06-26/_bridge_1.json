@@ -1,0 +1,6 @@
+{
+  "support_dimension": "because",
+  "narrative": "Feast's maximum-severity unauthenticated RCE gives the unsafe-deserialization bug class a documented exploit trail and a network-reachable, weaponizable shape. That is the structural market driver: once a primitive is both exploitable and recurring across pickle, dill, joblib and model artifacts, application-security and supply-chain vendors tend to productize a dedicated detection surface rather than leave it to generic dependency scanning.",
+  "coherence": 4,
+  "remaining_gap": "Needs a named, marketed vendor tier or SKU explicitly scoping ML serialized-artifact or deserialization scanning; today is the triggering CVE, not a shipped product."
+}

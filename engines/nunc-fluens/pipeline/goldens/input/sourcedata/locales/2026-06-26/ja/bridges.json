@@ -1,0 +1,242 @@
+{
+  "date": "2026-06-26",
+  "validation_rows": [
+    {
+      "prediction_ref": {
+        "id": "prediction.625a7234dd6e9ed1",
+        "short_label": "ML registry servers log a second max-severity deserialization RCE by Q1 2027",
+        "prediction_date": "2026-06-26"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "6月24日のFeastの脆弱性CVE-2026-56121(RCE)が、この見立ての起点となる兆候だ。オープンソースの機械学習向け特徴量ストアであるFeastに、認証不要で深刻度最大の遠隔コード実行の欠陥が見つかり、6月24日にCVE-2026-56121として公開された。CVSSはv4.0で9.3と評価され、Feast 0.63.0で修正されている。レジストリサーバーがgRPCリクエストを処理する際、OnDemandFeatureView仕様のuser_defined_function.bodyフィールドをbase64でデコードし、いかなる認可チェックも経ずにそのままdill.loads()へ渡す。そのため攻撃者は、任意の__reduce__メソッドを仕込んだ細工済みのシリアライズ済みPythonオブジェクトを送り込み、認証情報なしにFeastのサービスアカウント権限でOSコマンドを実行できる。本日の報道が示す構造的な読み筋は、まさにこの予測の前提そのものだ。機械学習の攻撃対象領域は、モデルや推論エンジンよりも一段下の、データとメタデータを扱う配管部分まで降りてきた。シリアライズされた変換ロジックをネットワーク越しに取り込むレジストリは、デシリアライズが制御されていない限り、認証不要のコード実行エンドポイントにほかならない。そして機械学習基盤が通信上のシリアライズ済みオブジェクトを信頼する場面ならどこでも、同じ仕組みが繰り返し現れる。反証可能な基準までの隔たりはこうだ。この予測は、2つ目となる、名前のある別個のプロジェクト(Feastではなく、CVE-2026-56121の再採点やバックポートでもないもの)が、機械学習のレジストリ・特徴量ストア・メタデータエンドポイントにおける、ネットワーク経由で渡されたオブジェクトの安全でないデシリアライズを根本原因とする、CVSS 9.0以上の独自のCVE/GHSAを受けることを要求する。本日はその最初の事例と構造的な引き金を提供したが、この脆弱性クラスが実在することを裏づける再発はまだ起きていない。",
+      "reference_links": [
+        {
+          "label": "GitHub Advisory Database - Feast unsafe deserialization allows unauthenticated RCE (CVE-2026-56121)",
+          "url": "https://github.com/advisories/GHSA-q63x-9pfm-mjx4"
+        },
+        {
+          "label": "NVD - CVE-2026-56121 Detail (Feast before 0.63.0, gRPC registry deserialization RCE)",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56121"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "FeastのCVE-2026-56121は、起点となる最初の事例だ。CVSS 9.3の認証不要なRCEであり、gRPCレジストリがbase64デコードした特徴量ビューのbodyを、認可チェックを経ずにdill.loads()へ渡す。これは、機械学習の攻撃対象領域がデータとメタデータの層まで降りてきたという前提を裏づける。通信上のシリアライズ済みオブジェクトを信頼するレジストリは、どれもコード実行エンドポイントになりうる。",
+        "coherence": 4,
+        "remaining_gap": "2つ目となる別個の名前のあるプロジェクトが、機械学習のレジストリや特徴量ストアのエンドポイントで、自身のCVSS 9.0以上のデシリアライズCVEを受ける必要がある。本日提供されたのは最初の事例のみだ。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.7b31cbaef01800e6",
+        "short_label": "Security vendor ships ML deserialization scanning as a named tier by Q1 2027",
+        "prediction_date": "2026-06-26"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "6月24日のFeastの脆弱性CVE-2026-56121(RCE)が、この見立ての土台となる構造的な引き金だ。深刻度最大(CVSS 9.3 v4.0)で認証不要のRCEは、Feastのレジストリサーバーが利用者の指定した特徴量ビューの関数bodyをbase64デコードし、いかなる認可チェックも経ずにそのままdill.loads()へ渡すというものだ。これは、攻撃対象領域がモデルや推論エンジンよりも一段下、シリアライズされたロジックをネットワーク越しに取り込む機械学習の配管部分まで移ったことを示している。これはまさに同じ安全でないデシリアライズの仕組み(pickle/dill/joblibのペイロード、モデルのチェックポイント、特徴量ストアの変換body)であり、この予測は、名前のあるアプリケーションセキュリティないしサプライチェーンセキュリティのプラットフォーム(Snyk / Endor Labs / JFrog / Protect AI / HiddenLayerの系統)が、これを独立したスキャナー階層として製品化すると見込んでいる。ある脆弱性クラスに実証済みの悪用経路と、ネットワークから到達可能で武器化しやすい形が揃うと、ベンダーは汎用の依存関係スキャンに任せるのではなく、専用の検出機能を製品化する傾向がある。基準までの隔たりはこうだ。反証可能な核心は、名前があり市場投入された製品階層・モジュール・SKUであって、その公表された対象範囲が機械学習のシリアライズ成果物・デシリアライズ・モデルサプライチェーンのスキャンを明示的に含み、ベンダーのドキュメント・リリース・発表で告知されたものだ。本日あるのは引き金となるCVEであって、出荷された製品ではない。FeastのCVEを取り込むだけの汎用SCAツール、単発のブログ記事、プロンプトインジェクション対策のガードレール製品は該当しない。",
+      "reference_links": [
+        {
+          "label": "GitHub Advisory Database - Feast unsafe deserialization allows unauthenticated RCE (CVE-2026-56121)",
+          "url": "https://github.com/advisories/GHSA-q63x-9pfm-mjx4"
+        },
+        {
+          "label": "NVD - CVE-2026-56121 Detail (Feast before 0.63.0, gRPC registry deserialization RCE)",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56121"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Feastの深刻度最大で認証不要なRCEは、安全でないデシリアライズの脆弱性クラスに、実証済みの悪用経路と、ネットワークから到達可能で武器化しやすい形を与える。これが構造的な市場の駆動力だ。ある仕組みが悪用可能であり、しかもpickle・dill・joblib・モデル成果物にまたがって繰り返し現れるようになると、アプリケーションセキュリティやサプライチェーンのベンダーは、汎用の依存関係スキャンに任せず専用の検出機能を製品化する傾向がある。",
+        "coherence": 4,
+        "remaining_gap": "機械学習のシリアライズ成果物やデシリアライズのスキャンを明示的に対象とする、名前があり市場投入されたベンダーの階層やSKUが必要だ。本日あるのは引き金となるCVEであって、出荷された製品ではない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.079ca77d11decc5f",
+        "short_label": "AI accelerator ships confidential-inference tier with attestation by H1 2027",
+        "prediction_date": "2026-06-26"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "本日の報道は、この見立てが拠って立つ構造的な引き金と、開示の舞台の両方を提供する。6月24日のFeastの脆弱性CVE-2026-56121(RCE)は、この予測が指し示すモデルサプライチェーンの完全性という論点を鋭くする。エージェント型AIのセキュリティの流れは、汚染されたチェックポイントや認証されていないレジストリにリスクを結びつけ続けており、署名付きモデルの証明は「自分が問い合わせている重みは、自分が承認した重みである」と立証するための、ハードウェアに根ざした答えだ。会場の側では、今後のAIチップとAIセキュリティのカレンダーが、秘匿推論向けの部品が現れそうな段階をまさに名指ししている。AMDのAdvancing AI 2026(7月22-23日、Mosconeにて。対面の基調講演とInstinct MI400シリーズへの注力は7月23日)とBlack Hat USA 2026(8月1-6日、Mandalay Bay、AI Summitは8月4日)が、この予測にとって有力な開示の舞台だ。この予測は、専用設計のAI推論アクセラレータが、秘匿コンピューティングを名前のある中核機能として出荷ないし発表されること、すなわちダイ上のルートオブトラスト、CPUとアクセラレータの境界をまたいで重みとアクティベーションを使用中も暗号化したまま保つTEE-I/O、署名付きモデルの証明を備え、名前のある秘匿推論のSKUまたはマネージド階層として市場投入されることを見込んでいる。基準までの隔たりはこうだ。本日あるのは引き金とカレンダーであって、出荷される部品ではない。GPUの仕様表に並ぶ汎用の秘匿コンピューティング系の項目、研究論文、TEE-I/Oやモデル証明を欠いた秘匿VMの提供は該当しない。名前のある秘匿推論の階層はまだ開示されていない。",
+      "reference_links": [
+        {
+          "label": "AMD - Advancing AI 2026 (San Francisco, July 22-23)",
+          "url": "https://www.amd.com/en/corporate/events/advancing-ai.html"
+        },
+        {
+          "label": "Black Hat - USA 2026 (August 1-6, Mandalay Bay, Las Vegas)",
+          "url": "https://blackhat.com/us-26/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "Feastのレジストリの脆弱性(RCE)は、モデルサプライチェーンの完全性という論点を鋭くし、問い合わせている重みが承認した重みであると立証するうえで、ハードウェアに根ざした署名付きモデルの証明を答えにする。この脅威の枠組みに加え、有力な開示の段階を名指しする今後のカレンダー、すなわちAMDのAdvancing AI 2026(7月22-23日)とBlack Hat USA 2026(8月1-6日)を踏まえると、秘匿推論向けの部品はこの期間内に現れる可能性が十分にある。",
+        "coherence": 3,
+        "remaining_gap": "TEE-I/Oと署名付きモデルの証明を備え、名前のある秘匿推論の階層として市場投入される、出荷されるAIアクセラレータが必要だ。本日あるのは脅威の背景と会場のリズムのみだ。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.94703faa1b26ba42",
+        "short_label": "Managed model-serving platforms default to safe artifact handling by H1 2027",
+        "prediction_date": "2026-06-17"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "6月24日のFeastの脆弱性CVE-2026-56121(RCE)は、この防御的な予測が想定する脅威について、単一として最も強い裏づけだ。Feastのレジストリサーバーは、利用者の指定した特徴量ビューの関数bodyをbase64デコードし、いかなる認可チェックも経ずにそのままdill.loads()へ渡す。その結果、サービスアカウント権限で認証不要のCVSS 9.3のRCEが生じる。これは、マネージドのモデル配信プラットフォームや特徴量ストアがホストする、機械学習のデータとメタデータの層における、安全でない成果物の取り扱いの典型例だ。この予測は、マネージドの配信プラットフォームが、安全な成果物の取り扱い、すなわち制御ないしサンドボックス化されたデシリアライズ、署名・来歴を検証した成果物、初期状態から安全な形式を、任意設定の項目からプラットフォームの既定へと移すと見込む。本日の勧告は、まさにそうした既定での出荷を歴史的に迫ってきたたぐいの、深刻度最大で容易に武器化できる事案だ。運用者は、0.63.0より前のネットワーク到達可能なgRPCレジストリはすべて露出しているものとして扱うよう告げられている。これこそ、マネージドプラットフォームに、通信上のシリアライズ済みオブジェクトを既定では信頼しないよう仕向ける圧力にほかならない。基準までの隔たりはこうだ。この予測は、名前のあるマネージドのモデル配信プラットフォームが、安全な成果物の取り扱いを出荷時の既定にすることで検証される。本日提供されたのは、オープンソースの構成要素における動機づけとなる脆弱性であって、マネージドプラットフォームの既定の取り扱いの変更ではない。防御側の着実な進展、すなわちプラットフォームが安全な取り扱いを既定で有効にすることは、まだ開示されていない。",
+      "reference_links": [
+        {
+          "label": "GitHub Advisory Database - Feast unsafe deserialization allows unauthenticated RCE (CVE-2026-56121)",
+          "url": "https://github.com/advisories/GHSA-q63x-9pfm-mjx4"
+        },
+        {
+          "label": "NVD - CVE-2026-56121 Detail (Feast before 0.63.0, gRPC registry deserialization RCE)",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56121"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "FeastのCVE-2026-56121は、この防御的な見立てが見越していた、安全でない成果物の取り扱いの典型的な事案だ。特徴量ビューのbodyが、いかなる認可チェックも経ずにdill.loads()でデシリアライズされ、マネージドの配信や特徴量ストアがホストする機械学習のデータとメタデータの層で、認証不要のRCEを生む。深刻度最大で容易に武器化できる勧告こそ、プラットフォームに通信上のシリアライズ済みオブジェクトを既定では信頼しないよう仕向けてきた、歴史的な圧力にほかならない。",
+        "coherence": 4,
+        "remaining_gap": "制御されたデシリアライズや署名付き成果物の取り扱いを既定として出荷する、名前のあるマネージドのモデル配信プラットフォームが必要だ。本日あるのはオープンソースの構成要素における動機づけとなる脆弱性であって、プラットフォームの既定の変更ではない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.3d03e9edeb3b854c",
+        "short_label": "Hyperscaler ships TEE-I/O confidential frontier-model inference by Q1 2027",
+        "prediction_date": "2026-06-22"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "本日のニュースは、この見立てを脅威と会場の両側から補強する。6月24日のFeastの脆弱性CVE-2026-56121(RCE)は、エージェント型AIのセキュリティの流れを、モデルサプライチェーンの完全性に結びつけ続ける。認証されていないレジストリがシリアライズ済みオブジェクトをデシリアライザに渡すというものであり、これは秘匿推論と証明が封じ込めようとするのと同じクラスのリスクだ。秘匿推論と証明は、重みとアクティベーションを使用中も暗号化したまま保ち、どのモデルが動いているかを検証することでこれに対処する。今後のカレンダーは、TEE-I/Oによる秘匿推論の提供が現れそうな会場を名指しする。AMDのAdvancing AI 2026(7月22-23日、Mosconeにて。Instinct MI400シリーズの基調講演は7月23日)とBlack Hat USA 2026(8月1-6日、AI Summitは8月4日)は、この予測の期間内にまさに位置する。この予測の反証可能な標的は、ハイパースケーラーが、CPUとアクセラレータの境界をまたいで重みとアクティベーションを使用中も暗号化するTEE-I/Oを備えた秘匿なフロンティアモデル推論を、実用的な提供として出荷することだ。基準までの隔たりはこうだ。本日提供されたのは脅威の背景と直近の会場のリズムであって、ハイパースケーラーの秘匿推論のローンチではない。本日の報道では、名前のあるクラウドがTEE-I/Oによる秘匿なフロンティアモデル推論の階層を開示してはいない。",
+      "reference_links": [
+        {
+          "label": "AMD - Advancing AI 2026 (San Francisco, July 22-23)",
+          "url": "https://www.amd.com/en/corporate/events/advancing-ai.html"
+        },
+        {
+          "label": "Black Hat - USA 2026 (August 1-6, Mandalay Bay, Las Vegas)",
+          "url": "https://blackhat.com/us-26/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "Feastのレジストリのデシリアライズの脆弱性(RCE)は、エージェント型AIの流れをモデルサプライチェーンの完全性に結びつけ続ける。これは、重みとアクティベーションを使用中も暗号化したまま保つことで秘匿推論と証明が封じ込める、まさに同じクラスのリスクだ。AMDのAdvancing AI 2026(7月22-23日)とBlack Hat USA(8月1-6日)はこの期間内に確かに位置し、有力な開示の舞台となる。これらはローンチではなく、脅威の論拠とタイミングを提供する。",
+        "coherence": 3,
+        "remaining_gap": "TEE-I/Oによる秘匿なフロンティアモデル推論の階層を、名前のあるクラウドはまだ開示していない。本日あるのは脅威の背景と会場のリズムであって、出荷される提供ではない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.c349283881f8339b",
+        "short_label": "Confidential-GPU attestation lands as a cloud-AI contract term by Q2 2027",
+        "prediction_date": "2026-06-14"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "本日のニュースは、本日の新しい秘匿推論の予測が掘り下げているのと同じ、秘匿コンピューティングと証明の筋でこの見立てに触れる。6月24日のFeastの脆弱性CVE-2026-56121(RCE)、すなわち機械学習の配管における認証不要のレジストリのデシリアライズの脆弱性は、まさにモデルサプライチェーンの完全性への圧力であり、ハードウェアに根ざした証明(「重みとノードが本物で改ざんされていないことを立証する」)を、開発者プレビューの設定ではなく契約水準の要件へと押し上げる。今後のカレンダーはタイミングを補強する。AMDのAdvancing AI 2026(7月22-23日)とBlack Hat USA 2026(8月1-6日、AI Summitは8月4日)は、秘匿GPUの証明やTEE-I/Oの機能が日常的に開示・製品化される会場だ。この予測の反証可能な標的は、秘匿GPUの証明が、宣伝文句ではなく、契約化され監査可能なクラウドAIの調達条件として現れることだ。基準までの隔たりはこうだ。本日提供されたのは脅威の論拠と会場のリズムであって、開示された契約条件ではない。本日の報道には、秘匿GPUの証明を調達条項として名指しするクラウドAIの契約は現れていない。",
+      "reference_links": [
+        {
+          "label": "AMD - Advancing AI 2026 (San Francisco, July 22-23)",
+          "url": "https://www.amd.com/en/corporate/events/advancing-ai.html"
+        },
+        {
+          "label": "Black Hat - USA 2026 (August 1-6, Mandalay Bay, Las Vegas)",
+          "url": "https://blackhat.com/us-26/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "機械学習の配管における認証不要のレジストリのデシリアライズの脆弱性(RCE)は、まさにモデルサプライチェーンへの圧力であり、ハードウェアに根ざした証明を、開発者プレビューの設定から契約水準の要件へと押し上げる。AMDのAdvancing AI 2026(7月22-23日)とBlack Hat USA(8月1-6日)は、秘匿GPUの証明やTEE-I/Oの機能が開示・製品化される会場であり、この見立てのタイミングを補強する。",
+        "coherence": 3,
+        "remaining_gap": "本日、秘匿GPUの証明を調達条項として名指しするクラウドAIの契約はない。あるのは脅威の論拠と会場のリズムのみで、契約化された条件ではない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.a943725fb4046b01",
+        "short_label": "An autonomous-pentest vendor lands a named enterprise/gov deal by Q1 2027",
+        "prediction_date": "2026-06-22"
+      },
+      "today_relevance": 2,
+      "evidence_summary": "本日のニュースは、この見立てにカレンダーの文脈でしか触れず、新たな成約の兆候には触れない。今後のAIセキュリティのカレンダーは、自律的な攻撃用ツールを企業や政府の購入者の前に並べ続ける。Black Hat USA 2026(8月1-6日、Mandalay Bay。AI SummitはSummit Dayの8月4日、Briefingsは8月5-6日)、DEF CON 34とそのAI Village(8月6-9日)、SecurityWeekのAI Risk Summit(8月11-12日、Half Moon Bay)は、自律ペンテストのベンダーが秋の調達期を前に購入者に売り込む花形の舞台だ。だがこれは会場のリズムであって、取引ではない。この予測の反証可能な標的は、自律ペンテストのベンダーによる、名前のある企業または政府の顧客との成約だ。そして本日の報道には、そうした契約は何ら載っていない。名前のある購入者もなく、開示された契約もない。基準までの隔たりは取引そのものすべてだ。本日提供されたのは、そうした取引が発表されうる時期を枠づける会議のカレンダーのみだ。",
+      "reference_links": [
+        {
+          "label": "Black Hat - USA 2026 (August 1-6, Mandalay Bay, Las Vegas)",
+          "url": "https://blackhat.com/us-26/"
+        },
+        {
+          "label": "SecurityWeek - AI Risk Summit, August 11-12, Half Moon Bay",
+          "url": "https://www.securityweek.com/securityweek-to-host-ai-risk-summit-august-11-12-at-the-ritz-carlton-half-moon-bay/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "none",
+        "narrative": "本日の報道が示すのはカレンダー上の近接のみで、成約の兆候ではない。Black Hat USA(8月1-6日、AI Summitは8月4日)、DEF CON 34のAI Village(8月6-9日)、SecurityWeekのAI Risk Summit(8月11-12日)は、自律ペンテストのベンダーが秋の調達期を前に企業や政府の購入者に売り込む花形の舞台だ。これは会場のリズムであって、取引ではない。",
+        "coherence": 2,
+        "remaining_gap": "名前のある企業や政府の購入者もなく、開示された契約もない。本日あるのは、そうした取引が発表されうる時期を枠づける会議のカレンダーのみだ。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.47a4eb0e8d95b76d",
+        "short_label": "Autonomous pentest agents ship as named managed tier by Q4 2026",
+        "prediction_date": "2026-06-25"
+      },
+      "today_relevance": 2,
+      "evidence_summary": "本日のニュースは、AIセキュリティのイベントのカレンダーを通じてのみこの見立てに関わり、製品のローンチを通じてではない。Black Hat USA 2026(8月1-6日、AI SummitはSummit Dayの8月4日)とDEF CON 34のAI Village(8月6-9日)は、自律的な攻撃用セキュリティのエージェントに、秋の調達期を前にした本年最初の花形の企業向け購入者の舞台を与える。SecurityWeekのAI Risk Summit(8月11-12日、Half Moon Bay)は、このカテゴリーをリスク側の購入者の前に保ち続ける。このリズムは、名前のあるマネージド階層がいつ市場投入されうるかを枠づけるが、それ自体は階層そのものではない。この予測の反証可能な標的は、少なくとも1社の大手サービスまたはセキュリティプラットフォームのベンダーが、独自のSKUと価格を備え、継続的に稼働する名前のあるマネージド階層として、自律ペンテストのエージェントを2026年第4四半期までに市場投入することだ。基準までの隔たりはこうだ。本日示されたのは会議のカレンダーのみであって、名前のあるセルフサービス型のマネージド製品ではない。責任や対象範囲をめぐる懸念から、これらのエージェントは人による監督付きの試験運用にとどめ置かれ、ローンチが期間を越えて押し出される可能性もある。",
+      "reference_links": [
+        {
+          "label": "Black Hat - USA 2026 (August 1-6, Mandalay Bay, Las Vegas)",
+          "url": "https://blackhat.com/us-26/"
+        },
+        {
+          "label": "SecurityWeek - AI Risk Summit, August 11-12, Half Moon Bay",
+          "url": "https://www.securityweek.com/securityweek-to-host-ai-risk-summit-august-11-12-at-the-ritz-carlton-half-moon-bay/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "none",
+        "narrative": "本日の報道は、この見立てを実質的に前進させない。唯一の接点は会場のリズムだ。Black Hat USAのAI Summit(8月4日)とDEF CON 34のAI Village(8月6-9日)が、自律的な攻撃用セキュリティのエージェントを秋の購入者の前に並べる。これは名前のあるマネージド階層がいつ市場投入されうるかを枠づけるが、本日、継続的に稼働する自律ペンテストのSKUを出荷ないし値付けしたベンダーはなかった。",
+        "coherence": 2,
+        "remaining_gap": "独自のSKUと価格を備えた、名前のあるセルフサービス型のマネージド自律ペンテスト階層がない。責任や対象範囲をめぐる懸念から、これらは監督付きの試験運用にとどめ置かれる可能性がある。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.3e6e8b6ae1e7c76e",
+        "short_label": "AI-agent procurement adds a numeric prompt-injection-resistance bar by Q2 2027",
+        "prediction_date": "2026-06-23"
+      },
+      "today_relevance": 2,
+      "evidence_summary": "本日のニュースは、この見立てに近接と会場で触れるのみで、調達仕様の変更には触れない。6月24日のFeastの脆弱性CVE-2026-56121(RCE)は、より広いエージェント型AIの攻撃対象領域をめぐる鼓動を保ち続ける。機械学習の配管における認証不要のコード実行経路であり、AI調達における計測可能なセキュリティ基準への購入者側の需要を後押しするたぐいの事案だ。ただしこれはプロンプトインジェクションではなくデシリアライズの欠陥だ。今後のカレンダーは、そうした調達の規範が議論され成文化されるアプリケーションセキュリティの場を名指しする。OWASP Global AppSec USA(11月5-6日、サンフランシスコ)は、Black HatやDEF CONのより広いAIセキュリティのトラックと並んで、この予測の期間内にまさに位置する。この予測の反証可能な標的は、AIエージェントの調達が、数値で示すプロンプトインジェクション耐性の基準、すなわち購入要件における定量化された閾値を加えることだ。基準までの隔たりは事実上、主張のほぼ全体だ。本日提供されたのは主題上のセキュリティ圧力と関連する標準の場であって、数値で示すプロンプトインジェクション耐性の閾値を規定する調達文書ではない。",
+      "reference_links": [
+        {
+          "label": "Black Hat - USA 2026 (August 1-6, Mandalay Bay, Las Vegas)",
+          "url": "https://blackhat.com/us-26/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "none",
+        "narrative": "本日のニュースは、この見立てを実質的に前進させない。Feastのデシリアライズの脆弱性(RCE)は、エージェント型AIの攻撃対象領域をめぐる鼓動を保ち、計測可能なセキュリティ基準への購入者の需要を後押しする。だがこれはプロンプトインジェクションの欠陥ではなく、OWASP Global AppSec USA(11月5-6日)は会場の文脈にすぎない。数値で示すプロンプトインジェクション耐性の閾値を規定する調達文書は現れなかった。",
+        "coherence": 2,
+        "remaining_gap": "主張のほぼ全体だ。定量化されたプロンプトインジェクション耐性の基準を加えた購入要件はない。本日あるのは主題上の圧力と標準の場であって、調達仕様ではない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.f492c98e68ae3d89",
+        "short_label": "Inline MCP-channel policy enforcement ships as a platform default by Q1 2027",
+        "prediction_date": "2026-06-16"
+      },
+      "today_relevance": 1,
+      "evidence_summary": "本日のニュースは、このエージェント型セキュリティ強化の見立てにごく薄くしか触れない。6月24日のFeastの脆弱性CVE-2026-56121(RCE)は、AI基盤における認証不要でネットワークから到達可能なコード実行の領域という、同じ広い系統に属し、エージェントやツールのチャネルに対するインラインのポリシー適用を動機づけるものだ。ただしこれは機械学習の特徴量ストアのレジストリにおけるデシリアライズの欠陥であって、MCPチャネルの問題ではなく、MCPのポリシー適用の既定について何も語っていない。本日の報道にはMCP固有の兆候はない。インラインのMCPチャネルのポリシー適用を有効にしたプラットフォームもなく、チャネルの既定を変更したベンダーもない。この予測の反証可能な標的は、プラットフォームがインラインのMCPチャネルのポリシー適用を既定で有効にして出荷することだ。本日のニュースはこれを扱っていない。関連性は、AI基盤の攻撃対象領域における一般的な主題上の近接にとどまる。",
+      "reference_links": [],
+      "bridge": {
+        "support_dimension": "none",
+        "narrative": "本日のニュースは、この見立てを前進させない。Feastの脆弱性(RCE)は、AI基盤における認証不要でネットワークから到達可能なコード実行の領域という同じ広い系統に属するが、これは特徴量ストアのデシリアライズの欠陥であって、MCPチャネルの問題ではなく、MCPのポリシー適用の既定について何も語っていない。インラインのMCPチャネルのポリシー適用を有効にしたプラットフォームもなく、チャネルの既定を変更したベンダーもない。",
+        "coherence": 1,
+        "remaining_gap": "MCP固有の兆候のいずれかが必要だ。すなわち、インラインのMCPチャネルのポリシー適用を既定で有効にして出荷するプラットフォームだ。本日あるのは、同じ系統の攻撃対象領域というごく薄い近接のみだ。"
+      }
+    }
+  ]
+}

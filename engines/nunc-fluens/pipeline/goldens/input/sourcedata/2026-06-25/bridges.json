@@ -1,0 +1,218 @@
+{
+  "date": "2026-06-25",
+  "validation_rows": [
+    {
+      "prediction_ref": {
+        "id": "prediction.225d77f109a86780",
+        "short_label": "Inference-ASIC cohort gains a fourth named buyer-designed chip by H1 2027",
+        "prediction_date": "2026-06-25"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "OpenAI-Broadcom Jalapeno unveil (June 24) is the precipitating origin signal for this thesis. OpenAI and Broadcom debuted Jalapeno, OpenAI's first custom inference accelerator and the first chip from a multi-year co-design effort, framed as an 'Intelligence Processor' architected around LLM inference rather than training. Engineering samples are already running machine-learning workloads in the lab at production target frequency and power, OpenAI claims performance per watt 'substantially better than current state-of-the-art,' and initial data-center deployment is targeted by end of 2026 at gigawatt scale. The platform is rack-scale: Broadcom's Tomahawk fabric (up to 1.6 terabits per second) wires the accelerators together and Celestia is co-designing the server rack. The structural read in today's reporting is exactly the prediction's premise -- the largest frontier-model buyer is now following the hyperscaler playbook of designing its own inference ASIC to escape merchant-GPU economics, placing a named OpenAI-Broadcom part alongside the Google-Broadcom TPU and Amazon Trainium lineage. The gap to the falsifiable bar: the cohort's fourth member is not yet here. No additional frontier-model buyer (Anthropic, Meta, xAI, or Microsoft) has publicly committed to or unveiled its own rack-scale inference accelerator, and the falsifiable core requires a named part or firm public commitment -- not a 'exploring custom silicon' rumor, and not an extension of an existing TPU or Trainium line.",
+      "reference_links": [
+        {
+          "label": "SiliconANGLE - OpenAI, Broadcom debut custom Jalapeno chip for AI inference",
+          "url": "https://siliconangle.com/2026/06/24/openai-broadcom-debut-custom-jalapeno-chip-llm-inference/"
+        },
+        {
+          "label": "Neowin - OpenAI and Broadcom unveil Jalapeno, a new AI chip built for LLM inference",
+          "url": "https://www.neowin.net/news/openai-and-broadcom-unveil-jalapeo-a-new-ai-chip-built-for-llm-inference/"
+        },
+        {
+          "label": "Constellation Research - OpenAI, Broadcom unveil first AI inference chip",
+          "url": "https://www.constellationr.com/insights/news/openai-broadcom-unveil-first-ai-inference-chip"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Today's OpenAI-Broadcom Jalapeno unveil is the precondition the Inference-ASIC cohort gains a fourth named buyer-designed chip by H1 2027 (2026-06-25) thesis rests on: the largest frontier-model buyer ships a named, co-designed inference accelerator with partner fabric and an end-2026 deployment target, confirming the escape-hatch template peers now face pressure to copy.",
+        "coherence": 4,
+        "remaining_gap": "No fourth buyer (Anthropic, Meta, xAI, Microsoft) has yet named a part or made a firm public commitment to its own rack-scale inference accelerator."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.3a5fa9315f58608d",
+        "short_label": "Agentic coding platforms ship token budgets and caps as default by Q2 2027",
+        "prediction_date": "2026-06-25"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "Gartner agentic-coding token-economics note (June 24) is the origin signal and reads as the product spec for this thesis. Gartner predicts that by 2028 the cost of AI coding will surpass the average developer's salary, driven by rising LLM token consumption and the shift to consumption-based pricing for agentic coding tools. The quotable thresholds are the news: 23 percent of technology leaders already spend $200-$500 per developer per month on tokens, and 6 percent of organizations pay more than $2,000 per developer per month. Gartner pins the steepest cost escalation on ungoverned autonomy in agent-driven workflows, bloated context windows, and the absence of structured feedback to optimize usage, naming the autonomous-developer-loop tools (the Cursor / Claude Code / Codex CLI class of agentic IDEs) as the per-seat cost center, and reframes the productivity narrative as a governance problem requiring a governed engineering operating model before scaled agent deployment outruns the gains. That diagnosis is the spec for the predicted default feature set: per-seat and per-team token budgets, hard and soft caps, real-time usage dashboards, and policy guardrails on autonomy depth and context-window size. The gap to the bar: this is an analyst projection, not a shipped product. No major agentic-coding platform has yet shipped admin-side consumption-governance controls as on-by-default features; the prediction needs vendors to make the spend-governance layer table stakes by Q2 2027.",
+      "reference_links": [
+        {
+          "label": "Gartner - AI coding costs will surpass the average developer's salary by 2028 as token consumption surges",
+          "url": "https://www.gartner.com/en/newsroom/press-releases/2026-06-24-gartner-predicts-ai-coding-costs-will-surpass-average-developer-salary-by-2028-as-token-consumption-surges"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "Gartner's June 24 note is the structural force behind Agentic coding platforms ship token budgets and caps as default by Q2 2027 (2026-06-25): with 23 percent of leaders spending $200-$500 per developer monthly and steepest escalation pinned on ungoverned autonomy and bloated context, the per-seat cost squeeze pushes vendors to make consumption-governance table stakes.",
+        "coherence": 4,
+        "remaining_gap": "This is an analyst projection; no major platform has yet shipped admin-side budgets, caps, and autonomy guardrails as on-by-default features."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.47a4eb0e8d95b76d",
+        "short_label": "Autonomous pentest agents ship as named managed tier by Q4 2026",
+        "prediction_date": "2026-06-25"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "Autonomous-pentest agents managed-tier signal (June 24-25) is the origin evidence for this thesis. Today's reporting has XBOW's autonomous platform -- which maps application environments, probes for vulnerabilities, and chains multi-step exploitation paths at machine speed -- taking a strategic Accenture Ventures investment plus a partnership to run continuous offensive testing for clients, on top of a $35M Series C extension whose backers include NVIDIA NVentures, Samsung Ventures, and SentinelOne S Ventures. That financing-and-partnership shape is the procurement signal that incumbents are wiring autonomous pentesting into delivery stacks rather than treating it as research. The forward AI-security calendar reinforces the timing: the AI Tinkerers SF Offensive Security Demo Night surfaced these agents this week, and Black Hat USA's AI Summit (August 1-6) alongside DEF CON's AI Village give the category its first marquee enterprise-buyer stage before the fall procurement window. The gap to the bar: by Q4 2026 the prediction requires at least one major services or security-platform vendor to market an autonomous-pentesting agent as a named, continuously-running managed tier with its own SKU and pricing. Today shows an investment-plus-partnership and a conference cadence, not yet a named, self-serve managed product; liability and scoping concerns could keep these agents gated behind human-supervised pilots and push the launch past the window.",
+      "reference_links": [
+        {
+          "label": "TweakTown - AMD announces Advancing AI 2026 event for July (July 22-23, San Francisco)",
+          "url": "https://www.tweaktown.com/news/110826/amd-announces-advancing-ai-2026-event-for-july/index.html"
+        },
+        {
+          "label": "MLQ - AMD sets July date for Advancing AI 2026 flagship event in San Francisco",
+          "url": "https://mlq.ai/news/v2/amd-sets-july-date-for-advancing-ai-2026-flagship-event-in-san-francisco/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "landing",
+        "narrative": "Today's signals move Autonomous pentest agents ship as named managed tier by Q4 2026 (2026-06-25) toward its window: XBOW's strategic Accenture Ventures investment plus a continuous-offensive-testing partnership, atop a $35M Series C, shows incumbents wiring autonomous pentesting into delivery stacks, with Black Hat and DEF CON staging enterprise buyers before the fall procurement window.",
+        "coherence": 3,
+        "remaining_gap": "Today shows financing, a partnership, and a conference cadence, not yet a named, continuously-running managed tier with its own SKU and pricing; liability concerns could gate launch past Q4 2026."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.98885276749e707b",
+        "short_label": "Corsair-class inference silicon books a named hyperscaler deployment by Q3 2027",
+        "prediction_date": "2026-06-17"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "OpenAI-Broadcom Jalapeno unveil (June 24) strongly supports the named-inference-silicon-deployment thesis, though through a buyer-designed part rather than a merchant Corsair-class vendor. Jalapeno is a custom inference accelerator with a concrete deployment commitment -- initial data-center deployment targeted by end of 2026 at gigawatt scale -- wired together by Broadcom's Tomahawk fabric (up to 1.6 terabits per second) with Celestia co-designing the rack, and OpenAI is the named buyer. That is precisely the shape the prediction anticipates: dedicated inference silicon landing a named, dated large-scale deployment rather than a generic merchant-GPU buy. The forward AI-chip calendar (AMD Advancing AI 2026 July 22-23 with an Instinct MI400-series focus, Hot Chips 2026 August 23-25 at Stanford, AI Infra Summit September 15-17 Santa Clara) supplies the venue cadence where further inference-silicon bookings would surface. The gap: Jalapeno is OpenAI's own co-designed ASIC announced as a future deployment, not a merchant Corsair-class inference-silicon vendor booking a named hyperscaler customer; the prediction's falsifiable target is a Corsair-class part with a named hyperscaler deployment, which today's news does not yet provide.",
+      "reference_links": [
+        {
+          "label": "SiliconANGLE - OpenAI, Broadcom debut custom Jalapeno chip for AI inference",
+          "url": "https://siliconangle.com/2026/06/24/openai-broadcom-debut-custom-jalapeno-chip-llm-inference/"
+        },
+        {
+          "label": "Constellation Research - OpenAI, Broadcom unveil first AI inference chip",
+          "url": "https://www.constellationr.com/insights/news/openai-broadcom-unveil-first-ai-inference-chip"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "so_that",
+        "narrative": "Today's OpenAI-Broadcom Jalapeno unveil shows exactly the consequence the Corsair-class deployment prediction (June 17) anticipates: dedicated inference silicon booking a named, dated large-scale landing -- OpenAI's gigawatt-scale deployment targeted by end of 2026 over Broadcom's Tomahawk fabric -- rather than a generic merchant-GPU buy, even though Jalapeno is a buyer-designed ASIC, not a merchant vendor part.",
+        "coherence": 3,
+        "remaining_gap": "Jalapeno is OpenAI's own co-designed ASIC, not a merchant Corsair-class vendor booking a named hyperscaler customer; the falsifiable target remains unmet."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.36f4ab773b39713e",
+        "short_label": "Hyperscaler custom AI silicon splits into training vs inference SKUs by H1 2027",
+        "prediction_date": "2026-04-22"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "[REVIVED] Layer 1 keyword + Layer 2 semantic match against today's Jalapeno reporting (Signals: training-vs-inference SKU split, Trainium, Inferentia, dual-track silicon, hyperscaler in-house silicon). OpenAI-Broadcom Jalapeno unveil (June 24) is a named accelerator that OpenAI frames explicitly as an 'Intelligence Processor' architected around LLM inference rather than training -- a dedicated inference part, placed alongside the Google-Broadcom TPU and Amazon Trainium lineage, with Jalapeno itself described as the first step in a multi-generation compute platform. That inference-specific-versus-training framing is exactly the dual-track custom-silicon split the prediction names: a buyer escaping merchant-GPU economics by designing a purpose-built inference SKU separate from training silicon. The gap to the bar: Jalapeno is a single inference part from a frontier-model buyer, not yet a hyperscaler publicly delineating a two-SKU training-versus-inference custom-silicon line; the prediction needs a named dual-track split, and today's signal establishes the inference-SKU half of that split without the explicit paired training-SKU disclosure.",
+      "reference_links": [
+        {
+          "label": "SiliconANGLE - OpenAI, Broadcom debut custom Jalapeno chip for AI inference",
+          "url": "https://siliconangle.com/2026/06/24/openai-broadcom-debut-custom-jalapeno-chip-llm-inference/"
+        },
+        {
+          "label": "Constellation Research - OpenAI, Broadcom unveil first AI inference chip",
+          "url": "https://www.constellationr.com/insights/news/openai-broadcom-unveil-first-ai-inference-chip"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "Revived from the dormant pool, the training-versus-inference SKU split prediction (Apr 22) gains structural reinforcement from today's Jalapeno unveil: OpenAI frames it as an 'Intelligence Processor' purpose-built for inference rather than training, placed alongside the Google TPU and Amazon Trainium lineage -- the dual-track custom-silicon force the prediction names, a buyer designing a dedicated inference SKU separate from training silicon.",
+        "coherence": 3,
+        "remaining_gap": "Jalapeno establishes the inference-SKU half from a frontier buyer, but no hyperscaler has publicly delineated a paired two-SKU training-versus-inference custom line."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.a943725fb4046b01",
+        "short_label": "An autonomous-pentest vendor lands a named enterprise/gov deal by Q1 2027",
+        "prediction_date": "2026-06-22"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "Autonomous-pentest agents managed-tier signal (June 24-25) directly supports this thesis. Today's reporting has XBOW -- a named autonomous-pentest vendor whose platform maps environments, probes for vulnerabilities, and chains multi-step exploitation at machine speed -- taking a strategic Accenture Ventures investment plus a partnership to run continuous offensive testing for clients, on top of a $35M Series C extension backed by NVIDIA NVentures, Samsung Ventures, and SentinelOne S Ventures. An Accenture partnership to deliver continuous offensive testing is close to the named-enterprise-engagement shape the prediction anticipates, and the forward security calendar (Black Hat USA's AI Summit August 1-6, DEF CON's AI Village) keeps buyer-side attention on agentic offensive tooling. The gap to the bar: an Accenture Ventures investment plus a delivery partnership is a vendor-channel relationship and a strategic round, not yet a disclosed named enterprise or government customer contract; the prediction's falsifiable target is a named enterprise or government deal, which today's financing-and-partnership news approaches but does not yet confirm.",
+      "reference_links": [
+        {
+          "label": "TweakTown - AMD announces Advancing AI 2026 event for July (July 22-23, San Francisco)",
+          "url": "https://www.tweaktown.com/news/110826/amd-announces-advancing-ai-2026-event-for-july/index.html"
+        },
+        {
+          "label": "MLQ - AMD sets July date for Advancing AI 2026 flagship event in San Francisco",
+          "url": "https://mlq.ai/news/v2/amd-sets-july-date-for-advancing-ai-2026-flagship-event-in-san-francisco/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "landing",
+        "narrative": "Today's XBOW news advances the named-enterprise-deal prediction (June 22) on timing and actor: XBOW, a named autonomous-pentest vendor, takes a strategic Accenture Ventures investment plus a partnership to run continuous offensive testing for clients, atop a $35M Series C from NVIDIA, Samsung, and SentinelOne -- close to the named-engagement shape, with Black Hat's AI Summit keeping buyer attention live.",
+        "coherence": 3,
+        "remaining_gap": "An Accenture Ventures investment plus delivery partnership is a vendor-channel relationship, not yet a disclosed named enterprise or government customer contract."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.60ff24cfe4c34842",
+        "short_label": "Intel Foundry lands a second external AI-chip customer on 18A by Q2 2027",
+        "prediction_date": "2026-06-11"
+      },
+      "today_relevance": 2,
+      "evidence_summary": "OpenAI-Broadcom Jalapeno unveil (June 24) bears weakly on the Intel-Foundry-second-customer thesis by reinforcing the custom-AI-silicon demand backdrop without touching the foundry-customer claim. Jalapeno is another instance of a hyperscale-class buyer commissioning a custom inference ASIC co-designed with a merchant partner (Broadcom) plus networking fabric -- exactly the fabless-AI-chip-designer pattern that feeds external foundry capacity demand. But the prediction is specifically about Intel Foundry signing a second external AI-chip customer on the 18A node, and today's news names Broadcom as the design partner with no disclosure of which foundry fabricates Jalapeno; there is no Intel Foundry signal in today's reporting. The gap is large: today supplies thematic demand-side context for custom AI silicon, not a signed Intel Foundry 18A customer agreement or tape-out disclosure, which is the prediction's falsifiable core.",
+      "reference_links": [
+        {
+          "label": "SiliconANGLE - OpenAI, Broadcom debut custom Jalapeno chip for AI inference",
+          "url": "https://siliconangle.com/2026/06/24/openai-broadcom-debut-custom-jalapeno-chip-llm-inference/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "none",
+        "narrative": "Today's OpenAI-Broadcom Jalapeno unveil reinforces the custom-AI-silicon demand backdrop behind the Intel Foundry second external AI-chip customer on 18A prediction (Jun 11), but names Broadcom as design partner with no disclosure of which foundry fabricates the part. No Intel Foundry 18A customer signal appears today.",
+        "coherence": 1,
+        "remaining_gap": "Needs a named second Intel Foundry 18A AI-chip customer or a tape-out disclosure; today gives only thematic demand-side context."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.a4ee0b5435860b21",
+        "short_label": "AWS Continuum's sandbox exploit-validation goes industry baseline by H1 2027",
+        "prediction_date": "2026-06-21"
+      },
+      "today_relevance": 2,
+      "evidence_summary": "Autonomous-pentest agents managed-tier signal (June 24-25) touches the prove-the-finding-by-running-it thesis on adjacency, not on the landing. XBOW's autonomous platform chains multi-step exploitation paths at machine speed -- building and executing working exploits to demonstrate reachability -- which is Continuum's sandbox exploit-validation move generalized to the offensive-vendor field, and the forward security calendar (Black Hat USA's AI Summit August 1-6, DEF CON's AI Village) keeps proof-of-exploit tooling in front of buyers. The relevance is on momentum and offensive-side adjacency, not the defensive landing: today's signal is an offensive autonomous-pentest vendor's financing and partnership, not the defensive exploit-validation pipeline becoming an industry baseline across named code-security vendors. The gap to the bar: the prediction names a defensive sandbox proof-of-exploit gate going industry baseline, and today's offensive-attacker-tooling framing does not advance that defensive-baseline claim.",
+      "reference_links": [
+        {
+          "label": "TweakTown - AMD announces Advancing AI 2026 event for July (July 22-23, San Francisco)",
+          "url": "https://www.tweaktown.com/news/110826/amd-announces-advancing-ai-2026-event-for-july/index.html"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "none",
+        "narrative": "XBOW's autonomous platform chaining working exploits at machine speed echoes the prove-by-running move behind the AWS Continuum sandbox exploit-validation industry-baseline prediction (Jun 21), but only on offensive-side adjacency. Today's financing-and-partnership signal is offensive-vendor momentum, not the defensive exploit-validation gate becoming baseline across named code-security vendors.",
+        "coherence": 2,
+        "remaining_gap": "Needs named defensive code-security vendors adopting a sandbox proof-of-exploit gate as baseline; today shows offensive attacker tooling instead."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.42df3be2edb72f8d",
+        "short_label": "Nvidia mean Street price target clears $300 on data-center GPU demand by Q4 2026",
+        "prediction_date": "2026-06-06"
+      },
+      "today_relevance": 2,
+      "evidence_summary": "[REVIVED] Layer 2 semantic match against today's Jalapeno reporting (Signals: inference fragments custom silicon Groq-style LPU, gross-margin step-down pricing pressure, soft-landing AI-accelerator demand). OpenAI-Broadcom Jalapeno unveil (June 24) is the merchant-GPU-economics-escape story the prediction's reasoning names as a counterweight to the bull case: the largest frontier-model buyer is designing its own inference ASIC specifically to escape merchant-GPU economics at gigawatt scale, the canonical example of inference demand fragmenting away from merchant GPUs toward custom silicon. That cuts against the data-center-GPU-demand thesis underpinning a $300-plus Nvidia mean target, since a major inference buyer building bespoke silicon erodes the merchant-GPU inference share the bull case assumes. The relevance is on the bearish counter-mechanism, not on a price-target print: today's news carries no Nvidia analyst-target revision, no mean-target figure, and no sell-side action. The gap to the bar: the prediction is checked by a sell-side consensus mean target clearing $300, which today's reporting does not address; Jalapeno only sharpens the inference-fragmentation risk to that thesis.",
+      "reference_links": [
+        {
+          "label": "SiliconANGLE - OpenAI, Broadcom debut custom Jalapeno chip for AI inference",
+          "url": "https://siliconangle.com/2026/06/24/openai-broadcom-debut-custom-jalapeno-chip-llm-inference/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "none",
+        "narrative": "Revived from the dormant pool, the Nvidia mean Street price target clears $300 prediction (Jun 06) is touched only by the bearish counter-mechanism: today's Jalapeno unveil shows the largest inference buyer building bespoke silicon to escape merchant-GPU economics, eroding the data-center-GPU-demand share the $300 bull case assumes. No analyst-target revision or mean-target figure appears today.",
+        "coherence": 2,
+        "remaining_gap": "Needs a sell-side consensus mean target clearing $300; today carries no Nvidia analyst action, only sharpened inference-fragmentation risk."
+      }
+    }
+  ]
+}

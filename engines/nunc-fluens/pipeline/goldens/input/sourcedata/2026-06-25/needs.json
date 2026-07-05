@@ -1,0 +1,95 @@
+{
+  "date": "2026-06-25",
+  "by_prediction": {
+    "prediction.1508cdb4fd03cc56": [
+      {
+        "actor": "IT-services or security-platform vendor managed-offering product lead",
+        "job": "Packaging an autonomous-pentest agent into a recurring managed SKU with pricing, scoping, and safe-harbor terms before the fall procurement window.",
+        "outcome": "A named, always-on managed autonomous-pentesting tier with its own SKU and pricing, marketed as a continuous offering not a one-off engagement.",
+        "motivation": "Capture recurring offensive-security revenue and differentiate the delivery stack as autonomous red-teaming moves from research curiosity to procurable service.",
+        "task": {
+          "who": "Vendor's managed-services product and offering-management team",
+          "what": "Define SKU, pricing, and scoping for managed pentest tier",
+          "where": "Service-catalog, procurement, and delivery-stack productization process",
+          "when": "Today through Q4 2026, ahead of the fall procurement window",
+          "why": "Sell autonomous pentesting as recurring managed revenue",
+          "how": "Partner-integrated autonomous platform wrapped in a managed-service SKU"
+        }
+      },
+      {
+        "actor": "autonomous-offensive-security startup platform and delivery-integration lead",
+        "job": "Hardening the autonomous pentest platform for continuous, multi-tenant client operation and wiring it into a partner vendor's delivery stack at production scale.",
+        "outcome": "A continuously-running offensive-testing platform integrated into an incumbent vendor's stack, ready to back a named always-on managed tier.",
+        "motivation": "Convert strategic investment and partnership into recurring enterprise distribution, proving always-on machine-scale red-teaming beyond conference demos.",
+        "task": {
+          "who": "Startup's platform-engineering and partner-integration team",
+          "what": "Harden agent for continuous multi-tenant client operation",
+          "where": "Partner vendor's delivery stack and client testing environments",
+          "when": "Today through Q4 2026, after the Series C extension close",
+          "why": "Enable always-on operation a vendor can productize",
+          "how": "Continuous offensive-testing pipeline integrated via partnership API"
+        }
+      }
+    ],
+    "prediction.18ba4b3ebe2d6bba": [
+      {
+        "actor": "frontier-model buyer custom-silicon program lead",
+        "job": "Driving an in-house rack-scale inference accelerator from architecture spec through tape-out toward a named part with vendor per-watt claims and an end-2026 deployment target.",
+        "outcome": "A publicly committed or unveiled named buyer-designed inference ASIC, co-designed with a merchant partner, joining the OpenAI/Google/Amazon cohort as the fourth entrant.",
+        "motivation": "Gigawatt-scale merchant-GPU inference economics are untenable; a co-designed accelerator plus partner fabric is the proven escape hatch for the model roadmap.",
+        "task": {
+          "who": "Buyer's silicon-architecture and hardware-engineering program team",
+          "what": "Co-design and tape out a rack-scale inference accelerator",
+          "where": "Internal silicon program with a merchant co-design partner",
+          "when": "Today through H1 2027, ahead of the public commitment",
+          "why": "Cut gigawatt-scale inference cost versus merchant-GPU economics",
+          "how": "ASIC co-design with Broadcom, Marvell, or a foundry-fronted house"
+        }
+      },
+      {
+        "actor": "merchant ASIC co-design partner engagement lead",
+        "job": "Engineering a frontier buyer's custom inference accelerator plus networking fabric on a proven co-design template, packaging it toward a public unveiling with per-watt claims.",
+        "outcome": "A merchant-partner-co-designed named inference part shipped or committed by a fourth frontier buyer, replicating the Jalapeno template for a new cohort entrant.",
+        "motivation": "Convert proven Jalapeno-style co-design demand into a repeat marquee design win as more gigawatt-scale buyers face the same build-versus-buy squeeze.",
+        "task": {
+          "who": "Merchant vendor's custom-ASIC and networking-fabric engineering team",
+          "what": "Deliver co-designed accelerator and rack-scale networking fabric",
+          "where": "Merchant ASIC house engagement with the frontier buyer",
+          "when": "Today through H1 2027, runway to the named part",
+          "why": "Win a repeat marquee inference-silicon co-design contract",
+          "how": "Reusable co-design template plus partner networking fabric"
+        }
+      }
+    ],
+    "prediction.98d07cefb20b3032": [
+      {
+        "actor": "agentic-coding platform product lead",
+        "job": "Building admin-side consumption-governance into the platform: per-seat and per-team token budgets, hard and soft caps, real-time usage dashboards, and autonomy-depth guardrails.",
+        "outcome": "Token budgets, caps, dashboards, and autonomy guardrails shipped as on-by-default features in a major agentic-coding platform's enterprise tier.",
+        "motivation": "Avoid a procurement disadvantage as consumption-based pricing becomes the norm and enterprises require governed token spend before scaling agent rollout.",
+        "task": {
+          "who": "Platform's enterprise-tier product and engineering team",
+          "what": "Ship default token budgets, caps, and usage dashboards",
+          "where": "Admin console of the agentic-coding platform's enterprise tier",
+          "when": "Today through Q2 2027 product-roadmap runway",
+          "why": "Make FinOps-for-agents table stakes to win procurement",
+          "how": "Consumption-metering, policy guardrails, and per-seat budget enforcement"
+        }
+      },
+      {
+        "actor": "enterprise FinOps-for-AI and platform-engineering lead",
+        "job": "Writing procurement requirements that demand platform-enforced token discipline, then evaluating agentic-coding vendors against a governed engineering operating model before scaled rollout.",
+        "outcome": "Procurement criteria requiring native budget and cap controls, which force vendors to make consumption governance default rather than opt-in.",
+        "motivation": "Curb per-seat token bills running $200-$2,000+ per developer monthly, where ungoverned autonomy and bloated context windows drive the steepest cost escalation.",
+        "task": {
+          "who": "Enterprise FinOps, procurement, and platform-engineering function",
+          "what": "Mandate platform-enforced token budgets in vendor evaluations",
+          "where": "Agentic-coding tool procurement and RFP processes",
+          "when": "Today through Q2 2027 scaled-rollout evaluation window",
+          "why": "Enforce token discipline in the platform, not developer restraint",
+          "how": "RFP requirements and governed engineering operating-model scorecards"
+        }
+      }
+    ]
+  }
+}

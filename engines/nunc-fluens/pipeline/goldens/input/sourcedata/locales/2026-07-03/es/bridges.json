@@ -1,0 +1,280 @@
+{
+  "date": "2026-07-03",
+  "validation_rows": [
+    {
+      "prediction_ref": {
+        "id": "prediction.5e0beac647793331",
+        "short_label": "AMD MI400 will market memory bandwidth over peak FLOPS at Advancing AI",
+        "prediction_date": "2026-07-02"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "El calendario de eventos de hoy confirma Advancing AI 2026 de AMD el 22 y 23 de julio en el Moscone como el catalizador de chips de IA más cercano, donde se esperan la serie MI400 y el sistema a escala de rack Helios con plazos de disponibilidad. La cobertura plantea el próximo ciclo de aceleradores como liderado por la memoria más que por el cómputo, que es exactamente la postura de marketing que anticipa esta predicción: señala la presentación de AMD y la cumbre de Half Moon Bay de mediados de agosto como los escenarios naturales para anuncios de aceleradores seguros y de inferencia confidencial, manteniendo el relato de memoria y rack por delante de un titular de FLOPS brutos. La propia ponencia no ha ocurrido, así que el planteamiento concreto de ancho de banda de memoria por encima de FLOPS está programado más que entregado.",
+      "reference_links": [
+        {
+          "label": "SemiWiki - Hot Chips 2026",
+          "url": "https://semiwiki.com/event/hot-chips-2026/"
+        },
+        {
+          "label": "AI Infra Summit - 2026 FAQs",
+          "url": "https://www.ai-infra-summit.com/faqs"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "landing",
+        "narrative": "El calendario de hoy fija Advancing AI el 22 y 23 de julio en el Moscone, con la serie MI400 y el sistema a escala de rack Helios esperados junto a plazos de disponibilidad, y plantea el próximo ciclo de aceleradores como liderado por memoria y rack por delante de un titular de FLOPS brutos. Eso fija el escenario y el actor de la postura anticipada, pero la ponencia no ha ocurrido.",
+        "coherence": 3,
+        "remaining_gap": "La ponencia todavía está a semanas de distancia, así que el planteamiento de ancho de banda de memoria por encima de FLOPS está programado más que entregado en el escenario."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.9bc46d8a918d51a2",
+        "short_label": "AMD Instinct MI400 launches with a named ship, memory, or rack spec by Q3 2026",
+        "prediction_date": "2026-06-27"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "El seguidor de eventos fija Advancing AI 2026 de AMD el 22 y 23 de julio en el Moscone de San Francisco, con la serie MI400 y el sistema a escala de rack Helios con nombre esperados junto a plazos de disponibilidad. Eso le da a la predicción una fecha firme de presentación dentro de la ventana del Q3 2026 y un sistema de rack con nombre, llevando el MI400 de la hoja de ruta a la divulgación programada con una franja concreta en el calendario. Las cifras concretas de envío, memoria y rack siguen sin confirmarse hasta la ponencia, así que esto es una fecha firme y un sistema con nombre más que la especificación final.",
+      "reference_links": [
+        {
+          "label": "SemiWiki - Hot Chips 2026",
+          "url": "https://semiwiki.com/event/hot-chips-2026/"
+        },
+        {
+          "label": "AI Infra Summit - 2026 FAQs",
+          "url": "https://www.ai-infra-summit.com/faqs"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "landing",
+        "narrative": "El seguidor de eventos fija Advancing AI el 22 y 23 de julio en el Moscone, con la serie MI400 y el sistema a escala de rack Helios con nombre esperados junto a plazos de disponibilidad. Eso coloca una fecha firme de presentación de lleno dentro de la ventana del Q3 2026 y ya aporta un sistema de rack con nombre, llevando el MI400 de la hoja de ruta a una divulgación programada con una franja concreta en el calendario.",
+        "coherence": 4,
+        "remaining_gap": "Las cifras concretas de envío, memoria y rack siguen sin confirmarse hasta que la ponencia entregue de verdad la especificación con nombre."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.cb8447f5c6e4c65d",
+        "short_label": "Agent-builder frameworks ship sandboxed MCP tool execution by default by Q1 2027",
+        "prediction_date": "2026-07-01"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "La noticia de hoy es una señal de presión directa: la prueba de concepto funcional de Obsidian Security para el RCE del Custom-MCP de Flowise (CVE-2026-40933) reside en el transporte stdio, que lanza un comando aportado por el usuario como un proceso hijo sin aislar, de modo que un flujo de trabajo exportado y envenenado se ejecuta al importarlo sin ninguna solicitud de aprobación. El apunte más afilado es que los investigadores demostraron que el parche oficial puede eludirse y que las instalaciones autoalojadas siguen vulnerables por defecto, así que la corrección recomendada pasa de parchear y esperar a desactivar stdio en favor de eventos enviados por el servidor (SSE) y tratar las configuraciones MCP importadas como código no confiable. Un aviso coordinado de cadena de suministro de MCP vincula la misma causa raíz de subproceso sin aislar en LiteLLM, Agent Zero, LangBot y Windsurf, que es exactamente la presión estructural hacia la ejecución de herramientas MCP aislada por defecto que nombra esta predicción.",
+      "reference_links": [
+        {
+          "label": "NVD - CVE-2026-40933 Detail",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-40933"
+        },
+        {
+          "label": "Infosecurity Magazine - Critical Flowise Flaw Gives Attackers Full Server Control",
+          "url": "https://www.infosecurity-magazine.com/news/flowise-mcp-rce-poc/"
+        },
+        {
+          "label": "OX Security - MCP Supply Chain Advisory",
+          "url": "https://www.ox.security/blog/mcp-supply-chain-advisory-rce-vulnerabilities-across-the-ai-ecosystem/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "Un RCE funcional del Custom-MCP de Flowise (CVE-2026-40933) ejecuta un proceso hijo sin aislar al importar sin ninguna solicitud de aprobación, y los investigadores demostraron que el parche oficial puede eludirse. Un aviso coordinado vincula la misma causa raíz de subproceso sin aislar en LiteLLM, Agent Zero, LangBot y Windsurf, que es exactamente la presión estructural hacia la ejecución de MCP aislada por defecto.",
+        "coherence": 4,
+        "remaining_gap": "La orientación ha convergido en desactivar stdio, pero ningún constructor de agentes importante ha entregado todavía la ejecución de MCP aislada como el valor por defecto impuesto."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.a4f83081580b9a3d",
+        "short_label": "Launch-day vLLM/SGLang + Ollama support becomes open-weight MoE release bar",
+        "prediction_date": "2026-07-02"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "AIA Labs de Bridgewater y Thinking Machines Lab publicaron un ajuste especializado de la base de pesos abiertos Qwen3-235B MoE que alcanza un 84,7% de precisión media en seis tareas de filtrado de información financiera frente al 78,2% del mejor modelo de frontera, una reducción del error del 29,8% a un coste de inferencia por tarea aproximadamente 13,8 veces menor. El resultado valida Qwen3-235B como una base seria de pesos abiertos MoE para el trabajo comercial y empuja la respuesta de construir frente a comprar hacia un especialista propio de pesos abiertos allí donde una firma posee etiquetas propietarias. Se sitúa en la vía de la optimización local, donde la cobertura de runtime de servicio y de runtime local en el momento del lanzamiento se está convirtiendo en el mínimo de los pesos abiertos, aunque la noticia de hoy se centra en la receta de entrenamiento y en la economía más que en el mínimo concreto de empaquetado con vLLM/SGLang más Ollama en el momento del lanzamiento en sí.",
+      "reference_links": [
+        {
+          "label": "Thinking Machines Lab - Learning to Replicate Expert Judgment in Financial Tasks",
+          "url": "https://thinkingmachines.ai/news/learning-to-replicate-expert-judgment-in-financial-tasks/"
+        },
+        {
+          "label": "Blockchain.News - Bridgewater Fine-Tunes Model to Beat Frontier LLMs",
+          "url": "https://blockchain.news/ainews/bridgewater-fine-tunes-model-beats-frontier-llms"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "El ajuste de Bridgewater y Thinking Machines de la base de pesos abiertos Qwen3-235B MoE superó al mejor modelo de frontera con una reducción del error del 29,8% a un coste por tarea aproximadamente 13,8 veces menor, validando Qwen3-235B como una base comercial seria y empujando la respuesta de construir frente a comprar hacia especialistas propios de pesos abiertos en la vía de la optimización local en la que se sitúa esta norma.",
+        "coherence": 3,
+        "remaining_gap": "La noticia de hoy se centra en la receta de entrenamiento y en la economía, no en el mínimo concreto de empaquetado con vLLM/SGLang más Ollama en el momento del lanzamiento en sí."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.551be7cada1926f6",
+        "short_label": "Commerce issues frontier-model export-control framework by Q1 2027",
+        "prediction_date": "2026-06-19"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "[REVIVED] La historia de la restauración de Fable 5 reactiva esta apuesta arriesgada e inactiva: el Departamento de Comercio de EE. UU. levantó el 30 de junio los controles de exportación de emergencia que habían suspendido el modelo durante unos 19 días, y la restauración llegó acompañada de un acuerdo gubernamental de cuatro puntos que cubre el acceso al modelo antes de su publicación, el intercambio de inteligencia de amenazas, la participación en infraestructuras críticas y un esquema codesarrollado de puntuación de riesgo de jailbreak. El episodio se plantea explícitamente como algo que llega justo cuando la Casa Blanca prepara un marco voluntario de estándares para modelos de frontera, esperado la semana del 7 de julio, que definirá los umbrales de modelo de frontera cubierto y la mecánica de revisión previa a la publicación. Eso lleva la directiva de Comercio caso por caso hacia el marco publicado y duradero que anticipa la predicción, aunque lo que se levantó aquí fue un control de emergencia y el marco permanente sigue pendiente.",
+      "reference_links": [
+        {
+          "label": "Build Fast with AI - AI News Today July 3 2026",
+          "url": "https://www.buildfastwithai.com/blogs/ai-news-today-july-3-2026"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "landing",
+        "narrative": "El levantamiento por parte de Comercio el 30 de junio de los controles de emergencia llegó acompañado de un acuerdo de cuatro puntos de acceso previo a la publicación e intercambio de amenazas, y se espera que la Casa Blanca publique la semana del 7 de julio un marco voluntario de estándares para modelos de frontera que define los umbrales de modelo cubierto y la revisión previa a la publicación. Eso nombra un actor y una fecha a corto plazo, llevando una directiva caso por caso hacia el marco publicado y duradero.",
+        "coherence": 4,
+        "remaining_gap": "Lo que se levantó fue un control de emergencia; el marco permanente sigue pendiente y podría entregarse como voluntario en lugar de como una norma de exportación exigible."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.908f659728d5b774",
+        "short_label": "Agent-builder platforms add tenant-scoped flow authorization by Q1 2027",
+        "prediction_date": "2026-07-02"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "La prueba de concepto del RCE del Custom-MCP de Flowise mantiene la capa de ejecución del constructor de agentes de bajo código como un frente de ataque activo, con un flujo de trabajo importado y envenenado ejecutando un proceso hijo sin aislar en el servidor de Flowise en el mismo momento en que una víctima lo importa. Eso refuerza la presión para que las plataformas constructoras de agentes controlen qué está autorizado a ejecutar un flujo importado o que cruza límites, la misma preocupación de autorización de objetos y flujos a la que apunta esta predicción. La evidencia es un fallo de ejecución de código al importar más que una elusión de autorización entre inquilinos en concreto, así que apoya la dirección hacia controles de autorización a nivel de flujo sin ser en sí un mecanismo de autorización acotado por inquilino.",
+      "reference_links": [
+        {
+          "label": "Infosecurity Magazine - Critical Flowise Flaw Gives Attackers Full Server Control",
+          "url": "https://www.infosecurity-magazine.com/news/flowise-mcp-rce-poc/"
+        },
+        {
+          "label": "NVD - CVE-2026-40933 Detail",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-40933"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "El RCE del Custom-MCP de Flowise mantiene la capa de ejecución del constructor de agentes de bajo código como un frente de ataque activo: un flujo de trabajo importado y envenenado ejecuta un proceso hijo sin aislar en el mismo momento en que una víctima lo importa. Esa es exactamente la presión estructural para controlar qué está autorizado a ejecutar un flujo importado o que cruza límites, empujando a las plataformas hacia controles de autorización a nivel de flujo.",
+        "coherence": 3,
+        "remaining_gap": "La evidencia es ejecución de código al importar, no una elusión de autorización entre inquilinos; nada entrega todavía autorización acotada por inquilino como mecanismo."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.6ba7ca6e01ab313e",
+        "short_label": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
+        "prediction_date": "2026-06-28"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "Dos de los hilos de hoy presionan sobre el límite de capacidades del agente de código. La disponibilidad general de Codex Remote de OpenAI responde a la objeción del RCE controlado por teléfono con un relé construido a medida y un emparejamiento por QR autenticado uno a uno que mantiene la máquina de desarrollo fuera de la internet pública mientras un desarrollador aprueba acciones individuales de forma remota, una puerta explícita de acceso y aprobación integrada en el arnés. En paralelo, el RCE del Custom-MCP de Flowise y la elusión de su parche muestran lo que ocurre cuando el cableado de herramientas corre sin aislar por defecto, afilando el argumento a favor de una puerta de capacidades por defecto sobre el acceso a herramientas, red y datos. Ninguno es una puerta trifecta con nombre entregada como valor por defecto de plataforma, así que esto es presión convergente más que un control entregado.",
+      "reference_links": [
+        {
+          "label": "TechTimes - OpenAI Codex Remote Goes Live for All Plans",
+          "url": "https://www.techtimes.com/articles/319201/20260627/openai-codex-remote-goes-live-all-plans-phone-control-now-secured-qr-relay.htm"
+        },
+        {
+          "label": "Infosecurity Magazine - Critical Flowise Flaw Gives Attackers Full Server Control",
+          "url": "https://www.infosecurity-magazine.com/news/flowise-mcp-rce-poc/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "Dos hilos convergen en el límite de capacidades: la disponibilidad general de Codex Remote integra en el arnés una puerta de acceso y aprobación con emparejamiento por QR autenticado para que un desarrollador apruebe acciones individuales de forma remota, mientras que la elusión del parche de Flowise muestra lo que cuesta el cableado de herramientas sin aislar por defecto. Juntos afilan el argumento a favor de una puerta por defecto sobre el acceso a herramientas, red y datos.",
+        "coherence": 3,
+        "remaining_gap": "Ninguno es una puerta trifecta con nombre entregada como valor por defecto de plataforma; esto es presión convergente más que un control entregado."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.0bb5badc89f68769",
+        "short_label": "OpenAI or Google ships an agent-tuned mid-tier model by Q4 2026",
+        "prediction_date": "2026-07-01"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "OpenAI sacó Codex Remote de la fase preliminar a disponibilidad general en todos los niveles de pago de ChatGPT y publicó Codex CLI 0.142.2, que convierte la búsqueda de herramientas MCP en el valor por defecto cuando un servidor lo admite y añade un complemento de espacio de trabajo con Droplet de DigitalOcean. El impulso hacia un bucle de código asíncrono y aprobable desde cualquier lugar es el lado de productización de la pila de agentes de código de OpenAI, la misma inversión en flujos de trabajo con agentes a la que serviría un modelo de gama media ajustado para agentes dedicado. La noticia es un lanzamiento de arnés y de herramientas más que un modelo de gama media con nombre ajustado para el uso por agentes, así que es impulso de apoyo a la tesis más que el lanzamiento del modelo en sí.",
+      "reference_links": [
+        {
+          "label": "Releasebot - OpenAI Codex updates (Remote GA, CLI 0.142.2)",
+          "url": "https://releasebot.io/updates/openai/codex"
+        },
+        {
+          "label": "TechTimes - OpenAI Codex Remote Goes Live for All Plans",
+          "url": "https://www.techtimes.com/articles/319201/20260627/openai-codex-remote-goes-live-all-plans-phone-control-now-secured-qr-relay.htm"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "OpenAI llevó Codex Remote a disponibilidad general en todos los niveles de pago y publicó CLI 0.142.2, convirtiendo la búsqueda de herramientas MCP en el valor por defecto y añadiendo un complemento de espacio de trabajo con Droplet. Productizar un bucle de código asíncrono y aprobable desde cualquier lugar es la misma inversión en flujos de trabajo con agentes a la que serviría un modelo de gama media ajustado para agentes dedicado, lo que refuerza la dirección de la tesis.",
+        "coherence": 3,
+        "remaining_gap": "Esto es un lanzamiento de arnés y de herramientas, no un modelo de gama media con nombre ajustado para el uso por agentes; el lanzamiento del modelo en sí no se ha entregado."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.7b2e55a251231fe9",
+        "short_label": "Single 24-32GB GPU fine-tuning crosses 100K-token context routine by Q2 2027",
+        "prediction_date": "2026-06-20"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "[REVIVED] El ajuste de Bridgewater y Thinking Machines de la base de pesos abiertos Qwen3-235B, que supera al mejor modelo de frontera con una reducción del error del 29,8% a un coste de inferencia por tarea aproximadamente 13,8 veces menor, reactiva la tesis más amplia de que la receta de entrenamiento y el conjunto de datos, no la escala bruta, deciden el resultado, y de que un punto de control de pesos abiertos bien ajustado es la respuesta de construcción por defecto allí donde una firma posee etiquetas propietarias. Eso refuerza la vía de la optimización local en la que se sitúa esta predicción, donde importa encajar el ajuste fino de contexto largo en hardware de una sola tarjeta de consumo. La ejecución demostrada entrenó un MoE de 235B en una plataforma alojada más que en una sola GPU de consumo de 24-32GB con contexto de 100K tokens, así que la reactivación es a nivel de tesis más que un acierto directo en el margen de hardware.",
+      "reference_links": [
+        {
+          "label": "Thinking Machines Lab - Learning to Replicate Expert Judgment in Financial Tasks",
+          "url": "https://thinkingmachines.ai/news/learning-to-replicate-expert-judgment-in-financial-tasks/"
+        },
+        {
+          "label": "Blockchain.News - Bridgewater Fine-Tunes Model to Beat Frontier LLMs",
+          "url": "https://blockchain.news/ainews/bridgewater-fine-tunes-model-beats-frontier-llms"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "El ajuste de hoy de Bridgewater y Thinking Machines de Qwen3-235B de pesos abiertos, que supera al mejor modelo de frontera con un 29,8% menos de error y una inferencia aproximadamente 13,8 veces más barata, endurece la vía de la optimización local en la que se sitúa esto: la receta y el conjunto de datos, no la escala bruta, deciden los resultados, manteniendo vivo como objetivo el ajuste fino de contexto largo en una sola tarjeta de consumo.",
+        "coherence": 3,
+        "remaining_gap": "La ejecución demostrada entrenó un MoE de 235B en una plataforma alojada, no en una sola GPU de consumo de 24-32GB con contexto de 100K tokens."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.a40a541ef73b240c",
+        "short_label": "Sub-7B open-weight reasoning models clear verified AIME-80 by Q1 2027",
+        "prediction_date": "2026-06-19"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "[REVIVED] El ajuste de Qwen3-235B, que supera a todos los modelos de frontera probados en tareas de juicio financiero, con las mejoras atribuidas explícitamente a técnicas de post-entrenamiento concretas como el batching por turnos rotatorios intercalado, una pérdida CISPO de recorte asimétrico y la destilación on-policy con un maestro promocionado, reactiva la afirmación subyacente de que las recetas de post-entrenamiento y no el número de parámetros marcan el techo de la capacidad de pesos abiertos. Ese es el mismo mecanismo de receta sobre escala en el que se apoya esta predicción inactiva para argumentar que los modelos pequeños de pesos abiertos pueden superar un listón difícil de razonamiento verificado. La evidencia es un MoE grande en una tarea experta acotada más que un modelo por debajo de 7B superando el AIME-80 verificado, así que reactiva la vía de la tesis sin alcanzar el objetivo concreto de parámetros y benchmark.",
+      "reference_links": [
+        {
+          "label": "Thinking Machines Lab - Learning to Replicate Expert Judgment in Financial Tasks",
+          "url": "https://thinkingmachines.ai/news/learning-to-replicate-expert-judgment-in-financial-tasks/"
+        },
+        {
+          "label": "Blockchain.News - Bridgewater Fine-Tunes Model to Beat Frontier LLMs",
+          "url": "https://blockchain.news/ainews/bridgewater-fine-tunes-model-beats-frontier-llms"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "El ajuste de Qwen3-235B superó a todos los modelos de frontera probados con mejoras acreditadas explícitamente a recetas de post-entrenamiento, batching por turnos rotatorios intercalado, una pérdida CISPO de recorte asimétrico y la destilación on-policy, reforzando el mecanismo de receta sobre escala en el que se apoya esto: el post-entrenamiento, no el número de parámetros, marca el techo de la capacidad de razonamiento de pesos abiertos.",
+        "coherence": 3,
+        "remaining_gap": "La evidencia es un MoE grande en una tarea experta acotada, no un modelo por debajo de 7B superando el AIME-80 verificado."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.a4ee0b5435860b21",
+        "short_label": "AWS Continuum's sandbox exploit-validation goes industry baseline by H1 2027",
+        "prediction_date": "2026-06-21"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "[REVIVED] La publicación por parte de Obsidian Security de una prueba de concepto funcional para el RCE del Custom-MCP de Flowise, junto con una demostración de que el parche oficial puede eludirse, es una prueba de alcanzabilidad y explotabilidad relevante para máquinas exactamente del tipo que esta predicción inactiva sostiene que se convertirá en una etapa de referencia: un exploit funcional que muestra que un fallo es realmente alcanzable, no una mera puntuación CVSS estática. El aviso coordinado de cadena de suministro de MCP extiende el mismo patrón de exploit demostrado a una familia de herramientas de agentes, subrayando que una simple subida de versión no cierra el agujero. Esto es un investigador de seguridad publicando un artefacto funcional de validación de exploits más que un servicio de gestión de vulnerabilidades con nombre que entregue la validación de exploits en entorno aislado como una etapa estándar, así que la reactivación es a nivel de patrón.",
+      "reference_links": [
+        {
+          "label": "Infosecurity Magazine - Critical Flowise Flaw Gives Attackers Full Server Control",
+          "url": "https://www.infosecurity-magazine.com/news/flowise-mcp-rce-poc/"
+        },
+        {
+          "label": "OX Security - MCP Supply Chain Advisory",
+          "url": "https://www.ox.security/blog/mcp-supply-chain-advisory-rce-vulnerabilities-across-the-ai-ecosystem/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "La prueba de concepto funcional del RCE del Custom-MCP de Flowise de Obsidian Security, más una elusión demostrada del parche oficial, es exactamente el artefacto de alcanzabilidad y explotabilidad que esto sostiene que se convertirá en una etapa de referencia: un exploit funcional que prueba que un fallo es realmente alcanzable, no una puntuación CVSS estática, y una subida de versión no lo cierra.",
+        "coherence": 4,
+        "remaining_gap": "Un investigador publicó un artefacto de validación de exploits; ningún servicio de gestión de vulnerabilidades con nombre ha entregado la validación de exploits en entorno aislado como una etapa estándar."
+      }
+    }
+  ]
+}

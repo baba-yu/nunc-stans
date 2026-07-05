@@ -1,0 +1,47 @@
+{
+  "date": "2026-06-27",
+  "predictions": [
+    {
+      "id": "prediction.7f3a9c2e1b8d4056",
+      "scope_hint": "tech",
+      "title": "Los constructores de agentes multiinquilino reciben un CVE de autorización entre inquilinos de 9.0+ para el Q1 2027",
+      "body": "El caso de Langflow no es un fallo aislado; es la firma de toda una clase. CVE-2026-55255 es una referencia directa insegura a objetos entre inquilinos (CWE-639, evasión de autorización mediante una clave controlada por el usuario) en un endpoint de ejecución de flujos, calificada con CVSS 9.9 y ahora explotada en la práctica según el informe del 25 de junio de Sysdig, encadenada con el RCE CVE-2026-33017 ya incluido en KEV. La lectura estructural es que el punto débil de las plataformas de agentes multiinquilino es el plano de orquestación y autorización: un constructor visual que resuelve el flujo de otro inquilino mediante un ID opaco y recolectable y nunca comprueba la propiedad convierte el producto en una primitiva de exfiltración entre clientes. El mismo patrón arquitectónico — ID opacos de flujo/ejecución/espacio de trabajo, un endpoint de ejecución compartido, comprobaciones de propiedad delegadas a la interfaz en lugar de aplicadas en el servidor objeto por objeto — se repite en los pares de código abierto y comerciales de esta categoría (la clase n8n / Flowise / Dify / LangGraph Platform / CrewAI). La predicción: para el Q1 2027 al menos OTRA plataforma con nombre de esta categoría (no Langflow) recibe un aviso con CVSS >= 9.0 cuya causa raíz sea autorización entre inquilinos, acceso roto a nivel de objeto o IDOR, idealmente con evidencia de explotación en la práctica o de CISA-KEV. La respuesta estructural hacia la que esto empuja a la categoría es un control de acceso por inquilino de confianza cero: propiedad aplicada en el límite del objeto en cada ruta de resolución de flujos y de ejecución, no en la interfaz ni en el prefijo de ruta.",
+      "reasoning": {
+        "because": "El IDOR entre inquilinos de Langflow CVE-2026-55255, CVSS 9.9 (CWE-639), se explota en la práctica más un RCE en KEV",
+        "given": "Los constructores pares comparten el patrón: ID de flujo recolectables, endpoint de ejecución compartido, comprobaciones de propiedad fuera del objeto",
+        "so_that": "Otra plataforma de la clase n8n/Flowise/Dify/LangGraph/CrewAI recibe un aviso de autorización/IDOR entre inquilinos de >=9.0",
+        "landing": "para el Q1 2027; >=1 CVE de plataforma distinta de Langflow, idealmente en la práctica o en CISA-KEV",
+        "plain_language": "El fallo de Langflow que dejaba a un cliente ejecutar el agente de otro es un patrón, así que un constructor similar tendrá pronto el mismo error."
+      },
+      "summary": "El IDOR entre inquilinos CVSS 9.9 de Langflow (CVE-2026-55255), explotado en la práctica y encadenado con un RCE de KEV, señala un fallo de clase en el plano de orquestación de agentes. Para el Q1 2027 cabe esperar que otro constructor de agentes multiinquilino (clase n8n/Flowise/Dify/LangGraph/CrewAI) reciba un aviso de IDOR entre inquilinos de >=9.0."
+    },
+    {
+      "id": "prediction.2d6b8e0a4c1f9357",
+      "scope_hint": "tech",
+      "title": "Una gran plataforma de agentes de IA lanza controles de confianza cero activados por defecto para el Q2 2027",
+      "body": "Para el Q2 2027 al menos una gran plataforma de agentes de IA, proveedor de orquestación de agentes o IDE agéntico lanzará controles de confianza cero activados por defecto en una versión con nombre, no como una opción que haya que habilitar. El cambio de postura que cuenta es la autorización por inquilino a nivel de flujo u objeto con denegación por defecto (que cierra las brechas de referencia directa insegura a objetos entre inquilinos como la de Langflow, donde get_flow_by_id_or_endpoint_name resolvía un flujo por UUID sin comprobación de propiedad) y/o la lista de permitidos de tráfico saliente por defecto con bloques de llamada a herramientas y de solicitud web endurecidos contra SSRF (que cierran primitivas como el SendWebRequestBlock de AutoGPT, cuya brecha de análisis de IPv6 con IPv4 mapeada volvió a abrir el filtro de IP internas). El imperativo es estructural: solo esta semana se produjo un IDOR entre inquilinos CVSS 9.9 en Langflow con la primera explotación en la práctica reportada por Sysdig el 25 de junio, y una evasión de SSRF CVSS 8.5 en AutoGPT (CVE-2026-56663, corregida en 0.6.52, 26 de junio). Ambos prueban que el plano de orquestación y ejecución se lanza sin valores por defecto de confianza cero, y que un bloque que recupera URL arbitrarias es por construcción una superficie de SSRF. Lo que NO cuenta: una entrada de blog o un documento de buenas prácticas, una opción que el cliente deba activar, un parche puntual de un CVE sin cambio de postura por defecto, o una promesa de hoja de ruta. El evento que cuenta es un control de capacidad activado por defecto que autentica y autoriza por inquilino antes de que se ejecute un flujo o salga una solicitud del ejecutor.",
+      "reasoning": {
+        "because": "El IDOR entre inquilinos CVSS 9.9 de Langflow explotado en vivo y la evasión SSRF CVSS 8.5 de AutoGPT golpean a los agentes",
+        "given": "la capa de orquestación de agentes se lanza sin autorización por inquilino con denegación por defecto ni lista de permitidos de salida",
+        "so_that": "una gran plataforma de agentes, proveedor de orquestación o IDE agéntico lanza controles de confianza cero activados por defecto en una versión con nombre",
+        "landing": "para el Q2 2027; versión con nombre con autorización por inquilino o lista de permitidos de salida por defecto",
+        "plain_language": "Dos herramientas de agentes fueron vulneradas esta semana por falta de comprobaciones de acceso, así que una gran plataforma de agentes pronto activará por defecto una seguridad estricta por inquilino."
+      },
+      "summary": "Dos CVE de plataformas de agentes esta semana (el IDOR entre inquilinos explotado en vivo de Langflow y la evasión SSRF de AutoGPT) dejan al descubierto una capa de orquestación sin valores por defecto de confianza cero. Para el Q2 2027 una gran plataforma de agentes o IDE agéntico lanza autorización por inquilino con denegación por defecto o lista de permitidos de salida activadas por defecto en una versión."
+    },
+    {
+      "id": "prediction.9a1c5f7b3e2d8046",
+      "scope_hint": "tech",
+      "title": "El AMD Instinct MI400 se lanza con una especificación con nombre de envío, memoria o rack para el Q3 2026",
+      "body": "El calendario de eventos de hoy confirma que el Advancing AI 2026 de AMD se celebra del 22 al 23 de julio en el Moscone de San Francisco, con la keynote y el foco en la serie Instinct MI400 programados para el 23 de julio. La predicción: en ese evento AMD lanza formalmente y detalla la serie de aceleradores de centro de datos MI400 con al menos un compromiso CON NOMBRE y verificable, no un adelanto. Entre los compromisos que cuentan están una ventana declarada de disponibilidad general o de envío en volumen, una capacidad o cifra de ancho de banda de memoria de alto ancho de banda con nombre para la pieza, una plataforma a escala de rack con nombre (un sistema de rack de clase Helios), Y/O un compromiso de despliegue con un hiperescalador o laboratorio puntero con nombre. Lo que NO cuenta: una diapositiva de adelanto sin especificación ni fecha; un gráfico de hoja de ruta sin ventana de disponibilidad general; un reanuncio o un benchmark repetido de la línea MI355X / MI350 de la generación anterior; o un rumor o filtración no confirmado en el escenario del evento. Esto sigue la tesis permanente del usuario de que el entrenamiento avanzado y la inferencia a gran escala se quedan en aceleradores comerciales de clase hiperescalador, así que el frente competitivo que de verdad mueve la nube es la hoja de ruta de aceleradores comerciales más sus especificaciones de memoria y de plataforma de rack y sus compromisos de clientes con nombre — justo los datos que un lanzamiento formal del MI400 está diseñado para dejar registrados frente a la hoja de ruta de Nvidia.",
+      "reasoning": {
+        "because": "El Advancing AI 2026 de AMD está confirmado del 22 al 23 de julio en el Moscone de SF, con la keynote del 23 de julio sobre el MI400",
+        "given": "El entrenamiento/inferencia se queda en aceleradores comerciales de hiperescalador, así que las especificaciones del MI400 son el frente de la nube",
+        "so_that": "AMD deja el MI400 registrado con un compromiso verificable: una ventana de disponibilidad general, especificación de memoria, rack Helios o hiperescalador con nombre",
+        "landing": "para el Q3 2026; en la keynote del Advancing AI de AMD del 22 al 23 de julio, no un adelanto sin especificaciones",
+        "plain_language": "En su evento del 22 al 23 de julio AMD lanzará de verdad sus chips de IA MI400 con una fecha de envío real, una cifra de memoria, un sistema de rack o un cliente con nombre."
+      },
+      "summary": "El Advancing AI 2026 de AMD (22-23 de julio, Moscone SF; keynote del MI400 el 23 de julio) es el catalizador. La predicción: AMD lanza formalmente el Instinct MI400 con un compromiso verificable, una ventana de disponibilidad general, una especificación de memoria, un rack de clase Helios o un hiperescalador con nombre. Un adelanto sin especificaciones o un reanuncio del MI355X no cuenta."
+    }
+  ]
+}

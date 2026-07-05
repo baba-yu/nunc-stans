@@ -1,0 +1,152 @@
+{
+  "date": "2026-06-25",
+  "topics": [
+    {
+      "topic": "LLM Workflow",
+      "searched": true,
+      "hits": 2,
+      "promoted_to_bullet": false,
+      "reason_dropped": "No fresh June 23-25 named workflow/orchestration release (n8n / LangFlow / Temporal / Dust / Inngest). Sakana Fugu's orchestration-model thread is in the prior-3-day digest (last seen June 24) with no new repro/latency-fix/customer state-change. The agentic-coding economics angle (Gartner token-cost note) is logged under Business plan and carried by that bullet."
+    },
+    {
+      "topic": "Multi-profiling for Local LLM (e.g. Multica)",
+      "searched": true,
+      "hits": 0,
+      "promoted_to_bullet": false,
+      "reason_dropped": "News-driven only; no Multica or multi-profiling local-LLM news in the June 23-25 window, and nothing elsewhere referenced it."
+    },
+    {
+      "topic": "Agent Harness (OpenClaw, NemoClaw, Hermes Agents, etc.)",
+      "searched": true,
+      "hits": 2,
+      "promoted_to_bullet": false,
+      "reason_dropped": "OpenClaw 2026.6.x / NemoClaw / Hermes least-privilege hardening is digest-carried (last seen June 23) with no fresh June 23-25 named release tag. The Cursor allowlist-bypass RCE (CVE-2026-22708, fixed in Cursor 2.3) surfaced in searches but was disclosed in January-April 2026, too old to anchor a June state-change. Gartner's agentic-coding token-cost note touches this category's unit economics and is carried by the Business plan bullet rather than here."
+    },
+    {
+      "topic": "Platform for Local LLM (vLLM, SGLang, etc.)",
+      "searched": true,
+      "hits": 1,
+      "promoted_to_bullet": false,
+      "reason_dropped": "Only refreshed comparison/benchmark roundups (vLLM vs SGLang vs TensorRT-LLM H100 numbers); no fresh June 23-25 named release tag or shipped artifact from vLLM/SGLang/TGI/LMDeploy to anchor a state-change bullet."
+    },
+    {
+      "topic": "Ecosystems for Local LLM Embedded System (Foundry Local, etc.)",
+      "searched": true,
+      "hits": 1,
+      "promoted_to_bullet": false,
+      "reason_dropped": "No fresh June 23-25 Foundry Local / Ollama / LM Studio / MLX / NPU-SDK state-change. Ollama's current line (v0.30.8, June 12) and edge-runtime activity predate the window with no new release tag this cycle."
+    },
+    {
+      "topic": "Local LLM Models",
+      "searched": true,
+      "hits": 2,
+      "promoted_to_bullet": false,
+      "reason_dropped": "The June open-weight wave (MiniMax M3 ~June 1, NVIDIA Nemotron 3 Ultra ~June 4, Qwen3.6) all predates the June 23-25 window; no net-new open-weight model card / Apache-2.0 release / quantized drop published June 23-25. GLM-5.2 only resurfaces via the carried-over Unsloth GGUF artifact, not a fresh model drop."
+    },
+    {
+      "topic": "Local LLM Optimization, Fine-tuning (Unsloth - every run)",
+      "searched": true,
+      "hits": 1,
+      "promoted_to_bullet": false,
+      "reason_dropped": "MANDATORY SEARCH PERFORMED. The only Unsloth item in the June 23-25 window remains the same June 23 Dynamic GGUF quantization of Z.ai's 744B GLM-5.2 (same 217-239GB / 84-86%-reduction figures, same Unsloth Studio pairing) already in the prior-3-day digest. No new quant build/tag, no independent accuracy-retention reproduction, no different model getting the same treatment, no named third party running it. The general Unsloth Dynamic 2.0 GGUF method (selective per-layer quant, 1.5M-token calibration set) is documentation, not a fresh June 23-25 artifact. Restating the June 23 GGUF builds with no new fact is a hold-steady framing, so DROPPED under ADR-002 Rule 2."
+    },
+    {
+      "topic": "Ecosystems for LLM on PaaS (AWS Bedrock, Azure AI Foundry, etc.)",
+      "searched": true,
+      "hits": 1,
+      "promoted_to_bullet": false,
+      "reason_dropped": "AWS / Azure / Vertex / OpenRouter managed-inference activity from earlier June is digest-carried or pre-window with no fresh GA/pricing/named-pilot state-change June 23-25. OpenRouter's June model/pricing roundup predates the window."
+    },
+    {
+      "topic": "AI Security",
+      "searched": true,
+      "hits": 3,
+      "promoted_to_bullet": false,
+      "reason_dropped": "OWASP State of Agentic AI v2.01 + StakeBench are in the digest with no fresh June 23-25 report version / new named benchmark / new procurement-bar. The Cursor allowlist-bypass RCE (CVE-2026-22708, Cursor 2.3) and the Gemini CLI CVSS-10 RCE (GHSA-wpqr-6v78-jr5g) are real agent-tool flaws but were disclosed January-April 2026, not in this window. AI-security-SoC standing watch checked (Axiado-style secure-control SoCs, confidential-computing inference, on-die RoT for NPUs): no new June 23-25 shipping/announcement signal; the OpenAI-Broadcom Jalapeno inference ASIC is a general accelerator with no disclosed security-silicon/RoT angle, so it is logged under Hardware, not here."
+    },
+    {
+      "topic": "AI Security - Zero-trust based access control for agentic AI",
+      "searched": true,
+      "hits": 1,
+      "promoted_to_bullet": false,
+      "reason_dropped": "Least-privilege / credential-filtering harness work (Hermes MCP, NemoClaw network-policy gating) is digest-carried with no fresh June 23-25 default-deny artifact or new named zero-trust-agent product launch this window."
+    },
+    {
+      "topic": "AI Security - Monitor and manage AI agent behavior",
+      "searched": true,
+      "hits": 1,
+      "promoted_to_bullet": false,
+      "reason_dropped": "StakeBench adversarial-trial monitoring and OWASP incident cataloging are digest-carried; no fresh June 23-25 named runtime-monitoring benchmark or agent-behavior-management product state-change."
+    },
+    {
+      "topic": "CVE update on score >= 8.0",
+      "searched": true,
+      "hits": 3,
+      "promoted_to_bullet": false,
+      "reason_dropped": "Surveyed late-June high-score disclosures via CVE aggregators (a June 24-25 cluster touching AI/ML dev tooling - Flowise, Crawl4AI, Langflow, picklescan, Feast, plus a maximum-severity Gemini CLI item). The specific CVE IDs surfaced (e.g. CVE-2026-56274 / CVE-2026-53753 / CVE-2026-12537 / CVE-2026-56121) appeared only via a single aggregator summary and could not be independently corroborated against NVD/vendor advisories during this run; per the verify-specifics rule, an uncorroborated CVE number is not published, so no standalone CVE bullet was written. The well-documented Gemini CLI CVSS-10 RCE (GHSA-wpqr-6v78-jr5g) and Cursor allowlist bypass (CVE-2026-22708) are confirmed but were disclosed/patched in April and January-February 2026 respectively, outside the window."
+    },
+    {
+      "topic": "Hardware",
+      "searched": true,
+      "hits": 3,
+      "promoted_to_bullet": true,
+      "reason_dropped": "Carried by the OpenAI-Broadcom Jalapeno bullet (June 24): OpenAI's first custom inference accelerator, co-designed with Broadcom, lab engineering samples at production frequency/power, performance-per-watt claim, first deployment by year-end 2026 at gigawatt scale, Broadcom Tomahawk 1.6 Tbps networking, Celestia rack co-design. NVIDIA GTC's Vera Rubin / Groq 3 LPU announcements were March 2026, not this week, and were dropped as stale."
+    },
+    {
+      "topic": "Physical AI",
+      "searched": true,
+      "hits": 3,
+      "promoted_to_bullet": false,
+      "reason_dropped": "Cobot Gen-2 Proxie / Automate 2026 physical-AI thread is digest-carried (last seen June 24) and Automate 2026 (June 22-25) ends today. Figure 03 production ramp, Tesla Optimus Fremont conversion, and 1X NEO pre-orders are all pre-window scaling updates with no fresh June 23-25 named ship/order/benchmark to anchor a new state-change bullet."
+    },
+    {
+      "topic": "LLM-related research and papers",
+      "searched": true,
+      "hits": 1,
+      "promoted_to_bullet": false,
+      "reason_dropped": "No standalone fresh arXiv paper rose to a high-impact June 23-25 state-change warranting a separate research bullet. Sakana's TRINITY/Conductor orchestration papers are digest-carried context, not net-new this window."
+    },
+    {
+      "topic": "Stock prices and corporate activity (frontier labs, hyperscalers, chip vendors)",
+      "searched": true,
+      "hits": 3,
+      "promoted_to_bullet": true,
+      "reason_dropped": "Corporate-activity signal is carried by two bullets: the OpenAI-Broadcom Jalapeno custom-silicon partnership (a strategic chip-vendor + frontier-lab move) and the Gartner agentic-coding cost forecast (sector cost-structure call). The SpaceX/xAI debut, Anthropic/OpenAI S-1 filings, and Nscale/AMI raises are all pre-June-23 with no fresh pricing/filing/analyst-action this window."
+    },
+    {
+      "topic": "Business plan",
+      "searched": true,
+      "hits": 2,
+      "promoted_to_bullet": true,
+      "reason_dropped": "Carried by the Gartner bullet (June 24): consumption-based pricing for agentic coding tools projected to push AI coding spend past the average developer's salary by 2028, with $200-500/dev/month for 23% of leaders and >$2,000/dev/month for 6% of orgs, reframing agent adoption as a governance/operating-model problem."
+    },
+    {
+      "topic": "Application fields",
+      "searched": true,
+      "hits": 2,
+      "promoted_to_bullet": true,
+      "reason_dropped": "Agentic-coding-as-application-field signal (token-cost governance for AI coding agents in scaled enterprise deployment) is carried by the Gartner bullet; LLM-inference-hardware application (gigawatt-scale data-center inference) is carried by the Jalapeno bullet."
+    },
+    {
+      "topic": "Applied research",
+      "searched": true,
+      "hits": 1,
+      "promoted_to_bullet": true,
+      "reason_dropped": "Applied-research-to-product signal (a custom inference ASIC architected specifically around LLM-inference workloads, moving from co-design to running ML workloads on lab engineering samples) is carried by the OpenAI-Broadcom Jalapeno bullet."
+    },
+    {
+      "topic": "Bay Area / SV AI meet-up events",
+      "searched": true,
+      "hits": 4,
+      "promoted_to_bullet": true,
+      "reason_dropped": ""
+    },
+    {
+      "topic": "Other standing-out topics",
+      "searched": true,
+      "hits": 1,
+      "promoted_to_bullet": false,
+      "reason_dropped": "Ambient roundup items (open-weight leaderboard shuffles, OpenRouter pricing roundup) surfaced but none carried a fresh June 23-25 hard state-change strong enough to displace the three chosen bullets under the anti-inertia soft-5 target."
+    }
+  ]
+}

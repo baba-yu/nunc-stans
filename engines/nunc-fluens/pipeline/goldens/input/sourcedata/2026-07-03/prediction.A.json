@@ -1,0 +1,14 @@
+{
+  "id": "prediction.f4118d6655c86297",
+  "scope_hint": "tech",
+  "title": "Open-weight MoE fine-tunes beat frontier APIs on niche expert tasks by Q2 2027",
+  "body": "Bridgewater's AIA Labs and Thinking Machines Lab published a specialized fine-tune of the open-weight Qwen3-235B base that reached 84.7% average accuracy across six financial information-filtering tasks versus 78.2% for the best frontier model, a 29.8% error reduction, while running at roughly 13.8x lower inference cost per task. The recipe, not the base weights, did the work: interleaved round-robin batching, a CISPO loss with asymmetric clipping, and on-policy distillation with a periodically promoted teacher, all trained on Thinking Machines' Tinker platform against proprietary expert-labeled data. This is a clean, reproducible template that any enterprise sitting on a high-quality domain dataset can copy, and it lands squarely in the local-optimization lane where tools such as Unsloth already operate. Expect the pattern to generalize: over the coming months more published results will show open-weight MoE checkpoints, fine-tuned on narrow expert-labeled datasets, beating generic frontier APIs on their specific vertical benchmark at a large cost discount. The differentiator is migrating from base-model scale to the dataset and the training recipe, so a domain-tuned open-weight specialist becomes the default build-versus-buy answer wherever a firm owns proprietary labels and cares about per-task cost.",
+  "reasoning": {
+    "because": "Qwen3-235B fine-tune hit 84.7% vs 78.2% frontier on financial tasks at ~13.8x lower cost per task",
+    "given": "differentiator is shifting from base-model scale to domain dataset and training recipe on open MoE",
+    "so_that": "more open-weight MoE fine-tunes on narrow expert data will beat frontier APIs on their vertical at a cost discount",
+    "landing": "by Q2 2027, an org ships an open-MoE fine-tune beating a frontier API on a niche",
+    "plain_language": "Companies with their own expert data will tune free open models to beat the big paid AIs at their specific job, for much less money."
+  },
+  "summary": "A Qwen3-235B open-weight fine-tune by Bridgewater and Thinking Machines beat the best frontier model on financial tasks, 84.7% vs 78.2%, at about 13.8x lower cost per task, driven by the recipe not the weights. Expect more open-weight MoE fine-tunes to beat frontier APIs on niche tasks by Q2 2027."
+}

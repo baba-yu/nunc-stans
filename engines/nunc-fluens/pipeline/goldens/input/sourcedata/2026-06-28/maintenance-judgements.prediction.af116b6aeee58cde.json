@@ -1,0 +1,50 @@
+{
+  "prediction_id": "prediction.af116b6aeee58cde",
+  "judgements": [
+    {
+      "prediction_id": "prediction.af116b6aeee58cde",
+      "stream": "reasoning",
+      "entry_id": "prediction.af116b6aeee58cde",
+      "verdict": "fresh",
+      "reason": "Trigger fired landed_this_week but the landing window is Q2 2027 (target 2027-04-01..2027-06-30); nothing this week landed it. The because precondition (Unsloth June 12 seed) and so_that (2nd open-weight diffusion-LM family OR 2nd native local stack) are intact. On-topic bridge validation.2bae753388ca096b (SGLang v0.5.13, 2026-06-16, support=given) reinforces the given rather than contradicting it; no contradict signal arrived.",
+      "cross_stream_evidence": [
+        "bridge:validation.2bae753388ca096b",
+        "bridge:validation.fc72bff7444dd082"
+      ],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.af116b6aeee58cde",
+      "stream": "bridge",
+      "entry_id": "validation.009784698efcdc4e",
+      "verdict": "broken",
+      "reason": "Bridge validation.009784698efcdc4e (2026-06-28, support=given) is keyed to this DiffusionGemma text-diffusion prediction but its bridge_text is entirely about AMD MI400 confidential-inference / attestation security SKUs and Qualcomm full-stack push — evidence belonging to the secure-AI-accelerator thesis, not text-diffusion training. Mis-association data inconsistency; escalate, do not auto-fix.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.9
+    },
+    {
+      "prediction_id": "prediction.af116b6aeee58cde",
+      "stream": "needs",
+      "entry_id": "prediction.af116b6aeee58cde",
+      "verdict": "fresh",
+      "reason": "No Need delivered this week. No 2nd independent open-weight text-diffusion LM family shipped (need.0a43396a680ced81), no mainstream local stack added native text-diffusion-LM fine-tune/inference (need.76473ff10b051eab). SGLang v0.5.13 serves diffusion image/world-model families (Cosmos/FLUX.2/SANA), not a 2nd open-weight text-diffusion LM training lineage, so it does not satisfy any Need actor.",
+      "cross_stream_evidence": [
+        "bridge:validation.2bae753388ca096b"
+      ],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.af116b6aeee58cde",
+      "stream": "readings",
+      "entry_id": "prediction.af116b6aeee58cde",
+      "verdict": "fresh",
+      "reason": "No new prediction_chain source edge landed or got contradicted this week, and no new prediction_relations (equivalent) edge appeared; the reasoning chain is unchanged. No readings update warranted.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "date": "2026-07-05",
+  "vs_date": "2026-07-04",
+  "items": [
+    {
+      "kind": "new",
+      "headline": "Ollama 0.31 turns on multi-token prediction for Gemma 4, cutting local Apple-Silicon generation by ~90%",
+      "diff_narrative": "This is a fresh on-device inference story with no antecedent on July 4. Yesterday's model news was Meituan's LongCat-2.0, a 1.6T open-weight release notable for its Chinese-ASIC training stack; the frame there was hosted, top-of-the-size-range open weights and the compute-export angle. Today's item is the opposite end of the stack: a local-runtime optimization. Ollama 0.31 (shipped July 1) enables in-model speculative decoding for Gemma 4 on Apple Silicon plus a new small-batch MLX matmul kernel, reporting Gemma 4 generating nearly 90% faster across a coding-agent benchmark with unchanged output, and 2x-2.5x faster large matrix multiplies on an M5 Max with nvfp4. Where July 4 asked whether open weights can be built without US silicon, July 5 asks how fast those weights run locally, closing part of the on-device-vs-hosted agentic throughput gap without new hardware."
+    },
+    {
+      "kind": "new",
+      "headline": "Together AI raises $800M Series C at an $8.3B valuation led by Aramco's Prosperity7",
+      "diff_narrative": "Together AI did not appear on July 4 and enters as a new topic, but it advances the AI-financing thread that yesterday's Crunchbase H1 tally opened. That report quantified extreme concentration: $510B in first-half venture funding with OpenAI and Anthropic alone taking 43%, framing capital as funneling into a shrinking set of frontier labs. Today's data point pushes against that read from a different layer of the stack: the $800M round (a 2.5x step-up from the $3.3B February 2025 Series B, $1.3B total raised) capitalizes the open-model inference/neocloud layer, with Prosperity7 signaling IPO intent and Together projecting a ~50-fold GPU-footprint expansion. So the money-in-AI storyline shifts from 'concentration at the labs' toward capital also chasing the open-weight hosting infrastructure that serves DeepSeek, Nemotron, MiniMax, and Kimi, alongside peers like Fireworks and Baseten."
+    },
+    {
+      "kind": "continuing",
+      "headline": "Tenstorrent CEO Jim Keller denies Qualcomm buyout talks, cooling a reported $8-10B deal",
+      "diff_narrative": "Tenstorrent is a new named entity relative to July 4, but the beat continues the non-NVIDIA accelerator thread that yesterday carried through Meituan's 50,000-plus Chinese-ASIC training cluster and the AMD MI400 events line. The fresh state-change is a specific actor position: Keller, speaking in Tokyo (June 30, reiterated into July 3), publicly denied that Tenstorrent is in acquisition talks with Qualcomm, countering a mid-June report of a $8-10B buyout. That removes, for now, a consolidation path that would have folded a credible RISC-V accelerator IP house into a mobile-SoC incumbent, and reaffirms an independent, IPO-bridge trajectory for the Galaxy rack roadmap. Whereas July 4 framed the alternative-silicon story as who can train without NVIDIA, July 5 frames it as whether the leading independents stay independent, with acquisition rumors now large enough to move markets."
+    },
+    {
+      "kind": "new",
+      "headline": "Stathera closes an oversubscribed $55M Series B for MEMS silicon timing aimed at AI data centers",
+      "diff_narrative": "Timing silicon is an entirely new topic with no July 4 precedent, extending the AI-datacenter-infrastructure thread down to a layer prior briefings did not name. The oversubscribed $55M round (led by Maverick Silicon, $75M total raised) funds Stathera's MEMS DualMode timing to replace legacy quartz oscillators, claiming ~85% smaller footprints, with a GEN3 platform targeting communications, enterprise, and AI-datacenter clocks and first customer samples in 2028. The thesis is that as accelerator clusters scale to tens of thousands of GPUs, cross-node time synchronization becomes a real interconnect and throughput constraint; it pegs the AI-datacenter timing opportunity at ~$1.5B cumulatively through 2030 within an $11B annual market. This is a directional, pre-production bet (2028 horizon), and its novelty is that it marks timing as a named line item in datacenter buildouts rather than an afterthought."
+    },
+    {
+      "kind": "updated",
+      "headline": "AI events to plan around: Geneva AI Week and an AI Tinkerers SF meetup open this week",
+      "diff_narrative": "The events calendar carries forward from July 4 with the same fall skeleton, but the near-term catalyst has rolled over. Yesterday the nearest item was AMD's Advancing AI 2026 on July 22-23 (MI400 series and 'Helios' reveal), with the security-and-Vegas cluster and fall chip/dev stack behind it. Today AMD's July 22-23 keynote has passed as the nearest slot and MI400/Helios recede to a general 2H-2026 watch item, while the immediate actions become the July 6-10 Geneva AI Week (UN Global Dialogue on AI Governance, ITU AI for Good Summit, and the new UN AI for Good Commission's first meeting July 8) and the July 8 AI Tinkerers San Francisco meetup. The mid-August and fall venues persist largely unchanged (Hot Chips Aug 23-25, AI Risk Summit Aug 11-12, Black Hat/DEF CON, Ai4 Aug 4-6, AI Infra Summit Sept 15-17, GitHub Universe Oct 28-29, AWS re:Invent Nov 30-Dec 4)."
+    }
+  ]
+}

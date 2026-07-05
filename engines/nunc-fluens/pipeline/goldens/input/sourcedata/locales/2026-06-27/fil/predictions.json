@@ -1,0 +1,47 @@
+{
+  "date": "2026-06-27",
+  "predictions": [
+    {
+      "id": "prediction.7f3a9c2e1b8d4056",
+      "scope_hint": "tech",
+      "title": "Makakakuha ang multi-tenant agent builders ng 9.0+ cross-tenant authz CVE pagdating ng Q1 2027",
+      "body": "Hindi isang basta-basta na bug ang kaso ng Langflow; isa itong lagda ng buong klase. Ang CVE-2026-55255 ay isang cross-tenant na insecure-direct-object-reference (CWE-639, authorization bypass sa pamamagitan ng user-controlled key) sa isang flow-execution endpoint, may rating na CVSS 9.9 at pinaputok na ngayon sa wild ayon sa June 25 na ulat ng Sysdig, na nikadena sa nasa KEV-list nang RCE na CVE-2026-33017. Ang structural na pagbasa ay ito: ang malambot na sikmura ng mga multi-tenant agent platform ay ang orchestration at authorization plane. Ang isang visual builder na niresolba ang flow ng ibang tenant gamit ang isang opaque at maaaning ID at hindi kailanman sinuri ang pagmamay-ari ay nagpapalit sa produkto tungong cross-customer exfiltration primitive. Ang parehong arkitekturang pattern, kung saan may mga opaque na flow/run/workspace ID, isang shared execution endpoint, at mga owner check na ipinagpaliban sa UI sa halip na ipinatupad nang server-side kada object, ay umuulit sa mga open-source at komersyal na kapwa-produkto sa kategoryang ito (ang klase ng n8n / Flowise / Dify / LangGraph Platform / CrewAI). Ang forward call: pagdating ng Q1 2027, hindi bababa sa isa PANG pinangalanang platform sa kategoryang ito (hindi ang Langflow) ang makakatanggap ng isang CVSS >= 9.0 advisory na ang ugat ng dahilan ay cross-tenant authorization, broken-object-level access, o IDOR, mas mainam kung may katibayan ng in-the-wild na pananamantala o CISA-KEV. Ang structural na sagot na itinutulak nito sa kategorya ay zero-trust per-tenant gating: ipinapatupad ang pagmamay-ari sa object boundary sa bawat flow-resolution at run-execution path, hindi sa UI o sa route prefix.",
+      "reasoning": {
+        "because": "Ang Langflow CVE-2026-55255, isang CVSS 9.9 cross-tenant IDOR (CWE-639), ay pinaputok sa wild kasama ang isang KEV RCE",
+        "given": "Magkakapareho ang pattern ng mga kapwa builder: maaaning flow ID, shared run endpoint, at mga owner check na nasa labas ng object",
+        "so_that": "Makakakuha ang isa pang platform sa klase ng n8n/Flowise/Dify/LangGraph/CrewAI ng isang >=9.0 cross-tenant authz/IDOR advisory",
+        "landing": "pagdating ng Q1 2027; >=1 non-Langflow platform CVE, mas mainam kung in-the-wild o CISA-KEV",
+        "plain_language": "Ang depekto ng Langflow na nagpahintulot sa isang customer na patakbuhin ang agent ng iba ay isang pattern, kaya malapit nang makakuha ng parehong bug ang isang katulad na builder."
+      },
+      "summary": "Ang CVSS 9.9 cross-tenant IDOR ng Langflow (CVE-2026-55255), na pinananamantala sa wild at nikadena sa isang KEV RCE, ay tanda ng isang depektong pang-klase sa agent-orchestration plane. Pagdating ng Q1 2027, asahan na makakakuha ang isa pang multi-tenant agent builder (klase ng n8n/Flowise/Dify/LangGraph/CrewAI) ng isang >=9.0 cross-tenant IDOR advisory."
+    },
+    {
+      "id": "prediction.2d6b8e0a4c1f9357",
+      "scope_hint": "tech",
+      "title": "Maglalabas ang isang malaking AI-agent platform ng zero-trust controls bilang default-on pagdating ng Q2 2027",
+      "body": "Pagdating ng Q2 2027, hindi bababa sa isang malaking AI-agent platform, agent-orchestration vendor, o agentic IDE ang maglalabas ng zero-trust controls bilang default-on sa isang pinangalanang release, hindi bilang isang opt-in flag. Ang kwalipikadong pagbabago sa postura ay deny-by-default na per-tenant na flow- o object-level authorization (na nagsasara sa mga cross-tenant na insecure-direct-object-reference gap gaya ng depekto sa Langflow, kung saan niresolba ng get_flow_by_id_or_endpoint_name ang isang flow gamit ang UUID nang walang owner check) at/o default na outbound-egress allowlisting na may SSRF-hardened na tool-call at web-request blocks (na nagsasara sa mga primitive gaya ng SendWebRequestBlock ng AutoGPT, na ang IPv4-mapped-IPv6 parsing gap ay muling nagbukas sa internal-IP filter). Ang hindi maiiwasang puwersa ay structural: ngayong linggo lang ay lumitaw ang isang CVSS 9.9 cross-tenant IDOR sa Langflow na may unang in-the-wild na pananamantalang iniulat ng Sysdig noong June 25, at isang CVSS 8.5 SSRF bypass sa AutoGPT (CVE-2026-56663, naayos sa 0.6.52, June 26). Pinatunayan ng dalawa na inilalabas ang orchestration at execution plane nang walang zero-trust defaults, at ang isang fetch-arbitrary-URL block ay isang SSRF surface mismo. Ang HINDI bibilang: isang blog post o best-practices doc, isang opt-in toggle na kailangang i-enable ng customer, isang basta-basang CVE patch na walang pagbabago sa default na postura, o isang pangako sa roadmap. Ang kwalipikadong pangyayari ay isang default-on na capability gate na nag-aauthenticate at nag-aauthorize kada tenant bago tumakbo ang isang flow o umalis ang isang outbound request mula sa runner.",
+      "reasoning": {
+        "because": "Tumama sa mga agent ang live-na-pinananamantalang CVSS 9.9 cross-tenant IDOR ng Langflow at ang CVSS 8.5 SSRF bypass ng AutoGPT",
+        "given": "inilalabas ang agent orchestration layer nang walang deny-by-default na per-tenant authz o egress allowlisting",
+        "so_that": "maglalabas ang isang malaking agent platform, orchestration vendor, o agentic IDE ng zero-trust controls bilang default-on sa isang pinangalanang release",
+        "landing": "pagdating ng Q2 2027; pinangalanang release na naka-default sa per-tenant authz o egress allowlisting",
+        "plain_language": "Dalawang agent tool ang na-hack ngayong linggo dahil sa kulang na access check, kaya malapit nang gawing default-on ng isang malaking agent platform ang mahigpit na per-tenant na seguridad."
+      },
+      "summary": "Ang kambal na agent-platform CVE ngayong linggo (ang live-na-pinananamantalang cross-tenant IDOR ng Langflow, ang SSRF bypass ng AutoGPT) ay naglalantad ng isang orchestration layer na walang zero-trust defaults. Pagdating ng Q2 2027, maglalabas ang isang malaking agent platform o agentic IDE ng deny-by-default na per-tenant authz o egress allowlisting bilang default-on sa isang release."
+    },
+    {
+      "id": "prediction.9a1c5f7b3e2d8046",
+      "scope_hint": "tech",
+      "title": "Ilulunsad ang AMD Instinct MI400 na may pinangalanang ship, memory, o rack spec pagdating ng Q3 2026",
+      "body": "Kinukumpirma ng kalendaryo ng mga event ngayon na mapupunta ang Advancing AI 2026 ng AMD sa July 22-23 sa Moscone sa San Francisco, na may keynote at focus sa Instinct MI400-series na nakaiskedyul sa July 23. Ang forward call: sa event na iyon, pormal na ilulunsad at idetalye ng AMD ang MI400 datacenter-accelerator series na may hindi bababa sa isang PINANGALANAN at masusuring commitment, hindi isang teaser. Kabilang sa mga kwalipikadong commitment ang isang nakasaad na general-availability o volume-ship window, isang pinangalanang high-bandwidth-memory capacity o bandwidth figure para sa parte, isang pinangalanang rack-scale platform (isang Helios-class rack system), AT/O isang pinangalanang hyperscaler o frontier-lab deployment commitment. Ang HINDI bibilang: isang teaser slide na walang spec at walang petsa; isang roadmap chart na walang GA window; isang muling-anunsyo o muling-sinabing benchmark para sa naunang-henerasyong MI355X / MI350 line; o isang tsismis o leak na hindi kumpirmado sa entablado sa event. Sinusubaybayan nito ang nananatiling tesis ng user na ang advanced training at large-scale inference ay nananatili sa hyperscaler-class na merchant accelerator, kaya ang competitive na bahagi na talagang gumagalaw sa cloud ay ang merchant-accelerator roadmap kasama ang memory at rack-platform specs nito at mga pinangalanang commitment ng customer, na siyang mga datapoint na nilalayon ng isang pormal na MI400 launch na ilagay sa rekord laban sa roadmap ng Nvidia.",
+      "reasoning": {
+        "because": "Kumpirmado ang AMD Advancing AI 2026 sa July 22-23 sa Moscone SF, ang July 23 keynote tungkol sa MI400",
+        "given": "Nananatili ang training/inference sa merchant hyperscaler accelerators, kaya ang MI400 specs ang bahagi ng cloud",
+        "so_that": "Ilalagay ng AMD ang MI400 sa rekord na may masusuring commitment: isang GA window, memory spec, Helios rack, o pinangalanang hyperscaler",
+        "landing": "pagdating ng Q3 2026; sa keynote ng AMD Advancing AI sa July 22-23, hindi isang teaser na walang spec",
+        "plain_language": "Sa event nito sa July 22-23, talagang ilulunsad ng AMD ang MI400 AI chips nito na may totoong ship date, memory number, rack system, o pinangalanang customer."
+      },
+      "summary": "Ang AMD Advancing AI 2026 (July 22-23, Moscone SF; MI400 keynote July 23) ang katalista. Ang call: pormal na ilulunsad ng AMD ang Instinct MI400 na may masusuring commitment, isang GA window, isang memory spec, isang Helios-class rack, o isang pinangalanang hyperscaler. Hindi bibilang ang isang teaser na walang spec o muling-anunsyo ng MI355X."
+    }
+  ]
+}

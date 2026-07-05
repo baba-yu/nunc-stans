@@ -1,0 +1,44 @@
+[
+  {
+    "actor": "second local-LLM runtime maintainer shipping to end users",
+    "job": "wiring paired-draft or in-model speculative decoding on as the default path for a popular open-weight family, bundling a working draft and kernel so users never touch a flag",
+    "outcome": "a runtime release whose notes flip speculative decoding to on-by-default for at least one popular open-weight model family, with byte-identical output",
+    "motivation": "Ollama's accuracy-neutral ~90% coding-agent speedup sets a competitive bar; defaulting it on closes the on-device-to-hosted throughput gap without new silicon",
+    "task": {
+      "who": "runtime inference-engine and model-packaging maintainers",
+      "what": "default-enable paired-draft speculative decoding for a popular open family",
+      "where": "the runtime's default inference path and bundled model manifests",
+      "when": "July 2026 through Q2 2027",
+      "why": "match Ollama's free accuracy-neutral speedup as a competitive baseline",
+      "how": "bundled draft model plus upstreamed small-batch matmul kernel"
+    }
+  },
+  {
+    "actor": "open-weight model-family release team",
+    "job": "shipping a matched small draft model alongside the main weights and validating byte-identical verified output, so a runtime can enable speculative decoding by default without accuracy risk",
+    "outcome": "a model-family release that includes a compatible draft checkpoint proven to give accuracy-neutral speculative decoding, ready for a runtime to default on",
+    "motivation": "families that ship a drop-in draft get faster local inference and become the family runtimes choose to default the speedup on for",
+    "task": {
+      "who": "model-training and release-engineering staff at the lab",
+      "what": "ship and validate a matched draft checkpoint with main weights",
+      "where": "the model-family release and its published inference config",
+      "when": "the runway before a runtime's Q2 2027 default flip",
+      "why": "let runtimes default speculative decoding on with no accuracy loss",
+      "how": "co-trained or distilled draft model with verified acceptance testing"
+    }
+  },
+  {
+    "actor": "speculative-decoding kernel contributor to local runtimes",
+    "job": "hardening and upstreaming the reusable small-batch matmul kernel and draft-verify path so speculative decoding is portable across MLX (or GGUF) models rather than tuned per model",
+    "outcome": "a merged, general-purpose speculative-decoding kernel any open-weight model on the runtime can use, removing the per-model engineering that blocks default-on",
+    "motivation": "a portable accuracy-neutral kernel is what converts speculative decoding from an advanced opt-in into a default a second runtime can safely ship",
+    "task": {
+      "who": "runtime and MLX/llama.cpp kernel-engineering contributors",
+      "what": "upstream a reusable small-batch draft-verify matmul kernel",
+      "where": "the runtime's shared inference kernel and framework libraries",
+      "when": "H2 2026 into early 2027",
+      "why": "make the accuracy-neutral speedup portable enough to default on",
+      "how": "small-batch MLX matmul kernel merged upstream for any model"
+    }
+  }
+]

@@ -1,0 +1,47 @@
+{
+  "date": "2026-07-03",
+  "predictions": [
+    {
+      "id": "prediction.f4118d6655c86297",
+      "scope_hint": "tech",
+      "title": "Los fine-tunes MoE open-weight superan a las APIs frontera en tareas de expertos de nicho para el Q2 2027",
+      "body": "AIA Labs de Bridgewater y Thinking Machines Lab publicaron un fine-tune especializado de la base open-weight Qwen3-235B que alcanzó un 84,7% de exactitud media en seis tareas de filtrado de información financiera frente al 78,2% del mejor modelo frontera, una reducción de errores del 29,8%, ejecutándose a un coste de inferencia por tarea aproximadamente 13,8x menor. Lo que hizo el trabajo fue la receta, no los pesos base: batching round-robin intercalado, una pérdida CISPO con recorte asimétrico y destilación on-policy con un profesor promovido periódicamente, todo entrenado en la plataforma Tinker de Thinking Machines contra datos propietarios etiquetados por expertos. Es una plantilla limpia y reproducible que cualquier empresa con un conjunto de datos de dominio de alta calidad puede copiar, y encaja de lleno en el terreno de la optimización local donde ya operan herramientas como Unsloth. Se espera que el patrón se generalice: en los próximos meses más resultados publicados mostrarán checkpoints MoE open-weight, afinados con conjuntos de datos estrechos etiquetados por expertos, superando a las APIs frontera genéricas en su benchmark vertical específico con un gran descuento de coste. El diferenciador es migrar de la escala del modelo base al conjunto de datos y a la receta de entrenamiento, de modo que un especialista open-weight afinado para el dominio se convierte en la respuesta por defecto de construir-o-comprar allí donde una firma posee etiquetas propietarias y le importa el coste por tarea.",
+      "reasoning": {
+        "because": "El fine-tune de Qwen3-235B alcanzó un 84,7% frente al 78,2% frontera en tareas financieras a un coste por tarea ~13,8x menor",
+        "given": "el diferenciador se desplaza de la escala del modelo base al conjunto de datos de dominio y a la receta de entrenamiento sobre MoE abierto",
+        "so_that": "más fine-tunes MoE open-weight con datos de expertos estrechos superarán a las APIs frontera en su vertical con un descuento de coste",
+        "landing": "para el Q2 2027, una organización lanza un fine-tune MoE abierto que supera a una API frontera en un nicho",
+        "plain_language": "Las empresas con sus propios datos de expertos afinarán modelos abiertos gratuitos para superar a las grandes IAs de pago en su tarea específica, por mucho menos dinero."
+      },
+      "summary": "Un fine-tune open-weight de Qwen3-235B de Bridgewater y Thinking Machines superó al mejor modelo frontera en tareas financieras, 84,7% frente a 78,2%, a un coste por tarea unas 13,8x menor, impulsado por la receta y no por los pesos. Se espera que más fine-tunes MoE open-weight superen a las APIs frontera en tareas de nicho para el Q2 2027."
+    },
+    {
+      "id": "prediction.788b3c0d5220ead0",
+      "scope_hint": "business",
+      "title": "Menlo Ventures destinará su ronda de $3B a un vehículo de fondo dedicado a IA para el Q1 2027",
+      "body": "Menlo Ventures cerró una ronda de $3B el 30 de junio de 2026 —la mayor de su historia— enmarcada explícitamente como una apuesta total por la IA, y la economía de esa decisión es inseparable de una participación en Anthropic ahora valorada en unos $14B frente a una valoración de $965B. Una sola posición tan grande respecto a los tamaños de fondo previos de la firma crea un problema de concentración que un vehículo generalista no puede absorber, así que cabe esperar que Menlo formalice el capital en una estructura dedicada a IA: un fondo de crecimiento u oportunidades con nombre propio, o una asignación de tesis de IA diferenciada, en lugar de integrarlo en un buque insignia indiferenciado. La presión temporal se agrava. El acceso al modelo puntero de Anthropic está ahora acoplado a un régimen gubernamental de seguridad y divulgación, y se espera un marco de estándares de modelos frontera de la Casa Blanca la semana del 7 de julio, dos factores que elevan la prima de los inversores capaces de respaldar a los laboratorios frontera a través de ciclos de cómputo intensivos en capital y del escrutinio regulatorio. Eso favorece a los vehículos de IA concentrados y de etapa tardía frente a las carteras semilla de spray-and-pray. Con la mayor ronda de su historia anunciada y una posición ancla emblemática que defender, Menlo tiene tanto el mandato como el incentivo para levantar un fondo de IA hecho a medida y empezar a desplegarlo en posiciones de seguimiento y de laboratorios adyacentes dentro de los próximos dos o tres trimestres.",
+      "reasoning": {
+        "because": "Menlo cerró su mayor ronda de la historia, $3B, el 30 de junio para apostar todo por la IA, anclada por una participación de ~$14B en Anthropic",
+        "given": "Una participación tan grande obliga a una estructura concentrada dedicada a IA y a un respaldo de etapa tardía intensivo en cómputo",
+        "so_that": "Menlo formaliza un vehículo de fondo específico de IA y empieza a desplegarlo en posiciones de laboratorios frontera y adyacentes",
+        "landing": "Menlo Ventures anuncia un vehículo de fondo dedicado a IA a partir de la ronda de $3B para el Q1 2027",
+        "plain_language": "Menlo acaba de recaudar 3.000 millones de dólares para IA, así que probablemente montará un fondo exclusivo de IA y empezará a gastarlo pronto."
+      },
+      "summary": "Menlo Ventures cerró una ronda récord de $3B el 30 de junio de 2026 para apostar todo por la IA, anclada por una participación en Anthropic valorada en unos $14B. Una posición tan grande obliga a una estructura concentrada, así que es probable que Menlo formalice un vehículo de fondo dedicado a IA y empiece a desplegarlo para el Q1 2027."
+    },
+    {
+      "id": "prediction.0cbb02dafcbc3e36",
+      "scope_hint": "cross",
+      "title": "El transporte stdio de MCP quedará desactivado por defecto en los frameworks de agentes para el Q1 2027",
+      "body": "La prueba de concepto funcional de la RCE de Custom-MCP de Flowise (CVE-2026-40933), combinada con la demostración de que su parche oficial puede eludirse, convierte el transporte stdio de una comodidad por defecto en un riesgo que un simple salto de versión no puede solucionar. Como el fallo es estructural y no un único error de programación, un archivo de flujo importado lanza un proceso hijo sin sandbox en el momento en que una víctima lo abre, y el aviso coordinado de la cadena de suministro de MCP rastrea el mismo patrón de comando-no-validado-a-subproceso en LiteLLM, Agent Zero, LangBot, Windsurf y afines. La guía de seguridad ya ha convergido en una sola instrucción: desactivar stdio en favor de Server-Sent Events y tratar cualquier configuración MCP importada como código no confiable. Esa convergencia, que llega justo cuando la Casa Blanca prepara un marco voluntario de estándares de modelos frontera para la semana del 7 de julio, ofrece tanto a los mantenedores como a cualquier línea base emergente de seguridad de agentes una palanca de fortalecimiento obvia y única sobre la que estandarizar. Se espera que los principales frameworks de agentes pasen la ejecución de MCP basada en stdio a opt-in tras una solicitud de confianza explícita o un sandbox, con SSE o un transporte igualmente aislado como valor por defecto de fábrica, de modo que un archivo de configuración ya no pueda convertirse silenciosamente en acceso a shell. El acoplamiento es de seguridad-impulsa-política: una clase de exploit viva y resistente a parches se convierte en el caso de prueba concreto en torno al cual se escriben las primeras normas de seguridad de agentes.",
+      "reasoning": {
+        "because": "La RCE de Custom-MCP de Flowise (CVE-2026-40933) tiene una PoC funcional y una elusión de parche demostrada",
+        "given": "El mismo patrón de inyección de comandos por stdio abarca LiteLLM, Agent Zero, LangBot, Windsurf mientras se acercan las normas de EE. UU.",
+        "so_that": "Los frameworks pasan la ejecución MCP por stdio a opt-in tras confianza/sandbox, con un transporte aislado tipo SSE por defecto",
+        "landing": "Los principales frameworks de agentes hacen que stdio de MCP sea opt-in / desactivado por defecto para el Q1 2027",
+        "plain_language": "Un hackeo difícil de parchear hizo que las herramientas de IA ejecutaran código de archivos importados, así que esas herramientas dejarán de confiar en ese modo por defecto."
+      },
+      "summary": "Un exploit funcional y una elusión de parche para la RCE de Custom-MCP de Flowise marcan stdio como un riesgo estructural compartido por muchas herramientas de agentes. Mientras la Casa Blanca prepara un marco voluntario de estándares de modelos frontera, se espera que los principales frameworks de agentes hagan que la ejecución MCP por stdio sea opt-in para el Q1 2027."
+    }
+  ]
+}

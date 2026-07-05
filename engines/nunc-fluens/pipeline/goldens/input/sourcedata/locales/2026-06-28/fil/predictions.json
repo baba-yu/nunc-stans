@@ -1,0 +1,47 @@
+{
+  "date": "2026-06-28",
+  "predictions": [
+    {
+      "id": "prediction.6f3ab91c4d2e7a08",
+      "scope_hint": "tech",
+      "title": "Magkakaroon ng same-week na Unsloth tuning support ang sub-gigabyte on-device LLM pagsapit ng Q3 2026",
+      "body": "Sa paglabas ng 230M-parameter na LFM2.5 ng Liquid AI na may launch-day llama.cpp, MLX, vLLM, SGLang at ONNX runtimes, lumitaw na ang isang sub-gigabyte on-device model ay nagsa-ship na ngayon laban sa buong local-inference stack sa unang araw mismo. Dahil naihatid na ng v0.1.471-beta ng Unsloth ang first-class fine-tuning para sa frontier open weights sa loob ng dalawang araw mula sa release (GLM-5.2 noong June 16, support noong June 18), darating din ang parehong compression sa edge tier. Ang prediksyon ay ito: isang sub-1B on-device model na inilabas ngayong cycle ang magkakaroon ng LoRA/QLoRA fine-tuning support sa isang mainstream tuning toolkit sa loob ng parehong linggo ng paglabas ng weights nito, na isinasara ang agwat mula sa open release patungo sa on-device customization. Hindi maiiwasan ang puwersang ito dahil sa kompetisyon: kapag naihatid ng isang tuning library ang isang popular na edge checkpoint sa loob ng ilang araw, kailangang tumugma ang iba sa bilis na iyon o mawalan ng on-device developer audience.",
+      "reasoning": {
+        "because": "Nag-ship ang LFM2.5-230M sa unang araw sa llama.cpp, MLX, vLLM, SGLang at ONNX runtimes",
+        "given": "Naihatid ng Unsloth ang GLM-5.2 fine-tuning dalawang araw matapos ang June 16 open-weight release nito",
+        "so_that": "magkakaroon ng same-week tuning support ang open-weight edge checkpoints, na pinaiikli ang release-to-customization sa ilang araw sa on-device",
+        "landing": "Magkakaroon ng same-week tuning support ang isang sub-1B edge model pagsapit ng Q3 2026",
+        "plain_language": "Magiging trainable ang maliliit na phone-sized AI models ilang araw lang matapos ilabas ang mga ito."
+      },
+      "summary": "Nag-ship ang 230M LFM2.5 ng Liquid AI sa unang araw sa llama.cpp, MLX, vLLM, SGLang at ONNX, habang nagdadagdag na ang Unsloth ng frontier fine-tuning sa loob ng dalawang araw ng isang release. Asahan na magkakaroon ng same-week LoRA/QLoRA tuning support ang isang sub-1B on-device model sa isang mainstream toolkit pagsapit ng Q3 2026."
+    },
+    {
+      "id": "prediction.7b3e9f12c4a6d8e0",
+      "scope_hint": "business",
+      "title": "Bibili ng CUDA-agnostic inference compiler ang isang karibal na accelerator vendor pagsapit ng Q1 2027",
+      "body": "Ang halos $14B full-stack na taya ng Qualcomm ngayong linggo — ang ~$3.92B all-stock na pagbili ng Modular para sa MAX cross-vendor inference engine, ang naiulat na $8-10B na usapan sa Tenstorrent, at ang nakatakdang paghahatid ng hyperscaler custom-silicon bago matapos ang taon — ginagawang pinaglalabanang lupa ang portable-compiler layer para basagin ang CUDA lock-in ng Nvidia. Ang pagmamay-ari ng isang silicon-agnostic compute layer ay ngayon na ang halaga ng pagpasok para sa sinumang vendor na nagbebenta ng enterprise inference laban sa Nvidia, at ang Modular ang pinakamalaking neutral compiler asset sa merkado. Asahan na hindi bababa sa isang karibal na accelerator buyer (AMD, Intel, o ang silicon arm ng isang hyperscaler) ang tutugon sa pamamagitan ng pagbili o pagkuha ng controlling stake sa isang katulad na cross-vendor inference-compiler o runtime startup, sa halip na ibigay sa Qualcomm ang kuwento ng portability.",
+      "reasoning": {
+        "because": "Inalis ng $3.92B Modular buy ng Qualcomm ang pinakamalaking neutral cross-vendor inference compiler asset",
+        "given": "table stakes na ngayon ang isang silicon-agnostic compute layer para magbenta ng enterprise inference laban sa CUDA",
+        "so_that": "isang karibal na accelerator buyer ang bibili o kukuha ng controlling stake sa isang katulad na inference-compiler startup",
+        "landing": "pagsapit ng Q1 2027; isang inanunsyong AMD/Intel/hyperscaler compiler buy o majority stake",
+        "plain_language": "Binili ng Qualcomm ang kumpanyang gumagawa ng AI chips mula sa magkakaibang gumagawa na magtutulungan, kaya magmamadali ang isang katunggali na bumili ng katulad nito."
+      },
+      "summary": "Ang ~$14B push ng Qualcomm — ang $3.92B Modular compiler buy, ang usapan sa Tenstorrent, at ang hyperscaler custom silicon — ginagawang table stakes ang isang portable inference layer laban sa Nvidia. Malamang na tutugon ang isang karibal na accelerator vendor sa pamamagitan ng pagbili ng katulad na cross-vendor compiler startup."
+    },
+    {
+      "id": "prediction.c5aa6ceae507d1a8",
+      "scope_hint": "cross",
+      "title": "Magsa-ship ang isang coding-agent platform ng trifecta capability gate bilang default pagsapit ng Q1 2027",
+      "body": "Hindi bababa sa isang nangungunang coding-agent platform (ang kategoryang tinawag ng OWASP na sentro ng prompt injection, kung saan kabilang ang Claude Code, AutoGPT, Dify at Roo-Code sa pinakamaraming-advisory na repositories) ang magsa-ship ng isang default-on na capability gate na nagpapatupad ng 'Rule of Two'-style na hadlang: maaaring pagsamahin ng isang agent run ang hanggang dalawa lamang sa private-data access, exposure sa untrusted content, at external communication bago ito kailangang huminto para sa tahasang pag-apruba ng tao. Sumusunod ang hakbang na ito sa muling pagbabalangkas ng OWASP sa prompt injection bilang isang structural, hindi-mapa-patch na katangian ng agentic systems sa halip na isang mapa-patch na CVE, na nag-iiwan sa mga vendor na magmitiga sa pamamagitan ng paglilimita sa lethal trifecta sa orchestration layer sa halip na i-filter ang token stream. Dahil itinatanggi ng argumentong arkitektural ang anumang maaasahang paraan para ihiwalay ang command tokens mula sa data tokens, ang tanging matibay na depensa ay tanggihan ang mapanganib na kombinasyon bilang default, at itutulak ng presyon ng kompetisyon kasama ng dami ng advisory ang pinakamalalaking platform doon una.",
+      "reasoning": {
+        "because": "Ini-map ng OWASP 2.01 ang prompt injection sa 6 ng 10 agentic categories at tinawag na sentro ang coding agents",
+        "given": "Hindi-mapa-patch ang injection, kaya ang tanging matibay na mitigasyon ay paglimita sa lethal trifecta sa orchestration",
+        "so_that": "Gagawing default-on ng isang coding-agent platform ang isang Rule-of-Two capability gate, na huminto para sa pag-apruba sa ikatlong katangian",
+        "landing": "pagsapit ng Q1 2027; >=1 nangungunang coding-agent platform ang magsa-ship ng default-on trifecta gate",
+        "plain_language": "Maaaring malinlang ng nakatagong instruksyon ang AI coding helpers, kaya sisimulan ng malalaking tool na harangan ang mapanganib na kombinasyon maliban kung papayag ang isang tao."
+      },
+      "summary": "Tinatawag na ngayon ng OWASP ang prompt injection na isang structural, hindi-mapa-patch na katangian ng agentic AI at tinawag na sentro ang coding agents. Dahil walang paraan para ihiwalay ang commands sa data, kailangang limitahan ng mga vendor ang lethal trifecta sa orchestration layer. Asahan na magsa-ship ang isang coding-agent platform ng default-on Rule-of-Two gate."
+    }
+  ]
+}

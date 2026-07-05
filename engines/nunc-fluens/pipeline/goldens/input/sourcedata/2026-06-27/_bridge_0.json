@@ -1,0 +1,6 @@
+{
+  "support_dimension": "because",
+  "narrative": "The Langflow cross-tenant IDOR (CVE-2026-55255, CVSS 9.9) firing in the wild June 25 is the precipitating origin signal: a flow resolved by opaque UUID with owner checks deferred to the UI on a shared execution endpoint. That is precisely the orchestration-plane underbelly the Multi-tenant agent builders authz-CVE thesis (Jun 27) rests on, and the pattern recurs across n8n/Flowise/Dify.",
+  "coherence": 4,
+  "remaining_gap": "A second distinct named platform still needs a CVSS >= 9.0 cross-tenant authz, BOLA, or IDOR advisory; today supplies only the first instance, not the class-confirming recurrence."
+}

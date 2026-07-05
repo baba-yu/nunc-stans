@@ -1,0 +1,47 @@
+{
+  "date": "2026-06-24",
+  "predictions": [
+    {
+      "id": "prediction.b7f4c2a91e6d80a3",
+      "scope_hint": "tech",
+      "title": "OpenAI cierra una asignación de HBM acoplada a capital con un fabricante de memoria antes del Q4 2026",
+      "body": "La entrada de Micron en la Serie H de Anthropic el 22 de junio, combinada con una asignación de suministro plurianual de HBM/DRAM/SSD, deja a Anthropic como el único laboratorio de frontera acoplado financieramente a los tres proveedores globales de memoria de alto ancho de banda (Micron, Samsung, SK Hynix). La memoria de alto ancho de banda es la restricción que limita la escala de entrenamiento e inferencia de IA, y las estructuras de capital más suministro aseguran capacidad de cara a las esperadas salidas a bolsa de los fabricantes de memoria en el Q4 2026 de forma mucho más duradera que las órdenes de compra. La predicción es que un laboratorio de frontera rival, lo más plausiblemente OpenAI dada su escala y acceso al capital, responde asegurando su propia asignación de HBM acoplada a capital con al menos uno de los tres proveedores, convirtiendo la cadena de suministro de una relación de compra en una participación de propiedad disputada. La señal a vigilar es un acuerdo divulgado de inversión estratégica más asignación plurianual entre un laboratorio distinto de Anthropic y un fabricante de HBM, no un mero contrato de compra (offtake).",
+      "reasoning": {
+        "because": "La entrada de Micron en la Serie H el 22 de junio vincula a Anthropic por capital más suministro con los tres fabricantes de HBM a la vez",
+        "given": "La HBM es la restricción de escala determinante y el capital asegura capacidad de forma más duradera que las órdenes de compra",
+        "so_that": "Un laboratorio rival, lo más plausiblemente OpenAI, asegura su propia asignación de HBM acoplada a capital para evitar el suministro en el mercado al contado",
+        "landing": "antes del Q4 2026; un laboratorio distinto de Anthropic y un fabricante de HBM divulgan un acuerdo de capital más asignación",
+        "plain_language": "Anthropic ahora es copropietario de sus vínculos con los tres fabricantes de chips de memoria. Pronto un competidor como OpenAI comprará su propia participación para no quedarse atrás."
+      },
+      "summary": "La entrada de Micron en la Serie H el 22 de junio deja a Anthropic acoplado de forma única a los tres fabricantes de HBM. Como la memoria es la restricción de escala determinante y el capital asegura capacidad de forma más duradera que las órdenes de compra, es probable que un laboratorio rival como OpenAI asegure su propia asignación de HBM acoplada a capital antes del Q4 2026."
+    },
+    {
+      "id": "prediction.7c1f9a3e84b2d6f0",
+      "scope_hint": "cross",
+      "title": "Los benchmarks de orquestación añaden una columna de divulgación de latencia para el Q1 2027",
+      "body": "Fugu, de Sakana, llegó el 22 de junio como un modelo de orquestación entrenado cuyo nivel Ultra se presenta a la par de Fable 5 y Mythos en sus propias tablas de programación, ciencia y razonamiento, pero en menos de 48 horas Ethan Mollick, de Wharton, lo ejecutó en sus pruebas habituales de shaders y escenas interactivas y encontró ejecuciones de unos 30 minutos que eran apenas \"aceptables\" y que no igualaban a Fable en la práctica. La brecha es estructural: un enrutador convertido en modelo que delega y verifica de forma recursiva sobre un grupo de modelos de frontera intercambiable compra calidad a costa de tiempo de reloj que las clasificaciones centradas solo en la precisión nunca muestran. La predicción es que los evaluadores independientes y los propios proveedores de orquestación pasan a publicar la latencia y el tiempo de reloj de extremo a extremo junto a las puntuaciones de calidad como un eje de reporte estándar, de modo que una afirmación de \"iguala a Fable en precisión\" ya no se acepte sin una divulgación del tiempo de finalización por tarea. Es de esperar que al menos un benchmark o evaluador ampliamente citado formalice una columna de latencia/coste por tarea para la orquestación multimodelo, y que al menos un proveedor de orquestación publique SLA de tiempo de reloj, antes del Q1 2027.",
+      "reasoning": {
+        "because": "Una prueba independiente de Fugu Ultra encontró ejecuciones de unos 30 minutos pese a la paridad de precisión publicada con Fable 5/Mythos",
+        "given": "Un enrutador convertido en modelo cambia tiempo de reloj por calidad, un coste que las clasificaciones centradas solo en la precisión nunca muestran",
+        "so_that": "Un evaluador o proveedor formaliza una columna de latencia/coste por tarea para las afirmaciones de paridad en orquestación",
+        "landing": "antes del Q1 2027; un benchmark citado añade una columna de latencia o un proveedor publica un SLA",
+        "plain_language": "Una nueva IA que contrata a otras IA puntuó alto pero tardó 30 minutos, así que las pruebas empezarán a reportar la velocidad, no solo la precisión."
+      },
+      "summary": "Tras chocar las afirmaciones de paridad de frontera de Fugu Ultra con una prueba independiente que mostró ejecuciones de unos 30 minutos, la evaluación de la orquestación debería añadir la latencia de reloj como un eje reportado estándar. Al menos un benchmark citado formaliza una columna de latencia o un proveedor publica SLA de tiempo de finalización antes del Q1 2027."
+    },
+    {
+      "id": "prediction.7c41f9a2e8b6d503",
+      "scope_hint": "cross",
+      "title": "Los cobots móviles de propósito general superan las 100.000 horas de operación productiva para el H1 2027",
+      "body": "El debut del Proxie de segunda generación de Collaborative Robotics en Automate 2026 llevó la manipulación móvil de propósito general de la demostración a un registro operativo cuantificado: inferencia de tareas en el propio robot sin dependencia de la nube para la ejecución central, un precio de 5.000 dólares al mes, y un historial de primera generación de 12.627 horas registradas, más de 40 millones de libras movidas y más de 17 millones de pasos humanos ahorrados en hospitales, manufactura y logística en turnos de 16 horas. La predicción es que al menos un proveedor de cobots móviles de propósito general publica un registro operativo acumulado de su flota a través de clientes que supera las 100.000 horas de producción, planteado como una métrica de despliegue en lugar de un piloto o demo. El giro que revela el lanzamiento es que los proveedores de IA física compiten en horas de operación auditadas y dólares de material movido en lugar de clips de capacidad de feria; una vez que una plataforma de propósito general ancle su marketing en una cifra de seis dígitos de horas de flota, el precio de suscripción mensual convierte las horas de operación en la unidad que los compradores respaldan y los rivales se ven arrastrados al mismo marcador. Se trata de una afirmación de despliegue productizado, distinta de una predicción de suministro de hardware o de fiabilidad de orquestación.",
+      "reasoning": {
+        "because": "El lanzamiento del Proxie Gen 2 de Cobot se ancló en un registro de producción de primera generación de 12.627 horas y 40 millones de libras, no en demos",
+        "given": "El precio de 5.000 dólares al mes hace de las horas de operación de flota auditadas la unidad que los compradores respaldan, arrastrando a los rivales",
+        "so_that": "Un proveedor de cobots móviles de propósito general publica un registro de flota a través de clientes superior a las 100.000 horas de operación productiva",
+        "landing": "antes del H1 2027; un proveedor de cobots móviles de propósito general, divulgación de horas de flota",
+        "plain_language": "Los robots de fábrica ahora presumen de horas reales trabajadas, no de demos; pronto uno superará las 100.000 horas a través de sus clientes."
+      },
+      "summary": "El lanzamiento del Proxie Gen 2 de Cobot en Automate 2026 se ancló en un registro operativo de primera generación (12.627 horas, más de 40 millones de libras movidas) y un precio de 5.000 dólares al mes. Es de esperar que un proveedor de cobots móviles de propósito general publique un registro de flota a través de clientes superior a las 100.000 horas de operación productiva antes del H1 2027."
+    }
+  ]
+}

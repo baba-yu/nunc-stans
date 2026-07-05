@@ -1,0 +1,122 @@
+{
+  "date": "2026-06-22",
+  "validation_rows": [
+    {
+      "prediction_ref": {
+        "id": "prediction.ef0bb943bcd4a5d3",
+        "short_label": "Rival humanoid maker lands $500M-plus chip-and-cloud strategic round by Q4 2026",
+        "prediction_date": "2026-06-18"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "Hyundai's board is set to vote today, June 22, to buy SoftBank's residual 9.65% of Boston Dynamics for about $325 million, an implied ~$3.37 billion enterprise value that re-rates the humanoid maker to roughly three times its 2021 mark and pulls the firm fully inside a strategic owner with the capital and captive demand to fund its roadmap. That is the capital-and-strategic-backing-concentrating-around-humanoid-platforms direction this prediction tracks: a deep-pocketed industrial sponsor putting nine figures behind a humanoid program tied to a ~25,000-unit Atlas factory deployment from 2028. But the match is structural, not the named landing: this is a full buyout of a captive subsidiary, not a $500M-plus external strategic round into a rival pure-play, and there is no chip-and-cloud syndicate of the kind the prediction specifies.",
+      "reference_links": [
+        {
+          "label": "KED Global - Hyundai to take full ownership of Boston Dynamics in SoftBank buyout",
+          "url": "https://www.kedglobal.com/robotics/newsView/ked202606210001"
+        },
+        {
+          "label": "Global Banking & Finance Review - Hyundai to buy SoftBank's remaining stake in Boston Dynamics for $325 million",
+          "url": "https://www.globalbankingandfinance.com/hyundai-buy-softbanks-remaining-stake-boston-dynamics-325/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "A deep-pocketed industrial owner is putting nine figures behind Boston Dynamics at a ~$3.37 billion re-rating, consolidating full control to fund a 25,000-unit Atlas factory roadmap — the capital concentrating around humanoid platforms the thesis tracks, with strategic money flowing to whoever can absorb the unit economics.",
+        "coherence": 3,
+        "remaining_gap": "This is a full buyout of a captive subsidiary, not a $500M-plus external strategic round into a rival pure-play backed by a chip-and-cloud syndicate."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.d15f8427132cce7b",
+        "short_label": "A frontier AI lab files a public S-1 and prices its IPO by Q2 2027",
+        "prediction_date": "2026-06-12"
+      },
+      "today_relevance": 2,
+      "evidence_summary": "The Hyundai-SoftBank buyout reported today turns on an IPO clock: SoftBank's exit is a put option from the 2021 deal that let it sell its residual Boston Dynamics shares back if the firm had not completed a US IPO by June 2026, and with no listing it notified Hyundai it would exercise. Korean business press frames full ownership as also clearing the path to accelerate a future Boston Dynamics IPO. The relevance to this prediction is thematic only, on the IPO-timing-and-exit-discipline thread it shares: a frontier-class private company facing a hard liquidity-window deadline. But the match is weak and off-target: Boston Dynamics is a robotics maker, not a frontier AI lab, the news is a missed-IPO put-option trigger rather than a priced S-1, and nothing today moves any named frontier lab to a public filing.",
+      "reference_links": [
+        {
+          "label": "KED Global - Hyundai to take full ownership of Boston Dynamics in SoftBank buyout",
+          "url": "https://www.kedglobal.com/robotics/newsView/ked202606210001"
+        },
+        {
+          "label": "Crypto Briefing - Hyundai to acquire SoftBank's remaining stake in Boston Dynamics for $325M",
+          "url": "https://cryptobriefing.com/hyundai-acquires-softbank-boston-dynamics-stake/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "SoftBank's exit fires because Boston Dynamics missed a US-IPO-by-June-2026 deadline baked into the 2021 deal, and full ownership is framed as clearing the path to accelerate a later listing — a live reminder that a hard IPO clock and exit discipline govern frontier-class private companies the way the thesis assumes.",
+        "coherence": 2,
+        "remaining_gap": "Boston Dynamics is a robotics maker, not a frontier AI lab, and this is a missed-IPO put-option trigger rather than a priced S-1 from a named lab."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.c349283881f8339b",
+        "short_label": "Confidential-GPU attestation lands as a cloud-AI contract term by Q2 2027",
+        "prediction_date": "2026-06-14"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "Today's events calendar puts the Confidential Computing Summit at the San Francisco Mint on June 23-24, now a day out, with confidential-AI and data-sovereignty keynotes featuring AMD, Google, Microsoft, NVIDIA, Meta and Samsung under the Linux Foundation and OPAQUE. That is the precise GPU-and-hyperscaler cohort whose attestation primitives this prediction expects to harden into a procurable cloud-AI contract term, convening on exactly the confidential-AI and data-sovereignty agenda that drives the thesis, with the soonest anchor among today's three security sub-tracks. The relevance is on venue and imminent momentum, not the landing itself: a summit on the calendar surfaces the vendors and the demand framing but is not a published attestation clause, SLA or contracted procurement term, and no cloud provider or buyer has yet committed confidential-GPU attestation as a default deal term on data-jurisdiction grounds.",
+      "reference_links": [
+        {
+          "label": "Linux Foundation - Confidential Computing Summit 2026 (June 23-24, San Francisco)",
+          "url": "https://events.linuxfoundation.org/confidential-computing-summit/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "A day out, the exact GPU-and-hyperscaler cohort the thesis depends on — AMD, NVIDIA, Google, Microsoft, Meta, Samsung — convenes at the Confidential Computing Summit on a confidential-AI and data-sovereignty agenda, the structural pull that has to mature before attestation guarantees harden into a procurable cloud-AI deal term.",
+        "coherence": 4,
+        "remaining_gap": "A summit on the calendar surfaces vendors and demand, not a published attestation clause; no provider or buyer has yet committed this as a default deal term on data-jurisdiction grounds."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.a4ee0b5435860b21",
+        "short_label": "AWS Continuum's sandbox exploit-validation goes industry baseline by H1 2027",
+        "prediction_date": "2026-06-21"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "Today's events calendar lists AI Tinkerers San Francisco hosting an Offensive Security Demo Night on June 25 with live autonomous-pentesting-agent demos sponsored by XBOW, ahead of the Black Hat USA AI Summit and DEF CON AI Village in August. That is the same prove-the-finding-by-running-it capability this prediction tracks: agents that chain reconnaissance, build a working exploit and execute it to demonstrate reachability rather than merely flagging a possible weakness, which is exactly Continuum's sandbox exploit-validation move generalized to a vendor field. But the relevance is on momentum and adjacency, not the landing: a demo night is conference-stage validation, not the defensive exploit-validation pipeline becoming an industry baseline across named code-security vendors, and the offensive-pentest framing here points at attacker tooling rather than the defensive proof-of-exploit gate the prediction names.",
+      "reference_links": [
+        {
+          "label": "AI Engineer World's Fair 2026 (June 29-July 2, San Francisco)",
+          "url": "https://www.ai.engineer/worldsfair/2026"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "Days out, an Offensive Security Demo Night puts autonomous agents on stage that chain recon, build a working exploit and run it to prove reachability — the prove-the-finding-by-running-it capability the thesis credits, generalizing Continuum's sandbox exploit-validation move into a competitive vendor field ahead of the August Black Hat window.",
+        "coherence": 3,
+        "remaining_gap": "A demo night is conference-stage validation, not the defensive exploit-validation gate becoming an industry baseline across named code-security vendors; the framing here is offensive tooling."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.52add1fe9732a4ff",
+        "short_label": "Automaker-built humanoid programs add a second high-volume entrant by Q2 2027",
+        "prediction_date": "2026-06-07"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "[REVIVED] Today's Hyundai-SoftBank buyout, reported tied to a plan to deploy about 25,000 Atlas humanoids across Hyundai's own factories from 2028, is a direct pulse on this dormant thesis that vertically integrated automakers will field high-volume humanoid programs on their own motor, battery and supply-chain foundations. By taking full ownership of Boston Dynamics at an implied ~$3.37 billion value and removing minority-shareholder friction around the captive-deployment roadmap, Hyundai positions itself as exactly the automaker-anchored, in-house-fleet humanoid entrant the prediction anticipated alongside Tesla and BYD. The match is strong on the structural claim but partial on the falsifiable bar: the news is an ownership consolidation and a stated 2028 unit target, not the on-record executive disclosure of a working prototype and production cost-down from a distinct second automaker that the prediction requires, and Hyundai/Boston Dynamics is an existing program rather than a fresh second entrant.",
+      "reference_links": [
+        {
+          "label": "KED Global - Hyundai to take full ownership of Boston Dynamics in SoftBank buyout",
+          "url": "https://www.kedglobal.com/robotics/newsView/ked202606210001"
+        },
+        {
+          "label": "Global Banking & Finance Review - Hyundai to buy SoftBank's remaining stake in Boston Dynamics for $325 million",
+          "url": "https://www.globalbankingandfinance.com/hyundai-buy-softbanks-remaining-stake-boston-dynamics-325/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Hyundai is taking full ownership of Boston Dynamics expressly to run about 25,000 Atlas units across its own plants from 2028 — a vertically integrated automaker committing its supply-chain and balance-sheet weight to a high-volume in-house humanoid program, precisely the automaker-anchored deployment pattern the thesis says will multiply.",
+        "coherence": 4,
+        "remaining_gap": "This consolidates an existing program rather than disclosing a fresh second entrant with a working prototype and production cost-down target on the record, as the prediction's bar requires."
+      }
+    }
+  ]
+}

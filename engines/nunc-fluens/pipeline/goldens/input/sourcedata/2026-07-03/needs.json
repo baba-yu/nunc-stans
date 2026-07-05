@@ -1,0 +1,137 @@
+{
+  "date": "2026-07-03",
+  "by_prediction": {
+    "prediction.0cbb02dafcbc3e36": [
+      {
+        "actor": "agent-framework core maintainer",
+        "job": "reworking MCP transport defaults so imported configs run through an isolated channel instead of spawning an unsandboxed stdio child process",
+        "outcome": "released framework version where stdio MCP execution is opt-in behind a trust prompt or sandbox, with SSE-style isolation as the shipped default",
+        "motivation": "the Flowise RCE PoC plus a demonstrated patch bypass proves stdio is a structural liability a version bump alone cannot fix",
+        "task": {
+          "who": "transport and security-response maintainers",
+          "what": "gate stdio MCP execution behind trust prompt or sandbox",
+          "where": "MCP client transport layer and config-import path",
+          "when": "July 2026 to Q1 2027",
+          "why": "stop a config file from silently becoming shell access",
+          "how": "SSE or equivalently isolated transport as default"
+        }
+      },
+      {
+        "actor": "MCP supply-chain security advisory coordinator",
+        "job": "documenting the shared unvalidated-command-to-subprocess pattern across LiteLLM, Agent Zero, LangBot, Windsurf and peers and issuing convergent hardening guidance",
+        "outcome": "coordinated advisory that names disabling stdio in favor of SSE and treating imported MCP config as untrusted code as the single hardening lever",
+        "motivation": "the same patch-resistant exploit class spans many agent tools, so per-project fixes need one cross-framework instruction to standardize on",
+        "task": {
+          "who": "vulnerability-coordination and disclosure researchers",
+          "what": "publish convergent disable-stdio hardening guidance",
+          "where": "coordinated multi-vendor MCP supply-chain advisory",
+          "when": "June 2026 to Q4 2026",
+          "why": "give maintainers one obvious lever against the shared pattern",
+          "how": "cross-framework advisory citing the common injection pattern"
+        }
+      },
+      {
+        "actor": "frontier-model standards framework drafter",
+        "job": "assembling a voluntary agent-security baseline that turns the live patch-resistant stdio exploit into the concrete test case the first norms are written around",
+        "outcome": "voluntary standards framework citing isolated MCP transport as a baseline hardening expectation for compliant agent frameworks",
+        "motivation": "an active exploit class arriving as norms are drafted gives the baseline a ready-made, defensible hardening requirement to anchor on",
+        "task": {
+          "who": "White House frontier-model policy and standards staff",
+          "what": "anchor agent-security baseline on isolated MCP transport",
+          "where": "voluntary frontier-model standards framework release",
+          "when": "week of July 7 2026 into Q1 2027",
+          "why": "security-drives-policy: live exploit becomes the norm's test case",
+          "how": null
+        }
+      }
+    ],
+    "prediction.788b3c0d5220ead0": [
+      {
+        "actor": "venture-firm fund-formation and GP lead",
+        "job": "structuring the closed $3B raise into a dedicated AI vehicle to absorb an outsized frontier-lab anchor position",
+        "outcome": "a named AI growth/opportunities fund or distinct AI thesis allocation formalized and beginning deployment",
+        "motivation": "a single ~$14B stake dwarfs prior fund sizes and cannot sit inside an undifferentiated generalist flagship",
+        "task": {
+          "who": "managing partners, fund CFO and formation counsel",
+          "what": "stand up an AI-dedicated fund structure",
+          "where": "fund LPA drafting, LP re-allocation and closing docs",
+          "when": "July 2026 through Q1 2027",
+          "why": "absorb concentration risk from the outsized anchor stake",
+          "how": "named growth/opportunities vehicle or distinct AI allocation"
+        }
+      },
+      {
+        "actor": "anchored frontier-lab capital and compute-strategy team",
+        "job": "running capital-intensive compute cycles and follow-on rounds that give concentrated later-stage backers a reason to formalize an AI vehicle",
+        "outcome": "follow-on and adjacent-lab funding opportunities that the new AI fund can deploy into during the runway",
+        "motivation": "the lab needs backers who can underwrite frontier compute through regulatory scrutiny and rising valuations",
+        "task": {
+          "who": "lab finance, corporate-development and compute-planning functions",
+          "what": "raise and structure follow-on frontier-compute financing",
+          "where": "later-stage funding rounds and compute-partner negotiations",
+          "when": "July 2026 through Q1 2027",
+          "why": "secure concentrated backers able to fund compute cycles",
+          "how": "later-stage rounds tied to compute buildout commitments"
+        }
+      },
+      {
+        "actor": "frontier-model policy and standards drafting body",
+        "job": "finalizing a frontier-model standards-and-disclosure framework that raises the premium on backers able to underwrite regulatory scrutiny",
+        "outcome": "a published standards framework that favors concentrated, later-stage AI vehicles over spray-and-pray seed portfolios",
+        "motivation": "coupling top-model access to a security-and-disclosure regime forces capital toward compliant frontier-lab backers",
+        "task": {
+          "who": "executive frontier-model standards and disclosure working group",
+          "what": "publish frontier-model standards-and-disclosure framework",
+          "where": "White House frontier-model standards framework release",
+          "when": "week of July 7, 2026 into Q1 2027",
+          "why": "raise the premium on compliant frontier-lab underwriters",
+          "how": "government security-and-disclosure standards regime"
+        }
+      }
+    ],
+    "prediction.f4118d6655c86297": [
+      {
+        "actor": "enterprise applied-ML lead sitting on proprietary expert-labeled data",
+        "job": "copying the published recipe to fine-tune an open-weight MoE base on their in-house domain labels for a target vertical benchmark",
+        "outcome": "a domain-tuned open-MoE specialist that beats a generic frontier API on the firm's vertical task at lower per-task cost",
+        "motivation": "owning proprietary labels plus a reproducible recipe makes build cheaper and better than paying frontier API per-task rates",
+        "task": {
+          "who": "in-house applied-ML / model-optimization team",
+          "what": "fine-tune open-weight MoE on proprietary domain labels",
+          "where": "internal training stack against a vertical benchmark",
+          "when": "July 2026 through Q2 2027",
+          "why": "beat frontier APIs on the vertical at a cost discount",
+          "how": "round-robin batching, CISPO loss, on-policy distillation recipe"
+        }
+      },
+      {
+        "actor": "open-weight-model research lab publishing reproducible fine-tune recipes",
+        "job": "packaging training recipes and expert-labeled fine-tune results into clean templates any firm can copy for its own domain",
+        "outcome": "more published open-MoE fine-tune results beating frontier APIs on specific verticals at large cost discounts",
+        "motivation": "demonstrating recipe-over-scale wins establishes their platform and methods as the default build path for domain specialists",
+        "task": {
+          "who": "post-training research and applied-science team",
+          "what": "publish reproducible open-MoE fine-tune benchmark results",
+          "where": "papers, model cards, and hosted training platforms",
+          "when": "the coming months into Q2 2027",
+          "why": "prove domain recipe beats base-model scale generically",
+          "how": "on-policy distillation with periodically promoted teacher"
+        }
+      },
+      {
+        "actor": "local-optimization tooling maintainer for open-weight fine-tuning",
+        "job": "productizing the recipe primitives so any enterprise dataset owner can run domain fine-tunes cheaply without bespoke infrastructure",
+        "outcome": "tooling that makes copying the round-robin/CISPO/distillation template a turnkey path for domain dataset owners",
+        "motivation": "the local-optimization lane grows as more firms tune open-weight specialists instead of buying frontier APIs",
+        "task": {
+          "who": "open-source library engineering and developer-experience team",
+          "what": "ship efficient fine-tuning primitives for open-weight MoE",
+          "where": "open-source training libraries and optimization toolchains",
+          "when": "July 2026 through Q2 2027",
+          "why": "lower the barrier to domain fine-tuning over frontier APIs",
+          "how": "memory- and cost-efficient training kernels and recipes"
+        }
+      }
+    ]
+  }
+}

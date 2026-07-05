@@ -1,0 +1,95 @@
+{
+  "date": "2026-06-28",
+  "by_prediction": {
+    "prediction.6f3ab91c4d2e7a08": [
+      {
+        "actor": "tagapag-maintain ng open-weight tuning-toolkit",
+        "job": "Nagmamadaling maihatid ang first-class LoRA/QLoRA fine-tuning para sa bagong-labas na sub-1B edge checkpoints sa loob ng ilang araw mula sa paglabas ng weights ng mga ito.",
+        "outcome": "Nagsa-ship ang isang mainstream tuning toolkit ng same-week LoRA/QLoRA support para sa isang sub-1B on-device model na inilabas ngayong cycle.",
+        "motivation": "Kung sino ang unang makakahatid ng isang popular na edge checkpoint ang mananalo sa on-device developer audience; ang pagkahuli ay nawawalan ng mindshare sa mga karibal.",
+        "task": {
+          "who": "core kernel / quantization engineering team",
+          "what": "magdagdag ng LoRA/QLoRA fine-tuning path para sa bagong sub-1B checkpoint",
+          "where": "ang model-support registry at training kernels ng toolkit",
+          "when": "Q3 2026 na panahong inilaan, day-zero hanggang day-seven matapos ang bawat edge weight drop",
+          "why": "tumugma sa bilis ng kakompetensya o mawalan ng on-device dev audience",
+          "how": "LoRA/QLoRA sa llama.cpp/MLX-compatible na quantized weights"
+        }
+      },
+      {
+        "actor": "tagapaglathala ng on-device model",
+        "job": "Nagsa-ship ng sub-gigabyte open weights sa unang araw laban sa buong local-inference stack (llama.cpp, MLX, vLLM, SGLang, ONNX).",
+        "outcome": "Lumilitaw ang isang sub-1B edge model bilang open na may malawak na runtime coverage, na ginagawa itong malinaw na target para sa agarang tuning support.",
+        "motivation": "Pinakamaraming adoption at ecosystem pickup ng edge tier nito sa pamamagitan ng pag-aalis ng bawat integration barrier sa paglunsad.",
+        "task": {
+          "who": "model release / ecosystem integration team",
+          "what": "maglathala ng quantized weights na may launch-day multi-runtime support",
+          "where": "model hub kasama ang llama.cpp/MLX/vLLM/SGLang/ONNX runtime repos",
+          "when": "Q3 2026 na panahong inilaan, sa bawat edge-model release event",
+          "why": "alisin ang integration friction para agad na mag-adopt ang tuning libraries",
+          "how": "launch-day GGUF/MLX/ONNX export at runtime PRs"
+        }
+      }
+    ],
+    "prediction.7b3e9f12c4a6d8e0": [
+      {
+        "actor": "corporate-development team ng karibal na accelerator vendor",
+        "job": "Naghahanap at nakikipagnegosasyon ng isang acquisition o controlling stake sa isang cross-vendor inference-compiler o runtime startup para tumugon sa Modular buy ng Qualcomm.",
+        "outcome": "Isang inanunsyong deal na bibili o kukuha ng majority control sa isang katulad na silicon-agnostic inference-compiler startup bago ang Q1 2027.",
+        "motivation": "Ang pagmamay-ari ng isang portable compute layer ay table stakes na ngayon para magbenta ng enterprise inference laban sa CUDA lock-in ng Nvidia.",
+        "task": {
+          "who": "corporate development / M&A function",
+          "what": "Maghanap, mag-diligence at mag-term-sheet ng isang cross-vendor compiler startup",
+          "where": "deal pipeline at proseso ng pag-apruba ng board",
+          "when": "June 2026 hanggang Q1 2027 na panahong inilaan",
+          "why": "para hindi ibigay sa Qualcomm ang kuwento ng portability",
+          "how": "M&A advisory, technical due diligence, all-stock o cash bid"
+        }
+      },
+      {
+        "actor": "inference-software platform team ng karibal na accelerator vendor",
+        "job": "Tinutukoy ang silicon-agnostic compiler capabilities na dapat ariin ng vendor para masara ng corp-dev target ang isang tunay na CUDA-portability na agwat.",
+        "outcome": "Isang target-fit na set ng technical requirements na nagbibigay-katwiran sa pagbili ng katulad na cross-vendor compiler kaysa gumawa sa loob.",
+        "motivation": "Ang isang neutral portable compiler ay ang halaga ng pagpasok para sa enterprise inference sales laban sa Nvidia.",
+        "task": {
+          "who": "inference compiler / runtime engineering team",
+          "what": "Tukuyin ang cross-vendor compiler capability gaps at build-vs-buy case",
+          "where": "internal software roadmap at architecture review",
+          "when": "June 2026 hanggang Q4 2026 na panahong inilaan",
+          "why": "para bigyang-katwiran ang pagbili sa halip na ibigay ang portability",
+          "how": "internal compiler-stack benchmarking laban sa MAX"
+        }
+      }
+    ],
+    "prediction.c5aa6ceae507d1a8": [
+      {
+        "actor": "security/orchestration product lead ng coding-agent platform",
+        "job": "Nagdidisenyo at nagsa-ship ng isang default-on capability gate na naglilimita sa lethal trifecta sa orchestration layer sa halip na i-filter ang token stream.",
+        "outcome": "Isang nai-ship, default-on na Rule-of-Two gate na huminto sa isang agent run para sa pag-apruba ng tao bago pagsamahin ang ikatlong mapanganib na katangian.",
+        "motivation": "Hindi-mapa-patch ang prompt injection, kaya ang paglilimita sa trifecta ang tanging matibay na depensa; pinipilit ng dami ng advisory at presyon ng kompetisyon ang pinakamalalaking platform na kumilos muna.",
+        "task": {
+          "who": "agent security / orchestration engineering team",
+          "what": "Ipatupad ang default-on Rule-of-Two capability gate na may human-approval na pause",
+          "where": "agent orchestration layer / permission enforcement runtime",
+          "when": "H2 2026 hanggang Q1 2027",
+          "why": "Tanggihan ang mapanganib na kombinasyon dahil hindi-mapa-patch ang injection",
+          "how": "Rule-of-Two capability gating sa orchestration layer"
+        }
+      },
+      {
+        "actor": "may-akda ng agentic-AI security standards (OWASP-aligned)",
+        "job": "Naglalathala at nirerebisa ang gabay na muling nagbabalangkas sa prompt injection bilang isang structural, hindi-mapa-patch na katangian at nima-map ito sa mga agentic categories.",
+        "outcome": "Awtoritatibong gabay na tumatawag sa coding agents bilang sentro at nagrereseta ng trifecta-capping na mitigasyon, na nagbibigay sa mga vendor ng saligan para mag-ship ng gate.",
+        "motivation": "Istandardisahin ang isang matibay na pattern ng mitigasyon para tigilan ng ecosystem ang pagtrato sa prompt injection bilang isang mapa-patch na CVE.",
+        "task": {
+          "who": "OWASP agentic-security working group / standards authors",
+          "what": "Maglathala ng gabay na muling nagbabalangkas sa prompt injection bilang structural at hindi-mapa-patch",
+          "where": "OWASP agentic-AI advisory / Top 10 framework",
+          "when": "patuloy hanggang 2026 papasok sa Q1 2027",
+          "why": "Itulak ang mga vendor patungo sa orchestration-layer trifecta caps",
+          "how": "OWASP 2.01 agentic-category mapping"
+        }
+      }
+    ]
+  }
+}

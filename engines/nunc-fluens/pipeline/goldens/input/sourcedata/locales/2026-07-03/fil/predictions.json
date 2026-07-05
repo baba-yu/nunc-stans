@@ -1,0 +1,47 @@
+{
+  "date": "2026-07-03",
+  "predictions": [
+    {
+      "id": "prediction.f4118d6655c86297",
+      "scope_hint": "tech",
+      "title": "Tatalunin ng open-weight MoE fine-tunes ang frontier APIs sa mga niche expert na gawain pagsapit ng Q2 2027",
+      "body": "Naglathala ang AIA Labs ng Bridgewater at ang Thinking Machines Lab ng isang specialized fine-tune ng open-weight Qwen3-235B base na umabot sa 84.7% average accuracy sa anim na financial information-filtering na gawain, kumpara sa 78.2% ng pinakamahusay na frontier model, isang 29.8% na pagbaba ng error, habang tumatakbo sa humigit-kumulang 13.8x na mas mababang inference cost bawat gawain. Ang recipe, hindi ang base weights, ang gumawa ng trabaho: interleaved round-robin batching, isang CISPO loss na may asymmetric clipping, at on-policy distillation na may pana-panahong pina-promote na teacher, na lahat ay sinanay sa Tinker platform ng Thinking Machines laban sa proprietary na expert-labeled na datos. Ito ay isang malinis at reproducible na template na maaaring kopyahin ng sinumang enterprise na may hawak na high-quality domain dataset, at tumatama ito nang tuwiran sa local-optimization na larangan kung saan gumagana na ang mga tool tulad ng Unsloth. Asahan na mag-generalize ang pattern: sa mga darating na buwan, mas maraming inilathalang resulta ang magpapakita ng open-weight MoE checkpoints, na fine-tuned sa makikitid na expert-labeled na dataset, na tumatalo sa generic na frontier APIs sa kanilang partikular na vertical benchmark sa malaking cost discount. Ang differentiator ay ang paglipat mula base-model scale patungo sa dataset at sa training recipe, kaya ang isang domain-tuned na open-weight specialist ay nagiging default na sagot sa build-versus-buy saan man may hawak na proprietary labels ang isang firm at may pakialam ito sa cost bawat gawain.",
+      "reasoning": {
+        "because": "Umabot ang Qwen3-235B fine-tune sa 84.7% vs 78.2% frontier sa financial na gawain sa ~13.8x na mas mababang cost bawat gawain",
+        "given": "lumilipat ang differentiator mula base-model scale patungo sa domain dataset at training recipe sa open MoE",
+        "so_that": "mas maraming open-weight MoE fine-tunes sa makikitid na expert na datos ang tatalo sa frontier APIs sa kanilang vertical sa cost discount",
+        "landing": "pagsapit ng Q2 2027, may org na maghahatid ng open-MoE fine-tune na tatalo sa isang frontier API sa isang niche",
+        "plain_language": "Ang mga kompanyang may sariling expert na datos ay ita-tune ang libreng open models para talunin ang malalaking bayad na AI sa kanilang partikular na trabaho, sa mas mumurang halaga."
+      },
+      "summary": "Tinalo ng isang Qwen3-235B open-weight fine-tune ng Bridgewater at Thinking Machines ang pinakamahusay na frontier model sa financial na gawain, 84.7% vs 78.2%, sa humigit-kumulang 13.8x na mas mababang cost bawat gawain, dulot ng recipe hindi ng weights. Asahan na mas maraming open-weight MoE fine-tunes ang tatalo sa frontier APIs sa mga niche na gawain pagsapit ng Q2 2027."
+    },
+    {
+      "id": "prediction.788b3c0d5220ead0",
+      "scope_hint": "business",
+      "title": "Ilalagay ng Menlo Ventures ang $3B raise sa isang dedikadong AI fund vehicle pagsapit ng Q1 2027",
+      "body": "Isinara ng Menlo Ventures ang isang $3B raise noong June 30, 2026 — ang pinakamalaki nito kailanman — na tahasang ibinalangkas bilang all-in sa AI, at ang economics ng desisyong iyon ay hindi mahihiwalay sa isang Anthropic stake na markado na ngayon sa humigit-kumulang $14B laban sa $965B na valuation. Ang isang posisyong ganito kalaki kumpara sa mga naunang laki ng fund ng firm ay lumilikha ng concentration na problema na hindi kayang sipsipin ng isang generalist vehicle, kaya asahan na gagawing pormal ng Menlo ang kapital sa isang AI-dedicated na istruktura: isang pinangalanang growth o opportunities fund, o isang tanging AI thesis allocation, sa halip na isama ito sa isang di-pinagkakaibang flagship. Nagbubuo ang timing pressure. Ang top-model access ng Anthropic ay nakakawing na ngayon sa isang government security-and-disclosure na regime, at inaasahan ang isang White House frontier-model standards framework sa linggo ng July 7, na parehong nagtataas sa premium sa mga backer na kayang mag-underwrite sa frontier labs sa buong capital-intensive compute cycles at regulatory scrutiny. Pabor iyon sa concentrated, later-stage na AI vehicles kaysa spray-and-pray na seed portfolios. Sa pinakamalaking raise na inanunsyo at isang marquee anchor na posisyong ipinagtatanggol, may mandato at insentibo ang Menlo na magtayo ng purpose-built na AI fund at simulan itong ilagay sa follow-on at adjacent-lab na posisyon sa loob ng susunod na dalawa hanggang tatlong quarter.",
+      "reasoning": {
+        "because": "Isinara ng Menlo ang pinakamalaki nitong $3B raise noong June 30 para maging all-in sa AI, na naka-anchor sa ~$14B Anthropic stake",
+        "given": "Isang stake na ganito kalaki ang pumupwersa sa isang concentrated AI-dedicated na istruktura at later-stage compute-heavy na underwriting",
+        "so_that": "Gagawing pormal ng Menlo ang isang AI-specific na fund vehicle at sisimulan itong ilagay sa frontier-lab at adjacent na posisyon",
+        "landing": "Iaanunsyo ng Menlo Ventures ang isang dedikadong AI fund vehicle mula sa $3B raise pagsapit ng Q1 2027",
+        "plain_language": "Nakalikom lang ng $3 billion ang Menlo para sa AI, kaya malamang na magtatayo ito ng espesyal na AI-only na fund at sisimulan itong gastahin sa madaling panahon."
+      },
+      "summary": "Isinara ng Menlo Ventures ang isang record na $3B raise noong June 30, 2026 para maging all-in sa AI, na naka-anchor sa isang Anthropic stake na nagkakahalaga ng humigit-kumulang $14B. Isang posisyong ganito kalaki ang pumupwersa sa isang concentrated na istruktura, kaya malamang na gagawing pormal ng Menlo ang isang AI-dedicated na fund vehicle at sisimulan itong ilagay pagsapit ng Q1 2027."
+    },
+    {
+      "id": "prediction.0cbb02dafcbc3e36",
+      "scope_hint": "cross",
+      "title": "Magiging off-by-default ang MCP stdio transport sa mga agent framework pagsapit ng Q1 2027",
+      "body": "Ang gumaganang proof-of-concept para sa Flowise Custom-MCP RCE (CVE-2026-40933), kasama ang demonstrasyong maaaring i-bypass ang opisyal na patch nito, ang nagbabago sa stdio transport mula isang convenience default patungo sa isang liability na hindi kayang ayusin ng version bump lang. Dahil ang depekto ay istruktural sa halip na isang solong coding na pagkakamali, ang isang na-import na workflow file ay naglulunsad ng isang unsandboxed na child process sa mismong sandali na buksan ito ng biktima, at ang coordinated na MCP supply-chain advisory ay tumutunton sa parehong unvalidated-command-to-subprocess na pattern sa buong LiteLLM, Agent Zero, LangBot, Windsurf, at mga kapantay. Nagsanib na ang security guidance sa iisang tagubilin: i-disable ang stdio pabor sa Server-Sent Events at ituring ang anumang na-import na MCP configuration bilang untrusted na code. Ang pagsasanib na iyon, na dumarating habang inihahanda ng White House ang isang voluntary frontier-model standards framework sa linggo ng July 7, ay nagbibigay sa mga maintainer at sa anumang umuusbong na agent-security baseline ng iisang maliwanag na hardening lever na i-standardize. Asahan na gagawing opt-in ng mga nangungunang agent framework ang stdio-based na MCP execution sa likod ng isang tahasang trust prompt o sandbox, na may SSE o katumbas na isolated transport bilang ipinadalang default, para hindi na tahimik na maging shell access ang isang config file. Ang kawing ay security-drives-policy: ang isang buháy at patch-resistant na exploit class ay nagiging konkretong test case kung saan isusulat ang unang agent-security norms.",
+      "reasoning": {
+        "because": "May gumaganang PoC at ipinakitang patch bypass ang Flowise Custom-MCP RCE (CVE-2026-40933)",
+        "given": "Ang parehong stdio-command-injection na pattern ay sumasaklaw sa LiteLLM, Agent Zero, LangBot, Windsurf habang papalapit ang US norms",
+        "so_that": "Gagawing opt-in ng mga framework ang stdio MCP execution sa likod ng trust/sandbox, na naghahatid ng SSE-style isolated transport bilang default",
+        "landing": "Gagawing opt-in / off-by-default ng mga nangungunang agent framework ang MCP stdio pagsapit ng Q1 2027",
+        "plain_language": "Isang mahirap i-patch na hack ang nagpatakbo sa mga AI tool ng code mula sa mga na-import na file, kaya ihihinto ng mga tool na iyon ang pagtitiwala sa mode na iyon bilang default."
+      },
+      "summary": "Isang gumaganang exploit at isang patch bypass para sa Flowise Custom-MCP RCE ang tumatatak sa stdio bilang isang istruktural na liability na ibinabahagi ng maraming agent tool. Habang inihahanda ng White House ang isang voluntary frontier-model standards framework, inaasahang gagawing opt-in ng mga nangungunang agent framework ang stdio MCP execution pagsapit ng Q1 2027."
+    }
+  ]
+}

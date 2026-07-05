@@ -1,0 +1,443 @@
+{
+  "date": "2026-07-04",
+  "validation_rows": [
+    {
+      "prediction_ref": {
+        "id": "prediction.9bc46d8a918d51a2",
+        "short_label": "AMD Instinct MI400 launches with a named ship, memory, or rack spec by Q3 2026",
+        "prediction_date": "2026-06-27"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "本日の AI イベントまとめは、Moscone で 7 月 22〜23 日に開かれる AMD の Advancing AI 2026 を、直近のチップの起点として引き続き位置づけている。ここでは MI400 シリーズと、名称のある Helios ラックスケールシステムが、供給時期の見通しとともに示される見込みである。これは確定した公開日を Q3 2026 の期間内にしっかり収め、名称のあるラックシステムをすでに与えており、MI400 はロードマップ上の一行ではなく、具体的な日程の定まった開示にとどまり続ける。具体的な出荷・メモリ・ラックの数量は基調講演まで確定しないため、これは最終仕様そのものではなく、確定した日付と名称のあるシステムである。",
+      "reference_links": [
+        {
+          "label": "Hot Chips 2026",
+          "url": "https://hotchips.org/about/"
+        },
+        {
+          "label": "AI Infra Summit 2026",
+          "url": "https://www.ai-infra-summit.com/agenda"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "本日のイベントまとめは、Advancing AI を Moscone での 7 月 22〜23 日に固定し、直近のチップの起点として Q3 の期間内にしっかり収め、名称のある Helios ラックスケールシステムをすでに挙げている。この確定した日程と名称のあるラックこそ、この公開が拠り所とする、検証可能なコミットメントの土台そのものである。ただし具体的な出荷・メモリ・ラックの数量は、基調講演まで確定しないままである。",
+        "coherence": 4,
+        "remaining_gap": "基調講演は、仕様のない予告ではなく、名称のある一般提供の時期・メモリの数値・ラック仕様を実際に示さなければならない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.5e0beac647793331",
+        "short_label": "AMD MI400 will market memory bandwidth over peak FLOPS at Advancing AI",
+        "prediction_date": "2026-07-02"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "イベントカレンダーは、Moscone で 7 月 22〜23 日に開かれる AMD の Advancing AI 2026 を、直近のアクセラレータの起点として改めて確定させ、MI400 シリーズと Helios ラックスケールシステムを供給時期の見通しとともに目玉の公開として描き、基調講演と、8 月 11〜12 日の AI Risk Summit を、安全なアクセラレータや秘匿推論の発表にふさわしい場として挙げている。これにより、素の FLOPS を前面に出す見出しよりも、メモリとラックの物語が先に立った状態が保たれ、これはまさにこの予測が見込む売り込みの姿勢である。基調講演そのものはまだ行われておらず、メモリ帯域を FLOPS より前に押し出すという具体的な位置づけは、壇上で語られたのではなく予定されている段階にとどまる。",
+      "reference_links": [
+        {
+          "label": "Hot Chips 2026",
+          "url": "https://hotchips.org/about/"
+        },
+        {
+          "label": "SecurityWeek AI Risk Summit 2026 (Aug 11-12, Half Moon Bay)",
+          "url": "https://www.airisksummit.com/agenda"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "so_that",
+        "narrative": "カレンダーは Advancing AI を 7 月 22〜23 日に改めて固定し、MI400 シリーズと Helios ラックスケールシステムを供給時期の見通しとともに目玉の公開として描き、素の FLOPS の見出しよりもメモリとラックの物語を先に立てている。これはこの予測が見込む売り込みの姿勢である。ただし本日の中心はイベントの日付であって、メモリ帯域を FLOPS より前に押し出す位置づけが壇上で語られたわけではない。",
+        "coherence": 3,
+        "remaining_gap": "基調講演そのものが、ピーク FLOPS ではなくメモリ帯域や HBM 容量を目玉の仕様として前面に立てなければならない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.cb8447f5c6e4c65d",
+        "short_label": "Agent-builder frameworks ship sandboxed MCP tool execution by default by Q1 2027",
+        "prediction_date": "2026-07-01"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "本日の Cursor の開示は直接の圧力となるシグナルであり、エージェントツールの実行というこの流れを、ニッチなローコードビルダーから主流の IDE へと広げるものである。Cato AI Labs は、Cursor のコーディング IDE に存在する CVSS 9.8 のゼロクリックのサンドボックス脱出 RCE を 2 件公開した。いずれも Cursor 3.0 で修正済みで、一つは任意の working_directory パラメータを介したパストラバーサル、もう一つはシンボリックリンク解決のフォールバックである。どちらの場合も、エージェントが取り込むよう設計された内容、すなわち汚染された README、Web 検索結果、あるいは MCP ツールの応答が、承認の確認を経ずにワークスペースの外への任意の書き込みへと変わってしまう。報道はこれを、先頃 Flowise と Langflow で見られたのと同じツール実行境界の破綻であり、それが開発者が日々信頼できないリポジトリに対して動かす一級の editor に対して実証された、と位置づけている。これはまさにこの予測が名指しする、MCP とツール実行をデフォルトでサンドボックス化する方向への構造的な圧力である。",
+      "reference_links": [
+        {
+          "label": "The Hacker News - Critical Cursor Flaws Could Let Prompt Injection Escape Sandbox",
+          "url": "https://thehackernews.com/2026/07/critical-cursor-flaws-could-let-prompt.html"
+        },
+        {
+          "label": "NVD - CVE-2026-50548 Detail",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-50548"
+        },
+        {
+          "label": "NVD - CVE-2026-50549 Detail",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-50549"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Cato AI Labs は Cursor に CVSS 9.8 のゼロクリック RCE を 2 件開示した。ここでは取り込まれた MCP ツールの応答や汚染された README が、確認を経ずにワークスペースの外への任意の書き込みを引き起こす。これは、Flowise と Langflow の CVE の背後にある、ホスト権限で動く同じツール実行境界の破綻を、ニッチなビルダーから旗艦の IDE へと広げるものであり、MCP 実行をデフォルトでサンドボックス化する方向への、まさにその構造的な圧力である。",
+        "coherence": 4,
+        "remaining_gap": "証拠は IDE の RCE であって、主要なエージェントビルダーのフレームワークが、サンドボックス化された最小権限の MCP 実行をデフォルトで有効にして実際に出荷したものではない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.69439c5e138d13eb",
+        "short_label": "Coding IDEs make workspace-confined agent file writes the default by Q1 2027",
+        "prediction_date": "2026-07-04"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "本日のニュースは、この新規の予測の起点となる証拠である。Cato AI Labs は Cursor にゼロクリックのサンドボックス脱出 RCE を 2 件開示した。いずれも CVSS 9.8 で Cursor 3.0 で修正済みであり、CVE-2026-50548 は任意の working_directory パラメータを介したパストラバーサル、CVE-2026-50549 は書き込みがプロジェクトの境界を越えられてしまうシンボリックリンク解決のフォールバックである。引き金がエージェントの取り込むよう設計された内容であるため、汚染された README、Web ページ、あるいはツールの応答が、承認の確認を経ずにワークスペースの外への任意の書き込みを引き起こし、エージェントのファイルシステム封じ込めの問題を、ニッチなローコードビルダーから旗艦の editor へと移す。同時に Anthropic は、Fable 5 のサイバー系ジェイルブレイクに対象を絞った HackerOne の報奨金プログラムと、AWS・Microsoft・Google と共同開発したジェイルブレイクの深刻度評価の初期の枠組みを立ち上げ、ベンダー側の対応が場当たりのパッチではなく、堅牢化と体系立った情報開示であることを示した。これは、この予測が拠り所とする、情報開示が堅牢化を促すという結びつきである。",
+      "reference_links": [
+        {
+          "label": "The Hacker News - Critical Cursor Flaws Could Let Prompt Injection Escape Sandbox",
+          "url": "https://thehackernews.com/2026/07/critical-cursor-flaws-could-let-prompt.html"
+        },
+        {
+          "label": "NVD - CVE-2026-50549 Detail",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-50549"
+        },
+        {
+          "label": "Build Fast with AI - AI News Today July 4 2026",
+          "url": "https://www.buildfastwithai.com/blogs/ai-news-today-july-4-2026"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Cursor のゼロクリック RCE 2 件は、取り込まれた README やツールの応答が確認を経ずにワークスペースの外へ書き込むもので、この予測が拠り所とする、まさに旗艦級の脱出である。ファイルシステムの封じ込めを任意のものから当然の前提へと移し、その修正を、堅牢化をこの分類全体へと押し広げる、体系立ったベンダー横断の情報開示と組み合わせている。",
+        "coherence": 4,
+        "remaining_gap": "デフォルト拒否・正規パス・シンボリックリンク拒否のワークスペース封じ込めを常時のデフォルトとして出荷した主流の editor は、まだ一つもない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.b29d00f310d8ad2c",
+        "short_label": "Second open-weight frontier model discloses non-NVIDIA ASIC training by Q2 2027",
+        "prediction_date": "2026-07-04"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "本日のニュースは、この新規の予測が土台とする実在証明である。Meituan は 6 月 30 日、LongCat-2.0 を MIT ライセンスで公開した。これはトークンあたりの有効パラメータがおよそ 48B、ネイティブで 100 万トークンの文脈を持つ、1.6 兆パラメータのエージェント型コーディングの mixture-of-experts である。要となる主張は学習の土台であり、このモデルは NVIDIA GPU を一切介さず、5 万基を超える中国製 ASIC のクラスタ上で、端から端まで構築・提供された。しかも SWE-bench Pro で GPT-5.5 を 59.5 対 58.6 でわずかに上回り、Owl Alpha として匿名のままおよそ 2 か月にわたり OpenRouter の世界トップ 3 に入り続けた。これは単一の証明を再現可能なひな型へと変え、供給が制限された体制の内側で活動する他のあらゆるラボにも、同じ輸出規制の圧力を及ぼす。これはまさに、この予測が第 2 の、独立して開示される非 NVIDIA の学習へと延ばしていく、計算資源からの独立の軌道である。欠けているのは、自らの端から端までの非 NVIDIA の学習を記録した、第 2 の独立したモデルカードである。",
+      "reference_links": [
+        {
+          "label": "VentureBeat - Meituan open sources LongCat-2.0, trained entirely on Chinese chips",
+          "url": "https://venturebeat.com/technology/meituan-open-sources-longcat-2-0-the-1-6t-near-frontier-agentic-coding-model-thats-been-leading-openrouter-trained-entirely-on-chinese-chips"
+        },
+        {
+          "label": "Open Source For You - Meituan Open Sources LongCat-2.0 Under MIT License",
+          "url": "https://www.opensourceforu.com/2026/06/meituan-open-sources-longcat-2-0-under-mit-license/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Meituan の MIT ライセンスの LongCat-2.0 は、NVIDIA を一切介さず 5 万基超の中国製 ASIC 上で端から端まで構築され、SWE-bench Pro で GPT-5.5 をわずかに上回る 1.6 兆パラメータの MoE であり、この予測が延ばしていく実在証明である。単一のフロンティア間近の学習を再現可能なひな型へと変え、輸出規制下のラボがこれを真似るよう圧力をかける。",
+        "coherence": 4,
+        "remaining_gap": "依然として欠けているのは、自らの端から端までの非 NVIDIA の学習をカードに記録した、第 2 の独立したオープンウェイトのモデルである。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.d6fc36093d611e94",
+        "short_label": "OpenAI files a public-listing step with a US-government stake by Q2 2027",
+        "prediction_date": "2026-07-04"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "本日のニュースは、この新規の予測の直接の背景である。Crunchbase の 2026 年上半期の分析によれば、世界のベンチャー資金は過去最高の 5,100 億ドルに達し、そのうち OpenAI と Anthropic だけで 2,170 億ドル、すなわち上半期のベンチャー資金全体の 43% を吸収し、Q2 には出口の窓が再び開いて 32 社のベンチャー支援企業が 10 億ドル超の評価額で株式公開した。報告書は、OpenAI が計画中の公開市場デビューに先立ち、米政府におよそ 5% の出資枠を与える案を打診したと指摘し、これは Menlo Ventures が Anthropic 株を土台に過去最大の 30 億ドルの調達を完了したのと同じ週に位置する。これほど極端な集中を私募の巨額ラウンドで維持するのは難しく、これがフロンティアの主導者を、異例の政府出資の構造をまとった公開市場での流動性へと押しやる。これはまさに、この予測が見込む上場前の足場である。依然として欠けているのは、S-1 や F-1、正式な上場発表、あるいはデビューに紐づく確定した政府出資の合意といった、具体的に開示された一歩である。",
+      "reference_links": [
+        {
+          "label": "Crunchbase News - Global Startup Investment Hit Record $510B In H1 2026",
+          "url": "https://news.crunchbase.com/venture/global-startup-exits-ipo-ma-soar-ai-q2-h1-2026/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Crunchbase の上半期の集計は、OpenAI が計画中の公開デビューに先立ち米政府におよそ 5% の出資枠を打診したと報じており、これはこの予測が名指しする政府出資の前提そのものである。2 つのラボがベンチャー資金の 43% を取り込むという集中を背景としており、これは私募では維持しがたい圧力となって、主導者を公開市場での流動性へと向かわせる。",
+        "coherence": 4,
+        "remaining_gap": "欠けているのは、提出された S-1 や F-1、正式な上場発表、あるいは確定した政府出資の合意といった、具体的に開示された一歩である。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.a4f83081580b9a3d",
+        "short_label": "Launch-day vLLM/SGLang + Ollama support becomes open-weight MoE release bar",
+        "prediction_date": "2026-07-02"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "Meituan の MIT ライセンスの LongCat-2.0 は、規模の上限に近い、信頼できる自己ホスト可能なオープンウェイトの MoE として登場した。トークンあたりの有効パラメータがおよそ 48B、ネイティブで 100 万トークンの文脈、そして長文脈のエージェントセッション向けに調整された独自の LongCat Sparse Attention 方式を備える 1.6 兆パラメータのモデルで、GitHub と Hugging Face に公開された。報道はこれを、Qwen、DeepSeek、そして先週の Mistral 3 といった疎な MoE の系列と並べ、各チームが標準として揃える参照群として位置づけている。これは、公開時点でのサーバー実行環境とローカル実行環境の対応がオープンウェイトの最低条件になりつつある、ローカル最適化の領域である。本日の話題は、公開時点での vLLM/SGLang と Ollama の同梱という条件そのものよりも、学習の土台と、GPT-5.5 を SWE-bench Pro で上回った差に重心があるため、名指しされたサーバー対応の規範を確定させることなく、この方向を補強する。",
+      "reference_links": [
+        {
+          "label": "VentureBeat - Meituan open sources LongCat-2.0, trained entirely on Chinese chips",
+          "url": "https://venturebeat.com/technology/meituan-open-sources-longcat-2-0-the-1-6t-near-frontier-agentic-coding-model-thats-been-leading-openrouter-trained-entirely-on-chinese-chips"
+        },
+        {
+          "label": "Open Source For You - Meituan Open Sources LongCat-2.0 Under MIT License",
+          "url": "https://www.opensourceforu.com/2026/06/meituan-open-sources-longcat-2-0-under-mit-license/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Crunchbase の上半期の集計は、OpenAI が計画中のデビューに先立ち米政府におよそ 5% の出資枠を打診したと報じており、これはこの予測が名指しする種そのものである。OpenAI と Anthropic がベンチャー資金全体の 43% を吸収した過去最高の 5,100 億ドルの上半期を背景としており、私募で維持し続けるには極端すぎる集中が、この基軸ラボを公開市場での流動性へと押しやる。",
+        "coherence": 4,
+        "remaining_gap": "提出された S-1/F-1 も、正式な上場発表も、デビューに紐づく確定した政府出資の合意も、まだない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.81e76659807bd1fc",
+        "short_label": "MCP stdio transport turns off-by-default across agent frameworks by Q1 2027",
+        "prediction_date": "2026-07-03"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "本日の Cursor の開示は、ツール実行のトランスポートを現に狙われている攻撃対象領域として保ち続け、それを昨日の Flowise の stdio の事例を越えて広げるものである。Cato AI Labs は Cursor に CVSS 9.8 のゼロクリック RCE を 2 件公開した。いずれも Cursor 3.0 で修正済みで、エージェントが取り込む MCP ツールの応答、汚染された README、あるいは Web 検索結果が、working_directory のパストラバーサルとシンボリックリンク解決のフォールバックを介して、承認の確認を経ずにワークスペースの外への任意の書き込みを引き起こす。報道はこれを、先頃の Flowise と Langflow の開示と同じ一つのパターン、すなわちモデルではなくツール実行境界の問題として結びつけている。そこではエージェントのスタックが、攻撃者の操る文字列をシェルアクセスへと変えてしまう。これは、この予測が名指しする、信頼できないトランスポートのデフォルトを堅牢化ないし無効化する方向への構造的な圧力である。証拠は、フレームワークが明示的に stdio トランスポートをデフォルトで無効にしたのではなく、主流の IDE における取り込み内容経由の RCE であるため、その設定変更そのものにはならないまま、この方向を強める。",
+      "reference_links": [
+        {
+          "label": "The Hacker News - Critical Cursor Flaws Could Let Prompt Injection Escape Sandbox",
+          "url": "https://thehackernews.com/2026/07/critical-cursor-flaws-could-let-prompt.html"
+        },
+        {
+          "label": "NVD - CVE-2026-50548 Detail",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-50548"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "Meituan の MIT ライセンスの LongCat-2.0 は、1.6 兆パラメータの疎な MoE として規模の上限に登場し、この予測が収束しつつある参照群として挙げる Qwen、DeepSeek、Mistral 3 の系列と並ぶ。各チームが標準として揃えるこの群のなかで、公開時点でのサーバー対応がオープンウェイトの最低条件になりつつあるローカル最適化の領域を補強する。",
+        "coherence": 3,
+        "remaining_gap": "話題の中心は学習の土台と SWE-bench での差であって、公開時点での vLLM/SGLang と Ollama の同梱が確認されたわけではない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.3a5fa9315f58608d",
+        "short_label": "Agentic coding platforms ship token budgets and caps as default by Q2 2027",
+        "prediction_date": "2026-06-25"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "本日の Anthropic の動きは、ほぼ直撃といえる。Claude Enterprise に、暴走するエージェントのトークン費用にまっすぐ狙いを定めた、一連の管理者向けコスト統制の機能が加わった。組織・チーム・部門の各単位の支出上限、ユーザーやグループごとのモデル単位のアクセス権限、エクスポートと Analytics API を備えた利用状況の分析ダッシュボード、エージェントの労力の制御、そしてリアルタイムの支出アラートである。この機能は企業のトークン浪費に対する明確な備えとして打ち出され、年間の AI 予算を数か月で使い果たす買い手を引き合いに出し、コーディングエージェントのトークン支出が開発者の給与に匹敵しかねないという Gartner の警告への直接の答えとして提示されている。これは、主要なエージェント型プラットフォームが、トークンの予算・上限・労力の制御を一級の管理者統制として出荷したものであり、この予測が名指しする仕組みそのものである。ただし、これらの制御はすべての層に対してデフォルトで有効というより、企業の管理者が設定するものである。",
+      "reference_links": [
+        {
+          "label": "Build Fast with AI - AI News Today July 4 2026",
+          "url": "https://www.buildfastwithai.com/blogs/ai-news-today-july-4-2026"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "3.0 で修正された Cursor の CVSS 9.8 のゼロクリック RCE 2 件は、MCP ツールの応答や汚染された README が、確認を経ずにワークスペースの外へ書き込むことを許し、同じツール実行境界のパターンを Flowise の stdio の事例から主流の IDE へと広げ、信頼できないトランスポートのデフォルトを堅牢化ないし無効化する圧力を鋭くする。",
+        "coherence": 4,
+        "remaining_gap": "これは取り込み内容経由の RCE であって、フレームワークが明示的に stdio の MCP トランスポートをデフォルトで無効にしたものではない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.9a362f2b1ba5b64a",
+        "short_label": "Enterprises self-host open-weight code models over hosted China APIs by Q2 2027",
+        "prediction_date": "2026-06-18"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "Meituan の LongCat-2.0 は、中国のラボによるオープンウェイトのコーディングモデルについて、内製して自己ホストする論拠を鋭くする。これは寛容な MIT ライセンスのもと、完全な重みとともに GitHub と Hugging Face に公開されており、SWE-bench Pro で GPT-5.5 を 59.5 対 58.6 でわずかに上回る 1.6 兆パラメータの MoE で、しかも Owl Alpha として匿名のままおよそ 2 か月にわたり OpenRouter の世界トップ 3 に入り、出自が明かされる前に実力で評価された。自己ホストのオープンウェイトを標準として揃えるチームにとって、これはホスティングされた中国発の API に対する信頼できる最上位クラスの代替であり、企業がコードをベンダーのエンドポイントに通す代わりに重みを自社内に取り込めるようにする。これはまさに、この予測が名指しする、ホスティングされた API より自己ホストを選ぶ移行である。この話題は、企業が API より自己ホストを選んだと記録された判断ではなく、オープンウェイトの公開とベンチマークであるため、採用そのものの実例にはならないまま、その推進力を強める。",
+      "reference_links": [
+        {
+          "label": "VentureBeat - Meituan open sources LongCat-2.0, trained entirely on Chinese chips",
+          "url": "https://venturebeat.com/technology/meituan-open-sources-longcat-2-0-the-1-6t-near-frontier-agentic-coding-model-thats-been-leading-openrouter-trained-entirely-on-chinese-chips"
+        },
+        {
+          "label": "Open Source For You - Meituan Open Sources LongCat-2.0 Under MIT License",
+          "url": "https://www.opensourceforu.com/2026/06/meituan-open-sources-longcat-2-0-under-mit-license/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Meituan の MIT ライセンスの LongCat-2.0 は、この姿勢が拠り所とする触媒そのものを与える。完全な重みとともに GitHub と Hugging Face で自己ホストできる最上位クラスの中国発オープンウェイトのコーダーで、OpenRouter のトップ 3 で匿名の 2 か月を過ごしたのち SWE-bench Pro で GPT-5.5 を上回る。各チームはいまや、機微なコードを外国でホストされる API に通す代わりに、重みを自社内に取り込める。",
+        "coherence": 3,
+        "remaining_gap": "ホスティングされた中国 API よりデータの管轄を優先すると明言した自己ホストの方針を公表した、名称のある企業やフレームワークは、まだ一つもない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.b7574191009318a9",
+        "short_label": "Menlo Ventures deploys $3B raise into a dedicated AI fund vehicle by Q1 2027",
+        "prediction_date": "2026-07-03"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "本日の Crunchbase の上半期の集計は、Menlo Ventures が Anthropic 株を強みに過去最大の 30 億ドルの調達を完了したのと同じ週に位置する。これはこの予測が追う具体的な資本のできごとであり、OpenAI と Anthropic だけで 2,170 億ドル、すなわちベンチャー資金全体の 43% を吸収した、過去最高の 5,100 億ドルの上半期のなかに置かれている。この集中こそ、突出したフロンティアラボへの持ち分を抱える会社を、新たな資本を同じ集団へ投じる専用の AI ビークルの立ち上げへと押しやる背景そのものである。報告書は調達の完了を確認しているが、名称のある専用の AI ファンドのビークルやその投下についてはまだ触れていないため、資金の事実は手中にある一方、この予測が名指しするビークルの構造は依然として保留のままである。",
+      "reference_links": [
+        {
+          "label": "Crunchbase News - Global Startup Investment Hit Record $510B In H1 2026",
+          "url": "https://news.crunchbase.com/venture/global-startup-exits-ipo-ma-soar-ai-q2-h1-2026/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Crunchbase の上半期の集計は、要となる前提を裏づける。Menlo は Anthropic 株を強みに過去最大の 30 億ドルの調達を完了し、OpenAI と Anthropic だけがベンチャー資金全体の 43% を吸収した過去最高の 5,100 億ドルの上半期のなかに位置する。この集中こそ、突出したフロンティアラボの持ち分を守る会社を、専用の AI ビークルの立ち上げへと押しやるものである。",
+        "coherence": 4,
+        "remaining_gap": "報告書は調達を確認しているが、この予測の要である専用の AI ファンドのビークルもその投下も、名指ししていない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.908f659728d5b774",
+        "short_label": "Agent-builder platforms add tenant-scoped flow authorization by Q1 2027",
+        "prediction_date": "2026-07-02"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "Cursor のサンドボックス脱出 RCE は、エージェントツールの実行層を現に狙われている攻撃対象領域として保ち、それを主流の editor へと移す。エージェントが取り込むよう設計された内容、すなわち汚染された README、Web 検索結果、あるいは MCP ツールの応答が、working_directory のパストラバーサルとシンボリックリンク解決のフォールバックを介して、承認の確認を経ずにワークスペースの外への任意の書き込みを引き起こすからである。これは、取り込まれた、あるいは境界をまたぐフローが何に触れてよいかをエージェントのプラットフォーム側で取り締まるべきだという圧力を強める。これはこの予測が狙う、オブジェクトとフローの認可という同じ懸念である。証拠は、テナントをまたぐ認可の回避そのものではなく、コード実行とファイル書き込みの脱出であるため、テナント単位の認可の仕組みそのものにはならないまま、フロー単位の認可制御へ向かう方向を裏づける。",
+      "reference_links": [
+        {
+          "label": "The Hacker News - Critical Cursor Flaws Could Let Prompt Injection Escape Sandbox",
+          "url": "https://thehackernews.com/2026/07/critical-cursor-flaws-could-let-prompt.html"
+        },
+        {
+          "label": "NVD - CVE-2026-50548 Detail",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-50548"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "Cursor のサンドボックス脱出 RCE は、エージェントツールの実行層を現に狙われている攻撃対象領域として保ち、それを主流の editor へと移す。そこでは取り込まれた内容が、承認の確認を経ずにワークスペースの外への任意の書き込みを引き起こす。これは、境界をまたぐフローが何に触れてよいかをエージェントのプラットフォーム側で取り締まるべきだという圧力を鋭くする。これはこの予測が狙う、オブジェクトとフローの認可という懸念である。",
+        "coherence": 3,
+        "remaining_gap": "証拠はファイル書き込みのサンドボックス脱出であって、この予測が名指しする、テナントをまたぐ IDOR の認可回避でも、出荷されたテナント単位のフロー認可でもない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.6ba7ca6e01ab313e",
+        "short_label": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
+        "prediction_date": "2026-06-28"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "本日の話題のうち 2 つが、コーディングエージェントの権限境界を押している。Cursor のゼロクリック RCE は、取り込まれた内容が承認の確認を経ずにワークスペースの外への任意の書き込みを引き起こすもので、開発者が日々使う editor における、ツール・ファイルシステム・データへのアクセスに対するデフォルトの権限ゲートという論拠を鋭くする。並行して Anthropic は、Fable 5 のサイバー系ジェイルブレイクに対象を絞った HackerOne の報奨金プログラムに加え、AWS・Microsoft・Google と共同開発したジェイルブレイクの深刻度評価の初期の枠組みを立ち上げ、ベンダー側の対応が場当たりのパッチではなく体系立った堅牢化であることを示した。いずれもプラットフォームのデフォルトとして出荷された、ツール・ネットワーク・データへのアクセスに対する名称のある三点セットのゲートではないため、これは出荷済みの制御ではなく、寄り集まってくる圧力である。",
+      "reference_links": [
+        {
+          "label": "The Hacker News - Critical Cursor Flaws Could Let Prompt Injection Escape Sandbox",
+          "url": "https://thehackernews.com/2026/07/critical-cursor-flaws-could-let-prompt.html"
+        },
+        {
+          "label": "Build Fast with AI - AI News Today July 4 2026",
+          "url": "https://www.buildfastwithai.com/blogs/ai-news-today-july-4-2026"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "so_that",
+        "narrative": "本日の Cursor のゼロクリックの脱出は、取り込まれた内容、すなわち汚染された README や MCP ツールの応答が、承認を経ずにワークスペースの外へ書き込むことを許し、取り込まれた、あるいは境界をまたぐフローが何に触れてよいかをプラットフォームが取り締まるべきだという論拠を鋭くする。これはフロー単位の認可へと押すが、このバグは一台のワークステーション上のコード実行とファイル書き込みの脱出であって、この見立てが拠り所とするテナントをまたぐ回避ではない。",
+        "coherence": 3,
+        "remaining_gap": "複数テナントの IDOR も、テナント単位のフローごとの認可を出荷したプラットフォームもない。証拠は単一ワークステーションの脱出であって、テナント間の分離ではない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.d15f8427132cce7b",
+        "short_label": "A frontier AI lab files a public S-1 and prices its IPO by Q2 2027",
+        "prediction_date": "2026-06-12"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "[REVIVED] 本日の Crunchbase の上半期の分析が、この休眠していた大穴を再び動かした。OpenAI が計画中の公開市場デビューに先立ち米政府におよそ 5% の出資枠を与える案を打診したと報じ、OpenAI と Anthropic だけで 2,170 億ドル、すなわちベンチャー資金全体の 43% を取り込み、Q2 には出口の窓が再び開いて 32 社のベンチャー支援企業が 10 億ドル超の評価額で株式公開した、過去最高の 5,100 億ドルの上半期を描いている。これはこの予測が拠り所とする、私募の巨額ラウンドから公開市場での流動性へという同じ仕組みが、いまやこのセクターの基軸ラボと、具体的な政府出資という一ひねりに結びついたものである。ここで動いたのは、価格帯を伴う提出済みの公開 S-1 や F-1 ではなく、打診された取り決めの報道であるため、復活は土台の水準にとどまり、この予測が名指しする実際の提出は依然として保留である。",
+      "reference_links": [
+        {
+          "label": "Crunchbase News - Global Startup Investment Hit Record $510B In H1 2026",
+          "url": "https://news.crunchbase.com/venture/global-startup-exits-ipo-ma-soar-ai-q2-h1-2026/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "so_that",
+        "narrative": "2 つの流れが、コーディングエージェントの権限境界に収束する。Cursor のゼロクリックの脱出は、取り込まれた内容が承認を経ずにワークスペースの外へ書き込むもので、ツール・ファイルシステム・データへのアクセスに対するデフォルトのゲートの論拠を鋭くする。Anthropic の報奨金と深刻度評価の枠組みは、場当たりのパッチではなく体系立った堅牢化を示す。いずれも名称のある三点セットのゲートをデフォルトで出荷してはおらず、これは高まる圧力であって仕組みそのものではない。",
+        "coherence": 3,
+        "remaining_gap": "ツール・ネットワーク・データという致命的な三点セットに達したときに承認のため一時停止する、デフォルト有効の二者のルールのゲートを出荷したコーディングエージェントのプラットフォームはない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.a96ff0bdaae351aa",
+        "short_label": "Open-weight coding model tops 85 on Terminal-Bench 2.1 by Q4 2026",
+        "prediction_date": "2026-06-18"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "[REVIVED] Meituan の LongCat-2.0 が、この休眠していたオープンウェイトのコーディングの見立てを復活させる。中国のラボによる寛容な MIT ライセンスの 1.6 兆パラメータの MoE で、SWE-bench Pro で 59.5 を記録して GPT-5.5 の 58.6 をわずかに上回り、Owl Alpha として匿名のままおよそ 2 か月にわたり OpenRouter の世界トップ 3 に入ってから出自が明かされた。これはこの予測が乗る、オープンウェイトのコーディングのラボが差を詰めるという同じ軌道であり、完全にオープンなチェックポイントが難しいコーディングのベンチマークの上位で競っていることを示す。報じられた数値は、この予測が名指しする Terminal-Bench 2.1 の 85 超という具体的な目標ではなく SWE-bench Pro であるため、復活はベンチマークの領域の水準にとどまり、掲げられた基準の直撃ではない。",
+      "reference_links": [
+        {
+          "label": "VentureBeat - Meituan open sources LongCat-2.0, trained entirely on Chinese chips",
+          "url": "https://venturebeat.com/technology/meituan-open-sources-longcat-2-0-the-1-6t-near-frontier-agentic-coding-model-thats-been-leading-openrouter-trained-entirely-on-chinese-chips"
+        },
+        {
+          "label": "Open Source For You - Meituan Open Sources LongCat-2.0 Under MIT License",
+          "url": "https://www.opensourceforu.com/2026/06/meituan-open-sources-longcat-2-0-under-mit-license/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Crunchbase の上半期の集計が、この見立てを復活させる。OpenAI が計画中の公開デビューに先立ち米政府におよそ 5% の出資枠を打診したと報じ、2 つのラボがベンチャー資金の 43% を取り込み、Q2 には 32 社が 10 億ドル超で上場した、過去最高の 5,100 億ドルの上半期のなかにある。これはこの予測が拠り所とする、私募の巨額ラウンドから公開市場での流動性へという仕組みが、いまや基軸ラボに及んだものである。",
+        "coherence": 4,
+        "remaining_gap": "現れたのは打診された取り決めであって、価格帯を伴う提出済みの公開・非秘匿の S-1 や F-1 でも、価格の付いた NYSE/Nasdaq への上場でもない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.7b2e55a251231fe9",
+        "short_label": "Single 24-32GB GPU fine-tuning crosses 100K-token context routine by Q2 2027",
+        "prediction_date": "2026-06-20"
+      },
+      "today_relevance": 2,
+      "evidence_summary": "[REVIVED] Meituan の LongCat-2.0 は、中国製 ASIC 上で端から端まで構築され SWE-bench Pro で GPT-5.5 をわずかに上回る MIT ライセンスの 1.6 兆パラメータの MoE であり、この予測が位置するローカル最適化と計算資源からの独立の領域を現に狙える対象として保つ。学習の土台の話は、フロンティア間近の能力がもはや特定のアクセラレータの割り当てに依存しないというものであり、そのネイティブの 100 万トークンの文脈は、長文脈の扱いがいまや当然の前提であることを裏づける。これは、具体的なハードウェアの範囲そのものではなく、より広い見立てを補強する。実証されたシステムは 5 万基の ASIC のクラスタで学習された 1.6 兆パラメータのモデルであり、単一の 24〜32GB のコンシューマー GPU に 100K トークンの微調整を収めるのとは規模の対極にあるため、復活は見立ての水準にとどまり、掲げられた 1 枚差しのハードウェアの目標には触れない。",
+      "reference_links": [
+        {
+          "label": "VentureBeat - Meituan open sources LongCat-2.0, trained entirely on Chinese chips",
+          "url": "https://venturebeat.com/technology/meituan-open-sources-longcat-2-0-the-1-6t-near-frontier-agentic-coding-model-thats-been-leading-openrouter-trained-entirely-on-chinese-chips"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "Meituan の LongCat-2.0 は、中国製 ASIC 上で端から端まで学習され SWE-bench Pro で GPT-5.5 をわずかに上回る MIT の 1.6 兆パラメータの mixture-of-experts であり、計算資源からの独立とローカル最適化の領域を保ち、100 万トークンの文脈を当然の前提として扱う。ただしこれはフロンティア間近のモデルを学習する 5 万基のクラスタであり、1 枚の汎用カードとは規模の対極にあるため、周辺の見立ては動かすが、1 枚差しのメモリ収容の軌道は動かさない。",
+        "coherence": 2,
+        "remaining_gap": "単一の 24〜32GB のコンシューマー GPU に 100K の実用文脈を収める、メモリ収容の最適化も記録された手順もない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.a40a541ef73b240c",
+        "short_label": "Sub-7B open-weight reasoning models clear verified AIME-80 by Q1 2027",
+        "prediction_date": "2026-06-19"
+      },
+      "today_relevance": 2,
+      "evidence_summary": "[REVIVED] LongCat-2.0 の MIT 公開は、Owl Alpha として匿名のままおよそ 2 か月にわたり OpenRouter の世界トップ 3 に入ったのち SWE-bench Pro で GPT-5.5 をわずかに上回ったもので、オープンウェイトのチェックポイントが難しいタスク特化のベンチマークで最良の閉じたフロンティアモデルと競えるという根底の主張を復活させる。これはこの休眠していた予測が、小型のオープンウェイトモデルでも検証済みの推論の基準を突破できると論じるために拠り所とする、同じオープンウェイトの同等性の仕組みである。証拠は、検証済みの AIME-80 を突破するサブ 7B モデルではなく、コーディングのベンチマークで首位に立つ 1.6 兆パラメータの MoE であるため、具体的なパラメータとベンチマークの目標に触れることなく、オープンウェイトの能力の領域を復活させる。",
+      "reference_links": [
+        {
+          "label": "VentureBeat - Meituan open sources LongCat-2.0, trained entirely on Chinese chips",
+          "url": "https://venturebeat.com/technology/meituan-open-sources-longcat-2-0-the-1-6t-near-frontier-agentic-coding-model-thats-been-leading-openrouter-trained-entirely-on-chinese-chips"
+        },
+        {
+          "label": "Open Source For You - Meituan Open Sources LongCat-2.0 Under MIT License",
+          "url": "https://www.opensourceforu.com/2026/06/meituan-open-sources-longcat-2-0-under-mit-license/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Meituan の MIT ライセンスの LongCat-2.0 は、Owl Alpha として匿名のまま OpenRouter の世界トップ 3 で 2 か月を過ごし、出自が明かされる前に実力で評価されたのち、SWE-bench Pro で GPT-5.5 をわずかに上回った。これは、オープンウェイトが難しいベンチマークで最良の閉じたフロンティアと競えるという前提を補強するが、実証は 1.6 兆パラメータのコーディングモデルであって、AIME で検証されたサブ 7B のモデルではない。",
+        "coherence": 2,
+        "remaining_gap": "独立した第三者のリーダーボードや再現で裏づけられた 80 台の AIME スコアを持つ、サブ 7B のオープンウェイトモデルはない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.a4ee0b5435860b21",
+        "short_label": "AWS Continuum's sandbox exploit-validation goes industry baseline by H1 2027",
+        "prediction_date": "2026-06-21"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "[REVIVED] Cato AI Labs が公開した、Cursor における CVSS 9.8 のゼロクリックのサンドボックス脱出 RCE 2 件は、いずれも完全なサンドボックス脱出として実証され Cursor 3.0 で修正されたもので、この休眠していた予測が標準の段階になると論じる、まさにその種類の、機械的に扱える到達可能性と悪用可能性の証明である。すなわち、静的な CVSS の数値ではなく、欠陥が本物の無クリックの脱出であることを示す研究であり、古いビルドはアップグレードされるまでデフォルトで悪用可能なまま残る。報道はこれを、先頃の Flowise と Langflow の開示と、エージェントツールの境界にまたがる一つの実証済みの悪用のパターンとして結びつけている。これは、名称のある脆弱性管理サービスがサンドボックスでの悪用検証を標準の段階として出荷したのではなく、セキュリティ研究所が実働する悪用検証の成果を公開したものであるため、復活はパターンの水準にとどまる。",
+      "reference_links": [
+        {
+          "label": "The Hacker News - Critical Cursor Flaws Could Let Prompt Injection Escape Sandbox",
+          "url": "https://thehackernews.com/2026/07/critical-cursor-flaws-could-let-prompt.html"
+        },
+        {
+          "label": "NVD - CVE-2026-50549 Detail",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-50549"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "so_that",
+        "narrative": "Cato AI Labs は、静的な数値ではなく完全なサンドボックス脱出として実証された Cursor の CVSS 9.8 の欠陥を 2 件公開し、Flowise と Langflow と一つの悪用可能なパターンとして結びつけた。これは、欠陥を順位づけるのではなく本当に到達可能だと示す、構築による検証の論理を映すものである。ただしこれは研究所が実働する悪用を公開したものであって、ベンダーがサンドボックスでの悪用検証を段階として出荷したものではない。",
+        "coherence": 3,
+        "remaining_gap": "自動化されたサンドボックスでの悪用の証明を、出荷された検証の段階として記録した、追加の名称のある AI セキュリティや ASPM のベンダーはない。"
+      }
+    }
+  ]
+}

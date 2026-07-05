@@ -1,0 +1,123 @@
+{
+  "date": "2026-06-24",
+  "by_prediction": {
+    "prediction.7c1f9a3e84b2d6f0": [
+      {
+        "actor": "Responsable de un benchmark de IA",
+        "job": "Revisar el esquema de reporte de una clasificación de orquestación ampliamente citada para capturar el tiempo de reloj y el coste por tarea junto a las puntuaciones de precisión.",
+        "outcome": "Una columna de benchmark publicada que formaliza la latencia/coste por tarea como un eje de reporte estándar para las afirmaciones de paridad en orquestación multimodelo.",
+        "motivation": "Las tablas centradas solo en la precisión permiten que los sistemas de enrutador convertido en modelo afirmen paridad de frontera mientras ocultan un coste de tiempo de reloj de unos 30 minutos, erosionando la credibilidad del benchmark.",
+        "task": {
+          "who": "Equipo de metodología de benchmarks e ingeniería del arnés de pruebas",
+          "what": "Añadir columnas de tiempo de finalización y coste por tarea a la puntuación",
+          "where": "El arnés de evaluación y el esquema de resultados de la clasificación",
+          "when": "Entre junio de 2026 y el Q1 2027, antes de la próxima actualización del benchmark",
+          "why": "Para que las afirmaciones de paridad no puedan ocultar un coste de tiempo de reloj",
+          "how": "Temporizadores por tarea instrumentados más una rúbrica estandarizada de coste por tarea"
+        }
+      },
+      {
+        "actor": "Evaluador independiente de modelos",
+        "job": "Ejecutar pruebas reales de extremo a extremo de modelos de orquestación en tareas prácticas y publicar observaciones de tiempo de reloj que contradicen las afirmaciones de paridad en precisión.",
+        "outcome": "Evidencia ampliamente citada de que la latencia de la orquestación es material, presionando a evaluadores y proveedores a adoptar la divulgación del tiempo de finalización.",
+        "motivation": "Las clasificaciones de los proveedores exageran la utilidad práctica; sacar a la luz la brecha de tiempo de reloj protege a los lectores y refuerza la autoridad del evaluador.",
+        "task": {
+          "who": "El evaluador independiente y su flujo de trabajo de pruebas",
+          "what": "Cronometrar ejecuciones de extremo a extremo en suites de tareas prácticas estándar",
+          "where": "Montajes propios de pruebas de shaders, escenas interactivas y razonamiento",
+          "when": "A lo largo del margen desde junio de 2026 hasta principios de 2027",
+          "why": "Para demostrar que la paridad en precisión oculta un coste de tiempo de reloj",
+          "how": "Cronometraje de extremo a extremo, estilo cronómetro, en baterías de tareas repetibles"
+        }
+      },
+      {
+        "actor": "Responsable de producto de un proveedor de orquestación",
+        "job": "Fijar precio y posicionar un producto de enrutador aprendido frente a los modelos de frontera, decidiendo si publicar SLA de tiempo de reloj para defender las afirmaciones de paridad.",
+        "outcome": "Un SLA de tiempo de finalización o de reloj publicado por el proveedor que convierte la latencia en un eje de reporte divulgado y contractual.",
+        "motivation": "Las pruebas independientes socavan el marketing de mera paridad en precisión; divulgar SLA replantea la disyuntiva más lento pero mejor como una característica que los compradores pueden respaldar.",
+        "task": {
+          "who": "Equipo de producto y relaciones con desarrolladores del proveedor",
+          "what": "Definir y publicar niveles de SLA de tiempo de reloj por tarea",
+          "where": "Páginas de precios de producto, tarjetas de modelo y documentación",
+          "when": "A lo largo del margen desde el lanzamiento hasta el Q1 2027",
+          "why": "Para defender las afirmaciones de paridad frente a las críticas de latencia",
+          "how": "Objetivos de latencia por niveles respaldados por telemetría interna de benchmarks"
+        }
+      }
+    ],
+    "prediction.7c41f9a2e8b6d503": [
+      {
+        "actor": "Responsable de despliegue de un proveedor de cobots móviles de propósito general",
+        "job": "Ampliar flotas de clientes de pago y registrar horas de operación auditadas por robot en hospitales, manufactura y logística con jornadas de varios turnos.",
+        "outcome": "Un registro operativo acumulado de flota a través de clientes que supera las 100.000 horas de operación productiva, publicado como una métrica de despliegue.",
+        "motivation": "El precio de suscripción convierte las horas de operación en la unidad que los compradores respaldan, así que una cifra de seis dígitos de horas de flota ancla el marketing y las renovaciones.",
+        "task": {
+          "who": "Equipo de despliegue de clientes y operaciones de flota",
+          "what": "Incorporar nuevos centros y acumular horas de operación productiva auditadas",
+          "where": "Plantas reales de clientes de hospitales, manufactura y logística en turnos de 16 horas",
+          "when": "Margen desde 2026-06 hasta el H1 2027",
+          "why": "Convertir las horas de operación en la unidad de suscripción respaldada",
+          "how": "Inferencia de tareas en el propio robot, suscripción mensual, telemetría auditada de registro de horas"
+        }
+      },
+      {
+        "actor": "Ingeniero de telemetría y auditoría de flotas de IA física",
+        "job": "Instrumentar el registro y reporte en el propio robot para que las horas acumuladas a través de clientes, las libras movidas y los pasos ahorrados sean auditados y divulgables.",
+        "outcome": "Un conjunto de datos de horas de flota auditado y defendible que respalde una divulgación de horas acumuladas de seis dígitos en lugar de una afirmación de demo.",
+        "motivation": "Un marcador de horas de operación solo se sostiene si los recuentos subyacentes resisten el escrutinio de compradores y rivales.",
+        "task": {
+          "who": "Función de ingeniería de telemetría, datos y reporte",
+          "what": "Agregar y auditar los registros de horas de operación y material movido por robot",
+          "where": "Canalización de telemetría de flota y pila de registro de inferencia en el propio robot",
+          "when": "Margen desde 2026-06 hasta el H1 2027",
+          "why": "Hacer la afirmación de horas de seis dígitos auditable, no una cifra de demo",
+          "how": "Registro en el propio robot, agregación a través de clientes, proceso de reporte auditado"
+        }
+      },
+      {
+        "actor": "Responsable de marketing de producto de un cobot móvil de propósito general rival",
+        "job": "Reposicionar plataformas competidoras para competir en horas de operación auditadas y dólares de material movido en lugar de clips de capacidad de feria.",
+        "outcome": "Divulgaciones de horas de flota rivales que empujan a la categoría hacia y más allá del marcador de las 100.000 horas de operación productiva.",
+        "motivation": "Una vez que una plataforma ancla en una cifra de seis dígitos de horas de flota, los rivales se ven arrastrados al mismo marcador para mantener su credibilidad.",
+        "task": {
+          "who": "Función de marketing de producto y métricas de despliegue",
+          "what": "Replantear el marketing en torno a métricas acumuladas de horas de operación de flota",
+          "where": "Ferias del sector, sitios de proveedores y casos prácticos de despliegue",
+          "when": "Margen desde 2026-06 hasta el H1 2027",
+          "why": "Mantener la credibilidad después de que un rival ancle en seis dígitos de horas de flota",
+          "how": "Métricas de despliegue auditadas, mensaje de horas y libras movidas"
+        }
+      }
+    ],
+    "prediction.b7f4c2a91e6d80a3": [
+      {
+        "actor": "Responsable de desarrollo corporativo de un laboratorio de frontera rival",
+        "job": "Negociar una participación estratégica de capital en un proveedor de memoria de alto ancho de banda combinada con una asignación plurianual de HBM/DRAM para asegurar capacidad a escala de entrenamiento.",
+        "outcome": "Un acuerdo divulgado de inversión estratégica más asignación plurianual entre un laboratorio distinto de Anthropic y al menos uno de los tres fabricantes de HBM.",
+        "motivation": "Evitar la exposición a la HBM del mercado al contado e igualar el cierre duradero y acoplado a capital de Anthropic sobre la restricción que limita la escala de entrenamiento e inferencia de IA.",
+        "task": {
+          "who": "Equipo de desarrollo corporativo y finanzas de cadena de suministro del laboratorio",
+          "what": "Redactar un term sheet de capital más asignación con un fabricante de HBM",
+          "where": "Negociaciones de inversión estratégica y contrato de suministro con un proveedor de memoria",
+          "when": "Desde hoy hasta el Q4 2026, antes de las salidas a bolsa de los proveedores de memoria",
+          "why": "Asegurar capacidad de HBM de forma más duradera de lo que permiten las órdenes de compra",
+          "how": "Ronda de inversión estratégica pre-OPV más contrato de asignación de suministro plurianual"
+        }
+      },
+      {
+        "actor": "Responsable de cuentas estratégicas y capital de un proveedor de HBM",
+        "job": "Estructurar una asignación de capital más suministro que ancle a un cliente laboratorio de frontera de cara a una esperada salida a bolsa en el Q4 2026, convirtiendo el contrato de compra en un vínculo de propiedad.",
+        "outcome": "Un acuerdo firmado de inversión estratégica más asignación que dé a un laboratorio distinto de Anthropic capacidad de HBM comprometida a cambio de una participación de capital.",
+        "motivation": "Asegurar demanda ancla y capital de balance antes de la salida a bolsa, diversificando más allá de la asignación de un único laboratorio mientras monetiza el escaso suministro de HBM.",
+        "task": {
+          "who": "Equipos de cuentas estratégicas, tesorería y planificación de capacidad del proveedor",
+          "what": "Asignar capacidad de HBM plurianual vinculada a una inversión de capital",
+          "where": "Procesos de ventas, finanzas y planificación de capacidad de fábrica del proveedor de memoria",
+          "when": "Desde hoy hasta el Q4 2026, ventana previa a la salida a bolsa",
+          "why": "Asegurar demanda ancla y capital antes de la OPV",
+          "how": "Asignación de suministro acoplada a capital contra producción de fábrica reservada"
+        }
+      }
+    ]
+  }
+}

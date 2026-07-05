@@ -1,0 +1,14 @@
+{
+  "id": "prediction.b7f4c2a91e6d80a3",
+  "scope_hint": "tech",
+  "title": "OpenAI locks equity-coupled HBM allocation with a memory maker by Q4 2026",
+  "body": "Micron's June 22 entry into Anthropic's Series H, bundled with a multi-year HBM/DRAM/SSD supply allocation, leaves Anthropic the only frontier lab financially coupled to all three global high-bandwidth-memory suppliers (Micron, Samsung, SK Hynix). High-bandwidth memory is the binding constraint on AI training and inference scale, and equity-plus-supply structures lock capacity ahead of expected Q4 2026 memory-vendor public listings far more durably than purchase orders. The prediction is that a rival frontier lab, most plausibly OpenAI given its scale and capital access, responds by securing its own equity-coupled HBM allocation with at least one of the three suppliers, converting the supply chain from a purchasing relationship into a contested ownership stake. The signal to watch is a disclosed strategic-investment-plus-multi-year-allocation deal between a non-Anthropic lab and an HBM maker, not a bare offtake contract.",
+  "reasoning": {
+    "because": "Micron's June 22 Series H entry ties Anthropic by equity-plus-supply to all three HBM makers at once",
+    "given": "HBM is the binding scale constraint and equity locks capacity more durably than purchase orders",
+    "so_that": "A rival lab, most plausibly OpenAI, secures its own equity-coupled HBM allocation to avoid spot-market supply",
+    "landing": "by Q4 2026; non-Anthropic lab + HBM maker disclose equity-plus-allocation deal",
+    "plain_language": "Anthropic now part-owns its ties to all three memory-chip makers. Soon a competitor like OpenAI will buy its own stake to keep up."
+  },
+  "summary": "Micron's June 22 Series H entry leaves Anthropic uniquely coupled to all three HBM makers. Because memory is the binding scale constraint and equity locks capacity more durably than purchase orders, a rival lab such as OpenAI is likely to secure its own equity-coupled HBM allocation by Q4 2026."
+}

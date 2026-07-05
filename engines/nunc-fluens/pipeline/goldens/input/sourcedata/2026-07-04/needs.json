@@ -1,0 +1,137 @@
+{
+  "date": "2026-07-04",
+  "by_prediction": {
+    "prediction.2445276f6f0458c1": [
+      {
+        "actor": "domestic-silicon AI lab training-infrastructure lead",
+        "job": "standing up a full non-NVIDIA ASIC training-and-serving cluster and running an end-to-end near-frontier training run on it during the runway",
+        "outcome": "an open-weight near-frontier model trained entirely on domestic accelerators, released with a model card documenting the ASIC-only training run",
+        "motivation": "export controls make NVIDIA allocation unreliable, so proving a full domestic stack works removes the lab's dependence on US-restricted silicon",
+        "task": {
+          "who": "cluster-engineering and model-training teams inside the lab",
+          "what": "run end-to-end near-frontier training on non-NVIDIA ASICs",
+          "where": "a domestic-accelerator training cluster (Ascend, Cambricon, or in-house parts)",
+          "when": "July 2026 through Q2 2027",
+          "why": "escape gating on US-restricted NVIDIA allocation",
+          "how": "Huawei Ascend / Cambricon / in-house ASIC training stack"
+        }
+      },
+      {
+        "actor": "domestic AI-accelerator vendor software-stack team",
+        "job": "hardening the compiler, kernels, and collective-communication libraries so a 1T-plus MoE trains and serves reliably on their ASICs without NVIDIA in the loop",
+        "outcome": "a production-grade ASIC software stack mature enough for an external lab to complete a disclosed end-to-end frontier training run",
+        "motivation": "the LongCat-2.0 existence proof turns their silicon into a credible NVIDIA substitute only if the toolchain reliably supports frontier-scale MoE workloads",
+        "task": {
+          "who": "accelerator compiler, kernel, and communication-library engineers",
+          "what": "harden training toolchain for 1T-plus MoE workloads",
+          "where": "the ASIC's compiler, kernel, and collective-comm software layers",
+          "when": "H2 2026 into early 2027",
+          "why": "make domestic silicon a reliable frontier-training substrate",
+          "how": "vendor SDK plus MoE-tuned collective-communication libraries"
+        }
+      },
+      {
+        "actor": "open-weight lab model-card and technical-report author",
+        "job": "documenting the training substrate explicitly — accelerator type, cluster scale, and end-to-end pipeline — in the model card rather than leaving it to be inferred by observers",
+        "outcome": "a published model card or technical report that states the non-NVIDIA ASIC training run as a disclosed, load-bearing claim",
+        "motivation": "the prediction lands only on explicit disclosure, and documenting compute-independence is itself the differentiating signal the lab wants to broadcast",
+        "task": {
+          "who": "research-communications and documentation staff at the lab",
+          "what": "disclose non-NVIDIA ASIC training substrate in the model card",
+          "where": "the model card / technical report shipped at release",
+          "when": "at release, within the runway ending Q2 2027",
+          "why": "make compute-independence an explicit, defensible claim",
+          "how": "structured training-substrate section in the model card"
+        }
+      }
+    ],
+    "prediction.995ca26eda650543": [
+      {
+        "actor": "frontier-lab finance and capital-markets lead",
+        "job": "converting OpenAI's private mega-round position into public-market-ready structure by drafting the registration and offering plan for a debut",
+        "outcome": "a filed S-1/F-1 or a formal direct-listing/IPO announcement that puts OpenAI's public-listing step on the disclosed record",
+        "motivation": "check sizes needed to keep marking the leader up now exceed what private syndicates will underwrite, forcing a move to public liquidity",
+        "task": {
+          "who": "in-house corporate-finance and capital-markets team",
+          "what": "prepare and file registration for a public debut",
+          "where": "SEC registration process and board approval path",
+          "when": "H2 2026 into Q2 2027",
+          "why": "private syndicates can no longer underwrite the mark-ups",
+          "how": "S-1/F-1 drafting with underwriter and audit support"
+        }
+      },
+      {
+        "actor": "government equity-stake deal architect",
+        "job": "structuring the roughly 5% US-government equity position as pre-listing scaffolding tied to the planned public-market debut",
+        "outcome": "a confirmed government equity agreement tied to the debut, the distinguishing sovereign-stake feature of how the listing happens",
+        "motivation": "the sovereign-stake wrapper only makes sense as pre-listing scaffolding, so nailing its terms is a gate on the debut proceeding",
+        "task": {
+          "who": "government-affairs and deal-structuring counsel",
+          "what": "negotiate and document the ~5% government equity terms",
+          "where": "US-government negotiation and shareholder-agreement drafting",
+          "when": "H2 2026 into Q2 2027",
+          "why": "the stake is the scaffolding the listing is wrapped in",
+          "how": "shareholder agreement plus regulatory sign-off"
+        }
+      },
+      {
+        "actor": "IPO underwriting and equity-capital-markets banker",
+        "job": "syndicating and pricing the frontier leader's move into public markets as the reopened exit window absorbs billion-dollar debuts",
+        "outcome": "a mandated, structured offering that carries OpenAI from the largest private position into a disclosed listing step",
+        "motivation": "the Q2 exit window reopened with 32 billion-dollar public debuts, and the cohort's anchor is the marquee mandate to win",
+        "task": {
+          "who": "equity-capital-markets syndicate desk",
+          "what": "structure, mandate and price the offering",
+          "where": "underwriting syndicate and public-market bookbuild",
+          "when": "H2 2026 into Q2 2027",
+          "why": "the reopened exit window rewards moving the anchor now",
+          "how": "bookbuilt IPO or direct-listing mechanics"
+        }
+      }
+    ],
+    "prediction.ae0caf312eefab98": [
+      {
+        "actor": "coding-agent IDE platform engineer",
+        "job": "reworking the agent file-write path so every write canonically resolves and is rejected when it lands outside the project root, shipped as the default",
+        "outcome": "an IDE release enforcing workspace-root confinement — canonical path resolution, symlink refusal, default-deny writes outside the project — with no approval prompt bypass",
+        "motivation": "two CVSS 9.8 zero-click RCEs in a flagship editor prove filesystem confinement is table-stakes, not a nice-to-have, so the whole class must close",
+        "task": {
+          "who": "agent-runtime and IDE security engineering teams",
+          "what": "enforce canonical-path, symlink-refusing default-deny agent writes",
+          "where": "the editor's agent file-write and tool-execution path",
+          "when": "July 2026 through Q1 2027",
+          "why": "stop ingested content from writing outside the workspace",
+          "how": "canonical path resolution plus symlink refusal at write time"
+        }
+      },
+      {
+        "actor": "agent-security jailbreak-severity framework co-author",
+        "job": "co-developing an early jailbreak-severity framework and bounty scope that classifies cyber-jailbreaks and makes filesystem sandbox escape a scored, disclosable severity",
+        "outcome": "a shared severity framework and structured disclosure path that treats workspace-escape writes as a rated vulnerability class, steering vendors toward hardening over one-off patches",
+        "motivation": "a coordinated severity standard turns isolated IDE RCEs into a recognized class vendors must design against, not patch reactively",
+        "task": {
+          "who": "Anthropic security team with AWS, Microsoft, and Google",
+          "what": "publish jailbreak-severity framework and scoped bounty",
+          "where": "HackerOne bounty program and co-developed severity framework",
+          "when": "July 2026 into Q1 2027",
+          "why": "make sandbox escape a scored class driving default hardening",
+          "how": "severity rubric co-developed with major cloud and model vendors"
+        }
+      },
+      {
+        "actor": "offensive AI-tooling security research lab",
+        "job": "hunting zero-click sandbox-escape RCEs across agent editors and disclosing them with reproducible PoCs that name filesystem confinement as the missing property",
+        "outcome": "disclosed CVEs against a mainstream coding IDE that convert an abstract tool-boundary weakness into a live, patched exploit the ecosystem must design defaults around",
+        "motivation": "proving the same escape against a top-tier IDE, not just a niche low-code builder, forces confinement from optional to shipped default",
+        "task": {
+          "who": "vulnerability research and coordinated-disclosure analysts",
+          "what": "find and disclose zero-click workspace-escape RCEs",
+          "where": "coding-agent editors and their tool-ingestion paths",
+          "when": "the runway from disclosure through Q1 2027",
+          "why": "make confinement table-stakes by proving the live exploit",
+          "how": "reproducible PoC via path-traversal and symlink-resolution abuse"
+        }
+      }
+    ]
+  }
+}

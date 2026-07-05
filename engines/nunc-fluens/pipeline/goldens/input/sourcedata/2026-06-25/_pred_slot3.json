@@ -1,0 +1,14 @@
+{
+  "id": "prediction.1508cdb4fd03cc56",
+  "scope_hint": "tech",
+  "title": "Autonomous pentest agents ship as named managed tier by Q4 2026",
+  "body": "Autonomous offensive-security agents are crossing from conference demos into named, procurable enterprise services. XBOW's autonomous platform — which maps application environments, probes for vulnerabilities, and chains multi-step exploitation paths at machine speed — just took a strategic Accenture Ventures investment plus a partnership to run continuous offensive testing for clients, on top of a $35M Series C extension whose backers include NVIDIA NVentures, Samsung Ventures, and SentinelOne S Ventures. That financing-and-partnership shape is the procurement signal: incumbent IT-services and security-platform vendors are wiring autonomous pentesting into their delivery stack rather than treating it as a research curiosity. The forward AI-security event calendar reinforces the timing — the AI Tinkerers SF Offensive Security Demo Night surfaced these agents this week, and Black Hat USA's AI Summit (August 1-6) alongside DEF CON's AI Village give the category its first marquee enterprise-buyer stage before the fall procurement window. The prediction is that by Q4 2026 at least one major services or security-platform vendor markets an autonomous-pentesting agent as a named, continuously-running managed tier — a recurring offering with its own SKU and pricing, not a one-off engagement — moving offensive AI from point-in-time human-led tests toward always-on machine-scale red-teaming. The risk is that liability, scoping, and safe-harbor concerns keep these agents gated behind human-supervised pilots rather than a self-serve managed product, which would push the named-tier launch past the window.",
+  "reasoning": {
+    "because": "XBOW took an Accenture Ventures investment and continuous-testing partnership on a $35M raise",
+    "given": "Services and security incumbents are wiring autonomous pentesting into delivery stacks, not just R&D",
+    "so_that": "A major services or security vendor markets an autonomous-pentest agent as a named, always-on managed tier",
+    "landing": "First named managed autonomous-pentest tier ships by Q4 2026",
+    "plain_language": "AI hacking tools that find security holes by themselves are about to be sold as an always-on service you can subscribe to."
+  },
+  "summary": "Autonomous offensive-security agents like XBOW are moving from demos to procurement, signaled by Accenture's investment, a continuous-testing partnership, and a $35M raise. With Black Hat's AI Summit staging the category in August, expect a vendor to ship one as a named managed tier by Q4 2026."
+}

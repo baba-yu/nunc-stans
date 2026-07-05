@@ -1,0 +1,47 @@
+{
+  "date": "2026-07-03",
+  "predictions": [
+    {
+      "id": "prediction.f4118d6655c86297",
+      "scope_hint": "tech",
+      "title": "Open-weight MoE fine-tunes beat frontier APIs on niche expert tasks by Q2 2027",
+      "body": "Bridgewater's AIA Labs and Thinking Machines Lab published a specialized fine-tune of the open-weight Qwen3-235B base that reached 84.7% average accuracy across six financial information-filtering tasks versus 78.2% for the best frontier model, a 29.8% error reduction, while running at roughly 13.8x lower inference cost per task. The recipe, not the base weights, did the work: interleaved round-robin batching, a CISPO loss with asymmetric clipping, and on-policy distillation with a periodically promoted teacher, all trained on Thinking Machines' Tinker platform against proprietary expert-labeled data. This is a clean, reproducible template that any enterprise sitting on a high-quality domain dataset can copy, and it lands squarely in the local-optimization lane where tools such as Unsloth already operate. Expect the pattern to generalize: over the coming months more published results will show open-weight MoE checkpoints, fine-tuned on narrow expert-labeled datasets, beating generic frontier APIs on their specific vertical benchmark at a large cost discount. The differentiator is migrating from base-model scale to the dataset and the training recipe, so a domain-tuned open-weight specialist becomes the default build-versus-buy answer wherever a firm owns proprietary labels and cares about per-task cost.",
+      "reasoning": {
+        "because": "Qwen3-235B fine-tune hit 84.7% vs 78.2% frontier on financial tasks at ~13.8x lower cost per task",
+        "given": "differentiator is shifting from base-model scale to domain dataset and training recipe on open MoE",
+        "so_that": "more open-weight MoE fine-tunes on narrow expert data will beat frontier APIs on their vertical at a cost discount",
+        "landing": "by Q2 2027, an org ships an open-MoE fine-tune beating a frontier API on a niche",
+        "plain_language": "Companies with their own expert data will tune free open models to beat the big paid AIs at their specific job, for much less money."
+      },
+      "summary": "A Qwen3-235B open-weight fine-tune by Bridgewater and Thinking Machines beat the best frontier model on financial tasks, 84.7% vs 78.2%, at about 13.8x lower cost per task, driven by the recipe not the weights. Expect more open-weight MoE fine-tunes to beat frontier APIs on niche tasks by Q2 2027."
+    },
+    {
+      "id": "prediction.788b3c0d5220ead0",
+      "scope_hint": "business",
+      "title": "Menlo Ventures deploys $3B raise into a dedicated AI fund vehicle by Q1 2027",
+      "body": "Menlo Ventures closed a $3B raise on June 30, 2026 — its largest ever — explicitly framed as going all-in on AI, and the economics of that decision are inseparable from an Anthropic stake now marked at roughly $14B against a $965B valuation. A single position that large relative to a firm's prior fund sizes creates a concentration problem that a generalist vehicle cannot absorb, so expect Menlo to formalize the capital into an AI-dedicated structure: a named growth or opportunities fund, or a distinct AI thesis allocation, rather than folding it into an undifferentiated flagship. The timing pressure is compounding. Anthropic's top-model access is now coupled to a government security-and-disclosure regime, and a White House frontier-model standards framework is expected the week of July 7, both of which raise the premium on backers who can underwrite frontier labs through capital-intensive compute cycles and regulatory scrutiny. That favors concentrated, later-stage AI vehicles over spray-and-pray seed portfolios. With the largest-ever raise announced and a marquee anchor position to defend, Menlo has both the mandate and the incentive to stand up a purpose-built AI fund and begin deploying it into follow-on and adjacent-lab positions within the next two to three quarters.",
+      "reasoning": {
+        "because": "Menlo closed its largest-ever $3B raise on June 30 to go all-in on AI, anchored by a ~$14B Anthropic stake",
+        "given": "A stake that large forces a concentrated AI-dedicated structure and later-stage compute-heavy underwriting",
+        "so_that": "Menlo formalizes an AI-specific fund vehicle and starts deploying it into frontier-lab and adjacent positions",
+        "landing": "Menlo Ventures announces a dedicated AI fund vehicle from the $3B raise by Q1 2027",
+        "plain_language": "Menlo just raised $3 billion for AI, so it will likely set up a special AI-only fund and start spending it soon."
+      },
+      "summary": "Menlo Ventures closed a record $3B raise on June 30, 2026 to go all-in on AI, anchored by an Anthropic stake worth about $14B. A position that large forces a concentrated structure, so Menlo is likely to formalize an AI-dedicated fund vehicle and begin deploying it by Q1 2027."
+    },
+    {
+      "id": "prediction.0cbb02dafcbc3e36",
+      "scope_hint": "cross",
+      "title": "MCP stdio transport turns off-by-default across agent frameworks by Q1 2027",
+      "body": "The working proof-of-concept for the Flowise Custom-MCP RCE (CVE-2026-40933), combined with the demonstration that its official patch can be bypassed, converts the stdio transport from a convenience default into a liability that a version bump alone cannot fix. Because the flaw is structural rather than a single coding mistake, an imported workflow file launches an unsandboxed child process the moment a victim opens it, and the coordinated MCP supply-chain advisory traces the same unvalidated-command-to-subprocess pattern across LiteLLM, Agent Zero, LangBot, Windsurf, and peers. The security guidance has already converged on one instruction: disable stdio in favor of Server-Sent Events and treat any imported MCP configuration as untrusted code. That convergence, arriving just as the White House readies a voluntary frontier-model standards framework the week of July 7, gives both maintainers and any emerging agent-security baseline a single obvious hardening lever to standardize on. Expect the leading agent frameworks to flip stdio-based MCP execution to opt-in behind an explicit trust prompt or sandbox, with SSE or an equivalently isolated transport as the shipped default, so that a config file can no longer silently become shell access. The coupling is security-drives-policy: a live, patch-resistant exploit class becomes the concrete test case the first agent-security norms are written around.",
+      "reasoning": {
+        "because": "Flowise Custom-MCP RCE (CVE-2026-40933) has a working PoC and a demonstrated patch bypass",
+        "given": "Same stdio-command-injection pattern spans LiteLLM, Agent Zero, LangBot, Windsurf as US norms near",
+        "so_that": "Frameworks flip stdio MCP execution to opt-in behind trust/sandbox, shipping an SSE-style isolated transport by default",
+        "landing": "Leading agent frameworks make MCP stdio opt-in / off-by-default by Q1 2027",
+        "plain_language": "A hard-to-patch hack made AI tools run code from imported files, so those tools will stop trusting that mode by default."
+      },
+      "summary": "A working exploit and a patch bypass for the Flowise Custom-MCP RCE mark stdio as a structural liability shared across many agent tools. As the White House readies a voluntary frontier-model standards framework, leading agent frameworks are expected to make stdio MCP execution opt-in by Q1 2027."
+    }
+  ]
+}

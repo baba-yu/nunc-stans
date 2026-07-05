@@ -1,0 +1,47 @@
+{
+  "date": "2026-06-28",
+  "predictions": [
+    {
+      "id": "prediction.6f3ab91c4d2e7a08",
+      "scope_hint": "tech",
+      "title": "Un LLM en dispositivo de menos de un gigabyte logra soporte de ajuste de Unsloth en la misma semana para el tercer trimestre de 2026",
+      "body": "El lanzamiento del LFM2.5 de 230M de parámetros de Liquid AI, con runtimes llama.cpp, MLX, vLLM, SGLang y ONNX desde el primer día, indica que un modelo en dispositivo de menos de un gigabyte ya se publica contra toda la pila de inferencia local desde el primer día. Dado que la versión v0.1.471-beta de Unsloth ya incorpora ajuste fino de primera clase para pesos abiertos de frontera dentro de los dos días posteriores al lanzamiento (GLM-5.2 el 16 de junio, soporte el 18 de junio), la misma compresión está llegando al nivel del borde. La predicción es que un modelo en dispositivo de menos de 1B publicado en este período obtendrá soporte de ajuste fino LoRA/QLoRA en un conjunto de herramientas de ajuste de uso generalizado dentro de la misma semana en que se publiquen sus pesos, cerrando el ciclo desde el lanzamiento abierto hasta la personalización en dispositivo. El imperativo es competitivo: una vez que una biblioteca de ajuste incorpora un checkpoint de borde popular en cuestión de días, las demás deben igualar el tiempo de respuesta o ceder la audiencia de desarrolladores en dispositivo.",
+      "reasoning": {
+        "because": "LFM2.5-230M se publicó desde el primer día en llama.cpp, MLX, vLLM, SGLang y ONNX",
+        "given": "Unsloth incorporó el ajuste fino de GLM-5.2 dos días después de su lanzamiento de pesos abiertos del 16 de junio",
+        "so_that": "los checkpoints de borde de pesos abiertos obtienen soporte de ajuste en la misma semana, reduciendo el lapso de lanzamiento a personalización a días en dispositivo",
+        "landing": "Un modelo de borde de menos de 1B obtiene soporte de ajuste en la misma semana para el tercer trimestre de 2026",
+        "plain_language": "Los modelos de IA diminutos del tamaño de un teléfono se podrán entrenar pocos días después de su lanzamiento."
+      },
+      "summary": "El LFM2.5 de 230M de Liquid AI se publica desde el primer día en llama.cpp, MLX, vLLM, SGLang y ONNX, mientras que Unsloth ya añade ajuste fino de frontera dentro de los dos días de un lanzamiento. Se espera que un modelo en dispositivo de menos de 1B obtenga soporte de ajuste LoRA/QLoRA en la misma semana en un conjunto de herramientas de uso generalizado para el tercer trimestre de 2026."
+    },
+    {
+      "id": "prediction.7b3e9f12c4a6d8e0",
+      "scope_hint": "business",
+      "title": "Un fabricante rival de aceleradores compra un compilador de inferencia agnóstico a CUDA para el primer trimestre de 2027",
+      "body": "La apuesta de pila completa de unos $14B de Qualcomm esta semana — la adquisición de Modular por ~$3,92B íntegramente en acciones por el motor de inferencia multifabricante MAX, las conversaciones reportadas de $8-10B con Tenstorrent y un envío comprometido de silicio personalizado a un hyperscaler antes de fin de año — convierte la capa del compilador portátil en el terreno disputado para romper el cierre de Nvidia con CUDA. Poseer una capa de cómputo agnóstica al silicio es ahora el precio de admisión para cualquier fabricante que venda inferencia empresarial frente a Nvidia, y Modular era el mayor activo de compilador neutral en el mercado. Se espera que al menos un comprador rival de aceleradores (AMD, Intel o el brazo de silicio de un hyperscaler) responda adquiriendo o tomando una participación de control en una startup comparable de compilador o runtime de inferencia multifabricante, en lugar de ceder a Qualcomm el relato de la portabilidad.",
+      "reasoning": {
+        "because": "La compra de Modular por $3,92B de Qualcomm eliminó el mayor activo de compilador de inferencia multifabricante neutral",
+        "given": "una capa de cómputo agnóstica al silicio es ahora un requisito básico para vender inferencia empresarial frente a CUDA",
+        "so_that": "un comprador rival de aceleradores adquiere o toma una participación de control en una startup comparable de compilador de inferencia",
+        "landing": "para el primer trimestre de 2027; una compra o participación mayoritaria anunciada de compilador por AMD/Intel/hyperscaler",
+        "plain_language": "Qualcomm compró la empresa que hace que los chips de IA de distintos fabricantes funcionen juntos, así que un competidor se apresurará a comprar una similar."
+      },
+      "summary": "El impulso de ~$14B de Qualcomm — la compra del compilador Modular por $3,92B, las conversaciones con Tenstorrent y el silicio personalizado para hyperscaler — convierte una capa de inferencia portátil en un requisito básico frente a Nvidia. Es probable que un fabricante rival de aceleradores responda adquiriendo una startup comparable de compilador multifabricante."
+    },
+    {
+      "id": "prediction.c5aa6ceae507d1a8",
+      "scope_hint": "cross",
+      "title": "Una plataforma de agentes de código incorpora un control de capacidades de tríada como opción predeterminada para el primer trimestre de 2027",
+      "body": "Al menos una plataforma líder de agentes de código (la categoría que OWASP señala como epicentro de la inyección de prompts, con Claude Code, AutoGPT, Dify y Roo-Code entre los repositorios con más advertencias) incorporará un control de capacidades activado por defecto que impone una restricción de estilo 'Regla de Dos': una ejecución de agente puede combinar como máximo dos de tres propiedades — acceso a datos privados, exposición a contenido no confiable y comunicación externa — antes de tener que detenerse para una aprobación humana explícita. La medida sigue al replanteamiento de OWASP de la inyección de prompts como una propiedad estructural y no parcheable de los sistemas agénticos, más que como un CVE parcheable, lo que obliga a los fabricantes a mitigar limitando la tríada letal en la capa de orquestación en lugar de filtrar el flujo de tokens. Como el argumento arquitectónico niega cualquier forma fiable de separar los tokens de comando de los tokens de datos, la única defensa duradera es denegar por defecto la combinación peligrosa, y la presión competitiva más el volumen de advertencias empujarán primero a las plataformas más grandes hacia esa solución.",
+      "reasoning": {
+        "because": "OWASP 2.01 vincula la inyección de prompts con 6 de 10 categorías agénticas y señala a los agentes de código como el epicentro",
+        "given": "La inyección no es parcheable, por lo que la única mitigación duradera limita la tríada letal en la orquestación",
+        "so_that": "Una plataforma de agentes de código activa por defecto un control de capacidades de Regla de Dos, deteniéndose para aprobación ante la tercera propiedad",
+        "landing": "para el primer trimestre de 2027; >=1 plataforma líder de agentes de código incorpora un control de tríada activado por defecto",
+        "plain_language": "A los asistentes de IA para programar se les puede engañar con instrucciones ocultas, así que las grandes herramientas empezarán a bloquear la combinación arriesgada salvo que una persona dé el visto bueno."
+      },
+      "summary": "OWASP ahora califica la inyección de prompts como un rasgo estructural y no parcheable de la IA agéntica y señala a los agentes de código como el epicentro. Sin forma de separar comandos de datos, los fabricantes deben limitar la tríada letal en la capa de orquestación. Se espera que una plataforma de agentes de código incorpore un control de Regla de Dos activado por defecto."
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "support_dimension": "because",
+  "narrative": "Feast's CVE-2026-56121 is the textbook unsafe-artifact-handling incident this defensive thesis anticipated: a feature-view body deserialized via dill.loads() before any auth check, yielding unauthenticated RCE on the ML data-and-metadata plane that managed serving and feature-store platforms host. A maximum-severity, trivially weaponizable advisory is precisely the pressure that historically pushes platforms to stop trusting serialized objects on the wire by default.",
+  "coherence": 4,
+  "remaining_gap": "Needs a named managed model-serving platform shipping gated deserialization or signed-artifact handling as its default; today is the motivating vulnerability in an open-source component, not a platform default change."
+}

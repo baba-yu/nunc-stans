@@ -1,0 +1,44 @@
+[
+  {
+    "actor": "agent-framework core maintainer",
+    "job": "reworking MCP transport defaults so imported configs run through an isolated channel instead of spawning an unsandboxed stdio child process",
+    "outcome": "released framework version where stdio MCP execution is opt-in behind a trust prompt or sandbox, with SSE-style isolation as the shipped default",
+    "motivation": "the Flowise RCE PoC plus a demonstrated patch bypass proves stdio is a structural liability a version bump alone cannot fix",
+    "task": {
+      "who": "transport and security-response maintainers",
+      "what": "gate stdio MCP execution behind trust prompt or sandbox",
+      "where": "MCP client transport layer and config-import path",
+      "when": "July 2026 to Q1 2027",
+      "why": "stop a config file from silently becoming shell access",
+      "how": "SSE or equivalently isolated transport as default"
+    }
+  },
+  {
+    "actor": "MCP supply-chain security advisory coordinator",
+    "job": "documenting the shared unvalidated-command-to-subprocess pattern across LiteLLM, Agent Zero, LangBot, Windsurf and peers and issuing convergent hardening guidance",
+    "outcome": "coordinated advisory that names disabling stdio in favor of SSE and treating imported MCP config as untrusted code as the single hardening lever",
+    "motivation": "the same patch-resistant exploit class spans many agent tools, so per-project fixes need one cross-framework instruction to standardize on",
+    "task": {
+      "who": "vulnerability-coordination and disclosure researchers",
+      "what": "publish convergent disable-stdio hardening guidance",
+      "where": "coordinated multi-vendor MCP supply-chain advisory",
+      "when": "June 2026 to Q4 2026",
+      "why": "give maintainers one obvious lever against the shared pattern",
+      "how": "cross-framework advisory citing the common injection pattern"
+    }
+  },
+  {
+    "actor": "frontier-model standards framework drafter",
+    "job": "assembling a voluntary agent-security baseline that turns the live patch-resistant stdio exploit into the concrete test case the first norms are written around",
+    "outcome": "voluntary standards framework citing isolated MCP transport as a baseline hardening expectation for compliant agent frameworks",
+    "motivation": "an active exploit class arriving as norms are drafted gives the baseline a ready-made, defensible hardening requirement to anchor on",
+    "task": {
+      "who": "White House frontier-model policy and standards staff",
+      "what": "anchor agent-security baseline on isolated MCP transport",
+      "where": "voluntary frontier-model standards framework release",
+      "when": "week of July 7 2026 into Q1 2027",
+      "why": "security-drives-policy: live exploit becomes the norm's test case",
+      "how": null
+    }
+  }
+]

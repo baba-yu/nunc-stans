@@ -1,0 +1,214 @@
+{
+  "date": "2026-06-24",
+  "validation_rows": [
+    {
+      "prediction_ref": {
+        "id": "prediction.a2d6a1d80d9edd87",
+        "short_label": "Orchestration benchmarks add a latency-disclosure column by Q1 2027",
+        "prediction_date": "2026-06-24"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "La noticia principal de hoy es la señal de origen directa de esta tesis. Fugu, de Sakana AI, lanzado el 22 de junio como un único endpoint compatible con OpenAI, es en sí mismo un modelo de lenguaje entrenado para enrutar, delegar, verificar y sintetizar a través de un conjunto intercambiable de LLM de frontera, con llamadas recursivas a sí mismo, construido sobre los artículos TRINITY y Conductor de ICLR 2026; su nivel Fugu Ultra se presenta a la par de Anthropic Fable 5 y Mythos en las propias tablas de programación, ciencia y razonamiento de Sakana. El hecho nuevo es la primera réplica independiente en menos de 48 horas: Ethan Mollick, de Wharton, ejecutó Fugu Ultra en sus pruebas habituales de programación de shaders y escenas interactivas y lo describió como 'increíblemente lento', con ejecuciones cercanas a 30 minutos en lugar de minutos y resultados 'aceptables' que no igualaron a Fable en la práctica, de modo que las puntuaciones de paridad publicadas siguen sin reproducirse. Ese es exactamente el hueco estructural que señala la predicción: un enrutador-como-modelo compra calidad a cambio de tiempo de reloj que las clasificaciones centradas solo en la precisión nunca muestran, y la propia cobertura plantea la latencia como el eje que las tablas de los benchmarks ocultan. La distancia hasta el listón falsable: esto es la anécdota de un único evaluador en una prueba estándar, todavía no un benchmark ampliamente citado ni un evaluador que formalice una columna de latencia o coste por tarea para la orquestación multimodelo, ni un proveedor de orquestación que publique SLA de tiempo de reloj.",
+      "reference_links": [
+        {
+          "label": "MarkTechPost - Sakana AI launches Sakana Fugu, an orchestration model that routes tasks across a swappable pool of frontier LLMs",
+          "url": "https://www.marktechpost.com/2026/06/22/sakana-ai-launches-sakana-fugu-an-orchestration-model-that-routes-tasks-across-a-swappable-pool-of-frontier-llms/"
+        },
+        {
+          "label": "Tech Times - AI orchestrator Sakana Fugu claims Fable 5 parity; real-world tests reveal 30-minute waits",
+          "url": "https://www.techtimes.com/articles/318968/20260624/ai-orchestrator-sakana-fugu-claims-fable-5-parity-real-world-tests-reveal-30-minute-waits.htm"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Sakana Fugu salió como un modelo enrutador que afirmaba estar a la par de Fable 5, pero en menos de 48 horas Mollick lo ejecutó en pruebas estándar de programación y midió esperas de unos 30 minutos con resultados que apenas igualaban, dejando las puntuaciones sin reproducir. Ese es el mecanismo señalado: la orquestación compra calidad a cambio de tiempo de reloj que las clasificaciones centradas solo en la precisión nunca muestran, y la propia cobertura plantea la latencia como el eje oculto.",
+        "coherence": 4,
+        "remaining_gap": "Sigue siendo la anécdota de un único evaluador en una prueba estándar, no un benchmark citado que formalice una columna de latencia o coste por tarea, ni un proveedor que publique SLA de tiempo de reloj."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.b0ee98f79df6fe54",
+        "short_label": "OpenAI locks equity-coupled HBM allocation with a memory maker by Q4 2026",
+        "prediction_date": "2026-06-24"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "La noticia empresarial principal de hoy es el detonante de esta tesis. Micron y Anthropic anunciaron el 22 de junio una alianza estratégica que reúne el codiseño de memoria y almacenamiento, una asignación de suministro plurianual de HBM, DRAM y SSD, un despliegue interno de Claude y una inversión estratégica de capital de Micron en la Serie H de Anthropic. La ronda de 65.000 millones de dólares, con una valoración post-money de unos 965.000 millones, se cerró el 28 de mayo, pero el hecho nuevo es la entrada de Micron, que deja a Anthropic como el único laboratorio de frontera vinculado financieramente a los tres proveedores globales de HBM (Micron, Samsung, SK Hynix), una vinculación que ningún otro laboratorio posee. La predicción lee esto como el detonante para que un rival, lo más probable OpenAI, asegure su propio acuerdo de capital más asignación plurianual con al menos uno de los tres, convirtiendo la cadena de suministro de una compra en una participación de propiedad en disputa antes de las cotizaciones de proveedores de memoria previstas para el cuarto trimestre de 2026. La señal a vigilar es un acuerdo divulgado de inversión estratégica más asignación entre un laboratorio distinto de Anthropic y un fabricante de HBM. El hueco: la noticia establece la presión competitiva y la plantilla, pero todavía no se ha informado de ningún laboratorio rival que asegure una asignación de HBM acoplada a capital, y el monto de la inversión de Micron no se divulgó.",
+      "reference_links": [
+        {
+          "label": "Digital Applied - Micron and Anthropic strike a strategic AI infrastructure deal",
+          "url": "https://www.digitalapplied.com/blog/micron-anthropic-strategic-infrastructure-agreement-2026"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "El acuerdo del 22 de junio de Micron con Anthropic, de capital más asignación plurianual, deja a un laboratorio vinculado a los tres proveedores de HBM, y esa asimetría es precisamente la fuerza competitiva que señala la tesis. Entrega a los rivales una plantilla probada y un fuerte incentivo para convertir la compra de memoria en una participación de propiedad en disputa antes de las cotizaciones de proveedores previstas para el cuarto trimestre de 2026.",
+        "coherence": 4,
+        "remaining_gap": "Todavía no se ha informado de ningún laboratorio distinto de Anthropic que asegure una asignación de HBM acoplada a capital, y el monto de la inversión de Micron sigue sin divulgarse."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.568eecc474844ffb",
+        "short_label": "General-purpose mobile cobots cross 100K production-operation hours by H1 2027",
+        "prediction_date": "2026-06-24"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "La noticia principal de IA física de hoy es la señal de origen de esta tesis. Collaborative Robotics presentó su Proxie de segunda generación el 22 de junio en Automate 2026 como un robot colaborativo móvil de propósito general que identifica el trabajo y lo realiza sin integración de software y sin un operador humano que lo dirija, llevando la inferencia de tareas por completo al propio robot, sin dependencia de la nube para la ejecución central, mediante un conjunto de sensores ScoutSense; mueve carros de hasta 1.500 libras, levanta hasta 200 libras, por 5.000 dólares al mes. Cobot ancló el lanzamiento en un historial de producción de primera generación: 12.627 horas registradas en operaciones reales, más de 40 millones de libras movidas y más de 17 millones de pasos humanos ahorrados en hospitales, manufactura y logística, en turnos de 16 horas. Ese es exactamente el giro que señala la predicción: proveedores de IA física que compiten en horas de operación auditadas y dólares de material movido en lugar de clips de feria, con un precio de suscripción mensual que convierte las horas de operación en la unidad de tarificación. La distancia hasta el listón: las 12.627 horas de primera generación son una cifra de una sola plataforma, aproximadamente un orden de magnitud por debajo del historial acumulado de seis cifras de una flota multicliente que exige la predicción, y ningún proveedor ha planteado todavía una cifra de flota de más de 100.000 horas como métrica de despliegue.",
+      "reference_links": [
+        {
+          "label": "Robotics Tomorrow - Cobot announces second-generation Proxie, bringing production-tested physical AI to real operations",
+          "url": "https://www.roboticstomorrow.com/news/2026/06/22/cobot-announces-second-generation-proxie-bringing-production-tested-physical-ai-to-real-operations/26756/"
+        },
+        {
+          "label": "Packaging World - Physical AI dominates Automate 2026's opening day while humanoids steal the show floor",
+          "url": "https://www.packworld.com/leaders-new/machinery/robotics/article/22969383/physical-ai-dominates-automate-2026s-opening-day-while-humanoids-steal-the-show-floor"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "El lanzamiento del Proxie de segunda generación de Cobot valida el mecanismo: ancló la presentación en un historial de producción cuantificado (12.627 horas de operación, 40 millones de libras movidas, 17 millones de pasos ahorrados) y con un precio de 5.000 dólares al mes, de modo que la facturación por suscripción convierte las horas de operación auditadas en la unidad con la que los proveedores compiten y fijan su tarificación, exactamente el giro desde los clips de feria que señala esta tesis.",
+        "coherence": 4,
+        "remaining_gap": "Una cifra de 12.627 horas de una sola plataforma queda un orden de magnitud por debajo del listón de seis cifras de una flota multicliente; ningún proveedor plantea todavía más de 100.000 horas como métrica."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.1ce328e19c9e6685",
+        "short_label": "Captive in-house fleets will lead paid humanoid deployment by H1 2028",
+        "prediction_date": "2026-06-22"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "El lanzamiento del Cobot Gen 2 de hoy y el recinto de Automate 2026 inciden en la tesis de que las flotas cautivas lideran el despliegue de pago. El Proxie de segunda generación de Collaborative Robotics incorpora inferencia en el propio robot con un historial operativo cuantificado de la Gen 1 (12.627 horas, 40 millones de libras movidas, 17 millones de pasos humanos ahorrados en hospitales, manufactura y logística) por una suscripción de 5.000 dólares al mes, un despliegue productizado cuyas pruebas provienen de sitios operativos reales y no de pilotos. El lanzamiento se enmarca en Automate 2026 (22-25 de junio, McCormick Place), cuyo tema dominante es la IA física y cuyo Humanoid Robot Pavilion, patrocinado por primera vez por NVIDIA, acoge más de 20 plataformas humanoides, presentado como el paso del sector de la investigación humanoide al despliegue comercial. Ese es el telón de fondo de demanda y oferta en el que los operadores cautivos que convierten sus propios sitios en despliegues de pago auditados se adelantan a la venta de humanoides comerciales. El hueco: una suscripción de cobot móvil y un pabellón de exhibición humanoide son adyacencia, no el listón falsable: no se ha mostrado ninguna flota humanoide cautiva interna liderando el despliegue humanoide de pago, y Proxie es un cobot con ruedas, no un humanoide.",
+      "reference_links": [
+        {
+          "label": "Packaging World - Physical AI dominates Automate 2026's opening day while humanoids steal the show floor",
+          "url": "https://www.packworld.com/leaders-new/machinery/robotics/article/22969383/physical-ai-dominates-automate-2026s-opening-day-while-humanoids-steal-the-show-floor"
+        },
+        {
+          "label": "Automate - Humanoid Robot Pavilion sponsored by NVIDIA (June 22-25, 2026)",
+          "url": "https://www.automateshow.com/education-networking/humanoid-robot-pavilion"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "El Proxie de segunda generación de Cobot llega con precio de suscripción, y sus pruebas son horas de operación auditadas de sitios reales de clientes en lugar de pilotos, lanzado dentro de un recinto de Automate cuyo tema dominante son los humanoides pasando de la investigación al despliegue comercial. Ese es el telón de fondo liderado por operadores y basado en sitios reales en el que las flotas cautivas que convierten sus propias operaciones en despliegue de pago se adelantan a la venta de humanoides comerciales.",
+        "coherence": 3,
+        "remaining_gap": "Proxie es un cobot con ruedas y el pabellón es presencia de exhibición; no se ha mostrado ninguna flota humanoide cautiva interna liderando el despliegue humanoide de pago."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.ef0bb943bcd4a5d3",
+        "short_label": "Rival humanoid maker lands $500M-plus chip-and-cloud strategic round by Q4 2026",
+        "prediction_date": "2026-06-18"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "La cobertura de Automate 2026 de hoy respalda la tesis del capital humanoide en cuanto al impulso, no en cuanto a un evento de financiación. El Humanoid Robot Pavilion del evento, patrocinado por primera vez por NVIDIA, acoge más de 20 plataformas humanoides y la narrativa del recinto es el paso del sector de la investigación humanoide al despliegue comercial, con NVIDIA patrocinando explícitamente el espacio humanoide estrella, el respaldo de chips y nube que la predicción espera que ancle una ronda estratégica. Un campo denso de aspirantes humanoides compitiendo por los mismos socios de cómputo y capital es la presión estructural que empuja a un fabricante rival hacia una ronda estratégica de chips y nube de más de 500 millones de dólares. El hueco es grande: un pabellón patrocinado es visibilidad de conferencia y señalización de ecosistema de proveedores, no una financiación estratégica divulgada; no se ha informado de ningún fabricante humanoide que cierre una ronda de chips y nube de más de 500 millones, y el patrocinio de NVIDIA es marketing de evento más que un compromiso de capital.",
+      "reference_links": [
+        {
+          "label": "Automate - Humanoid Robot Pavilion sponsored by NVIDIA (June 22-25, 2026)",
+          "url": "https://www.automateshow.com/education-networking/humanoid-robot-pavilion"
+        },
+        {
+          "label": "Packaging World - Physical AI dominates Automate 2026's opening day while humanoids steal the show floor",
+          "url": "https://www.packworld.com/leaders-new/machinery/robotics/article/22969383/physical-ai-dominates-automate-2026s-opening-day-while-humanoids-steal-the-show-floor"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "El Humanoid Pavilion de Automate 2026, patrocinado por primera vez por NVIDIA, reúne más de veinte plataformas en un solo espacio, con el respaldo de chips y nube apostando por el recinto estrella. Un campo tan denso compitiendo por los mismos socios de cómputo es precisamente la presión estructural que empuja a un fabricante rival hacia una gran ronda estratégica, aunque el patrocinio sea visibilidad, no capital.",
+        "coherence": 2,
+        "remaining_gap": "No se ha informado de ningún fabricante humanoide que cierre una ronda de chips y nube de más de 500 millones; el patrocinio del pabellón es marketing de evento, no un compromiso de capital divulgado."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.20260607-1",
+        "short_label": "Automaker-built humanoid programs add a second high-volume entrant by Q2 2027",
+        "prediction_date": "2026-06-07"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "[REVIVED] Coincidencia semántica de capa 2 con la cobertura de hoy del recinto de IA física de Automate 2026 (Señales: campo de robots humanoides, otro fabricante de automóviles de alto volumen para el segundo trimestre de 2027, prototipo funcional, grupo integrado). El Humanoid Robot Pavilion, patrocinado por primera vez por NVIDIA, acoge más de 20 plataformas humanoides y el tema dominante es el paso del sector de la investigación humanoide al despliegue comercial, el tipo de campo denso de aspirantes integrados verticalmente en el que surgiría un segundo programa humanoide de alto volumen construido por un fabricante de automóviles. La relevancia recae en la amplitud del ecosistema, no en el listón falsable: las más de 20 plataformas del pabellón no se identifican por fabricante en la cobertura de hoy, de modo que no hay un segundo fabricante de automóviles nombrado que divulgue un programa humanoide con un prototipo funcional y un objetivo de reducción de coste de producción, y un pabellón de feria es presencia de exhibición más que un compromiso de programa en firme.",
+      "reference_links": [
+        {
+          "label": "Packaging World - Physical AI dominates Automate 2026's opening day while humanoids steal the show floor",
+          "url": "https://www.packworld.com/leaders-new/machinery/robotics/article/22969383/physical-ai-dominates-automate-2026s-opening-day-while-humanoids-steal-the-show-floor"
+        },
+        {
+          "label": "Automate - Humanoid Robot Pavilion sponsored by NVIDIA (June 22-25, 2026)",
+          "url": "https://www.automateshow.com/education-networking/humanoid-robot-pavilion"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "El Humanoid Robot Pavilion de Automate 2026, patrocinado por primera vez por NVIDIA, reúne más de veinte plataformas bajo el lema del paso de la investigación humanoide al despliegue comercial. Ese campo denso de aspirantes integrados verticalmente es la presión estructural que empuja a un segundo fabricante de automóviles de alto volumen hacia su propio programa humanoide. La amplitud es real; el segundo fabricante concreto aún no es visible.",
+        "coherence": 2,
+        "remaining_gap": "Las plataformas del pabellón no están identificadas por fabricante, de modo que ningún segundo fabricante de automóviles ha divulgado un programa humanoide con un prototipo funcional y un objetivo de reducción de coste de producción."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.a943725fb4046b01",
+        "short_label": "An autonomous-pentest vendor lands a named enterprise/gov deal by Q1 2027",
+        "prediction_date": "2026-06-22"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "El calendario de eventos de hoy respalda la tesis del proveedor de pentesting autónomo en cuanto a visibilidad, no en cuanto a un contrato. AI Tinkerers San Francisco celebra una Offensive Security Demo Night el 25 de junio con demostraciones en vivo de agentes de pentesting autónomo respaldadas por el patrocinador XBOW, antes del AI Summit de Black Hat USA (1-6 de agosto) y el AI Village de DEF CON en agosto, con XBOW, un proveedor de pentesting autónomo nombrado, poniendo sus agentes en un escenario público mientras construye el perfil comercial que precede a los acuerdos empresariales y gubernamentales. El calendario de seguridad próximo (AI Risk Summit de SecurityWeek, OWASP Global AppSec USA, la serie de Zenity en la lista de vigilancia) mantiene la atención del lado comprador en las herramientas ofensivas agénticas. La distancia hasta el listón: una noche de demostraciones patrocinada es marketing de escenario de conferencia, no un contrato empresarial o gubernamental nombrado y divulgado; no se ha informado de ningún proveedor de pentesting autónomo que logre tal acuerdo en las noticias de hoy.",
+      "reference_links": [
+        {
+          "label": "AI Engineer World's Fair 2026 schedule (June 29-July 2, Moscone West)",
+          "url": "https://www.ai.engineer/worldsfair/schedule"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "XBOW, un proveedor de pentesting autónomo nombrado, pone sus agentes en un escenario público en la Offensive Security Demo Night del 25 de junio, antes del AI Summit de Black Hat y el AI Village de DEF CON. Esa construcción visible de perfil comercial es el trabajo de cara al comprador que suele preceder al tipo de contrato empresarial o gubernamental que la tesis espera.",
+        "coherence": 3,
+        "remaining_gap": "Una noche de demostraciones patrocinada es marketing de escenario de conferencia, no un contrato empresarial o gubernamental nombrado y divulgado; no se ha informado de tal acuerdo."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.a4ee0b5435860b21",
+        "short_label": "AWS Continuum's sandbox exploit-validation goes industry baseline by H1 2027",
+        "prediction_date": "2026-06-21"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "El calendario de eventos de hoy roza la tesis de demostrar el hallazgo ejecutándolo. AI Tinkerers San Francisco celebra una Offensive Security Demo Night el 25 de junio con demostraciones en vivo de agentes de pentesting autónomo respaldadas por el patrocinador XBOW, antes del AI Summit de Black Hat USA y el AI Village de DEF CON en agosto, agentes que encadenan reconocimiento, construyen un exploit funcional y lo ejecutan para demostrar accesibilidad, que es la maniobra de validación de exploits en entorno aislado de Continuum generalizada al campo de proveedores ofensivos. El calendario de seguridad próximo mantiene las herramientas de prueba de exploits frente a compradores y audiencias de conferencia. La relevancia recae en el impulso y la adyacencia, no en el aterrizaje: una noche de demostraciones es validación ofensiva de escenario de conferencia, no la canalización defensiva de validación de exploits convertida en estándar del sector entre proveedores de seguridad de código nombrados, y el enfoque de la noche de demostraciones apunta a herramientas ofensivas de atacante en lugar de la verificación defensiva de prueba de exploit que señala la predicción.",
+      "reference_links": [
+        {
+          "label": "AI Engineer World's Fair 2026 schedule (June 29-July 2, Moscone West)",
+          "url": "https://www.ai.engineer/worldsfair/schedule"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "La Offensive Security Demo Night del 25 de junio respaldada por XBOW, con agentes que encadenan reconocimiento, construyen un exploit funcional y lo ejecutan para demostrar accesibilidad, aporta exactamente el sustrato de prueba de exploit construido por máquina que hace creíble replicar la validación por construcción entre proveedores, y el calendario de Black Hat y DEF CON de agosto mantiene esas herramientas frente a los compradores.",
+        "coherence": 3,
+        "remaining_gap": "Las herramientas de la noche de demostraciones son del lado ofensivo del atacante y de escenario de conferencia; ningún proveedor defensivo de seguridad de código ha incorporado una verificación de prueba de exploit en entorno aislado como estándar."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.98885276749e707b",
+        "short_label": "Corsair-class inference silicon books a named hyperscaler deployment by Q3 2027",
+        "prediction_date": "2026-06-17"
+      },
+      "today_relevance": 2,
+      "evidence_summary": "El calendario de chips de IA de hoy incide débilmente en la tesis del despliegue de silicio de inferencia, al aportar la sucesión de eventos donde surgen tales reservas. La agenda de hardware corre casi sin pausa desde Automate 2026 (22-25 de junio, McCormick Place) pasando por Advancing AI 2026 de AMD (22-23 de julio en Moscone, con foco esperado en la serie Instinct MI400, keynote el 23 de julio), Hot Chips 2026 (23-25 de agosto en Stanford) y el AI Infra Summit (15-17 de septiembre, Santa Clara), el calendario apilado de eventos de aceleradores donde un proveedor de silicio de inferencia de clase Corsair escenificaría el anuncio de un despliegue nombrado en un hyperscaler. La relevancia recae puramente en el contexto del calendario: una lista de próximas conferencias de chips es planificación, no una reserva; no se ha informado de ningún proveedor de silicio de inferencia que asegure un despliegue nombrado en un hyperscaler en las noticias de hoy, y el foco de AMD nombrado es la serie de aceleradores MI400, no una pieza de inferencia de clase Corsair.",
+      "reference_links": [
+        {
+          "label": "Automate - Humanoid Robot Pavilion sponsored by NVIDIA (June 22-25, 2026)",
+          "url": "https://www.automateshow.com/education-networking/humanoid-robot-pavilion"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "El calendario apilado de eventos de aceleradores de hoy (Automate, Advancing AI de AMD en julio, Hot Chips en agosto, el AI Infra Summit en septiembre) es el escenario casi continuo donde surgiría la reserva de silicio de inferencia para un hyperscaler nombrado, aportando el trasfondo de cronograma que supone la tesis. Pero es solo planificación: no se anunció tal despliegue, y el foco nombrado de AMD es la serie de aceleradores MI400.",
+        "coherence": 2,
+        "remaining_gap": "No se ha informado de ningún proveedor de silicio de inferencia que reserve un despliegue nombrado en un hyperscaler; la señal de hoy es la sucesión de conferencias, no un contrato."
+      }
+    }
+  ]
+}

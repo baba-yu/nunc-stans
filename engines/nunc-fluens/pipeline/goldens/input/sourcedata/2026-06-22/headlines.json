@@ -1,0 +1,27 @@
+{
+  "date": "2026-06-22",
+  "technical": [
+    {
+      "lead": "Hyundai board votes today to buy out SoftBank, valuing Boston Dynamics ~3x",
+      "body": "Hyundai Motor is expected to convene a board meeting today, June 22, to approve buying SoftBank Group's remaining 9.65% stake in Boston Dynamics for about $325 million, making the Waltham, Massachusetts robotics firm a wholly owned Hyundai subsidiary. SoftBank is exiting via a put option from the 2021 deal that let it sell the shares back if Boston Dynamics had not completed a US IPO by June 2026; with no listing, SoftBank notified Hyundai it would exercise it. The new fact is valuation: $325 million for 9.65% implies a roughly $3.37 billion enterprise value, more than three times the ~$1.1 billion mark from Hyundai's 2021 transaction (about $880 million for 80%). Korea Economic Daily reports the consolidation is tied to a plan to deploy about 25,000 Atlas humanoids across Hyundai factories from 2028 and could clear the way for a future IPO. The terms, the 25,000-unit figure, and the vote itself are as reported by Korean business press and not yet confirmed by Hyundai or SoftBank.",
+      "citations": [
+        {"label": "KED Global - Hyundai to take full ownership of Boston Dynamics in SoftBank buyout", "url": "https://www.kedglobal.com/robotics/newsView/ked202606210001"},
+        {"label": "Global Banking & Finance Review - Hyundai to buy SoftBank's remaining stake in Boston Dynamics for $325 million", "url": "https://www.globalbankingandfinance.com/hyundai-buy-softbanks-remaining-stake-boston-dynamics-325/"},
+        {"label": "Crypto Briefing - Hyundai to acquire SoftBank's remaining stake in Boston Dynamics for $325M", "url": "https://cryptobriefing.com/hyundai-acquires-softbank-boston-dynamics-stake/"}
+      ]
+    },
+    {
+      "lead": "AI events to plan around: confidential computing and offensive security open tomorrow",
+      "body": "The forward calendar across three sub-tracks, with the soonest events a day out and nothing past its end date. AI-security: the Confidential Computing Summit lands June 23-24 at the SF Mint (Linux Foundation and OPAQUE, with AMD, Google, Microsoft, NVIDIA, Meta and Samsung on the keynotes); AI Tinkerers SF hosts an Offensive Security Demo Night June 25 with live autonomous-pentest-agent demos (sponsor XBOW); SecurityWeek's AI Risk Summit follows August 11-12; Black Hat USA's AI Summit runs August 1-6 alongside DEF CON's AI Village; and OWASP Global AppSec USA is November 5-6. Mainstream dev/data: Snowflake runs a virtual Dev Day June 25; the AI Engineer World's Fair takes over Moscone West June 29 through July 2 (orientation June 28), billed as the largest technical AI-engineering conference with 20-plus tracks, ~250 speakers, dedicated Inference and Security tracks, and OpenAI, Anthropic, Google DeepMind, Amazon AGI Labs and Microsoft on the floor, with the hackathon June 27-28; GitHub Universe is October 28-29 and AWS re:Invent November 30-December 4. AI-chip: AMD's Advancing AI is July 22-23 (MI400-series focus expected), Hot Chips August 23-25, AI Infra Summit September 15-17.",
+      "citations": [
+        {"label": "Linux Foundation - Confidential Computing Summit 2026 (June 23-24, San Francisco)", "url": "https://events.linuxfoundation.org/confidential-computing-summit/"},
+        {"label": "AI Engineer World's Fair 2026 (June 29-July 2, San Francisco)", "url": "https://www.ai.engineer/worldsfair/2026"},
+        {"label": "AMD - Advancing AI 2026 (July 22-23, San Francisco)", "url": "https://www.amd.com/en/corporate/events/advancing-ai.html"}
+      ]
+    }
+  ],
+  "plain": [
+    "Hyundai set to fully own robot maker Boston Dynamics",
+    "Confidential computing and security events start this week"
+  ]
+}

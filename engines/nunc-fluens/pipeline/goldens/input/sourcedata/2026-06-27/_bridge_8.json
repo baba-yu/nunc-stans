@@ -1,0 +1,6 @@
+{
+  "support_dimension": "because",
+  "narrative": "The AutoGPT SSRF bypass (CVE-2026-56663, fixed in 0.6.52) is the same SSRF-on-an-agent-gateway primitive this June 10 thesis tracks, remediated by constraining outbound egress. The Langflow cross-tenant IDOR fired in the wild (CVE-2026-55255, CVSS 9.9), chained on-instance with KEV-listed RCE CVE-2026-33017, reinforces the KEV-timeline thread: the proxy layer is generating actively-exploited maximum-severity CVEs.",
+  "coherence": 4,
+  "remaining_gap": "Fresh CVEs in this class, one chained with a KEV-listed RCE, but no named governance instrument designating AI inference proxies as a software class."
+}

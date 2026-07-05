@@ -1,0 +1,27 @@
+{
+  "date": "2026-06-22",
+  "technical": [
+    {
+      "lead": "Hyundai 取締役会、本日 SoftBank の株式買い取りを採決へ。Boston Dynamics の評価額は約3倍に",
+      "body": "Hyundai Motor は本日6月22日に取締役会を開き、SoftBank Group が持つ Boston Dynamics の残り9.65%の株式を約$325Mで買い取ることを承認する見通しだ。これにより、マサチューセッツ州 Waltham のロボティクス企業は Hyundai の完全子会社になる。SoftBank の退出は、2021年の取引で得たプットオプションによるもので、Boston Dynamics が2026年6月までに米国 IPO を完了しなければ株式を売り戻せる権利だ。上場がないため、SoftBank は権利を行使すると Hyundai に通知した。新たに浮かぶ事実は評価額だ。9.65%で$325Mということは、企業価値はおよそ$3.37Bとなり、Hyundai の2021年の取引時の約$1.1B（80%に対して約$880M）の3倍を超える。Korea Economic Daily は、この統合が2028年から Hyundai 各工場に Atlas ヒューマノイドを約25,000台導入する計画と結びついており、将来の IPO への道を開きうると報じている。取引条件、25,000台という数字、そして採決そのものは韓国の経済紙が報じたもので、Hyundai や SoftBank はまだ確認していない。",
+      "citations": [
+        {"label": "KED Global - Hyundai が SoftBank の株式買い取りで Boston Dynamics を完全所有へ", "url": "https://www.kedglobal.com/robotics/newsView/ked202606210001"},
+        {"label": "Global Banking & Finance Review - Hyundai が SoftBank の残る Boston Dynamics 株を$325Mで買い取りへ", "url": "https://www.globalbankingandfinance.com/hyundai-buy-softbanks-remaining-stake-boston-dynamics-325/"},
+        {"label": "Crypto Briefing - Hyundai が SoftBank の残る Boston Dynamics 株を$325Mで取得へ", "url": "https://cryptobriefing.com/hyundai-acquires-softbank-boston-dynamics-stake/"}
+      ]
+    },
+    {
+      "lead": "予定を組んでおくべき AI イベント。機密コンピューティングと攻撃的セキュリティが明日開幕",
+      "body": "3つのサブトラックにわたる先々のカレンダーで、最も近いイベントは1日後に迫り、終了日を過ぎたものはない。AI セキュリティ: Confidential Computing Summit が6月23-24日にサンフランシスコの Mint で開催される（Linux Foundation と OPAQUE、基調講演に AMD、Google、Microsoft、NVIDIA、Meta、Samsung）。AI Tinkerers SF は6月25日に Offensive Security Demo Night を開き、自律ペンテストエージェントのライブデモが並ぶ（スポンサーは XBOW）。SecurityWeek の AI Risk Summit が8月11-12日に続く。Black Hat USA の AI Summit は8月1-6日に DEF CON の AI Village と並んで走る。OWASP Global AppSec USA は11月5-6日だ。メインストリームの開発/データ: Snowflake は6月25日にバーチャルの Dev Day を開く。AI Engineer World's Fair は6月29日から7月2日まで Moscone West を占有し（オリエンテーションは6月28日）、最大級の技術系 AI エンジニアリング会議とされ、20を超えるトラック、約250人の登壇者、専用の Inference と Security のトラックを擁し、OpenAI、Anthropic、Google DeepMind、Amazon AGI Labs、Microsoft が出展、ハッカソンは6月27-28日だ。GitHub Universe は10月28-29日、AWS re:Invent は11月30日から12月4日。AI チップ: AMD の Advancing AI は7月22-23日（MI400 シリーズが焦点と見られる）、Hot Chips は8月23-25日、AI Infra Summit は9月15-17日。",
+      "citations": [
+        {"label": "Linux Foundation - Confidential Computing Summit 2026（6月23-24日、サンフランシスコ）", "url": "https://events.linuxfoundation.org/confidential-computing-summit/"},
+        {"label": "AI Engineer World's Fair 2026（6月29日-7月2日、サンフランシスコ）", "url": "https://www.ai.engineer/worldsfair/2026"},
+        {"label": "AMD - Advancing AI 2026（7月22-23日、サンフランシスコ）", "url": "https://www.amd.com/en/corporate/events/advancing-ai.html"}
+      ]
+    }
+  ],
+  "plain": [
+    "Hyundai がロボットメーカー Boston Dynamics を完全所有へ",
+    "機密コンピューティングとセキュリティのイベントが今週始まる"
+  ]
+}

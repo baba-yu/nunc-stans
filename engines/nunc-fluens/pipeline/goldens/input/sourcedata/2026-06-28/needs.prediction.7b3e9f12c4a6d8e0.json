@@ -1,0 +1,30 @@
+[
+  {
+    "actor": "rival accelerator vendor's corporate-development team",
+    "job": "Sourcing and negotiating an acquisition or controlling stake in a cross-vendor inference-compiler or runtime startup to answer Qualcomm's Modular buy.",
+    "outcome": "An announced deal acquiring or taking majority control of a comparable silicon-agnostic inference-compiler startup before Q1 2027.",
+    "motivation": "Owning a portable compute layer is now table stakes to sell enterprise inference against Nvidia's CUDA lock-in.",
+    "task": {
+      "who": "corporate development / M&A function",
+      "what": "Source, diligence and term-sheet a cross-vendor compiler startup",
+      "where": "deal pipeline and board approval process",
+      "when": "June 2026 through Q1 2027 runway",
+      "why": "to not cede the portability narrative to Qualcomm",
+      "how": "M&A advisory, technical due diligence, all-stock or cash bid"
+    }
+  },
+  {
+    "actor": "rival accelerator vendor's inference-software platform team",
+    "job": "Specifying the silicon-agnostic compiler capabilities the vendor must own so the corp-dev target closes a real CUDA-portability gap.",
+    "outcome": "A target-fit technical requirements set that justifies acquiring a comparable cross-vendor compiler over building in-house.",
+    "motivation": "A neutral portable compiler is the price of admission for enterprise inference sales against Nvidia.",
+    "task": {
+      "who": "inference compiler / runtime engineering team",
+      "what": "Define cross-vendor compiler capability gaps and build-vs-buy case",
+      "where": "internal software roadmap and architecture review",
+      "when": "June 2026 through Q4 2026 runway",
+      "why": "to justify acquiring rather than ceding portability",
+      "how": "internal compiler-stack benchmarking against MAX"
+    }
+  }
+]

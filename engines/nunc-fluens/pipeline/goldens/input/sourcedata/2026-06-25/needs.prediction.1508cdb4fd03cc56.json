@@ -1,0 +1,30 @@
+[
+  {
+    "actor": "IT-services or security-platform vendor managed-offering product lead",
+    "job": "Packaging an autonomous-pentest agent into a recurring managed SKU with pricing, scoping, and safe-harbor terms before the fall procurement window.",
+    "outcome": "A named, always-on managed autonomous-pentesting tier with its own SKU and pricing, marketed as a continuous offering not a one-off engagement.",
+    "motivation": "Capture recurring offensive-security revenue and differentiate the delivery stack as autonomous red-teaming moves from research curiosity to procurable service.",
+    "task": {
+      "who": "Vendor's managed-services product and offering-management team",
+      "what": "Define SKU, pricing, and scoping for managed pentest tier",
+      "where": "Service-catalog, procurement, and delivery-stack productization process",
+      "when": "Today through Q4 2026, ahead of the fall procurement window",
+      "why": "Sell autonomous pentesting as recurring managed revenue",
+      "how": "Partner-integrated autonomous platform wrapped in a managed-service SKU"
+    }
+  },
+  {
+    "actor": "autonomous-offensive-security startup platform and delivery-integration lead",
+    "job": "Hardening the autonomous pentest platform for continuous, multi-tenant client operation and wiring it into a partner vendor's delivery stack at production scale.",
+    "outcome": "A continuously-running offensive-testing platform integrated into an incumbent vendor's stack, ready to back a named always-on managed tier.",
+    "motivation": "Convert strategic investment and partnership into recurring enterprise distribution, proving always-on machine-scale red-teaming beyond conference demos.",
+    "task": {
+      "who": "Startup's platform-engineering and partner-integration team",
+      "what": "Harden agent for continuous multi-tenant client operation",
+      "where": "Partner vendor's delivery stack and client testing environments",
+      "when": "Today through Q4 2026, after the Series C extension close",
+      "why": "Enable always-on operation a vendor can productize",
+      "how": "Continuous offensive-testing pipeline integrated via partnership API"
+    }
+  }
+]

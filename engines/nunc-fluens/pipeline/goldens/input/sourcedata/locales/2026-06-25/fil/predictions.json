@@ -1,0 +1,47 @@
+{
+  "date": "2026-06-25",
+  "predictions": [
+    {
+      "id": "prediction.18ba4b3ebe2d6bba",
+      "scope_hint": "tech",
+      "title": "Magkakaroon ang inference-ASIC cohort ng pang-apat na pinangalanang buyer-designed na chip pagsapit ng H1 2027",
+      "body": "Pagsapit ng H1 2027, magkakaroon ng pang-apat na miyembro ang named-buyer custom-inference-silicon cohort: kahit isa pang frontier-model buyer (Anthropic, Meta, xAI, o Microsoft) ang publikong magsasabi ng commitment o maglalabas ng sarili nitong rack-scale inference accelerator na co-designed kasama ang isang merchant partner (Broadcom, Marvell, o isang foundry-fronted ASIC house). Sasama ito sa Jalapeno ng OpenAI, sa tabi ng Google-Broadcom TPU at Amazon Trainium lineage. Ang June 24 na paglulunsad ng Jalapeno ang structural trigger nito: kinukumpirma nito na para sa pinakamalaking frontier-model buyer, hindi na kayang panindigan ang merchant-GPU inference economics sa gigawatt scale, at ang co-designed na accelerator kasama ang partner networking fabric ang labasan. Kapag may peer-tier buyer nang nag-ship ng pinangalanang part na may vendor per-watt claims at end-2026 deployment target, haharap ang natitirang malalaking buyer sa parehong inference-cost-versus-model-roadmap na pressure at sa parehong napatunayang co-design template. Hinihigpitan nito ang build-versus-buy na desisyon para sa iba pang miyembro ng cohort. Ang falsifiable na core ay isang PINANGALANANG part o isang matibay na publikong commitment mula sa isang pinangalanang buyer, hindi isang malabong 'exploring custom silicon' na tsismis. Ang isang leak na walang pinangalanang programa o isang extension ng dating linya (hal. next-gen TPU o Trainium) ay hindi mabibilang bilang bagong cohort entrant. Bilang resulta, mapipilitan ang merchant-GPU inference share sa mga pinakamalaking buyer, ngunit ang load-bearing at masusuring claim ay ang pang-apat na pinangalanang buyer-designed inference accelerator.",
+      "reasoning": {
+        "because": "Inilabas ng OpenAI at Broadcom ang Jalapeno noong June 24 bilang unang custom inference accelerator ng OpenAI",
+        "given": "Hindi kayang absorbin ng gigawatt-scale na mga buyer ang merchant-GPU inference cost, at gumagana ang co-design ASIC path",
+        "so_that": "isa pang pinangalanang frontier buyer (Anthropic, Meta, xAI, Microsoft) ang magsasabi ng commitment o maglalabas ng sarili nitong rack-scale inference ASIC",
+        "landing": "pagsapit ng H1 2027; 1 pinangalanang buyer-designed inference chip bukod sa OpenAI/Google/Amazon",
+        "plain_language": "Kakaibunyag lang ng OpenAI ng sarili nitong AI chip para babaan ang gastos. Malapit nang mag-anunsyo ng sarili nitong custom chip ang isa pang malaking AI company."
+      },
+      "summary": "Matapos ilabas ng OpenAI at Broadcom ang Jalapeno inference accelerator noong June 24, asahan na may pang-apat na pinangalanang frontier buyer (Anthropic, Meta, xAI, o Microsoft) na magsasabi ng commitment o maglalabas ng sarili nitong rack-scale inference ASIC pagsapit ng H1 2027, kasama sa cohort ng OpenAI, Google-TPU, at Amazon-Trainium."
+    },
+    {
+      "id": "prediction.98d07cefb20b3032",
+      "scope_hint": "business",
+      "title": "Mag-i-ship ng token budgets at caps bilang default ang agentic coding platforms pagsapit ng Q2 2027",
+      "body": "Ang mga malalaking agentic-coding platform (ang Cursor / Claude Code / Codex CLI na klase ng autonomous developer-loop tools at ang enterprise tiers nila) ay mag-i-ship ng admin-side consumption-governance controls bilang default, on-by-default na feature sa halip na opt-in na add-on. Kabilang dito ang per-seat at per-team token budgets, hard at soft caps, real-time usage dashboards, at policy guardrails sa lalim ng autonomy at laki ng context window. Ang June 24 na note ng Gartner ay naglagay ng quotable na threshold sa cost curve: 23% ng tech leaders ay gumagastos na ng $200-$500 kada developer kada buwan sa tokens, at 6% ang nagbabayad ng higit sa $2,000. Itinuro nito na ang pinakamabilis na pagtaas ng gastos ay nagmumula sa ungoverned na autonomy, sobrang laking context window, at kawalan ng usage feedback. Ang diagnosis na iyon mismo ang product spec: kapag ang cost center ay per-seat token bills at ang failure mode ay kawalan ng structured feedback, itinutulak ng competitive at procurement na pressure ang mga vendor na gawing table stakes ang FinOps-for-agents na layer. Lalo nang hihingin ng mga enterprise na nag-e-evaluate ng scaled agent rollout ang isang governed engineering operating model — token discipline na ipinapatupad sa platform, hindi iniiwan sa indibidwal na developer. Mapag-iiwanan sa procurement ang mga vendor na walang native budget at cap controls habang nagiging norm ang consumption-based pricing para sa kategorya.",
+      "reasoning": {
+        "because": "Iniuugnay ng June 24 na note ng Gartner ang pinakamabilis na agentic-coding cost escalation sa ungoverned na autonomy",
+        "given": "Ginagawa ng consumption pricing na cost center ang per-seat token bills, kaya dapat nasa platform ang kontrol",
+        "so_that": "Gagawing default ng mga vendor ang token budgets, caps, dashboards, at autonomy guardrails para manalo sa enterprise procurement sa scale",
+        "landing": "pagsapit ng Q2 2027; >=2 malalaking agentic-coding platform ang mag-i-ship ng default budgets at caps",
+        "plain_language": "Magastos kada tao ang AI coding tools, kaya magdaragdag ang mga app ng built-in na spending limits at dashboards para hindi sumabog ang mga bayarin."
+      },
+      "summary": "Iniuugnay ng June 24 na note ng Gartner ang pinakamabilis na agentic-coding cost escalation sa ungoverned na autonomy. Asahan na gagawing default na feature ng malalaking agentic-coding platform ang token budgets, caps, dashboards, at autonomy guardrails pagsapit ng Q2 2027, habang hinihingi ng mga enterprise ang governed na paggastos bago i-scale ang agent rollout."
+    },
+    {
+      "id": "prediction.1508cdb4fd03cc56",
+      "scope_hint": "tech",
+      "title": "Mag-i-ship ang autonomous pentest agents bilang pinangalanang managed tier pagsapit ng Q4 2026",
+      "body": "Tumatawid ang autonomous offensive-security agents mula sa conference demos patungo sa pinangalanan at nabibiling enterprise services. Ang autonomous platform ng XBOW — na nagmamapa ng application environments, naghahanap ng vulnerabilities, at nagka-chain ng multi-step exploitation paths sa bilis ng makina — ay kakatanggap lang ng strategic na Accenture Ventures investment kasama ang isang partnership para magpatakbo ng continuous offensive testing para sa mga kliyente, bukod pa sa $35M Series C extension na ang mga backer ay kinabibilangan ng NVIDIA NVentures, Samsung Ventures, at SentinelOne S Ventures. Ang hugis na iyon ng financing-at-partnership ang procurement signal: ikinakabit ng mga incumbent IT-services at security-platform vendor ang autonomous pentesting sa kanilang delivery stack sa halip na ituring itong research curiosity. Pinatitibay ng forward AI-security event calendar ang timing — inilantad ng AI Tinkerers SF Offensive Security Demo Night ang mga agent na ito ngayong linggo, at ang AI Summit ng Black Hat USA (August 1-6) kasabay ng AI Village ng DEF CON ang magbibigay sa kategorya ng unang marquee enterprise-buyer stage bago ang fall procurement window. Ang prediction ay pagsapit ng Q4 2026, kahit isang malaking services o security-platform vendor ang magbebenta ng autonomous-pentesting agent bilang pinangalanan at tuloy-tuloy na managed tier — isang paulit-ulit na alok na may sariling SKU at presyo, hindi isang one-off na engagement. Inililipat nito ang offensive AI mula sa point-in-time human-led tests patungo sa always-on machine-scale red-teaming. Ang panganib ay maaaring panatilihin ng liability, scoping, at safe-harbor na alalahanin ang mga agent na ito sa likod ng human-supervised pilots sa halip na maging self-serve managed product, na magtutulak sa named-tier launch lampas sa window.",
+      "reasoning": {
+        "because": "Kumuha ang XBOW ng Accenture Ventures investment at continuous-testing partnership sa isang $35M raise",
+        "given": "Ikinakabit ng mga services at security incumbent ang autonomous pentesting sa delivery stacks, hindi lang R&D",
+        "so_that": "Magbebenta ang isang malaking services o security vendor ng autonomous-pentest agent bilang pinangalanan at always-on managed tier",
+        "landing": "Mag-i-ship ang unang pinangalanang managed autonomous-pentest tier pagsapit ng Q4 2026",
+        "plain_language": "Ang AI hacking tools na nakakahanap ng security holes nang mag-isa ay malapit nang ibenta bilang always-on na serbisyong puwedeng i-subscribe."
+      },
+      "summary": "Lumilipat ang autonomous offensive-security agents tulad ng XBOW mula sa demos patungo sa procurement, na hinuhudyatan ng investment ng Accenture, isang continuous-testing partnership, at isang $35M raise. Sa pag-stage ng AI Summit ng Black Hat sa kategorya sa Agosto, asahan na may vendor na mag-i-ship nito bilang pinangalanang managed tier pagsapit ng Q4 2026."
+    }
+  ]
+}

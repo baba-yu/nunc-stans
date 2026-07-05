@@ -1,0 +1,45 @@
+{
+  "prediction_id": "prediction.42df3be2edb72f8d",
+  "judgements": [
+    {
+      "prediction_id": "prediction.42df3be2edb72f8d",
+      "stream": "reasoning",
+      "entry_id": "prediction.42df3be2edb72f8d",
+      "verdict": "fresh",
+      "reason": "Trigger landed_this_week fired off the Jun 24 OpenAI/Broadcom Jalapeno custom-inference-ASIC unveil, not off this prediction landing - its own window is Q4 2026 (target_start 2026-10-01), unresolved. Jalapeno is exactly the bearish counter-mechanism the reasoning already names ('inference fragments toward custom silicon and Groq-style LPUs ... breaks the thesis'), so it confirms rather than invalidates the because/given/so_that frame. No analyst-target revision and no data-center revenue print this week, so the falsifiable condition (mean PT > $300 after two data-center prints) is untouched. Reasoning is intact and still forward-looking.",
+      "cross_stream_evidence": ["bridge:validation.767ad71c819b18cf"],
+      "proposed_action": "noop",
+      "confidence": 0.82
+    },
+    {
+      "prediction_id": "prediction.42df3be2edb72f8d",
+      "stream": "bridge",
+      "entry_id": "prediction.42df3be2edb72f8d",
+      "verdict": "fresh",
+      "reason": "The week's load-bearing event (Jalapeno, Jun 24-25) is already captured in bridge validation.767ad71c819b18cf (Jun 25, observed_relevance=2, support='none'), correctly weighed as the bearish counter-mechanism that erodes the data-center-GPU-demand share the bull case assumes, with no analyst-target or mean-target figure. The recent bridge set (Jun 07-25) is consistent with the reasoning and carries no support_direction='contradict' that would force a because reframe. No bridge gap.",
+      "cross_stream_evidence": ["bridge:validation.767ad71c819b18cf", "bridge:validation.56381e0e83db867c"],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.42df3be2edb72f8d",
+      "stream": "needs",
+      "entry_id": "prediction.42df3be2edb72f8d",
+      "verdict": "fresh",
+      "reason": "All three Needs (data-center ~$130B run-rate over two prints, accelerator GM defense vs inference fragmentation, hyperscaler capex backlog) still describe the open Q4-2026 preconditions. Nothing delivered or retired this week: no actor flipped to done and no Bridge documents a deliverable shipped against a task.what. Jalapeno raises pressure on the GM-defense Need (need.d9676121eaff6dfa) but that Need's outcome already explicitly covers 'inference fragmentation toward custom silicon and LPUs', so its framing holds. No coalition refresh required.",
+      "cross_stream_evidence": ["bridge:validation.767ad71c819b18cf"],
+      "proposed_action": "noop",
+      "confidence": 0.78
+    },
+    {
+      "prediction_id": "prediction.42df3be2edb72f8d",
+      "stream": "readings",
+      "entry_id": "prediction.42df3be2edb72f8d",
+      "verdict": "stale",
+      "reason": "No prediction_chain or prediction_relations edges exist for this prediction, yet the Jun 24-25 Jalapeno landing puts the largest frontier-model buyer into the custom-inference-ASIC cohort (alongside Google-Broadcom TPU and Amazon Trainium) - a custom-silicon-cohort landing that is the upstream of the bearish counter-mechanism this thesis depends against. Per the Needs->Readings guidance, this is a candidate new chain edge (custom-silicon cohort expands -> downstream pressure on the GPU-demand-driven $300 mean-target thesis). Surfacing the edge would make the cross-stream linkage explicit; this is enrichment, not a correctness fix.",
+      "cross_stream_evidence": ["bridge:validation.767ad71c819b18cf", "news:2026-06-25 Jalapeno"],
+      "proposed_action": "rewrite",
+      "confidence": 0.55
+    }
+  ]
+}

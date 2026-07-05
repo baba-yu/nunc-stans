@@ -1,0 +1,14 @@
+{
+  "id": "prediction.9a1c5f7b3e2d8046",
+  "scope_hint": "tech",
+  "title": "AMD Instinct MI400 launches with a named ship, memory, or rack spec by Q3 2026",
+  "body": "Today's events calendar confirms AMD's Advancing AI 2026 lands July 22-23 at Moscone in San Francisco, with the keynote and Instinct MI400-series focus scheduled for July 23. The forward call: at that event AMD formally launches and details the MI400 datacenter-accelerator series with at least one NAMED, checkable commitment, not a teaser. Qualifying commitments include a stated general-availability or volume-ship window, a named high-bandwidth-memory capacity or bandwidth figure for the part, a named rack-scale platform (a Helios-class rack system), AND/OR a named hyperscaler or frontier-lab deployment commitment. What does NOT count: a teaser slide with no spec and no date; a roadmap chart with no GA window; a re-announcement or restated benchmark for the prior-generation MI355X / MI350 line; or a rumor or leak that is not confirmed on stage at the event. This tracks the user's standing thesis that advanced training and large-scale inference stay on hyperscaler-class merchant accelerators, so the competitive leg that actually moves the cloud is the merchant-accelerator roadmap plus its memory and rack-platform specifications and named-customer commitments — exactly the datapoints a formal MI400 launch is built to put on the record against Nvidia's roadmap.",
+  "reasoning": {
+    "because": "AMD Advancing AI 2026 is confirmed July 22-23 at Moscone SF, the July 23 keynote on the MI400",
+    "given": "Training/inference stays on merchant hyperscaler accelerators, so MI400 specs are the cloud leg",
+    "so_that": "AMD puts MI400 on the record with a checkable commitment: a GA window, memory spec, Helios rack, or named hyperscaler",
+    "landing": "by Q3 2026; at the AMD Advancing AI July 22-23 keynote, not a spec-free teaser",
+    "plain_language": "At its July 22-23 event AMD will actually launch its MI400 AI chips with a real ship date, memory number, rack system, or named customer."
+  },
+  "summary": "AMD Advancing AI 2026 (July 22-23, Moscone SF; MI400 keynote July 23) is the catalyst. The call: AMD formally launches the Instinct MI400 with a checkable commitment, a GA window, a memory spec, a Helios-class rack, or a named hyperscaler. A spec-free teaser or MI355X re-announcement does not count."
+}

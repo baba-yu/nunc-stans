@@ -1,0 +1,176 @@
+{
+  "date": "2026-06-28",
+  "verifications": [
+    {
+      "topic": "LLM Workflow",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No bullet is an agent/workflow/pipeline orchestration platform release or state-change; the closest material (OWASP's note that n8n leads agentic-project security advisories) is security context, not a workflow-tool news event, so no bullet semantically anchors this topic."
+    },
+    {
+      "topic": "Multi-profiling for Local LLM (e.g. Multica)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "News-driven-only topic; no bullet references Multica or any sibling multi-profiling activity, so an uncovered/consistent verdict is the expected outcome."
+    },
+    {
+      "topic": "Agent Harness (OpenClaw, NemoClaw, Hermes Agents, etc.)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No bullet is a coding-agent / agentic-IDE / autonomous-dev-tool release; coding agents (Claude Code, AutoGPT, Roo-Code) appear only as named targets in the OWASP security-advisory tally, which is security news rather than a harness release."
+    },
+    {
+      "topic": "Platform for Local LLM (vLLM, SGLang, etc.)",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "Liquid AI pushes agentic LLMs onto phones and robots with a 230M edge model carrying launch-day vLLM and SGLang support"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "The Liquid AI LFM2.5-230M bullet centers on the model landing with launch-day vLLM and SGLang serving support, explicitly framing the data-center inference engines (vLLM, SGLang) as the default on-device target; that is a concrete serving-stack state-change touching the platform topic."
+    },
+    {
+      "topic": "Ecosystems for Local LLM Embedded System (Foundry Local, etc.)",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "Liquid AI pushes agentic LLMs onto phones and robots with a 230M edge model carrying launch-day vLLM and SGLang support"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "The LFM2.5-230M release is squarely an on-device / edge LLM runtime story (293-375 MB 4-bit footprint, llama.cpp/MLX/ONNX support, 213 tok/s on a Galaxy S25 Ultra and 42 tok/s on a Raspberry Pi 5), which is the core edge / embedded-inference scope of this topic."
+    },
+    {
+      "topic": "Local LLM Models",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "Liquid AI pushes agentic LLMs onto phones and robots with a 230M edge model carrying launch-day vLLM and SGLang support"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "LFM2.5-230M is a fresh open-weight model release (base and instruction-tuned checkpoints on Hugging Face under the lfm1.0 license, with a published model card and benchmarks), which is exactly the open-weight model-release-ness this topic captures."
+    },
+    {
+      "topic": "Local LLM Optimization, Fine-tuning (Unsloth — every run)",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "Unsloth's latest beta folds the new open-weight wave into fine-tuning, adding GLM-5.2, Gemma 4 multi-token prediction and DiffusionGemma"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "The mandatory Unsloth topic is covered by a dedicated bullet on the v0.1.471-beta release (June 18), which adds GLM-5.2 / Gemma 4 / DiffusionGemma fine-tuning support, an improved auto-fit memory algorithm, Blackwell RTX 50X/60X support and vLLM 0.22+ compatibility; this is a concrete fresh fine-tuning-toolkit artifact, so the constant-coverage requirement is satisfied."
+    },
+    {
+      "topic": "Ecosystems for LLM on PaaS (AWS Bedrock, Azure AI Foundry, etc.)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No managed-inference / hosted-LLM-API announcement anchors any bullet; today's news is edge-model, M&A, fine-tuning, security and events, none of which is a PaaS / hosted-inference state-change."
+    },
+    {
+      "topic": "AI Security",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "OWASP reframes prompt injection as a structural, unpatchable property of agentic AI and names coding agents the epicenter"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "The OWASP State of Agentic AI Security and Governance v2.01 bullet is squarely AI-security news (prompt injection as a structural design constraint mapping to six of the Top 10 for Agentic Applications, the lethal-trifecta and Agents-Rule-of-Two mitigation budgets, and a security-advisory tally across agentic projects)."
+    },
+    {
+      "topic": "AI Security",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "Zero-trust access-control sub-topic: the OWASP report is a governance/architecture framing of prompt injection rather than a fresh zero-trust agent access-control product, policy or CVE, so no bullet anchors this specific sub-track today."
+    },
+    {
+      "topic": "AI Security",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "OWASP reframes prompt injection as a structural, unpatchable property of agentic AI and names coding agents the epicenter"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "Monitor-and-manage-AI-agent-behavior sub-topic: the OWASP v2.01 report is centrally about governing and constraining agent behavior (Agents Rule of Two, human-approval gating, and quantifying which agentic projects draw the most security advisories), which fits the behavior-management sub-track."
+    },
+    {
+      "topic": "CVE update on score ≥ 8.0",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No bullet centers on a specific CVE at or above the 8.0 threshold; the OWASP bullet is explicitly a reframing of prompt injection away from the per-CVE model toward a structural design constraint, so no scored CVE anchors a bullet today."
+    },
+    {
+      "topic": "Hardware",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "Qualcomm buys a cross-vendor inference compiler and stalks a RISC-V chip startup, assembling a full-stack alternative to Nvidia"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "The Qualcomm bullet is an AI-accelerator / silicon story: the Modular acquisition plus reported Tenstorrent (RISC-V AI accelerator) talks and custom-silicon shipments to a hyperscaler assemble a full-stack accelerator-plus-compiler challenge to Nvidia, which is squarely the chip/data-center-hardware scope."
+    },
+    {
+      "topic": "Physical AI",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No robotics / embodied-AI artifact anchors a bullet; the LFM2.5-230M bullet mentions robots only as a deployment target for an edge model, not as a robotics state-change (VLA model, deployment, hardware), so this topic is not semantically covered."
+    },
+    {
+      "topic": "LLM-related research and papers",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No standout arxiv / research paper rises to a bullet; the OWASP report is an industry security-governance publication rather than a research paper, and the model/fine-tuning bullets are release news, so no research artifact anchors a bullet today."
+    },
+    {
+      "topic": "Stock prices and corporate activity (frontier labs, hyperscalers, chip vendors)",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "Qualcomm buys a cross-vendor inference compiler and stalks a RISC-V chip startup, assembling a full-stack alternative to Nvidia"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "The Qualcomm-Modular bullet is concrete corporate-activity / M&A news (a roughly $3.92B all-stock acquisition of up to 19.2M Qualcomm shares expected to close H2 2026, plus reported $8-10B Tenstorrent talks and ~$14B aggregate commitment), squarely the M&A scope of this topic."
+    },
+    {
+      "topic": "Business plan",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "Qualcomm buys a cross-vendor inference compiler and stalks a RISC-V chip startup, assembling a full-stack alternative to Nvidia"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "The Qualcomm bullet articulates an explicit business strategy — a silicon-agnostic compute layer spanning compiler, accelerator and hyperscaler supply assembled to challenge Nvidia's CUDA lock-in for enterprise inference — which is the business-plan/strategy progression dimension applied to the chip-vendor topic."
+    },
+    {
+      "topic": "Application fields",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "Liquid AI pushes agentic LLMs onto phones and robots with a 230M edge model carrying launch-day vLLM and SGLang support"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "The LFM2.5-230M bullet names concrete application fields for the edge model — agentic data extraction and tool use running on phones, robots and automation devices — which is the application-fields progression dimension for the local-LLM-models topic."
+    },
+    {
+      "topic": "Applied research",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "Liquid AI pushes agentic LLMs onto phones and robots with a 230M edge model carrying launch-day vLLM and SGLang support"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "The LFM2.5-230M bullet surfaces applied-research detail — pre-training on 19 trillion tokens then post-training via distillation from the larger LFM2.5-350M plus DPO and multi-domain RL, with reported IFEval gains over Qwen3.5-0.8B and Gemma 3 1B — which is the applied-research progression dimension for the model topic."
+    },
+    {
+      "topic": "Bay Area / SV AI meet-up events",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "AI events to plan around now: World's Fair main program opens this week, with summer and fall chip and security dates locked in"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "The events bullet is a forward-looking, user-attendable calendar covering all three mandated sub-tracks (mainstream dev: AI Engineer World's Fair June 29-July 2, GitHub Universe, re:Invent; AI-security: SecurityWeek AI Risk Summit, Black Hat AI Summit, DEF CON AI Village, OWASP Global AppSec, Zenity series; AI-chip: AMD Advancing AI, Hot Chips, AI Infra Summit); under the carry-forward exception this is covered/consistent even without a fresh state-change, and the now-passed weekend hackathon is correctly demoted to passed-context rather than the bullet's center."
+    },
+    {
+      "topic": "Other standing-out topics",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No standout topic outside the enumerated categories appears in any bullet; all five bullets map to the enumerated topics above, so there is no residual other-standing-out item today."
+    }
+  ]
+}

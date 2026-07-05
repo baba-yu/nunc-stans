@@ -1,0 +1,6 @@
+{
+  "support_dimension": "given",
+  "narrative": "Gartner's June 24 note is the structural force behind Agentic coding platforms ship token budgets and caps as default by Q2 2027 (2026-06-25): with 23 percent of leaders spending $200-$500 per developer monthly and steepest escalation pinned on ungoverned autonomy and bloated context, the per-seat cost squeeze pushes vendors to make consumption-governance table stakes.",
+  "coherence": 4,
+  "remaining_gap": "This is an analyst projection; no major platform has yet shipped admin-side budgets, caps, and autonomy guardrails as on-by-default features."
+}

@@ -1,0 +1,214 @@
+{
+  "date": "2026-06-24",
+  "validation_rows": [
+    {
+      "prediction_ref": {
+        "id": "prediction.a2d6a1d80d9edd87",
+        "short_label": "Orchestration benchmarks add a latency-disclosure column by Q1 2027",
+        "prediction_date": "2026-06-24"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "本日のトップニュースが、この見立ての出発点となる直接の兆候だ。Sakana AI の Fugu は6月22日に単一の OpenAI 互換エンドポイントとして公開された。これ自体が一つの言語モデルであり、入れ替え可能なフロンティア LLM 群に対してタスクの振り分け・委譲・検証・統合を行い、自分自身を再帰的に呼び出すよう訓練されている。基盤となるのは ICLR 2026 の TRINITY と Conductor の論文で、最上位の Fugu Ultra ティアは、Sakana 自前のコーディング・科学・推論の各表で Anthropic Fable 5 と Mythos に並ぶと打ち出された。新たな動きは、48時間以内に現れた最初の独立した反証だ。ウォートン校の Ethan Mollick が標準的なシェーダーとインタラクティブ・シーンのコーディングテストで Fugu Ultra を走らせたところ、「とてつもなく遅い」と報告した。実行は数分ではなく30分近くかかり、出力は「悪くはない」ものの実際には Fable に及ばなかった。つまり公表された並列スコアは再現されないままだ。これこそ、この予測が名指しする構造的な隔たりそのものである。モデルとしてのルーターは、精度のみを競うリーダーボードには決して表れない実時間と引き換えに品質を買っており、報道自体がベンチマーク表の隠す軸として遅延を取り上げている。反証可能な基準までの隔たりはこうだ。これは標準テストにおける一人の評価者の事例に過ぎず、マルチモデル・オーケストレーションについてタスクあたりの遅延・コスト欄を形式化した広く引用されるベンチマークや評価者はまだ存在せず、オーケストレーション・ベンダーが実時間 SLA を公表してもいない。",
+      "reference_links": [
+        {
+          "label": "MarkTechPost - Sakana AI launches Sakana Fugu, an orchestration model that routes tasks across a swappable pool of frontier LLMs",
+          "url": "https://www.marktechpost.com/2026/06/22/sakana-ai-launches-sakana-fugu-an-orchestration-model-that-routes-tasks-across-a-swappable-pool-of-frontier-llms/"
+        },
+        {
+          "label": "Tech Times - AI orchestrator Sakana Fugu claims Fable 5 parity; real-world tests reveal 30-minute waits",
+          "url": "https://www.techtimes.com/articles/318968/20260624/ai-orchestrator-sakana-fugu-claims-fable-5-parity-real-world-tests-reveal-30-minute-waits.htm"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Sakana Fugu は Fable 5 並みをうたうルーター型モデルとして出荷された。だが48時間以内に Mollick が標準的なコーディングテストで走らせ、出力はかろうじて並ぶ程度なのに約30分の待ち時間を計測し、スコアは再現されないままに終わった。これが名指しされた仕組みである。オーケストレーションは、精度のみのリーダーボードには決して表れない実時間と引き換えに品質を買っており、報道自体が遅延を隠れた軸として取り上げている。",
+        "coherence": 4,
+        "remaining_gap": "依然として標準テストにおける一人の評価者の事例に過ぎず、遅延やタスクあたりコストの欄を形式化した引用ベンチマークでもなければ、ベンダーが実時間 SLA を公表したわけでもない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.b0ee98f79df6fe54",
+        "short_label": "OpenAI locks equity-coupled HBM allocation with a memory maker by Q4 2026",
+        "prediction_date": "2026-06-24"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "本日のビジネス・トップニュースが、この見立てを引き起こした出来事だ。Micron と Anthropic は6月22日に戦略的提携を発表した。内容は、メモリとストレージの共同設計、HBM・DRAM・SSD にまたがる複数年の供給枠、社内での Claude 導入、そして Anthropic のシリーズ H への Micron による戦略的な出資を束ねたものだ。約9,650億ドルのポストマネー評価での650億ドルのラウンドは5月28日に完了したが、新たな事実は Micron の参入である。これにより Anthropic は、世界の HBM 三大供給元（Micron、Samsung、SK Hynix）すべてと資本面で結びついた唯一のフロンティア研究所となる。他のどの研究所も持たない結びつきだ。この予測はこれを、ライバル、最も可能性が高いのは OpenAI が、三社のうち少なくとも一社と自前の出資＋複数年供給枠の取り決めを確保し、Q4 2026 に見込まれるメモリベンダーの上場を前にして、サプライチェーンを単なる購買から争奪される所有権益へと転換する引き金と読む。注視すべき兆候は、Anthropic 以外の研究所と HBM メーカーとのあいだで開示される戦略的出資＋供給枠の取り決めだ。隔たりはこうだ。今回のニュースは競争圧力とその雛形を確立したが、Anthropic 以外のどのライバル研究所も出資と結びついた HBM 供給枠を確保したとはまだ報じられておらず、Micron の出資額も非開示だ。",
+      "reference_links": [
+        {
+          "label": "Digital Applied - Micron and Anthropic strike a strategic AI infrastructure deal",
+          "url": "https://www.digitalapplied.com/blog/micron-anthropic-strategic-infrastructure-agreement-2026"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "6月22日の Micron による Anthropic との出資＋複数年供給枠の取り決めにより、一つの研究所が HBM 三大供給元すべてと結びつく状態が生まれた。この非対称性こそ、この見立てが名指しする競争上の力そのものである。これはライバルに対し、実証済みの雛形と、Q4 2026 に見込まれるベンダー上場を前にメモリ購買を争奪される所有権益へ転換する鋭い動機を与える。",
+        "coherence": 4,
+        "remaining_gap": "Anthropic 以外の研究所が出資と結びついた HBM 供給枠を確保したとはまだ報じられておらず、Micron の出資額も非開示のままだ。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.568eecc474844ffb",
+        "short_label": "General-purpose mobile cobots cross 100K production-operation hours by H1 2027",
+        "prediction_date": "2026-06-24"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "本日のフィジカル AI のトップニュースが、この見立ての源となる兆候だ。Collaborative Robotics は6月22日の Automate 2026 で第二世代の Proxie を発表した。これは汎用の移動型協働ロボットで、作業を自ら見極めてこなし、ソフトウェアの統合作業も人間の指示役も不要だ。ScoutSense センサー群により、中核となる実行ではクラウドに依存せずタスク推論を完全にロボット側へ移し、最大1,500ポンドのカートを動かし、最大200ポンドを持ち上げ、月額5,000ドルで提供される。Cobot は第一世代の本番稼働実績を発表の拠り所とした。実運用で記録した12,627時間、累計4,000万ポンド超の運搬、病院・製造・物流にわたり16時間シフトで節約した1,700万歩超の人間の歩行である。これこそ、この予測が名指しする転換そのものだ。フィジカル AI のベンダーが、展示会場の映像ではなく、監査済みの稼働時間と運搬した資材のドル額で競い合い、月額サブスク料金が稼働時間を引き受けの単位へと変える。基準までの隔たりはこうだ。第一世代の12,627時間は単一プラットフォームの数字で、予測が求める顧客横断の累計六桁台の保有実績よりおよそ一桁低く、10万時間超の保有台数規模を展開指標として打ち出したベンダーはまだいない。",
+      "reference_links": [
+        {
+          "label": "Robotics Tomorrow - Cobot announces second-generation Proxie, bringing production-tested physical AI to real operations",
+          "url": "https://www.roboticstomorrow.com/news/2026/06/22/cobot-announces-second-generation-proxie-bringing-production-tested-physical-ai-to-real-operations/26756/"
+        },
+        {
+          "label": "Packaging World - Physical AI dominates Automate 2026's opening day while humanoids steal the show floor",
+          "url": "https://www.packworld.com/leaders-new/machinery/robotics/article/22969383/physical-ai-dominates-automate-2026s-opening-day-while-humanoids-steal-the-show-floor"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Cobot の第二世代 Proxie の発表は、この仕組みを裏付ける。発表は定量的な本番実績を拠り所とした。12,627時間の稼働、4,000万ポンドの運搬、1,700万歩の節約であり、価格は月額5,000ドルだ。サブスク課金により、監査済みの稼働時間がベンダーの競争と引き受けの単位となる。これこそ、この見立てが名指しする、展示会場の映像からの転換そのものである。",
+        "coherence": 4,
+        "remaining_gap": "単一プラットフォームの12,627時間という数字は、顧客横断の六桁台という基準より一桁低い。10万時間超を指標として打ち出すベンダーはまだいない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.1ce328e19c9e6685",
+        "short_label": "Captive in-house fleets will lead paid humanoid deployment by H1 2028",
+        "prediction_date": "2026-06-22"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "本日の Cobot 第二世代の発表と Automate 2026 の会場は、自社保有の機体群が有償展開を先導するという見立てに関わる。Collaborative Robotics の第二世代 Proxie はロボット側で推論を実行し、第一世代の定量的な稼働実績（病院・製造・物流にわたる12,627時間、4,000万ポンドの運搬、1,700万歩の人間の歩行節約）を伴って月額5,000ドルのサブスクで提供される。実証点が試験運用ではなく実際の稼働現場から得られた、製品化された展開だ。発表は Automate 2026（6月22～25日、McCormick Place）の内側に位置し、その主たるテーマはフィジカル AI で、NVIDIA が初めてスポンサーを務める Humanoid Robot Pavilion は20を超えるヒューマノイド・プラットフォームを集め、業界がヒューマノイド研究から商用展開へ移る転換として打ち出された。これが、自社サイトを有償かつ監査済みの展開へ転換する保有事業者が、商用ヒューマノイド販売の先を行く需給の背景である。隔たりはこうだ。移動型協働ロボットのサブスクとヒューマノイドの展示会場は隣接領域であって反証可能な基準ではない。自社保有のヒューマノイド機体群が有償のヒューマノイド展開を先導した例は示されておらず、Proxie は車輪式の協働ロボットであってヒューマノイドではない。",
+      "reference_links": [
+        {
+          "label": "Packaging World - Physical AI dominates Automate 2026's opening day while humanoids steal the show floor",
+          "url": "https://www.packworld.com/leaders-new/machinery/robotics/article/22969383/physical-ai-dominates-automate-2026s-opening-day-while-humanoids-steal-the-show-floor"
+        },
+        {
+          "label": "Automate - Humanoid Robot Pavilion sponsored by NVIDIA (June 22-25, 2026)",
+          "url": "https://www.automateshow.com/education-networking/humanoid-robot-pavilion"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "Cobot の第二世代 Proxie はサブスク料金で提供され、その実証点は試験運用ではなく実際の顧客サイトでの監査済み稼働時間だ。主たるテーマがヒューマノイドの研究から商用展開への移行である Automate の会場の内側で発表された。これが、自社の運用を有償展開へ転換する保有機体群が、商用ヒューマノイド販売の先を行く、事業者主導かつ実サイトに基づく背景である。",
+        "coherence": 3,
+        "remaining_gap": "Proxie は車輪式の協働ロボットで、パビリオンは展示会場での存在感に過ぎない。自社保有のヒューマノイド機体群が有償のヒューマノイド展開を先導した例は示されていない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.ef0bb943bcd4a5d3",
+        "short_label": "Rival humanoid maker lands $500M-plus chip-and-cloud strategic round by Q4 2026",
+        "prediction_date": "2026-06-18"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "本日の Automate 2026 の報道は、ヒューマノイド資本の見立てを、資金調達という出来事ではなく勢いの面で支える。同展で初めて NVIDIA がスポンサーを務める Humanoid Robot Pavilion は20を超えるヒューマノイド・プラットフォームを集め、会場の語り口は業界がヒューマノイド研究から商用展開へ移る転換であり、NVIDIA は看板となるヒューマノイドの場を明確にスポンサーしている。これは予測が戦略ラウンドの軸になると見込むチップ・クラウドの後ろ盾である。同じ計算資源と資本のパートナーを奪い合うヒューマノイド参入企業の密集した一団は、ライバルメーカーを5億ドル超のチップ・クラウド戦略ラウンドへ引き寄せる構造的圧力だ。隔たりは大きい。スポンサー付きのパビリオンはカンファレンスでの可視性とベンダー・エコシステムのシグナルであって、開示された戦略的資金調達ではない。5億ドル超のチップ・クラウドラウンドを締結したヒューマノイドメーカーは報じられておらず、NVIDIA のスポンサーは出資の確約ではなくイベントのマーケティングだ。",
+      "reference_links": [
+        {
+          "label": "Automate - Humanoid Robot Pavilion sponsored by NVIDIA (June 22-25, 2026)",
+          "url": "https://www.automateshow.com/education-networking/humanoid-robot-pavilion"
+        },
+        {
+          "label": "Packaging World - Physical AI dominates Automate 2026's opening day while humanoids steal the show floor",
+          "url": "https://www.packworld.com/leaders-new/machinery/robotics/article/22969383/physical-ai-dominates-automate-2026s-opening-day-while-humanoids-steal-the-show-floor"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Automate 2026 で初めて NVIDIA がスポンサーを務める Humanoid Pavilion は、20を超えるプラットフォームを一つの場に詰め込み、チップ・クラウドの後ろ盾が看板の会場に名乗りを上げている。これほど密集した一団が同じ計算パートナーを奪い合う状況は、まさにライバルメーカーを大型の戦略ラウンドへ引き寄せる構造的圧力だ。もっとも、スポンサーは可視性であって資本ではない。",
+        "coherence": 2,
+        "remaining_gap": "5億ドル超のチップ・クラウドラウンドを締結したヒューマノイドメーカーは報じられていない。パビリオンのスポンサーはイベントのマーケティングであって、開示された出資の確約ではない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.20260607-1",
+        "short_label": "Automaker-built humanoid programs add a second high-volume entrant by Q2 2027",
+        "prediction_date": "2026-06-07"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "[REVIVED] 本日の Automate 2026 のフィジカル AI 会場報道に対する Layer 2 の意味的一致（シグナル：ヒューマノイドロボットの一団、Q2 2027 までの追加の大量生産自動車メーカー、動作するプロトタイプ、統合された一群）。初めて NVIDIA がスポンサーを務める Humanoid Robot Pavilion は20を超えるヒューマノイド・プラットフォームを集め、主たるテーマは業界がヒューマノイド研究から商用展開へ移る転換であり、これは二社目の大量生産型の自動車メーカー製ヒューマノイド計画が現れうる、密集した垂直統合の参入企業の一団そのものだ。関連性はエコシステムの広がりにあって反証可能な基準にはない。パビリオンの20超のプラットフォームは本日の報道ではメーカー別に特定されておらず、動作するプロトタイプと量産コスト低減目標を伴うヒューマノイド計画を開示した二社目の自動車メーカーは名指しされていない。展示会のパビリオンは記録に残る計画の確約ではなく展示会場での存在感に過ぎない。",
+      "reference_links": [
+        {
+          "label": "Packaging World - Physical AI dominates Automate 2026's opening day while humanoids steal the show floor",
+          "url": "https://www.packworld.com/leaders-new/machinery/robotics/article/22969383/physical-ai-dominates-automate-2026s-opening-day-while-humanoids-steal-the-show-floor"
+        },
+        {
+          "label": "Automate - Humanoid Robot Pavilion sponsored by NVIDIA (June 22-25, 2026)",
+          "url": "https://www.automateshow.com/education-networking/humanoid-robot-pavilion"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Automate 2026 で初めて NVIDIA がスポンサーを務める Humanoid Robot Pavilion は、ヒューマノイド研究から商用展開へ移るという旗印のもと、20を超えるプラットフォームを集める。この密集した垂直統合の参入企業の一団は、二社目の大量生産型自動車メーカーを自前のヒューマノイド計画へ引き寄せる構造的圧力だ。広がりは本物だが、特定の二社目のメーカーはまだ見えていない。",
+        "coherence": 2,
+        "remaining_gap": "パビリオンのプラットフォームはメーカー別に名指しされておらず、動作するプロトタイプと量産コスト低減目標を伴うヒューマノイド計画を開示した二社目の自動車メーカーはいない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.a943725fb4046b01",
+        "short_label": "An autonomous-pentest vendor lands a named enterprise/gov deal by Q1 2027",
+        "prediction_date": "2026-06-22"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "本日のイベント・カレンダーは、自律型ペンテスト・ベンダーの見立てを、契約ではなく可視性の面で支える。AI Tinkerers San Francisco は6月25日に Offensive Security Demo Night を開催し、スポンサー XBOW が後ろ盾となる自律型ペンテスト・エージェントのライブデモが行われる。Black Hat USA の AI Summit（8月1～6日）と8月の DEF CON の AI Village に先立つもので、名の通った自律型ペンテスト・ベンダーである XBOW が、企業・政府との取引に先立つ商用としての存在感を築く中で、自社エージェントを公の舞台に乗せる。今後のセキュリティ・カレンダー（SecurityWeek AI Risk Summit、OWASP Global AppSec USA、注視リスト上の Zenity のシリーズ）は、買い手側の関心をエージェント型の攻撃用ツールに向け続ける。基準までの隔たりはこうだ。スポンサー付きのデモナイトはカンファレンス舞台のマーケティングであって、開示された名指しの企業・政府契約ではない。自律型ペンテスト・ベンダーがそうした取引を獲得したと本日のニュースで報じられた例はない。",
+      "reference_links": [
+        {
+          "label": "AI Engineer World's Fair 2026 schedule (June 29-July 2, Moscone West)",
+          "url": "https://www.ai.engineer/worldsfair/schedule"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "名の通った自律型ペンテスト・ベンダーである XBOW は、Black Hat の AI Summit と DEF CON の AI Village に先立つ6月25日の Offensive Security Demo Night で、自社エージェントを公の舞台に乗せる。こうした目に見える商用の存在感づくりは、この見立てが見込む企業・政府契約に通常先立つ、買い手に向けた下地である。",
+        "coherence": 3,
+        "remaining_gap": "スポンサー付きのデモナイトはカンファレンス舞台のマーケティングであって、開示された名指しの企業・政府契約ではない。そうした取引が報じられた例はない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.a4ee0b5435860b21",
+        "short_label": "AWS Continuum's sandbox exploit-validation goes industry baseline by H1 2027",
+        "prediction_date": "2026-06-21"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "本日のイベント・カレンダーは、実行して発見を証明するという見立てに触れる。AI Tinkerers San Francisco は6月25日に Offensive Security Demo Night を開催し、スポンサー XBOW が後ろ盾となる自律型ペンテスト・エージェントのライブデモが行われる。8月の Black Hat USA の AI Summit と DEF CON の AI Village に先立つもので、偵察を連鎖させ、動作するエクスプロイトを構築し、それを実行して到達可能性を実証するエージェントだ。これは Continuum のサンドボックスでのエクスプロイト検証の手法を、攻撃用ベンダーの領域へ一般化したものである。今後のセキュリティ・カレンダーは、エクスプロイト実証ツールを買い手とカンファレンス聴衆の前に置き続ける。関連性は勢いと隣接性にあって、見立ての実現そのものにはない。デモナイトはカンファレンス舞台での攻撃側の検証であって、防御側のエクスプロイト検証パイプラインが名の通ったコードセキュリティ・ベンダー全体で業界標準になることではない。デモナイトの枠組みは、この予測が名指しする防御側のエクスプロイト実証ゲートではなく、攻撃者の攻撃用ツールを指している。",
+      "reference_links": [
+        {
+          "label": "AI Engineer World's Fair 2026 schedule (June 29-July 2, Moscone West)",
+          "url": "https://www.ai.engineer/worldsfair/schedule"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "6月25日の XBOW が後ろ盾となる Offensive Security Demo Night では、偵察を連鎖させ、動作するエクスプロイトを構築し、それを実行して到達可能性を証明するエージェントが、ベンダー横断で再現するに足る、機械が組み立てたエクスプロイト実証の基盤を、まさに供給する。これにより構築による検証が信頼に値するものとなり、8月の Black Hat と DEF CON のカレンダーがそのツールを買い手の前に置き続ける。",
+        "coherence": 3,
+        "remaining_gap": "デモナイトのツールは攻撃者側かつカンファレンス舞台のものだ。防御側のコードセキュリティ・ベンダーが、サンドボックスでのエクスプロイト実証ゲートを標準として出荷した例はない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.98885276749e707b",
+        "short_label": "Corsair-class inference silicon books a named hyperscaler deployment by Q3 2027",
+        "prediction_date": "2026-06-17"
+      },
+      "today_relevance": 2,
+      "evidence_summary": "本日の AI チップ・カレンダーは、推論シリコン展開の見立てに、そうした受注が現れる会場の連なりを供給することで、弱く関わる。ハードウェアの流れは Automate 2026（6月22～25日、McCormick Place）から AMD の Advancing AI 2026（7月22～23日、Moscone、Instinct MI400 シリーズ重視が見込まれ、基調講演は7月23日）、Hot Chips 2026（8月23～25日、Stanford）、AI Infra Summit（9月15～17日、Santa Clara）までほぼ途切れなく続く。これが、Corsair 級の推論シリコン・ベンダーが名指しのハイパースケーラー展開の発表を仕掛けるであろう、積み重なったアクセラレータ会場のカレンダーだ。関連性は純粋にカレンダー上の文脈にある。今後のチップ・カンファレンスの一覧は予定であって受注ではない。名指しのハイパースケーラー展開を確保した推論シリコン・ベンダーは本日のニュースで報じられておらず、名指しされた AMD の重点は MI400 シリーズのアクセラレータであって Corsair 級の推論部品ではない。",
+      "reference_links": [
+        {
+          "label": "Automate - Humanoid Robot Pavilion sponsored by NVIDIA (June 22-25, 2026)",
+          "url": "https://www.automateshow.com/education-networking/humanoid-robot-pavilion"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "本日の積み重なったアクセラレータ会場のカレンダー、すなわち Automate、7月の AMD の Advancing AI、8月の Hot Chips、9月の AI Infra Summit は、名指しのハイパースケーラー向け推論シリコン受注が現れるであろうほぼ途切れない舞台であり、この見立てが前提とするタイミングの背景を供給する。だがそれは予定に過ぎない。そうした展開は発表されておらず、AMD の名指しされた重点は MI400 シリーズのアクセラレータだ。",
+        "coherence": 2,
+        "remaining_gap": "名指しのハイパースケーラー展開を受注した推論シリコン・ベンダーは報じられていない。本日の兆候は契約ではなくカンファレンスの連なりだ。"
+      }
+    }
+  ]
+}

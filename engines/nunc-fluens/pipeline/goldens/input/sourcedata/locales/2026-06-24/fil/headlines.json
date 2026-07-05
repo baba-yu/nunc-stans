@@ -1,0 +1,49 @@
+{
+  "date": "2026-06-24",
+  "technical": [
+    {
+      "lead": "Tumama ang pag-aangking Fable-parity ng Sakana Fugu Ultra sa isang 30-minutong latency wall",
+      "body": "Ang Fugu ng Sakana AI, inilunsad noong June 22 bilang isang OpenAI-compatible na endpoint, ay isa mismong language model na sinanay para mag-route, mag-delegate, mag-verify, at mag-synthesize sa isang swappable na pool ng frontier LLM, kasama ang mga recursive na tawag sa sarili nitong mga instance; nakabatay ang disenyo sa dalawang papel sa ICLR 2026, ang TRINITY at Conductor, at ibinida ang Fugu Ultra tier bilang katumbas ng Fable 5 at Mythos ng Anthropic sa sariling mga coding, scientific, at reasoning na talahanayan ng Sakana. Ang bagong kaganapan ang siyang unang independiyenteng pagtutol sa loob ng 48 oras: pinatakbo ni Ethan Mollick ng Wharton ang Fugu Ultra sa kanyang standard shader at interactive-scene na mga coding test at iniulat na ito ay \"incredibly slow,\" na may mga takbong umaabot ng mga 30 minuto sa halip na ilang minuto, at output na \"fine\" ngunit hindi katumbas ng Fable sa praktika. Kaya nananatiling hindi naulit ang mga inilathalang parity score. Ang senyales ay maaaring lumapit sa frontier quality sa papel ang learned na multi-model orchestration habang nagbabayad ng matinding latency tax na hindi kailanman inilalabas ng mga benchmark na talahanayan.",
+      "citations": [
+        {"label": "MarkTechPost - Sakana AI launches Sakana Fugu, an orchestration model that routes tasks across a swappable pool of frontier LLMs", "url": "https://www.marktechpost.com/2026/06/22/sakana-ai-launches-sakana-fugu-an-orchestration-model-that-routes-tasks-across-a-swappable-pool-of-frontier-llms/"},
+        {"label": "Tech Times - AI orchestrator Sakana Fugu claims Fable 5 parity; real-world tests reveal 30-minute waits", "url": "https://www.techtimes.com/articles/318968/20260624/ai-orchestrator-sakana-fugu-claims-fable-5-parity-real-world-tests-reveal-30-minute-waits.htm"}
+      ]
+    },
+    {
+      "lead": "Sumama ang Micron sa Anthropic Series H, inilalagay ang lahat ng tatlong HBM maker sa loob ng isang lab",
+      "body": "Inanunsyo ng Micron at Anthropic ang isang strategic partnership noong June 22 na pinagsasama ang apat na piraso: isang memory-and-storage na co-design na nagta-target ng performance, energy efficiency, at token economics; isang multi-year na supply allocation na sumasaklaw sa HBM, DRAM, at SSD; isang internal na rollout ng Claude sa mga engineering, manufacturing, at enterprise na function ng Micron; at isang strategic equity investment ng Micron sa Series H ng Anthropic. Ang round na iyon, isang $65 billion na pagtataas sa humigit-kumulang $965 billion na post-money valuation, ay isinara noong May 28, ngunit ang bagong katotohanan ay ang pagpasok ng Micron, na nangangahulugang ang lahat ng tatlong global na HBM supplier (Micron, Samsung, at SK Hynix) ay mga Series H participant at infrastructure partner na ngayon ng Anthropic, isang pagkakabit na hindi pa hawak ng anumang ibang frontier lab. Hindi ibinunyag ang halaga ng supply agreement ni ang laki ng investment ng Micron, kaya hindi pa nakumpirma ang anumang partikular na dolyar na nilalakbay. Ang istruktural na pagbasa: ikinakandado ng mga frontier lab ang high-bandwidth-memory na kapasidad sa pamamagitan ng equity, hindi lang sa mga purchase order, bago ang inaasahang public listing sa Q4 2026.",
+      "citations": [
+        {"label": "Digital Applied - Micron and Anthropic strike a strategic AI infrastructure deal", "url": "https://www.digitalapplied.com/blog/micron-anthropic-strategic-infrastructure-agreement-2026"}
+      ]
+    },
+    {
+      "lead": "Naglulunsad ang Gen 2 Proxie ng Cobot ng on-robot inference na may production track record",
+      "body": "Inilahad ng Collaborative Robotics ang second-generation nitong Proxie noong June 22 sa Automate 2026, na inilalarawan ito bilang isang general-purpose na mobile collaborative robot na tumutukoy sa gawaing dapat gawin at ginagawa ito nang walang software integration at walang human dispatcher. Ang bagong artipakto ay inililipat ng Gen 2 ang task inference nang buo sa robot, nang walang cloud dependency para sa core execution, kasama ng isang ScoutSense sensor stack na nakakakita sa workspace sa antas ng mata ng tao, nagpaplano at nag-sesequence ng gawain, at malakas na ipinapahayag ang bawat aksyon; inililipat ng robot ang mga cart na umaabot ng 1,500 libra, nagbubuhat nang patayo hanggang 200 libra, at inaalok simula sa $5,000 kada buwan. Ipinundar ng Cobot ang launch sa isang first-generation na production record: 12,627 na oras na naitala sa totoong operasyon, mahigit 40 milyong libra ng materyal ang nailipat, at mahigit 17 milyong hakbang ng tao ang naiipon sa mga ospital, manufacturing, at logistics. Naroroon ang launch sa loob ng Automate 2026 (June 22-25, McCormick Place), na ang nangingibabaw na tema ay physical AI at ang first-time na NVIDIA-sponsored na Humanoid Robot Pavilion ay nagho-host ng mahigit 20 humanoid platform.",
+      "citations": [
+        {"label": "Robotics Tomorrow - Cobot announces second-generation Proxie, bringing production-tested physical AI to real operations", "url": "https://www.roboticstomorrow.com/news/2026/06/22/cobot-announces-second-generation-proxie-bringing-production-tested-physical-ai-to-real-operations/26756/"},
+        {"label": "Packaging World - Physical AI dominates Automate 2026's opening day while humanoids steal the show floor", "url": "https://www.packworld.com/leaders-new/machinery/robotics/article/22969383/physical-ai-dominates-automate-2026s-opening-day-while-humanoids-steal-the-show-floor"}
+      ]
+    },
+    {
+      "lead": "Bubukas ngayong linggo ang offensive-security at dev na track, June 25 hanggang July 2",
+      "body": "Parehong bubukas ngayong linggo ang mga AI-security at mainstream dev na kalendaryo. Sa security track, magho-host ang AI Tinkerers San Francisco ng isang Offensive Security Demo Night sa June 25 na may live na autonomous-pentesting-agent na demo na suportado ng sponsor na XBOW; sa mas malayo, tatakbo ang AI Summit ng Black Hat USA sa August 1-6 sa Las Vegas kasabay ng AI Village ng DEF CON, susunod ang AI Risk Summit ng SecurityWeek sa August 11-12 sa Half Moon Bay, ang OWASP Global AppSec USA ay November 5-6 sa San Francisco, at nananatili sa watch list ang serye ng AI Agent Security Summit ng Zenity. Sa mainstream dev/data na track, magpapatakbo ang Snowflake ng isang virtual na Dev Day sa June 25 (dalawang luminary talk kasama ang isang hands-on na agentic-AI lab), at sasakupin ng AI Engineer World's Fair ang Moscone West na may pangunahing programa mula June 29 hanggang July 2 (opsyonal na New Engineer Orientation sa June 28), na pinauna ng opisyal na AIE World's Fair Hackathon kasama ang Cerebral Valley sa June 27-28; babalik ang GitHub Universe sa October 28-29 at tatakbo ang AWS re:Invent mula November 30 hanggang December 4.",
+      "citations": [
+        {"label": "AI Engineer World's Fair 2026 schedule (June 29-July 2, Moscone West)", "url": "https://www.ai.engineer/worldsfair/schedule"}
+      ]
+    },
+    {
+      "lead": "Tatakbo ang AI-chip na kalendaryo mula Automate ngayon hanggang AMD, Hot Chips, at AI Infra",
+      "body": "Umaabot ang AI-chip at hardware na track mula ngayong linggo hanggang sa taglagas. Tumatakbo na ngayon ang Automate 2026 (June 22-25, McCormick Place) na may first-time na NVIDIA-sponsored na Humanoid Robot Pavilion at isang Humanoid Robot Forum sa June 23-24. Sa hinaharap, nakatakda ang Advancing AI 2026 ng AMD sa July 22-23 sa Moscone, na may inaasahang fokus sa Instinct MI400-series at ang keynote sa July 23; tatakbo ang Hot Chips 2026 sa August 23-25 sa Stanford; at ang AI Infra Summit ay September 15-17 sa Santa Clara Convention Center. Ang pangkalahatang daloy ay isang siksik, halos tuloy-tuloy na takbo ng mga chip at accelerator na venue sa buong tag-araw, na nagbibigay sa mga team na sumusubaybay sa mga AI-hardware roadmap ng isang nakasalansang kalendaryo na mapagpaplanuhan ng pagdalo at timing ng produkto.",
+      "citations": [
+        {"label": "Automate - Humanoid Robot Pavilion sponsored by NVIDIA (June 22-25, 2026)", "url": "https://www.automateshow.com/education-networking/humanoid-robot-pavilion"}
+      ]
+    }
+  ],
+  "plain": [
+    "Inaangkin ng Fugu ng Sakana ang top-tier na parity pero mabagal tumakbo",
+    "Sumama ang Micron sa Anthropic, kinukumpleto ang memory lineup nito",
+    "Buo nang nag-iisip sa robot mismo ang isang warehouse robot",
+    "Pinupuno ng mga security at developer na event ang linggong ito",
+    "Tatakbo hanggang taglagas ang kalendaryo ng AI-chip na event"
+  ]
+}

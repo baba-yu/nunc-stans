@@ -1,0 +1,50 @@
+{
+  "prediction_id": "prediction.b1fc4c7fdc0c17fe",
+  "judgements": [
+    {
+      "prediction_id": "prediction.b1fc4c7fdc0c17fe",
+      "stream": "reasoning",
+      "entry_id": "prediction.b1fc4c7fdc0c17fe",
+      "verdict": "fresh",
+      "reason": "Trigger 'landed_this_week' fired on the 2026-06-27 bridge landing, not on the prediction itself: reasoning.landing targets Q2 2027 (target_end_date 2027-06-30), >12 months out, so it cannot have come true yet. The thesis stays directionally on-track and is reinforced, not contradicted: the new 06-27 bridge (AutoGPT SSRF CVE-2026-56663, Langflow IDOR CVE-2026-55255 chained with KEV-listed RCE CVE-2026-33017) keeps the proxy/agent-broker tier generating actively-exploited max-severity CVEs, exactly the 'because' precondition; the 06-16 Zscaler AI Broker / Oasis bridge advances the 'given' enforcement-layer precondition. No federal category-level CISA/NSA directive has issued, so the landing remains open and unmet, as expected. because/given/so_that framing all still hold.",
+      "cross_stream_evidence": [
+        "bridge:validation.3e2eee302e67cce1",
+        "bridge:validation.be6641c24c3c4c74"
+      ],
+      "proposed_action": "noop",
+      "confidence": 0.86
+    },
+    {
+      "prediction_id": "prediction.b1fc4c7fdc0c17fe",
+      "stream": "bridge",
+      "entry_id": "prediction.b1fc4c7fdc0c17fe",
+      "verdict": "fresh",
+      "reason": "Both recent bridges are accurate, on-thesis, and correctly dimensioned. validation.3e2eee302e67cce1 (06-27, support='because', rel=4) documents continued in-the-wild max-severity CVEs on the agent-gateway/proxy layer; validation.be6641c24c3c4c74 (06-16, support='given', rel=3) documents the commercial enforcement layer (Zscaler AI Broker, Oasis NHI lifecycle) building toward the governance preconditions. Neither contradicts the reasoning; no bridge needs reframing or retraction.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.b1fc4c7fdc0c17fe",
+      "stream": "needs",
+      "entry_id": "prediction.b1fc4c7fdc0c17fe",
+      "verdict": "fresh",
+      "reason": "All three Needs (CISA cyber-governance lead -> named category guidance; joint CISA-NSA secure-AI author -> joint publication; MCP/proxy researcher -> sustained category-level CVE evidence) remain unmet and active, with target window 2027-04-01..2027-06-30 matching the prediction landing. The researcher-coalition Need is being actively satisfied in-progress (this week's bridge of fresh proxy-layer CVEs is exactly the 'sustained body of category-level evidence' it calls for), but the federal-actor Needs (CISA / CISA-NSA directive) have not delivered. No actor has shipped the category-level deliverable, so no status flips to done; the Need-set is fresh forward-looking.",
+      "cross_stream_evidence": [
+        "bridge:validation.3e2eee302e67cce1"
+      ],
+      "proposed_action": "noop",
+      "confidence": 0.84
+    },
+    {
+      "prediction_id": "prediction.b1fc4c7fdc0c17fe",
+      "stream": "readings",
+      "entry_id": "prediction.b1fc4c7fdc0c17fe",
+      "verdict": "fresh",
+      "reason": "No upstream chain edge landed or got contradicted this week that would shorten or weaken this prediction's Q2-2027 landing window. The week's developments are corroborating same-tier CVE/governance signals (already captured as bridges), not chain-source predictions resolving. No new equivalent/relation edge surfaced that transfers evidence. Readings stream needs no edit.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    }
+  ]
+}

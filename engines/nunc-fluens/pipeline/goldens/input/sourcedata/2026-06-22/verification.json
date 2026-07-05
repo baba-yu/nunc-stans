@@ -1,0 +1,162 @@
+{
+  "date": "2026-06-22",
+  "verifications": [
+    {
+      "topic": "LLM Workflow",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No bullet touches workflow/orchestration-platform news. The writer searched, found the in-window orchestration material was the AWS Summit storyline already in the digest, and correctly dropped it as an ADR-002 Rule 2 inertia continuation."
+    },
+    {
+      "topic": "Multi-profiling for Local LLM (e.g. Multica)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "News-driven-only topic with no Multica or sibling multi-profiling state-change referenced anywhere today. searched=false is correct here since constant coverage is not required for this topic."
+    },
+    {
+      "topic": "Agent Harness (OpenClaw, NemoClaw, Hermes Agents, etc.)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No bullet on coding agents / agentic IDEs / harness releases. Writer searched, found only prior-window clusters and weekend benchmark/comparison coverage, and correctly dropped under Rule 2 with no fresh ship."
+    },
+    {
+      "topic": "Platform for Local LLM (vLLM, SGLang, etc.)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No inference-engine/serving-stack bullet. Writer searched and found vLLM/SGLang still on their mid-June tags with only benchmarking coverage over the weekend; correctly unpromoted as no fresh release."
+    },
+    {
+      "topic": "Ecosystems for Local LLM Embedded System (Foundry Local, etc.)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No edge/on-device LLM runtime bullet. Writer searched Foundry Local / Ollama / LM Studio / llama.cpp / MLX / NPU SDKs, found only prior-window items, and correctly dropped with nothing in-window."
+    },
+    {
+      "topic": "Local LLM Models",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No open-weight model-release bullet. Writer searched and confirmed every recent open/frontier release is prior-window and in the digest, with no net-new family launch over the June 20-22 weekend; correctly unpromoted."
+    },
+    {
+      "topic": "Local LLM Optimization, Fine-tuning (Unsloth — every run)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "Constant-coverage mandate satisfied: writer searched Unsloth (searched=true) and found only the June 18 v0.1.47-beta build that already led two days ago; re-use is barred by ADR-002 Rule 2, so searched-but-correctly-unpromoted is consistent, not an overreport."
+    },
+    {
+      "topic": "Ecosystems for LLM on PaaS (AWS Bedrock, Azure AI Foundry, etc.)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No managed-inference/hosted-LLM bullet. Writer searched, found the AWS Summit NYC launches were yesterday's lead and in the digest (barred under Rule 2), and saw no new Bedrock/Azure/Vertex/OpenRouter feature in-window; correctly dropped."
+    },
+    {
+      "topic": "AI Security",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No standalone AI-security bullet. Writer searched; active security material is June 17-21 digest content barred under Rule 2, weekend coverage was commentary plus prior-window RCE CVEs, and no fresh AI-security-x-silicon ship surfaced. The Confidential Computing Summit appears only as a forward event in the events bullet, which does not make AI Security a covered news topic."
+    },
+    {
+      "topic": "CVE update on score ≥ 8.0",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No freshly disclosed CVSS >= 8.0 CVE dated to the June 20-22 window. Writer searched and found the high-severity AI/ML CVEs in circulation are all prior-window (Transformers, SGLang 9.8, VS Code MCP 9.6, Semantic Kernel from the June 9 Patch Tuesday); correctly unpromoted with nothing new in-window."
+    },
+    {
+      "topic": "Hardware",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No AI-accelerator/chip launch or data-center-capacity bullet. Writer searched, found notable chip items all prior-window (RTX Spark/Nemotron, Qualcomm-Tenstorrent talks, Meta-AMD MI540), and correctly dropped. AMD Advancing AI and Hot Chips appear only as forward events in the events bullet."
+    },
+    {
+      "topic": "Physical AI",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "Hyundai's board is set to vote today on buying out SoftBank's last slice of Boston Dynamics, a deal whose price implies the humanoid maker is now worth roughly three times its 2021 valuation"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "The lead bullet is squarely robotics/embodied-AI: Hyundai's scheduled June 22 board vote to take 100% of Boston Dynamics, with net-new facts (~$3.37B implied valuation, ~25,000 Atlas units by 2028). Promoted on a fresh same-day state-change; matches search_log promoted=true."
+    },
+    {
+      "topic": "LLM-related research and papers",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No research/papers bullet. Writer searched; major recent papers are prior-window digest items and the arXiv weekend listings were routine method papers with no substrate-shifting result. Correctly unpromoted to avoid inertia."
+    },
+    {
+      "topic": "Stock prices and corporate activity",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "Hyundai's board is set to vote today on buying out SoftBank's last slice of Boston Dynamics, a deal whose price implies the humanoid maker is now worth roughly three times its 2021 valuation"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "Covered inside the Hyundai bullet as the corporate-activity event of the day: a scheduled board vote on a ~$325M put-option buyout of SoftBank's 9.65% stake implying a ~$3.37B valuation re-rating and a path to a future IPO. Matches search_log promoted=true."
+    },
+    {
+      "topic": "Bay Area / SV AI meet-up events",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "AI events to plan around now: the confidential-computing and offensive-security tracks open tomorrow, then the AI Engineer World's Fair, with the chip and security calendar running into the fall"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "Carry-forward exception applies (ADR-002 Rules 1+2 waived for this topic). The events bullet covers all three mandatory sub-tracks (AI-security: Confidential Computing Summit Jun 23-24, Offensive Security Demo Night, SecurityWeek, Black Hat/DEF CON, OWASP, Zenity watch; mainstream: Snowflake Dev Day, AIE World's Fair, GitHub Universe, re:Invent; AI-chip: AMD Advancing AI, Hot Chips, AI Infra Summit). Nothing has passed its end date on June 22, so carrying forward still-upcoming events with no fresh state-change is correct, not an overreport."
+    },
+    {
+      "topic": "Other standing-out topics",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "The day's standout concrete item (Hyundai buyout) is already promoted under Physical AI / corporate activity, and no separate standalone item warranted its own bullet. On a quiet weekend window the writer correctly preferred under-filling (Rule 4) over inertia-filling; no additional bullet forced."
+    },
+    {
+      "topic": "Zero-trust based access control for agentic AI",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No zero-trust agent-access bullet. Writer searched; the AgentCore Guardrails / AWS Context access-control material is yesterday's digest content barred under Rule 2, and no new agent-identity / MCP-firewall / least-privilege release surfaced in-window. Correctly unpromoted."
+    },
+    {
+      "topic": "Monitor and manage AI agent behavior",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No agent-behavior-observability bullet. Writer searched; recent items (AgentCore optimization analytics, OpenAI beneficial-RL) are prior-window digest material barred under Rule 2, and no new monitoring/trajectory-observability product or paper landed in-window. Correctly unpromoted."
+    },
+    {
+      "topic": "Business plan",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "Hyundai's board is set to vote today on buying out SoftBank's last slice of Boston Dynamics, a deal whose price implies the humanoid maker is now worth roughly three times its 2021 valuation"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "Covered inside the Hyundai bullet as a corporate-structure / go-to-market move: full ownership removes minority-shareholder friction around a captive ~25,000-Atlas-by-2028 factory deployment and could accelerate a future Boston Dynamics IPO. Matches search_log promoted=true."
+    },
+    {
+      "topic": "Application fields",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        "Hyundai's board is set to vote today on buying out SoftBank's last slice of Boston Dynamics, a deal whose price implies the humanoid maker is now worth roughly three times its 2021 valuation"
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "Covered via the Hyundai bullet's application target: humanoid robots in industrial manufacturing, framed around deploying ~25,000 Atlas units across Hyundai's own factories from 2028 (embodied AI moving from demos into captive paid factory work). Matches search_log promoted=true."
+    },
+    {
+      "topic": "Applied research",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No applied-research bullet. Writer searched; recent applied work (OpenAI beneficial-RL, LifeSciBench, NVIDIA SpatialClaw) is prior-window digest material barred under Rule 2, and arXiv weekend listings carried no standout applied result. Correctly unpromoted."
+    }
+  ]
+}

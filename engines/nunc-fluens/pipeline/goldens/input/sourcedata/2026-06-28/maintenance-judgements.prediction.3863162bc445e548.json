@@ -1,0 +1,45 @@
+{
+  "prediction_id": "prediction.3863162bc445e548",
+  "judgements": [
+    {
+      "prediction_id": "prediction.3863162bc445e548",
+      "stream": "reasoning",
+      "entry_id": "prediction.3863162bc445e548",
+      "verdict": "fresh",
+      "reason": "Trigger landed_this_week mis-fires here: the landing window (H2 2026; target_start 2026-07-01) has not yet opened as of 2026-06-28, so the managed fine-tune-to-MCP-agent-to-synthetic-data service has NOT landed. The reasoning.because/given premises are being progressively confirmed, not invalidated: the 2026-06-28 bridge (rel 3) shows Unsloth's June 18 beta maturing the consumer-class loop into productizable shape, and the 2026-06-16 Databricks Agent Bricks bridge documents the deployment+governance half graduating into a shipping managed service while explicitly noting the fine-tuning and synthetic-data legs remain absent. The closed loop is not yet absorbed end-to-end, so the thesis stays live and forward-looking; no reframe needed before the window opens.",
+      "cross_stream_evidence": ["bridge:validation.2146426d6c8b6323", "bridge:validation.c5e0cefc0ad5349c"],
+      "proposed_action": "noop",
+      "confidence": 0.82
+    },
+    {
+      "prediction_id": "prediction.3863162bc445e548",
+      "stream": "bridge",
+      "entry_id": "prediction.3863162bc445e548",
+      "verdict": "fresh",
+      "reason": "All recent bridges (2026-06-28, 06-20, 06-16, 06-15, 06-09) are consistently rated relevance 3 and all support the thesis along because/given dimensions. They track real, accelerating progress (Unsloth June beta, Databricks Agent Bricks, Omnigent orchestration, NSA MCP guidance) toward the structural pull the prediction names. No contradict-direction bridge has appeared; the bridge set is internally consistent and current. Historical record stands as-is.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.3863162bc445e548",
+      "stream": "needs",
+      "entry_id": "prediction.3863162bc445e548",
+      "verdict": "fresh",
+      "reason": "The four Needs (hyperscaler PM bundling the console, local stack maintainer demonstrating the loop, synthetic-data vendor, MCP catalog maintainer) remain the active actor coalition. None has been fully satisfied: the 2026-06-16 Databricks bridge shows the deployment/orchestration leg shipping as managed, but the fine-tuning and synthetic-data legs are explicitly still absent, so no Need flips to done. The hyperscaler-PM Need in particular is the still-unmet keystone the landing depends on. No actor-set refresh warranted pre-window.",
+      "cross_stream_evidence": ["bridge:validation.c5e0cefc0ad5349c"],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.3863162bc445e548",
+      "stream": "readings",
+      "entry_id": "prediction.3863162bc445e548",
+      "verdict": "fresh",
+      "reason": "No upstream chain edge has landed or been contradicted this week that would shorten or weaken the reasoning.landing window. The H2 2026 window remains intact and un-entered. No new equivalent/relation edge surfaced that requires importing transferable evidence. Chain state unchanged.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.78
+    }
+  ]
+}

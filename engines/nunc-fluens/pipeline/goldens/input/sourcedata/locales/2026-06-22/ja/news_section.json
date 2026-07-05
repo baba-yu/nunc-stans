@@ -1,0 +1,31 @@
+{
+  "date": "2026-06-22",
+  "sections": [
+    {
+      "category": "Hyundai の取締役会は本日、SoftBank の最後の Boston Dynamics 株を買い取る採決を行う見通しで、その価格は同ヒューマノイドメーカーの価値がいまや2021年の評価額のおよそ3倍であることを示唆する",
+      "bullets": [
+        {
+          "body": "Hyundai Motor は本日6月22日に取締役会を開き、SoftBank Group が持つ Boston Dynamics の残り9.65%の株式を約$325Mで取得することを承認する見通しだ。これは、マサチューセッツ州 Waltham のロボティクス企業を Hyundai の完全子会社にする、予定された契機である。SoftBank の退出は、2021年の取引で保持していたプットオプションによるもので、Boston Dynamics が2026年6月までに米国 IPO を完了しなければ残りの株式を Hyundai に売り戻せる権利だ。上場が手元にないため、SoftBank はその権利を行使すると Hyundai に通知し、関係各社は成立に向けて取締役会承認を整えていると報じられている。この買い取りが浮かび上がらせる新たな事実は評価額だ。9.65%で$325Mということは、Boston Dynamics の企業価値はおよそ$3.37Bとなり、Hyundai 当初の2021年の取引時の約$1.1B（80%に対して約$880Mを支払った）の3倍を超える。デモから有償の工場作業へと進むヒューマノイドプラットフォームの、具体的な再評価だ。Korea Economic Daily は、この統合が2028年から自社各工場に Atlas ヒューマノイドを約25,000台導入する Hyundai の計画と結びついており、将来の Boston Dynamics の IPO を加速させる道も開きうると報じている。だから完全所有は、自社内製の導入計画と将来の上場の両方をめぐる少数株主の摩擦を取り除く。取引条件と25,000台という数字は韓国の経済紙が報じたもので、Hyundai や SoftBank はまだ確認しておらず、取締役会の採決そのものも最新の報道時点では公に承認されていなかった。 <a href=\"https://www.kedglobal.com/robotics/newsView/ked202606210001\">KED Global - Hyundai が SoftBank の株式買い取りで Boston Dynamics を完全所有へ</a> <a href=\"https://www.globalbankingandfinance.com/hyundai-buy-softbanks-remaining-stake-boston-dynamics-325/\">Global Banking & Finance Review - Hyundai が SoftBank の残る Boston Dynamics 株を$325Mで買い取りへ</a> <a href=\"https://cryptobriefing.com/hyundai-acquires-softbank-boston-dynamics-stake/\">Crypto Briefing - Hyundai が SoftBank の残る Boston Dynamics 株を$325Mで取得へ</a>",
+          "citations": [
+            {"label": "KED Global - Hyundai が SoftBank の株式買い取りで Boston Dynamics を完全所有へ", "url": "https://www.kedglobal.com/robotics/newsView/ked202606210001"},
+            {"label": "Global Banking & Finance Review - Hyundai が SoftBank の残る Boston Dynamics 株を$325Mで買い取りへ", "url": "https://www.globalbankingandfinance.com/hyundai-buy-softbanks-remaining-stake-boston-dynamics-325/"},
+            {"label": "Crypto Briefing - Hyundai が SoftBank の残る Boston Dynamics 株を$325Mで取得へ", "url": "https://cryptobriefing.com/hyundai-acquires-softbank-boston-dynamics-stake/"}
+          ]
+        }
+      ]
+    },
+    {
+      "category": "いま予定を組んでおくべき AI イベント。機密コンピューティングと攻撃的セキュリティのトラックが明日開幕し、続いて AI Engineer World's Fair。チップとセキュリティのカレンダーは秋まで続く",
+      "bullets": [
+        {
+          "body": "3つのサブトラックすべてにわたる先々のカレンダーで、最も近いイベントはいまや1日後に迫り、まだ終了日を過ぎたものはない。AI セキュリティ: Confidential Computing Summit が6月23-24日にサンフランシスコの Mint で開催される（Linux Foundation と OPAQUE、機密 AI とデータ主権の基調講演には AMD、Google、Microsoft、NVIDIA、Meta、Samsung ほかが登壇）。AI Tinkerers San Francisco は6月25日に Offensive Security Demo Night を開き、自律ペンテストエージェントのライブデモが並ぶ（スポンサーは XBOW）。SecurityWeek の AI Risk Summit が8月11-12日に Half Moon Bay で続く。Black Hat USA の AI Summit は8月1-6日にラスベガスで DEF CON の AI Village と並んで走る。OWASP Global AppSec USA は11月5-6日にサンフランシスコで、Zenity の AI Agent Security Summit シリーズも引き続き注視対象だ。メインストリームの開発/データ: Snowflake は6月25日にバーチャルの Dev Day を開く（2つの著名講演に加えて実践的なエージェント型 AI ラボ）。AI Engineer World's Fair は Moscone West を占有し、本編は6月29日から7月2日まで（任意の新規エンジニア向けオリエンテーションは6月28日）、最大級の技術系 AI エンジニアリング会議とされ、20を超えるトラック、約250人の登壇者、専用の Inference と Security のトラックを擁し、OpenAI、Anthropic、Google DeepMind、Amazon AGI Labs、Microsoft が出展、これに先立ち公式の AIE World's Fair ハッカソンが Cerebral Valley とともに6月27-28日に開かれる。さらに先では、GitHub Universe が10月28-29日に戻り、AWS re:Invent が11月30日から12月4日までラスベガスで走る。AI チップ/ハードウェア: AMD の Advancing AI 2026 は7月22-23日に Moscone で予定され（Instinct MI400 シリーズが焦点と見られ、基調講演は7月23日）、Hot Chips 2026 は8月23-25日に Stanford で、AI Infra Summit は9月15-17日に Santa Clara Convention Center で開かれる。 <a href=\"https://events.linuxfoundation.org/confidential-computing-summit/\">Linux Foundation - Confidential Computing Summit 2026（6月23-24日、サンフランシスコ）</a> <a href=\"https://www.ai.engineer/worldsfair/2026\">AI Engineer World's Fair 2026（6月29日-7月2日、サンフランシスコ）</a> <a href=\"https://www.amd.com/en/corporate/events/advancing-ai.html\">AMD - Advancing AI 2026（7月22-23日、サンフランシスコ）</a>",
+          "citations": [
+            {"label": "Linux Foundation - Confidential Computing Summit 2026（6月23-24日、サンフランシスコ）", "url": "https://events.linuxfoundation.org/confidential-computing-summit/"},
+            {"label": "AI Engineer World's Fair 2026（6月29日-7月2日、サンフランシスコ）", "url": "https://www.ai.engineer/worldsfair/2026"},
+            {"label": "AMD - Advancing AI 2026（7月22-23日、サンフランシスコ）", "url": "https://www.amd.com/en/corporate/events/advancing-ai.html"}
+          ]
+        }
+      ]
+    }
+  ]
+}

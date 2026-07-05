@@ -1,0 +1,94 @@
+{
+  "date": "2026-07-05",
+  "technical": [
+    {
+      "lead": "Ollama 0.31がApple Silicon上のGemma 4でマルチトークン予測を有効化",
+      "body": "Ollamaは<a href=\"https://ollama.com/blog/faster-gemma-4-mlx-mtp\">2026年7月1日にバージョン0.31</a>をリリースし、Apple Silicon上のGemma 4に対してマルチトークン予測(MTP)をデフォルトで有効にした。同社は、モデルがコーディングエージェントのベンチマーク全体で平均して約90%高速にトークンを生成するようになり、出力に変化はないと報告している。仕組みはモデル内蔵の投機的デコードだ。Gemma 4は次の数トークンを提案する小さなドラフトモデルを同梱し、メインモデルが1回のパスでそれらを検証するため、ドラフトが当たっていればおよそ1トークン分のコストで複数のトークンが得られる。Ollamaはまた、各重みブロックを一度だけ展開してバッチ全体で再利用する小バッチ向け行列積カーネルをAppleの<a href=\"https://github.com/ollama/ollama/releases/tag/v0.31.1\">MLXフレームワーク</a>に提供し、nvfp4を用いたM5 Max上でGemma 4の最大級の行列積を2〜2.5倍高速にした。このカーネルはGemma以外のMLXモデルでも再利用できる。<a href=\"https://releasebot.io/updates/ollama\">Ollamaのリリースノート</a>によると、0.30.11〜0.31の一連の更新では、思考能力の検出、Claude Codeとopencodeの自動インストールフック、Codexのドリフト検出、CUDA sm_86サポートも追加された。コーディングエージェントはモデルを継続的に呼び出し、コードは異例なほど予測しやすいため、ドラフトの採用率は高く、高速化はセッションを通じて積み重なる。これにより、新しいハードウェアなしに、オンデバイスのエージェント的スループットとホスト型推論との差の一部が埋まる。",
+      "citations": [
+        {
+          "label": "Ollamaブログ - マルチトークン予測によるMLX上での高速なGemma 4",
+          "url": "https://ollama.com/blog/faster-gemma-4-mlx-mtp"
+        },
+        {
+          "label": "GitHub - Ollama v0.31.1リリース",
+          "url": "https://github.com/ollama/ollama/releases/tag/v0.31.1"
+        },
+        {
+          "label": "Releasebot - Ollamaリリースノート(2026年6〜7月)",
+          "url": "https://releasebot.io/updates/ollama"
+        }
+      ]
+    },
+    {
+      "lead": "Together AIが83億ドルの評価額で8億ドルのシリーズCを調達、AramcoのProsperity7が主導",
+      "body": "Together AIは、2026年7月1日に<a href=\"https://www.businesswire.com/news/home/20260701243402/en/Together-AI-Raises-$800-Million-at-$8.3-Billion-Valuation-to-Make-Frontier-AI-Accessible-to-All\">ポストマネー83億ドルの評価額で8億ドルのシリーズC</a>を発表した。これは2025年2月の33億ドルのシリーズBから2.5倍の引き上げにあたり、累計調達額は13億ドルとなる。<a href=\"https://www.datacenterdynamics.com/en/news/together-ai-raises-800m-in-series-c-funding-round/\">DataCenter Dynamics</a>によると、このラウンドはAramco VenturesのProsperity7 Ventures USが主導し、Vista Equity Partners、General Catalyst、Emergence Capital、NVIDIA、March Capital、Pegatron、SentinelOneのS Venturesが参加した。フロンティア各社の巨額ラウンドと一線を画すのは、資金がスタックのどこに位置するかだ。Together AIは、DeepSeek、Nemotron、MiniMax、Kimiといったオープンウェイトモデルを、クローズドモデルの何分の一かのコストで学習・提供するネオクラウドであり、GPUインフラの規模を5年でおよそ50倍に拡大する見込みだとしている。Prosperity7のマネージングディレクターであるAbhishek Shuklaは、同社を株式市場へ向かう企業と位置づけた。推論ベンダーを選ぶチームにとってのシグナルは、オープンモデルのホスティング層が、FireworksやBasetenといった同業と並んで、いまやそれ自体で持続的なプラットフォームとして資本化されているという点だ。残る問いは、自社GPUによるオープンモデル推論が、レイテンシで肩を並べつつ、価格でホスト型フロンティアAPIを下回り続けられるかどうかである。",
+      "citations": [
+        {
+          "label": "Business Wire - Together AIが83億ドルの評価額で8億ドルを調達",
+          "url": "https://www.businesswire.com/news/home/20260701243402/en/Together-AI-Raises-$800-Million-at-$8.3-Billion-Valuation-to-Make-Frontier-AI-Accessible-to-All"
+        },
+        {
+          "label": "DataCenter Dynamics - Together AIがシリーズCで8億ドルを調達",
+          "url": "https://www.datacenterdynamics.com/en/news/together-ai-raises-800m-in-series-c-funding-round/"
+        }
+      ]
+    },
+    {
+      "lead": "TenstorrentのJim KellerがQualcommとの買収協議を否定、80〜100億ドルの取引観測が沈静化",
+      "body": "東京でのメディアイベントで、TenstorrentのCEOであるJim Kellerは2026年6月30日に、このAIチップのスタートアップがQualcommと買収協議中ではないと述べ、7月3日にかけてもこれを繰り返した。これは、The Informationが最初に報じReutersが取り上げた、Qualcommが80億ドルから100億ドルとされる完全買収を検討しているとする6月中旬の報道に真っ向から反論するものだ(<a href=\"https://www.gurufocus.com/news/8938157/tenstorrent-ceo-denies-qualcomm-acquisition-talks-amid-focus-on-ai-development\">GuruFocus</a>による)。Kellerは、パートナーシップの余地は残しつつ、IPライセンスや日本を拠点とするハイエンドでスケーラブルなAI事業を含め、自社事業の構築に注力していると語った。この否定が重要なのは、数少ない信頼に足るRISC-VベースのアクセラレータIPハウスの一つを、モバイルSoCの既存大手に吸収させたであろう統合の道筋を、今のところ取り除くからだ。しかもそれは、Tenstorrentが自社を売りに出すのではなく、IPOブリッジと秘密裏のS-1の途上にある最中の出来事だ。非NVIDIAのアクセラレータ分野を検討する買い手にとっての要点は、TenstorrentのGalaxyラックのロードマップとIPライセンスモデルが独立の軌道にとどまっているという点である。より大きく読み解けば、メモリ帯域幅と推論ASICの競争は、いまや買収観測が市場を動かすほどの価値を持つに至ったが、先頭を行く独立系企業は売却よりも株式公開を選んでいる。",
+      "citations": [
+        {
+          "label": "GuruFocus - TenstorrentのCEOがQualcommによる買収協議を否定",
+          "url": "https://www.gurufocus.com/news/8938157/tenstorrent-ceo-denies-qualcomm-acquisition-talks-amid-focus-on-ai-development"
+        }
+      ]
+    },
+    {
+      "lead": "StatheraがAIデータセンター向けMEMSシリコンタイミングで5,500万ドルのシリーズBをクローズ",
+      "body": "モントリオールを拠点とするStatheraは、2026年6月30日に<a href=\"https://www.prnewswire.com/news-releases/stathera-announces-us55-million-series-b-to-scale-silicon-timing-and-accelerate-next-generation-ai-data-center-solutions-302813712.html\">応募超過となった5,500万ドルのシリーズB</a>を発表した。新規投資家のMaverick Siliconが主導し、Celesta Capital、BDC Capital、MediaTek Innovation Fund、TXC Corporation、Ultratech Capital Partnersが参加、累計調達額は7,500万ドルとなった(<a href=\"https://www.citybiz.co/article/867841/stathera-raises-55-million-series-b-to-expand-silicon-timing-for-ai-data-centers/\">citybiz</a>による)。Statheraは、従来の水晶発振器を半導体タイミングに置き換える独自のDualModeアーキテクチャ上で、MEMSベースの精密タイミングを構築しており、実装面積をおよそ85%小型化し、衝撃と振動への耐性も向上すると主張する。今回の調達で、第2世代の32.768 kHz製品群の量産を加速し、ハイパースケール顧客を開拓するためのシリコンバレー拠点を開設し、通信、エンタープライズ、AIデータセンター向けクロックを狙うGEN3プラットフォームに資金を投じる。最初の顧客サンプルは2028年を目標としている。同社は、AIデータセンターの時刻同期の市場機会を、年間110億ドルのタイミング市場の中で2030年までに累計およそ15億ドルと見積もる。クロックのスタートアップがAIの解説記事に登場する理由は、アクセラレータのクラスターが数万台のGPU規模に達すると、ノード間の精密で頑健なタイミングがインターコネクトとスループットの現実の制約になるからだ。2028年サンプル出荷という時間軸ゆえ、これは出荷済みの製品ではなく方向性を示す賭けだが、AIデータセンターの構築においてタイミングが名前の付いた項目であることを示している。",
+      "citations": [
+        {
+          "label": "PR Newswire - StatheraがAIデータセンター向けシリコンタイミングで5,500万ドルのシリーズBを発表",
+          "url": "https://www.prnewswire.com/news-releases/stathera-announces-us55-million-series-b-to-scale-silicon-timing-and-accelerate-next-generation-ai-data-center-solutions-302813712.html"
+        },
+        {
+          "label": "citybiz - StatheraがAIデータセンター向けシリコンタイミング拡大のため5,500万ドルのシリーズBを調達",
+          "url": "https://www.citybiz.co/article/867841/stathera-raises-55-million-series-b-to-expand-silicon-timing-for-ai-data-centers/"
+        }
+      ]
+    },
+    {
+      "lead": "Geneva AI WeekとAI Tinkerers SFのミートアップが、充実した秋のイベント日程の幕を開ける",
+      "body": "最も近い契機は、Palexpoセンターで開かれる<a href=\"https://unrot.co/blogs/today-top-10-ai-news-july-3-2026\">2026年7月6〜10日のGeneva AI Week</a>だ。国連のGlobal Dialogue on AI Governance(7月6〜7日)で幕を開け、ITUのAI for Good Summit(7月7〜10日)へと続く。ここでは、SalesforceのMarc BenioffとルワンダのPaul Kagameが共同議長を務め、Jensen Huang、Andy Jassy、Brad Smith、AnthropicのJack Clarkが名を連ねる新設の国連AI for Good Commissionが、7月8日に初会合を開く。ベイエリアの地元勢向けには、<a href=\"https://sf.aitinkerers.org/\">AI Tinkerers San Francisco</a>が7月8日にGTMエンジニアリングのミートアップを主催する。ハードウェア方面では、AMDのMI400 Instinctシリーズと「Helios」ラックスケールシステムが2026年下半期の目玉となる契機であり続けており、最も近い確定済みの集まりは、8月23〜25日にスタンフォードで開かれる<a href=\"https://hotchips.org/\">Hot Chips 2026</a>(早期登録は7月31日締切)と、9月15〜17日にサンタクララで開かれる<a href=\"https://www.ai-infra-summit.com/agenda\">AI Infra Summit</a>だ。AIセキュリティ枠は8月上旬から中旬に集中する。SecurityWeekの<a href=\"https://www.airisksummit.com/agenda\">AI Risk Summit</a>は8月11〜12日にHalf Moon Bayで、Black Hat USAとDEF CON 34のAI Villageはラスベガスで開かれ、OWASP Global AppSec USAは11月5〜6日にサンフランシスコで続く。エンタープライズ方面では、<a href=\"https://ai4.io/\">Ai4 2026</a>が8月4〜6日にラスベガスで開催され、GitHub Universeは10月28〜29日、AWS re:Inventは11月30日〜12月4日に行われる。当面の2つの行動は、ガバナンス向けの7月6〜10日のジュネーブのセッションと、地元勢向けの7月8日のAI Tinkerers SFのミートアップだ。8月のAI Risk SummitとHot Chipsは、秘匿推論やセキュアなアクセラレータの発表にとって次の自然な舞台となる。",
+      "citations": [
+        {
+          "label": "unrot.co - 2026年7月3日のAIニュース トップ10(Geneva AI Week、国連AI for Good Commission)",
+          "url": "https://unrot.co/blogs/today-top-10-ai-news-july-3-2026"
+        },
+        {
+          "label": "AI Tinkerers San Francisco",
+          "url": "https://sf.aitinkerers.org/"
+        },
+        {
+          "label": "Hot Chips 2026(8月23〜25日、スタンフォード)",
+          "url": "https://hotchips.org/"
+        },
+        {
+          "label": "SecurityWeek AI Risk Summit 2026(8月11〜12日、Half Moon Bay)",
+          "url": "https://www.airisksummit.com/agenda"
+        },
+        {
+          "label": "Ai4 2026(8月4〜6日、ラスベガス)",
+          "url": "https://ai4.io/"
+        }
+      ]
+    }
+  ],
+  "plain": [
+    "OllamaがローカルのGemmaモデルを約90%高速化",
+    "Together AIがオープンモデル提供のため8億ドルを調達",
+    "TenstorrentがQualcommによる買収を否定",
+    "チップのスタートアップがAIデータセンター向けクロックで5,500万ドルを調達",
+    "大型AIイベントが今週ジュネーブで開幕"
+  ]
+}

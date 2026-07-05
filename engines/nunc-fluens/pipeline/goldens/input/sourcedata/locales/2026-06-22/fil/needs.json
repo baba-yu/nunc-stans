@@ -1,0 +1,137 @@
+{
+  "date": "2026-06-22",
+  "by_prediction": {
+    "prediction.9a4ef78575099c38": [
+      {
+        "actor": "go-to-market lead ng autonomous-pentest startup",
+        "job": "Pagpapalit sa momentum ng demo pagkatapos ng Black Hat tungo sa isang nilagdaan at maipapahayag na enterprise o government logo deal para sa continuous autonomous red-teaming na produkto nito",
+        "outcome": "Isang pampublikong dokumentadong pinangalanang enterprise o government customer deployment ng autonomous-pentest agent ng vendor bago magsara ang Q1 2027",
+        "motivation": "Ang isang pinangalanang landing ang pinakamurang kredibilidad na kayang bilhin ng isang vendor sa isang masikip na larangan ng katumbas na entrant pagkatapos ng Black Hat",
+        "task": {
+          "who": "ang enterprise sales at customer-marketing function ng startup",
+          "what": "Makipag-ayos sa isang maipapahayag na pinangalanang deployment kasama ang isang marquee na buyer",
+          "where": "Ang procurement pipeline na sinimulan sa Black Hat USA / DEF CON",
+          "when": "Mula sa demo night ng June 25 hanggang Q1 2027",
+          "why": "Ang isang logo deal ay bumibili ng kredibilidad laban sa mga karibal na entrant",
+          "how": "Pagbabago mula demo tungo sa procurement na may pangakong pampublikong case study"
+        }
+      },
+      {
+        "actor": "offensive-agent engineering team ng autonomous-pentest startup",
+        "job": "Pagpapatatag sa agent nito para kusang mag-ugnay ng recon, bumuo ng isang gumaganang exploit, patakbuhin ito, at magdokumento ng isang reproducible na kill-chain sa antas ng produkto",
+        "outcome": "Isang ginawang produkto na offensive agent na bumubuo ng mga na-verify at reproducible na exploit-chain na maaaring kumpirmahin nang independent ng isang buyer o benchmark",
+        "motivation": "Pinagkakatiwalaan ng mga buyer ang proof-of-exploit higit sa mga scanner, kaya ang reproducible na kill-chain ang kakayahan na nagbibigay-katwiran sa isang bayad at nakatayong produkto",
+        "task": {
+          "who": "ang offensive-agent at detection engineering team ng startup",
+          "what": "Gawing produkto ang autonomous recon-to-exploit kill-chain generation",
+          "where": "Ang continuous autonomous red-teaming platform ng vendor",
+          "when": "Mula ngayon hanggang Q1 2027, batay sa mga live na demo ng June 25",
+          "why": "Ang reproducible na proof-of-exploit ang tunay na binabayaran ng mga buyer",
+          "how": "Isang LLM-driven na agent na bumubuo at nagpapasabog ng mga exploit sa loob ng sandbox"
+        }
+      },
+      {
+        "actor": "enterprise o government security buyer na nagpapatakbo ng pilot",
+        "job": "Pagpapatakbo ng isang production pilot ng isang autonomous-pentest vendor at pagpayag na pangalanan bilang isang reference deployment",
+        "outcome": "Isang dokumentado at pinangalanang deployment na nagpapatunay sa continuous autonomous red-teaming bilang isang nakatayong produkto, hindi isang one-off na demo",
+        "motivation": "Ang pagbawas ng human red-team hours ay umaangkop sa security budget, at ang pagiging isang pinangalanang early adopter ay nagbibigay ng kredibilidad at vendor leverage",
+        "task": {
+          "who": "ang security operations at red-team function ng buyer",
+          "what": "Subukan ang autonomous agent laban sa sarili nitong attack surface",
+          "where": "Ang production estate ng buyer sa ilalim ng isang controlled engagement",
+          "when": "Sa buong 2026 papasok sa Q1 2027, bago ang landing",
+          "why": "Binabawasan ng autonomous red-teaming ang magastos na human pentest hours",
+          "how": "Isang scoped na continuous autonomous red-teaming engagement"
+        }
+      }
+    ],
+    "prediction.9ca246725adf1b12": [
+      {
+        "actor": "program lead ng humanoid-fleet ng captive owner-manufacturer",
+        "job": "Pagtatayo ng isang in-house humanoid production fleet sa loob ng sariling mga planta ng manufacturer, na binibigyang-katwiran laban sa labor at downtime na nakatala na nito sa sarili nitong balance sheet",
+        "outcome": "Isang captive at malawakang humanoid fleet na gumagawa ng tunay na production work na siyang pinakamalaking pampublikong iniulat na deployment ayon sa bilang ng unit pagsapit ng H1 2028",
+        "motivation": "Pinapayagan ng captive demand at owned unit economics na magdeploy ito sa loob nang hindi naghihintay ng per-robot rental price na kakayanin ng bukas na merkado",
+        "task": {
+          "who": "ang automation at manufacturing-engineering deployment team ng manufacturer",
+          "what": "I-install at i-scale ang mga owned humanoid unit sa mga buhay na production line",
+          "where": "Ang sariling mga pabrika at logistics facility ng manufacturer",
+          "when": "Sa buong 2026-2027 ramp tungo sa H1 2028 landing",
+          "why": "Ang owned unit economics ay nanaig sa anumang open-market rental price",
+          "how": "Mga in-house Atlas-class na humanoid na pinatatakbo sa balance sheet ng owner"
+        }
+      },
+      {
+        "actor": "production lead ng ganap na pag-aaring humanoid robot-maker",
+        "job": "Pagpapataas ng humanoid manufacturing tungo sa nakasaad na ~25,000-unit na target para sa 2028 para suplayan ang captive in-house fleet ng parent nito sa halip na mga third-party RaaS customer",
+        "outcome": "Na-verify na malawakang unit volume na lumalampas sa low-thousands na inihatid sa mga planta ng owner, na ginagawang pinakamalaking iniulat na bayad na production deployment ang captive fleet",
+        "motivation": "Bilang isang ganap na nasipsip na subsidiary, ang demand nito ay ang mga planta ng parent nito, kaya papasok muna ang volume bago ang anumang panlabas na benta",
+        "task": {
+          "who": "ang manufacturing at supply-chain operations team ng robot-maker",
+          "what": "I-scale ang humanoid build rate tungo sa 25,000-unit na target",
+          "where": "Ang mga production line ng robot-maker at ang mga deployment site na pag-aari ng parent",
+          "when": "Mula ngayon hanggang sa panahon ng 2028 production target",
+          "why": "Hinihila papasok muna ng captive demand ng parent ang volume",
+          "how": "Atlas humanoid platform na ginawa para sa parent-owned na internal deployment"
+        }
+      },
+      {
+        "actor": "corporate-development lead ng strategic acquisition",
+        "job": "Pagsasagawa ng ownership-consolidation buyout na sumisipsip sa buong robot maker kapag nabigo ang venture IPO exit, na pinapalitan ang market pricing ng captive ownership",
+        "outcome": "Isang sarado na acquisition na nagbibigay sa owner ng 100% ng robot maker at ng capital structure para magdeploy ng fleet sa loob sa halip na presyuhan ang mga ito sa bukas na merkado",
+        "motivation": "Isang owner lamang na may kapital at captive demand ang makakasipsip sa isang robot maker, at ginagawang nabibili ang asset ng IPO-default put-option exit",
+        "task": {
+          "who": "ang corporate-development at M&A team ng acquirer",
+          "what": "Isara ang buyout ng natitirang bahagi ng financial sponsor",
+          "where": "Ang cap table ng robot-maker at ang balance sheet ng acquirer",
+          "when": "Sa panahon ng IPO-deadline put-option exit, mula kalagitnaan ng 2026 pasulong",
+          "why": "Pinapalitan ng captive ownership ang market pricing na hindi kakayanin ng bukas na merkado",
+          "how": "Put-option-triggered na buyout ng natitirang equity ng sponsor"
+        }
+      }
+    ],
+    "prediction.dfc8663133f5e74d": [
+      {
+        "actor": "confidential-AI product team ng hyperscaler",
+        "job": "Pagpapatatag sa isang confidential-inference offering para tumakbo ang isang frontier model sa loob ng isang hardware TEE nang may end-to-end TEE-I/O at customer-verifiable remote attestation",
+        "outcome": "Isang generally available na confidential-inference service para sa isang frontier-class na modelo, na may TEE-I/O mula host tungo GPU at isang attestation report na bina-verify ng customer bago magpadala ng mga prompt",
+        "motivation": "Tumatanggi ang mga regulated at sovereign na buyer sa isang GPU na hindi nila ma-attest, kaya nakukuha ng confidential inference ang pinakamahalaga at hindi gaanong price-sensitive na workload",
+        "task": {
+          "who": "ang confidential-computing product at inference-platform engineering team ng cloud",
+          "what": "I-wire ang end-to-end TEE-I/O at attestation sa isang frontier-model inference service",
+          "where": "Ang managed inference platform ng cloud at ang GA release pipeline nito",
+          "when": "Mula sa panahon ng summit noong June 2026 hanggang sa GA pagsapit ng Q1 2027",
+          "why": "Binubuksan ng attestable confidentiality ang regulated at sovereign na inference demand",
+          "how": "Hardware TEE sa accelerator na may attestable key release at remote-attestation report"
+        }
+      },
+      {
+        "actor": "accelerator silicon vendor na nagpapadala ng TEE-I/O",
+        "job": "Paglilipat sa mga confidential-computing mode at sa mga CPU-enclave-to-GPU-memory TEE-I/O link mula maipapakita tungo sa volume para makagawa ang mga hyperscaler ng attestable inference batay sa mga ito",
+        "outcome": "Pagpapadala ng silicon na may hardware root-of-trust, attestable TEE-I/O sa pagitan ng host CPU at GPU memory, at mga attestation service na magagawang produkto ng mga hyperscaler",
+        "motivation": "Ang confidential AI ang nagpapaiba na naghihila sa mga regulated na buyer tungo sa mga accelerator nito, kaya ang pagpapagana ng attestable inference ay nagpapalago sa premium silicon demand",
+        "task": {
+          "who": "ang confidential-computing at platform-security engineering group ng silicon vendor",
+          "what": "Magpadala ng volume na TEE-I/O link at hardware root-of-trust attestation",
+          "where": "Ang GPU/CPU platform, firmware, at attestation service ng vendor",
+          "when": "Sa buong H2 2026 papasok sa unang bahagi ng 2027, batay sa mga confidential mode ng Blackwell",
+          "why": "Ang mga attestable accelerator ang nananalo sa pinakamahalagang confidential-AI workload",
+          "how": "Hardware root-of-trust, encrypted na CPU-GPU memory link, at isang attestation verification service"
+        }
+      },
+      {
+        "actor": "regulated/sovereign enterprise buyer na humihingi ng attestation",
+        "job": "Pagtukoy sa mga kontraktwal na attestation at data-residency na kinakailangan na pumipilit sa cloud na patunayang walang operator o co-tenant na makakabasa ng mga prompt o weights bago ang anumang deal",
+        "outcome": "Mga nilagdaang commitment at design-partner pull na ginagawang isang GA procurement requirement ang verifiable confidential inference, na naghihila sa hyperscaler service tungo sa general availability",
+        "motivation": "Ipinagbabawal ng mga patakaran sa healthcare, finance, defense at EU data-residency ang pagpapadala ng sensitibong prompt sa isang hindi-ma-attest na shared GPU",
+        "task": {
+          "who": "ang security architecture, compliance, at procurement function ng buyer",
+          "what": "Iutos ang verifiable attestation at residency bilang precondition sa pagbili",
+          "where": "Mga RFP, design-partner program, at vendor security review",
+          "when": "Sa buong panahon mula kalagitnaan ng 2026 papasok sa mga procurement cycle ng Q1 2027",
+          "why": "Ipinagbabawal ng regulasyon ang hindi-ma-attest na pagproseso ng sensitibong prompt",
+          "how": "Pag-verify ng attestation report at mga TEE-I/O confidentiality clause sa mga kontrata"
+        }
+      }
+    ]
+  }
+}

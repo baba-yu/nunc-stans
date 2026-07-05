@@ -1,0 +1,218 @@
+{
+  "date": "2026-06-25",
+  "validation_rows": [
+    {
+      "prediction_ref": {
+        "id": "prediction.225d77f109a86780",
+        "short_label": "Inference-ASIC cohort gains a fourth named buyer-designed chip by H1 2027",
+        "prediction_date": "2026-06-25"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "OpenAIとBroadcomによるJalapenoの発表(6月24日)が、この見立ての起点となる最初の兆候だ。両社は、OpenAI初の独自推論アクセラレータであり、複数年にわたる共同設計の成果として生まれた最初のチップであるJalapenoを公開した。トレーニングではなくLLM推論を軸に設計され、「Intelligence Processor」と位置づけられている。エンジニアリングサンプルはすでに量産目標の動作周波数と消費電力でラボ内の機械学習ワークロードを動かしており、OpenAIは電力あたりの性能が「現行の最先端を大幅に上回る」と主張する。最初のデータセンター展開は2026年末までに、ギガワット級の規模で行うことを目標としている。このプラットフォームはラックスケールであり、Broadcomのファブリック「Tomahawk」(最大毎秒1.6テラビット)がアクセラレータ同士を接続し、Celestiaがサーバーラックを共同設計する。本日の報道が示す構造的な読み筋は、まさにこの予測の前提そのものだ。最大手のフロンティアモデル購入者が、いまやハイパースケーラーの定石にならって自前の推論ASICを設計し、汎用GPUの経済性から脱しようとしている。OpenAI-Broadcom製の名前を持つ部品が、Google-BroadcomのTPUやAmazon Trainiumの系譜と並ぶ形だ。反証可能な基準までの隔たりは次の点にある。この企業群の4社目はまだ現れていない。Anthropic、Meta、xAI、Microsoftのいずれも、自前のラックスケール推論アクセラレータを公に約束したり発表したりしていない。反証可能な核心は、名前のある部品か明確な公的コミットメントを要求しており、「独自シリコンを検討中」といった噂や、既存のTPU・Trainiumラインの延長では足りない。",
+      "reference_links": [
+        {
+          "label": "SiliconANGLE - OpenAI, Broadcom debut custom Jalapeno chip for AI inference",
+          "url": "https://siliconangle.com/2026/06/24/openai-broadcom-debut-custom-jalapeno-chip-llm-inference/"
+        },
+        {
+          "label": "Neowin - OpenAI and Broadcom unveil Jalapeno, a new AI chip built for LLM inference",
+          "url": "https://www.neowin.net/news/openai-and-broadcom-unveil-jalapeo-a-new-ai-chip-built-for-llm-inference/"
+        },
+        {
+          "label": "Constellation Research - OpenAI, Broadcom unveil first AI inference chip",
+          "url": "https://www.constellationr.com/insights/news/openai-broadcom-unveil-first-ai-inference-chip"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "本日のOpenAI-Broadcom Jalapeno発表は、「推論ASICを設計する企業群が2027年上半期までに4社目の自社設計チップを得る」という見立て(2026-06-25)が前提とする条件そのものだ。最大手のフロンティアモデル購入者が、パートナーのファブリックを伴い2026年末展開を目標とする、名前のある共同設計の推論アクセラレータを世に出す。これは、同業他社がいまや模倣を迫られる「脱出口」のテンプレートを裏づけている。",
+        "coherence": 4,
+        "remaining_gap": "Anthropic、Meta、xAI、Microsoftのいずれの4社目も、自前のラックスケール推論アクセラレータについて部品名を挙げたり、明確な公的コミットメントを示したりしていない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.3a5fa9315f58608d",
+        "short_label": "Agentic coding platforms ship token budgets and caps as default by Q2 2027",
+        "prediction_date": "2026-06-25"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "Gartnerのエージェント型コーディングのトークン経済に関するノート(6月24日)が起点の兆候であり、この見立てにとっての製品仕様書のように読める。Gartnerは、LLMのトークン消費の増大と、エージェント型コーディングツールにおける従量課金への移行を背景に、2028年までにAIコーディングのコストが平均的な開発者の給与を上回ると予測する。引用可能な水準値こそがニュースだ。技術系リーダーの23パーセントはすでに開発者1人あたり月200〜500ドルをトークンに費やしており、組織の6パーセントは開発者1人あたり月2,000ドル超を支払っている。Gartnerは、コスト上昇が最も急峻になる要因を、エージェント駆動ワークフローにおける統制なき自律性、肥大化したコンテキストウィンドウ、利用を最適化するための構造化フィードバックの欠如に求める。そして、自律的な開発者ループのツール群(CursorやClaude Code、Codex CLIに代表されるエージェント型IDE)を1席あたりのコストの中心と名指しする。さらに、生産性をめぐる物語を、規模を伴うエージェント展開が利益を食いつぶす前に統制された工学運用モデルを必要とする統制問題として捉え直している。この診断こそ、予測される標準機能群の仕様だ。すなわち、席単位・チーム単位のトークン予算、ハードキャップとソフトキャップ、リアルタイムの利用ダッシュボード、自律性の深さやコンテキストウィンドウのサイズに対するポリシー上のガードレールである。基準までの隔たりは次の点にある。これはアナリストの予測であって、出荷された製品ではない。主要なエージェント型コーディングプラットフォームのいずれも、管理者側の消費統制機能をデフォルトで有効な標準機能として出荷してはいない。この予測が満たされるには、ベンダー側が2027年第2四半期までに支出統制レイヤーを当然の前提にする必要がある。",
+      "reference_links": [
+        {
+          "label": "Gartner - AI coding costs will surpass the average developer's salary by 2028 as token consumption surges",
+          "url": "https://www.gartner.com/en/newsroom/press-releases/2026-06-24-gartner-predicts-ai-coding-costs-will-surpass-average-developer-salary-by-2028-as-token-consumption-surges"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "Gartnerの6月24日のノートは、「エージェント型コーディングプラットフォームが2027年第2四半期までにトークン予算と上限をデフォルトで搭載する」(2026-06-25)という見立ての背後にある構造的な力だ。リーダーの23パーセントが開発者1人あたり月200〜500ドルを費やし、コスト上昇が最も急峻になる要因が統制なき自律性と肥大化したコンテキストにあると指摘される中で、席単位のコスト圧迫がベンダーに消費統制を当然の前提とさせる方向へ押し進める。",
+        "coherence": 4,
+        "remaining_gap": "これはアナリストの予測だ。主要プラットフォームのいずれも、管理者側の予算・上限・自律性ガードレールをデフォルトで有効な機能として出荷してはいない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.47a4eb0e8d95b76d",
+        "short_label": "Autonomous pentest agents ship as named managed tier by Q4 2026",
+        "prediction_date": "2026-06-25"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "自律型ペンテストエージェントのマネージドティアに関する兆候(6月24〜25日)が、この見立ての起点となる証拠だ。本日の報道では、XBOWの自律プラットフォーム(アプリケーション環境を地図化し、脆弱性を探り、多段階の悪用経路を機械の速度で連鎖させる)が、Accenture Venturesからの戦略投資に加え、顧客向けに継続的な攻撃側テストを実施するパートナーシップを獲得した。これは、NVIDIA NVentures、Samsung Ventures、SentinelOne S Venturesらが出資する3,500万ドルのシリーズC追加調達の上に乗る形だ。この資金調達とパートナーシップの形こそ、既存大手が自律型ペンテストを研究対象として扱うのではなく、デリバリースタックに組み込みつつあることを示す調達の兆候である。AIセキュリティの今後のカレンダーもタイミングを補強する。AI Tinkerers SF Offensive Security Demo Nightが今週これらのエージェントを取り上げ、Black Hat USAのAI Summit(8月1〜6日)とDEF CONのAI Villageが、秋の調達時期を前にこのカテゴリに初の大型な企業バイヤー向け舞台を与える。基準までの隔たりは次の点にある。2027年第4四半期までにこの予測が満たされるには、少なくとも1社の主要なサービス事業者またはセキュリティプラットフォームのベンダーが、独自のSKUと価格を持つ、名前のある継続稼働のマネージドティアとして自律型ペンテストエージェントを売り出す必要がある。本日示されたのは投資とパートナーシップ、そしてカンファレンスの頻度であって、まだ名前のあるセルフサービス型のマネージド製品ではない。責任の所在やスコープに関する懸念によって、これらのエージェントが人間の監督下の試験運用にとどめ置かれ、ローンチが期限を越えて押し出される可能性もある。",
+      "reference_links": [
+        {
+          "label": "TweakTown - AMD announces Advancing AI 2026 event for July (July 22-23, San Francisco)",
+          "url": "https://www.tweaktown.com/news/110826/amd-announces-advancing-ai-2026-event-for-july/index.html"
+        },
+        {
+          "label": "MLQ - AMD sets July date for Advancing AI 2026 flagship event in San Francisco",
+          "url": "https://mlq.ai/news/v2/amd-sets-july-date-for-advancing-ai-2026-flagship-event-in-san-francisco/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "landing",
+        "narrative": "本日の兆候は、「自律型ペンテストエージェントが2026年第4四半期までに名前のあるマネージドティアとして出荷される」(2026-06-25)を期限に向けて前進させる。XBOWはAccenture Venturesからの戦略投資と継続的な攻撃側テストのパートナーシップを、3,500万ドルのシリーズCの上に獲得し、既存大手が自律型ペンテストをデリバリースタックに組み込みつつあることを示した。Black HatとDEF CONが、秋の調達時期を前に企業バイヤーを舞台に上げる。",
+        "coherence": 3,
+        "remaining_gap": "本日示されたのは資金調達、パートナーシップ、カンファレンスの頻度であって、独自のSKUと価格を持つ、名前のある継続稼働のマネージドティアではない。責任の所在に関する懸念がローンチを2026年第4四半期の先へ押し出す可能性もある。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.98885276749e707b",
+        "short_label": "Corsair-class inference silicon books a named hyperscaler deployment by Q3 2027",
+        "prediction_date": "2026-06-17"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "OpenAI-Broadcom Jalapenoの発表(6月24日)は、名前のある推論シリコン展開という見立てを強く支える。ただし汎用のCorsair級ベンダーの部品ではなく、購入者が設計した部品を通じてである。Jalapenoは具体的な展開コミットメントを伴う独自の推論アクセラレータだ。最初のデータセンター展開は2026年末までにギガワット級の規模で行うことを目標とし、BroadcomのTomahawkファブリック(最大毎秒1.6テラビット)で接続され、Celestiaがラックを共同設計し、OpenAIが名前のある購入者である。これはまさに予測が想定している形だ。すなわち、汎用GPUの一般的な購入ではなく、専用の推論シリコンが名前付き・日付付きの大規模展開を獲得するという形である。今後のAIチップのカレンダー(AMD Advancing AI 2026は7月22〜23日でInstinct MI400シリーズが焦点、Hot Chips 2026は8月23〜25日にスタンフォードで、AI Infra Summitは9月15〜17日にサンタクララで)は、さらなる推論シリコンの受注が表面化する場の頻度を供給する。隔たりは次の点にある。JalapenoはOpenAI自身が共同設計したASICで、将来の展開として発表されたものであって、名前のあるハイパースケーラー顧客を受注する汎用Corsair級の推論シリコンベンダーではない。この予測の反証可能な目標は、名前のあるハイパースケーラー展開を伴うCorsair級の部品であり、本日のニュースはまだそれを提供していない。",
+      "reference_links": [
+        {
+          "label": "SiliconANGLE - OpenAI, Broadcom debut custom Jalapeno chip for AI inference",
+          "url": "https://siliconangle.com/2026/06/24/openai-broadcom-debut-custom-jalapeno-chip-llm-inference/"
+        },
+        {
+          "label": "Constellation Research - OpenAI, Broadcom unveil first AI inference chip",
+          "url": "https://www.constellationr.com/insights/news/openai-broadcom-unveil-first-ai-inference-chip"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "so_that",
+        "narrative": "本日のOpenAI-Broadcom Jalapeno発表は、Corsair級展開の予測(6月17日)が想定する帰結そのものを示す。専用の推論シリコンが、汎用GPUの一般的な購入ではなく、名前付き・日付付きの大規模展開を獲得する形だ。OpenAIのギガワット級展開はBroadcomのTomahawkファブリック上で2026年末までを目標としている。もっとも、Jalapenoは購入者が設計したASICであって、汎用ベンダーの部品ではない。",
+        "coherence": 3,
+        "remaining_gap": "JalapenoはOpenAI自身が共同設計したASICであって、名前のあるハイパースケーラー顧客を受注する汎用Corsair級ベンダーではない。反証可能な目標は依然として満たされていない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.36f4ab773b39713e",
+        "short_label": "Hyperscaler custom AI silicon splits into training vs inference SKUs by H1 2027",
+        "prediction_date": "2026-04-22"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "[復活] 本日のJalapeno報道に対する第1層のキーワード一致と第2層の意味的一致(兆候:トレーニング対推論のSKU分化、Trainium、Inferentia、二系統シリコン、ハイパースケーラーの内製シリコン)。OpenAI-Broadcom Jalapenoの発表(6月24日)は名前のあるアクセラレータであり、OpenAIはこれを明確に、トレーニングではなくLLM推論を軸に設計した「Intelligence Processor」と位置づける。専用の推論部品であり、Google-BroadcomのTPUやAmazon Trainiumの系譜と並べられ、Jalapeno自身は複数世代にわたる計算プラットフォームの第一歩と説明される。この推論専用対トレーニングという位置づけこそ、予測が指す二系統の独自シリコン分化そのものだ。すなわち、購入者がトレーニング用シリコンとは別に、目的特化の推論SKUを設計することで汎用GPUの経済性から脱するという形である。基準までの隔たりは次の点にある。Jalapenoはフロンティアモデル購入者による単一の推論部品であって、ハイパースケーラーがトレーニング対推論の2SKU構成の独自シリコンラインを公に区分けしたものではない。この予測には名前のある二系統分化が必要であり、本日の兆候はその分化の推論SKU側を示すにとどまり、対をなすトレーニングSKUの明示的な開示はない。",
+      "reference_links": [
+        {
+          "label": "SiliconANGLE - OpenAI, Broadcom debut custom Jalapeno chip for AI inference",
+          "url": "https://siliconangle.com/2026/06/24/openai-broadcom-debut-custom-jalapeno-chip-llm-inference/"
+        },
+        {
+          "label": "Constellation Research - OpenAI, Broadcom unveil first AI inference chip",
+          "url": "https://www.constellationr.com/insights/news/openai-broadcom-unveil-first-ai-inference-chip"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "休眠プールから復活したトレーニング対推論のSKU分化の予測(4月22日)は、本日のJalapeno発表から構造的な裏づけを得る。OpenAIはこれをトレーニングではなく推論に目的特化した「Intelligence Processor」と位置づけ、Google TPUやAmazon Trainiumの系譜と並べた。これは予測が指す二系統の独自シリコンの力であり、購入者がトレーニング用シリコンとは別に専用の推論SKUを設計する動きだ。",
+        "coherence": 3,
+        "remaining_gap": "Jalapenoはフロンティア購入者による推論SKU側を確立したが、ハイパースケーラーが対をなすトレーニング対推論の2SKU構成の独自ラインを公に区分けしたわけではない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.a943725fb4046b01",
+        "short_label": "An autonomous-pentest vendor lands a named enterprise/gov deal by Q1 2027",
+        "prediction_date": "2026-06-22"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "自律型ペンテストエージェントのマネージドティアに関する兆候(6月24〜25日)は、この見立てを直接的に支える。本日の報道では、XBOW(環境を地図化し、脆弱性を探り、多段階の悪用を機械の速度で連鎖させるプラットフォームを持つ、名前のある自律型ペンテストベンダー)が、Accenture Venturesからの戦略投資に加え、顧客向けに継続的な攻撃側テストを実施するパートナーシップを獲得した。これは、NVIDIA NVentures、Samsung Ventures、SentinelOne S Venturesが出資する3,500万ドルのシリーズC追加調達の上に乗る形だ。継続的な攻撃側テストを提供するAccentureとのパートナーシップは、予測が想定する名前のある企業契約の形に近い。今後のセキュリティのカレンダー(Black Hat USAのAI Summitは8月1〜6日、DEF CONのAI Village)も、エージェント型の攻撃側ツールにバイヤー側の関心を引き留める。基準までの隔たりは次の点にある。Accenture Venturesの投資と提供パートナーシップは、ベンダーのチャネル関係および戦略的ラウンドであって、まだ開示された名前のある企業または政府の顧客契約ではない。この予測の反証可能な目標は名前のある企業または政府との取引であり、本日の資金調達とパートナーシップのニュースはそれに近づいてはいるが、まだ確認には至っていない。",
+      "reference_links": [
+        {
+          "label": "TweakTown - AMD announces Advancing AI 2026 event for July (July 22-23, San Francisco)",
+          "url": "https://www.tweaktown.com/news/110826/amd-announces-advancing-ai-2026-event-for-july/index.html"
+        },
+        {
+          "label": "MLQ - AMD sets July date for Advancing AI 2026 flagship event in San Francisco",
+          "url": "https://mlq.ai/news/v2/amd-sets-july-date-for-advancing-ai-2026-flagship-event-in-san-francisco/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "landing",
+        "narrative": "本日のXBOWのニュースは、名前のある企業契約の予測(6月22日)をタイミングと主体の両面で前進させる。名前のある自律型ペンテストベンダーであるXBOWが、Accenture Venturesからの戦略投資と、顧客向けに継続的な攻撃側テストを実施するパートナーシップを、NVIDIA、Samsung、SentinelOneによる3,500万ドルのシリーズCの上に獲得した。名前のある契約の形に近く、Black HatのAI Summitがバイヤーの関心を引き留めている。",
+        "coherence": 3,
+        "remaining_gap": "Accenture Venturesの投資と提供パートナーシップはベンダーのチャネル関係であって、まだ開示された名前のある企業または政府の顧客契約ではない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.60ff24cfe4c34842",
+        "short_label": "Intel Foundry lands a second external AI-chip customer on 18A by Q2 2027",
+        "prediction_date": "2026-06-11"
+      },
+      "today_relevance": 2,
+      "evidence_summary": "OpenAI-Broadcom Jalapenoの発表(6月24日)は、Intel Foundryの2社目顧客という見立てに対して、ファウンドリ顧客の主張には触れずに独自AIシリコン需要の背景を補強するという、弱い形でのみ関係する。Jalapenoは、ハイパースケール級の購入者が、マーチャントパートナー(Broadcom)とネットワークファブリックを伴って独自の推論ASICを発注したもう一つの事例であり、まさに外部ファウンドリの生産能力需要を生み出すファブレスAIチップ設計のパターンだ。しかし、この予測はIntel Foundryが18Aノードで2社目の外部AIチップ顧客を獲得することを具体的に対象としており、本日のニュースは設計パートナーとしてBroadcomの名を挙げるものの、どのファウンドリがJalapenoを製造するかは開示していない。本日の報道にIntel Foundryの兆候はない。隔たりは大きい。本日供給されるのは独自AIシリコンに対する需要側の主題的な背景であって、署名されたIntel Foundryの18A顧客契約やテープアウトの開示ではない。後者こそ予測の反証可能な核心だ。",
+      "reference_links": [
+        {
+          "label": "SiliconANGLE - OpenAI, Broadcom debut custom Jalapeno chip for AI inference",
+          "url": "https://siliconangle.com/2026/06/24/openai-broadcom-debut-custom-jalapeno-chip-llm-inference/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "none",
+        "narrative": "本日のOpenAI-Broadcom Jalapeno発表は、Intel Foundryが18Aで2社目の外部AIチップ顧客を獲得するという予測(6月11日)の背後にある独自AIシリコン需要の背景を補強する。だが設計パートナーとしてBroadcomの名を挙げるのみで、どのファウンドリが部品を製造するかは開示していない。本日、Intel Foundryの18A顧客の兆候は現れていない。",
+        "coherence": 1,
+        "remaining_gap": "名前のあるIntel Foundryの18A AIチップ顧客の2社目か、テープアウトの開示が必要だ。本日得られるのは需要側の主題的な背景にとどまる。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.a4ee0b5435860b21",
+        "short_label": "AWS Continuum's sandbox exploit-validation goes industry baseline by H1 2027",
+        "prediction_date": "2026-06-21"
+      },
+      "today_relevance": 2,
+      "evidence_summary": "自律型ペンテストエージェントのマネージドティアに関する兆候(6月24〜25日)は、「実行して発見を裏づける」という見立てに、条件成立そのものではなく隣接の形で触れる。XBOWの自律プラットフォームは、多段階の悪用経路を機械の速度で連鎖させ、到達可能性を示すために実際に動く悪用コードを構築・実行する。これは、Continuumのサンドボックスでの悪用検証という手法を、攻撃側ベンダーの領域に一般化したものだ。今後のセキュリティのカレンダー(Black Hat USAのAI Summitは8月1〜6日、DEF CONのAI Village)も、悪用証明のツールをバイヤーの目の前に置き続ける。関連性は勢いと攻撃側の隣接にあり、防御側での条件成立にはない。本日の兆候は攻撃側の自律型ペンテストベンダーの資金調達とパートナーシップであって、防御側の悪用検証パイプラインが名前のあるコードセキュリティベンダー各社で業界標準になるというものではない。基準までの隔たりは次の点にある。この予測は防御側のサンドボックス悪用証明ゲートが業界標準になることを指しており、本日の攻撃者側ツールという位置づけは、その防御側標準化の主張を前進させない。",
+      "reference_links": [
+        {
+          "label": "TweakTown - AMD announces Advancing AI 2026 event for July (July 22-23, San Francisco)",
+          "url": "https://www.tweaktown.com/news/110826/amd-announces-advancing-ai-2026-event-for-july/index.html"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "none",
+        "narrative": "XBOWの自律プラットフォームが機能する悪用コードを機械の速度で連鎖させることは、AWS Continuumのサンドボックス悪用検証が業界標準になるという予測(6月21日)の背後にある「実行して裏づける」手法と響き合う。ただし攻撃側の隣接にとどまる。本日の資金調達とパートナーシップの兆候は攻撃側ベンダーの勢いであって、防御側の悪用検証ゲートが名前のあるコードセキュリティベンダー各社で標準になることではない。",
+        "coherence": 2,
+        "remaining_gap": "名前のある防御側コードセキュリティベンダーが、サンドボックスでの悪用証明ゲートを標準として採用することが必要だ。本日示されるのは攻撃者側ツールである。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.42df3be2edb72f8d",
+        "short_label": "Nvidia mean Street price target clears $300 on data-center GPU demand by Q4 2026",
+        "prediction_date": "2026-06-06"
+      },
+      "today_relevance": 2,
+      "evidence_summary": "[復活] 本日のJalapeno報道に対する第2層の意味的一致(兆候:推論が独自シリコンへ分散しGroq型のLPUへ、粗利益の段階的低下と価格圧力、AIアクセラレータ需要のソフトランディング)。OpenAI-Broadcom Jalapenoの発表(6月24日)は、予測の論拠が強気論への対抗要因として挙げる「汎用GPUの経済性からの脱出」の物語そのものだ。最大手のフロンティアモデル購入者が、ギガワット級の規模で汎用GPUの経済性から脱するためにこそ自前の推論ASICを設計しており、これは推論需要が汎用GPUから独自シリコンへと分散していく典型例だ。これは、Nvidiaの平均目標株価300ドル超を支えるデータセンターGPU需要の見立てに対して逆風となる。主要な推論購入者が専用シリコンを構築すれば、強気論が前提とする汎用GPUの推論シェアが浸食されるからだ。関連性は弱気側の対抗メカニズムにあり、目標株価の数値が出ることにはない。本日のニュースには、Nvidiaのアナリスト目標株価の改定も、平均目標値の数値も、セルサイドの動きもない。基準までの隔たりは次の点にある。この予測はセルサイドのコンセンサス平均目標が300ドルを超えることで判定されるが、本日の報道はそれを扱っていない。Jalapenoはこの見立てに対する推論分散リスクを鋭くするにとどまる。",
+      "reference_links": [
+        {
+          "label": "SiliconANGLE - OpenAI, Broadcom debut custom Jalapeno chip for AI inference",
+          "url": "https://siliconangle.com/2026/06/24/openai-broadcom-debut-custom-jalapeno-chip-llm-inference/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "none",
+        "narrative": "休眠プールから復活したNvidiaの平均目標株価300ドル超の予測(6月6日)に触れるのは、弱気側の対抗メカニズムのみだ。本日のJalapeno発表は、最大手の推論購入者が汎用GPUの経済性から脱するために専用シリコンを構築する様子を示し、300ドルの強気論が前提とするデータセンターGPU需要のシェアを浸食する。本日、アナリスト目標の改定や平均目標値の数値は現れていない。",
+        "coherence": 2,
+        "remaining_gap": "セルサイドのコンセンサス平均目標が300ドルを超えることが必要だ。本日、Nvidiaのアナリストの動きはなく、推論分散リスクが鋭くなったのみである。"
+      }
+    }
+  ]
+}

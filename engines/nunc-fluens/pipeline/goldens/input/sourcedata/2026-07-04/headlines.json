@@ -1,0 +1,53 @@
+{
+  "date": "2026-07-04",
+  "technical": [
+    {
+      "lead": "Meituan open-sources LongCat-2.0, a 1.6T coding MoE trained on Chinese ASICs",
+      "body": "Meituan released <a href=\"https://venturebeat.com/technology/meituan-open-sources-longcat-2-0-the-1-6t-near-frontier-agentic-coding-model-thats-been-leading-openrouter-trained-entirely-on-chinese-chips\">LongCat-2.0</a> on June 30, 2026, a 1.6-trillion-parameter mixture-of-experts model with roughly 48B parameters activated per token and a native one-million-token context window, published to GitHub and Hugging Face under the permissive MIT license. Per <a href=\"https://www.opensourceforu.com/2026/06/meituan-open-sources-longcat-2-0-under-mit-license/\">Open Source For You</a>, the model was trained and served end-to-end on a cluster of more than 50,000 Chinese-made ASICs with no NVIDIA GPUs in the loop, and it introduces a LongCat Sparse Attention scheme tuned for long-context agentic workloads. On coding it scores 59.5 on SWE-bench Pro, narrowly ahead of GPT-5.5's 58.6, and it had already spent roughly two months as the anonymous \"Owl Alpha\" checkpoint in OpenRouter's global top three before its origin was disclosed. The sharper signal is that the open-weight frontier is no longer gated on access to US-restricted silicon.",
+      "citations": [
+        {"label": "VentureBeat - Meituan open sources LongCat-2.0, trained entirely on Chinese chips", "url": "https://venturebeat.com/technology/meituan-open-sources-longcat-2-0-the-1-6t-near-frontier-agentic-coding-model-thats-been-leading-openrouter-trained-entirely-on-chinese-chips"},
+        {"label": "Open Source For You - Meituan Open Sources LongCat-2.0 Under MIT License", "url": "https://www.opensourceforu.com/2026/06/meituan-open-sources-longcat-2-0-under-mit-license/"}
+      ]
+    },
+    {
+      "lead": "Two CVSS 9.8 zero-click sandbox-escape flaws hit the Cursor coding IDE",
+      "body": "Cato AI Labs disclosed a pair of critical remote-code-execution flaws in the Cursor AI coding IDE on July 1, 2026, covered by <a href=\"https://thehackernews.com/2026/07/critical-cursor-flaws-could-let-prompt.html\">The Hacker News</a>, that let external content weaponize prompt injection into a full sandbox escape with no user click. <a href=\"https://nvd.nist.gov/vuln/detail/CVE-2026-50548\">CVE-2026-50548</a> (CVSS 9.8, a CWE-22 path traversal) abuses the optional working_directory parameter so a malicious agent can write files outside the intended workspace, while <a href=\"https://nvd.nist.gov/vuln/detail/CVE-2026-50549\">CVE-2026-50549</a> (also CVSS 9.8) exploits a symlink-resolution fallback that lets writes land outside the project boundary; both are fixed in Cursor 3.0. Because the trigger is content the agent is designed to ingest, a poisoned README, web page, or tool response can drive command execution without any approval prompt, moving the agent-tooling RCE surface from niche low-code builders into the mainstream editor developers run against untrusted repositories every day. The immediate action is to confirm every install is on Cursor 3.0 or later, since older builds remain exploitable by default.",
+      "citations": [
+        {"label": "The Hacker News - Critical Cursor Flaws Could Let Prompt Injection Escape Sandbox", "url": "https://thehackernews.com/2026/07/critical-cursor-flaws-could-let-prompt.html"},
+        {"label": "NVD - CVE-2026-50548 Detail", "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-50548"},
+        {"label": "NVD - CVE-2026-50549 Detail", "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-50549"}
+      ]
+    },
+    {
+      "lead": "Anthropic ships Enterprise spend caps and opens a Fable 5 jailbreak bounty",
+      "body": "Following this week's global restoration of Fable 5, Anthropic moved on two fronts on July 3, 2026, per the <a href=\"https://www.buildfastwithai.com/blogs/ai-news-today-july-4-2026\">July 4 news roundup</a>. First, Claude Enterprise gained admin cost-governance controls aimed at runaway agent token bills: organization-, team-, and department-level spend caps, model-level access entitlements per user or group, a usage-analytics dashboard with an export and Analytics API, agent-effort controls, and real-time spend alerts, framed explicitly against enterprise \"tokenmaxxing\" and answering the Gartner warning that coding-agent token spend could rival developer salaries. Second, Anthropic launched a formal HackerOne bug-bounty program scoped narrowly to Fable 5 cyber-jailbreak bypasses, pairing it with an early-draft jailbreak-severity framework co-developed with AWS, Microsoft, and Google that scores incidents on attack accessibility and harm potential. Access to the top model now comes bundled with both the cost controls enterprises need to deploy agents at scale and the disclosure machinery the government restoration deal required.",
+      "citations": [
+        {"label": "Build Fast with AI - AI News Today July 4 2026", "url": "https://www.buildfastwithai.com/blogs/ai-news-today-july-4-2026"}
+      ]
+    },
+    {
+      "lead": "Global venture funding hits a record $510B in H1 2026, two labs taking 43%",
+      "body": "Crunchbase's first-half 2026 funding analysis shows global startup investment hit a record $510 billion, already exceeding the $440 billion deployed across all of 2025 and setting an all-time high for any half-year, per <a href=\"https://news.crunchbase.com/venture/global-startup-exits-ipo-ma-soar-ai-q2-h1-2026/\">Crunchbase News</a>. The concentration is the striking part: OpenAI and Anthropic together accounted for $217 billion, or 43% of all venture dollars in the half, so two companies absorbed nearly half of global startup funding. The quarterly split runs $305 billion in Q1 (the largest single quarter ever) and $205 billion in Q2 across more than 5,000 startups, and exits returned in force with 32 venture-backed companies going public above a $1 billion valuation in Q2 alone. The report lands the same week Menlo Ventures closed its largest-ever $3 billion raise on the strength of its Anthropic stake, and amid reporting that OpenAI floated giving the US government a roughly 5% equity position ahead of a planned public debut. The structural read is that AI is no longer one theme within venture; in H1 2026 it was the majority of it.",
+      "citations": [
+        {"label": "Crunchbase News - Global Startup Investment Hit Record $510B In H1 2026", "url": "https://news.crunchbase.com/venture/global-startup-exits-ipo-ma-soar-ai-q2-h1-2026/"}
+      ]
+    },
+    {
+      "lead": "AMD's July 22-23 MI400 reveal leads a dense AI event calendar",
+      "body": "The nearest AI-chip catalyst is AMD's Advancing AI 2026 on July 22-23 at Moscone in San Francisco, where the MI400 series and \"Helios\" rack-scale system are expected with availability timelines; further out on the hardware track, <a href=\"https://hotchips.org/about/\">Hot Chips 2026</a> runs at Stanford's Memorial Auditorium on August 23-25 and the <a href=\"https://www.ai-infra-summit.com/agenda\">AI Infra Summit</a> follows in Santa Clara on September 15-17. The AI-security block clusters in early-to-mid August: SecurityWeek's <a href=\"https://www.airisksummit.com/agenda\">AI Risk Summit</a> runs August 11-12 at the Ritz-Carlton in Half Moon Bay, while Black Hat USA and DEF CON 34's AI Village land in Las Vegas in early August and OWASP Global AppSec USA follows in San Francisco on November 5-6, with Zenity's agent-security series directly relevant given this week's Cursor sandbox-escape CVEs. Newly on the calendar, <a href=\"https://ai4.io/\">Ai4 2026</a> runs August 4-6 in Las Vegas; on the mainstream dev track GitHub Universe is October 28-29 and AWS re:Invent runs November 30 to December 4. The two nearest actions are registering for the July 22 AMD keynote and the August 11-12 AI Risk Summit.",
+      "citations": [
+        {"label": "Hot Chips 2026", "url": "https://hotchips.org/about/"},
+        {"label": "AI Infra Summit 2026", "url": "https://www.ai-infra-summit.com/agenda"},
+        {"label": "SecurityWeek AI Risk Summit 2026 (Aug 11-12, Half Moon Bay)", "url": "https://www.airisksummit.com/agenda"},
+        {"label": "Ai4 2026 (Aug 4-6, Las Vegas)", "url": "https://ai4.io/"}
+      ]
+    }
+  ],
+  "plain": [
+    "Meituan open-sources a huge coding model on Chinese chips",
+    "Two critical zero-click flaws hit the Cursor coding tool",
+    "Anthropic adds AI spend caps and a jailbreak bug bounty",
+    "AI startups pull in a record $510B, half to two labs",
+    "AMD's July chip reveal leads a packed AI event season"
+  ]
+}

@@ -1,0 +1,44 @@
+[
+  {
+    "actor": "open-weight quantization toolkit engineering lead",
+    "job": "Shipping reproducible sub-2-bit selective-precision GGUF recipes that fit a 700B-plus open-weight model into 256GB or less of single-node memory",
+    "outcome": "A published, reproducible quantization recipe running a frontier-class open-weight model on one workstation node under 256GB combined memory",
+    "motivation": "Owning the canonical local-inference recipe for the heaviest open tier drives adoption and cements the toolkit as the on-prem standard",
+    "task": {
+      "who": "the toolkit's quantization and kernel engineering team",
+      "what": "Refine selective sub-2-bit quant recipe and publish it",
+      "where": "Dynamic GGUF build pipeline and public model-hub release",
+      "when": "From now through Q4 2026",
+      "why": "A reproducible recipe is what crosses the heaviest tier on-prem",
+      "how": "Selective-precision sub-2-bit GGUF quantization with documented steps"
+    }
+  },
+  {
+    "actor": "independent local-inference reproducer and benchmarker",
+    "job": "Independently rerunning the published recipe on owned hardware and measuring accuracy retention on a public benchmark rather than vendor self-report",
+    "outcome": "A third-party reproduction confirming the sub-256GB single-node run with public-benchmark accuracy retention published openly",
+    "motivation": "Vendor compression and quality numbers are self-reported and unverified, so credible independent confirmation is what the community trusts",
+    "task": {
+      "who": "an independent researcher or local-LLM community benchmarker",
+      "what": "Reproduce the run and publish accuracy-retention scores",
+      "where": "Owned single-node workstation and a public benchmark harness",
+      "when": "After recipe publication through Q4 2026",
+      "why": "Self-reported quality numbers need independent verification to be trusted",
+      "how": "Public coding and reasoning benchmark on the quantized build"
+    }
+  },
+  {
+    "actor": "frontier-class open-weight model release lead",
+    "job": "Releasing a near-frontier 700B-plus mixture-of-experts open-weight checkpoint and weights that the quantization recipe can compress and run single-node",
+    "outcome": "An available open-weight frontier-class checkpoint whose released weights enable a sub-256GB single-node quantized deployment",
+    "motivation": "Open releases that demonstrably run on owned hardware drive ecosystem reach and differentiate the lab against closed cloud-only frontier rivals",
+    "task": {
+      "who": "the lab's open-weight release and model-publishing function",
+      "what": "Publish full-precision frontier-class MoE weights openly",
+      "where": "Public model hub and the lab's release channels",
+      "when": "Ahead of and through 2026 into Q4",
+      "why": "Open weights are the raw input the quantization recipe needs",
+      "how": "Open-weight checkpoint release in a standard inference format"
+    }
+  }
+]

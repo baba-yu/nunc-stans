@@ -1,0 +1,137 @@
+{
+  "date": "2026-06-22",
+  "by_prediction": {
+    "prediction.9a4ef78575099c38": [
+      {
+        "actor": "responsable de comercialización de una startup de pentesting autónomo",
+        "job": "Convertir el impulso de las demos posteriores a Black Hat en un acuerdo con logo firmado y publicable, en una empresa o gobierno, para su producto de red teaming autónomo continuo",
+        "outcome": "Un despliegue nombrado y documentado públicamente en un cliente empresarial o gubernamental del agente de pentesting autónomo del proveedor antes de que cierre Q1 2027",
+        "motivation": "Un cierre nombrado es la credibilidad más barata que un proveedor puede comprar en un campo abarrotado de participantes comparables tras Black Hat",
+        "task": {
+          "who": "la función de ventas empresariales y marketing de clientes de la startup",
+          "what": "Negociar un despliegue nombrado y referenciable con un comprador destacado",
+          "where": "El embudo de compras sembrado en Black Hat USA / DEF CON",
+          "when": "Desde la demo night del 25 de junio hasta Q1 2027",
+          "why": "Un acuerdo con logo compra credibilidad frente a participantes rivales",
+          "how": "Conversión de demo a compra con un compromiso público de caso de estudio"
+        }
+      },
+      {
+        "actor": "equipo de ingeniería de agentes ofensivos de una startup de pentesting autónomo",
+        "job": "Endurecer su agente para que encadene de forma autónoma el reconocimiento, construya un exploit funcional, lo ejecute y documente una cadena de ataque reproducible con calidad de producto",
+        "outcome": "Un agente ofensivo convertido en producto que produce cadenas de explotación verificadas y reproducibles que un comprador o un benchmark puede confirmar de forma independiente",
+        "motivation": "Los compradores confían más en la prueba de explotación que en los escáneres, así que las cadenas de ataque reproducibles son la capacidad que justifica un producto permanente de pago",
+        "task": {
+          "who": "el equipo de ingeniería de agentes ofensivos y de detección de la startup",
+          "what": "Convertir en producto la generación autónoma de cadenas de ataque de reconocimiento a explotación",
+          "where": "La plataforma de red teaming autónomo continuo del proveedor",
+          "when": "Desde ahora hasta Q1 2027, construyendo sobre las demos en vivo del 25 de junio",
+          "why": "La prueba de explotación reproducible es lo que los compradores realmente pagan",
+          "how": "Un agente impulsado por LLM que construye y detona exploits en un sandbox"
+        }
+      },
+      {
+        "actor": "comprador de seguridad empresarial o gubernamental que ejecuta el piloto",
+        "job": "Ejecutar un piloto en producción de un proveedor de pentesting autónomo y aceptar ser nombrado como despliegue de referencia",
+        "outcome": "Un despliegue documentado y nombrado que valida el red teaming autónomo continuo como un producto permanente, no una demo aislada",
+        "motivation": "Recortar horas de red team humano encaja en el presupuesto de seguridad, y ser un adoptante temprano nombrado gana credibilidad y poder de negociación frente al proveedor",
+        "task": {
+          "who": "la función de operaciones de seguridad y de red team del comprador",
+          "what": "Pilotar el agente autónomo contra su propia superficie de ataque",
+          "where": "El parque de producción del comprador bajo un compromiso controlado",
+          "when": "A lo largo de 2026 hasta Q1 2027, de cara al cierre de la predicción",
+          "why": "El red teaming autónomo recorta costosas horas de pentest humano",
+          "how": "Un compromiso acotado de red teaming autónomo continuo"
+        }
+      }
+    ],
+    "prediction.9ca246725adf1b12": [
+      {
+        "actor": "responsable del programa de flota humanoide del fabricante-propietario cautivo",
+        "job": "Poner en marcha una flota interna de producción humanoide dentro de las propias plantas del fabricante, justificada frente a la mano de obra y el tiempo de inactividad que ya contabiliza en su propio balance",
+        "outcome": "Una flota humanoide cautiva a escala que hace trabajo de producción real y es el mayor despliegue reportado públicamente por número de unidades para H1 2028",
+        "motivation": "La demanda cautiva y la economía unitaria propia le permiten desplegar internamente sin esperar un precio de alquiler por robot que el mercado abierto soporte",
+        "task": {
+          "who": "el equipo de despliegue de automatización e ingeniería de fabricación del fabricante",
+          "what": "Instalar y escalar unidades humanoides propias en líneas de producción activas",
+          "where": "Las propias fábricas e instalaciones logísticas del fabricante",
+          "when": "A lo largo del ramp-up de 2026-2027 hacia el cierre de H1 2028",
+          "why": "La economía unitaria propia supera cualquier precio de alquiler de mercado abierto",
+          "how": "Humanoides internos de clase Atlas operados en el balance del propietario"
+        }
+      },
+      {
+        "actor": "responsable de producción del fabricante de robots humanoides de propiedad total",
+        "job": "Escalar la fabricación de humanoides hacia el objetivo declarado de ~25.000 unidades para 2028 para abastecer la flota interna cautiva de su matriz en lugar de a clientes de RaaS de terceros",
+        "outcome": "Un volumen unitario verificado a escala que supere los pocos miles de unidades, entregado a las plantas del propietario, haciendo de la flota cautiva el mayor despliegue de producción de pago reportado",
+        "motivation": "Como filial totalmente absorbida, su demanda son las plantas de su matriz, así que el volumen va hacia dentro antes que cualquier venta externa",
+        "task": {
+          "who": "el equipo de operaciones de fabricación y cadena de suministro del fabricante de robots",
+          "what": "Escalar el ritmo de producción de humanoides hacia el objetivo de 25.000 unidades",
+          "where": "Las líneas de producción del fabricante de robots y los sitios de despliegue de la matriz",
+          "when": "Desde ahora hasta la ventana del objetivo de producción de 2028",
+          "why": "La demanda cautiva de la matriz atrae el volumen hacia dentro primero",
+          "how": "Plataforma humanoide Atlas construida para el despliegue interno de la matriz"
+        }
+      },
+      {
+        "actor": "responsable de desarrollo corporativo de adquisiciones estratégicas",
+        "job": "Ejecutar la compra de consolidación de la propiedad que absorbe entero al fabricante de robots cuando falla la salida vía IPO del capital riesgo, reemplazando el precio de mercado por la propiedad cautiva",
+        "outcome": "Una adquisición cerrada que da al propietario el 100 % del fabricante de robots y la estructura de capital para desplegar flotas internamente en lugar de ponerles precio en el mercado abierto",
+        "motivation": "Solo un propietario con capital y demanda cautiva puede absorber a un fabricante de robots, y la salida por opción de venta ante el incumplimiento de la IPO hace que el activo sea adquirible",
+        "task": {
+          "who": "el equipo de desarrollo corporativo y M&A del adquirente",
+          "what": "Cerrar la compra de la participación residual del patrocinador financiero",
+          "where": "La tabla de capitalización del fabricante de robots y el balance del adquirente",
+          "when": "En la ventana de salida por opción de venta del plazo de la IPO, desde mediados de 2026 en adelante",
+          "why": "La propiedad cautiva reemplaza el precio de mercado que el mercado abierto no soportará",
+          "how": "Compra activada por la opción de venta del capital residual del patrocinador"
+        }
+      }
+    ],
+    "prediction.dfc8663133f5e74d": [
+      {
+        "actor": "equipo de producto de IA confidencial de un hyperscaler",
+        "job": "Endurecer una oferta de inferencia confidencial para que un modelo de frontera se ejecute dentro de un TEE por hardware con TEE-I/O de extremo a extremo y atestación remota verificable por el cliente",
+        "outcome": "Un servicio de inferencia confidencial en disponibilidad general para un modelo de clase frontera, con TEE-I/O de host a GPU y un informe de atestación que el cliente verifica antes de enviar prompts",
+        "motivation": "Los compradores regulados y soberanos rechazan una GPU que no pueden atestiguar, así que la inferencia confidencial captura las cargas de mayor valor y menos sensibles al precio",
+        "task": {
+          "who": "el equipo de producto de computación confidencial e ingeniería de plataforma de inferencia de la nube",
+          "what": "Cablear TEE-I/O de extremo a extremo y atestación en un servicio de inferencia de modelos de frontera",
+          "where": "La plataforma de inferencia gestionada de la nube y su canalización de lanzamiento a disponibilidad general",
+          "when": "Desde la ventana de la cumbre de junio de 2026 hasta la disponibilidad general de Q1 2027",
+          "why": "La confidencialidad atestiguable desbloquea la demanda de inferencia regulada y soberana",
+          "how": "TEE por hardware en el acelerador con liberación de claves atestiguable e informes de atestación remota"
+        }
+      },
+      {
+        "actor": "proveedor de silicio de aceleradores que lanza TEE-I/O",
+        "job": "Mover los modos de computación confidencial y los enlaces TEE-I/O entre enclave de CPU y memoria de GPU de demostrables a volumen para que los hyperscalers puedan construir inferencia atestiguable sobre ellos",
+        "outcome": "Silicio en producción con raíz de confianza por hardware, TEE-I/O atestiguable entre la CPU del host y la memoria de la GPU, y servicios de atestación que los hyperscalers pueden convertir en producto",
+        "motivation": "La IA confidencial es el diferenciador que atrae a los compradores regulados a sus aceleradores, así que habilitar la inferencia atestiguable hace crecer la demanda de silicio premium",
+        "task": {
+          "who": "el grupo de ingeniería de computación confidencial y seguridad de plataforma del proveedor de silicio",
+          "what": "Lanzar en volumen enlaces TEE-I/O y atestación con raíz de confianza por hardware",
+          "where": "La plataforma de GPU/CPU del proveedor, su firmware y su servicio de atestación",
+          "when": "A lo largo de H2 2026 hasta principios de 2027, construyendo sobre los modos confidenciales de Blackwell",
+          "why": "Los aceleradores atestiguables ganan las cargas de IA confidencial de mayor valor",
+          "how": "Raíz de confianza por hardware, enlaces de memoria CPU-GPU cifrados y un servicio de verificación de atestación"
+        }
+      },
+      {
+        "actor": "comprador empresarial regulado/soberano que exige atestación",
+        "job": "Especificar requisitos contractuales de atestación y residencia de datos que obliguen a la nube a probar que ningún operador ni co-inquilino puede leer prompts o pesos antes de cualquier acuerdo",
+        "outcome": "Compromisos firmados y demanda de socios de diseño que conviertan la inferencia confidencial verificable en un requisito de compra de disponibilidad general, empujando el servicio del hyperscaler hacia esa disponibilidad",
+        "motivation": "Las reglas de salud, finanzas, defensa y residencia de datos de la UE prohíben enviar prompts sensibles a una GPU compartida no atestiguable",
+        "task": {
+          "who": "la función de arquitectura de seguridad, cumplimiento y compras del comprador",
+          "what": "Exigir atestación verificable y residencia como condición previa de compra",
+          "where": "RFPs, programas de socios de diseño y revisiones de seguridad de proveedores",
+          "when": "A lo largo del plazo desde mediados de 2026 hasta los ciclos de compra de Q1 2027",
+          "why": "La regulación prohíbe el procesamiento no atestiguable de prompts sensibles",
+          "how": "Verificación del informe de atestación y cláusulas de confidencialidad TEE-I/O en los contratos"
+        }
+      }
+    ]
+  }
+}

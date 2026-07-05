@@ -1,0 +1,22 @@
+check-topic-coverage :: date=2026-06-28
+  mode=verification (verification.json present — LLM auditor verdict)
+     LLM Workflow: verdict=uncovered, alignment=consistent
+     Multi-profiling for Local LLM (e.g. Multica) [news-driven]: verdict=uncovered, alignment=consistent
+     Agent Harness (OpenClaw, NemoClaw, Hermes Agents, etc.): verdict=uncovered, alignment=consistent
+OK Platform for Local LLM (vLLM, SGLang, etc.): verdict=covered, alignment=consistent
+OK Ecosystems for Local LLM Embedded System (Foundry Local, etc.): verdict=covered, alignment=consistent
+OK Local LLM Models: verdict=covered, alignment=consistent
+OK Local LLM Optimization, Fine-tuning (Unsloth — every run) [MANDATORY]: verdict=covered, alignment=consistent
+     Ecosystems for LLM on PaaS (AWS Bedrock, Azure AI Foundry, etc.): verdict=uncovered, alignment=consistent
+OK AI Security: verdict=covered, alignment=consistent
+     CVE update on score ≥ 8.0: verdict=uncovered, alignment=consistent
+OK Hardware: verdict=covered, alignment=consistent
+     Physical AI: verdict=uncovered, alignment=consistent
+     LLM-related research and papers: verdict=uncovered, alignment=consistent
+  -- Stock prices and corporate activity: NOT IN verification.json (auditor didn't enumerate it)
+OK Bay Area / SV AI meet-up events: verdict=covered, alignment=consistent
+     Other standing-out topics: verdict=uncovered, alignment=consistent
+  
+Summary: 7/16 topics covered (semantic verdict)
+  
+OK topic coverage (verification mode)

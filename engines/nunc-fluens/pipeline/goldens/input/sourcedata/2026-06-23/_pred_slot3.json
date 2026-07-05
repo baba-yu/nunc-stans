@@ -1,0 +1,14 @@
+{
+  "id": "prediction.7c1f4a9e3b6d20f8",
+  "scope_hint": "business",
+  "title": "AI-agent procurement adds a numeric prompt-injection-resistance bar by Q2 2027",
+  "body": "A standards body, regulator, or large enterprise/government buyer will name a quantified prompt-injection-resistance score as a stated, pass/fail requirement in an agentic-AI procurement gate, framework control, or certification. The trigger is the shift this cycle from hypothetical to measured: OWASP's State of Agentic AI Security and Governance v2.01 now ties nearly every agentic-risk category to concrete CVEs, vendor advisories, and breach reports, ranking the repositories carrying the most advisories (n8n 57, Claude Code 22, AutoGPT 15, Dify 13, Roo-Code 11) and mapping prompt injection to six of its ten Top 10 categories. In parallel, the StakeBench benchmark (Nanyang Technological University, ST Engineering, IBM Research, and the University of Illinois Urbana-Champaign) ran 3,168 adversarial trials and found indirect-injection success of 41.67%-68.16% and direct attacks above 79% across every tested configuration, with none landing in the robust-behavior region. Once an attack class has both a documented incident trail and a published benchmark with numeric pass thresholds, buyers stop accepting vendor self-attestation and start writing a measurable bar into contracts. Expect the first such gate to cite a named benchmark or a numeric maximum injection-success rate rather than asking vendors to 'mitigate prompt injection' in prose. This makes resistance an auditable acceptance criterion, not a best-effort claim, and gives the OWASP/StakeBench numbers a downstream consumer.",
+  "reasoning": {
+    "because": "OWASP v2.01 now ties agentic risk to real CVEs and StakeBench's 3,168 trials found no robust config",
+    "given": "an attack class with an incident trail plus a numeric benchmark outgrows vendor-prose mitigation",
+    "so_that": "a buyer or framework writes a numeric injection-resistance bar into a gate, replacing self-attestation with an audit",
+    "landing": "First named numeric injection-resistance procurement gate appears by Q2 2027",
+    "plain_language": "Buyers will start demanding AI agents pass a real score for resisting tricky inputs, not just promise they handle them."
+  },
+  "summary": "OWASP's 2026 report ties agentic risks to real CVEs, and StakeBench found no agent configuration resists prompt injection. With an incident trail and a numeric benchmark in hand, a standards body or major buyer will write a quantified injection-resistance threshold into a procurement gate by 2027."
+}

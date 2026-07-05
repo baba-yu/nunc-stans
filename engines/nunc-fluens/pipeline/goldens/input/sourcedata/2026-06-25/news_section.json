@@ -1,0 +1,41 @@
+{
+  "date": "2026-06-25",
+  "sections": [
+    {
+      "category": "OpenAI and Broadcom unveil Jalapeno, OpenAI's first custom inference accelerator, with first deployment targeted by year-end",
+      "bullets": [
+        {
+          "body": "OpenAI and Broadcom unveiled Jalapeno on June 24, the first chip from a multi-year co-design effort and what OpenAI frames as its first \"Intelligence Processor\" — an accelerator architected specifically around OpenAI's view of LLM inference rather than training. The fresh artifact is a concrete part with concrete claims: engineering samples are already running machine-learning workloads in the lab at production target frequency and power, OpenAI says early testing shows performance per watt \"substantially better than current state-of-the-art,\" and the companies describe Jalapeno as the first step in a multi-generation compute platform with initial data-center deployment targeted by the end of 2026 at gigawatt scale. The system around the chip is as load-bearing as the silicon: Broadcom's Tomahawk networking fabric (rated up to 1.6 terabits per second) wires the accelerators together and Celestia is collaborating on the custom server-rack design, signaling that this is a full rack-scale inference platform, not a standalone die. The structural read is that the largest frontier-model buyer is now following the hyperscaler playbook of designing its own inference ASIC to escape merchant-GPU economics, putting a named OpenAI-Broadcom part directly alongside the Google-Broadcom TPU and Amazon Trainium custom-silicon lineage and tightening the inference-cost link between model roadmaps and bespoke hardware. Final performance numbers are still being measured and a fuller technical report is promised in the coming months, so the per-watt advantage is a vendor claim, not yet independently benchmarked. <a href=\"https://siliconangle.com/2026/06/24/openai-broadcom-debut-custom-jalapeno-chip-llm-inference/\">SiliconANGLE - OpenAI, Broadcom debut custom Jalapeno chip for AI inference</a> <a href=\"https://www.neowin.net/news/openai-and-broadcom-unveil-jalapeo-a-new-ai-chip-built-for-llm-inference/\">Neowin - OpenAI and Broadcom unveil Jalapeno, a new AI chip built for LLM inference</a> <a href=\"https://www.constellationr.com/insights/news/openai-broadcom-unveil-first-ai-inference-chip\">Constellation Research - OpenAI, Broadcom unveil first AI inference chip</a>",
+          "citations": [
+            {"label": "SiliconANGLE - OpenAI, Broadcom debut custom Jalapeno chip for AI inference", "url": "https://siliconangle.com/2026/06/24/openai-broadcom-debut-custom-jalapeno-chip-llm-inference/"},
+            {"label": "Neowin - OpenAI and Broadcom unveil Jalapeno, a new AI chip built for LLM inference", "url": "https://www.neowin.net/news/openai-and-broadcom-unveil-jalapeo-a-new-ai-chip-built-for-llm-inference/"},
+            {"label": "Constellation Research - OpenAI, Broadcom unveil first AI inference chip", "url": "https://www.constellationr.com/insights/news/openai-broadcom-unveil-first-ai-inference-chip"}
+          ]
+        }
+      ]
+    },
+    {
+      "category": "Gartner puts a number on agentic-coding economics: AI coding spend projected to overtake the average developer's salary by 2028 as token consumption surges",
+      "bullets": [
+        {
+          "body": "Gartner published a research note on June 24 predicting that by 2028 the cost of AI coding will surpass the average developer's salary, driven by rising LLM token consumption and the shift to consumption-based pricing for agentic coding tools. The fresh, quotable thresholds are the news: Gartner Peer Insights data cited in the note shows 23 percent of technology leaders already spend between $200 and $500 per developer per month on tokens, and 6 percent of organizations pay more than $2,000 per developer per month, with the firm warning that the steepest cost escalation comes from ungoverned autonomy in agent-driven workflows, bloated context windows, and the absence of structured feedback to optimize usage. The analysis ties directly to the coding-agent and LLM-workflow categories — it is the autonomous-developer-loop tools (the Cursor / Claude Code / Codex CLI class of agentic IDEs) whose per-seat token bills are the cost center — and it reframes the productivity narrative as a governance problem: Gartner's explicit position is that token discipline will not arise spontaneously and that organizations need a governed engineering operating model before scaled agent deployment outruns the productivity gains. This is a forward forecast from an analyst house rather than a shipped product, so the 2028 crossover is a projection, not an observed event, but it is a net-new named numeric position on the unit economics of the agent-harness category. <a href=\"https://www.gartner.com/en/newsroom/press-releases/2026-06-24-gartner-predicts-ai-coding-costs-will-surpass-average-developer-salary-by-2028-as-token-consumption-surges\">Gartner - AI coding costs will surpass the average developer's salary by 2028 as token consumption surges</a>",
+          "citations": [
+            {"label": "Gartner - AI coding costs will surpass the average developer's salary by 2028 as token consumption surges", "url": "https://www.gartner.com/en/newsroom/press-releases/2026-06-24-gartner-predicts-ai-coding-costs-will-surpass-average-developer-salary-by-2028-as-token-consumption-surges"}
+          ]
+        }
+      ]
+    },
+    {
+      "category": "AI events to plan around now: the dev-conference and offensive-security tracks open this week, with the chip and security calendar running into the fall",
+      "bullets": [
+        {
+          "body": "The forward calendar across all three sub-tracks, with the events that closed at the start of this week (Automate 2026, June 22-25 at McCormick Place; the AI Tinkerers SF Offensive Security Demo Night; and Snowflake's virtual Dev Day, both June 25) reaching their end and dropping off the forward list. Mainstream dev/data: the AI Engineer World's Fair takes over Moscone West with the official AIE World's Fair Hackathon run with Cerebral Valley on June 27-28, an optional New Engineer Orientation June 28, and main programming June 29 through July 2; GitHub Universe returns October 28-29 and AWS re:Invent runs November 30 to December 4 in Las Vegas. AI-security: Black Hat USA's AI Summit runs August 1-6 in Las Vegas alongside DEF CON's AI Village, SecurityWeek's AI Risk Summit follows August 11-12 at Half Moon Bay, OWASP Global AppSec USA is November 5-6 in San Francisco, and Zenity's AI Agent Security Summit series stays on the watch list. AI-chip/hardware: AMD's Advancing AI 2026 is set for July 22-23 at Moscone in San Francisco, where the Instinct MI400 series is the expected focus (keynote July 23); Hot Chips 2026 runs August 23-25 at Stanford's Memorial Auditorium; and the AI Infra Summit is September 15-17 at the Santa Clara Convention Center. <a href=\"https://www.tweaktown.com/news/110826/amd-announces-advancing-ai-2026-event-for-july/index.html\">TweakTown - AMD announces Advancing AI 2026 event for July (July 22-23, San Francisco)</a> <a href=\"https://mlq.ai/news/v2/amd-sets-july-date-for-advancing-ai-2026-flagship-event-in-san-francisco/\">MLQ - AMD sets July date for Advancing AI 2026 flagship event in San Francisco</a>",
+          "citations": [
+            {"label": "TweakTown - AMD announces Advancing AI 2026 event for July (July 22-23, San Francisco)", "url": "https://www.tweaktown.com/news/110826/amd-announces-advancing-ai-2026-event-for-july/index.html"},
+            {"label": "MLQ - AMD sets July date for Advancing AI 2026 flagship event in San Francisco", "url": "https://mlq.ai/news/v2/amd-sets-july-date-for-advancing-ai-2026-flagship-event-in-san-francisco/"}
+          ]
+        }
+      ]
+    }
+  ]
+}

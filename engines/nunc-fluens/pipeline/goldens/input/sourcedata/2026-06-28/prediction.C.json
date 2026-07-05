@@ -1,0 +1,14 @@
+{
+  "id": "prediction.c5aa6ceae507d1a8",
+  "scope_hint": "cross",
+  "title": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
+  "body": "At least one leading coding-agent platform (the category OWASP names as prompt injection's epicenter, with Claude Code, AutoGPT, Dify and Roo-Code among the most-advisoried repositories) will ship a default-on capability gate that enforces a 'Rule of Two'-style constraint: an agent run may combine at most two of private-data access, exposure to untrusted content, and external communication before it must pause for explicit human approval. The move follows OWASP's reframing of prompt injection as a structural, unpatchable property of agentic systems rather than a patchable CVE, which leaves vendors to mitigate by capping the lethal trifecta at the orchestration layer instead of filtering the token stream. Because the architectural argument denies any reliable way to separate command tokens from data tokens, the only durable defense is to deny the dangerous combination by default, and competitive pressure plus advisory volume will push the largest platforms there first.",
+  "reasoning": {
+    "because": "OWASP 2.01 maps prompt injection to 6 of 10 agentic categories and names coding agents the epicenter",
+    "given": "Injection is unpatchable, so the only durable mitigation caps the lethal trifecta at orchestration",
+    "so_that": "A coding-agent platform makes a Rule-of-Two capability gate default-on, pausing for approval on the third property",
+    "landing": "by Q1 2027; >=1 leading coding-agent platform ships a default-on trifecta gate",
+    "plain_language": "AI coding helpers can be tricked by hidden instructions, so the big tools will start blocking the risky combo unless a human says ok."
+  },
+  "summary": "OWASP now calls prompt injection a structural, unpatchable trait of agentic AI and names coding agents the epicenter. With no way to separate commands from data, vendors must cap the lethal trifecta at the orchestration layer. Expect a coding-agent platform to ship a default-on Rule-of-Two gate."
+}
