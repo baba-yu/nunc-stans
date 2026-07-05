@@ -12,10 +12,12 @@ function gitGrep(args: string[]): string {
   catch { return '' } // git grep exits 1 on no match
 }
 
-// FD-3.2: the data-store path must not leak into tracked code/config
-// (tools/ legitimately names the string in order to check for it)
+// FD-3.2: the data-store path must not leak into tracked CODE/config —
+// everything reaches the vault through NS_DATA. Documentation (*.md) may
+// name the bootstrap default; tools/ legitimately names the string in
+// order to check for it.
 const leak = gitGrep(['-e', 'nunc-stans-data', '-e', 'federation-data', '--',
-  '.', ':!tools/', ':!design/', ':!**/prd-override.md'])
+  '.', ':!tools/', ':!design/', ':!*.md'])
 if (leak.trim()) ng(`FD-3.2: data-store path leaked into code/config\n${leak}`)
 else ok('FD-3.2: no vault path leak')
 

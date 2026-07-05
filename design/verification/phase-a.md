@@ -65,6 +65,11 @@ merged to `main` at the review gate).
 ## Decisions log
 
 - Design-repo absorption source branch: `dev` (plan said `main`; `main` is a stub).
+- FD-3.2 refined at T10: the leak check now covers code/config only
+  (`*.md` documentation excluded, like design/ and tools/). Rationale:
+  `just bootstrap` made `~/nunc-stans-data` an official default, so READMEs
+  must be able to name it; the rule's intent — no code path-coupling to the
+  vault — is unchanged and still enforced.
 
 ## Exit criteria
 
