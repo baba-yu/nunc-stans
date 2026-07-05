@@ -414,13 +414,22 @@ apply-schema-edit, weekly-maintenance port).
       node_modules, so the CLI's runtime `import('nunc-ai')` needs a
       launcher fix (tsx devDep or a tiny build) — resolve with T9.
 
-### Task 6: Replay mode (S-4 substrate)
-- [ ] `--replay`: stored-sourcedata path, `forbid` provider assertion,
-      diff-vs-published-day report with the allowed-metadata list.
+### Task 6: Replay mode (S-4 substrate) — DONE 2026-07-05
+- [x] `nunc-fluens run --replay`: every LLM step sources its stored
+      artifact (missing ⇒ hard fail; `ai` is null so no call path
+      exists). E2E proofs: weekday 06-27 and **Sunday 06-28 incl. the
+      weekly chain** replay to byte-identical renders and the exact
+      golden DB state (80f0fb2). S-4's diff report = run the replay on
+      the real checkout and show `git status`: only `run.json` may
+      change (the allowed-metadata list).
 
-### Task 7: Settings surface (S-3 substrate)
-- [ ] Gate config endpoint (C5) + tests; Formans world settings drawer;
-      pipeline reads `news-config.json`; CLI overrides.
+### Task 7: Settings surface (S-3 substrate) — DONE 2026-07-05
+- [x] Gate config API `GET/PUT /api/world/news-config` (atomic write,
+      unknown-field rejection, pair validation, 503 without a store;
+      `--data-dir` flag wired through `just up`) + 2 integration tests
+      (c805e0a, f600b94). Formans world view gains the settings drawer
+      (runtime + search×model pair — 0204580); the pipeline CLI reads
+      the same file at run start and stamps the pair into `run.json`.
 
 ### Task 8: Remnant split
 - [ ] Re-diff subtree; then in `~/news`: remove `app/` + orchestration
