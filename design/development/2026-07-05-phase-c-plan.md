@@ -365,13 +365,22 @@ apply-schema-edit, weekly-maintenance port).
       `validate-glossary-terms` form checks, `daily-flow-check`,
       `post-update-validation`.
 
-### Task 4c: Deterministic port — export + gates + weekly
-- [ ] `export` + `run-update-pages` (graph-*.json, manifest, dashboard
-      rebuild), `citation-restriction-check`, `check-topic-coverage`,
-      `apply-schema-edit` (manual mode), `weekly-maintenance` — export
-      parity on goldens; vitest suite covering the ported-surface test
-      intent green (`rename_future_titles` retired un-ported, see port
-      scope rule).
+### Task 4c: Deterministic port — export + gates + weekly — export core DONE 2026-07-07
+- [x] `export.py` ported (scope graphs with evidence/bridges/needs/
+      readings detail, mix merge, glossary, manifest) — **all five
+      export JSONs parsed-equal against the goldens** (ac8106d,
+      1714daf). Two recorded gates-of-comparison: JSON numbers compare
+      parsed (python repr floats vs JS), and ring-layout x/y round to
+      9 decimals (libm-vs-V8 sin/cos ULP). The export-side set-order
+      nondeterminism got the same sorted-sum fix as ingest (oracle +
+      TS + goldens recaptured; oracle pytest still 133).
+- [ ] Remaining, moved next to their consumers (T5): `run-update-pages`
+      wrapper, `citation-restriction-check`, `check-topic-coverage`,
+      `daily-flow-check`, `post-update-validation`,
+      `validate-glossary-terms`, `apply-schema-edit` (manual mode),
+      `weekly-maintenance` — these are DAG step gates; porting them
+      inside the orchestrator work keeps each one exercised the day it
+      lands.
 
 ### Task 5: Orchestrator
 - [ ] DAG runner: DOW table, artifact-presence resume, DRY_RUN, `--only`;
