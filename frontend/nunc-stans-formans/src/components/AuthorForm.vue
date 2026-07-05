@@ -31,8 +31,8 @@ async function submit() {
 </script>
 
 <template>
+  <!-- The heading comes from the surrounding Panel's title. -->
   <form @submit.prevent="submit">
-    <strong>Author a commitment</strong>
     <input v-model="form.slug" placeholder="slug (a-z, 0-9, -)" required pattern="[a-z0-9-]+" />
     <input v-model="form.title" placeholder="title" required />
     <input v-model="form.started_at" placeholder="started_at (YYYY-MM-DD)" required />

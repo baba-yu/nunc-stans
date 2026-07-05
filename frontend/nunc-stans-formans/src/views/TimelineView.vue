@@ -18,7 +18,8 @@ const CELL = 56
 const LANE = { commitments: 34, edges: 84, provenance: 124, interventions: 158, mandates: 188 }
 const HEIGHT = 214
 
-const width = computed(() => GUTTER + weeks.value.length * CELL + 24)
+// Floor keeps the reserved-lane labels readable when few weeks exist.
+const width = computed(() => Math.max(GUTTER + weeks.value.length * CELL + 24, 640))
 
 function x(i: number): number {
   return GUTTER + i * CELL + CELL / 2
@@ -199,10 +200,14 @@ onMounted(async () => {
   stroke: var(--nui-accent);
   stroke-width: 1.6;
   cursor: pointer;
+  /* fill:none leaves the interior unpainted, which SVG hit-testing skips —
+     without this the ring is clickable only on its hairline stroke */
+  pointer-events: all;
 }
 .tl-close {
   fill: var(--nui-accent);
   cursor: pointer;
+  pointer-events: all;
 }
 .tl-edge {
   fill: var(--nui-heat-1);
