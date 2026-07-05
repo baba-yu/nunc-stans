@@ -1,6 +1,6 @@
-# Federation Design Stack
+# Nunc Stans Design Stack
 
-This package contains the Markdown-only design stack for Human Thought Augmentation System / Federation / News / NuncStans / FourFive.
+This package contains the Markdown-only design stack for Human Thought Augmentation System / Nunc Stans / Nunc Fluens / FourFive.
 
 Start here:
 
@@ -13,9 +13,9 @@ Primary route (this is the minimal reading route; the complete inventory is the 
 ```text
 design/product/htas-integrated-prd.md
 ↓
-design/architecture/htas-positioning-in-federation.md
+design/architecture/htas-positioning-in-nunc-stans.md
 ↓
-design/federation/federation-constitution.md
+design/constitution/constitution.md
 ↓
 design/architecture/memory-write-read-contract.md
 ↓
@@ -23,5 +23,5 @@ design/development/development-plan.md
 ↓
 design/development/setup-phase0.md
 ↓
-design/federation/test-spec-journey.md
+design/stories/test-spec-journey.md
 ```

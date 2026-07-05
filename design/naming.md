@@ -1,0 +1,40 @@
+# Naming map (2026-07)
+
+The product is **Nunc Stans**; the monorepo is `~/nunc-stans`. The
+integrated UI is **Nunc Stans Formans** (`frontend/nunc-stans-formans/`,
+assembled in Phase B; never abbreviated to "formans"). The self-scope engine
+is `engines/nunc-stans` (crate `nunc-stans-engine`); the news engine is
+`engines/nunc-fluens` — *nunc fluens*, the flowing now, paired with *nunc
+stans*, the standing now. manda and fourfive keep their names. The name
+"federation" is retired.
+
+| Old | New |
+|---|---|
+| federation (the system) | Nunc Stans |
+| the federation layer / agreement | the contracts layer |
+| federation edge / FederationEdge | edge / Edge |
+| federation ID / federation-id / `valid_federation_id` | scope ID / scope-id / `valid_scope_id` |
+| Federation Constitution | Nunc Stans Constitution (`design/constitution/constitution.md`) |
+| Federation:Phase N | Pre-v1 Phase N |
+| FED_DATA | NS_DATA (deprecated fallback kept one phase) |
+| ~/federation-data | ~/nunc-stans-data |
+| ~/federation (repo) | ~/nunc-stans |
+| ~/nuncstans (design repo) | absorbed; archived at ~/old/nuncstans-design-repo |
+| nuncstans / NuncStans | nunc-stans / Nunc Stans (hyphenation) |
+| engines/nuncstans, crate nuncstans-engine | engines/nunc-stans, crate nunc-stans-engine |
+| News (the stack), engines/news | Nunc Fluens, engines/nunc-fluens (commit area `nf`) |
+| ~/news (external repo) | ~/nunc-fluens — renamed at Phase C (live daily routine; Pages URL changes without redirect) |
+| NEWS_WORLD (env) | kept until Phase C |
+| nuncstans-agent | nunc-stans-agent (`agents/nunc-stans-agent`, Phase D) |
+| integrated UI ("shell") | Nunc Stans Formans — `frontend/nunc-stans-formans` (Phase B) |
+| GitHub remote (new, monorepo) | baba-yu/nunc-stans |
+| engines/news/FEDERATION.md | engines/nunc-fluens/INTEGRATION.md |
+| design/federation/ | design/constitution/ (journeys moved to design/stories/) |
+| htas-positioning-in-federation.md | htas-positioning-in-nunc-stans.md |
+
+Rule IDs (`F1`–`F15`, `FD-x.y`, `NS-x`, `Inv N`) are retained as opaque
+historical identifiers; the letters no longer expand to anything.
+
+Permanent exception: the commitment slug `federation-local`
+(`self/commitment/2026-06-federation-local` in the vault) is historical,
+append-only data and is never renamed; documents may quote it.

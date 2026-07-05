@@ -1,7 +1,7 @@
-# Memory WRITE / READ Contract v0.2 — Federation-aware Edition
+# Memory WRITE / READ Contract v0.2 — Nunc Stans-aware Edition
 
 Status: Draft v0.2  
-Scope: Human Thought Augmentation System / Federation / News / NuncStans / FourFive  
+Scope: Human Thought Augmentation System / the contracts layer / News / Nunc Stans / FourFive  
 Purpose: Fix the implementation boundary for Memory WRITE / READ / Reconnection, and define the contract that keeps AI output, external knowledge, user understanding, self-prediction, and deliverables from being conflated.
 
 ---
@@ -14,9 +14,9 @@ Its goals are as follows.
 
 1. Define WRITE not as "save" but as "commit"
 2. Define READ not as "search" but as "reconnection to the current INTENT"
-3. Do not conflate AIResponse / ExternalKnowledge / UserUnderstanding / Federation SoR
-4. Do not let the respective sources of truth (canonical records) of News / NuncStans / FourFive collide with the Memory Core on the HTAS side
-5. Separate the responsibilities of Thin Agent Harness / Policy Layer / Federation Adapter
+3. Do not conflate AIResponse / ExternalKnowledge / UserUnderstanding / Nunc Stans SoR
+4. Do not let the respective sources of truth (canonical records) of News / Nunc Stans / FourFive collide with the Memory Core on the HTAS side
+5. Separate the responsibilities of Thin Agent Harness / Policy Layer / Contracts-Layer Adapter
 
 The WRITE/READ defined here is not CRUD against a single DB.
 
@@ -36,17 +36,17 @@ READ  = an operation that reconnects past assets to the current UserState / INTE
 5. AIResponse is not UserUnderstanding.
 6. ExternalKnowledge is not UserUnderstanding.
 7. News world prediction does not commit directly to the self-side UserHypothesis.
-8. The user peer of NuncStans / SPL is the source of truth of the self domain.
-9. The ai peer / superposition_state of NuncStans / SPL is a transparent hypothesis on the AI side, not UserUnderstanding.
+8. The user peer of Nunc Stans / SPL is the source of truth of the self domain.
+9. The ai peer / superposition_state of Nunc Stans / SPL is a transparent hypothesis on the AI side, not UserUnderstanding.
 10. FourFive's artifact_version is the source of truth of fixed deliverables, not a possession of the Memory Core.
-11. The Federation Edge is the source of truth of inter-system connections, kept separate from BeliefGraphEdge.
+11. The contracts-layer Edge is the source of truth of inter-system connections, kept separate from BeliefGraphEdge.
 12. The Continuity Kernel's artifact is a cache, not the source-of-truth.
 13. READ returns a ReconnectionResult.
 14. surfaced_items is at most 3.
 15. The final decision on surface / suppress / defer is made by the Policy Layer.
 16. The LLM emits candidates but holds no commit authority.
 17. App Core owns MemoryWritePolicy / ReconnectionPolicy / UserState / IntentFrame / CognitiveLoadGovernor / ACCPolicy / InterventionLog / Audit.
-18. Each Federation engine owns its own source of truth, and HTAS does not store them in a unified way.
+18. Each Nunc Stans engine owns its own source of truth, and HTAS does not store them in a unified way.
 
 ---
 
@@ -67,7 +67,7 @@ User chooses X
 → DecisionRecord committed
 
 User bets resources on X
-→ NuncStans commitment
+→ Nunc Stans commitment
 ```
 
 WRITE is not adding a row to the DB. It is **determining what that row is treated as**.
@@ -80,7 +80,7 @@ An operation that appends so as not to lose raw events or logs.
 user_message append
 assistant_message append
 tool_result append
-federation edge append
+edge append
 ```
 
 append is not commit.
@@ -101,13 +101,13 @@ A record that, by the authority rules of the Policy Layer or the target engine, 
 
 Not returning search results, but reconnecting past understanding, hypotheses, judgments, action results, world predictions, and deliverables to the current UserState / INTENT / cognitive load.
 
-### Federation SoR
+### Nunc Stans SoR
 
-The respective sources of truth owned by News / NuncStans / FourFive.
+The respective sources of truth owned by News / Nunc Stans / FourFive.
 
 ```text
 world    = News
-self     = NuncStans / SPL
+self     = Nunc Stans / SPL
 artifact = FourFive
 ```
 
@@ -124,7 +124,7 @@ artifact = FourFive
 2. Domain Memory
    structured memory such as UserUnderstanding / Decision / Action / Result / Actor
 
-3. Federation SoR
+3. Nunc Stans SoR
    the respective sources of truth for world / self / artifact
 
 4. Artifact / Projection / Cache
@@ -145,7 +145,7 @@ What it owns:
 What it does not own:
 
 - the source of truth of UserUnderstanding
-- the source of truth of NuncStans commitment
+- the source of truth of Nunc Stans commitment
 - the source of truth of News world prediction
 - the source of truth of FourFive artifact_version
 
@@ -170,9 +170,9 @@ What it owns:
 - InterventionLog
 - Feedback
 
-However, anything belonging to the Federation SoR is treated in Domain Memory as a read model or typed reference.
+However, anything belonging to the Nunc Stans SoR is treated in Domain Memory as a read model or typed reference.
 
-### 3.4 Federation SoR
+### 3.4 Nunc Stans SoR
 
 ```text
 News
@@ -181,7 +181,7 @@ News
 - forecast evaluation
 - source reliability
 
-NuncStans / SPL
+Nunc Stans / SPL
 - self prediction
 - user/ai peer track
 - commitment
@@ -190,7 +190,7 @@ NuncStans / SPL
 - mandate
 - suspension
 - intervention under mandate
-- federation edge
+- edge
 
 FourFive
 - artifact_version
@@ -208,7 +208,7 @@ The following are not sources of truth.
 - active frame
 - rolling summary
 - derived strategy card
-- federation joined view
+- Nunc Stans joined view
 - search index
 - embeddings
 - ranking output
@@ -226,7 +226,7 @@ WRITE is handled in three stages.
 2. ProposalWrite
    create a candidate
 
-3. Domain / Federation Commit
+3. Domain / Nunc Stans Commit
    commit to the correct layer
 ```
 
@@ -241,7 +241,7 @@ Targets:
 - file diff
 - branch operation
 - user correction
-- federation adapter event
+- contracts-layer adapter event
 
 Properties:
 
@@ -260,7 +260,7 @@ Targets:
 - ActionRecord candidate
 - ResultRecord candidate
 - ActorHypothesis candidate
-- FederationEdge candidate
+- Edge candidate
 - commitment candidate
 - mandate candidate
 - strategy model candidate
@@ -271,7 +271,7 @@ Properties:
 - source_ref required
 - not a source of truth before policy_decision
 
-### 4.3 Domain / Federation Commit
+### 4.3 Domain / Nunc Stans Commit
 
 Promote to source of truth according to the authority rules of the target layer.
 
@@ -280,7 +280,7 @@ UserUnderstanding commit
 → App Core MemoryWritePolicy
 
 self prediction / commitment / outcome / revision commit
-→ NuncStans authority
+→ Nunc Stans authority
 
 world prediction / observation commit
 → News authority
@@ -288,8 +288,8 @@ world prediction / observation commit
 artifact_version commit
 → FourFive authority
 
-federation edge commit
-→ NuncStans edge ledger authority
+edge commit
+→ Nunc Stans edge ledger authority
 ```
 
 ---
@@ -304,29 +304,29 @@ federation edge commit
 | user understanding inferred by AI | WriteProposal | candidate | No |
 | external material / Web / News source | ExternalKnowledgeItem / News | committed external | No |
 | News world prediction | News world/prediction | committed world | No |
-| world prediction made by the user | NuncStans self prediction(scope=world) | committable | Yes, self-side |
+| world prediction made by the user | Nunc Stans self prediction(scope=world) | committable | Yes, self-side |
 | belief stated by the user | UserBelief | committable | Yes |
 | hypothesis stated by the user | UserHypothesis | candidate or committed | Yes |
 | question posed by the user | Question | committable | Yes |
 | distinction placed by the user | Distinction | committable | Yes |
 | judgment adopted/rejected by the user | DecisionRecord | committable | Yes |
 | action the user takes / has taken | ActionRecord | committable | Yes |
-| action on which the user wagered resources | NuncStans commitment | committable | Yes, self-side |
-| observable close of a commitment | NuncStans outcome(component=observable) | committed | self SoR |
-| subjective close of a commitment | NuncStans outcome(component=subjective) | committed | self SoR |
-| observed result after action | ResultRecord / NuncStans outcome | committable | Yes |
-| revision | NuncStans revision / HypothesisUpdate | committable | Yes |
+| action on which the user wagered resources | Nunc Stans commitment | committable | Yes, self-side |
+| observable close of a commitment | Nunc Stans outcome(component=observable) | committed | self SoR |
+| subjective close of a commitment | Nunc Stans outcome(component=subjective) | committed | self SoR |
+| observed result after action | ResultRecord / Nunc Stans outcome | committable | Yes |
+| revision | Nunc Stans revision / HypothesisUpdate | committable | Yes |
 | FourFive app version | FourFive artifact_version | committed artifact | No, but referenceable |
 | app metric | FourFive artifact data | committed artifact data | No |
 | AI's strategy understanding | superposition_state / StrategyModelCandidate | candidate / transparent AI track | No |
 | user adopts/modifies strategy understanding | UserHypothesis / Goal / IntentFrame / DecisionRecord | committable | Yes |
-| Federation edge | NuncStans edge ledger | append-only | Edge, not belief |
+| edge | Nunc Stans edge ledger | append-only | Edge, not belief |
 | Actor container | Actor | committed container | No by itself |
 | user's Actor hypothesis | ActorHypothesis | candidate or committed | Yes |
 | AI's Actor inference | ActorHypothesis proposal | candidate | No |
 | Actor's observed behavior | ActorObservation | committable | observation |
-| mandate | NuncStans mandate | committed only by user | permission record |
-| intervention under mandate | SPL/NuncStans intervention + HTAS InterventionLog | committed log | No |
+| mandate | Nunc Stans mandate | committed only by user | permission record |
+| intervention under mandate | SPL/Nunc Stans intervention + HTAS InterventionLog | committed log | No |
 
 ---
 
@@ -400,11 +400,11 @@ WriteProposal {
     | Actor
     | ActorHypothesis
     | ActorObservation
-    | FederationEdge
-    | NuncStansPrediction
-    | NuncStansCommitment
-    | NuncStansOutcome
-    | NuncStansRevision
+    | Edge
+    | Nunc StansPrediction
+    | Nunc StansCommitment
+    | Nunc StansOutcome
+    | Nunc StansRevision
     | Mandate
     | StrategyModelCandidate
 
@@ -451,7 +451,7 @@ WriteProposal {
     | ask_user
     | reject
     | log_only
-    | route_to_federation_engine
+    | route_to_nunc_stans_engine
 
   policy_reason
   created_at
@@ -468,7 +468,7 @@ WriteProposal {
 3. Classify destination
 4. Attach source refs
 5. Determine authority
-6. Apply MemoryWritePolicy / FederationWritePolicy
+6. Apply MemoryWritePolicy / ContractsLayerWritePolicy
 7. Decide: commit_now / keep_candidate / ask_user / reject / log_only / route_to_engine
 8. Commit or store candidate
 9. Append audit log
@@ -482,7 +482,7 @@ if destination in UserUnderstanding:
   authority = AppCore.MemoryWritePolicy
 
 if destination in self ledger:
-  authority = NuncStans
+  authority = Nunc Stans
 
 if destination in world:
   authority = News
@@ -490,8 +490,8 @@ if destination in world:
 if destination in artifact:
   authority = FourFive
 
-if destination is FederationEdge:
-  authority = NuncStans edge ledger
+if destination is Edge:
+  authority = Nunc Stans edge ledger
 
 if destination is Continuity Event/Artifact:
   authority = Continuity Kernel
@@ -529,9 +529,9 @@ The following may be auto-committed.
 10. explicit observed result
 11. Actor container when subject is explicitly referenced
 12. ActorObservation when observed behavior has source_ref
-13. FederationEdge authored by user
-14. NuncStans commitment authored by user
-15. NuncStans outcome authored by user/sensor according to component rule
+13. Edge authored by user
+14. Nunc Stans commitment authored by user
+15. Nunc Stans outcome authored by user/sensor according to component rule
 16. FourFive artifact_version when version is explicitly cut
 
 However, even for auto-commit, source_ref / provenance / author / created_at are required.
@@ -581,11 +581,11 @@ Only things based on the user's own utterances, choices, adoptions, modification
 
 News prediction stays in world. It connects to the self side via an informed_by edge or a user-authored prediction / commitment.
 
-### W6. Only the user can write a NuncStans commitment
+### W6. Only the user can write a Nunc Stans commitment
 
 AI goes only as far as proposing. It becomes a commitment only when the user writes it.
 
-### W7. Separate the observable and subjective of a NuncStans outcome
+### W7. Separate the observable and subjective of a Nunc Stans outcome
 
 observable is sensor/user observation; subjective is user only. The subjective can supersedes by appending.
 
@@ -605,9 +605,9 @@ Creating an Actor is creating a subject container, not creating an ActorHypothes
 
 An ActorHypothesis inferred by AI is candidate. It can be committed only once the user accepts / modifies / rejects it.
 
-### W12. FederationEdge is not BeliefGraphEdge
+### W12. Edge is not BeliefGraphEdge
 
-FederationEdge is an inter-system connection. BeliefGraphEdge is the user-understanding structure. Do not mix them.
+Edge is an inter-system connection. BeliefGraphEdge is the user-understanding structure. Do not mix them.
 
 ### W13. Do not store the joined state
 
@@ -675,7 +675,7 @@ ReconnectionRequest {
     confidence
   }
 
-  federation_context {
+  nunc_stans_context {
     world_refs[]
     self_refs[]
     artifact_refs[]
@@ -733,7 +733,7 @@ ReconnectionResult {
 
   response_constraints
   memory_used
-  federation_refs_used
+  nunc_stans_refs_used
   external_knowledge_used
   tools_allowed
   tools_blocked
@@ -771,15 +771,15 @@ READ treats the following as candidates.
 - open_questions
 - active artifacts with source refs
 
-### Federation
+### Nunc Stans engines
 
 - News world prediction / observation
-- NuncStans self prediction
-- NuncStans commitment
-- NuncStans outcome
-- NuncStans revision
-- NuncStans mandate
-- FederationEdge
+- Nunc Stans self prediction
+- Nunc Stans commitment
+- Nunc Stans outcome
+- Nunc Stans revision
+- Nunc Stans mandate
+- Edge
 - FourFive artifact_version
 - FourFive app metrics
 - FourFive produced outputs
@@ -819,7 +819,7 @@ News is world context. It does not overwrite the user's past commitment / decisi
 
 When presented, it is explicitly marked as an "AI-side understanding candidate." It is not presented as a user belief.
 
-### R7. Federation join only at read-time
+### R7. Nunc Stans join only at read-time
 
 A result that joins world / self / artifact is not stored as a source of truth.
 
@@ -845,7 +845,7 @@ READ candidates are ranked by the following.
 2. intent_fit
 3. user_origin_priority
 4. decision_action_relevance
-5. federation_edge_relevance
+5. contracts_layer_edge_relevance
 6. commitment_relevance
 7. result_learning_value
 8. risk_relevance
@@ -878,7 +878,7 @@ Retrieval candidates:
 - high-risk constraints
 - target_actor_ids related ActorHypothesis
 - pending ResultRecord
-- related NuncStans commitment
+- related Nunc Stans commitment
 - related FourFive artifact_version / app metric
 - relevant mandate if intervention/tool action
 
@@ -900,7 +900,7 @@ Retrieval candidates:
 - assumptions
 - reversibility
 - ResultRecord
-- NuncStans outcomes
+- Nunc Stans outcomes
 - commitment history
 - News world predictions as context
 - FourFive metrics
@@ -970,7 +970,7 @@ Output:
 
 ---
 
-## 19. Federation-aware READ patterns
+## 19. Nunc Stans-aware READ patterns
 
 ### 19.1 News → self
 
@@ -1044,7 +1044,7 @@ SuppressedItem {
     | privacy_risk
     | not_actionable_now
     | mandate_required
-    | federation_scope_boundary
+    | contracts_layer_scope_boundary
   could_surface_if
 }
 ```
@@ -1076,10 +1076,10 @@ DeferredItem {
 5. IntentExtractor extracts / updates IntentFrame candidate
 6. WriteCandidateExtractor extracts WriteProposal[]
 7. MemoryWritePolicy applies explicit commit / candidate / ask_user / reject
-8. FederationAdapter routes federation-bound proposals
+8. ContractsLayerAdapter routes Nunc Stans-bound proposals
 9. ReconnectionResolver builds ReconnectionRequest
 10. MemoryRead retrieves Domain Memory candidates
-11. FederationRead retrieves News / NuncStans / FourFive candidates by typed refs and edges
+11. ContractsLayerRead retrieves News / Nunc Stans / FourFive candidates by typed refs and edges
 12. ReconnectionPolicy filters / ranks / suppresses / defers
 13. ReconnectionResult generated
 14. ResponseGenerator produces response under constraints
@@ -1104,16 +1104,16 @@ GET  /api/memory/records/{id}
 GET  /api/interventions/{id}
 ```
 
-### Federation Adapter
+### Contracts-Layer Adapter
 
 ```text
-GET  /api/federation/resolve/{federation_id}
-GET  /api/federation/edges?from=&to=&type=
-POST /api/federation/edges/proposals
-POST /api/federation/edges/append
+GET  /api/contracts/resolve/{scope_id}
+GET  /api/contracts/edges?from=&to=&type=
+POST /api/contracts/edges/proposals
+POST /api/contracts/edges/append
 ```
 
-### NuncStans
+### Nunc Stans
 
 ```text
 GET  /api/self/predictions
@@ -1155,13 +1155,13 @@ class MemoryWriteService:
 class ReconnectionService:
     def reconnect(self, request: ReconnectionRequest) -> ReconnectionResult: ...
 
-class FederationReadAdapter:
-    def resolve(self, federation_id: str) -> FederationNode: ...
-    def get_edges(self, *, from_id=None, to_id=None, edge_type=None) -> list[FederationEdge]: ...
+class ContractsLayerReadAdapter:
+    def resolve(self, scope_id: str) -> ContractsLayerNode: ...
+    def get_edges(self, *, from_id=None, to_id=None, edge_type=None) -> list[Edge]: ...
     def retrieve_context(self, request: ReconnectionRequest) -> list[MemoryCandidate]: ...
 
-class FederationWriteAdapter:
-    def route_proposal(self, proposal: WriteProposal) -> FederationWriteDecision: ...
+class ContractsLayerWriteAdapter:
+    def route_proposal(self, proposal: WriteProposal) -> ContractsLayerWriteDecision: ...
 ```
 
 ---
@@ -1177,12 +1177,12 @@ class FederationWriteAdapter:
 5. User action becomes ActionRecord.
 6. Observed result becomes ResultRecord.
 7. News prediction does not become UserHypothesis directly.
-8. User-authored world prediction goes to NuncStans self.
+8. User-authored world prediction goes to Nunc Stans self.
 9. Commitment is user-authored only.
 10. FourFive artifact_version is fixed and referenced, not copied.
 11. StrategyModelCandidate is dismissible and not UserUnderstanding.
 12. Actor AI inference is candidate only.
-13. FederationEdge is append-only and includes author/to_label.
+13. Edge is append-only and includes author/to_label.
 
 ### READ fixtures
 
@@ -1213,7 +1213,7 @@ In the MVP, the following are not done.
 - OpenHands deep integration
 - Celery / Redis
 - Rust domain core
-- automatic federation edge generation before phase gate
+- automatic edge generation before phase gate
 - News intervention function
 - FourFive full integration before ME / News view stabilization
 
@@ -1222,20 +1222,20 @@ In the MVP, the following are not done.
 ## 26. ADR
 
 ```text
-ADR: Fix Federation-aware Memory WRITE / READ Contract v0.2
+ADR: Fix Nunc Stans-aware Memory WRITE / READ Contract v0.2
 
 Decision:
-Memory WRITE is defined as commit, not storage. READ is defined as reconnection, not search. HTAS App Core owns MemoryWritePolicy, ReconnectionPolicy, UserState, IntentFrame, CognitiveLoadGovernor, ACCPolicy, InterventionLog, and Audit. Federation engines own their respective SoR: News owns world, NuncStans owns self, FourFive owns artifact. HTAS does not merge these into a unified database; it reads them through typed references and FederationEdge at read time.
+Memory WRITE is defined as commit, not storage. READ is defined as reconnection, not search. HTAS App Core owns MemoryWritePolicy, ReconnectionPolicy, UserState, IntentFrame, CognitiveLoadGovernor, ACCPolicy, InterventionLog, and Audit. Nunc Stans engines own their respective SoR: News owns world, Nunc Stans owns self, FourFive owns artifact. HTAS does not merge these into a unified database; it reads them through typed references and Edge at read time.
 
 Rules:
 - AIResponse is not UserUnderstanding.
 - ExternalKnowledge is not UserUnderstanding.
 - News world prediction does not directly become self memory.
 - UserUnderstanding requires user-origin or user approval/modification/rejection.
-- NuncStans commitment is user-authored only.
+- Nunc Stans commitment is user-authored only.
 - FourFive artifact_version is immutable.
 - StrategyModel / superposition_state is transparent AI hypothesis, not user belief.
-- FederationEdge is separate from BeliefGraphEdge.
+- Edge is separate from BeliefGraphEdge.
 - READ returns ReconnectionResult with max 3 surfaced items.
 - surface / suppress / defer decisions are logged.
 - LLM proposes; Policy validates; user confirms when needed; authority service commits; everything is traced.
@@ -1245,8 +1245,8 @@ Rules:
 
 ## 27. Source references note
 
-- federation-constitution-v0.3.1
-- NuncStans PRD diff v1.1
+- nunc-stans-constitution-v0.3.1
+- Nunc Stans PRD diff v1.1
 - SPL v3 Plan
 - Human Thought Augmentation System Integrated PRD v0.2
 - Memory I/O Contract & MVP Decision Record v0.1

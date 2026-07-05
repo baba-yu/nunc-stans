@@ -521,9 +521,11 @@ prepare the new private remote `baba-yu/nunc-stans` (owner creates
 and pushes).
 
 Exit: `just up` works from `~/nunc-stans`; `just check` green;
-`rg -i federation` hits only `design/naming.md` and git history; every stack
-README has a verified run command; stories S-0 and S-10 pass (S-10 in a
-pristine WSL distro or container).
+`git grep -iI federation -- ':!design/naming.md' ':!design/development'
+':!design/verification'` returns nothing except the historical commitment
+slug `federation-local` (migration docs may reference the old name
+historically); every stack README has a verified run command; stories S-0
+and S-10 pass (S-10 in a pristine WSL distro or container).
 
 ### Phase B — Nunc Stans Formans (the integrated UI) + nunc-ui
 

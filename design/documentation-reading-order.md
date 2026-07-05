@@ -1,6 +1,6 @@
 # Documentation Reading Order
 
-Scope: Human Thought Augmentation System / Federation / News / NuncStans / FourFive  
+Scope: Human Thought Augmentation System / the contracts layer / News / Nunc Stans / FourFive  
 Purpose: Organize the reading order and placement of related documents, and the documents to hand off at implementation time.
 
 ---
@@ -24,9 +24,9 @@ The shortest reading order is as follows.
 ```text
 design/product/htas-integrated-prd.md
 ↓
-design/architecture/htas-positioning-in-federation.md
+design/architecture/htas-positioning-in-nunc-stans.md
 ↓
-design/federation/federation-constitution.md
+design/constitution/constitution.md
 ↓
 design/architecture/memory-write-read-contract.md
 ↓
@@ -34,7 +34,7 @@ design/development/development-plan.md
 ↓
 design/development/setup-phase0.md
 ↓
-design/federation/test-spec-journey.md
+design/stories/test-spec-journey.md
 ```
 
 ---
@@ -42,7 +42,7 @@ design/federation/test-spec-journey.md
 ## 2. Recommended placement
 
 ```text
-federation/
+nunc-stans/
 ├── design/
 │   ├── documentation-reading-order.md
 │   │
@@ -53,7 +53,7 @@ federation/
 │   │       └── htas-round2-output.md
 │   │
 │   ├── architecture/
-│   │   ├── htas-positioning-in-federation.md
+│   │   ├── htas-positioning-in-nunc-stans.md
 │   │   ├── memory-write-read-contract.md
 │   │   ├── memory-io-contract-mvp-decisions.md
 │   │   ├── actor-model.md
@@ -61,8 +61,10 @@ federation/
 │   │   ├── microservice-readiness.md
 │   │   └── ip-server-readiness.md
 │   │
-│   ├── federation/
-│   │   ├── federation-constitution.md
+│   ├── constitution/
+│   │   └── constitution.md
+│   │
+│   ├── stories/
 │   │   ├── journey-examples.md
 │   │   └── test-spec-journey.md
 │   │
@@ -72,14 +74,14 @@ federation/
 │
 ├── contracts/
 │   ├── edge.schema.json
-│   ├── federation-id.md
+│   ├── scope-id.md
 │   ├── glossary.md
 │   └── agent-abi.md
 │
 ├── engines/
 │   ├── news/
 │   │   └── docs/
-│   ├── nuncstans/
+│   ├── nunc-stans/
 │   │   └── docs/
 │   │       ├── prd-override.md
 │   │       └── spl-plan.md
@@ -102,22 +104,22 @@ federation/
 | `design/product/htas-integrated-prd.md` | `第3回統合PRD.txt` |
 | `design/product/archive/htas-prd-round1.md` | `第1回PRD.txt` |
 | `design/product/archive/htas-round2-output.md` | `第2回成果物.txt` |
-| `design/architecture/htas-positioning-in-federation.md` | `HTAS_Positioning_in_Federation_v0.1.md` |
-| `design/architecture/memory-write-read-contract.md` | `Memory_WRITE_READ_Contract_v0.2_Federation.md` |
+| `design/architecture/htas-positioning-in-nunc-stans.md` | `HTAS_Positioning_in_Nunc_Stans_v0.1.md` |
+| `design/architecture/memory-write-read-contract.md` | `Memory_WRITE_READ_Contract_v0.2_Nunc_Stans.md` |
 | `design/architecture/memory-io-contract-mvp-decisions.md` | `Memory_IO_Contract_MVP_Decisions_v0.1.md` |
 | `design/architecture/actor-model.md` | `Actor Model Specification.docx` converted |
 | `design/architecture/continuity-kernel.md` | `Continuity Kernel 設計書.docx` converted |
 | `design/architecture/microservice-readiness.md` | `Microservice_Readiness_Development_Principles_v0.1.md` |
 | `design/architecture/ip-server-readiness.md` | `IP_Server_Readiness_Development_Principles_v0.1.md` |
-| `design/federation/federation-constitution.md` | `federation-constitution-v0.3.1.md` |
-| `design/federation/journey-examples.md` | `journey-examples.md` |
-| `design/federation/test-spec-journey.md` | `test-spec-journey-v2.3.md` |
+| `design/constitution/constitution.md` | `nunc-stans-constitution-v0.3.1.md` |
+| `design/stories/journey-examples.md` | `journey-examples.md` |
+| `design/stories/test-spec-journey.md` | `test-spec-journey-v2.3.md` |
 | `design/development/development-plan.md` | `開発進行ドキュメント v0.1.docx` converted |
 | `design/development/setup-phase0.md` | `SETUP-phase0.md` |
-| `engines/nuncstans/docs/prd-override.md` | `prd-override-nuncstans.md` |
-| `engines/nuncstans/docs/spl-plan.md` | `SPL_v3_Plan.docx` converted |
-| `contracts/edge.schema.json` | generated from Federation:Phase 0 setup |
-| `contracts/federation-id.md` | generated from Federation Constitution |
+| `engines/nunc-stans/docs/prd-override.md` | `prd-override-nunc-stans.md` |
+| `engines/nunc-stans/docs/spl-plan.md` | `SPL_v3_Plan.docx` converted |
+| `contracts/edge.schema.json` | generated from Pre-v1 Phase 0 setup |
+| `contracts/scope-id.md` | generated from Nunc Stans Constitution |
 | `contracts/glossary.md` | generated project glossary |
 | `contracts/agent-abi.md` | reserved contract |
 
@@ -130,27 +132,27 @@ This is the minimal route; the tree in §2 is the complete inventory.
 | Order | Document | Reading purpose |
 |---:|---|---|
 | 1 | `design/product/htas-integrated-prd.md` | Read the product definition of HTAS |
-| 2 | `design/architecture/htas-positioning-in-federation.md` | Read what HTAS owns on top of the Federation |
-| 3 | `design/federation/federation-constitution.md` | Read the world / self / artifact boundaries and the permission table |
+| 2 | `design/architecture/htas-positioning-in-nunc-stans.md` | Read what HTAS owns on top of Nunc Stans |
+| 3 | `design/constitution/constitution.md` | Read the world / self / artifact boundaries and the permission table |
 | 4 | `design/architecture/memory-write-read-contract.md` | Read the WRITE / READ / Reconnection contract |
 | 5 | `design/development/development-plan.md` | Read in what order to build |
 | 6 | `design/development/setup-phase0.md` | Read the starting procedure for the monorepo / data location / check |
-| 7 | `design/federation/test-spec-journey.md` | Read the acceptance criteria for the whole system |
+| 7 | `design/stories/test-spec-journey.md` | Read the acceptance criteria for the whole system |
 
 ---
 
 ## 5. Implementation route
 
-### Federation:Phase 0
+### Pre-v1 Phase 0
 
 ```text
-design/federation/federation-constitution.md
+design/constitution/constitution.md
 design/development/setup-phase0.md
 contracts/edge.schema.json
-contracts/federation-id.md
+contracts/scope-id.md
 contracts/glossary.md
 contracts/agent-abi.md
-engines/nuncstans/docs/prd-override.md
+engines/nunc-stans/docs/prd-override.md
 ```
 
 ### Memory WRITE / READ
@@ -163,18 +165,18 @@ design/architecture/actor-model.md
 design/architecture/continuity-kernel.md
 ```
 
-### Federation Journey
+### Nunc Stans Journey
 
 ```text
-design/federation/journey-examples.md
-design/federation/test-spec-journey.md
-engines/nuncstans/docs/spl-plan.md
+design/stories/journey-examples.md
+design/stories/test-spec-journey.md
+engines/nunc-stans/docs/spl-plan.md
 ```
 
 ### Boundary / Extraction Readiness
 
 ```text
-design/architecture/htas-positioning-in-federation.md
+design/architecture/htas-positioning-in-nunc-stans.md
 design/architecture/microservice-readiness.md
 design/architecture/ip-server-readiness.md
 ```

@@ -1,26 +1,26 @@
-# HTAS Positioning in Federation v0.1
+# HTAS Positioning in Nunc Stans v0.1
 
 Status: Draft v0.1  
-Scope: Human Thought Augmentation System / Federation / News / NuncStans / FourFive / Continuity Kernel  
-Purpose: Define which layer HTAS should be treated as on the Federation.
+Scope: Human Thought Augmentation System / the contracts layer / News / Nunc Stans / FourFive / Continuity Kernel  
+Purpose: Define which layer HTAS should be treated as on Nunc Stans.
 
 ---
 
 ## 0. Conclusion
 
-HTAS is not a giant DB that absorbs News / NuncStans / FourFive.
+HTAS is not a giant DB that absorbs News / Nunc Stans / FourFive.
 
-HTAS is the **cognitive control / reconnection / Memory I/O Policy layer** that sits on the Federation.
+HTAS is the **cognitive control / reconnection / Memory I/O Policy layer** that sits on Nunc Stans.
 
 ```text
 News owns world.
-NuncStans owns self.
+Nunc Stans owns self.
 FourFive owns artifact.
 Continuity Kernel owns session continuity.
 HTAS owns cognitive control, Memory I/O policy, and reconnection.
 ```
 
-HTAS does not consolidate and store the source of truth (canonical record). HTAS reads each source of truth through typed references and the FederationEdge, and reconnects them to the current UserState / INTENT / cognitive load.
+HTAS does not consolidate and store the source of truth (canonical record). HTAS reads each source of truth through typed references and the Edge, and reconnects them to the current UserState / INTENT / cognitive load.
 
 ---
 
@@ -33,7 +33,7 @@ The existing design has four streams.
    - READ according to UserState / INTENT / cognitive load
    - Cognitive control via DMN / CEN / SN / ACC
 
-2. SPL / NuncStans
+2. SPL / Nunc Stans
    - self prediction / outcome / revision
    - user peer / ai peer
    - commitment
@@ -59,26 +59,26 @@ This document fixes where HTAS should be placed.
 
 ## 2. Basic definitions
 
-### 2.1 Federation
+### 2.1 Nunc Stans
 
-The Federation is a configuration that connects the three scopes world / self / artifact.
+Nunc Stans is a configuration that connects the three scopes world / self / artifact.
 
 ```text
 world    = News
-self     = NuncStans / SPL
+self     = Nunc Stans / SPL
 artifact = FourFive
 ```
 
-What the Federation shares is the following.
+What Nunc Stans shares is the following.
 
 - vocabulary
-- Federation ID
-- Federation Edge
+- scope ID
+- contracts-layer Edge
 - permission table
 - contracts
 - read-time join
 
-What the Federation does not do.
+What Nunc Stans does not do.
 
 - A consolidated DB
 - Joined storage of data
@@ -110,10 +110,10 @@ What HTAS handles.
 What HTAS does not own.
 
 - News world SoR
-- NuncStans self ledger
+- Nunc Stans self ledger
 - FourFive artifact_version
 - The source of truth of the Continuity raw event log
-- The source of truth of the Federation joined view
+- The source of truth of the Nunc Stans joined view
 
 ---
 
@@ -132,16 +132,16 @@ What HTAS does not own.
   - ACC Monitor
   - InterventionLog
         ↓
-[Integration / Federation Adapter]
-  - Federation ID resolver
-  - FederationEdge reader/writer
+[Integration / Contracts-Layer Adapter]
+  - scope ID resolver
+  - Edge reader/writer
   - NewsAdapter
-  - NuncStansAdapter
+  - Nunc StansAdapter
   - FourFiveAdapter
         ↓
 [System of Record]
   - News       = world
-  - NuncStans  = self
+  - Nunc Stans  = self
   - FourFive   = artifact
         ↓
 [Continuity Kernel]
@@ -149,7 +149,7 @@ What HTAS does not own.
   - Active Frame construction
 ```
 
-Note: in the diagram above, the Continuity Kernel is also a cross-cutting foundation. It handles raw events of conversation and work continuity, but it does not own UserUnderstanding or the Federation SoR.
+Note: in the diagram above, the Continuity Kernel is also a cross-cutting foundation. It handles raw events of conversation and work continuity, but it does not own UserUnderstanding or the Nunc Stans SoR.
 
 ---
 
@@ -170,13 +170,13 @@ User says "I think X"
 → UserHypothesis
 
 User bets resources on X
-→ NuncStans commitment
+→ Nunc Stans commitment
 
 User builds app X
 → FourFive artifact_version
 ```
 
-However, rather than rewriting the source of truth of NuncStans or FourFive, HTAS sends a proposal / command to the relevant engine.
+However, rather than rewriting the source of truth of Nunc Stans or FourFive, HTAS sends a proposal / command to the relevant engine.
 
 ### 4.2 Reconnection Policy
 
@@ -212,7 +212,7 @@ HTAS controls the amount, timing, and format of output.
 
 HTAS judges whether intervention is needed.
 
-However, active intervention requires a NuncStans mandate.
+However, active intervention requires a Nunc Stans mandate.
 
 ```text
 intervention without mandate = forbidden
@@ -239,9 +239,9 @@ News prediction
 → user-authored prediction / commitment
 ```
 
-### 5.2 The source of truth of NuncStans
+### 5.2 The source of truth of Nunc Stans
 
-NuncStans owns the source of truth of self.
+Nunc Stans owns the source of truth of self.
 
 - self prediction
 - commitment
@@ -250,9 +250,9 @@ NuncStans owns the source of truth of self.
 - mandate
 - suspension
 - intervention under mandate
-- FederationEdge
+- Edge
 
-HTAS does not copy NuncStans as a consolidated DB. It references it at READ time.
+HTAS does not copy Nunc Stans as a consolidated DB. It references it at READ time.
 
 ### 5.3 The source of truth of FourFive
 
@@ -300,20 +300,20 @@ What News must not do:
 - Writing a user commitment
 - Asserting the user's psychology or strategy
 
-### 6.2 NuncStans = self ledger / consent rail
+### 6.2 Nunc Stans = self ledger / consent rail
 
-NuncStans is the source of truth of self prediction / commitment / outcome / revision / mandate / edge.
+Nunc Stans is the source of truth of self prediction / commitment / outcome / revision / mandate / edge.
 
-The role of NuncStans as seen from HTAS:
+The role of Nunc Stans as seen from HTAS:
 
 - The source of truth of User-authored prediction
 - The source of truth of Commitment
 - The source of truth of Outcome / revision
-- The source of truth of FederationEdge
+- The source of truth of Edge
 - The source of truth of Mandate / intervention permission
 - The transparent advisor track of AI peer / superposition_state
 
-What NuncStans must not do:
+What Nunc Stans must not do:
 
 - Auto-committing world AI predictions to self
 - Treating an AI peer as a user peer
@@ -352,14 +352,14 @@ The role of the Continuity Kernel as seen from HTAS:
 What the Continuity Kernel must not do:
 
 - Owning the UserUnderstanding source of truth
-- Owning the Federation SoR
+- Owning the Nunc Stans SoR
 - Turning a summary into a source-of-truth
 
 ---
 
 ## 7. The position of HTAS in the 5-stage loop
 
-The Federation experience loop is the following.
+The Nunc Stans experience loop is the following.
 
 ```text
 1. Have AI present future predictions and action options
@@ -376,10 +376,10 @@ HTAS handles the following between each stage.
 | Stage | Source of truth | HTAS role |
 |---|---|---|
 | 1. World prediction / options | News / AIResponse | Turn into material, do not rank, control cognitive load |
-| 2. Prediction / commitment / app | NuncStans / FourFive | WRITE classification, confirm user-authored commit, artifact reference |
+| 2. Prediction / commitment / app | Nunc Stans / FourFive | WRITE classification, confirm user-authored commit, artifact reference |
 | 3. Strategic understanding | superposition_state / FourFive refs | Make transparent as an AI-side understanding candidate, make it dismissible |
-| 4. Proposal | HTAS InterventionLog / NuncStans mandate | Confirm mandate, present material only, surface/suppress/defer |
-| 5. Action / close | NuncStans outcome / ResultRecord | Separate observable/subjective, reconnect to the next READ |
+| 4. Proposal | HTAS InterventionLog / Nunc Stans mandate | Confirm mandate, present material only, surface/suppress/defer |
+| 5. Action / close | Nunc Stans outcome / ResultRecord | Separate observable/subjective, reconnect to the next READ |
 
 ---
 
@@ -421,9 +421,9 @@ can commit to UserUnderstanding
 
 ---
 
-## 9. FederationEdge and BeliefGraphEdge
+## 9. Edge and BeliefGraphEdge
 
-### 9.1 FederationEdge
+### 9.1 Edge
 
 Connections between systems.
 
@@ -468,7 +468,7 @@ Example:
 
 ### 9.3 Separation principle
 
-Do not convert FederationEdge into BeliefGraphEdge and store it.
+Do not convert Edge into BeliefGraphEdge and store it.
 
 When needed, handle it with a read model.
 
@@ -511,7 +511,7 @@ Only when the user explicitly states "yes, this strategic understanding is corre
 
 ## 11. The role of HTAS READ
 
-HTAS READ is not an API that searches each Federation source of truth.
+HTAS READ is not an API that searches each Nunc Stans source of truth.
 
 HTAS READ decides the following.
 
@@ -534,10 +534,10 @@ HTAS WRITE judges which authority it should be sent to.
 
 ```text
 User writes prediction
-→ NuncStans
+→ Nunc Stans
 
 User writes commitment
-→ NuncStans
+→ Nunc Stans
 
 News produces forecast
 → News
@@ -552,7 +552,7 @@ User adopts AI proposal
 → UserUnderstanding commit
 
 AI proposes edge
-→ FederationEdge candidate
+→ Edge candidate
 ```
 
 HTAS is the policy layer that prevents misplacing commit authority.
@@ -592,12 +592,12 @@ apps/
     intervention_log
     audit
 
-  federation_adapter/
-    federation_id_resolver
+  contracts_layer_adapter/
+    scope_id_resolver
     edge_reader
     edge_writer
     news_adapter
-    nuncstans_adapter
+    nunc-stans_adapter
     fourfive_adapter
 
   continuity/
@@ -612,7 +612,7 @@ apps/
     forecast_context
 
   self_ledger/
-    nuncstans_client
+    nunc-stans_client
 
   artifact_engine/
     fourfive_client
@@ -649,13 +649,13 @@ Reasons:
 
 ### HTAS:M0 (was Positioning Phase A): Contract preparation
 
-- Place the Federation-aware Memory WRITE / READ Contract
+- Place the Nunc Stans-aware Memory WRITE / READ Contract
 - Place the HTAS Positioning document
-- Confirm the Federation ID / Edge schema / authority table
+- Confirm the scope ID / Edge schema / authority table
 
 ### HTAS:M1 (was Positioning Phase B): Minimal read model
 
-- Read NuncStans self JSON / edges.jsonl
+- Read Nunc Stans self JSON / edges.jsonl
 - Surface in the ME view
 - Compute the provenance breakdown from edges
 
@@ -667,12 +667,12 @@ Reasons:
 - ReconnectionRequest / Result
 - surfaced / suppressed / deferred logging
 
-### HTAS:M2 (was Positioning Phase D): Federation Adapter
+### HTAS:M2 (was Positioning Phase D): Contracts-Layer Adapter
 
 - NewsAdapter
-- NuncStansAdapter
+- Nunc StansAdapter
 - FourFiveAdapter
-- FederationEdge resolver
+- Edge resolver
 
 ### HTAS:M5 (was Positioning Phase E): Mode-aware response
 
@@ -695,9 +695,9 @@ Reasons:
 
 HTAS does not copy each source of truth and store it joined.
 
-### H2. HTAS does not override the Federation SoR
+### H2. HTAS does not override the Nunc Stans SoR
 
-HTAS does not break the internal rules of News / NuncStans / FourFive.
+HTAS does not break the internal rules of News / Nunc Stans / FourFive.
 
 ### H3. HTAS protects UserUnderstanding
 
@@ -707,7 +707,7 @@ Do not put AIResponse / ExternalKnowledge / News / FourFive / StrategyModel dire
 
 News prediction connects to self through an informed_by edge.
 
-### H5. NuncStans protects the sovereignty track of self
+### H5. Nunc Stans protects the sovereignty track of self
 
 commitment / subjective outcome / user prediction are user-authority.
 
@@ -735,7 +735,7 @@ A resident program or active proposal requires a mandate + expiration + suspensi
 
 ## 17. Success conditions
 
-The state in which HTAS is functioning correctly on the Federation is the following.
+The state in which HTAS is functioning correctly on Nunc Stans is the following.
 
 1. The user can create a self commitment by looking at a News prediction
 2. A self commitment can produce a FourFive artifact
@@ -753,18 +753,18 @@ The state in which HTAS is functioning correctly on the Federation is the follow
 ## 18. ADR
 
 ```text
-ADR: Position HTAS as Cognitive Control and Reconnection Layer over Federation
+ADR: Position HTAS as Cognitive Control and Reconnection Layer over Nunc Stans
 
 Decision:
-HTAS will not be implemented as a unified database that absorbs News, NuncStans, and FourFive. News remains the world SoR, NuncStans remains the self ledger and consent rail, and FourFive remains the artifact SoR. HTAS sits above them as the cognitive control, Memory I/O policy, and reconnection layer. It reads federation data through typed references and FederationEdge, and it writes only through the correct authority boundary.
+HTAS will not be implemented as a unified database that absorbs News, Nunc Stans, and FourFive. News remains the world SoR, Nunc Stans remains the self ledger and consent rail, and FourFive remains the artifact SoR. HTAS sits above them as the cognitive control, Memory I/O policy, and reconnection layer. It reads Nunc Stans data through typed references and Edge, and it writes only through the correct authority boundary.
 
 Rationale:
-The hard problem is not data aggregation. The hard problem is preserving UserUnderstanding, keeping AI output separate from user knowledge, maintaining INTENT, and reconnecting the right past assets at the right cognitive load. Federation already gives the correct data boundaries: world / self / artifact. HTAS should use these boundaries rather than erase them.
+The hard problem is not data aggregation. The hard problem is preserving UserUnderstanding, keeping AI output separate from user knowledge, maintaining INTENT, and reconnecting the right past assets at the right cognitive load. Nunc Stans already gives the correct data boundaries: world / self / artifact. HTAS should use these boundaries rather than erase them.
 
 Rules:
 - HTAS owns MemoryWritePolicy, ReconnectionPolicy, UserState, IntentFrame, CognitiveLoadGovernor, ACCPolicy, InterventionLog, Feedback, and Audit.
 - News owns world prediction and observation.
-- NuncStans owns self prediction, commitment, outcome, revision, mandate, and FederationEdge.
+- Nunc Stans owns self prediction, commitment, outcome, revision, mandate, and Edge.
 - FourFive owns artifact_version and app metrics.
 - Continuity Kernel owns session event continuity and active frame construction.
 - Joined views are read-time projections, not source-of-truth.
@@ -776,9 +776,9 @@ Rules:
 
 ## 19. Reference-source notes
 
-- federation-constitution-v0.3.1
+- nunc-stans-constitution-v0.3.1
 - journey-examples.md
-- prd-override-nuncstans.md
+- prd-override-nunc-stans.md
 - test-spec-journey-v2.3.md
 - Human Thought Augmentation System Integrated PRD v0.2
 - Memory I/O Contract & MVP Decision Record v0.1

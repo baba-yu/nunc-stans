@@ -1,5 +1,5 @@
 # Journey test spec v2.3: Yu's 19 steps
-Targets: Constitution v0.3.1 / Nunc Stans experience audit / journey-examples (the five-stage loop) / test-spec-federation (common rules)
+Targets: Constitution v0.3.1 / Nunc Stans experience audit / journey-examples (the five-stage loop) / the common test rules
 v2.3: aligned the backbone to the five-stage loop (examples §0). Inserted "build the tactic (stage 2)" and "the strategy is read (stage 3)" between T9 and T11, and renumbered to 19 steps. The source of the terrain's numbers became the app's real data.
 Nature: if a unit test is an inspection of parts, this is an inspection of "can the person who uses this system actually fight." The hypothesis under test is the mission of the audit document — that it is a tool that reinforces the courage of someone who is wavering and aids resolve.
 Location: design/test-spec-journey.md / scripts and test data: tests/journey/
@@ -9,7 +9,7 @@ Location: design/test-spec-journey.md / scripts and test data: tests/journey/
 ## 0. Two ways to use it
 
 1. CI mode: `just journey` replays the script against data in a temporary folder, takes a snapshot at each step, and confirms checks 1–11. It does not touch real data (NS-5.3)
-2. Real-life mode: chapters 0–1 can be used as-is as the actual 4-week procedure for Federation:Phase 1. After actually spending 4 weeks, `just journey:verify` replays checks 1–11 read-only against the real data's git history (conforms to F11)
+2. Real-life mode: chapters 0–1 can be used as-is as the actual 4-week procedure for Pre-v1 Phase 1. After actually spending 4 weeks, `just journey:verify` replays checks 1–11 read-only against the real data's git history (conforms to F11)
 
 The aim is that the test script and the real-life procedure are the same document.
 
@@ -55,7 +55,7 @@ Checks confirmed at every step:
 | Check 6 | The provenance mix is recomputable from edges alone and matches the recorded value | F9 |
 | Check 7 | A broken reference is displayed by to_label (e2e steps only) | §10-A |
 | Check 8 | No files have grown outside the designated locations | F5 / §10-A |
-| Check 9 | Every intervention references a valid mandate (mandate-external interventions = 0) | SPL Inv 12–13 (proposed as Federation rule F15) |
+| Check 9 | Every intervention references a valid mandate (mandate-external interventions = 0) | SPL Inv 12–13 (proposed as constitution rule F15) |
 | Check 10 | Interventions are material only: no ranking / two or more options or a single factual notice / no imperative form / all numbers trace back to records | Inv 19 / audit document |
 | Check 11 | close is done with two outcomes, external form and felt sense. External form = SPL's result_type vocabulary, felt sense = happy / unhappy / unchanged | §3 / SPL's separation of external form and felt sense |
 
@@ -164,12 +164,12 @@ Confirm: intervention count during the lapse = 0 (a hands-on confirmation of che
 
 ## 6. The design this script decided (already reflected as provisions in other documents)
 
-1. close is the form of appending two SPL outcomes (external form + felt sense). The felt-sense vocabulary adds only the 3 words happy / unhappy / unchanged. → Constitution §3, NuncStans override §1.1
+1. close is the form of appending two SPL outcomes (external form + felt sense). The felt-sense vocabulary adds only the 3 words happy / unhappy / unchanged. → Constitution §3, Nunc Stans override §1.1
 2. The form of the intervention record: a mandate reference required (check 9) / materiality (check 10) / dismissable per item / degradable display via to_label
 3. The absence of an adopt button is spec: no screen that directly generates a commitment or prediction from the content of an intervention is built. Generation always passes through the person's own entry screen
 4. Readability of lapse: the reason a card stopped (expiry) is readable in the intervention-record view
 5. Inherited from v1: corrections are appended (supersedes) / a week writing nothing is valid / a broken reference is a state, not a repair target
-6. The AI's understanding of strategy is written in superposition_state (transparent / versioned / dismissable) and holds an informed_by edge to the underlying app (artifact). Metrics the app does not measure are not used as grounds for understanding or proposals. → Constitution §3, NuncStans override §1.5
+6. The AI's understanding of strategy is written in superposition_state (transparent / versioned / dismissable) and holds an informed_by edge to the underlying app (artifact). Metrics the app does not measure are not used as grounds for understanding or proposals. → Constitution §3, Nunc Stans override §1.5
 
 ## 7. Unimplemented features this script demands of the product
 
@@ -177,9 +177,9 @@ Fact: Constitution v0.3.1 commits entirely to removing authority (the fence of a
 
 | Stage | Content | Landing | Steps it requires |
 |---|---|---|---|
-| L1 | A card within the mandate scope at the top of the review (a guaranteed weekly presentation) | Same time as Federation:Phase 3 (computable with the News view and edges) | T9 |
-| L2 | Local notification of expiry / divergence (within 127.0.0.1, conforms to F11) | After Federation:Phase 3 | T17(d) |
-| L3 | Detection of wavering (circling / lingering / unconfirmed) → generation of terrain. Bundling a route to a human at the boundary of despair | Same time as NuncStans v3 | T13, T17 |
+| L1 | A card within the mandate scope at the top of the review (a guaranteed weekly presentation) | Same time as Pre-v1 Phase 3 (computable with the News view and edges) | T9 |
+| L2 | Local notification of expiry / divergence (within 127.0.0.1, conforms to F11) | After Pre-v1 Phase 3 | T17(d) |
+| L3 | Detection of wavering (circling / lingering / unconfirmed) → generation of terrain. Bundling a route to a human at the boundary of despair | Same time as Nunc Stans v3 | T13, T17 |
 
 Additions to the Constitution (drafted after approval): intervention rules (the distinction between authority and initiative / the materiality of check 10 / a route to a human at the boundary of despair) + a new rule F15: mandate-external interventions = 0 (proposed / pending Constitution §5 amendment; not yet ratified. Enforcement for now rests on the existing SPL Inv 12–13). §10-C-1 (the AI does not touch the screen's ordering) stays as-is. The card within the mandate scope is noted as a separate jurisdiction.
 

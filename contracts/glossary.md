@@ -6,7 +6,7 @@ The scope owned by News for world prediction, observation, and external context;
 
 ## self
 
-The scope owned by NuncStans for self-prediction, commitment, outcome, revision, mandate, and edge; user-authored world predictions are stored in self with scope=world.
+The scope owned by Nunc Stans for self-prediction, commitment, outcome, revision, mandate, and edge; user-authored world predictions are stored in self with scope=world.
 
 ## artifact
 
@@ -36,7 +36,7 @@ The return value of READ. Holds surface / suppress / defer along with the reason
 
 Human Thought Augmentation System. Not the source-of-truth DB, but the upper control layer that owns cognitive control / Memory I/O policy / reconnection.
 
-## NuncStans
+## Nunc Stans
 
 Formerly SPL. Owns the source of truth of the self scope, plus edge, commitment, and mandate.
 

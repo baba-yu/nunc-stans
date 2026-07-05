@@ -1,5 +1,5 @@
 # The process of courage: a collection of concrete examples
-Targets: Federation Constitution v0.3.1 / Nunc Stans experience audit / test-spec-journey v2.3
+Targets: Nunc Stans Constitution v0.3.1 / Nunc Stans experience audit / test-spec-journey v2.3
 Nature: with the loop common to all users (the five stages below) as the backbone, four concrete examples are invented. The E2E test runs these examples as-is.
 Location: design/journey-examples.md
 
@@ -119,7 +119,7 @@ Common to all stages: mandate-external interventions = 0 (check 9) / absence of 
 
 ## 6. What this collection of examples decides
 
-1. **No new location is created for stage 3**: the AI's understanding of strategy = superposition_state (existing in SPL. transparent / versioned / dismissable) + informed_by → artifact (already appended to Constitution §3 and NuncStans override §1.5)
+1. **No new location is created for stage 3**: the AI's understanding of strategy = superposition_state (existing in SPL. transparent / versioned / dismissable) + informed_by → artifact (already appended to Constitution §3 and Nunc Stans override §1.5)
 2. **The FourFive app is a mandatory element of the journey**: a produced edge appears in every example. The backbone of journey v2.2 (T8–T12) had no stages 2–3 — two steps "build the app" and "the AI reads the strategy" are already inserted in v2.3 between T9 and T11
 3. **The unit of an E2E scenario is "one lap of the loop + the entrance to the second lap"**: stopping at one lap cannot confirm whether stages 3–4 are learning
 4. **The app speaks the strategy even by what it does not measure** (Example 2): reading the strategy looks at both the presence and absence of metrics. For the AI to fill in a "metric it does not measure" on its own and use it as grounds for a proposal violates check 10 (all numbers trace to records)
