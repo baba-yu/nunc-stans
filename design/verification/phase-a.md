@@ -16,7 +16,51 @@ merged to `main` at the review gate).
 
 ## Evidence log
 
-- T0 (2026-07-04): branch + tag created; baselines above.
+- T0 (2026-07-04): branch + tag created; baselines above. Commit 9d3a92f.
+- T1: fourfive subtree split == standalone dev tip (cfaac35) — parity
+  confirmed, no pull needed. The June app-composition work is already in.
+- T2: design repo absorbed from `dev` (subtree 6b101c1); reconcile found
+  every file byte-identical except `plan/README-plan.md` (adopted into
+  `design/`); LICENSE/NOTICE carried to the root. Commit e50a139.
+- T3: renames (a74ace6) + vocabulary sweep in 6 commits (961daf0..89ae141).
+  107 contextual replacements in the 4 large docs done by a review agent;
+  `valid_federation_id` → `valid_scope_id` in the engine; frontend package
+  renamed to `nunc-stans-formans`; §13 amended (engine-independence retired,
+  boundary discipline kept). Verification: engine 11/11 tests, frontend
+  10/10 + build, fourfive 24/24, checks 3× ok, final grep clean except the
+  exempted slug `federation-local`.
+- T4: justfile NS_DATA shim (c9ae1ce); `~/federation-data` →
+  `~/nunc-stans-data` moved with the vault intact (3 commitments served,
+  `/health` reports `nunc-stans-engine`); FED_DATA prints a deprecation
+  warning; F11 re-verified (no remote).
+- T5: check.ts + commit-scope.ts replace the shell originals (055133a);
+  rust-toolchain.toml pins 1.96.1, .node-version pins 24. The engine's
+  unix-permission code was ALREADY `#[cfg(unix)]`-guarded with a
+  `#[cfg(not(unix))]` no-op — no change needed. FD-3.2 exclusion
+  generalized to `tools/` (the tooling legitimately names the string).
+- T6: `just bootstrap` (b0565dc) — doctor + NS_DATA skeleton
+  (self/world/artifact/profiles/runs, self git-init, no-remote check,
+  chmod 700); verified fresh + idempotent; root package.json added
+  (type: module).
+- T7: root README + CONTRIBUTING (380c183), frontend README (02ba8bc),
+  engine README → NS_DATA (74910e7), nunc-fluens code-freeze banner
+  (7892647). Commands verified live: `just up` (T4), `just web` (Vite
+  served :5173), engine `scripts/smoke.sh` — all checks passed.
+- T8: news suite in-monorepo: 121 passed / 12 data-dependent failures
+  (test_rename_future_titles.py entirely + 2 others needing live
+  report/prediction data that stays in `~/news` until Phase C). Scoped
+  subset passes 110/110 (+1 skip); the same scope is wired into CI
+  (1b9ecdd). CI proves itself after the owner pushes (pending).
+- T9: archived to `~/old/`: fourfive, nuncstans-hermes-stack-remnant
+  (root-owned — moved via WSL root, chowned back), multi-stakeholder-
+  simulater, and home junk into `~/old/home-junk-2026-07/` (pptx/js decks,
+  root package.json + lockfiles + node_modules, honeypot, llmsec,
+  tmp_pptx). Nothing deleted. **Caveat for the owner:** the
+  `honcho-sim-deriver-1` Docker container (plus a langfuse/litellm/
+  clickhouse stack) is still running from the archived experiments and
+  Docker recreates `~/multi-stakeholder-simulater` as an empty root-owned
+  mount skeleton; stopping those containers is the owner's call — until
+  then the skeleton dir may reappear.
 
 ## Decisions log
 
