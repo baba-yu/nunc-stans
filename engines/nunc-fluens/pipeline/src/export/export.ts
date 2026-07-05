@@ -9,7 +9,7 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import type { Db } from '../ingest/ingest-core.ts';
-import { hashId, nowIso, sha1Hex } from '../ingest/util.ts';
+import { hashId, nowIso, pyRound, sha1Hex } from '../ingest/util.ts';
 import { WINDOWS, windowRange } from '../ingest/analytics.ts';
 import { parseWeekBucket } from '../ingest/timewindow.ts';
 import { boldHint, deriveShortLabel } from './short-label.ts';
@@ -46,25 +46,9 @@ function pyTitle(s: string): string {
   return s.replace(/[A-Za-z]+/g, w => w[0].toUpperCase() + w.slice(1).toLowerCase());
 }
 
-/** Python round(x, 2): decimal round-half-even on the exact double. */
+/** Python round(x, 2) — see util.pyRound. */
 export function pyRound2(x: number): number {
-  const s = x.toFixed(20);
-  const dot = s.indexOf('.');
-  const frac = s.slice(dot + 1);
-  const kept = Number(s.slice(0, dot).replace('-', '')) * 100
-    + Number(frac.slice(0, 2));
-  const rest = frac.slice(2);
-  const sign = x < 0 ? -1 : 1;
-  let n = kept;
-  const restNum = rest.replace(/0+$/, '');
-  if (restNum.length === 0) {
-    // exact — nothing to round
-  } else if (restNum[0] >= '5' && (restNum.length > 1 || restNum[0] > '5')) {
-    n += 1;
-  } else if (restNum === '5') {
-    if (n % 2 === 1) n += 1; // half to even
-  }
-  return sign * n / 100;
+  return pyRound(x, 2);
 }
 
 function grassLevelFor(attn: number): number {

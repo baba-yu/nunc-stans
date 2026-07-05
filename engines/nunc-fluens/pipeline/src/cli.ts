@@ -9,7 +9,8 @@ import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { join } from 'node:path'
 import {
   configFile, linkNewsRepo, requireConfig, requireNewsRepo,
-  resolveDataDir, resolveNewsRepo, sourcedataDir, worldDbFile,
+  resolveDataDir, resolveNewsRepo, runLogFile, sourcedataDir,
+  worldDbFile, worldDir,
 } from './config.ts'
 import { migrateDb } from './migrate.ts'
 import { CANONICAL_FILES } from './schemas/sourcedata.ts'
@@ -83,18 +84,54 @@ function cmdValidate(date: string | undefined): number {
 }
 
 const [cmd, arg] = process.argv.slice(2)
+async function cmdRun(argv: string[]): Promise<number> {
+  const opts = { date: new Date().toISOString().slice(0, 10), replay: false, dryRun: false, only: null as string | null }
+  for (let i = 0; i < argv.length; i++) {
+    const a = argv[i]
+    if (a === '--date') opts.date = argv[++i]
+    else if (a === '--replay') opts.replay = true
+    else if (a === '--dry-run') opts.dryRun = true
+    else if (a === '--only') opts.only = argv[++i]
+    else { console.error(`run: unknown flag ${a}`); return 2 }
+  }
+  const cfg = requireConfig()
+  // Runtime/search pair from the settings file (S-3; the gate API and
+  // Formans drawer read/write the same file), CLI-overridable later.
+  const newsConfigFile = join(worldDir(cfg.dataDir), 'news-config.json')
+  let newsCfg: Record<string, unknown> = {}
+  if (existsSync(newsConfigFile)) newsCfg = JSON.parse(readFileSync(newsConfigFile, 'utf8'))
+  const runtime = (newsCfg.runtime as string) ?? 'claude-code'
+  const search = (newsCfg.search as string) === 'external'
+    ? (newsCfg.searchEngine as string) ?? 'brave'
+    : 'native'
+  const synthModel = (newsCfg.synthModel as string) ?? null
+
+  const { createAi } = await import('nunc-ai')
+  const { runDay } = await import('./orchestrator/dag.ts')
+  const ai = opts.replay ? null : createAi({ runLogFile: runLogFile(cfg.dataDir) })
+  const r = await runDay({
+    date: opts.date,
+    dataDir: cfg.dataDir,
+    newsRepo: cfg.newsRepo,
+    ai, runtime, search, synthModel,
+    replay: opts.replay,
+    dryRun: opts.dryRun,
+    only: opts.only,
+  })
+  console.log(`run ${opts.date}: ${r.ok ? 'OK' : `FAILED at ${r.failedStep}`} — manifest ${r.manifestPath}`)
+  return r.ok ? 0 : 1
+}
+
+const argvRest = process.argv.slice(3)
 let code: number
 switch (cmd) {
   case 'link': code = cmdLink(arg); break
   case 'status': code = cmdStatus(); break
   case 'migrate-db': code = cmdMigrateDb(); break
   case 'validate': code = cmdValidate(arg); break
-  case 'run':
-    console.error('run: not implemented yet - the orchestrator lands with Phase C T5')
-    code = 2
-    break
+  case 'run': code = await cmdRun(argvRest); break
   default:
-    console.error('usage: nunc-fluens link <dir> | status | migrate-db | validate <date> | run')
+    console.error('usage: nunc-fluens link <dir> | status | migrate-db | validate <date> | run [--date D] [--replay] [--dry-run] [--only step]')
     code = 2
 }
 process.exit(code)

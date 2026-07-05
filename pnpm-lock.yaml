@@ -78,6 +78,9 @@ importers:
       better-sqlite3:
         specifier: ^12.4.1
         version: 12.11.1
+      nunc-ai:
+        specifier: workspace:*
+        version: link:../../../frontend/packages/ai
       nunjucks:
         specifier: ^3.2.4
         version: 3.2.4

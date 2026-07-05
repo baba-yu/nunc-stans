@@ -39,6 +39,26 @@ export function canonicalizeUrl(url: string): string {
   return u.replace(/\/+$/, '');
 }
 
+/** Python round(x, n): decimal round-half-even on the exact double
+ * (decided on the exact decimal expansion via toFixed(20)). */
+export function pyRound(x: number, ndigits: number): number {
+  if (!Number.isFinite(x)) return x;
+  const s = Math.abs(x).toFixed(20);
+  const dot = s.indexOf('.');
+  const frac = s.slice(dot + 1);
+  const scale = 10 ** ndigits;
+  let n = Number(s.slice(0, dot)) * scale + Number(frac.slice(0, ndigits) || '0');
+  const rest = (frac.slice(ndigits) || '').replace(/0+$/, '');
+  if (rest.length === 0) {
+    // exact — nothing to round
+  } else if (rest[0] >= '5' && (rest.length > 1 || rest[0] > '5')) {
+    n += 1;
+  } else if (rest === '5') {
+    if (n % 2 === 1) n += 1; // half to even
+  }
+  return (x < 0 ? -1 : 1) * n / scale;
+}
+
 /** Python json.dumps compatible: ", " / ": " separators; ensure_ascii
  * escapes every char > 0x7E as \uXXXX (astral chars as surrogate pairs,
  * which JS strings already are). */
