@@ -28,10 +28,9 @@ jobs:
         with:
           node-version: 24
       - run: corepack enable
-      - run: corepack pnpm -C frontend install --frozen-lockfile
-      - run: corepack pnpm -C frontend test
-      - run: corepack pnpm -C frontend build
-      - run: corepack pnpm -C engines/fourfive install --frozen-lockfile
+      - run: corepack pnpm install --frozen-lockfile
+      - run: corepack pnpm -C frontend/nunc-stans-formans test
+      - run: corepack pnpm -C frontend/nunc-stans-formans build
       - run: corepack pnpm -C engines/fourfive typecheck
       - run: corepack pnpm -C engines/fourfive test
 

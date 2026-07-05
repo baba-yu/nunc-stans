@@ -19,27 +19,27 @@ _require_data:
 up: _require_data build-frontend
     cargo run --manifest-path engines/nunc-stans/Cargo.toml --release -- \
       --self-dir "{{data_dir}}/self" \
-      --static-dir frontend/dist \
+      --static-dir frontend/nunc-stans-formans/dist \
       --port "${NS_PORT:-8720}"
 
-# Build the Vue frontend to frontend/dist (served by the engine at /). The
-# world adapter runs first so the read-only world view has fresh headlines.
+# Build the Vue frontend to frontend/nunc-stans-formans/dist. The world
+# adapter runs first so the read-only world view has fresh headlines.
 # NEWS_WORLD points at News's exported graph (e.g. ~/news/docs/data/graph-mix.json);
 # its path lives outside this repo, like the data store. Unset = empty world view.
 build-frontend: build-world
-    pnpm -C frontend install --frozen-lockfile || pnpm -C frontend install
-    pnpm -C frontend build
+    pnpm install --frozen-lockfile || pnpm install
+    pnpm -C frontend/nunc-stans-formans build
 
-# Flatten News's world export into frontend/public/world-headlines.json
+# Flatten News's world export into the formans public dir
 # (§13-B: conversion on the Nunc Stans side; News is not asked to change).
 build-world:
-    node frontend/scripts/build-world.mjs
+    node frontend/nunc-stans-formans/scripts/build-world.mjs
 
 # Fast dev loop: Vite dev server (proxies /self + /health to the engine).
 # Run `just build-world` once first if you want headlines in dev.
 # Run `just up` (or the engine) in another terminal.
 web:
-    pnpm -C frontend dev
+    pnpm -C frontend/nunc-stans-formans dev
 
 ritual: _require_data
     git -C "{{data_dir}}/self" add -A && \
@@ -48,7 +48,7 @@ ritual: _require_data
 
 test:
     cargo test --manifest-path engines/nunc-stans/Cargo.toml
-    pnpm -C frontend test
+    pnpm -r test
 
 check:
     @node tools/check.ts
