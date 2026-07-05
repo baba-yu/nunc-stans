@@ -1,0 +1,48 @@
+/* nunc-ui design tokens — the one visual language (v1-plan §2.5).
+   Neutral base from FourFive; cold data surface from News; primary accent
+   is News cyan (decision D6); FourFive blue survives as the secondary. */
+:root {
+  --nui-bg: #0f1115;
+  --nui-elev1: #171a21;
+  --nui-elev2: #1e222b;
+  --nui-border: #2a2f3a;
+  --nui-text: #e6e8ec;
+  --nui-dim: #9aa3b2;
+  --nui-accent: #18c7d8;
+  --nui-accent-press: #12a8b7;
+  --nui-secondary: #5b8cff;
+  --nui-radius-s: 8px;
+  --nui-radius-m: 10px;
+  --nui-radius-l: 12px;
+  --nui-radius-pill: 999px;
+  --nui-font: system-ui, -apple-system, 'Segoe UI', Roboto,
+    'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+  --nui-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --nui-heat-0: #203047;
+  --nui-heat-1: #2464a8;
+  --nui-heat-2: #18c7d8;
+  --nui-heat-3: #ffb84d;
+  --nui-heat-4: #ff4d2e;
+  --nui-heat-5: #fff3c4;
+  --nui-success: #5fd99f;
+  --nui-warn: #d9c47f;
+  --nui-error: #e08f8f;
+  --nui-contradiction: #c74bd8;
+  --nui-cold-bg: #07111f;
+  --nui-cold-grid: rgba(130, 170, 210, 0.08);
+  --nui-cold-panel: rgba(10, 22, 38, 0.92);
+  --nui-cold-border: rgba(130, 170, 210, 0.18);
+  --nui-cold-text: #d8e7f7;
+  --nui-cold-dim: #8fa8c2;
+  color-scheme: dark;
+}
+
+/* Immersive data surface: deep navy + the faint 56px instrument grid. */
+.nui-cold {
+  background-color: var(--nui-cold-bg);
+  background-image:
+    linear-gradient(var(--nui-cold-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--nui-cold-grid) 1px, transparent 1px);
+  background-size: 56px 56px;
+  color: var(--nui-cold-text);
+}
