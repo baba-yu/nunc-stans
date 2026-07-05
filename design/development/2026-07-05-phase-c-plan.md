@@ -290,14 +290,22 @@ apply-schema-edit, weekly-maintenance port).
       rename-future-titles tests); local run 133 passed / 1 skipped /
       0 excluded; CI news job exclusions removed.
 
-### Task 2: packages/ai v0
-- [ ] Types + capabilities; providers `anthropic-api`, `ollama`, `mock`;
-      runtime `claude-code` (headless spawn, JSON envelope, timeout+retry).
-- [ ] `SearchSource` registry: native + adapters `brave`, `searxng`,
-      `tavily`, `perplexity` (env/config-keyed; shared result shape;
-      per-adapter smoke test behind a key-present guard).
-- [ ] Goal-verify config plumbing (off) + run-log JSONL writer.
-- [ ] Unit tests on `mock`; headless-under-systemd probe (risk 3).
+### Task 2: packages/ai v0 — code DONE 2026-07-05 (probe open)
+- [x] Package `nunc-ai` at `frontend/packages/ai` (workspace auto-joins
+      via `frontend/packages/*`): types + capabilities; providers
+      `anthropic-api`, `ollama`, `mock` (+ `forbid` for replay);
+      runtime `claude-code` (headless spawn, JSON envelope, NS_CLAUDE_BIN,
+      timeout + retry). Commit 4c0a4d2.
+- [x] `SearchSource` registry: adapters `brave`, `searxng`, `tavily`,
+      `perplexity` (env-keyed, shared result shape; fake-fetch unit
+      tests — live smoke happens when S-3 exercises real keys).
+- [x] Goal-verify config plumbing (off) + run-log JSONL writer.
+- [x] 12 unit tests green (`pnpm --filter nunc-ai test`); typecheck green.
+- [ ] Headless probe (risk 3): **`claude` CLI is not installed in WSL**
+      (the old routine ran via Windows Cowork). Owner installs it in WSL
+      (native installer, no sudo: `curl -fsSL https://claude.ai/install.sh
+      | bash`, then login once); probe + systemd verification then land
+      with T9.
 
 ### Task 3: Pipeline scaffold + data moves
 - [ ] Package skeleton, CLI, config resolution (`tools/lib/data-dir.ts`
