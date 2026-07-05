@@ -1,0 +1,47 @@
+{
+  "date": "2026-04-19",
+  "predictions": [
+    {
+      "id": "prediction.4bd551bfc1cca138",
+      "scope_hint": "tech",
+      "title": "Bonsai 8B anchors 1-bit native training as default edge-LLM recipe by Q3 2026",
+      "body": "**1-bit native training becomes the dominant alternative to post-hoc quantization.** Bonsai 8B demonstrates production-quality output at 1.15 GB. Designing for 1-bit from training, rather than 4/8-bit post-quantization, will become the standard for edge LLMs. Expect 1-bit derivatives of the Qwen and Llama families to follow within the next quarter. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Bonsai 8B ships production-quality output at 1.15 GB by training natively in 1-bit.",
+        "given": "Edge LLM deployment is memory-bound; post-hoc 4/8-bit quantization caps achievable compression.",
+        "so_that": "Native 1-bit training becomes the default edge-LLM recipe and 1-bit Qwen/Llama derivatives ship.",
+        "landing": "Within ~1 quarter; open-weight Qwen + Llama family forks lead.",
+        "plain_language": "A 1.15 GB model already works well. Training tiny from day one beats shrinking later, so expect tiny copies of popular models soon."
+      },
+      "summary": "Bonsai 8B's 1.15 GB production-quality result shows native 1-bit training outperforms post-hoc 4/8-bit quantization for edge deployment. Within roughly one quarter, open-weight 1-bit derivatives of the Qwen and Llama families are expected to follow this recipe."
+    },
+    {
+      "id": "prediction.c08481a657991ec8",
+      "scope_hint": "cross",
+      "title": "Agent registry standard converges with MCP for agent artifacts by H2 2026",
+      "body": "**Convergence on an \"Agent Registry\" model.** AWS Agent Registry, NemoClaw's audit-log + guardrail story, and Hermes Agent's self-learned skills all surface in the same window. By H2 2026, a registry standard for distributing agent artifacts (skills, tool permissions, audit traces) will grow alongside MCP. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "AWS Agent Registry, NemoClaw audit/guardrail, and Hermes self-learned skills all surface together.",
+        "given": "Enterprises need a portable, auditable way to ship agent skills, tool permissions, and traces.",
+        "so_that": "A shared registry standard for agent artifacts grows alongside MCP and becomes the distribution shape.",
+        "landing": "By H2 2026; multi-vendor registry spec activity visible.",
+        "plain_language": "Several companies just launched ways to share AI agents and their permissions. Soon, one common format will let agents move between platforms safely."
+      },
+      "summary": "AWS Agent Registry, NemoClaw's audit-log and guardrail tooling, and Hermes Agent's self-learned skills appear in the same window. By H2 2026, a registry standard for distributing agent artifacts (skills, tool permissions, audit traces) is expected to grow alongside MCP."
+    },
+    {
+      "id": "prediction.995feb039ef043c1",
+      "scope_hint": "tech",
+      "title": "Indirect prompt injection becomes a top CVE category by Q3 2026",
+      "body": "**Indirect prompt injection becomes a top CVE category.** Successful attacks are up +190% YoY, and CVE-2025-53773-style flaws (RCE from PR body) reproduce easily. By Q3 2026, CVSS 8.0+ LLM-integration CVEs will be a Patch Tuesday regular. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Successful indirect-prompt-injection attacks are up +190% YoY and CVE-2025-53773 RCE-from-PR-body reproduces trivially",
+        "given": "LLM coding assistants and agentic tools now read untrusted text (PRs, issues, web pages) directly into privileged execution paths",
+        "so_that": "CVSS 8.0+ LLM-integration CVEs land in the regular Patch Tuesday cadence, not as one-off advisory curiosities",
+        "landing": "by Q3 2026; recurring entries on monthly Patch Tuesday rollups",
+        "plain_language": "Hackers hide commands in things AI tools read, like pull requests or web pages, and the AI runs them. Soon vendors will patch this every month."
+      },
+      "summary": "Indirect prompt injection is hardening into a recurring CVE category: successful attacks +190% YoY, and CVE-2025-53773-style RCE-from-PR-body flaws reproduce easily. By Q3 2026, CVSS 8.0+ LLM-integration CVEs become a regular Patch Tuesday fixture."
+    }
+  ]
+}

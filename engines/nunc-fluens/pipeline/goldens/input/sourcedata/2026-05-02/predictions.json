@@ -1,0 +1,61 @@
+{
+  "date": "2026-05-02",
+  "predictions": [
+    {
+      "id": "prediction.a2dde9d6d5ec02a3",
+      "scope_hint": "cross",
+      "title": "Microsoft Agent 365 GA forces Big-3 to ship default MCP policy by Q4 2026",
+      "body": "**By Q4 2026 the Microsoft Agent 365 GA ($15/user, M365 E7) + Cisco DefenseClaw open-source (Mar 23) + CSAI Foundation MITRE-CNA (Apr 29) + AWS Bedrock AgentCore Managed Harness (Apr 28) stack converges into an enterprise agent-control-plane reference model — at least 2 of the Big-3 hyperscalers (AWS, Azure, GCP) ship policy-based MCP-server allow/block enforcement at the tenant level with audited tool-invocation logs as a default-on primitive; at least one independent control-plane vendor (Vanta, Zenity, OpenClawAI) publishes a Sec-Labels-style artifact attestation gate.** Forcing function is enterprise procurement: Microsoft just put a per-user price tag ($15/user/mo) on the agent-control-plane category, which sets the pricing-anchor that AWS + Google must respond to with comparable disclosures; the Apr 30 OpenAI Agents SDK + 7 sandbox providers pre-baked the runtime side, and the May 1 GA wires the policy side to an existing M365 admin surface (Entra/Purview/Intune/Defender). Once the May 1 GA's Defender asset-context mapping (devices + MCP servers + identities + cloud resources per agent) ships in June 2026 it becomes the de-facto schema; the path of least resistance is for AWS Bedrock AgentCore + Google Vertex Agent Garden to publish parallel schemas before Q4 to avoid losing the M365-installed-base anchor. CSAI's MITRE-CNA cadence will compress the disclosure side in parallel. In plain language: Microsoft put a price tag on controlling AI agents — other clouds will copy or lose customers. In plain language: In plain language:",
+      "reasoning": {
+        "because": "Microsoft Agent 365 GA on May 1 set a $15/user price tag on tenant-level MCP-server allow/block enforcement.",
+        "given": "OpenAI Agents SDK + 7 sandbox providers pre-baked the runtime side and CSAI's MITRE-CNA cadence compresses disclosure timing.",
+        "so_that": "AWS Bedrock AgentCore and Google Vertex publish parallel default-on MCP allow/block schemas with audited tool-invocation logs.",
+        "landing": "by Q4 2026; ≥2 Big-3 default-on + ≥1 independent attestation gate.",
+        "plain_language": "Microsoft put a price tag on controlling AI agents at work. Soon Amazon and Google clouds will copy that control, or customers will leave."
+      },
+      "summary": "Microsoft Agent 365's May 1 GA at $15/user wires MCP-server allow/block enforcement to an existing M365 admin surface and sets the pricing anchor for AWS Bedrock AgentCore and Google Vertex. Combined with CSAI's MITRE-CNA cadence and the Apr 30 OpenAI Agents SDK runtime substrate, ≥2 of the Big-3 ship default-on tenant-level enforcement with audited tool-invocation logs by Q4 2026, plus ≥1 independent attestation-gate vendor."
+    },
+    {
+      "id": "prediction.e4612827ed602fa6",
+      "scope_hint": "tech",
+      "title": "LLM-tooling + Linux-kernel CVE chain becomes dominant attack pattern by H2 2026",
+      "body": "**By H2 2026 the May 1 Copy Fail (CVE-2026-31431) BOD-22-01 14-day deadline + the Apr 30 LiteLLM CVE-2026-42208 26-hour exploitation window + the unpatched-into-May-1 SGLang CVE-2026-5760 trio makes \"supply-chain weaponization of LLM-tooling-layer CVEs\" the dominant attacker pattern — at least one major IR firm publishes a public post-mortem of a real intrusion that pairs an LLM-gateway / agent-harness / inference-runtime CVE with a Linux-kernel LPE (Copy Fail or its successor) for full-chain root-on-multi-tenant-inference, and at least one CSAI-CNA-issued advisory explicitly carves out the LLM-tooling + kernel chain as a named technique within ATT&CK v19's Defense Impairment.** Apr 28 ATT&CK v19 already names the agentic techniques (context poisoning, tool invocation abuse, MCP server compromise, malicious agent deployment); the May 1 Copy Fail wave gives attackers a universal-Linux LPE with confirmed in-the-wild use against cloud service providers (per Microsoft Security Blog disclosure); the LiteLLM SQLi-row-leaks-OpenAI/Anthropic/Bedrock-keys precedent gives them the lateral-movement vector. CSAI's Apr 29 CNA authorization is the disclosure-issuance side; the path of least resistance for an IR firm Q3 incident report is one cloud-multi-tenant intrusion stitched together this exact way. In plain language: Hackers can chain an AI-tooling bug with a Linux-kernel bug to take over shared AI servers. In plain language: In plain language:",
+      "reasoning": {
+        "because": "May 1 Copy Fail (CVE-2026-31431) gives attackers a universal-Linux LPE with confirmed cloud-provider in-the-wild use.",
+        "given": "LiteLLM 26-hour SQLi-key-leak + unpatched SGLang CVE-2026-5760 supply lateral movement, and ATT&CK v19 already names the agentic techniques.",
+        "so_that": "An IR firm publishes a public post-mortem chaining LLM-tooling + kernel LPE for full-chain root on multi-tenant inference.",
+        "landing": "by H2 2026; IR post-mortem + CSAI CNA advisory naming the chain.",
+        "plain_language": "Attackers can join a shared-AI-server bug to a Linux bug to take over the whole machine. Soon a security firm will tell that story."
+      },
+      "summary": "May 1 Copy Fail's universal-Linux LPE with cloud-provider in-the-wild use, layered onto the Apr 30 LiteLLM 26-hour SQLi-key-leak and unpatched SGLang RCE, plus ATT&CK v19's agentic technique names and CSAI's Apr 29 CNA authorization, set up at least one IR-firm public post-mortem and one CSAI CNA advisory naming the LLM-tooling + kernel chain by H2 2026."
+    },
+    {
+      "id": "prediction.5f44afb9506631c7",
+      "scope_hint": "business",
+      "title": "Frontier AI labs publish autonomous-weapons carve-outs by Q3 2026",
+      "body": "**The May 1 Pentagon-snubs-Anthropic + 7-vendor classified-network AI deal becomes the first US presidential-administration vs frontier-AI-lab autonomous-weapons-use line in the sand — by Q3 2026 at least two other frontier labs (Mistral, OpenAI, xAI, Google DeepMind, Inflection-2026, Cohere) explicitly publish a use-of-force / autonomous-weapons carve-out in their public ToS or DoD bid responses; Anthropic's federal-judge-blocked Trump-admin freeze (April CA ruling) becomes the operative procurement-law precedent; Q3 earnings calls add an \"autonomous-weapons exposure\" disclosure line for the cohort.** Forcing function is litigation precedent: the federal-judge block already exists, so any future DoD freeze action against a competing lab now has a court-tested predicate. Trump's \"deal is possible\" framing on Apr 17 + the May 1 contract signings are the carrot-and-stick choreography; once a deal-or-no-deal binary becomes visible to the buyside, capital-allocation pressure will force every frontier-lab board to formally adopt either the Anthropic posture (carve-out, accept exclusion) or the OpenAI/Microsoft/Google posture (no carve-out, accept full DoD use). The middle position becomes untenable as soon as Q3 earnings cycle starts. In plain language: Anthropic's Pentagon snub forces every other AI lab to pick: take the contract or refuse it. In plain language: In plain language:",
+      "reasoning": {
+        "because": "May 1 Pentagon signed 7 classified-network AI deals while excluding Anthropic as a supply-chain risk over use-of-force terms.",
+        "given": "An April federal-judge block against the Trump-admin freeze gives any future DoD action a court-tested predicate, and Q3 earnings make the binary visible.",
+        "so_that": "Two more frontier labs publish autonomous-weapons carve-outs in public ToS or DoD bids and earnings calls add an exposure disclosure line.",
+        "landing": "by Q3 2026; ≥2 lab carve-outs + cohort earnings-call disclosure visible.",
+        "plain_language": "The Pentagon shut Anthropic out for refusing weapons work. Soon other AI labs must pick a side: take the contract or refuse it in writing."
+      },
+      "summary": "The Pentagon's May 1 7-vendor classified-network AI deals plus Anthropic's explicit exclusion as a supply-chain risk, layered onto an April California federal-judge block of the Trump-admin freeze, force at least two other frontier labs to publish autonomous-weapons carve-outs in their ToS or DoD bid responses by Q3 2026, with cohort earnings calls adding an exposure-disclosure line."
+    },
+    {
+      "id": "prediction.82df9971974feb60",
+      "scope_hint": "business",
+      "title": "Cerebras IPO prices above $22-25B with first-day pop >=30% by mid-May 2026",
+      "body": "**The May 1 record S&P 7,230.12 + Nasdaq 25,114.44 + April best-month-since-2020 + AAPL +3.28% to $280.25 + $700B 2026 Big-Tech AI-capex tape sets up the mid-May Cerebras IPO to price at or above the top of the $22-25B targeted range with a multi-day pop — the Apr 30 Apple +$100B buyback authorization + the Q3 guide (+14-17%) is the buyside ratification of the AI-capex-on-faith thesis, and the Cerebras roadshow lands into the cleanest single tape since 2020; pricing closer to the pre-IPO secondary $26-28B than the public S-1 $22-25B; first-day pop ≥30% with the underwriter syndicate (Morgan Stanley / Citi / Barclays / UBS) pulling allocation aggressively from the long-only side; the IPO becomes the cohort signal that the AI-infrastructure-build is fundable through public markets and not just private capex.** $510M 2025 revenue + $20B+/750MW OpenAI deal through 2028 + the 24% G42 / 62% MBZUAI revenue concentration is priced in already; the swing factor is the May 1 record-tape ratification of the AI-capex thesis, which the buyside has been waiting for since the Apr 28 OpenAI-revenue-miss WSJ. The mid-May window also avoids competing with the May 8 Apr Jobs print + the May 5 AMD print; pricing should land in the pre-Cerebras quiet-period sweet spot. In plain language: A clean record stock tape makes the next AI-chip IPO likely to price above expectations. In plain language: In plain language:",
+      "reasoning": {
+        "because": "May 1 prints set S&P 7,230.12 + Nasdaq 25,114.44 records and AAPL +3.28% on $100B buyback + Q3 guide +14-17%.",
+        "given": "Cerebras revenue concentration (24% G42 / 62% MBZUAI) is priced in; the mid-May window avoids the May 8 Jobs print and the May 5 AMD print.",
+        "so_that": "Pricing lands closer to the pre-IPO secondary $26-28B than the S-1 $22-25B and first-day pop hits ≥30%.",
+        "landing": "by mid-May 2026; CBRS price + first-day close above range.",
+        "plain_language": "A record-setting stock week makes the next AI-chip IPO likely to price high. Investors keep buying the AI build-out story."
+      },
+      "summary": "Record S&P + Nasdaq closes on May 1, AAPL +3.28% on a $100B buyback and a Q3 +14-17% guide, plus the $700B 2026 Big-Tech AI-capex tape ratify the AI-capex-on-faith thesis just as Cerebras's mid-May roadshow lands; pricing should clear the $22-25B S-1 range toward the pre-IPO secondary $26-28B with a ≥30% first-day pop."
+    }
+  ]
+}

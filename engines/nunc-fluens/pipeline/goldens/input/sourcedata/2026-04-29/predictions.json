@@ -1,0 +1,47 @@
+{
+  "date": "2026-04-29",
+  "predictions": [
+    {
+      "id": "prediction.f960d058dc42c7c6",
+      "scope_hint": "tech",
+      "title": "KV-cache-compression dtype ships as inference-stack deployment knob by Q4 2026",
+      "body": "**By Q4 2026 KV-cache-compression dtype is exposed as a first-class deployment knob in every major inference stack — vLLM, SGLang, TGI, Ollama, llama.cpp, NVIDIA TensorRT-LLM all ship a `--kv-cache-dtype turboquant` (or equivalent) flag with TurboQuant + at least one alternative (KVTC / kvpress / TriAttention).** Apr 27-29 makes this a near-certainty: **TurboQuant lands at ICLR 2026 + Google Research blog**, **SGLang PR #21419 already in-tree** with a fused-kernel rewrite (#23134) hitting 93-105% bf16 throughput, **NVIDIA kvpress** at Decoding-Press maturity, **PolyKV (arxiv 2604.24971)** demoing multi-agent shared-pool quantization, and **community MLX + Triton + vLLM ports** circulating before Google's official Python release lands in Q2 2026. The economic forcing function is the same Mag-7 capex tape the Apr 28 OpenAI-miss WSJ report just cracked: every memory-bandwidth-bound long-context workload that can move from FP16 to 3.5-bit cuts effective per-token cost ~5-6x. By Q4 2026 hyperscalers gate Bedrock/Azure/Vertex per-token pricing on opt-in compressed-cache tiers, and the hardware-cap-on-incremental-GPU-capex thesis from yesterday's report tightens via this lever rather than via fewer GPUs. In plain language: In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "TurboQuant landed at ICLR 2026 + Google Research blog and SGLang PR #21419 + #23134 already wires it as a first-class flag.",
+        "given": "Long-context workloads are memory-bandwidth-bound and Apr 28's OpenAI-miss tape forces hyperscalers to compress per-token cost rather than add GPUs.",
+        "so_that": "Every major inference runtime ships a kv-cache-dtype flag with TurboQuant plus an alternative (KVTC / kvpress / TriAttention) and hyperscalers tier per-token pricing on it.",
+        "landing": "By Q4 2026; flag visible in vLLM, SGLang, TGI, Ollama, llama.cpp, TensorRT-LLM + Bedrock/Azure/Vertex tiered pricing.",
+        "plain_language": "AI servers are about to ship a single switch that shrinks memory use 5-6x, so cloud providers can charge less per word without buying more chips."
+      },
+      "summary": "Apr 27-29 stacks the evidence: TurboQuant lands at ICLR 2026, SGLang PR #21419 + fused-kernel rewrite #23134 hit 93-105% bf16 throughput, NVIDIA kvpress matures, PolyKV demos multi-agent shared-pool quantization, and community ports circulate. By Q4 2026 every major inference stack exposes a kv-cache-dtype flag and hyperscalers tier per-token pricing on compressed-cache tiers."
+    },
+    {
+      "id": "prediction.0ed37d30935303df",
+      "scope_hint": "business",
+      "title": "OpenAI ships audited monthly revenue + WAU disclosure cadence by Q3 2026",
+      "body": "**The OpenAI Apr 28 WSJ report initiates a 2026 \"AI-revenue disclosure rewrite\" — by Q3 2026 at least one foundation lab (OpenAI, Anthropic, or xAI) ships an audited monthly-revenue + WAU disclosure cadence, and at least one Mag-7 hyperscaler publishes Bedrock/Azure-OpenAI/Vertex per-token-margin disclosure separated from raw cloud revenue.** WSJ Apr 28 was decisive: a single off-target-leak dropped Oracle 4%, AMD 3%, Broadcom 4%, SoftBank 10% in one session, on top of the **Apr 27 OpenAI/Microsoft AGI-clause unwind** (which already removed the discretionary \"AGI declaration\" IP-revocation risk). Combined with the Mag-7 print collision today + ~$700B aggregated 2026 capex + the Cerebras IPO mid-May at $22B-$25B (24% G42 / 62% MBZUAI revenue concentration), Wall Street is now **explicitly demanding tangible AI-economics disclosure, not narrative**. By Q3 2026 the SEC + analyst pressure produces (a) at least one foundation lab moving to a public monthly revenue / WAU dashboard cadence, and (b) at least one Big-3 cloud separating per-token AI-platform margin in the 10-Q footnotes. The \"AGI\" word goes from metaphysical to financial-instrument; \"DAU/WAU\" goes from product KPI to MD&A. In plain language: In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "WSJ Apr 28 OpenAI-miss leak dropped Oracle / AMD / Broadcom / SoftBank in one session and stacks on the Apr 27 AGI-clause unwind.",
+        "given": "~$700B Mag-7 capex + Cerebras IPO concentration risk + SEC / analyst pressure shifts the bar from narrative to audited AI-economics disclosure.",
+        "so_that": "At least one foundation lab ships audited monthly revenue + WAU and at least one Big-3 cloud breaks out per-token AI-platform margin in 10-Q footnotes.",
+        "landing": "By Q3 2026; foundation-lab dashboard cadence + Big-3 hyperscaler 10-Q per-token margin footnote.",
+        "plain_language": "After a leak knocked AI stocks down hard, regulators and investors will soon force the biggest AI companies to publish real monthly revenue numbers, not just hype."
+      },
+      "summary": "WSJ's Apr 28 OpenAI-revenue-miss report dropped Oracle 4%, AMD 3%, Broadcom 4%, SoftBank 10% in one session, on top of the Apr 27 OpenAI/Microsoft AGI-clause unwind. By Q3 2026, SEC + analyst pressure is expected to force at least one foundation lab to ship audited monthly revenue + WAU and at least one Big-3 hyperscaler to break out per-token AI-platform margin in 10-Q footnotes."
+    },
+    {
+      "id": "prediction.08513eaa976c5c5b",
+      "scope_hint": "cross",
+      "title": "Agent-skills attack surface lands MITRE-style threat sub-matrix by H2 2026",
+      "body": "**By H2 2026 the agent-skills attack surface lands its own MITRE-ATT&CK-style sub-matrix and at least one major skill marketplace (Anthropic's official skills, ClawHub, Multica, Hermes, Hugging Face skills/agent traces) ships an enforced signing + provenance gate.** ClawHavoc's 1,184 malicious ClawHub skills + Cisco's **36% prompt-injection rate across the OpenClaw skill marketplace** is no longer a one-off — Apr 28 Novita Sandbox is the first commercial mitigation product purpose-built for OpenClaw + Hermes + autonomous-agent runtimes. With Corpus2Skill making **\"skills as a navigable artifact\"** mainstream and the Externalization-in-LLM-Agents survey (arxiv 2604.08224) calling skills/harness/protocol the dominant 2026 design layer, the attack surface is now **first-class infrastructure**, not a side-channel. By H2 2026 we see (a) a published agent-skills threat-matrix (MITRE-style or NIST-led) covering skill poisoning + indirect-prompt-injection-via-skill + cross-skill privilege chains, and (b) at least one major marketplace mandating signed-and-provenance-attested skills before publish — with Anthropic's 17-skill repo, ClawHub, Multica's marketplace, and Hugging Face's agent-trace surface as the first candidates. In plain language: In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "ClawHavoc's 1,184 malicious ClawHub skills and Cisco's 36% prompt-injection finding turn skill marketplaces into a first-class supply-chain risk.",
+        "given": "Corpus2Skill + the Externalization survey establish skills/harness/protocol as the dominant 2026 design layer, and Apr 28 Novita Sandbox is the first commercial mitigation aimed squarely at this surface.",
+        "so_that": "A MITRE / NIST-style agent-skills threat sub-matrix is published and at least one marketplace gates publish on signed + provenance-attested skills.",
+        "landing": "By H2 2026; published threat sub-matrix + at least one marketplace enforcing signature + provenance.",
+        "plain_language": "Bad actors uploaded over a thousand poisoned AI plugins, so soon the big plugin stores will require signed, traceable code before anything new gets in."
+      },
+      "summary": "ClawHavoc's 1,184 malicious ClawHub skills + Cisco's 36% prompt-injection finding + Apr 28 Novita Sandbox launch + Corpus2Skill + the Externalization-in-LLM-Agents survey turn the agent-skills attack surface into first-class infrastructure. By H2 2026 a published agent-skills threat sub-matrix (MITRE / NIST) lands and at least one major skill marketplace mandates signed-and-provenance-attested skills before publish."
+    }
+  ]
+}

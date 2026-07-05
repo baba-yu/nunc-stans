@@ -1,0 +1,47 @@
+{
+  "date": "2026-04-23",
+  "predictions": [
+    {
+      "id": "prediction.99f1f0a5202acdbb",
+      "scope_hint": "cross",
+      "title": "El Plano de Control de Agentes se convierte en el nuevo campo de batalla entre hyperscalers para Q3 2026",
+      "body": "**El \"Plano de Control de Agentes\" se convierte en el nuevo campo de batalla en la competencia entre hyperscalers.** Gemini Enterprise Agent Platform de Google, el nuevo Managed Harness / CLI / skills de AWS Bedrock AgentCore y Workspace Agents de OpenAI convergen todos en la misma estrategia: **integrar el ciclo de vida del agente, la auditoría y la gobernanza en un único plano de control.** Para el Q3 2026, las capas de SSO de Okta / Microsoft Entra ID / Google Workspace tratarán los identificadores de agente como objetos de primera clase junto con humanos y cuentas de servicio. Los proveedores de CASB / SSPM medirán las \"llamadas a API tocadas por agentes de IA\" con un SLO / puntuación de riesgo separado de las líneas base de usuarios humanos. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Gemini Enterprise Agent Platform de Google, AWS Bedrock AgentCore y Workspace Agents de OpenAI aterrizan en la misma ventana con una sola forma de plano de control.",
+        "given": "Las empresas necesitan un único lugar para gobernar el ciclo de vida del agente, la auditoría y la identidad a medida que los agentes proliferan en SaaS e infraestructura.",
+        "so_that": "Los proveedores de SSO tratan los IDs de agentes como principales de primera clase y los proveedores de CASB / SSPM rastrean las llamadas a API de agentes de IA bajo una puntuación de riesgo separada.",
+        "landing": "Para el Q3 2026; categoría de agent-ID en Okta / Entra ID / Workspace + métrica de agente de IA en CASB / SSPM activa.",
+        "plain_language": "Tres grandes nubes construyeron esta semana un lugar para gestionar agentes de IA. Pronto los sistemas de inicio de sesión tratarán a los agentes como usuarios con sus propios permisos."
+      },
+      "summary": "Gemini Enterprise Agent Platform de Google, AWS Bedrock AgentCore y Workspace Agents de OpenAI convergen en un único plano de control de ciclo de vida de agentes. Para el Q3 2026, se espera que Okta / Entra ID / Google Workspace traten los IDs de agentes como principales de primera clase mientras los proveedores de CASB / SSPM destacan una métrica de riesgo separada para las llamadas a API de agentes de IA."
+    },
+    {
+      "id": "prediction.bcace95fe3e753d1",
+      "scope_hint": "tech",
+      "title": "27B Dense + contexto de 1M se convierte en la receta predeterminada para LLM locales empresariales para Q3 2026",
+      "body": "**\"27B Dense + contexto de 1M\" se convierte en el estándar de facto para LLMs locales empresariales en H2 2026.** Qwen3.6-27B demuestra que el paquete — sin complejidad de enrutamiento MoE, funciona en una sola RTX 4090, contexto de 1M, Apache 2.0 — alcanza capacidad de codificación de grado insignia. Para el Q3 2026, Mistral / Meta / DeepSeek / Google Gemma cada uno enviará modelos de 20-30B Dense × contexto de 1M × estilo Apache/Llama. Los diferenciadores para 70B+ MoE se reducen a comprensión multimodal, amplitud de herramientas y razonamiento de horizonte largo. El requisito predeterminado de VRAM para inferencia on-prem cambia de RTX 6000 48GB / H100 80GB a **RTX 4090 24GB / Apple M4 Max 64GB**. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Qwen3.6-27B Dense supera al MoE de 397B en SWE-bench Verified con 77.2% en una sola RTX 4090 con contexto de 1M bajo Apache 2.0.",
+        "given": "Dense 20-30B con contexto largo elimina la complejidad de enrutamiento MoE y cabe en VRAM commodity de 24GB, colapsando el costo de despliegue on-prem.",
+        "so_that": "Mistral / Meta / DeepSeek / Gemma convergen en una receta de 20-30B Dense × contexto de 1M y 70B+ MoE se retira a nichos de multimodal / herramientas / horizonte largo.",
+        "landing": "Para el Q3 2026; ≥3 lanzamientos de proveedores de 20-30B Dense + RTX 4090 / M4 Max como VRAM on-prem por defecto.",
+        "plain_language": "Un modelo de 27B ahora iguala a uno de 400B para codificar y funciona en una sola GPU para juegos. Otros laboratorios copiarán esta receta en meses."
+      },
+      "summary": "Qwen3.6-27B Dense alcanza codificación de grado insignia (SWE-bench Verified 77.2%) en una sola RTX 4090 con contexto de 1M bajo Apache 2.0, superando a su predecesor MoE de 397B. Para el Q3 2026, se espera que Mistral, Meta, DeepSeek y Gemma envíen modelos comparables de 20-30B Dense × contexto de 1M, cambiando los valores predeterminados de VRAM on-prem a RTX 4090 / M4 Max."
+    },
+    {
+      "id": "prediction.5acccd6cae1f9b03",
+      "scope_hint": "business",
+      "title": "Las vistas previas de modelos de frontera requerirán base SOC 2 + FedRAMP + FMF para Q3 2026",
+      "body": "**Los estándares de seguridad de agentes de IA se extienden a la \"frontera de proveedores externos\" y la \"entropía de nomenclatura de URL.\"** El incidente de acceso no autorizado de Mythos (contratista + adivinanza de convención de nomenclatura + datos filtrados de terceros) repite el patrón de cadena de suministro de Vercel-Context.ai, esta vez en una capa de control de acceso de modelo de frontera. Para el Q3 2026, los \"entornos de proveedores externos para preview / acceso temprano de modelos de frontera\" deberán superar una línea base de seguridad común de SOC 2 Type II + FedRAMP Moderate + Frontier Model Forum, y las URLs / subdominios de endpoints pasarán a una nomenclatura aleatorizada y difícil de adivinar. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "La brecha de Mythos Preview combinó credenciales de contratista, la filtración de Mercor y la adivinanza de convención de nomenclatura — replicando exactamente la forma de cadena de suministro de Vercel-Context.ai.",
+        "given": "Los entornos de preview de modelos de frontera dependen de proveedores externos y subdominios predecibles, por lo que la identidad + entropía de nomenclatura es la nueva superficie de ataque.",
+        "so_that": "Los proveedores de preview externos deben superar una línea base de SOC 2 Type II + FedRAMP Moderate + Frontier Model Forum y las URLs de endpoint pasan a nomenclatura aleatorizada.",
+        "landing": "Para el Q3 2026; línea base de seguridad común de proveedores externos + nomenclatura de endpoint aleatorizada visible en laboratorios de frontera.",
+        "plain_language": "Los hackers llegaron al modelo secreto de Anthropic adivinando su dirección web y usando el inicio de sesión robado de un contratista. Pronto los laboratorios aleatorizarán las URLs y exigirán controles de contratistas más estrictos."
+      },
+      "summary": "El incidente de acceso no autorizado de Mythos Preview — credenciales de contratista, la filtración de Mercor y una convención de nomenclatura adivinada — repite el patrón de cadena de suministro de Vercel-Context.ai en una capa de control de acceso de modelo de frontera. Para el Q3 2026, se espera que los proveedores de preview externos superen una línea base de SOC 2 Type II + FedRAMP Moderate + Frontier Model Forum y que las URLs de endpoint pasen a nomenclatura aleatorizada."
+    }
+  ]
+}

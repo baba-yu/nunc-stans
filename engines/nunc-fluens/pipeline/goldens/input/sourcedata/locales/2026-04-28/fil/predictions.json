@@ -1,0 +1,47 @@
+{
+  "date": "2026-04-28",
+  "predictions": [
+    {
+      "id": "prediction.9dd2833778239627",
+      "scope_hint": "business",
+      "title": "Kakalat ang AGI-clause unwind sa peer hyperscaler-lab contracts pagsapit ng Q4 2026",
+      "body": "**Ang \"AGI-clause unwind\" ay naglalatag ng template — pagsapit ng Q4 2026, kahit isa pang foundation-lab x hyperscaler contract ay pampublikong susuguin upang alisin ang discretionary \"capability-trigger\" clause, na papalitan ng fixed-end revenue-share + non-exclusive cloud distribution.** Ang Apr 27 Microsoft/OpenAI rewrite ay hindi na lamang tungkol sa Azure exclusivity — ito ay nagko-convert ng binary, board-discretionary IP-revocation risk patungo sa **calendar-bound revenue cap (2030)** at **multi-cloud distribution bilang bagong default**. Ang Google x Anthropic na $40B / 5GW deal, ang Amazon x Anthropic na $5B + $25B / $100B AWS commit, ang OpenAI x Cerebras + Microsoft, at ang paparating na Cerebras IPO ($22B-$25B mid-May) ay lahat nakaupo sa katulad na capability-trigger language. **Pagsapit ng Q4 2026, makikita natin ang kahit isa sa mga kontratang iyon na pampublikong nirestructure upang sumalamin sa pattern ng Apr 27** — fixed-date revenue cap, non-exclusive license, multi-cloud distribution clause. Ang salitang \"AGI\" ay magiging financial-instrument primitive, hindi metaphysical. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Pinapalitan ng Apr 27 Microsoft/OpenAI rewrite ang discretionary capability trigger sa pamamagitan ng 2030 revenue cap + multi-cloud distribution",
+        "given": "Ang Google/Anthropic $40B, Amazon/Anthropic $100B, OpenAI/Cerebras + Microsoft ay lahat nakaupo sa katulad na capability-trigger language",
+        "so_that": "Kahit isang peer contract ay pampublikong susuguin upang alisin ang discretionary trigger para sa fixed-end revenue share at non-exclusive distribution",
+        "landing": "Pagsapit ng Q4 2026; >=1 pampublikong sinuguing foundation-lab x hyperscaler contract ay sumasalamin sa pattern ng Apr 27",
+        "plain_language": "Microsoft and OpenAI just dropped the vague AGI escape clause and capped payments by date instead, so a copycat deal will follow in 2026."
+      },
+      "summary": "Ang Apr 27 Microsoft/OpenAI rewrite ay nagko-convert ng board-discretionary IP-revocation patungo sa calendar-bound 2030 revenue cap na may non-exclusive multi-cloud distribution, habang ang Google/Anthropic, Amazon/Anthropic, at OpenAI/Cerebras ay nakaupo sa katulad na trigger language; pagsapit ng Q4 2026, kahit isang peer contract ay sumasalamin sa bagong pattern."
+    },
+    {
+      "id": "prediction.4c31ca30d449311e",
+      "scope_hint": "tech",
+      "title": "Ilalabas ng CISA ang AI-Infra KEV sub-catalog kasama ang inference-server SBOM pagsapit ng Q3 2026",
+      "body": "**Ang inference-server SSTI ay magta-graduate mula one-off CVE patungo sa OWASP LLM Top-10 v2026 entry; magpapadala ang CISA ng \"AI-Infra KEV\" sub-catalog pagsapit ng Q3 2026.** Ang SGLang CVE-2026-5760 (CVSS 9.8) ay **nananatiling unpatched hanggang Apr 28** (10+ araw post-disclosure), na may pampublikong PoC at ang parehong Jinja2-without-`ImmutableSandboxedEnvironment` shape na ngayon ay nakaflag bilang copy-paste class na sumasaklaw sa vLLM, LMDeploy, at mga karatig na inference servers. Pinagsama sa **Apr 27-28 Totolink CVE quad (7153/7154/7156/7202, lahat 9.8)**, **Cisco ISE unauth-RCE**, **simple-git CVE-2026-6951 RCE sa CI/CD**, **Pillar's Antigravity sandbox-escape sa pamamagitan ng `find_by_name -X`**, at ang **32% YoY indirect-prompt-injection rise** ng Google/Forcepoint na may 10 in-the-wild payloads — ang pressure sa NIST/CISA ay nagkri-crystallize. **Pagsapit ng Q3 2026, magpapadala ang CISA ng dedikadong \"AI-Infra\" KEV sub-catalog** na may mandatory SBOM tagging sa inference servers (vLLM/SGLang/Ollama/llama.cpp/LMDeploy) at agentic-CI runtimes (Claude Code/Codex/Antigravity/OpenClaw). Ina-promote ng OWASP LLM Top-10 v2026 ang \"Inference Server Template/Loader RCE\" sa top-3. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Ang SGLang CVE-2026-5760 ay unpatched 10+ araw na may pampublikong PoC, plus copy-paste class sa vLLM, LMDeploy, at mga karatig na servers",
+        "given": "Apr 27-28 Totolink quad, Cisco ISE unauth-RCE, simple-git RCE, Antigravity sandbox-escape, Google/Forcepoint 32% IPI rise",
+        "so_that": "Magpapadala ang CISA ng dedikadong AI-Infra KEV sub-catalog na may mandatory SBOM tagging sa inference servers at agentic-CI runtimes",
+        "landing": "Pagsapit ng Q3 2026; magpapadala ang sub-catalog + ang OWASP LLM Top-10 v2026 ay magpo-promote sa Loader RCE sa top-3",
+        "plain_language": "AI inference servers and coding agents keep getting hacked the same way, so regulators will publish a dedicated catalog with required ingredient labels."
+      },
+      "summary": "Ang SGLang CVE-2026-5760 ay nananatiling unpatched na may pampublikong PoC habang ang parehong Jinja2-SSTI shape ay sumasaklaw sa vLLM, LMDeploy, at mga karatig na servers; nakapatong sa Apr 27-28 Totolink quad, Cisco ISE unauth-RCE, simple-git RCE, Antigravity sandbox-escape, at 32% IPI rise, magpapadala ang CISA ng AI-Infra KEV sub-catalog pagsapit ng Q3 2026."
+    },
+    {
+      "id": "prediction.140440d9ebffd489",
+      "scope_hint": "business",
+      "title": "Magpapahayag ang hyperscaler ng per-token-margin-gated GPU capex floor pagsapit ng Q3 2026",
+      "body": "**Ang Mag 7 prints + FOMC Apr 28-29 ay magpipilit sa unang **per-token-margin-gated capex** disclosure mula sa hyperscaler pagsapit ng Q3 2026 — Apr 27 OpenAI/Microsoft pact + Anthropic/AWS Trainium silicon-level deal ang nag-aanchor sa bagong doctrine.** Ang pinagsamang Mag 7 capex na ~$700B para sa 2026 (Alphabet $175B-$185B, Amazon ~$200B, Meta $115B-$135B, Microsoft ~$146B FY26 trending sa ~$170B FY27) ay tumatama sa tape na lumipat na mula sa \"rewarding capex on faith\" patungo sa \"demanding tangible profit.\" **Ang Apr 27 contract restructurings ay tahasang nagru-route ng AI-lab compute sa pamamagitan ng hyperscaler-owned silicon** (AWS Trainium/Graviton kasama ang Anthropic; Meta-Graviton CPUs sa scale). Pagsapit ng Q3 2026, kahit isa sa Big-3 hyperscaler ay pampublikong **maglalagay ng gate sa incremental GPU capex sa Bedrock/Azure/Vertex per-token-margin floor** — ang unang tahasang \"AI-infra ROI threshold\" mula sa public cloud. Ang NVDA $5T-class market cap at AMD/Cerebras IPO trajectory ay nananatili; hindi mababasag ang spend curve, ngunit ang disclosure language nito ay babasagin. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Ang pinagsamang Mag 7 2026 AI capex na malapit sa $700B ay tumatama sa tape na humihingi ng tangible profit, hindi faith-based capex",
+        "given": "Apr 27 OpenAI/Microsoft pact + Anthropic/AWS Trainium silicon-level deal ay nagru-route ng lab compute sa pamamagitan ng hyperscaler silicon",
+        "so_that": "Kahit isa sa Big-3 hyperscaler ay pampublikong maglalagay ng gate sa incremental GPU capex sa Bedrock/Azure/Vertex per-token-margin floor",
+        "landing": "Pagsapit ng Q3 2026; unang tahasang per-token-margin-gated AI-infra ROI threshold mula sa public cloud",
+        "plain_language": "Hyperscalers spend roughly $700B on AI in 2026, and after the new Apr 27 contracts one cloud will publicly cap new GPU spend by token-margin."
+      },
+      "summary": "Ang pinagsamang Mag 7 2026 AI capex na malapit sa $700B ay tumatagpo sa tape na humihingi ng tangible profit habang ang Apr 27 OpenAI/Microsoft at Anthropic/AWS-Trainium deals ay nagru-route ng lab compute sa pamamagitan ng hyperscaler silicon; pagsapit ng Q3 2026, kahit isa sa Big-3 hyperscaler ay pampublikong maglalagay ng gate sa incremental GPU capex sa per-token-margin floor."
+    }
+  ]
+}

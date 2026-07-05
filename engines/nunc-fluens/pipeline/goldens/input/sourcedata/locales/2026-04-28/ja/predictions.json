@@ -1,0 +1,47 @@
+{
+  "date": "2026-04-28",
+  "predictions": [
+    {
+      "id": "prediction.9dd2833778239627",
+      "scope_hint": "business",
+      "title": "AGI条項アンワインドがQ4 2026までに同業ハイパースケーラ・ラボ契約へ波及する",
+      "body": "**「AGI 条項アンワインド」がテンプレート化する — Q4 2026 までに、少なくとももう 1 件のフロンティアラボ × ハイパースケーラ契約が、裁量的な「能力トリガ」条項を撤廃し、固定期日の収益シェア + 非排他的なクラウド配信に置き換える形で公に修正される。** 4/27 の Microsoft / OpenAI 書き換えはもはや Azure 排他性の話だけではない — 二者択一かつ取締役会裁量による IP 失効リスクを、**カレンダーで縛られた収益キャップ (2030)** と **新たなデフォルトとしてのマルチクラウド配信** に変換している。Google × Anthropic の $40B / 5GW ディール、Amazon × Anthropic の $5B + $25B / $100B AWS コミット、OpenAI × Cerebras + Microsoft、そして 5 月中旬予定の Cerebras IPO ($22B-$25B) はいずれも類似の能力トリガ文言を抱えている。**Q4 2026 までに、これらの契約のうち少なくとも 1 件が 4/27 のパターンを反映する形で公に再構成される** — 固定期日の収益キャップ、非排他的ライセンス、マルチクラウド配信条項。「AGI」という語は形而上的なものではなく、金融商品のプリミティブとなる。In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "4/27 の Microsoft / OpenAI 書き換えが、裁量的な能力トリガを 2030 年までの収益キャップ + マルチクラウド配信へとスワップした",
+        "given": "Google / Anthropic $40B、Amazon / Anthropic $100B、OpenAI / Cerebras + Microsoft はいずれも類似の能力トリガ文言を抱えている",
+        "so_that": "少なくとも 1 件のピア契約が、裁量的トリガを撤廃し固定期日の収益シェアと非排他的配信に置き換える形で公に修正される",
+        "landing": "Q4 2026 までに、4/27 のパターンを反映する公に修正されたフロンティアラボ × ハイパースケーラ契約が 1 件以上",
+        "plain_language": "Microsoft と OpenAI はあいまいな AGI エスケープ条項を撤廃し、代わりに支払いを期日でキャップしたばかりだ。模倣ディールが 2026 年中に続くだろう。"
+      },
+      "summary": "4/27 の Microsoft / OpenAI 書き換えが、取締役会裁量の IP 失効をカレンダーで縛られた 2030 年の収益キャップと非排他的マルチクラウド配信に変換する一方で、Google / Anthropic、Amazon / Anthropic、OpenAI / Cerebras はいずれも類似のトリガ文言を抱えている。Q4 2026 までに少なくとも 1 件のピア契約が新しいパターンを反映する。"
+    },
+    {
+      "id": "prediction.4c31ca30d449311e",
+      "scope_hint": "tech",
+      "title": "CISA、Q3 2026までに推論サーバSBOMを伴うAIインフラKEVサブカタログを出荷する",
+      "body": "**推論サーバ SSTI が単発の CVE から OWASP LLM Top-10 v2026 のエントリへ昇格する。CISA は Q3 2026 までに「AI インフラ KEV」サブカタログを出荷する。** SGLang CVE-2026-5760 (CVSS 9.8) は **4/28 時点で依然として未パッチ** (公表後 10 日以上)、公開 PoC が出回っており、`ImmutableSandboxedEnvironment` を伴わない同じ Jinja2 形状は今や vLLM、LMDeploy、隣接する推論サーバを横断するコピペ的クラスとしてフラグされている。**4/27-28 の Totolink CVE 4 連発 (7153 / 7154 / 7156 / 7202、いずれも 9.8)**、**Cisco ISE の認証なし RCE**、**CI/CD における simple-git CVE-2026-6951 RCE**、**Pillar による Antigravity の `find_by_name -X` 経由のサンドボックス エスケープ**、そして Google / Forcepoint の **野生における間接プロンプトインジェクション 32% 前年比増** と 10 件の野生のペイロードが組み合わさり — NIST / CISA への圧力が結晶化する。**Q3 2026 までに CISA は専用の「AI インフラ」KEV サブカタログを出荷する**。推論サーバ (vLLM / SGLang / Ollama / llama.cpp / LMDeploy) とエージェンティック CI ランタイム (Claude Code / Codex / Antigravity / OpenClaw) に対する SBOM タグ付けが必須化される。OWASP LLM Top-10 v2026 は「Inference Server Template / Loader RCE」をトップ 3 へ格上げする。In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "SGLang CVE-2026-5760 が公開 PoC とともに 10 日以上未パッチのままであり、加えて vLLM、LMDeploy、隣接サーバを横断するコピペ的クラスが存在する",
+        "given": "4/27-28 の Totolink 4 連発、Cisco ISE の認証なし RCE、simple-git RCE、Antigravity サンドボックス エスケープ、Google / Forcepoint の IPI 32% 増",
+        "so_that": "CISA は推論サーバとエージェンティック CI ランタイムに対する SBOM タグ付け必須化を伴う、専用の AI インフラ KEV サブカタログを出荷する",
+        "landing": "Q3 2026 までに、サブカタログが出荷され、OWASP LLM Top-10 v2026 が Loader RCE をトップ 3 へ格上げする",
+        "plain_language": "AI 推論サーバとコーディング エージェントは同じやり方で繰り返し攻撃されており、規制当局は必須の成分表示を伴う専用カタログを公表することになる。"
+      },
+      "summary": "SGLang CVE-2026-5760 は公開 PoC とともに未パッチのままであり、同じ Jinja2-SSTI 形状は vLLM、LMDeploy、隣接サーバを横断する。4/27-28 の Totolink 4 連発、Cisco ISE の認証なし RCE、simple-git RCE、Antigravity サンドボックス エスケープ、IPI 32% 増の上に積み上がり、CISA は Q3 2026 までに AI インフラ KEV サブカタログを出荷する。"
+    },
+    {
+      "id": "prediction.140440d9ebffd489",
+      "scope_hint": "business",
+      "title": "ハイパースケーラがQ3 2026までにトークン当たり利益率連動のGPU設備投資フロアを開示する",
+      "body": "**Mag 7 決算 + 4/28-29 FOMC が、Q3 2026 までにハイパースケーラからの初の **トークン単位マージンでゲーティングされた capex** 開示を強要する — 4/27 の OpenAI / Microsoft 協定 + Anthropic / AWS Trainium のシリコンレベル ディールが新ドクトリンを定礎する。** 2026 年の Mag 7 合算 capex 約 $700B (Alphabet $175B-$185B、Amazon 約 $200B、Meta $115B-$135B、Microsoft 約 $146B FY26 から FY27 で約 $170B へトレンド) は、すでに「信仰に基づき capex を報いる」から「具体的な利益を要求する」へとシフトしたテープに着地する。**4/27 の契約再構築は AI ラボの計算リソースをハイパースケーラ自社シリコン経由に明示的にルーティング** している (Anthropic との AWS Trainium / Graviton、スケールでの Meta-Graviton CPU)。Q3 2026 までに Big-3 ハイパースケーラの少なくとも 1 社が **増分 GPU capex を Bedrock / Azure / Vertex のトークン単位マージン下限でゲーティング** する — パブリッククラウドからの初の明示的な「AI インフラ ROI 閾値」となる。NVDA $5T クラスの時価総額と AMD / Cerebras IPO 軌道は維持される。支出曲線は折れないが、その開示言語は折れる。In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Mag 7 の 2026 年合算 AI capex が約 $700B に達し、信仰ベースの capex ではなく具体的な利益を要求するテープに着地する",
+        "given": "4/27 の OpenAI / Microsoft 協定 + Anthropic / AWS Trainium のシリコンレベル ディールが、ラボの計算リソースをハイパースケーラ シリコン経由にルーティングする",
+        "so_that": "Big-3 ハイパースケーラの少なくとも 1 社が、増分 GPU capex を Bedrock / Azure / Vertex のトークン単位マージン下限で公にゲーティングする",
+        "landing": "Q3 2026 までに、パブリッククラウドからの初の明示的な、トークン単位マージンでゲーティングされた AI インフラ ROI 閾値",
+        "plain_language": "ハイパースケーラは 2026 年に AI へ約 $700B を投じる。新しい 4/27 契約の後、1 社のクラウドはトークン マージンによって新規 GPU 支出を公にキャップすることになる。"
+      },
+      "summary": "Mag 7 の 2026 年合算 AI capex 約 $700B が、具体的な利益を要求するテープに直面する一方で、4/27 の OpenAI / Microsoft と Anthropic / AWS-Trainium ディールがラボの計算リソースをハイパースケーラ シリコン経由にルーティングする。Q3 2026 までに Big-3 ハイパースケーラの少なくとも 1 社が、増分 GPU capex をトークン単位マージン下限で公にゲーティングする。"
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "date": "2026-04-21",
+  "predictions": [
+    {
+      "id": "prediction.082b0a07077870dd",
+      "scope_hint": "tech",
+      "title": "Las cadenas de suministro de GGUF controlan las cargas mediante tarjetas firmadas + escaneos SSTI para Q3 2026",
+      "body": "**Las cadenas de suministro de GGUF son el nuevo campo de batalla.** SGLang CVE-2026-5760 (SSTI de Jinja2 a través de GGUF, RCE) hace visible el hecho de que \"los propios archivos de modelo son portadores de código ejecutable\". Para el Q3 2026, Hugging Face / Ollama Library / ModelScope exigirán verificación de firma de model-card + chat_template o ejecución en sandbox como base; Foundry Local / Bedrock / vLLM activarán el escaneo de SSTI por defecto en el momento de carga de GGUF. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "SGLang CVE-2026-5760 incluye un SSTI de Jinja2 en el análisis de chat_template de GGUF que produce RCE al cargar el modelo.",
+        "given": "Los archivos GGUF incrustan plantillas ejecutables, por lo que los artefactos del modelo funcionan como portadores de código arbitrario.",
+        "so_that": "Los hubs filtran las cargas tras model-cards y chat_templates firmados, y los runtimes de servicio escanean en busca de SSTI en el momento de carga de GGUF.",
+        "landing": "Para el Q3 2026; HF / Ollama / ModelScope + Foundry Local / Bedrock / vLLM.",
+        "plain_language": "Un fallo en SGLang muestra que los archivos de modelo pueden ocultar código dañino, así que los grandes hubs de modelos y servidores de inferencia comenzarán a verificarlos antes de ejecutarlos."
+      },
+      "summary": "SGLang CVE-2026-5760, un SSTI de Jinja2 a través del análisis de chat_template de GGUF, muestra que los archivos de modelo llevan código ejecutable. Para el Q3 2026, se espera que Hugging Face, Ollama y ModelScope exijan model-cards firmados o sandboxes, y que Foundry Local, Bedrock y vLLM activen el escaneo de SSTI en la carga de GGUF."
+    },
+    {
+      "id": "prediction.af6de8a1d9fd7731",
+      "scope_hint": "business",
+      "title": "El pacto Anthropic-AWS consolida un régimen hyperscaler-laboratorio de 5 polos para H1 2027",
+      "body": "**Ha llegado la era de la \"alianza exclusiva entre hyperscaler y laboratorio de frontera\"**. El compromiso de 100.000 millones de dólares a 10 años entre Amazon y Anthropic se convierte en el segundo contrato \"co-diseñado en hardware + exclusivo de plataforma\" tras MS-OpenAI. A lo largo del H2 2026 / H1 2027, se espera que se afiance el **régimen de 5 polos** — Google–(Gemini interno), Anthropic–AWS, OpenAI–MS, Meta–interno (Llama), xAI–Oracle/NVDA. Las diferencias de diseño entre Trainium / TPU / MAIA / MI300X se traducirán directamente en diferencias de comportamiento de modelo, y los desarrolladores reevaluarán la **portabilidad de backend** (una capa agnóstica al runtime como MCP) como un requisito imprescindible. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Amazon-Anthropic 10 años, 100.000 millones de dólares + 5 GW de Trainium se empareja con MS-OpenAI como el 2.º exclusivo co-diseñado",
+        "given": "La economía del entrenamiento de frontera exige un hyperscaler con silicio co-diseñado para financiar la construcción de clústeres",
+        "so_that": "Se afianza un régimen de 5 polos laboratorio-nube-chip y la portabilidad de backend agnóstica al runtime se convierte en un requisito imprescindible",
+        "landing": "H2 2026 / H1 2027; régimen de 5 polos afianzado + capa de portabilidad adoptada",
+        "plain_language": "Cada gran laboratorio de IA se está emparejando con una nube y una familia de chips, así que las apps necesitarán una capa traductora para cambiar entre ellas."
+      },
+      "summary": "El compromiso de 100.000 millones de dólares a 10 años de Amazon-Anthropic en Trainium se une a MS-OpenAI como el 2.º exclusivo hyperscaler-laboratorio co-diseñado en hardware. A lo largo del H2 2026 / H1 2027 se afianza un régimen de 5 polos entre Google, Anthropic-AWS, OpenAI-MS, Meta y xAI, forzando la portabilidad de backend como un requisito imprescindible."
+    },
+    {
+      "id": "prediction.b60e425d646be753",
+      "scope_hint": "cross",
+      "title": "La frontera de pesos cerrados se cristaliza mientras los pesos abiertos se topan con un techo de 35B-A3B para Q3 2026",
+      "body": "**Re-expansión propietaria frente a una división geopolítica de pesos abiertos.** El giro \"propietario, solo API\" de Qwen3.6-Max-Preview, junto con la apertura escalonada de Mythos Preview por parte de Anthropic, hace del Q3 2026 el momento en que se cristaliza **\"el modelo más fuerte = pesos cerrados\"**. Los pesos abiertos, mientras tanto, se concentran en las líneas 35B-A3B / Bonsai / Llama para producción, formalizando la línea: local para utilidad, nube para la frontera. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Qwen3.6-Max-Preview giró a solo API y Anthropic restringió Mythos Preview en la misma ventana",
+        "given": "el cómputo de nivel de frontera + la sobrecarga de seguridad hacen que el lanzamiento de pesos abiertos sea económicamente inviable para los laboratorios de la cima",
+        "so_that": "para el Q3 2026 los modelos públicamente disponibles más fuertes son uniformemente cerrados, con los pesos abiertos asentándose en el nivel de producción 35B-A3B / Bonsai / Llama",
+        "landing": "para el Q3 2026; ≥2 laboratorios de frontera solo API + techo de pesos abiertos en la clase ~35B-A3B",
+        "plain_language": "Los modelos más grandes están pasando detrás de muros de pago mientras los más pequeños y abiertos siguen siendo gratis, así que la gente usará modelos locales para tareas cotidianas y la nube para las más difíciles."
+      },
+      "summary": "El giro a solo API de Qwen3.6-Max-Preview y la restricción por Anthropic de Mythos Preview marcan juntos el Q3 2026 como el punto en que los modelos más fuertes son uniformemente de pesos cerrados. Los lanzamientos de pesos abiertos se concentran en los niveles de producción 35B-A3B, Bonsai y Llama, formalizando una división entre modelos locales de utilidad y modelos de frontera en la nube."
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "date": "2026-04-30",
+  "predictions": [
+    {
+      "id": "prediction.fe9e46055f4a05b9",
+      "scope_hint": "cross",
+      "title": "La sub-matriz de amenazas de agent-skills aterriza como extensión de MITRE/NIST para Q3 2026",
+      "body": "Para Q3 2026 una sub-matriz publicada de amenazas de agent-skills aterriza como extensión de primera clase de MITRE ATT&CK o como apéndice del NIST AI-RMF, y al menos un marketplace mayor de skills (repo oficial de skills de Anthropic, ClawHub, Multica, Hermes, skills de Hugging Face) lanza un gate obligatorio de firma + provenance antes de publicar. Para Q3 2026 una sub-matriz publicada de amenazas de agent-skills aterriza como extensión de primera clase de MITRE ATT&CK o como apéndice del NIST AI-RMF, y al menos un marketplace mayor de skills (repo oficial de skills de Anthropic, ClawHub, Multica, Hermes, skills de Hugging Face) lanza un gate obligatorio de firma + provenance antes de publicar. Para Q3 2026 una sub-matriz publicada de amenazas de agent-skills aterriza como extensión de primera clase de MITRE ATT&CK o como apéndice del NIST AI-RMF, y al menos un marketplace mayor de skills (repo oficial de skills de Anthropic, ClawHub, Multica, Hermes, skills de Hugging Face) lanza un gate obligatorio de firma + provenance antes de publicar. **Para Q3 2026 una sub-matriz publicada de amenazas de agent-skills aterriza como extensión de primera clase de MITRE ATT&CK o como apéndice del NIST AI-RMF, y al menos un marketplace mayor de skills (repo oficial de skills de Anthropic, ClawHub, Multica, Hermes, skills de Hugging Face) lanza un gate obligatorio de firma + provenance antes de publicar.** El framework ATT&CK v19 + v5.4 del 28 abr ya nombra envenenamiento de contexto de AI-agent, abuso de invocación de herramientas, compromiso del servidor MCP y despliegue de agentes maliciosos como técnicas; Novita Sandbox del 28 abr es el primer producto comercial de mitigación construido a propósito para runtimes OpenClaw + Hermes; SuiteCloud Agent Skills del 28 abr (Oracle NetSuite, SuiteConnect SF) es el primer vendor mayor no-foundation-lab que envía skills-as-a-product con distribución firmada como marco de seguridad; arxiv 2604.24026 del 28 abr (representación SSL para skills) + arxiv 2604.23374 NeuroTaint del 24 abr proporcionan el andamiaje académico. La función forzante es el hallazgo de Cisco RSAC 2026 de 36% de tasa de prompt-injection + los 1.184 skills maliciosos de ClawHavoc + el alza del +32% en IPI de Google del 23-29 abr; combinado, este es el mismo arco de brecha-de-gobernanza que produjo MITRE ATT&CK Mobile en 2017 y MITRE ATLAS en 2021. Es probable que el primero de estos mandatos se origine en CISA / NIST o directamente en los operadores de marketplace bajo presión de clientes empresariales en lugar de en un laboratorio de fundación. In plain language: In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "",
+        "given": "",
+        "so_that": "",
+        "landing": "",
+        "plain_language": ""
+      },
+      "summary": "Las técnicas nombradas en ATT&CK v19 (envenenamiento de contexto, abuso de invocación de herramientas, compromiso MCP, despliegue de agentes maliciosos) más los 1.184 skills maliciosos de ClawHavoc, la tasa del 36% de prompt-injection de Cisco y un alza del +32% en IPI fuerzan una sub-matriz publicada de amenazas de agent-skills y un gate obligatorio de firma + provenance en marketplaces para Q3 2026."
+    },
+    {
+      "id": "prediction.81e3e9b9a80e4cb7",
+      "scope_hint": "tech",
+      "title": "Los stacks de LLM local exponen un flag unificado de KV-cache comprimido para H2 2026",
+      "body": "**Para H2 2026 cada ecosistema mayor de LLM local (vLLM, SGLang, TGI, Ollama, llama.cpp, NVIDIA TensorRT-LLM, Foundry Local) expone un knob unificado de despliegue de KV-cache comprimido — TurboQuant + al menos una alternativa — y Foundry Local (Microsoft, GA 9 abr) lanza integración nativa de TurboQuant atada a los execution providers de Windows ML / WinML como optimización por defecto en Windows.** Evidencia del 27-29 abr: el PR #21419 de SGLang está in-tree; la rescritura de fused-Triton-decode kernel de SGLang #23134 alcanza 93–105% del throughput bf16; vLLM v0.19.0 (2 abr) trae torch 2.11 / Python 3.14 / async scheduler por defecto + Model Runner V2; PolyKV (arxiv 2604.24971, 27 abr) es un pool compartido asimétrico de KV para inferencia multi-agente; NVIDIA kvpress alcanza madurez en Decoding-Press; el hilo #20969 de discusión de TurboQuant en llama.cpp está activo; Unsloth 2026.4.8 inferencia 20-30% más rápida. Foundry Local es el punto de entrada empresarial-Windows que faltaba — Microsoft lo envía como una librería nativa de ~20MB que empaqueta IA local en cualquier app con execution providers de WinML adaptados al hardware, y el siguiente paso obvio para Q2 2026 es exponer un flag de TurboQuant en el Foundry Catalog. La función forzante económica es el mismo tape de capex Mag 7: cada workload long-context limitado por ancho de banda de memoria que pasa de FP16 a 3,5 bits recorta el costo efectivo por token unas 5-6x, y Foundry Local hace ese cambio invisible para los desarrolladores finales. In plain language: In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "",
+        "given": "",
+        "so_that": "",
+        "landing": "",
+        "plain_language": ""
+      },
+      "summary": "El trabajo paralelo en SGLang, vLLM, llama.cpp y Foundry Local de Microsoft junto con TurboQuant + PolyKV + NVIDIA kvpress apunta hacia un knob unificado de despliegue de KV-cache comprimido en cada stack mayor de LLM local para H2 2026, con Foundry Local lanzando TurboQuant nativo atado a los execution providers de WinML."
+    },
+    {
+      "id": "prediction.4d71e1d1457066ec",
+      "scope_hint": "business",
+      "title": "Los laboratorios foundation publican revenue mensual auditado y margen por token para Q3 2026",
+      "body": "**El reporte del WSJ del 28 abr sobre la falta de revenue de OpenAI + la colisión de prints Mag 7 del 29 abr dispara un push 2026 SEC + analistas para la reescritura de la disclosure de revenue de IA — para Q3 2026 al menos un foundation lab (OpenAI / Anthropic / xAI) lanza una cadencia auditada de disclosure mensual de revenue o WAU, y al menos un hyperscaler Big-3 separa el margen por token de Bedrock / Azure-OpenAI / Vertex en notas al pie del 10-Q frente al revenue cloud crudo.** El selloff del 28 abr (S&P -0,49%, Nasdaq -0,9%, Oracle -4%, AMD -3%, Broadcom -4%, SoftBank -10%) fue la primera grieta material en el tape de capex-IA-por-fe; los prints del 29 abr fueron un reset mixto (MSFT/GOOGL pegaron fuerte, META -7% AH); los prints del 30 abr de AAPL cierran el ciclo Mag 7. Microsoft ya citó un AI run rate de $37B (+123%) explícitamente — ese es el precedente de disclosure. Con el IPO de Cerebras a mediados de mayo a $22B-$25B (24% G42 / 62% MBZUAI concentración de revenue), la presión SEC + buyside por divulgación explícita de margen por token + WAU converge en torno a los ciclos de earnings Q2-Q3 2026. La elección de Powell de quedarse en la Junta como contrapeso a la investigación de la Fed por la administración Trump también eleva la prima de riesgo político sobre todo el tape de capex-IA; exigir números más duros es la palanca que tienen los mercados públicos. In plain language: In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "",
+        "given": "",
+        "so_that": "",
+        "landing": "",
+        "plain_language": ""
+      },
+      "summary": "El reporte del WSJ del 28 abr sobre la falta de revenue de OpenAI + los prints Mag 7 del 29 abr + la disclosure explícita del AI run-rate de $37B de Microsoft convergen con el IPO de Cerebras a mediados de mayo para empujar al menos un foundation lab a una cadencia auditada de revenue mensual / WAU y al menos un hyperscaler Big-3 a notas al pie del 10-Q con margen por token para Q3 2026."
+    },
+    {
+      "id": "prediction.9fce1997ef699a48",
+      "scope_hint": "business",
+      "title": "Powell permanece en la Fed Board, convirtiéndose en voto decisivo de la investigación de la Fed para Q4 2026",
+      "body": "**La decisión de Powell del 29 abr de permanecer en la Board of Governors más allá de la expiración de su mandato como Chair (15 may) reconfigura la psicología de mercado de política monetaria 2026 — para Q4 2026 el FOMC revierte a una norma de menor disenso (≤2 disidentes) bajo Warsh como Chair, pero la presencia continua de Powell en la Junta se vuelve el voto bisagra marginal sobre la cuestión de gobernanza de la investigación a la Fed, no sobre tasas.** El 29 abr fue el FOMC con más disenso desde oct-1992 (8-4); Miran quería -25bp; Hammack/Kashkari/Logan se opusieron a incluir un sesgo flexibilizador. La nominación de Warsh avanzó desde el Senate Banking ese mismo día. La configuración 2026-2027: Powell en la Junta hasta el final de su mandato en 2028 con Warsh en el asiento de Chair; la postura de disenso se comprime en decisiones de tasas porque el Chair fija el encuadre; el voto marginal de Powell se vuelve una señal de gobernanza cada vez que se mueve el resultado de la investigación a la Fed por la administración Trump. Los mercados precian menor volatilidad de forward-guidance sobre tasas pero una prima de riesgo institucional mayor sobre la propia Fed. La comparación con el precedente de 1992 deja de ser una curiosidad y empieza a ser un punto de referencia estructural en las explicaciones de la prensa financiera del nuevo régimen de gobernanza de la Fed. In plain language: In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "",
+        "given": "",
+        "so_that": "",
+        "landing": "",
+        "plain_language": ""
+      },
+      "summary": "La elección de Powell de quedarse en la Junta hasta 2028 junto al FOMC con más disenso desde 1992 y la confirmación pendiente de Warsh como Chair produce un régimen 2026-2027 donde el disenso en decisiones de tasas se comprime bajo Warsh mientras el voto de Powell en la Junta se vuelve la señal marginal sobre la cuestión de gobernanza de la investigación a la Fed por la administración Trump."
+    }
+  ]
+}

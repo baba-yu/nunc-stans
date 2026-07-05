@@ -1,0 +1,47 @@
+{
+  "date": "2026-04-21",
+  "predictions": [
+    {
+      "id": "prediction.082b0a07077870dd",
+      "scope_hint": "tech",
+      "title": "GGUF supply chains gate uploads via signed cards + SSTI scans by Q3 2026",
+      "body": "**GGUF supply chains are the new battleground.** SGLang CVE-2026-5760 (Jinja2 SSTI through GGUF, RCE) makes visible the fact that \"model files themselves are carriers of executable code.\" By Q3 2026, Hugging Face / Ollama Library / ModelScope will require model-card + chat_template signature verification or sandboxed execution as a baseline; Foundry Local / Bedrock / vLLM will enable SSTI scanning by default at GGUF load time. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "SGLang CVE-2026-5760 ships a Jinja2 SSTI in GGUF chat_template parsing yielding RCE on model load.",
+        "given": "GGUF files embed executable templates, so model artifacts function as carriers of arbitrary code.",
+        "so_that": "Hubs gate uploads behind signed model-cards and chat_templates, and serving runtimes scan for SSTI at GGUF load time.",
+        "landing": "By Q3 2026; HF / Ollama / ModelScope + Foundry Local / Bedrock / vLLM.",
+        "plain_language": "A bug in SGLang shows model files can hide harmful code, so big model hubs and inference servers will start checking them before running."
+      },
+      "summary": "SGLang CVE-2026-5760, a Jinja2 SSTI through GGUF chat_template parsing, shows that model files carry executable code. By Q3 2026, Hugging Face, Ollama, and ModelScope are expected to require signed model-cards or sandboxes, and Foundry Local, Bedrock, and vLLM to enable SSTI scanning at GGUF load."
+    },
+    {
+      "id": "prediction.af6de8a1d9fd7731",
+      "scope_hint": "business",
+      "title": "Anthropic-AWS pact locks 5-pole hyperscaler-lab regime by H1 2027",
+      "body": "**The era of \"exclusive alliance between hyperscaler and frontier lab\"** is here. Amazon-Anthropic's 10-year $100B commit becomes the second \"hardware-codesigned + platform-exclusive\" contract after MS-OpenAI. Through H2 2026 / H1 2027, expect the **5-pole regime** — Google–(in-house Gemini), Anthropic–AWS, OpenAI–MS, Meta–internal (Llama), xAI–Oracle/NVDA — to lock in. Trainium / TPU / MAIA / MI300X design differences will translate directly into model-behavior differences, and developers will reassess **backend portability** (a runtime-agnostic layer like MCP) as a hard requirement. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Amazon-Anthropic 10-year $100B + 5 GW Trainium pairs with MS-OpenAI as 2nd codesigned exclusive",
+        "given": "Frontier training economics demand one hyperscaler with co-designed silicon to fund cluster build",
+        "so_that": "A 5-pole lab-cloud-chip regime locks in and runtime-agnostic backend portability becomes a hard requirement",
+        "landing": "H2 2026 / H1 2027; 5-pole regime locked + portability layer adopted",
+        "plain_language": "Each big AI lab is pairing with one cloud and one chip family, so apps will need a translator layer to switch between them."
+      },
+      "summary": "Amazon-Anthropic's 10-year $100B Trainium commit joins MS-OpenAI as the 2nd hardware-codesigned hyperscaler-lab exclusive. Through H2 2026 / H1 2027 a 5-pole regime locks in across Google, Anthropic-AWS, OpenAI-MS, Meta, and xAI, forcing backend portability as a hard requirement."
+    },
+    {
+      "id": "prediction.b60e425d646be753",
+      "scope_hint": "cross",
+      "title": "Closed-weight frontier crystallizes as open weights cap at 35B-A3B by Q3 2026",
+      "body": "**Proprietary re-expansion against an open-weight geopolitical split.** Qwen3.6-Max-Preview's \"proprietary, API-only\" pivot, alongside Anthropic's staged gating of Mythos Preview, makes Q3 2026 the moment **\"strongest model = closed weights\"** crystallizes. Open weights, meanwhile, concentrate on the 35B-A3B / Bonsai / Llama lines for production, formalizing the line: local for utility, cloud for the frontier. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Qwen3.6-Max-Preview pivoted API-only and Anthropic gated Mythos Preview in the same window",
+        "given": "frontier-tier compute + safety overhead make open-weight release uneconomic for top-of-stack labs",
+        "so_that": "by Q3 2026 the strongest publicly available models are uniformly closed, with open weights settling at the 35B-A3B / Bonsai / Llama production tier",
+        "landing": "by Q3 2026; ≥2 frontier labs API-only + open-weight ceiling at ~35B-A3B class",
+        "plain_language": "The biggest models are going behind paywalls while smaller open ones stay free, so people will use local models for everyday tasks and cloud for the hardest ones."
+      },
+      "summary": "Qwen3.6-Max-Preview's API-only pivot and Anthropic's gating of Mythos Preview together mark Q3 2026 as the point where the strongest models are uniformly closed weights. Open-weight releases concentrate on the 35B-A3B, Bonsai, and Llama production tiers, formalizing a split between local utility models and cloud frontier models."
+    }
+  ]
+}

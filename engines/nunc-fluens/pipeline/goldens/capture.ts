@@ -72,7 +72,28 @@ function stage(upstream: string) {
       cpIf(path.join(upstream, 'memory/theme-review', f), path.join(INPUT, 'memory/theme-review', f));
   cpIf(path.join(upstream, 'reference'), path.join(INPUT, 'reference'));
   cpIf(path.join(upstream, 'references.txt'), path.join(INPUT, 'references.txt'));
+  const H = M.historicalPredictionDates;
+  for (const d of daysBetween(H.start, H.end)) {
+    cpIf(path.join(upstream, 'app/sourcedata', d, 'predictions.json'),
+      path.join(INPUT, 'sourcedata', d, 'predictions.json'));
+    for (const L of ['ja', 'es', 'fil'])
+      cpIf(path.join(upstream, 'app/sourcedata/locales', d, L, 'predictions.json'),
+        path.join(INPUT, 'sourcedata/locales', d, L, 'predictions.json'));
+  }
   console.log(`staged: ${ALL_SD_DAYS.length} sourcedata days, ${staged} report/fp files`);
+}
+
+// ------------------------------------------------------------- stage-ci ----
+// Copy input/ into the engine root in the upstream repo layout so the
+// Python test suite finds its live-data fixtures (paths are gitignored
+// there). Used by CI before pytest and for local verification.
+function stageCi() {
+  cpIf(path.join(INPUT, 'sourcedata'), path.join(ENGINE, 'app/sourcedata'));
+  // reference/ is deliberately NOT staged: it is tracked in the monorepo
+  // (the tests use the repo's own copy); everything below is gitignored.
+  for (const part of ['report', 'future-prediction', 'memory', 'references.txt'])
+    cpIf(path.join(INPUT, part), path.join(ENGINE, part));
+  console.log(`staged fixtures into ${ENGINE}`);
 }
 
 // ------------------------------------------------------------------ run ----
@@ -199,5 +220,6 @@ function run() {
 
 const cmd = process.argv[2];
 if (cmd === 'stage') stage(process.argv[3] ?? path.join(os.homedir(), 'news'));
+else if (cmd === 'stage-ci') stageCi();
 else if (cmd === 'run') run();
-else { console.error('usage: node capture.ts stage [upstream] | node capture.ts run'); process.exit(2); }
+else { console.error('usage: node capture.ts stage [upstream] | stage-ci | run'); process.exit(2); }

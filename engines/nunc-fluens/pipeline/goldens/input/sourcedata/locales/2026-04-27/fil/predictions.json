@@ -1,0 +1,47 @@
+{
+  "date": "2026-04-27",
+  "predictions": [
+    {
+      "id": "prediction.3a5f7303d1a57312",
+      "scope_hint": "business",
+      "title": "Big-3 hyperscalers, ipapatigil ang AI capex hangga't di natutugunan ang per-token-margin floor pagsapit ng Q3 2026",
+      "body": "**Ang Mag 7 Q1 earnings (Apr 29-30) ay magre-reset ng AI-capex ROI narrative — pagsapit ng Q3 2026, makikita ang unang hyperscaler na pampublikong magti-tier ng AI capex sa pamamagitan ng token-margin gate.** Sa pinagsamang 2026 capex guidance mula sa Alphabet ($175B-$185B), Amazon (~$200B), Meta ($115B-$135B), at Microsoft (Azure-laggard rerating risk) na umaabot sa ~$650B-$700B laban sa \"AI ROI reality check\" ng Wall Street, ang Apr 29-30 prints ay magpapatunay sa **per-token-revenue exit-velocity** thesis o magti-trigger ng multiple compression. Pagsapit ng Q3 2026, kahit isa sa Big-3 hyperscalers ay pampublikong **maglalagay ng gate sa incremental GPU capex sa pamamagitan ng Bedrock/Azure/Vertex per-token-margin floor** — ang unang tahasang \"AI infra ROI threshold\" mula sa public cloud, na nagtatapos sa 2024-2025 \"spend or die\" doctrine. Ang frontier-lab anchor deals (Google $40B / Anthropic, Amazon $25B / Anthropic, OpenAI $20B / Cerebras + Microsoft) ay magiging visible pressure relief valve. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Ang pinagsamang Mag 7 2026 AI capex guidance ay ~$650B-$700B laban sa tahasang Wall Street ROI reality check",
+        "given": "Ang Apr 29-30 Q1 prints ay tatama sa multiple-compression-risk tape kasama ang Hormuz tension na nakapatong",
+        "so_that": "Kahit isa sa Big-3 hyperscalers ay pampublikong magti-tier ng incremental GPU spend sa pamamagitan ng per-token-margin floor",
+        "landing": "Pagsapit ng Q3 2026; unang 10-Q o earnings-call disclosure ng tahasang AI-infra ROI threshold",
+        "plain_language": "Cloud giants spent huge on AI chips; investors now want proof of profit, so one will publicly limit new GPU spend by token-margin."
+      },
+      "summary": "Ang pinagsamang 2026 Mag 7 AI capex guidance na malapit sa $650B-$700B ay sasalubungin ng AI ROI reality check ng Wall Street sa Apr 29-30 prints. Pagsapit ng Q3 2026, kahit isa sa Big-3 hyperscalers ay pampublikong magti-tier ng incremental GPU spend sa Bedrock/Azure/Vertex per-token-margin floor, na nagtatapos sa 2024-2025 spend-or-die doctrine."
+    },
+    {
+      "id": "prediction.7db9cba24cef0f48",
+      "scope_hint": "tech",
+      "title": "CISA at NIST, maglalathala ng inference-server at agentic-tool CVE sub-catalog pagsapit ng Q4 2026",
+      "body": "**Ang \"AI-Infra CVE class\" ay magiging regulatory primitive — pagsapit ng Q4 2026, ilalathala ng CISA / NIST ang sub-catalog para sa inference-server + agentic-CI runtimes, hiwalay sa KEV.** Ang Apr 19-27 sequence — **LMDeploy CVE-2026-33626 SSRF (12h31m)** + **SGLang CVE-2026-5760 (hindi pa rin na-patch)** + **Pillar's Antigravity sandbox-escape sa pamamagitan ng `find_by_name -X`** + **simple-git CVE-2026-6951 RCE sa foundational CI/CD dep** + **Apr 21 Comment-and-Control prompt-injection chain sa Claude Code / Gemini CLI / Copilot** + **OpenClaw CVE-2026-41329 sandbox bypass** — ay hindi na isang \"category emerging.\" Ang Apr ops update ng NIST (record CVE-publication growth, AI-driven evaluation support) kasama ang **32% YoY indirect-prompt-injection rise sa wild ng Google** ay pumipilit sa CISA/NVD na magpadala ng **dedikadong inference-server + agentic-tool CVE sub-catalog** na may mandatory SBOM tagging pagsapit ng Q4 2026. Ang LLM Top 10 v2026 ng OWASP ay mag-aangat sa \"Inference Server Template / Loader RCE\" sa top-3. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Ang Apr 19-27 sequence ay nagsasalansan ng 6 inference-server + agentic-CI CVEs kasama ang hindi pa na-patch na SGLang SSTI RCE",
+        "given": "Ang record CVE-publication growth ng NIST + 32% YoY indirect-prompt-injection rise ng Google sa wild",
+        "so_that": "Maglalathala ang CISA/NVD ng dedikadong inference-server + agentic-tool CVE sub-catalog na may mandatory SBOM tagging",
+        "landing": "Pagsapit ng Q4 2026; sub-catalog na hiwalay sa KEV kasama ang OWASP LLM Top 10 v2026 na nag-aangat sa Loader RCE sa top-3",
+        "plain_language": "AI servers and coding agents now keep getting hacked the same way, so regulators will create a dedicated catalog with required ingredient labels."
+      },
+      "summary": "Anim na Apr 19-27 inference-server at agentic-CI exploits (LMDeploy SSRF, SGLang SSTI hindi na-patch, Antigravity sandbox-escape, simple-git RCE, multi-agent prompt-injection, OpenClaw bypass) kasama ang 32% indirect-prompt-injection rise ng Google ay pumipilit sa CISA/NVD na maglathala ng dedikadong AI-Infra CVE sub-catalog na may mandatory SBOM tagging pagsapit ng Q4 2026."
+    },
+    {
+      "id": "prediction.b83721f72876a218",
+      "scope_hint": "cross",
+      "title": "US state, magko-codify ng agent-as-first-class-identity statute pagsapit ng Q3 2026",
+      "body": "**Ang public-opinion blowback laban sa AI ay magiging binding agent-governance rules — pagsapit ng Q3 2026, kahit isang US state ay magpapadala ng \"Statutory Identity for Autonomous Agents\" Act na sumasalamin sa Agent Discovery + Agent Gateway pattern ng Okta.** Ang Apr 16 attacks sa bahay ni Altman + ang Apr 15 CNBC datacenter-blowback piece + Apr 26 Salt Security data (\"48.9% ng orgs ay hindi makakapag-monitor ng AI-agent traffic\") + Okta for AI Agents GA noong **Apr 30** (kasama ang Agent Discovery, Agent Gateway, virtual-MCP-server registry, credential vaulting + auto-rotation, universal logout) ay bumubuo ng regulatory pull-forward. Isang US state (CA, NY, o TX malamang) ay magpapadala ng statute pagsapit ng Q3 2026 na nag-uutos ng **agent-as-first-class-identity registration, MCP-call-chain logging, at per-action consent**, na sumasalamin sa Cross App Access protocol semantics. Ang EU AI Act Article 26 enforcement ay magti-trigger nang parallel. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Salt Security: 48.9% ng orgs ay hindi makakapag-monitor ng AI-agent traffic; ang Okta for AI Agents GA noong Apr 30 ay nagpapadala ng usable template",
+        "given": "Ang public sentiment ay sumasama (Apr 15 CNBC), Apr 16 physical attacks sa bahay ni Altman, EU AI Act Article 26 nang parallel",
+        "so_that": "Ang isang US state ay nag-co-codify ng agent-as-first-class-identity registration, MCP-call-chain logging, at per-action consent",
+        "landing": "Pagsapit ng Q3 2026; ang CA, NY, o TX ay nagpapadala ng Statutory Identity for Autonomous Agents Act",
+        "plain_language": "People are fed up with unsupervised AI agents, so a US state will pass a law making each agent register and log every action it takes."
+      },
+      "summary": "Ang Apr 15 CNBC public-opinion data, Apr 16 attacks sa bahay ni Altman, Apr 26 Salt Security finding na 48.9% ng orgs ay hindi makakapag-monitor ng AI-agent traffic, at Apr 30 Okta for AI Agents GA ay magkakasamang magtutulak sa kahit isang US state (CA, NY, o TX) na magpadala ng Statutory Identity for Autonomous Agents Act pagsapit ng Q3 2026."
+    }
+  ]
+}

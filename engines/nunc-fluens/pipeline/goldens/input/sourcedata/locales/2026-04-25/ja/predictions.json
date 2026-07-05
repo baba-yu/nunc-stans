@@ -1,0 +1,47 @@
+{
+  "date": "2026-04-25",
+  "predictions": [
+    {
+      "id": "prediction.81d3055dbb24f016",
+      "scope_hint": "cross",
+      "title": "フロンティアAIのクラウド・キャパシティ確保、Q3 2026までに3クラウド学習寡占体制へ収束",
+      "body": "**「フロンティアAIラボ × Tier-1クラウド・キャパシティ確保」がQ3 2026までに業界を明確に二分する。** Google Cloudが1ヶ月で3件の取引 ― Anthropic(GB300 + 大規模TPU)、Meta(GB300キャパシティ)、Thinking Machines Lab(A4X Max) ― を確定させたことで、構造が結晶化する:フロンティア・モデル開発に十分なキャパシティを持つクラウドは3社(AWS / Azure / GCP)に絞られる。Amazonは**さらに$25B + 5GW Trainium2/3キャパシティ + 10年$100Bコミット**でAnthropicに対抗;AzureはOpenAI / Mistral / Inflectionを保持;GCPはAnthropic / TML / Metaを追加する。Q3 2026までに、「自社クラウドもフロンティアラボとの長期キャパシティ契約も持たない第4ハイパースケーラー候補」(Oracle Cloud / IBM / Coreweave)は、**「フロンティア規模での学習が不可能、推論に特化」**へと完全シフトする。AIシリコン・エコシステムは2層構造に固定化される:学習キャパシティ = 3クラウド寡占 / 推論 = 階層化。In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Google CloudはAnthropic GB300 + TPU、Meta GB300、Thinking Machines Lab A4X Maxを1ヶ月で確定させ、AmazonはAnthropicに$25B + 5GW Trainiumを追加した。",
+        "given": "フロンティア規模の学習キャパシティは、10年コミットを吸収できるGB300 / Trainium / TPUバックログを持つ3社のハイパースケーラーにのみ集中している。",
+        "so_that": "Oracle Cloud、IBM、Coreweaveはフロンティア規模の学習へのアクセスを失い、推論ワークロードに完全に再ポジショニングする。",
+        "landing": "Q3 2026までに;AIシリコンは学習について3クラウド寡占に、推論については階層化された市場に固定化する。",
+        "plain_language": "巨大な新しいAI学習ジョブに対応できるのは大手クラウド3社だけ。中小クラウドは挑戦をやめ、代わりに完成した安価なモデルを動かすようになる。"
+      },
+      "summary": "Google CloudのAnthropic + Meta + Thinking Machines Labの取引と、AmazonによるAnthropic向けの$25B + 5GW Trainium追加が、フロンティア規模の学習キャパシティをAWS、Azure、GCPに絞り込む。Q3 2026までに、長期フロンティアラボ契約を持たない第4クラウド候補は推論への再フォーカスが予想される。"
+    },
+    {
+      "id": "prediction.70ad45e258b72e8c",
+      "scope_hint": "cross",
+      "title": "Physical AIリーグ・テーブル、H2 2026までにOEM採用ヒューマノイドのトップ5をランキング化",
+      "body": "**「Physical AIの生産ライン記録がIROS / GTC 2026でリーグ・テーブル化する」が2026年下半期に始まる。** Siemens Erlangenの**HMND 01 Alpha**(60トート/h × 8h × 90%以上)、BMW SpartanburgのFigure 02(10ヶ月 / 30,000台 / 90,000部品)、BMW LeipzigのAEON(2026年4月トライアル → 夏パイロット)、GXOのDigit(100K以上トート)がすべて同じウィンドウに着地し、Hannover Messe 2026がPhysical AIを初の中心テーマに据えたことで、業界の評価基準は「ベンダー主張のデモ」から**「OEM採用の生産記録」**へとシフトしている。2026年下半期の**IROS(10月)**と**GTC Fall 2026**で、「OEM採用数 × 連続稼働時間 × 取扱部品数 × MTBF」のリーグ・テーブルが始まり、Apptronik Apollo / Agility Digit / Figure 03 / Humanoid HMND 01 / Hexagon AEONのトップ5が頂点に立つ。PoC段階で停滞している30社以上は、Q4 2026の資金不足 / 買収 / 撤退に追い込まれる。In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Siemens Erlangen、BMW Spartanburg、BMW Leipzig、GXOの生産記録がすべて同時に表面化し、Hannover MesseはPhysical AIを中心テーマに据えた。",
+        "given": "OEM採用の生産記録が今や具体性を持つため、買い手は連続稼働時間、取扱部品数、MTBFでベンダーをランク付けできる。",
+        "so_that": "IROS 10月とGTC FallがOEM採用リーグ・テーブルを公表し、トップ5層を引き上げ、PoCで停滞する裾野を圧搾する。",
+        "landing": "2026年下半期に開始;30社以上のPoCベンダーがQ4 2026の資金不足、買収、撤退に直面する。",
+        "plain_language": "実際の工場でヒューマノイド・ロボットが本物の稼働時間を記録している。間もなく大手AIカンファレンスがそれらをスポーツリーグのようにランク付けし、弱いスタートアップは消えていく。"
+      },
+      "summary": "Siemens ErlangenのHMND 01 Alphaの8時間稼働、BMW SpartanburgのFigure 02の30,000台記録、BMW LeipzigのAEONトライアル、GXOのDigit 100Kトート稼働が、Hannover Messe 2026のPhysical AIスポットライトと同じウィンドウに着地する。2026年下半期のIROSとGTCはOEM採用リーグ・テーブルの公表が予想される。"
+    },
+    {
+      "id": "prediction.5094f95cbe8376d1",
+      "scope_hint": "tech",
+      "title": "MCPプロトコルの再設計、Q3 2026までに企業AI導入の最大ボトルネックとして浮上",
+      "body": "**「MCPプロトコル自体への攻撃面」がQ3 2026までに企業AI導入の最大ボトルネックとなる。** Nginx UIの**CVE-2026-33032(MCPwn、CVSS 9.8)** ― `/mcp_message`エンドポイントが空のデフォルトIPアロウリストで12個の認証なしツール・コールを公開する構造的欠陥 ― は、本番環境での2リクエスト乗っ取り後にVulnCheck KEVに追加された。これは、MCPプロトコル自体がスケールするためにはWeb標準として再設計される必要があることを物語る。Q3 2026までに、OWASP MCP Top 10が公式公開され、**Anthropic / Microsoft / Google / Cisco / CloudflareによるMCP-over-mTLS / 標準化されたOAuthスコープ仕様**が業界標準となり、Keycard / Okta for AI Agents / Wiz / Levo.ai / Pillar Securityが「MCP Gateway / MCP Firewall」製品をQ4を通じて投入する。企業のコンプライアンス監査は「MCP接続ツール / エンドポイント / 認可ポリシーの数」を新たな監査カテゴリとして追跡し始める。In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Nginx UIのCVE-2026-33032(MCPwn、CVSS 9.8)が、空のデフォルトIPアロウリスト経由の2リクエストでの実環境乗っ取り後にVulnCheck KEVに着地した。",
+        "given": "MCP統合が認証なしツール・コールをスケールで公開するため、単一ベンダーのバグではなくプロトコル自体が障害モードとなる。",
+        "so_that": "OWASP MCP Top 10が出荷され、MCP-over-mTLSとOAuthスコープ仕様が業界標準となり、MCP Gateway / Firewallベンダーが第4四半期を通じて投入する。",
+        "landing": "Q3 2026までに;企業のコンプライアンス監査がMCP接続ツールと認可ポリシーを新たな監査カテゴリとして追加する。",
+        "plain_language": "人気のMCPサーバーが、インターネット上の誰でもそのツールを呼び出せたためにハッキングされた。企業が信頼する前に、プロトコル全体に正規のログイン壁が必要になっている。"
+      },
+      "summary": "Nginx UIのCVE-2026-33032(MCPwn、CVSS 9.8) ― 2リクエストでの実環境乗っ取り後にKEVに掲載 ― がMCPプロトコル自体を障害モードとして露呈する。Q3 2026までに、OWASP MCP Top 10、MCP-over-mTLS / OAuthスコープ仕様、MCP Gateway / Firewall製品の出荷が予想される。"
+    }
+  ]
+}

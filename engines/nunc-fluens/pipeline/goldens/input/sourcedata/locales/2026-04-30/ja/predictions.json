@@ -1,0 +1,61 @@
+{
+  "date": "2026-04-30",
+  "predictions": [
+    {
+      "id": "prediction.fe9e46055f4a05b9",
+      "scope_hint": "cross",
+      "title": "エージェントスキル脅威サブマトリクスがMITRE/NIST拡張として2026年Q3までに登場",
+      "body": "2026年Q3までに、公開されたエージェントスキル脅威サブマトリクスがMITRE ATT&CKの第一級拡張またはNIST AI-RMFの付録として登場し、少なくとも1つの主要なスキルマーケットプレイス(Anthropic公式スキルリポジトリ、ClawHub、Multica、Hermes、Hugging Faceスキル)が公開前の署名+来歴認証ゲートを強制的に出荷する。2026年Q3までに、公開されたエージェントスキル脅威サブマトリクスがMITRE ATT&CKの第一級拡張またはNIST AI-RMFの付録として登場し、少なくとも1つの主要なスキルマーケットプレイス(Anthropic公式スキルリポジトリ、ClawHub、Multica、Hermes、Hugging Faceスキル)が公開前の署名+来歴認証ゲートを強制的に出荷する。2026年Q3までに、公開されたエージェントスキル脅威サブマトリクスがMITRE ATT&CKの第一級拡張またはNIST AI-RMFの付録として登場し、少なくとも1つの主要なスキルマーケットプレイス(Anthropic公式スキルリポジトリ、ClawHub、Multica、Hermes、Hugging Faceスキル)が公開前の署名+来歴認証ゲートを強制的に出荷する。**2026年Q3までに、公開されたエージェントスキル脅威サブマトリクスがMITRE ATT&CKの第一級拡張またはNIST AI-RMFの付録として登場し、少なくとも1つの主要なスキルマーケットプレイス(Anthropic公式スキルリポジトリ、ClawHub、Multica、Hermes、Hugging Faceスキル)が公開前の署名+来歴認証ゲートを強制的に出荷する。** 4月28日のATT&CK v19 + v5.4フレームワークは、AIエージェントのコンテキスト汚染、ツール呼び出しの濫用、MCPサーバ侵害、悪意あるエージェントのデプロイをすでに技法として命名している。4月28日のNovita SandboxはOpenClaw + Hermesランタイム向けに設計された初の商用緩和製品である。4月28日のSuiteCloud Agent Skills(Oracle NetSuite、SuiteConnect SF)は、署名配布をセキュリティ枠組みとしてスキル・アズ・ア・プロダクトを出荷する初の主要な非基盤研究所ベンダーである。4月28日のarxiv 2604.24026(スキル向けSSL表現) + 4月24日のarxiv 2604.23374 NeuroTaintが学術的な土台を提供している。強制要因はCisco RSAC 2026の36%プロンプトインジェクション率の発見 + ClawHavocの1,184の悪意あるスキル + 4月23-29日のGoogle +32%のIPI急増である。これらを組み合わせると、2017年のMITRE ATT&CK Mobileと2021年のMITRE ATLASを生み出したのと同じガバナンスギャップ弧となる。これらの義務化の最初のものは、基盤研究所からではなく、CISA / NIST、または企業顧客の圧力下にあるマーケットプレイス事業者から直接生まれる可能性が高い。",
+      "reasoning": {
+        "because": "ATT&CK v19はすでにエージェントのコンテキスト汚染、ツール呼び出しの濫用、MCP侵害、悪意あるエージェントのデプロイを命名している。",
+        "given": "ClawHavocの1,184の悪意あるスキル + Cisco RSACの36%プロンプトインジェクション率 + Google +32%のIPI急増が構造化されたカタログを強制する。",
+        "so_that": "スキルマーケットプレイス汚染サブマトリクスが登場し、少なくとも1つの主要なマーケットプレイスが公開前の署名+来歴認証スキルを義務付ける。",
+        "landing": "2026年Q3までに、CISA/NISTまたはマーケットプレイス事業者が最初に公開する。",
+        "plain_language": "The biggest catalogue of cyber attacks just added entries for AI agents. Soon the rules will say agent skill stores must check who made each skill before sharing it."
+      },
+      "summary": "ATT&CK v19の命名された技法(コンテキスト汚染、ツール呼び出しの濫用、MCP侵害、悪意あるエージェントのデプロイ)に加え、ClawHavocの1,184の悪意あるスキル、Ciscoの36%プロンプトインジェクション率、+32%のIPI急増が、2026年Q3までに公開されたエージェントスキル脅威サブマトリクスと強制的な署名+来歴認証マーケットプレイスゲートを強制する。"
+    },
+    {
+      "id": "prediction.81e3e9b9a80e4cb7",
+      "scope_hint": "tech",
+      "title": "ローカルLLMスタックが2026年下半期までに統一された圧縮KVキャッシュフラグを公開",
+      "body": "**2026年下半期までに、すべての主要なローカルLLMエコシステム(vLLM、SGLang、TGI、Ollama、llama.cpp、NVIDIA TensorRT-LLM、Foundry Local)が統一された圧縮KVキャッシュデプロイメントノブ — TurboQuant + 少なくとも1つの代替案 — を公開し、Foundry Local(Microsoft、4月9日GA)はWindows ML / WinML実行プロバイダに紐付いたネイティブTurboQuant統合をWindowsデフォルト最適化として出荷する。** 4月27-29日のエビデンス:SGLang PR #21419がインツリー化、SGLang #23134のfused-Triton-decodeカーネル書き換えがbf16スループットの93–105%に到達、vLLM v0.19.0(4月2日)はtorch 2.11 / Python 3.14 / 非同期スケジューラがデフォルト + Model Runner V2、PolyKV(arxiv 2604.24971、4月27日)はマルチエージェント推論向けの共有非対称KVプール、NVIDIA kvpressはDecoding-Press成熟度、llama.cpp #20969のTurboQuant議論スレッドがアクティブ、Unsloth 2026.4.8の推論が20-30%高速化。Foundry Localは欠けていたエンタープライズWindowsエントリポイントである — Microsoftはこれをハードウェア対応のWinML実行プロバイダで任意のアプリにローカルAIをバンドルする約20MBのネイティブライブラリとして出荷しており、2026年Q2の明らかな次の一歩はFoundry CatalogでTurboQuantフラグを公開することである。経済的な強制要因はMag 7 capexテープと同じである:FP16から3.5ビットに移行するメモリ帯域幅律速の長文脈ワークロードはすべてトークンあたりの実効コストを約5-6倍削減し、Foundry Localはその切替をエンドデベロッパーに対して不可視にする。",
+      "reasoning": {
+        "because": "TurboQuant + SGLang #21419/#23134 + PolyKV + NVIDIA kvpress + llama.cpp #20969がスタック横断で並行して登場している。",
+        "given": "メモリ帯域幅律速の長文脈ワークロードはFP16から3.5ビットへの移行でトークンあたりの実効コストを約5-6倍削減し、Mag 7 capexテープがそれを要求する。",
+        "so_that": "すべての主要な推論スタックが統一された圧縮KVキャッシュフラグを公開し、Foundry LocalはWinMLに紐付いたネイティブTurboQuantを出荷する。",
+        "landing": "2026年下半期までに、Foundry Catalogフラグ + 並行するスタックフラグが可視化される。",
+        "plain_language": "Squeezing AI memory by six times saves a lot of money on chips. Soon every tool that runs models locally on your computer will turn that on by default."
+      },
+      "summary": "SGLang、vLLM、llama.cpp、MicrosoftのFoundry Local間の並行作業に加え、TurboQuant + PolyKV + NVIDIA kvpressが、2026年下半期までにすべての主要なローカルLLMスタック横断で統一された圧縮KVキャッシュデプロイメントノブを示唆し、Foundry LocalはWinML実行プロバイダに紐付いたネイティブTurboQuantを出荷する。"
+    },
+    {
+      "id": "prediction.4d71e1d1457066ec",
+      "scope_hint": "business",
+      "title": "基盤研究所が2026年Q3までに監査済み月次収益+トークン単位マージンを開示",
+      "body": "**4月28日のWSJ OpenAI収益未達報告 + 4月29日のMag 7決算の衝突が、2026年のSEC + アナリストによるAI収益開示書き直しを引き起こす — 2026年Q3までに少なくとも1つの基盤研究所(OpenAI / Anthropic / xAI)が監査済み月次収益またはWAU開示頻度を出荷し、少なくとも1つのBig-3ハイパースケーラがBedrock / Azure-OpenAI / Vertexのトークンあたりマージンを生のクラウド収益から10-Q脚注で分離する。** 4月28日のセルオフ(S&P -0.49%、Nasdaq -0.9%、Oracle -4%、AMD -3%、Broadcom -4%、SoftBank -10%)はAI capex on faithテープにおける最初の物質的なクラックだった。4月29日の決算は混合的なリセットだった(MSFT/GOOGLは大幅に上回り、META -7% AH)。4月30日のAAPLの決算がMag 7サイクルを締めくくる。Microsoftはすでに$37BのAIランレート(+123%)を明示的に引用していた — それが開示先例である。CerebrasのIPOが5月中旬に$22B-$25B(G42 24% / MBZUAI 62%の収益集中)で予定されているなか、明示的なトークンあたりマージン + WAU開示を求めるSEC + バイサイドの圧力が2026年Q2-Q3の決算サイクル周辺で収束する。Powellがトランプ政権のFRB調査に対するチェック役として理事会に残ることを選択したことで、AI capexテープ全体に対する政治リスクプレミアムも上昇する。より厳しい数字を要求することは公開市場が持つレバーである。",
+      "reasoning": {
+        "because": "4月28日のWSJの収益未達がAI capex on faithテープにクラックを生じさせ、4月29日のMag 7決算は混合的に着地した(META -7% AH)。",
+        "given": "Microsoftの明示的な$37B AIランレート(+123%)はハイパースケーラの開示先例を確立し、Cerebrasの5月中旬のIPOがSECの精査を集中させる。",
+        "so_that": "1つの基盤研究所が監査済み月次収益 / WAUを出荷し、1つのBig-3ハイパースケーラが10-Q脚注でトークンあたりマージンを分離する。",
+        "landing": "2026年Q3までに、報道頻度 + 10-Q脚注開示が可視化される。",
+        "plain_language": "Stocks dropped after a leak said OpenAI missed its targets. Now Wall Street wants real monthly numbers — soon AI labs and clouds will publish them."
+      },
+      "summary": "4月28日のWSJ OpenAI収益未達 + 4月29日のMag 7決算 + Microsoftの明示的な$37B AIランレート開示が、Cerebrasの5月中旬のIPOと収束し、少なくとも1つの基盤研究所を監査済み月次収益 / WAU頻度に押し上げ、少なくとも1つのBig-3ハイパースケーラを2026年Q3までにトークンあたりマージンの10-Q脚注に押し上げる。"
+    },
+    {
+      "id": "prediction.9fce1997ef699a48",
+      "scope_hint": "business",
+      "title": "PowellがFed理事会に残留し、2026年Q4までにFed調査のスイング票となる",
+      "body": "**Powellの4月29日の決定 — 議長任期満了(5月15日)後も理事会に残る — が2026年の金融政策市場心理を再構築する — 2026年Q4までに、FOMCはWarsh議長の下でより小規模な反対(≤2人の反対者)規範に戻るが、Powellの理事会継続的存在は金利ではなくFRB調査ガバナンス問題に関する限界スイング票となる。** 4月29日は1992年10月以来最高の反対(8-4)のFOMCだった。Miranは-25bpを希望、Hammack/Kashkari/Loganは緩和バイアス採用に反対した。Warsh指名は同日上院銀行委員会から進展した。2026-2027年のセットアップ:Powellは2028年の任期末まで理事会、Warshは議長席に着席。議長がフレーミングを設定するため反対姿勢は金利関連で圧縮される。Powellの限界票は、トランプ政権のFRB調査結果が動くたびにガバナンスシグナルとなる。市場は金利に関するフォワードガイダンスのボラティリティの低下を織り込む一方、FRB自体への制度リスクプレミアムの上昇を織り込む。1992年先例の比較は珍奇なものではなくなり、新しいFRBガバナンス体制の金融プレス解説における構造的な参照点となり始める。",
+      "reasoning": {
+        "because": "4月29日は1992年10月以来最高の反対(8-4)のFOMCであり、Powellは2028年の任期末まで理事会に残ると発表した。",
+        "given": "Warsh指名は同日上院銀行委員会から進展したため、Powellの理事会席が変わらないまま議長席が変わる。",
+        "so_that": "FOMCは金利に関しては≤2人の反対者規範に戻り、Powellの理事会票はFRB調査ガバナンスに関する限界シグナルとなる。",
+        "landing": "2026年Q4までに、Warsh主導のFOMC + 金融プレスでのPowellガバナンス票ウォッチ。",
+        "plain_language": "Powell's term as Fed leader is ending but he's keeping his board seat. Soon the focus will switch from rate fights to whether the Fed itself can be investigated."
+      },
+      "summary": "Powellが2028年まで理事会に残るという選択 + 1992年以来最高の反対のFOMC + 保留中のWarsh議長承認が、Warshの下で金利関連の反対が圧縮される一方、Powellの理事会票がトランプ政権のFRB調査ガバナンス問題に関する限界シグナルとなる2026-2027年体制を生み出す。"
+    }
+  ]
+}

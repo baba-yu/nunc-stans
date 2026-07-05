@@ -1,0 +1,61 @@
+{
+  "date": "2026-05-03",
+  "predictions": [
+    {
+      "id": "prediction.88da40c441aebc58",
+      "scope_hint": "tech",
+      "title": "クラウド横断のエージェントID + MCPレジストリが2026年Q3までにRFCドラフトに収束する",
+      "body": "**2026年Q3までに、Microsoft Agent 365の5月1日GAでのAWS Bedrock + Google Cloud Gemini Enterprise Agent Platformとのレジストリ同期、Anthropic MCP SDKの月間~97Mダウンロード、並行する4月30日のOpenAI Agents SDK / Microsoft Foundry Agent Framework 1.0 GA / AWS Bedrock AgentCoreスタックが、クラウド横断のエージェントID + MCPサーバーインベントリ + ツール呼び出しログスキーマを標準的な相互運用層として形式化する公開ドラフトRFC(IETF / OpenID Foundation / CSAI Foundation作業部会)へと収斂する。** 強制力はエンタープライズ調達である。Microsoftが$15/user/moでM365管理画面統合を伴うレジストリ同期プリミティブを出荷すれば、AWS + Googleは並行する画面を露出するか、Microsoftスキーマに吸収されるかを迫られる。CSAIの4月29日のMITRE-CNA権限 + ATT&CK v19の命名済み手法(MCPサーバー侵害、悪意あるエージェント配備)が脅威側の標準化圧力を提供する。4月30日のOpenAI Agents SDK + Microsoft Agent Framework 1.0 GAは既にビルド/ランタイム層を標準化しているため、欠けているのはレジストリ同期が機能することを証明している相互運用プロトコル層だけだ。Microsoft + AWS + Googleが公開ドラフトRFCで三角測量することが期待される。なぜならベンダー固有のスキーマではM365 + Bedrock + Vertexのインストールベース錨点優位を失うからだ。平易な言葉で言えば: MicrosoftがAIエージェントIDをMicrosoft、Amazon、Googleクラウド間で動作させた — まもなく公開仕様がそれを固定化する。",
+      "reasoning": {
+        "because": "Microsoft Agent 365の5月1日GAは、AWS Bedrock + Google Vertex Gemini Enterpriseとのレジストリ同期を機能するクラウド横断プリミティブとして出荷した。",
+        "given": "OpenAI Agents SDK + Foundry Agent Framework 1.0 + AgentCoreがビルド/ランタイムを標準化し、CSAI MITRE-CNA + ATT&CK v19が脅威側の圧力を加える。",
+        "so_that": "AWS、Azure、GoogleがエージェントID + MCPインベントリ + ツール呼び出しログのための公開ドラフトRFCで三角測量し、スキーマを単一ベンダーに譲ることを避ける。",
+        "landing": "2026年Q3までに、IETF / OpenID Foundation / CSAI作業部会のドラフトRFC。",
+        "plain_language": "MicrosoftはAIエージェントIDをMicrosoft、Amazon、Googleクラウド間で動作させたばかりだ。3社はそれを巡って争うのではなく、まもなく共有仕様を公開する。"
+      },
+      "summary": "Microsoft Agent 365 GAのAWS Bedrock + Google Vertexとのレジストリ同期、4月30日のOpenAI Agents SDK + Foundry Agent Framework 1.0、CSAI MITRE-CNA圧力が、公開された相互運用層へと収斂する。2026年Q3までに、クラウド横断のエージェントID + MCPインベントリ + ツール呼び出しログのためのIETF / OpenID / CSAIドラフトRFCの出荷が見込まれる。"
+    },
+    {
+      "id": "prediction.a3d8484a4a27d471",
+      "scope_hint": "cross",
+      "title": "フロンティアのサイバーAI輸出規制カテゴリーが2026年Q3までに新設される",
+      "body": "**2026年Q3までに、4月7日のAnthropic Mythos PreviewのProject Glasswing下での発表(~50社のローンチパートナー + ~40の重要ソフトウェアインフラ組織 + $100Mの利用クレジット + $4Mのオープンソースセキュリティ寄付)、4月30日のBloombergによるNSA Project AetherのMythosと機密主権サイバーツールのベンチマーク開示、5月1日のPentagon CTO声明によるAnthropic排除リストとNSA Mythos関与の分離が、米国がフロンティアサイバー能力AI輸出規制カテゴリーを正式に定義する規制プルを生み出す。少なくとも1つの政府発出(Cat 5 part 2のデュアルユース暗号下のBIS商務省輸出規制規則、または並行するサイバー能力カテゴリー、NIST AI Cyber Center RFIフォローアップ、ホワイトハウス大統領令)がフロンティアサイバーAIをライセンス必須カテゴリーとして明示的に命名する。少なくとも他に2つのファウンデーションラボ(OpenAI、Google DeepMind、xAI、Mistral、Cohere)が、Glasswingパターンを反映する公開パートナーリスト開示を伴う同等のゲート付き配布プログラムを出荷する。** 強制力はAether開示が表面化させた非対称性である。Pentagonが調達を拒否した同じモデルが、NSAが主権サイバーベンチマークで依存しているモデルだ。これにより、行政府が規制カテゴリーを未定義のままにすることは不可能となる。4月29日のCSAI Foundation MITRE-CNA権限 + ATT&CK v19の命名済み手法(MCPサーバー侵害、ツール呼び出し悪用)が開示側の規制インフラを提供する。最も抵抗の少ない経路はBISがCat 5下で規則を発出することだ。なぜなら30年のデュアルユース技術の前例があり、オープンソースのエージェントスキルを遅延させるFDA型の本格承認体制を切り出すことを避けられるからだ。平易な言葉で言えば: NSAがAnthropicの最強AIをMicrosoftバグ探しに借り始めたとき、米国政府は他に誰がそれを借りられるかを規制し始めなければならなくなった。",
+      "reasoning": {
+        "because": "Bloombergが4月30日に、PentagonがAnthropicを調達から排除する一方でNSA Project AetherがAnthropic Mythosを機密主権サイバーツールに対してベンチマークしていることを開示した。",
+        "given": "MythosはProject Glasswing下で~50パートナー、$100Mクレジット、$4Mのオープンソース寄付でゲート付きで発表され、CSAI MITRE-CNA + ATT&CK v19が開示インフラを供給する。",
+        "so_that": "行政府がフロンティアサイバー能力カテゴリーを定義し、少なくとも他に2つのファウンデーションラボがGlasswing型のゲート付きプログラムを公開する。",
+        "landing": "2026年Q3までに、1つのBIS規則、NIST AI Cyber Centerフォローアップ、または大統領令と、2つの並行ゲート付きプログラム。",
+        "plain_language": "NSAはAnthropicの最強AIを使ってMicrosoftバグを狩っているのに、Pentagonはその購入を拒否している。政府はその矛盾を輸出ライセンスカテゴリーに変えるだろう。"
+      },
+      "summary": "4月7日のProject Glasswing下のMythos Preview、4月30日のBloombergによるMythosをベンチマークするNSA Project Aetherの開示、5月1日のPentagon CTOの切り分けが、規制の前倒しを構成する。2026年Q3までに、BIS、NIST、または大統領令の発出がフロンティアサイバーAIをライセンス必須として命名し、さらに2つのラボがゲート付き配布プログラムを出荷することが見込まれる。"
+    },
+    {
+      "id": "prediction.ce848bfd5843480a",
+      "scope_hint": "business",
+      "title": "SECがAI収益コンセプトリリースをドラフトし、Big-3が2026年Q4までにAI-KPI脚注を出荷する",
+      "body": "**2026年Q4までに、コホート買い手側圧力スタック — 4月30日AAPL Q3ガイダンス+14-17%(コンセンサス9.5%対比)が別のAIサービスラインなしで印字、$700Bの2026年Big-Tech AI capexテープ、AAPL +$100Bの自社株買い承認、4月29日MSFTの$37B AI run-rate単一ライン項目開示前例、OpenAIの$25B年換算 + $2B/月のrun rate + 2026年までに$8/月で122M有料 + 広告パイロット$100M年換算の不透明性、5月中旬にCerebras IPOが$22-25B目標 — がSECに、ハイパースケーラーとファウンデーションラボの公開比較対象提出に対する、監査済みAI事業KPI開示についてのコンセプトリリース(Reg S-K改正提案)の公表を強いる。少なくとも1つのBig-3ハイパースケーラーが、規則最終化に先立って、開示形を錨付けするために監査済みAI事業KPIセグメントを10-Q脚注に先制公表する。** 強制力はコホートの集合的$700B capexコミットメントとコホートの監査済みAI-KPI脚注の欠如との間の開示形ギャップだ。買い手側は、SECが既にクラウド、ゲーム、その他の報告セグメントに要求している別個セグメントビューなしで、四半期当たり8桁のAI capexを引き受けることを要求されている。5月1日のCerebras IPOロードショーと公開S-1開示、4月28日のWSJ OpenAI収益テープ、4月29日のMSFT $37B前例が運用上の錨信号だ。SECは既に4月28日のReg S-K近代化コメント期間(気候開示規則制定の伴侶)を通じて規制窓を開いており、AI収益開示は自然な次の追加だ。平易な言葉で言えば: 投資家は何が返ってくるかを見ずにAIに数千億ドルを使っている — SECは企業にそれを内訳開示するよう求めるドラフト規則を公表する。",
+      "reasoning": {
+        "because": "AAPL Q3ガイダンス+14-17%がAIサービスラインなしで印字、MSFTが$37B AI run-rateを引用、コホートの2026年capexテープが~$700Bに達した。",
+        "given": "5月中旬のCerebras IPO S-1開示、4月28日のWSJ OpenAI収益テープ、4月28日のReg S-K近代化コメント期間が規制窓を開く。",
+        "so_that": "SECが監査済みAI事業KPI開示についてのコンセプトリリースを発出し、少なくとも1つのBig-3ハイパースケーラーが先制的に10-Q AIセグメント脚注を出荷する。",
+        "landing": "2026年Q4までに、コンセプトリリースと1つのハイパースケーラー10-Q AI-KPI脚注。",
+        "plain_language": "数千億ドルがAIに流れ込んでいるが財務諸表に別ラインがない。SECは企業にAIが何をもたらすかを内訳開示することを強制する規則をドラフトする。"
+      },
+      "summary": "AAPLの$700B capexコホートガイダンスがAIサービスラインなし、MSFTの$37B AI run-rate前例、4月28日のWSJ OpenAIテープ、Cerebras IPOのS-1が、4月28日のReg S-K近代化窓に乗っている。2026年Q4までに、監査済みAI-KPI開示についてのSECコンセプトリリースが見込まれ、1つのBig-3ハイパースケーラーが先制的にAIセグメント脚注を公表する。"
+    },
+    {
+      "id": "prediction.b8db7fae2f8f28bd",
+      "scope_hint": "business",
+      "title": "Tesla Optimusの設備投資がMag-7の物理AI 10-Qセグメント開示を2026年H2までに迫る",
+      "body": "**2026年H2までに、Tesla Q2 2026のFremont Optimus生産ライン構築(レガシーModel S + Model Xラインが第1世代ロボティクス工場の1Mユニット/年向けに段階的に置き換えられる。Optimus 3が2026年夏に$20K-$30Kで発表され、2026年に数百ユニット、2027-2028年までに数千〜数万にランプアップ)、4月28日のApptronik + Jabil Apolloの製造パートナーシップ、Figure 03の1台/時間での生産と夜間完全自律稼働、TeslaのCFOによるEVとロボティクス間のcapex配分のコメンタリーテープが、少なくとも1つのMag-7(当初Tesla;1社以上の兄弟会社 — NVIDIA Isaac、Amazon Robotics、Microsoft)に、SEC命令に先立って物理AI capexを別個のセグメントまたは脚注として10-Qに公表することを強いる。これは2014-2015年にクラウドセグメント開示が最初に自発的に公表され、その後SECが正式化した経緯を反映している。** 強制力は開示前例の拡張だ。クラウドcapexのセグメンテーションは金額が買い手側注目閾値を超えたときに標準となった。Teslaの1Mユニット/年銘板出力での物理AI capex(価格目標で~$25B-$35B年換算)は単一施設でその閾値を越え、Apptronik + Figure + Boston Dynamicsの商業展開軌道の上に積層される。Q2生産ライン構築 + Optimus 3の夏発表により、2026年9月30日締め期間のTesla 10-Qが自然な最初の開示の場となる。単一のTesla脚注開示からの競争圧力が、1〜2回のファイリングサイクル以内に兄弟Mag-7の開示を引き寄せる。平易な言葉で言えば: Teslaは年間100万台のロボットを作るために大金を費やしている — まもなくウォール街はそれらのコストを別途内訳開示することを要求するだろう。",
+      "reasoning": {
+        "because": "Teslaが2026年Q2にFremontの1Mユニット/年Optimusラインを開始し、Optimus 3が2026年夏に$20K-$30Kで発表される。",
+        "given": "Apptronik + Jabil Apollo、Figure 03の1台/時間と夜間自律稼働、Boston Dynamicsがヒューマノイドロボティクスcapexを買い手側カテゴリーにする。",
+        "so_that": "少なくとも1つのMag-7(まずTesla;NVIDIA Isaac、Amazon Robotics、Microsoftが続く)が、SEC命令に先立って物理AI capexを別個の10-Qセグメントまたは脚注として公表する。",
+        "landing": "2026年H2までに、2026年9月30日締め期間のTesla 10-Qが自然な最初の開示の場。",
+        "plain_language": "Teslaは年間100万台のロボットを作るために何十億ドルも使っているので、その10-Qはヒューマノイドロボットコストを内訳開示する必要があり、Big Techの残りはそれを真似する。"
+      },
+      "summary": "TeslaのQ2 Fremont Optimus構築の1Mユニット/年銘板、Apptronik + Jabil Apollo、Figure 03の1台/時間が、2014-2015年のクラウドセグメント開示を駆動した買い手側注目閾値を越える。2026年H2までに、少なくとも1つのMag-7が物理AI capexを10-Qセグメントまたは脚注として内訳開示することが見込まれ、Teslaの9月30日ファイリングが自然な最初の場となる。"
+    }
+  ]
+}

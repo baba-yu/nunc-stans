@@ -1,0 +1,61 @@
+{
+  "date": "2026-05-01",
+  "predictions": [
+    {
+      "id": "prediction.02f6b0edac73535a",
+      "scope_hint": "cross",
+      "title": "エージェント型AIのCVEクラスがCSAI CNAサブコーパスとして2026年Q3までに確立",
+      "body": "2026年Q3までにエージェント型AIのCVEクラスが独立した第一級のCNA発行サブコーパスとなり、CSAIのMITRE認定CNAの下でエージェント／スキル／ハーネス／サンドボックス固有のCVEが50件以上公表され、少なくとも1つの主要なスキルマーケットプレイス(Anthropic skills、ClawHub、Multica、Hermes、Hugging Face skills)が公開前に署名済み+来歴証明済みの必須ゲートを実装する。4月29日のCSAI MITRE-CNA認定は制度的な火種であり、4月28日のATT&CK v19は技術名(コンテキスト汚染、ツール呼び出し悪用、MCPサーバー侵害、悪意あるエージェント展開)を命名し、4月30日のOpenAI Agents SDKは7つのサンドボックスプロバイダー(Blaxel/Cloudflare/Daytona/E2B/Modal/Runloop/Vercel)全体でデフォルトのプリミティブとしてネイティブサンドボックス実行を出荷し、4月28日のNovita Sandbox+4月28日のAWS Bedrock Managed Agents+4月30日のMicrosoft Foundry hosted agentsはベンダー側の対応を形成し、4月26日のLiteLLM CVE-2026-42208(単一のSQLi行がOpenAI+Anthropic+Bedrockキーを漏洩)+4月28日のSpring AI CVE-2026-40967+繰り越しのSGLang CVE-2026-5760はモデルツールレイヤー注入の影響半径を実証している。強制関数は企業のリスク移転である ― 明示的なAIエージェント任務を持つCNAが存在すれば、開示ケイデンスはランダムパブリッシャーから調整発行者主導へと圧縮され、スキルマーケットプレイスはエンタープライズ顧客を失わずに署名なしデフォルトを維持できなくなる。CSAIの最初のフルクォーター(2026年Q3)が閾値を超える最も可能性の高い着地点である。",
+      "reasoning": {
+        "because": "4月29日にCSAIがエージェント型AI脆弱性に特化したMITRE CNAとして認定され、4月28日のATT&CK v19が技術セットを命名した。",
+        "given": "LiteLLM+Spring AI+SGLangのモデルツールレイヤー注入CVEがAIスタック全体にわたり、OpenAI/AWS/Microsoftが現在サンドボックス実行をプリミティブとして出荷している。",
+        "so_that": "50件以上のエージェント／スキル／ハーネス／サンドボックスCVEがCSAI CNAの下で公表され、少なくとも1つの主要なスキルマーケットプレイスが公開前に署名済み+来歴証明済みゲートを必須化する。",
+        "landing": "2026年Q3までに。CSAIの最初のフルクォーターが可視化され、マーケットプレイスゲートが稼働。",
+        "plain_language": "A new safety hub now hands out alerts for AI agent bugs. Soon dozens will land and stores selling agent skills will check who made each one before sharing it."
+      },
+      "summary": "CSAIの4月29日のMITRE CNA認定に加え、ATT&CK v19が命名したエージェント型技法、OpenAI、AWS、Microsoftの並行するサンドボックス・アズ・プリミティブ・ローンチは、2026年Q3までにCSAI CNAの下で50件以上のエージェント／スキル／ハーネス／サンドボックス固有のCVEが公表され、少なくとも1つの主要なスキルマーケットプレイスが公開前に署名済み+来歴証明済みゲートを必須化することを示している。"
+    },
+    {
+      "id": "prediction.ed9d8bdccfe9d082",
+      "scope_hint": "business",
+      "title": "マルチクラウドのフロンティアモデルSLA標準化の波が2026年H2までに到来",
+      "body": "2026年下半期までに、OpenAI-on-AWS-Bedrock+Microsoftライセンス非排他リセットがマルチクラウドのフロンティアモデルSLA標準化の波を引き起こす ― 少なくとも1つのBig-3ハイパースケーラー(AWS、Azure、GCP)がモデル別のレイテンシ／スループット／可用性SLAを単一の比較可能な開示として公表し、少なくとも1つの非OpenAIファウンデーションラボ(Anthropic、Google DeepMind、xAI)が並行するSLA開示を伴う「すべてのクラウド上のフロンティア」のミラー契約を出荷する。4月27日のMicrosoft–OpenAIパートナーシップリセットはクラウド排他性条項を取り除き、4月28日のOpenAI-on-Bedrock(限定プレビュー)はポスト排他性世界における最初のクロスクラウドフロンティアモデル展開となり、4月30日のCodex CLI 0.128.0のモデルプロバイダー所有のディスカバリー+AWS Bedrockアカウント状態の公開は開発者側のプリミティブであり、4月28日のAWS Bedrock AgentCore Node.js+AgentCore CLI 14リージョンGA+Managed Harness 4リージョンプレビューはオーケストレーション基盤であり、4月30日のMicrosoft Foundry Agent Framework 1.0 GA+Toolboxプレビューは並行する非Bedrockのパスである。強制関数は企業調達である ― フロンティアモデルがクロスデプロイされると、買い手の最初の比較は「モデル」ではなく「記録対象クラウド上のモデル+SLA」になる。最初のSLA標準化の動きはAWS Bedrockの可能性が最も高い(Bedrockは最も広範なモデル選択と最強のエンタープライズコンプライアンス姿勢を持つため)。最初の非OpenAIミラーは、4月27日のMicrosoftの非排他言語が明示的に「OpenAI製品」に適用され、並行契約のためのホワイトスペースを作り出していることから、Anthropicの可能性が最も高い。",
+      "reasoning": {
+        "because": "4月27日のMicrosoft–OpenAIリセットがクラウド排他性を解除し、4月28日のOpenAI-on-Bedrockが最初のクロスクラウドフロンティア展開を立ち上げた。",
+        "given": "Codex CLI 0.128.0+Bedrock AgentCore Node.js+Foundry Agent Framework 1.0 GAが企業が比較する開発者+オーケストレーション基盤を構成する。",
+        "so_that": "1つのBig-3ハイパースケーラーがモデル別のレイテンシ／スループット／可用性SLAを公表し、1つの非OpenAIラボが対応する開示を伴うミラーのフロンティア・オン・エブリ・クラウド契約を出荷する。",
+        "landing": "2026年下半期までに。BedrockのSLA開示とAnthropicクラスのミラー契約が可視化される。",
+        "plain_language": "Until last week OpenAI's models only ran on Microsoft's cloud. Now every big cloud will publish how fast and reliable each AI model is so buyers can compare."
+      },
+      "summary": "4月27日のMicrosoft–OpenAI排他性解消に加え、4月28日のOpenAI-on-Bedrockローンチ、AWS AgentCoreとMicrosoft Foundryでの並行するオーケストレーション基盤は、2026年下半期までにマルチクラウドのフロンティアモデルSLA標準化の波を引き起こし、1つのBig-3ハイパースケーラーが比較可能なモデル別SLAを公表し、1つの非OpenAIラボがミラーのフロンティア・オン・エブリ・クラウド契約を出荷する。"
+    },
+    {
+      "id": "prediction.c705e26533ea0dc7",
+      "scope_hint": "business",
+      "title": "Microsoftが監査済み月次AI事業KPIを2026年Q4までに10-Q脚注として開示",
+      "body": "Mag 7スーパーウィーク+7,000億ドル-2026年AI設備投資プリント+4月30日のApple +1,000億ドル-自社株買い／4%-配当増の組み合わせは、2026年をAI設備投資開示が2つの報告ケイデンスに分裂する年として確定する ― 2026年Q4までに、少なくとも1つのBig-3ハイパースケーラー(4月29日の370億ドルAIランレート前例を踏まえると、Microsoftの可能性が最も高い)が監査済みの月次AIビジネスKPI(ランレート、有料席、展開済みエージェント)を10-Qフットノートとして公表し、より広範なS&P AIコホート(Apple、IPO後のCerebras、Broadcom)が四半期ごとのAIビジネス別マージン開示で追随する。4月29日のMicrosoftの370億ドルAIランレート(+123%)は開示の前例であり、4月30日のAppleの記録的なサービス収益309.8億ドル(+16%)はAIサービスの個別ラインを含まなかった。4月30日のビッグテックの1,300億ドル超のQ1設備投資(Alphabet+Meta+Microsoft+Amazon)は2026年の7,000億ドル設備投資への道のりであり、買い手側の圧力数値である。5月中旬のCerebras IPOは220億～250億ドルの評価額で、収益集中度はG42 24%／MBZUAI 62%であり、開示のストレステストである。4月28日のWSJ OpenAI収益不振+4月29日のMag 7混合リセット(プリント当日にMETA -7.5%、MSFT -3.8%)は、公開市場の価格差別が既に不正確なAI収益数値で動いていることを示している。最も抵抗の少ないパスは、最も開示するハイパースケーラーが前例を作り、コホートに追随を強制することである。SECは自主開示に先立って行動する必要はない ― 買い手側がここで強制関数となる。",
+      "reasoning": {
+        "because": "Microsoftの4月29日の370億ドルAIランレート(+123%)はハイパースケーラーからの最初のAIビジネス別単一ライン開示である。",
+        "given": "7,000億ドルの2026年設備投資+4月30日のApple +1,000億ドル自社株買い+24%／62%の収益集中度を持つ5月中旬のCerebras IPOが買い手側の圧力を集中させる。",
+        "so_that": "1つのBig-3ハイパースケーラーが監査済みの月次AIビジネスKPIを10-Qフットノートとして公表し、S&P AIコホートが四半期ごとのAIビジネス別マージン開示で追随する。",
+        "landing": "2026年Q4までに。10-Qフットノート+コホートの四半期マージン開示が可視化される。",
+        "plain_language": "Tech giants spent record amounts on AI but won't say how much it earns. Wall Street's pressure means soon they'll publish monthly AI revenue and profit margins."
+      },
+      "summary": "Microsoftの4月29日の370億ドルAIランレート開示前例に加え、7,000億ドルの2026年設備投資プリント、Appleの1,000億ドル自社株買い、5月中旬のCerebras IPOは、2026年Q4までに少なくとも1つのBig-3ハイパースケーラーを月次AIビジネスKPI 10-Qフットノートに、より広範なS&P AIコホートを四半期ごとのAIビジネス別マージン開示に押し上げる。"
+    },
+    {
+      "id": "prediction.d6dd18c11bbbb0bb",
+      "scope_hint": "business",
+      "title": "Powell-Warshの分裂がFedをシフトさせ、FOMCが2026年Q4までに反対票2票以下の規範に回帰",
+      "body": "Powellの2028年までの連邦準備制度理事会への留任決定+4月29日の8-4反対票(1992年10月以来最高)+5月15日の議長交代ウィンドウ前面の5月1日4月雇用統計プリントは、2026年の金融政策市場心理を金利ボラティリティから制度的ボラティリティへとシフトさせる ― 2026年Q4までにWarsh議長下のFOMCは金利決定で小規模な反対票標準(2票以下)に戻るが、Fed調査ガバナンスに関するPowell-Warshの不一致が連邦準備制度の独立性に関する問題での限界スイング票となり、株式市場のAI設備投資再評価イベントはFOMC声明の文言よりも理事会のシグナリングに敏感になる。4月29日は1992年以来初の4反対票FOMCであり、Powellの理事会留任は1948年以来前例がなく、Warshは4月29日に上院銀行委員会で承認され、5月15日前に上院本会議投票が予定されている。4月30日のMag-7月次テープ(2020年以来最高の月)はFOMC反対姿勢がまだ検証していない利下げ期待で部分的に価格設定されている。5月1日の4月雇用統計プリントはコンセンサス13.5万件(3月17.8万件比)で、交代ウィンドウへの最初の弱含みデータである。「シャドウ議長としてのPowell」フレーミングは4月29日にPowellによって明確に拒否された(「私はシャドウ議長にはならない」)が、Warsh議長下で反対票理事としてのPowellを伴う7名理事会の制度的現実は、金利ではないにせよ、Fed独立性の問題でまさにそのダイナミクスを生み出す。市場は2026年下半期を通じて金利ボラティリティ価格を圧縮し、制度的リスク価格を膨張させるだろう。",
+      "reasoning": {
+        "because": "4月29日は1992年10月以来最高の反対票FOMC(8-4)であり、Powellが5月15日以降も理事会に留まる選択は1948年以来前例がない。",
+        "given": "Warshは4月29日に上院銀行委員会から進み、5月15日前に上院本会議投票が予定され、5月1日の4月雇用統計プリントが交代ウィンドウへの最初に着地する。",
+        "so_that": "FOMCは金利で2票以下の反対票標準に戻る一方で、PowellのFed調査ガバナンス理事会票が限界スイングとなり、AI設備投資再評価が理事会シグナリングを追跡する。",
+        "landing": "2026年Q4までに。Warsh主導のFOMC+Powellのガバナンス票追跡が可視化される。",
+        "plain_language": "Powell's Fed leader job ends May 15 but he's keeping his board seat. Soon investors will worry less about rate fights and more about whether the Fed itself stays independent."
+      },
+      "summary": "Powellの2028年までの理事会留任の選択に加え、4月29日の8-4 FOMC反対票、Warshの議長承認待ち、5月1日の4月雇用統計プリントは、金利ボラティリティ価格を圧縮しつつ制度的リスク価格を膨張させる ― 2026年Q4までにFOMC反対票は金利で2票以下に戻る一方で、Powellの理事会票はFed独立性の問題に関する限界シグナルとなる。"
+    }
+  ]
+}

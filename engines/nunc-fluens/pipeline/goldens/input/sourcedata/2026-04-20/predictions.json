@@ -1,0 +1,47 @@
+{
+  "date": "2026-04-20",
+  "predictions": [
+    {
+      "id": "prediction.4bd33db2ea06e5b4",
+      "scope_hint": "tech",
+      "title": "Local-first coding agents standardize cloud-overflow as default by Q3 2026",
+      "body": "**Acceleration of the \"local-first, cloud-overflow\" inversion.** Qwen3.6-35B-A3B's 73.4% on SWE-bench Verified and Bonsai 1.7B's 674 tok/s on CUDA push edge implementations into practical territory. By Q3 2026, individual / SMB coding agents will standardize on \"local by default, cloud as overflow.\" In plain language: In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Qwen3.6-35B-A3B hits 73.4% on SWE-bench Verified and Bonsai 1.7B reaches 674 tok/s on CUDA.",
+        "given": "Edge-runnable models now match useful coding-agent quality bars, while cloud inference stays metered and latency-bound.",
+        "so_that": "Individual and SMB coding-agent stacks default to local execution, with cloud reserved for overflow and hard tasks.",
+        "landing": "By Q3 2026; individual + SMB coding-agent tooling.",
+        "plain_language": "Small coding AIs that run on your own computer are now good and fast enough that most people will use those first and only call the cloud when needed."
+      },
+      "summary": "Qwen3.6-35B-A3B's 73.4% on SWE-bench Verified and Bonsai 1.7B's 674 tok/s on CUDA push edge coding agents into practical territory. By Q3 2026, individual and SMB coding-agent stacks are expected to standardize on local-by-default execution, with cloud reserved for overflow."
+    },
+    {
+      "id": "prediction.4ecb84808c9acc3f",
+      "scope_hint": "tech",
+      "title": "Agent-in-the-Loop Secret Exfiltration tops CIS / OWASP risk lists by Q3 2026",
+      "body": "**Secret leakage through CI / agents becomes the next battleground.** GitHub Actions indirect prompt injection PoCs reproduce across Claude Code, Gemini CLI, and Copilot — three vendors at once. Through Q2-Q3 2026, a new supply-chain security category, \"Agent-in-the-Loop Secret Exfiltration,\" will rise to the top of CIS / OWASP risk lists. In plain language: In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "OWASP shipped 'State of Agentic AI Security and Governance v2.01,' codifying CI/agent leak risk.",
+        "given": "PoCs across Claude Code, Gemini CLI and Copilot are now folded into OWASP's agentic governance base.",
+        "so_that": "Next milestone: a discrete 'Agent-in-the-Loop Secret Exfiltration' entry tops CIS / OWASP lists, beyond broad coverage.",
+        "landing": "By Q3 2026 (Jul-Sep); a named CIS / OWASP top-list entry.",
+        "plain_language": "OWASP just published agent-security guidance. Next, watch for this leak risk to get its own named top spot on the lists."
+      },
+      "summary": "GitHub Actions indirect prompt injection proofs-of-concept reproduce across Claude Code, Gemini CLI, and Copilot in the same window. Through Q2-Q3 2026, a new supply-chain category, Agent-in-the-Loop Secret Exfiltration, is expected to rise to the top of CIS and OWASP risk lists."
+    },
+    {
+      "id": "prediction.4bbf8ec79bafedd1",
+      "scope_hint": "tech",
+      "title": "Headless Everything standardizes via MCP/Agent Registry by H2 2026",
+      "body": "**\"Headless Everything\" architecture standardizes.** Simon Willison's Apr 19 thesis — that personal AI is faster and more reliable hitting headless services than driving a GUI — frames an axis against browser-operating agents (Claude in Chrome, etc.). By H2 2026, expect a \"headless-preferred\" metadata standard on MCP / Agent Registry surfaces. In plain language: In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Simon Willison's Apr 19 thesis argues headless service calls beat GUI-driving for personal AI speed and reliability.",
+        "given": "Browser-operating agents (Claude in Chrome, etc.) are slower and more brittle than direct API calls into headless services.",
+        "so_that": "MCP / Agent Registry surfaces add a 'headless-preferred' metadata field so agents pick the headless path by default.",
+        "landing": "By H2 2026; visible on MCP / Agent Registry server metadata.",
+        "plain_language": "Agents that call services directly are faster and break less than ones that click around web pages, so registries will start labeling which path to prefer."
+      },
+      "summary": "Simon Willison's Apr 19 thesis frames headless service calls as faster and more reliable than GUI-driving for personal AI, setting up an axis against browser-operating agents like Claude in Chrome. By H2 2026, MCP and Agent Registry surfaces are expected to carry a 'headless-preferred' metadata standard."
+    }
+  ]
+}

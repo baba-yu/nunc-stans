@@ -1,0 +1,47 @@
+{
+  "date": "2026-04-26",
+  "predictions": [
+    {
+      "id": "prediction.24c0c80f954f5a45",
+      "scope_hint": "cross",
+      "title": "El acoplamiento de capital entre hyperscalers y laboratorios de IA se consolida en bloqueo de cómputo para Q3 2026",
+      "body": "**El \"acoplamiento de capital entre hyperscalers y laboratorios de IA\" pasa de pacto financiero a bloqueo de pila de cómputo para Q3 2026.** Los **$40B + 5GW** de Google a Anthropic del 24 de abril + los previos **$25B + 5GW Trainium2/3** de Amazon + los más de $13B existentes de Microsoft a OpenAI significan que **cada uno de los 3 principales laboratorios de frontera tiene un asegurador hyperscaler — pagado en parte en capacidad de cómputo, no en efectivo**. Para Q3 2026, **la topología de servicio de modelos de frontera queda dictada por el origen de financiación**: Anthropic Claude Opus 4.7 / 4.8 se desplegará nativamente en Trainium2 + TPU v8 (vías de Amazon + Google), OpenAI GPT-5.5 / 6 se mantendrá en Azure primero, y los laboratorios de frontera chinos (DeepSeek V4 / Qwen 3.6-3.7) doblarán la apuesta por Huawei Ascend (según la pieza de Bloomberg-CCTV del 26 de abril). La \"promesa de portabilidad de modelos\" de 2024-2025 termina silenciosamente; **la estrategia LLM multi-cloud empresarial pasa de \"multi-runtime\" a \"multi-vendor de frontera.\"** In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Los $40B + 5GW de Google del 24 de abril a Anthropic se suman a los $25B + 5GW Trainium2/3 de Amazon y los más de $13B de Microsoft a OpenAI.",
+        "given": "Cada uno de los 3 principales laboratorios de frontera ahora tiene un asegurador hyperscaler pagado en gran parte en capacidad de cómputo dedicada en lugar de efectivo.",
+        "so_that": "La topología de servicio de modelos de frontera se alinea con el origen de financiación y la promesa de portabilidad de modelos de 2024-2025 termina silenciosamente.",
+        "landing": "Para Q3 2026; la estrategia multi-cloud empresarial pasa de multi-runtime a multi-vendor de frontera.",
+        "plain_language": "Big AI labs now get paid in cloud capacity, so each model runs best on its sponsor's chips. Companies must pick vendors, not just runtimes."
+      },
+      "summary": "El compromiso de $40B + 5GW de Google del 24 de abril con Anthropic, el acuerdo de $25B + 5GW Trainium2/3 de Amazon y los más de $13B de Microsoft a OpenAI significan que cada uno de los 3 principales laboratorios de frontera tiene un asegurador hyperscaler pagado en cómputo. Para Q3 2026, se espera que la topología de servicio de modelos rastree el origen de financiación y que la estrategia multi-cloud empresarial pase de multi-runtime a multi-vendor de frontera."
+    },
+    {
+      "id": "prediction.678c96beb7ff20f6",
+      "scope_hint": "tech",
+      "title": "Los servidores de inferencia conforman una cadena de suministro y desencadenan una clase de CVE de AI-Infra para Q3 2026",
+      "body": "**Los servidores de inferencia se convierten en la nueva \"cadena de suministro primitiva\" — Q3 2026 ve la primera clase de CVE específica de infraestructura de IA (LLM-INFRA-CWE) con etiquetado obligatorio en NVD.** La secuencia del 19-26 de abril — **LMDeploy CVE-2026-33626 SSRF (12h31m explotado)** + **SGLang CVE-2026-5760 (CVSS 9.8) Jinja2 SSTI RCE** + **escape de sandbox de Antigravity de Pillar mediante `find_by_name -X`** + la cadena Comment-and-Control de inyección de prompts del 21 de abril a través de Claude Code / Gemini CLI / Copilot — compone una clara categoría de superficie de ataque \"runtime de inferencia + CI agéntico\". Para Q3 2026, NIST/NVD añade una etiqueta dedicada **\"AI-Infra\"** a su esquema CVE, el OWASP LLM Top 10 v2026 promueve **\"RCE en Plantilla / Cargador de Servidor de Inferencia\"** a una entrada top-3, y las herramientas SBOM de cadena de suministro (Snyk / Wiz / Pillar / Lasso / Lakera) lanzan **feeds de firmas por motor para vLLM / SGLang / LMDeploy / Triton / Ollama** como SKUs estándar. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "LMDeploy SSRF (12h31m explotado), SGLang CVE-2026-5760 (CVSS 9.8 Jinja2 SSTI RCE), escape de sandbox de Antigravity find_by_name y la cadena Comment-and-Control aterrizan en una sola ventana.",
+        "given": "Los runtimes de inferencia más el CI agéntico ahora forman una categoría coherente de superficie de ataque que las herramientas SBOM heredadas no pueden mapear sobre el esquema CWE existente.",
+        "so_that": "NIST/NVD añade una etiqueta AI-Infra, OWASP LLM Top 10 promueve RCE en Plantilla / Cargador de Servidor de Inferencia al top-3, y los proveedores SBOM lanzan feeds de firmas por motor.",
+        "landing": "Para Q3 2026; vLLM / SGLang / LMDeploy / Triton / Ollama obtienen SKUs de firmas por motor de Snyk / Wiz / Pillar / Lasso / Lakera.",
+        "plain_language": "AI servers got hacked four different ways in a week. Soon the official vulnerability catalog will get a new section just for AI infrastructure bugs."
+      },
+      "summary": "La secuencia del 19-26 de abril de LMDeploy SSRF, SGLang CVE-2026-5760 Jinja2 SSTI RCE, escape de sandbox de Antigravity, y la cadena de inyección de prompts Comment-and-Control compone una categoría de superficie de ataque de runtime de inferencia más CI agéntico. Para Q3 2026, se espera que NIST/NVD añada una etiqueta CVE AI-Infra, que OWASP LLM Top 10 promueva RCE en Plantilla de Servidor de Inferencia al top-3, y que los proveedores SBOM lancen feeds de firmas por motor."
+    },
+    {
+      "id": "prediction.82599b6cfd05751b",
+      "scope_hint": "tech",
+      "title": "Los agentes de codificación con GPU de consumo desplazan a las APIs solo en la nube para el 30% de los desarrolladores para Q3 2026",
+      "body": "**El \"agente de codificación con GPU de consumo\" desplaza a la API de codificación solo en la nube para ≥30% de las cargas de desarrollo para Q3 2026.** Qwen3.6-27B del 22 de abril (denso, supera a 397B-A17B en SWE-bench Verified, **40 tok/s en RTX 3090 a Q4_K_M ~16.8 GB**) + el preview de Ollama MLX del 23 de abril (1.57x prefill / 1.93x decode en M5 Max para Qwen3.5-35B-A3B) + DeepSeek V4-Pro con API 75% de descuento (**efectivamente ~28x más barato que Claude Opus 4.7**) componen un **apretón de 3 esquinas** sobre el modelo SaaS de API de frontera propietaria. Para Q3 2026, **las herramientas de desarrollo empresariales adoptan por defecto un harness híbrido** — Qwen 3.6-class local para \"codificación, refactor, lint, test\" + API de frontera remota solo para \"planificación de largo horizonte / razonamiento multi-herramienta\" — y todos los IDE Big-3 (Cursor / Windsurf / Kiro Power) lanzan un **conmutador local-first** por defecto. \"Agente de codificación solo en la nube\" se convierte en un artefacto de la era de 2024. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Qwen3.6-27B supera a 397B-A17B en SWE-bench Verified a 40 tok/s en RTX 3090, Ollama MLX alcanza 1.57x / 1.93x en M5 Max, y DeepSeek V4-Pro es ~28x más barato que Opus 4.7.",
+        "given": "Calidad, throughput y precio superan el listón de la API de frontera propietaria a escala de GPU de consumo y Apple Silicon en la misma ventana.",
+        "so_that": "Las herramientas de desarrollo empresariales adoptan por defecto un harness híbrido ejecutando local para codificación / refactor / lint / test y remoto solo para planificación de largo horizonte.",
+        "landing": "Para Q3 2026; Cursor / Windsurf / Kiro Power lanzan un conmutador local-first por defecto y la codificación solo en la nube se convierte en un artefacto de la era de 2024.",
+        "plain_language": "A laptop GPU can now run a coding model that beats the giant cloud ones. So most coding work will move off the cloud bill in about a year."
+      },
+      "summary": "Qwen3.6-27B del 22 de abril superando a 397B-A17B en SWE-bench Verified a 40 tok/s en RTX 3090, el preview de Ollama MLX del 23 de abril alcanzando 1.57x prefill / 1.93x decode en M5 Max, y DeepSeek V4-Pro a ~28x más barato que Opus 4.7 aprietan a la API de codificación solo en la nube. Para Q3 2026, se espera que las herramientas de desarrollo empresariales adopten por defecto un harness híbrido y que Cursor / Windsurf / Kiro Power lancen conmutadores local-first."
+    }
+  ]
+}

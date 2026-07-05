@@ -1,0 +1,47 @@
+{
+  "date": "2026-04-29",
+  "predictions": [
+    {
+      "id": "prediction.f960d058dc42c7c6",
+      "scope_hint": "tech",
+      "title": "KV-cache-compression dtype magiging deployment knob ng inference stack pagsapit ng Q4 2026",
+      "body": "**Pagsapit ng Q4 2026, ang KV-cache-compression dtype ay ilalabas bilang first-class deployment knob sa bawat major inference stack — vLLM, SGLang, TGI, Ollama, llama.cpp, NVIDIA TensorRT-LLM lahat ay maglalabas ng `--kv-cache-dtype turboquant` (o katumbas) flag na may TurboQuant + kahit isang alternatibo (KVTC / kvpress / TriAttention).** Ang Apr 27-29 ay ginagawa itong halos kasiguraduhan: **TurboQuant ay lumapag sa ICLR 2026 + Google Research blog**, **SGLang PR #21419 ay nasa-tree na** kasama ang fused-kernel rewrite (#23134) na umaabot ng 93-105% bf16 throughput, **NVIDIA kvpress** sa Decoding-Press maturity, **PolyKV (arxiv 2604.24971)** na nag-demo ng multi-agent shared-pool quantization, at **community MLX + Triton + vLLM ports** na umiikot bago ang opisyal na Python release ng Google sa Q2 2026. Ang economic forcing function ay parehong Mag-7 capex tape na binasag ng Apr 28 OpenAI-miss WSJ report: bawat memory-bandwidth-bound long-context workload na maaaring lumipat mula FP16 papunta sa 3.5-bit ay nababawasan ang epektibong per-token cost ng ~5-6x. Pagsapit ng Q4 2026, ang mga hyperscaler ay mag-gate ng Bedrock/Azure/Vertex per-token pricing sa opt-in compressed-cache tiers, at ang hardware-cap-on-incremental-GPU-capex thesis mula sa report kahapon ay tumitindi sa pamamagitan ng lever na ito sa halip na sa pamamagitan ng mas kakaunting GPUs. In plain language: In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Lumapag ang TurboQuant sa ICLR 2026 + Google Research blog at ang SGLang PR #21419 + #23134 ay i-wire na ito bilang first-class flag.",
+        "given": "Ang long-context workloads ay memory-bandwidth-bound at ang Apr 28 OpenAI-miss tape ay pumipilit sa hyperscalers na i-compress ang per-token cost sa halip na magdagdag ng GPUs.",
+        "so_that": "Bawat major inference runtime ay maglalabas ng kv-cache-dtype flag na may TurboQuant kasama ang isang alternatibo (KVTC / kvpress / TriAttention) at ang hyperscalers ay mag-tier ng per-token pricing dito.",
+        "landing": "Pagsapit ng Q4 2026; flag na nakikita sa vLLM, SGLang, TGI, Ollama, llama.cpp, TensorRT-LLM + Bedrock/Azure/Vertex tiered pricing.",
+        "plain_language": "Ang AI servers ay malapit nang maglabas ng iisang switch na nagpapaliit ng memory use ng 5-6x, kaya ang cloud providers ay maaaring magpa-singil ng mas mura per word nang hindi bumibili ng mas maraming chips."
+      },
+      "summary": "Ang Apr 27-29 ay nagpapatong ng ebidensya: lumapag ang TurboQuant sa ICLR 2026, ang SGLang PR #21419 + fused-kernel rewrite #23134 ay umaabot ng 93-105% bf16 throughput, ang NVIDIA kvpress ay tumatanda, ang PolyKV ay nag-demo ng multi-agent shared-pool quantization, at umiikot ang community ports. Pagsapit ng Q4 2026, bawat major inference stack ay maglalabas ng kv-cache-dtype flag at ang hyperscalers ay mag-tier ng per-token pricing sa compressed-cache tiers."
+    },
+    {
+      "id": "prediction.0ed37d30935303df",
+      "scope_hint": "business",
+      "title": "OpenAI maglulunsad ng audited monthly revenue + WAU disclosure cadence pagsapit ng Q3 2026",
+      "body": "**Ang OpenAI Apr 28 WSJ report ay nagpapasimula ng 2026 \"AI-revenue disclosure rewrite\" — pagsapit ng Q3 2026, kahit isang foundation lab (OpenAI, Anthropic, o xAI) ay maglalabas ng audited monthly-revenue + WAU disclosure cadence, at kahit isang Mag-7 hyperscaler ay maglalathala ng Bedrock/Azure-OpenAI/Vertex per-token-margin disclosure na hiwalay sa raw cloud revenue.** Ang WSJ Apr 28 ay mapagpasiya: isang off-target-leak ang nagpababa ng Oracle 4%, AMD 3%, Broadcom 4%, SoftBank 10% sa isang session, sa ibabaw ng **Apr 27 OpenAI/Microsoft AGI-clause unwind** (na inalis na ang discretionary \"AGI declaration\" IP-revocation risk). Kasama ang Mag-7 print collision ngayon + ~$700B aggregated 2026 capex + ang Cerebras IPO sa kalagitnaan ng Mayo sa $22B-$25B (24% G42 / 62% MBZUAI revenue concentration), ang Wall Street ay ngayon **lantarang humihingi ng tangible AI-economics disclosure, hindi narrative**. Pagsapit ng Q3 2026, ang SEC + analyst pressure ay magbubunga ng (a) kahit isang foundation lab na lumipat sa public monthly revenue / WAU dashboard cadence, at (b) kahit isang Big-3 cloud na maghihiwalay ng per-token AI-platform margin sa 10-Q footnotes. Ang salitang \"AGI\" ay magiging mula metaphysical patungo sa financial-instrument; ang \"DAU/WAU\" ay magiging mula product KPI patungo sa MD&A. In plain language: In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Ang WSJ Apr 28 OpenAI-miss leak ay nagpababa ng Oracle / AMD / Broadcom / SoftBank sa isang session at nagpapatong sa Apr 27 AGI-clause unwind.",
+        "given": "Ang ~$700B Mag-7 capex + Cerebras IPO concentration risk + SEC / analyst pressure ay nagbabago sa bar mula narrative patungo sa audited AI-economics disclosure.",
+        "so_that": "Kahit isang foundation lab ay maglalabas ng audited monthly revenue + WAU at kahit isang Big-3 cloud ay maghihiwalay ng per-token AI-platform margin sa 10-Q footnotes.",
+        "landing": "Pagsapit ng Q3 2026; foundation-lab dashboard cadence + Big-3 hyperscaler 10-Q per-token margin footnote.",
+        "plain_language": "Pagkatapos ng leak na nagpababa ng matindi sa AI stocks, ang regulators at investors ay malapit nang pilitin ang pinakamalalaking AI companies na maglathala ng totoong monthly revenue numbers, hindi lang hype."
+      },
+      "summary": "Ang Apr 28 WSJ OpenAI-revenue-miss report ay nagpababa ng Oracle 4%, AMD 3%, Broadcom 4%, SoftBank 10% sa isang session, sa ibabaw ng Apr 27 OpenAI/Microsoft AGI-clause unwind. Pagsapit ng Q3 2026, ang SEC + analyst pressure ay inaasahang pipilitin ang kahit isang foundation lab na maglabas ng audited monthly revenue + WAU at kahit isang Big-3 hyperscaler na ihiwalay ang per-token AI-platform margin sa 10-Q footnotes."
+    },
+    {
+      "id": "prediction.08513eaa976c5c5b",
+      "scope_hint": "cross",
+      "title": "Agent-skills attack surface magkakaroon ng MITRE-style threat sub-matrix pagsapit ng H2 2026",
+      "body": "**Pagsapit ng H2 2026, ang agent-skills attack surface ay magkakaroon ng sariling MITRE-ATT&CK-style sub-matrix at kahit isang major skill marketplace (opisyal na skills ng Anthropic, ClawHub, Multica, Hermes, Hugging Face skills/agent traces) ay maglalabas ng enforced signing + provenance gate.** Ang 1,184 malicious ClawHub skills ng ClawHavoc + ang **36% prompt-injection rate ng Cisco sa kabuuan ng OpenClaw skill marketplace** ay hindi na one-off — ang Apr 28 Novita Sandbox ang unang commercial mitigation product na purpose-built para sa OpenClaw + Hermes + autonomous-agent runtimes. Sa Corpus2Skill na ginagawang **\"skills bilang navigable artifact\"** mainstream at ang Externalization-in-LLM-Agents survey (arxiv 2604.08224) na tumatawag sa skills/harness/protocol bilang dominant 2026 design layer, ang attack surface ay ngayon **first-class infrastructure**, hindi side-channel. Pagsapit ng H2 2026, makikita natin ang (a) inilathalang agent-skills threat-matrix (MITRE-style o NIST-led) na sumasaklaw sa skill poisoning + indirect-prompt-injection-via-skill + cross-skill privilege chains, at (b) kahit isang major marketplace na nag-mamandato ng signed-and-provenance-attested skills bago mag-publish — kasama ang 17-skill repo ng Anthropic, ClawHub, marketplace ng Multica, at agent-trace surface ng Hugging Face bilang unang mga kandidato. In plain language: In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Ang 1,184 malicious ClawHub skills ng ClawHavoc at ang 36% prompt-injection finding ng Cisco ay ginagawa ang skill marketplaces na first-class supply-chain risk.",
+        "given": "Ang Corpus2Skill + ang Externalization survey ay nagtatatag sa skills/harness/protocol bilang dominant 2026 design layer, at ang Apr 28 Novita Sandbox ang unang commercial mitigation na nakatuon sa surface na ito.",
+        "so_that": "Inilalathala ang isang MITRE / NIST-style agent-skills threat sub-matrix at kahit isang marketplace ay nag-gate ng publish sa signed + provenance-attested skills.",
+        "landing": "Pagsapit ng H2 2026; inilathalang threat sub-matrix + kahit isang marketplace na nag-eenforce ng signature + provenance.",
+        "plain_language": "Ang mga bad actor ay nag-upload ng higit sa isang libong poisoned AI plugins, kaya malapit na ang malalaking plugin stores ay magrerequire ng signed at traceable code bago papasukin ang anumang bago."
+      },
+      "summary": "Ang 1,184 malicious ClawHub skills ng ClawHavoc + ang 36% prompt-injection finding ng Cisco + Apr 28 Novita Sandbox launch + Corpus2Skill + ang Externalization-in-LLM-Agents survey ay ginagawa ang agent-skills attack surface na first-class infrastructure. Pagsapit ng H2 2026, lalabas ang inilathalang agent-skills threat sub-matrix (MITRE / NIST) at kahit isang major skill marketplace ay magmamandato ng signed-and-provenance-attested skills bago mag-publish."
+    }
+  ]
+}

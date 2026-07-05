@@ -1,0 +1,47 @@
+{
+  "date": "2026-04-24",
+  "predictions": [
+    {
+      "id": "prediction.23c160efd9baa194",
+      "scope_hint": "tech",
+      "title": "Dumarating ang open-weight 1M-context era bilang bagong floor pagsapit ng Q3 2026",
+      "body": "**Ang \"1M context bilang default\" open-weight era ay buong dadating sa Q3 2026.** Ang \"1M context designed in, not bolted on\" ng DeepSeek V4, ang 262K to 1M extension ng Qwen3.6-27B, ang 1M context ng Claude Opus 4.7 (Bedrock), at ang long-context strengthening ng GPT-5.5 ay lahat tumuturo sa parehong direksyon. Pagsapit ng Q3 2026, ang \"native 1M context\" ay nagiging floor para sa open weights, at ang umiiral na 32K-128K models ay babagsak sa legacy. Ang RAG pipelines ay lumilipat mula sa \"search → context-insert\" papunta sa \"dump everything in + dynamic prune,\" at ang mga vendor ng vector DB ay napipilitang i-redefine ang sarili bilang \"long-context cache optimization layers.\" In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Ang DeepSeek V4 ay nagpapadala ng native 1M context, pinalalawak ng Qwen3.6-27B ang 262K papuntang 1M, ang Claude Opus 4.7 ay umaabot sa 1M sa Bedrock, at pinatatatag ng GPT-5.5 ang long context.",
+        "given": "Ibinababa ng Hybrid Attention ang 1M-context FLOPs sa 27% at ang KV cache sa 10% ng V3.2, na ginagawang abot-kaya ang 1M context sa open weights.",
+        "so_that": "Ang native 1M context ay nagiging open-weight floor at ang RAG ay lumilipat mula sa search-then-insert papunta sa dump-everything-plus-dynamic-prune workflows.",
+        "landing": "Pagsapit ng Q3 2026; ang 32K-128K open-weight models ay babagsak sa legacy at magpoposisyon muli ang mga vendor ng vector DB.",
+        "plain_language": "Maaari nang basahin ng malalaking AI models ang isang buong library nang sabay-sabay, at humahabol na ang mga murang open-weight versions. Hindi magtatagal, magmumukhang luma ang sinumang model sa ibaba ng laking iyon."
+      },
+      "summary": "Ang native 1M context ng DeepSeek V4, ang 262K to 1M extension ng Qwen3.6-27B, ang 1M ng Claude Opus 4.7 sa Bedrock, at ang long-context push ng GPT-5.5 ay lahat nagsasama-sama. Pagsapit ng Q3 2026, ang native 1M context ay inaasahang magiging open-weight floor at ang RAG pipelines ay lilipat mula sa search-and-insert papunta sa dump-and-prune."
+    },
+    {
+      "id": "prediction.6f0a6061c079c28e",
+      "scope_hint": "cross",
+      "title": "Ang 8-hour production runs ng Physical AI ay magiging enterprise RFP cuts pagsapit ng Q4 2026",
+      "body": "**Ang \"Physical AI 8-hour production runs\" ay magiging enterprise procurement requirement sa H2 2026.** Ang **8 hours / 90% success / 60 totes/hour** ng Siemens-Humanoid HMND 01 Alpha sa Erlangen — sa production line, hindi demo — ay malinaw na graduation point mula sa \"humanoid = PoC.\" Pagsapit ng Q4 2026, isasama ng big-manufacturer RFPs (VW / Bosch / Mercedes / Foxconn / TSMC / Toyota) ang \"24h continuous operation,\" \"1-week MTBF,\" \"90%+ autonomous completion rate,\" at \"MES / PLC integration\" bilang de facto cuts. Ang competitive axis para sa Physical AI ay ganap na lumilipat mula sa \"good-looking demo videos\" papunta sa \"ease of insertion into existing OT environments.\" In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Ang Siemens-Humanoid HMND 01 Alpha ay nakatala ng 8 hours / 60 totes per hour / 90% success sa Erlangen production line, hindi demo.",
+        "given": "Ang big-manufacturer procurement teams ay mayroon na ngayong concrete production benchmark para mag-anchor sa RFP cuts laban sa humanoid PoC vendors.",
+        "so_that": "Ang VW / Bosch / Mercedes / Foxconn / TSMC / Toyota RFPs ay magpapatibay ng 24h continuous operation, 1-week MTBF, 90% autonomy, at MES / PLC integration bilang de facto cuts.",
+        "landing": "Pagsapit ng Q4 2026; lilipat ang competitive axis sa OT-environment insertion ease.",
+        "plain_language": "Isang factory humanoid ay kakatapos lang magtrabaho ng 8 oras nang tuloy-tuloy sa isang totoong production line. Hindi magtatagal, ang malalaking manufacturers ay bibili lamang ng mga robot na pumapasa sa pamantayang iyon."
+      },
+      "summary": "Ang 8-oras na Erlangen run ng Siemens-Humanoid HMND 01 Alpha sa 60 totes/hour at 90% success sa live production line ay nagpapagraduate sa mga humanoid mula sa PoC. Pagsapit ng Q4 2026, ang big-manufacturer RFPs ay inaasahang magsasama ng 24h continuous operation, 1-week MTBF, 90% autonomy, at MES / PLC integration sa procurement cuts."
+    },
+    {
+      "id": "prediction.11c2c648527fe212",
+      "scope_hint": "business",
+      "title": "Ire-reprice ng capital markets ang agent-displaced SaaS base sa agent-touched API share sa Q2 2026",
+      "body": "**Iri-reset ng capital markets ang valuation nila ng \"AI-agent-displaced enterprise SaaS\" sa loob ng Q2 2026.** Ang **-18% (worst single-day drop ever)** ng ServiceNow noong Apr 23, ang same-day decline ng IBM, at ang chained falls ng Salesforce / Workday / Oracle ay naghahayag ng pagbabago kung paano tinitimbang ng capital markets ang \"AI cost-savings benefit\" laban sa \"AI displacement of legacy workflow SaaS.\" Sa loob ng Q2 2026, asahan ang Gartner / Forrester Magic Quadrant / Wave reports na gawing explicit ang \"Agent-native vs Legacy SaaS\" axis, at ang market-cap math na lumipat mula sa \"seats × ARPU\" papunta sa \"share of API calls touched by agents.\" Ang lagging analyst consensus updates ay nangangahulugan na isa pang 3-5 names (Workday / Atlassian / Box / Smartsheet etc.) ay malamang na makikita ng 15%+ drops sa susunod na dalawang quarter. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Ang worst-ever single-day -18% ng ServiceNow noong Apr 23, ang same-day decline ng IBM, at ang chained Salesforce / Workday / Oracle falls ay naglalantad ng displacement axis.",
+        "given": "Tinitimbang na ngayon ng capital markets ang AI displacement ng legacy workflow SaaS laban sa AI cost savings, na muling nag-pa-presyo ng seat-based revenue.",
+        "so_that": "Ginagawang explicit ng Gartner / Forrester ang Agent-native vs Legacy SaaS at lumilipat ang market-cap math mula sa seats x ARPU papunta sa share of agent-touched API calls.",
+        "landing": "Sa loob ng Q2 2026; isa pang 3-5 names ang malamang kumuha ng 15%+ drops sa loob ng dalawang quarter.",
+        "plain_language": "Ang stock ng ServiceNow ay nagkaroon ng pinakamasamang araw nito kailanman dahil iniisip ng mga investor na papalitan ng AI agents ang software nito. Sumusunod ang ibang workflow SaaS firms."
+      },
+      "summary": "Ang worst-ever -18% single-day drop ng ServiceNow noong Apr 23, ang same-day fall ng IBM, at ang chained Salesforce / Workday / Oracle declines ay tumutugma sa capital-markets reset sa AI-agent displacement ng legacy SaaS. Sa loob ng Q2 2026, ang Gartner / Forrester ay inaasahang gagawing explicit ang Agent-native vs Legacy axis at 3-5 pang names ang malamang makakaranas ng 15%+ drops."
+    }
+  ]
+}

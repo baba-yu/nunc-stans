@@ -1,0 +1,47 @@
+{
+  "date": "2026-04-19",
+  "predictions": [
+    {
+      "id": "prediction.4bd551bfc1cca138",
+      "scope_hint": "tech",
+      "title": "Bonsai 8B consolida el entrenamiento nativo de 1 bit como receta predeterminada de LLM en el edge para el Q3 2026",
+      "body": "**El entrenamiento nativo de 1 bit se convierte en la alternativa dominante a la cuantización post-hoc.** Bonsai 8B demuestra una salida con calidad de producción a 1,15 GB. Diseñar para 1 bit desde el entrenamiento, en lugar de cuantización post-hoc de 4/8 bits, se convertirá en el estándar para los LLM en el borde. Se esperan derivados de 1 bit de las familias Qwen y Llama dentro del próximo trimestre. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Bonsai 8B entrega salida con calidad de producción a 1,15 GB al entrenarse de forma nativa en 1 bit.",
+        "given": "El despliegue de LLM en el borde está limitado por la memoria; la cuantización post-hoc de 4/8 bits limita la compresión alcanzable.",
+        "so_that": "El entrenamiento nativo de 1 bit se convierte en la receta predeterminada para LLM en el borde y se publican derivados de 1 bit de Qwen/Llama.",
+        "landing": "Dentro de aproximadamente 1 trimestre; las bifurcaciones de pesos abiertos de las familias Qwen + Llama lideran.",
+        "plain_language": "Un modelo de 1,15 GB ya funciona bien. Entrenar pequeño desde el primer día supera a reducir el tamaño después, así que se esperan pronto copias diminutas de los modelos populares."
+      },
+      "summary": "El resultado de calidad de producción de 1,15 GB de Bonsai 8B muestra que el entrenamiento nativo de 1 bit supera a la cuantización post-hoc de 4/8 bits para el despliegue en el borde. Dentro de aproximadamente un trimestre, se espera que los derivados de pesos abiertos de 1 bit de las familias Qwen y Llama sigan esta receta."
+    },
+    {
+      "id": "prediction.c08481a657991ec8",
+      "scope_hint": "cross",
+      "title": "El estandar de registro de agentes converge con MCP para artefactos de agentes para H2 2026",
+      "body": "**Convergencia hacia un modelo de \"Registro de Agentes\".** AWS Agent Registry, la propuesta de registro de auditoría + barreras de seguridad de NemoClaw y las habilidades autoaprendidas de Hermes Agent surgen en la misma ventana. Para H2 2026, un estándar de registro para distribuir artefactos de agentes (habilidades, permisos de herramientas, trazas de auditoría) crecerá junto con MCP. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "AWS Agent Registry, la auditoría/barreras de seguridad de NemoClaw y las habilidades autoaprendidas de Hermes surgen juntas.",
+        "given": "Las empresas necesitan una forma portátil y auditable de distribuir habilidades de agentes, permisos de herramientas y trazas.",
+        "so_that": "Un estándar de registro compartido para artefactos de agentes crece junto con MCP y se convierte en la forma de distribución.",
+        "landing": "Para H2 2026; actividad visible de especificación de registro multi-proveedor.",
+        "plain_language": "Varias empresas acaban de lanzar formas de compartir agentes de IA y sus permisos. Pronto, un formato común permitirá que los agentes se muevan entre plataformas de forma segura."
+      },
+      "summary": "AWS Agent Registry, las herramientas de registro de auditoría y barreras de seguridad de NemoClaw y las habilidades autoaprendidas de Hermes Agent aparecen en la misma ventana. Para H2 2026, se espera que un estándar de registro para distribuir artefactos de agentes (habilidades, permisos de herramientas, trazas de auditoría) crezca junto con MCP."
+    },
+    {
+      "id": "prediction.995feb039ef043c1",
+      "scope_hint": "tech",
+      "title": "La inyeccion indirecta de prompts se convierte en una categoria principal de CVE para el Q3 2026",
+      "body": "**La inyección indirecta de prompts se convierte en una categoría de CVE principal.** Los ataques exitosos han aumentado un +190% interanual, y los fallos al estilo de CVE-2025-53773 (RCE desde el cuerpo de un PR) se reproducen fácilmente. Para Q3 2026, los CVE de integración de LLM con CVSS 8.0+ serán habituales en los Patch Tuesday. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Los ataques exitosos de inyección indirecta de prompts han aumentado un +190% interanual y CVE-2025-53773 RCE-desde-cuerpo-de-PR se reproduce trivialmente",
+        "given": "Los asistentes de codificación con LLM y las herramientas agénticas ahora leen texto no confiable (PRs, issues, páginas web) directamente en rutas de ejecución privilegiadas",
+        "so_that": "Los CVE de integración de LLM con CVSS 8.0+ se incorporan a la cadencia regular de Patch Tuesday, no como curiosidades de aviso aisladas",
+        "landing": "para Q3 2026; entradas recurrentes en los recopilatorios mensuales de Patch Tuesday",
+        "plain_language": "Los hackers ocultan comandos en cosas que las herramientas de IA leen, como pull requests o páginas web, y la IA los ejecuta. Pronto los proveedores parchearán esto cada mes."
+      },
+      "summary": "La inyección indirecta de prompts se está consolidando como una categoría de CVE recurrente: ataques exitosos +190% interanual, y los fallos al estilo de CVE-2025-53773 RCE-desde-cuerpo-de-PR se reproducen fácilmente. Para Q3 2026, los CVE de integración de LLM con CVSS 8.0+ se convierten en un elemento habitual de Patch Tuesday."
+    }
+  ]
+}

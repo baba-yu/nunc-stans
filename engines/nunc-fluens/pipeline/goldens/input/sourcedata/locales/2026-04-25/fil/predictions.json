@@ -1,0 +1,47 @@
+{
+  "date": "2026-04-25",
+  "predictions": [
+    {
+      "id": "prediction.81d3055dbb24f016",
+      "scope_hint": "cross",
+      "title": "Frontier-AI cloud capacity, mako-lock-in sa three-cloud training oligopoly pagsapit ng Q3 2026",
+      "body": "**Ang \"frontier AI lab x Tier-1 cloud capacity capture\" ay malinis na maghahati sa field pagsapit ng Q3 2026.** Sa kumpirmasyon ng Google Cloud sa tatlong deals sa loob ng isang buwan — Anthropic (GB300 + large TPU), Meta (GB300 capacity), Thinking Machines Lab (A4X Max) — kumikristal ang istraktura: ang mga clouds na may sapat na capacity para sa frontier model development ay umiikli sa tatlo (AWS / Azure / GCP). Sasagot ang Amazon ng **isa pang $25B + 5GW Trainium2/3 capacity + 10-year $100B commit** para sa Anthropic; hawak ng Azure ang OpenAI / Mistral / Inflection; idinaragdag ng GCP ang Anthropic / TML / Meta. Pagsapit ng Q3 2026, ang \"fourth-hyperscaler candidates without their own cloud or long-term capacity contracts with frontier labs\" (Oracle Cloud / IBM / Coreweave) ay ganap na lilipat sa **\"unable to train frontier-scale, specialize on inference.\"** Ang mga AI silicon ecosystems ay nakakandado sa two-tier shape: training capacity = three-cloud oligopoly / inference = layered. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Isinasara ng Google Cloud ang Anthropic GB300 + TPU, Meta GB300, at Thinking Machines Lab A4X Max sa loob ng isang buwan habang nagdaragdag ang Amazon ng $25B + 5GW Trainium para sa Anthropic.",
+        "given": "Ang frontier-scale training capacity ay nakakonsentrado lamang sa tatlong hyperscalers na may GB300 / Trainium / TPU backlog upang masipsip ang 10-year commits.",
+        "so_that": "Nawawalan ng access ang Oracle Cloud, IBM, at Coreweave sa frontier-scale training at ganap na muling magposisyon sa inference workloads.",
+        "landing": "Pagsapit ng Q3 2026; nakakandado ang AI silicon sa three-cloud oligopoly para sa training at layered inference market.",
+        "plain_language": "Only three big clouds can fit the giant new AI training jobs. Smaller clouds will stop trying and instead run cheaper finished models."
+      },
+      "summary": "Ang Anthropic + Meta + Thinking Machines Lab deals ng Google Cloud kasama ang $25B + 5GW Trainium top-up ng Amazon para sa Anthropic ay nag-iikli ng frontier-scale training capacity sa AWS, Azure, at GCP. Pagsapit ng Q3 2026, ang fourth-cloud candidates na walang long-term frontier-lab contracts ay inaasahang muling magpopokus sa inference."
+    },
+    {
+      "id": "prediction.70ad45e258b72e8c",
+      "scope_hint": "cross",
+      "title": "Physical AI league tables, magra-rank ng top-five OEM-adopted humanoids pagsapit ng H2 2026",
+      "body": "**Ang \"Physical AI production-line records become league tables at IROS / GTC 2026\" ay magsisimula sa H2 2026.** Sa **HMND 01 Alpha** ng Siemens Erlangen (60 tote/h x 8h x 90%+), **Figure 02** ng BMW Spartanburg (10 months / 30,000 vehicles / 90,000 parts), **AEON** ng BMW Leipzig (Apr 2026 trial -> summer pilot), at **Digit** ng GXO (100K+ totes) na lahat tumatama sa parehong window — at ang Hannover Messe 2026 na ginagawang first central theme ang Physical AI — ang evaluation criterion ng industry ay lumilipat mula sa \"vendor-claimed demos\" papunta sa **\"OEM-adopted production records.\"** Sa H2 2026 sa **IROS (October)** at **GTC Fall 2026**, magsisimula ang league tables para sa \"OEM adoption count x continuous-operation hours x parts handled x MTBF,\" kasama ang Apptronik Apollo / Agility Digit / Figure 03 / Humanoid HMND 01 / Hexagon AEON's top five sa itaas. Ang 30+ na kumpanyang nakatigil pa sa PoC phase ay itinutulak sa Q4 2026 funding shortfalls / acquisitions / exits. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Ang production records ng Siemens Erlangen, BMW Spartanburg, BMW Leipzig, at GXO ay sumasambulat nang sabay-sabay habang ginagawang central theme ng Hannover Messe ang Physical AI.",
+        "given": "Ang OEM-adopted production records ay sapat nang konkreto upang ma-rank ng mga buyers ang vendors batay sa continuous hours, parts handled, at MTBF.",
+        "so_that": "Naglalathala ang IROS October at GTC Fall ng OEM-adoption league tables na nag-aangat ng top-five cohort at pumipiga sa PoC-stuck long tail.",
+        "landing": "Magsisimula sa H2 2026; ang 30+ PoC vendors ay haharap sa Q4 2026 funding shortfalls, acquisitions, o exits.",
+        "plain_language": "Real factories now have humanoid robots logging real hours. Soon big AI conferences will rank them like sports leagues, and weaker startups disappear."
+      },
+      "summary": "Ang 8-hour run ng HMND 01 Alpha ng Siemens Erlangen, ang 30,000-vehicle record ng Figure 02 ng BMW Spartanburg, ang AEON trial ng BMW Leipzig, at ang 100K-tote run ng Digit ng GXO ay tumama sa parehong window habang inaangat ng Hannover Messe 2026 ang Physical AI. Ang IROS at GTC ng H2 2026 ay inaasahang maglathala ng OEM-adoption league tables."
+    },
+    {
+      "id": "prediction.5094f95cbe8376d1",
+      "scope_hint": "tech",
+      "title": "MCP protocol redesign, lalabas bilang nangungunang enterprise AI bottleneck pagsapit ng Q3 2026",
+      "body": "**Ang \"Attack surface against the MCP protocol itself\" ay magiging pinakamalaking enterprise AI adoption bottleneck pagsapit ng Q3 2026.** Ang **CVE-2026-33032 (MCPwn, CVSS 9.8)** ng Nginx UI — isang structural defect kung saan ang `/mcp_message` endpoint, kasama ang empty default IP allowlist nito, ay naglalantad ng 12 unauthenticated tool calls — ay idinagdag sa VulnCheck KEV pagkatapos ng 2-request real-world takeover sa production. Sinasabi nito sa atin na ang MCP protocol mismo ay kailangang muling i-design bilang web standard kung lalaki ito. Pagsapit ng Q3 2026, opisyal na ilalathala ang OWASP MCP Top 10, **ang MCP-over-mTLS / standardized OAuth scope specs ng Anthropic / Microsoft / Google / Cisco / Cloudflare** ay magiging industry standard, at ang Keycard / Okta for AI Agents / Wiz / Levo.ai / Pillar Security ay maglulunsad ng \"MCP Gateway / MCP Firewall\" products hanggang Q4. Ang enterprise compliance audits ay magsisimulang magsubaybay ng \"number of MCP-connected tools / endpoints / authorization policies\" bilang bagong audit category. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Ang CVE-2026-33032 (MCPwn, CVSS 9.8) ng Nginx UI ay napunta sa VulnCheck KEV pagkatapos ng 2-request real-world takeover sa pamamagitan ng empty default IP allowlist.",
+        "given": "Ang mga MCP integrations ay naglalantad ng unauthenticated tool calls sa scale, na ginagawang ang protocol mismo ang failure mode sa halip na bug ng anumang single vendor.",
+        "so_that": "Ipapadala ang OWASP MCP Top 10, ang MCP-over-mTLS at OAuth scope specs ay magiging industry standard, at ang MCP Gateway / Firewall vendors ay maglulunsad hanggang Q4.",
+        "landing": "Pagsapit ng Q3 2026; ang enterprise compliance audits ay magdaragdag ng MCP-connected tools at authorization policies bilang bagong audit category.",
+        "plain_language": "A popular MCP server got hacked because anyone on the internet could call its tools. The whole protocol now needs proper login walls before companies trust it."
+      },
+      "summary": "Ang CVE-2026-33032 (MCPwn, CVSS 9.8) ng Nginx UI — KEV-listed pagkatapos ng 2-request real-world takeover — ay naglalantad sa MCP protocol mismo bilang failure mode. Pagsapit ng Q3 2026, ang OWASP MCP Top 10, MCP-over-mTLS / OAuth scope specs, at MCP Gateway / Firewall products ay inaasahang ipapadala."
+    }
+  ]
+}

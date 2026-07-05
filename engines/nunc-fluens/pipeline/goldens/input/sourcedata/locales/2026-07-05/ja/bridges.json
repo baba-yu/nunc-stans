@@ -1,0 +1,343 @@
+{
+  "date": "2026-07-05",
+  "validation_rows": [
+    {
+      "prediction_ref": {
+        "id": "prediction.9eb6e9888959d4b6",
+        "short_label": "Local-LLM runtimes ship in-model speculative decoding on by default by Q2 2027",
+        "prediction_date": "2026-07-05"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "本日の Ollama リリースが、この新規予測の起点となる証拠だ。Ollama は7月1日にバージョン0.31を公開し、Apple Silicon 上の Gemma 4 でマルチトークン予測をデフォルトで有効化した。コーディングエージェント向けベンチマークで、出力はバイト単位で同一のまま、トークン生成が平均でほぼ90%高速化したと報告している。仕組みはモデル内蔵の投機的デコードだ。Gemma 4 は小さなドラフトモデルを同梱し、これが次のトークンを複数提案、本体モデルが1回のパスでまとめて検証するため、ドラフトが採用されればおよそ1トークン分のコストで複数トークンが確定する。重要なのは、これがチューニング用フラグではなくデフォルトとして提供される点だ。さらに Ollama が上流へ還元した小バッチ向け MLX 行列積カーネルは、M5 Max と nvfp4 の環境で Gemma 4 の最大級の行列積を2〜2.5倍高速化するが、Gemma 専用ではなく任意の MLX モデルで再利用できる。これはまさに、精度を保ったまま高速化を1つの実装で示せば広がっていく、とこの予測が見込む力学そのものだ。加えてコーディングエージェントは、予測しやすいテキストに対してモデルを絶えず呼び出すため、採用されたドラフトの効果がセッションを通じて積み上がる。まだ欠けているのは、2つ目の主流ローカルランタイム、すなわち LM Studio、llama.cpp のデスクトップ版、MLX-LM、あるいは vLLM のローカルモードが、人気のオープンウェイト系列に対してモデル内蔵型やドラフト併用型の投機的デコードをデフォルト経路に切り替えることだ。",
+      "reference_links": [
+        {
+          "label": "Ollama Blog - マルチトークン予測による MLX 上での Gemma 4 高速化",
+          "url": "https://ollama.com/blog/faster-gemma-4-mlx-mtp"
+        },
+        {
+          "label": "GitHub - Ollama v0.31.1 リリース",
+          "url": "https://github.com/ollama/ollama/releases/tag/v0.31.1"
+        },
+        {
+          "label": "Releasebot - Ollama リリースノート（2026年6〜7月）",
+          "url": "https://releasebot.io/updates/ollama"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Ollama 0.31 は7月1日のリリースで、Apple Silicon 上の Gemma 4 に対しモデル内蔵の投機的デコードをデフォルトで有効化し、出力はバイト単位で同一のままほぼ90%の生成高速化を報告した。同梱ドラフトを1回のパスで検証し、フラグではなくデフォルトとして提供され、上流還元された MLX カーネルは任意のモデルで再利用できる。これはまさに、精度を保ったまま広がるとこの予測が見込む高速化だ。",
+        "coherence": 4,
+        "remaining_gap": "LM Studio、MLX-LM、llama.cpp のデスクトップ版、vLLM のローカルモードといった2つ目の主流ランタイムは、人気のオープンウェイト系列に対して投機的デコードをまだデフォルト経路に切り替えていない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.70512b58e932f532",
+        "short_label": "Open-model inference neocloud files a public-listing step by Q4 2027",
+        "prediction_date": "2026-07-05"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "本日の Together AI の調達が、この新規予測の起点となる証拠だ。Together AI は7月1日、ポストマネー評価額83億ドルで8億ドルのシリーズCを発表した。2025年2月のシリーズBからおよそ17か月で2.5倍の評価額上昇であり、累計調達額は13億ドルに達する。方向性を同じくする兆候が3つある。第一に、このラウンドを主導したのは Aramco Ventures の Prosperity7 であり、こうしたソブリン規模の出資は通常、初期のベンチャー資金ではなく上場前後の後期段階資本として入ってくる。第二に、Prosperity7 のマネージングディレクター Abhishek Shukla は、同社が株式公開へ向かっていると位置づけており、これはいまフロンティア各社を引き寄せているのと同じ IPO への引力だ。第三に、Together は単独ではない。報道は同社を Fireworks や Baseten と並べ、薄利の汎用リセラーではなく持続的なプラットフォーム層として資本を投じられているオープンモデルのホスティング基盤だと位置づける。DeepSeek、Nemotron、MiniMax、Kimi といったオープンウェイトを、クローズドモデルのごく一部のコストで提供している。5年でおよそ50倍に拡大する計画の GPU 保有規模は、民間シンジケートがいずれ引き受けをやめる資本基盤を必要とし、これがこの予測の名指す株式流動性への構造的な圧力だ。まだ欠けているのは、投資家の見解ではなく、具体的に開示された一歩、すなわち秘密保持または公開の S-1、あるいは正式な直接上場や IPO の発表だ。",
+      "reference_links": [
+        {
+          "label": "Business Wire - Together AI が評価額83億ドルで8億ドルを調達",
+          "url": "https://www.businesswire.com/news/home/20260701243402/en/Together-AI-Raises-$800-Million-at-$8.3-Billion-Valuation-to-Make-Frontier-AI-Accessible-to-All"
+        },
+        {
+          "label": "DataCenter Dynamics - Together AI がシリーズCで8億ドルを調達",
+          "url": "https://www.datacenterdynamics.com/en/news/together-ai-raises-800m-in-series-c-funding-round/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "so_that",
+        "narrative": "Together AI の7月1日、評価額83億ドルでの8億ドルのシリーズCは、Aramco の Prosperity7 が主導する2.5倍の評価額上昇であり、株式公開への明確な方向づけを伴う。ソブリン規模の後期段階の出資に、50倍への拡大を計画する GPU 保有規模が加われば、いずれ民間シンジケートの引き受け能力を超える。Together は Fireworks や Baseten と並ぶ持続的なプラットフォーム層として資本を得ており、これがこの予測の名指す流動性への圧力だ。",
+        "coherence": 4,
+        "remaining_gap": "証拠は投資家の見解であって、具体的に開示された一歩ではない。秘密保持または公開の S-1 はなく、正式な直接上場や IPO の発表も提出されていない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.a879b03610b9ab92",
+        "short_label": "Non-GPU AI-datacenter silicon draws standalone infrastructure funding by Q4 2027",
+        "prediction_date": "2026-07-05"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "本日のニュースはこの新規予測の起点となる証拠であり、しかも同一サイクル内で互いを補強する2つの兆候として現れた。Stathera は6月30日、応募超過となった5500万ドルのシリーズBを完了した。新規投資家 Maverick Silicon が主導し、MediaTek Innovation Fund、TXC、Celesta ほかが参加、総額7500万ドルを調達した。目的は明確に、AI データセンター向けクロックの GEN3 プラットフォームへの出資であり、MEMS DualMode タイミングを、年間110億ドルのタイミング市場のなかで2030年までに累計およそ15億ドルの同期需要機会として売り込み、加速器クラスターが数万 GPU 規模に達すればノード間の精密なタイミングが現実の制約になると位置づけている。並行して、Tenstorrent の CEO Jim Keller は、報じられた80〜100億ドルの Qualcomm による買収を公に否定し、IPO ブリッジと秘密保持 S-1 に沿った独立路線を改めて表明した。これにより、信頼に足る RISC-V 加速器 IP の企業が、モバイル SoC の既存大手へ吸収されるのではなく、単独での資本調達の軌道にとどまる。両者を併せて読むと、資本は AI データセンターの非 GPU 層、すなわちタイミングと同期のシリコン、および独立系の加速器 IP を、それぞれ独自の投資仮説と Maverick Silicon のような専門の出資者を持つ別個の項目として名指し、資金を投じている。これはまさに、この予測が延長する独立系インフラのカテゴリーという仮説そのものだ。まだ欠けているのは、2つ目の非 GPU サプライヤーが機関投資家によるラウンドを完了する、あるいは自らを独立した AI データセンター向けインフラのカテゴリーとして明確に打ち出しつつ株式公開を申請することであり、加えて否定された買収ではなく確定した独立上場だ。",
+      "reference_links": [
+        {
+          "label": "PR Newswire - Stathera が AI データセンター向けシリコンタイミングで5500万ドルのシリーズBを発表",
+          "url": "https://www.prnewswire.com/news-releases/stathera-announces-us55-million-series-b-to-scale-silicon-timing-and-accelerate-next-generation-ai-data-center-solutions-302813712.html"
+        },
+        {
+          "label": "citybiz - Stathera が AI データセンター向けシリコンタイミング拡大のため5500万ドルのシリーズBを調達",
+          "url": "https://www.citybiz.co/article/867841/stathera-raises-55-million-series-b-to-expand-silicon-timing-for-ai-data-centers/"
+        },
+        {
+          "label": "GuruFocus - Tenstorrent CEO が Qualcomm による買収交渉を否定",
+          "url": "https://www.gurufocus.com/news/8938157/tenstorrent-ceo-denies-qualcomm-acquisition-talks-amid-focus-on-ai-development"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "互いを補強する2つの兆候が同時に現れた。Maverick Silicon が主導した Stathera の6月30日の応募超過となる5500万ドルのシリーズBは、15億ドルの同期需要機会として売り込まれる AI データセンター向けタイミングシリコンに出資する。一方 Keller は Qualcomm による買収を否定し、Tenstorrent の加速器 IP を独立に保つ。資本はデータセンターの非 GPU 層を、専門の出資者を持つ別個の項目として名指し資金を投じており、これはまさにこの予測が延長する独立系インフラのカテゴリーという仮説だ。",
+        "coherence": 4,
+        "remaining_gap": "欠けているのは、2つ目の非 GPU サプライヤーが、独立した AI データセンターのカテゴリーを明確に打ち出しつつラウンドを完了ないし株式公開を申請することであり、加えて否定された買収ではなく確定した独立上場だ。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.14cd36ae7a6a8633",
+        "short_label": "Quantized-by-default serving lands as the OSS inference baseline by H1 2027",
+        "prediction_date": "2026-06-30"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "Ollama 0.31 は、ローカルランタイムの側から、量子化をデフォルトとするサービングの論拠を鮮明にする。本日報告された性能向上は、M5 Max と nvfp4 量子化の環境で測定されたものだ。Ollama が上流へ還元した新しい小バッチ向け MLX 行列積カーネルは、各重みブロックを一度だけ展開してバッチ全体で再利用することで、Gemma 4 の最大級の行列積を2〜2.5倍高速化する。しかもこのカーネルは Gemma 専用ではなく任意の MLX モデルで利用できる。これは、低ビット量子化された重み形式を、主流ランタイムが最適化の前提とし、既定でエンドユーザーへ届けるサービング基盤として扱うものであり、この予測がオープンソース推論について名指す方向だ。ただし話の中心は投機的デコードのスループットと再利用可能な行列積カーネルであって、あるモデル系列に対して量子化された重みを恒常的な既定として明示的に切り替えるランタイムそのものではない。したがって、名指された「デフォルトで有効」の設定変更そのものではないものの、量子化サービングを基準線とする流れを補強している。",
+      "reference_links": [
+        {
+          "label": "Ollama Blog - マルチトークン予測による MLX 上での Gemma 4 高速化",
+          "url": "https://ollama.com/blog/faster-gemma-4-mlx-mtp"
+        },
+        {
+          "label": "GitHub - Ollama v0.31.1 リリース",
+          "url": "https://github.com/ollama/ollama/releases/tag/v0.31.1"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "本日の性能向上は M5 Max と nvfp4 量子化の環境で測定された。Ollama が上流へ還元した小バッチ向け MLX カーネルは、Gemma 4 の最大級の行列積を2〜2.5倍高速化し、Gemma 専用ではなく任意の MLX モデルで再利用できる。これは、低ビット量子化された形式を、主流ランタイムが最適化の前提とし既定でエンドユーザーへ届けるサービング基盤として扱うものだ。",
+        "coherence": 3,
+        "remaining_gap": "話の中心は投機的デコードのスループットと再利用可能なカーネルであって、あるモデル系列に対し量子化された重みを恒常的な既定として明示的に切り替えるランタイムではない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.a4f83081580b9a3d",
+        "short_label": "Launch-day vLLM/SGLang + Ollama support becomes open-weight MoE release bar",
+        "prediction_date": "2026-07-02"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "本日の Ollama リリースは、公開当日のサービング対応という仮説の、ローカルランタイム側を補強する。Ollama 0.31 は Gemma 4 のマルチトークン予測をデフォルトで有効化しただけでなく、その周辺の 0.30.11〜0.31 の一連の更新で、思考能力の検出、Claude Code と opencode の自動インストールフック、Codex のドリフト検出、CUDA sm_86 対応を追加し、同梱の llama.cpp エンジンも刷新した。これは、ランタイム層が第一級のローカル対応を、高度な設定ではなくすぐ使える既定にしようと競り合っている様子を示す。まさに、公開当日のランタイム対応がオープンウェイトの最低条件になりつつある、というこの予測が名指すローカル最適化の領域だ。ただし話の焦点は、既存モデルに対して高速化と統合フックを提供するランタイムであって、オープンウェイトの MoE が公開当日に vLLM、SGLang、Ollama 向けのパッケージ化を明示の公開条件として伴って登場することではない。したがって、名指された公開当日のサービング規範を確定させるものではないが、方向性は補強している。",
+      "reference_links": [
+        {
+          "label": "Ollama Blog - マルチトークン予測による MLX 上での Gemma 4 高速化",
+          "url": "https://ollama.com/blog/faster-gemma-4-mlx-mtp"
+        },
+        {
+          "label": "Releasebot - Ollama リリースノート（2026年6〜7月）",
+          "url": "https://releasebot.io/updates/ollama"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "landing",
+        "narrative": "Ollama の 0.30.11〜0.31 の一連の更新は、Gemma 4 向けの既定のマルチトークン予測に、思考能力の検出、Claude Code と opencode の自動インストールフック、Codex のドリフト検出、刷新された llama.cpp エンジンを組み合わせ、ランタイム層が第一級のローカル対応をすぐ使える既定にしようと競り合う様子を示す。まさに、公開当日のランタイム対応がオープンウェイトの最低条件になりつつある、というこの予測が名指すローカル最適化の領域だ。",
+        "coherence": 3,
+        "remaining_gap": "これは既存モデルへの高速化と統合フックであって、オープンウェイトの MoE が公開当日に vLLM、SGLang、Ollama 向けのパッケージ化を明示の公開条件として伴って登場することではない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.cbba6275f880fc04",
+        "short_label": "Second hyperscaler names non-Nvidia data-center inference silicon by Q4 2027",
+        "prediction_date": "2026-06-29"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "本日の Tenstorrent の動きは、信頼に足る非 NVIDIA の加速器サプライヤーを、吸収されるのではなく独立路線にとどめる。Jim Keller は6月30日に述べ、7月3日にかけて改めて、Tenstorrent は Qualcomm との買収交渉には入っていないと表明し、6月中旬に報じられた80〜100億ドルの買収報道を打ち消した。そして同社を、IP ライセンスや日本を拠点とする高性能でスケーラブルな AI 開発を含め、自社事業の構築に注力する企業と位置づけ、Galaxy ラックのロードマップも独立した軌道にとどめた。これがこの予測に関わるのは、ハイパースケーラーがデータセンター推論向けに名指しうる数少ない商用 RISC-V 加速器 IP 企業の一つを、モバイル SoC の既存大手経由に回すのではなく温存し、非 NVIDIA の供給の選択肢を維持できるからだ。証拠は、非 NVIDIA 推論シリコンをハイパースケーラーが名指して採用した事例ではなく、統合の拒否と独立の姿勢だ。したがって、ハイパースケーラーによる名指しそのものではないが、この仮説の供給可能性の側面を裏づける。",
+      "reference_links": [
+        {
+          "label": "GuruFocus - Tenstorrent CEO が Qualcomm による買収交渉を否定",
+          "url": "https://www.gurufocus.com/news/8938157/tenstorrent-ceo-denies-qualcomm-acquisition-talks-amid-focus-on-ai-development"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "Keller の6月30日の Qualcomm による買収報道の否定は、数少ない商用 RISC-V 加速器 IP 企業の一つを、モバイル SoC の既存大手経由に回すのではなく、日本を拠点に Galaxy ラックのロードマップに沿って独立に保つ。これは、2つ目のハイパースケーラーがデータセンター推論向けに名指しうる非 NVIDIA の供給を温存し、名指しの出来事そのものではないものの、供給可能性という前提条件を維持する。",
+        "coherence": 2,
+        "remaining_gap": "実際に非 NVIDIA 推論シリコンを名指したハイパースケーラーはいない。これは候補サプライヤーを存続させるだけで、採用の確定ではない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.225d77f109a86780",
+        "short_label": "Inference-ASIC cohort gains a fourth named buyer-designed chip by H1 2027",
+        "prediction_date": "2026-06-25"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "Tenstorrent の独立の姿勢は、買い手が設計する加速器を増やす経路として、同社の IP ライセンスモデルを選択肢に残す。Keller は、Qualcomm による買収を否定しつつ、Tenstorrent は IP ライセンスと、日本を拠点とする高性能でスケーラブルな AI 開発に注力していると改めて表明し、大型案件への業界の意欲が高まるなか、戦略的な領域で多くの企業と対話していると述べた。ライセンス可能な Tenstorrent の RISC-V 加速器 IP は、新たな買い手が設計チームを一から作らずに自前の推論シリコンを立ち上げる手段であるため、この企業を独立に保つことは、4つ目の買い手設計チップに向けてこの予測が依拠する供給側の仕組みを維持する。証拠は、特定の新たな買い手がカスタム推論 ASIC を名指した事例ではなく、ライセンスと独立の姿勢だ。したがって、4つ目のチップを名指す事例そのものではないが、それを可能にする条件を強める。",
+      "reference_links": [
+        {
+          "label": "GuruFocus - Tenstorrent CEO が Qualcomm による買収交渉を否定",
+          "url": "https://www.gurufocus.com/news/8938157/tenstorrent-ceo-denies-qualcomm-acquisition-talks-amid-focus-on-ai-development"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "Keller は買収を否定しつつ、IP ライセンスと高性能でスケーラブルな AI 開発への注力を改めて表明し、案件への意欲が高まるなか多くの企業と対話していると述べた。ライセンス可能な RISC-V 加速器 IP は、新たな買い手が一から設計チームを作らずにカスタム推論シリコンを立ち上げることを可能にする。だからこの企業を独立に保つことは、4つ目の買い手設計チップに向けた供給側の仕組みを維持する。",
+        "coherence": 2,
+        "remaining_gap": "特定の新たな買い手がカスタム推論 ASIC を名指した事例はない。これはそれを可能にするライセンスの条件を強めるものであって、4つ目のチップの事例ではない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.b29d00f310d8ad2c",
+        "short_label": "Second open-weight frontier model discloses non-NVIDIA ASIC training by Q2 2027",
+        "prediction_date": "2026-07-04"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "本日の Tenstorrent のニュースは、この予測が乗る非 NVIDIA の計算独立という軌道の、供給側を補強する。Keller による Qualcomm 買収の否定と、独立した IPO ブリッジ路線の再表明は、信頼に足る RISC-V 加速器 IP 企業を、モバイル SoC の既存大手へ吸収されるのではなく、自前の高性能でスケーラブルな AI ハードウェアと Galaxy ラックのロードマップを構築し続ける状態に保つ。これは、研究所がフロンティアモデルを学習させうる非 NVIDIA 加速器の層を維持する。それは、昨日の Meituan LongCat-2.0 の中国製 ASIC を用いた学習が拠り所とした、同じ代替シリコンの領域であり、いま商用 IP の側で独立を保っている姿が示されたことになる。証拠は、加速器ベンダーが独立を守る動きであって、2つ目のオープンウェイトモデルのモデルカードがエンドツーエンドの非 NVIDIA 学習を記録した事例ではない。したがって、この予測が名指す2つ目の開示の事例そのものではないが、それを可能にするハードウェアの軌道を裏づける。",
+      "reference_links": [
+        {
+          "label": "GuruFocus - Tenstorrent CEO が Qualcomm による買収交渉を否定",
+          "url": "https://www.gurufocus.com/news/8938157/tenstorrent-ceo-denies-qualcomm-acquisition-talks-amid-focus-on-ai-development"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "拒否された Qualcomm 買収と再表明された独立路線は、信頼に足る RISC-V 企業を、自前の高性能でスケーラブルなハードウェアを構築し続ける状態に保ち、研究所がフロンティアモデルを学習させうる非 NVIDIA 加速器の層を維持する。それは、昨日の Meituan LongCat-2.0 の中国製 ASIC を用いた学習が拠り所とした同じ代替シリコンの領域であり、いま商用 IP の側で持ちこたえている姿が示された。",
+        "coherence": 2,
+        "remaining_gap": "エンドツーエンドの非 NVIDIA 学習を記録した2つ目のオープンウェイトのモデルカードはない。これは可能にするハードウェアを裏づけるものであって、開示そのものではない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.d6fc36093d611e94",
+        "short_label": "OpenAI files a public-listing step with a US-government stake by Q2 2027",
+        "prediction_date": "2026-07-04"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "本日の Together AI の調達は、この予測が置かれた IPO ウィンドウという背景に、同じ方向のデータ点を加える。Together の8億ドルのシリーズCは、主導投資家 Prosperity7 が同社を株式公開へ向かうものと明確に位置づけて行われ、報道はこれを、いまフロンティア各社自身を引き寄せているのと同じ IPO への引力だと呼んでいる。これは、この分野で最大級の AI プレイヤーが、民間の巨額ラウンドから株式流動性へと押し出されつつある、というより広い読みを補強する。それはまさに、OpenAI の上場前の一歩が着地する環境だ。証拠は、推論ネオクラウドが IPO の意向を示すものであって、OpenAI 自身の申請や、この予測が具体的に名指す米国政府の出資構造に関する新たな開示ではない。したがって、OpenAI 固有のソブリン出資の一歩を動かすものではないが、周辺の IPO ウィンドウの圧力を強める。",
+      "reference_links": [
+        {
+          "label": "Business Wire - Together AI が評価額83億ドルで8億ドルを調達",
+          "url": "https://www.businesswire.com/news/home/20260701243402/en/Together-AI-Raises-$800-Million-at-$8.3-Billion-Valuation-to-Make-Frontier-AI-Accessible-to-All"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Together の8億ドルのシリーズCは、主導投資家 Prosperity7 が同社を株式公開へ向かうものと位置づけて行われ、報道はこれを、いまフロンティア各社を引き寄せているのと同じ IPO への引力だと呼んでいる。これは、民間の巨額ラウンドから株式流動性へという構造的な圧力を補強する。それはまさに、上場前の一歩が着地する環境だ。",
+        "coherence": 2,
+        "remaining_gap": "OpenAI 自身の申請や米国政府の出資構造に関する新たな開示はない。これは周辺のウィンドウを動かすものであって、ソブリン出資の一歩ではない。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.9bc46d8a918d51a2",
+        "short_label": "AMD Instinct MI400 launches with a named ship, memory, or rack spec by Q3 2026",
+        "prediction_date": "2026-06-27"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "本日の AI イベント一覧は、AMD の MI400 Instinct シリーズと Helios ラックスケールシステムを、2026年後半の目玉ハードウェア触媒として引き続き俎上に残すが、直近の枠は先送りされた。当面のカレンダー項目はいまや7月6〜10日の Geneva AI Week と7月8日の AI Tinkerers San Francisco のミートアップであり、MI400 と Helios は後半の一般的な注視対象へと後退している。直近で確定しているハードウェアの集まりは、8月23〜25日にスタンフォードで開かれる Hot Chips 2026 と、9月15〜17日の AI Infra Summit だ。これは Helios をラックスケールシステムとして名指し、MI400 を後半のうちに収めてはいるものの、Advancing AI の基調講演がもはや直近の確定枠ではなくなったため、この予測が求める具体的な出荷、メモリ、ラックの数値は、提供済みの仕様ではなく予定された注視対象のままとなり、カレンダーが進むにつれ第3四半期のウィンドウは狭まる。",
+      "reference_links": [
+        {
+          "label": "Hot Chips 2026（8月23〜25日、スタンフォード）",
+          "url": "https://hotchips.org/"
+        },
+        {
+          "label": "AI Infra Summit 2026",
+          "url": "https://www.ai-infra-summit.com/agenda"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "landing",
+        "narrative": "イベント一覧は依然として MI400 シリーズと Helios ラックスケールシステムを後半の目玉触媒として名指すが、直近の枠は Geneva AI Week と7月8日のミートアップへ先送りされ、Advancing AI の基調講演はもはや直近の確定した舞台ではない。具体的な出荷、メモリ、ラックの数値は予定された注視対象のままであり、第3四半期のウィンドウは狭まる。",
+        "coherence": 2,
+        "remaining_gap": "本日、提供済みの出荷、メモリ、ラックの仕様はない。直近で確定しているハードウェアの場は8月23〜25日の Hot Chips であり、第3四半期の期限が詰まってくる。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.5e0beac647793331",
+        "short_label": "AMD MI400 will market memory bandwidth over peak FLOPS at Advancing AI",
+        "prediction_date": "2026-07-02"
+      },
+      "today_relevance": 2,
+      "evidence_summary": "イベントカレンダーは依然として AMD の MI400 Instinct シリーズと Helios ラックスケールシステムを2026年後半の目玉触媒として名指し、メモリとラックを軸とする位置づけを注視対象として生かしつつ、8月23〜25日の Hot Chips と8月11〜12日の AI Risk Summit を、セキュア加速器や秘匿推論の発表にふさわしい場として指し示す。しかし本日の一覧は、直近の触媒を Advancing AI の基調講演ではなく7月6〜10日の Geneva のセッションへと前倒しするため、この予測が見込むメモリ帯域を FLOPS より前面に出すマーケティングの姿勢は、確定した近い将来の舞台も、本日提供された位置づけも持たない。これは後退しつつあるカレンダー上の言及であって、目玉仕様の選択そのものの証拠ではない。",
+      "reference_links": [
+        {
+          "label": "Hot Chips 2026（8月23〜25日、スタンフォード）",
+          "url": "https://hotchips.org/"
+        },
+        {
+          "label": "SecurityWeek AI Risk Summit 2026（8月11〜12日、Half Moon Bay）",
+          "url": "https://www.airisksummit.com/agenda"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "landing",
+        "narrative": "本日の一覧は依然として MI400 シリーズと Helios ラックスケールシステムを後半の目玉触媒として名指すが、直近の舞台を Advancing AI の基調講演ではなく7月6〜10日の Geneva のセッションへ前倒しする。メモリ帯域を FLOPS より前面に出すマーケティングの姿勢は、確定した近い将来の場も提供された位置づけも持たず、見込まれる目玉仕様の選択はカレンダー上の言及にとどまり、証拠にはならない。",
+        "coherence": 2,
+        "remaining_gap": "確定した Advancing AI の枠と、メモリ帯域をピーク FLOPS より前面に出す実際の MI400 のローンチメッセージが必要だ。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.d7abb993513f7449",
+        "short_label": "Tenstorrent S-1 anchors three-name AI-chip IPO set by early August 2026",
+        "prediction_date": "2026-05-24"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "[REVIVED] 本日の Tenstorrent のニュースは、この休眠していた AI チップ IPO のロングショットを、直接の兆候で再び点灯させる。Keller は6月30日に、報じられた80〜100億ドルの Qualcomm による買収を否定し、7月3日にかけて改めて表明した。そして報道は、Tenstorrent が自らを売りに出しているのではなく、IPO ブリッジと秘密保持 S-1 の路線を歩んでいる最中であり、Galaxy ラックのロードマップと IP ライセンスモデルが独立した軌道にあると明言している。これはまさに、Tenstorrent の S-1 が AI 加速器 IPO 群の先陣を担う、というこの予測が依拠する仕組みそのものであり、いまや同社が、業界の買収意欲が高まるなか売却よりも株式公開を能動的に選んでいる。ここで持ち上がったのは、再表明された秘密保持 S-1 の姿勢と拒否された買収であって、比較対象群の第1号として着地する公開の（非秘密保持の）S-1 提出ではない。したがって復活は意向と路線のレベルにとどまり、この予測が8月上旬までと名指す実際の公開提出はなお保留のままだ。",
+      "reference_links": [
+        {
+          "label": "GuruFocus - Tenstorrent CEO が Qualcomm による買収交渉を否定",
+          "url": "https://www.gurufocus.com/news/8938157/tenstorrent-ceo-denies-qualcomm-acquisition-talks-amid-focus-on-ai-development"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Keller の6月30日の Qualcomm による買収の否定は、7月3日にかけて改めて表明され、Tenstorrent を IPO ブリッジと秘密保持 S-1 の路線を歩む最中に保ち、Galaxy のロードマップと IP ライセンスモデルは独立している。買収意欲が高まるなか売却よりも株式公開を選ぶことが、先陣を担う S-1 の仕組みを支える力だが、着地した提出ではなく意向と路線のレベルにとどまる。",
+        "coherence": 3,
+        "remaining_gap": "再表明された秘密保持の路線ではなく、比較対象となる AI チップ群の第1号として実際に提出された公開の（非秘密保持の）S-1 が必要だ。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.d15f8427132cce7b",
+        "short_label": "A frontier AI lab files a public S-1 and prices its IPO by Q2 2027",
+        "prediction_date": "2026-06-12"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "[REVIVED] 本日の Together AI の調達は、この休眠していた IPO のロングショットを、下ごしらえのレベルで温め続ける。8億ドルのシリーズCは、主導投資家 Prosperity7 のマネージングディレクター Abhishek Shukla が Together を株式公開へ向かうものと位置づけて行われ、報道はこれを、いまフロンティア各社自身を引き寄せているのと同じ IPO への引力だと明言している。加えて2.5倍の評価額上昇と、民間シンジケートがいずれ引き受けをやめる、およそ50倍への拡大を計画する GPU 保有規模を伴う。これはまさに、この予測が依拠する民間の巨額ラウンドから株式流動性へという仕組みであり、いまやスタックを一段下ったオープンモデル推論の層で見え、各研究所自身の IPO への引力と地続きのものとして描かれている。表面化したのは、フロンティア研究所が価格帯付きの公開の（非秘密保持の）S-1 を提出することではなく、ネオクラウドに結びついた IPO の位置づけだ。したがって復活は市場ウィンドウのレベルにとどまり、この予測が名指す実際の研究所による提出はなお保留のままだ。",
+      "reference_links": [
+        {
+          "label": "Business Wire - Together AI が評価額83億ドルで8億ドルを調達",
+          "url": "https://www.businesswire.com/news/home/20260701243402/en/Together-AI-Raises-$800-Million-at-$8.3-Billion-Valuation-to-Make-Frontier-AI-Accessible-to-All"
+        },
+        {
+          "label": "DataCenter Dynamics - Together AI がシリーズCで8億ドルを調達",
+          "url": "https://www.datacenterdynamics.com/en/news/together-ai-raises-800m-in-series-c-funding-round/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "Together の8億ドルのシリーズCは、主導投資家 Prosperity7 が同社を株式公開へ向かうものと位置づけて行われ、報道はこれを、いまフロンティア各社を引き寄せているのと同じ IPO への引力だと呼び、加えて2.5倍の評価額上昇と、民間シンジケートが引き受けをやめる保有規模を伴う。これは、この仮説が依拠する民間の巨額ラウンドから株式流動性へという条件であり、各研究所の一段下で表面化している。",
+        "coherence": 2,
+        "remaining_gap": "ネオクラウドではなくフロンティア研究所が、価格帯を明示した公開の（非秘密保持の）S-1 を提出することが必要だ。"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.82599b6cfd05751b",
+        "short_label": "Consumer-GPU coding agents displace cloud-only APIs for 30% of devs by Q3 2026",
+        "prediction_date": "2026-04-26"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "[REVIVED] 本日の Ollama リリースは、この休眠していたコンシューマー GPU コーディングの仮説を、まさにその仮説が生きる場所、すなわちオンデバイスとホスティングの差を縮めることで復活させる。Ollama 0.31 は Apple Silicon 上の Gemma 4 でマルチトークン予測をデフォルトで有効化し、出力を変えずにコーディングエージェント向けベンチマークでトークン生成がほぼ90%高速化したと報告した。加えて小バッチ向け MLX カーネルが、M5 Max と nvfp4 の環境で Gemma 4 の最大級の行列積を2〜2.5倍高速化する。報道は、コーディングエージェントは予測しやすいコードに対してモデルを絶えず呼び出すため、採用されたドラフトの効果がセッションを通じて積み上がり、この恩恵は構造的だと指摘する。そして、Mac 上で OpenAI 互換エンドポイントの背後にローカルモデルを走らせる者にとって、オンデバイスのエージェント的スループットは、新しいハードウェアなしにホスティング推論との差を意味あるかたちで縮めたばかりだと結論づける。これはまさに、ローカルのコーディングエージェントがクラウド API を下回るコストで切り崩す、というこの予測が乗る仕組みだ。証拠は Apple Silicon 上の1つのモデル系列のスループット向上であって、開発者が実際にクラウド専用 API から乗り換えた計測された割合ではない。したがって復活は駆動要因のレベルにとどまり、名指された開発者の30%という採用の基準には触れていない。",
+      "reference_links": [
+        {
+          "label": "Ollama Blog - マルチトークン予測による MLX 上での Gemma 4 高速化",
+          "url": "https://ollama.com/blog/faster-gemma-4-mlx-mtp"
+        },
+        {
+          "label": "GitHub - Ollama v0.31.1 リリース",
+          "url": "https://github.com/ollama/ollama/releases/tag/v0.31.1"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Ollama 0.31 は Gemma 4 のマルチトークン予測をデフォルトで有効化し、出力を変えずにコーディングベンチマークでトークン生成が90%高速化し、加えてカーネルが M5 Max で最大級の行列積を2〜2.5倍高速化する。コーディングエージェントは予測しやすいコードに対してモデルを絶えず呼び出すため、採用されたドラフトの効果が積み上がり、ローカルエージェントがクラウド API を切り崩す駆動要因であるオンデバイスとホスティングの差を縮める。",
+        "coherence": 3,
+        "remaining_gap": "1つのモデル系列のスループット向上ではなく、開発者が実際にクラウド専用 API から乗り換えた計測された割合が必要だ。"
+      }
+    }
+  ]
+}

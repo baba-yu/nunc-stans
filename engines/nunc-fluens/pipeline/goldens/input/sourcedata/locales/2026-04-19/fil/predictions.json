@@ -1,0 +1,47 @@
+{
+  "date": "2026-04-19",
+  "predictions": [
+    {
+      "id": "prediction.4bd551bfc1cca138",
+      "scope_hint": "tech",
+      "title": "Bonsai 8B nag-aangkla sa 1-bit native training bilang default na edge-LLM recipe pagsapit ng Q3 2026",
+      "body": "**Ang 1-bit native training ay magiging dominanteng alternatibo sa post-hoc quantization.** Ipinapakita ng Bonsai 8B ang production-quality output sa 1.15 GB. Ang pag-disenyo para sa 1-bit mula sa training, sa halip na 4/8-bit post-quantization, ay magiging standard para sa edge LLMs. Asahan ang 1-bit derivatives ng Qwen at Llama families sa loob ng susunod na quarter. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Ang Bonsai 8B ay nag-ship ng production-quality output sa 1.15 GB sa pamamagitan ng natively na training sa 1-bit.",
+        "given": "Ang Edge LLM deployment ay memory-bound; ang post-hoc 4/8-bit quantization ay naglilimita sa nakukuhang compression.",
+        "so_that": "Ang native 1-bit training ay magiging default na edge-LLM recipe at ang 1-bit Qwen/Llama derivatives ay maglulunsad.",
+        "landing": "Sa loob ng ~1 quarter; nangunguna ang open-weight Qwen + Llama family forks.",
+        "plain_language": "Ang 1.15 GB na model ay gumagana na nang maayos. Ang pag-train nang maliit mula sa unang araw ay mas mabuti kaysa sa pag-shrink mamaya, kaya asahan ang maliliit na kopya ng popular na models sa lalong madaling panahon."
+      },
+      "summary": "Ang 1.15 GB production-quality result ng Bonsai 8B ay nagpapakita na ang native 1-bit training ay nakakahigit sa post-hoc 4/8-bit quantization para sa edge deployment. Sa loob ng halos isang quarter, asahan na ang open-weight 1-bit derivatives ng Qwen at Llama families ay susunod sa recipe na ito."
+    },
+    {
+      "id": "prediction.c08481a657991ec8",
+      "scope_hint": "cross",
+      "title": "Agent registry standard tutugma sa MCP para sa agent artifacts pagsapit ng H2 2026",
+      "body": "**Convergence patungo sa isang \"Agent Registry\" model.** Ang AWS Agent Registry, ang audit-log + guardrail story ng NemoClaw, at ang self-learned skills ng Hermes Agent ay lahat lumitaw sa parehong window. Pagsapit ng H2 2026, isang registry standard para sa pag-distribute ng agent artifacts (skills, tool permissions, audit traces) ang lalago kasabay ng MCP. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Ang AWS Agent Registry, NemoClaw audit/guardrail, at Hermes self-learned skills ay lahat lumitaw nang sabay-sabay.",
+        "given": "Kailangan ng mga enterprise ng portable, auditable na paraan para mag-ship ng agent skills, tool permissions, at traces.",
+        "so_that": "Isang shared registry standard para sa agent artifacts ang lalago kasabay ng MCP at magiging distribution shape.",
+        "landing": "Pagsapit ng H2 2026; nakikitang multi-vendor registry spec activity.",
+        "plain_language": "Ilang kumpanya ang naglunsad kamakailan ng mga paraan para magbahagi ng AI agents at kanilang permissions. Sa lalong madaling panahon, isang common format ang magbibigay-daan sa agents na lumipat sa pagitan ng platforms nang ligtas."
+      },
+      "summary": "Ang AWS Agent Registry, ang audit-log at guardrail tooling ng NemoClaw, at ang self-learned skills ng Hermes Agent ay lumitaw sa parehong window. Pagsapit ng H2 2026, asahan na isang registry standard para sa pag-distribute ng agent artifacts (skills, tool permissions, audit traces) ang lalago kasabay ng MCP."
+    },
+    {
+      "id": "prediction.995feb039ef043c1",
+      "scope_hint": "tech",
+      "title": "Indirect prompt injection magiging top CVE category pagsapit ng Q3 2026",
+      "body": "**Ang indirect prompt injection ay magiging top CVE category.** Ang matagumpay na pag-atake ay tumaas ng +190% YoY, at ang mga CVE-2025-53773-style flaws (RCE mula sa PR body) ay madaling reproducible. Pagsapit ng Q3 2026, ang CVSS 8.0+ LLM-integration CVEs ay magiging regular na bahagi ng Patch Tuesday. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Ang matagumpay na indirect-prompt-injection attacks ay tumaas ng +190% YoY at ang CVE-2025-53773 RCE-from-PR-body ay reproducible nang trivially",
+        "given": "Ang LLM coding assistants at agentic tools ay direktang bumabasa ng untrusted text (PRs, issues, web pages) papasok sa privileged execution paths",
+        "so_that": "Ang CVSS 8.0+ LLM-integration CVEs ay maglulunsad sa regular na Patch Tuesday cadence, hindi bilang one-off advisory curiosities",
+        "landing": "pagsapit ng Q3 2026; paulit-ulit na entries sa monthly Patch Tuesday rollups",
+        "plain_language": "Ang mga hacker ay nagtatago ng commands sa mga bagay na binabasa ng AI tools, tulad ng pull requests o web pages, at pinapatakbo ito ng AI. Sa lalong madaling panahon, magpapatch ang mga vendor nito buwan-buwan."
+      },
+      "summary": "Ang indirect prompt injection ay tumitigas bilang recurring CVE category: matagumpay na attacks +190% YoY, at ang CVE-2025-53773-style RCE-from-PR-body flaws ay madaling reproducible. Pagsapit ng Q3 2026, ang CVSS 8.0+ LLM-integration CVEs ay magiging regular na Patch Tuesday fixture."
+    }
+  ]
+}

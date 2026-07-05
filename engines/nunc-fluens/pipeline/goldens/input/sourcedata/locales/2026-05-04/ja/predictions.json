@@ -1,0 +1,47 @@
+{
+  "date": "2026-05-04",
+  "predictions": [
+    {
+      "id": "prediction.45f984ec0a2420c0",
+      "scope_hint": "cross",
+      "title": "ハイパースケーラーが倫理的除外規定を含む類似のJVテンプレートを2026年Q4までに公表する",
+      "body": "**2026年Q4までに、5月4日の並行JVローンチ — AnthropicのBlackstone + Hellman & Friedman + Goldman Sachsとの$1.5BエンタープライズAI合弁(各社$300Mコミット) + OpenAIの並行「The Development Company」発表 — に、5月1日の8ベンダーPentagon機密ネットワーク除外(Anthropicは明示的に除外、既存導入は6ヶ月のサンセット期間)、4月7日のAnthropic Project Glasswingゲート配布前例(約50のローンチパートナー + 約40の重要ソフトウェアインフラ組織、$100Mの利用クレジット + $4Mのオープンソースセキュリティ寄付)、4月28日〜5月1日のRSAC 2026スタック(Cisco DefenseClaw + Microsoft Agent 365 GA + CSA Zero Trustフレーミング)が組み合わさり、1社以上のハイパースケーラー・パートナー(Microsoft / AWS / Google)に対し、必須の倫理カーブアウト言語 + 監査済みAIサービス売上シェアセグメントを10-Q脚注に含めた構造的に類似のJVテンプレートを公表することを強いる。** 強制関数は二重の開示プレッシャー: バイサイドは$50B(Anthropicラウンド) + $122B(OpenAIラウンド) + 並行JVスタックの資金供給を求められているが、Bedrock / Foundry / Vertexの展開が運用上のサービス提供基盤となっているハイパースケーラーからは同等の開示形状が出ていない。最初に公表したハイパースケーラーがテンプレートを固定する。Microsoftの5月1日 Agent 365 GA + Cisco DefenseClawオープンソースリリースが運用上のアンカーシグナル。Microsoftが最有力の先駆者となる根拠は、Bedrock相当のFoundryが4月29日の$37B AIランレート単一ライン項目開示で監査済みAI売上前例を既に確立しており、加えてMicrosoftはAnthropic Mythos + Foundry経由のClaude統合を持つため並行JVが現実的になる点。In plain language: PentagonがAnthropicを締め出した後、AnthropicとOpenAIは同日に投資家資金で支えられた事業部門を立ち上げた — 近いうちにクラウド企業がその形をコピーするだろう。In plain language: In plain language:",
+      "reasoning": {
+        "because": "AnthropicとOpenAIは、5月4日の同じニュースサイクルで投資家資金による並行エンタープライズAI JVをそれぞれローンチした。",
+        "given": "Pentagonの5月1日の8ベンダー除外が、フロンティア・ラボに対し機密調達の外側で構造化された商業展開形状を出荷することを強いている。",
+        "so_that": "1社以上のハイパースケーラー・パートナーが、必須の倫理カーブアウト + 監査済みAIサービス売上シェア脚注を含む類似のJVテンプレートを出荷する。",
+        "landing": "2026年Q4までに。MicrosoftがFoundry + Anthropic Mythos統合を経由する最有力の先駆者。",
+        "plain_language": "PentagonがAnthropicを締め出した後、AnthropicとOpenAIは同日に投資家資金で支えられた事業部門を立ち上げた — 近いうちにクラウド企業がその形をコピーするだろう。"
+      },
+      "summary": "5月4日、AnthropicはBlackstone、Hellman & Friedman、Goldman Sachsと$1.5BのエンタープライズAI JVをローンチし、OpenAIは並行する「The Development Company」部門を発表した。5月1日のPentagonによるAnthropic除外と組み合わさり、2026年Q4までに、ハイパースケーラー・パートナーが監査済みAIサービス売上シェア開示を伴う構造的に類似のJVテンプレートを公表することが期待される。"
+    },
+    {
+      "id": "prediction.9d68206f94f7d87d",
+      "scope_hint": "tech",
+      "title": "Unsloth 2026スタックがハイパースケーラー運用のファインチューニングサービスとして2026年下半期までに登場する",
+      "body": "**2026年下半期までに、Unsloth 2026アップデートの波 — 12倍高速MoE学習 + 超ロングコンテキスト強化学習 + 1.8〜3.3倍高速 embedding / BERT / 分類器学習でVRAM 20%削減 + コンテキスト2倍長(Hugging Face共同エンジニアリング) + Unsloth Studio 3月17日 100%オフラインGGUF + Safetensorsランタイム + NVIDIA DGX Spark RTX-AI Garageファインチューニング・ガイド(RTXラップトップ性能2.5倍向上) — がSGLangのH100上での29%スループット優位(RadixAttentionプレフィックスキャッシュをvLLMと共有、約16,200 vs 約12,500 tok/s) + SGLangのMiMo-V2-Flash、Nemotron 3 Nano、Mistral Large 3、LLaDA 2.0 Diffusion、MiniMax M2へのday-0サポート + 4月28日〜5月3日のKVキャッシュarxiv波(SideQuest、DepthKV、KVFundaBench)と組み合わさり、コンシューマーGPU学習をエンタープライズGPU 2024ベースラインと運用上同等にする。1社以上のハイパースケーラー(AWS Bedrock fine-tuning、Azure AI Foundry、またはGoogle Vertex AI)が、コンシューマーGPU → エンタープライズ・ファインチューニング間のギャップを埋めるため、AWS re:Invent / Microsoft Igniteのサイクルまでに、マネージド・ランタイム + IAM + 監査 + コスト最適化GPUプールを伴うマネージドUnsloth-as-a-serviceティアを出荷することが期待される。** 強制関数は調達摩擦の非対称性: 内部Unslothパイロットを持つ企業はコンシューマーGPUで既にVRAM 70%削減の経済性を得ているが、エンタープライズのセキュリティ + ガバナンス要件には、オープンソースCLIでは提供できないマネージド・コントロールプレーンが必要となる。最初に出荷したハイパースケーラーが移行需要を吸収する。Microsoft Foundry Agent Framework + AWS Bedrock AgentCore Runtime + Google Vertex AIはいずれもランタイム基盤を持っており、欠けているピースは、オープンソースカーネル性能とマネージドIAMエンタープライズ・ガバナンスを統合するファインチューニング・アズ・ア・サービスのサーフェスである。In plain language: ローカルLLM学習は今や2倍高速でVRAMも70%少なくて済む — 近いうちに大手クラウドがそれをマネージドサービスとして貸し出すだろう。In plain language: In plain language:",
+      "reasoning": {
+        "because": "Unsloth 2026アップデート + NVIDIA DGX Sparkガイド + SGLangのH100で29%スループット優位が、コンシューマーGPUとエンタープライズGPUの経済性を収斂させている。",
+        "given": "エンタープライズのセキュリティ + ガバナンスは依然として、オープンソースCLIでは提供できないマネージドIAM + 監査 + コスト最適化GPUコントロールプレーンを要求している。",
+        "so_that": "ハイパースケーラーがBedrock、Foundry、またはVertex上にマネージドUnsloth-as-a-serviceファインチューニング・ティアを出荷する。",
+        "landing": "2026年下半期まで。AWS re:InventおよびMicrosoft Igniteのサイクル以前。",
+        "plain_language": "ローカルLLM学習は今や2倍高速でVRAMも70%少なくて済む — 近いうちに大手クラウドがそれをマネージドサービスとして貸し出すだろう。"
+      },
+      "summary": "Unslothの2026年波(12倍MoE学習、Hugging Face共同作業によりVRAM 20%減で1.8〜3.3倍高速のBERT/embedding) + NVIDIA DGX Sparkガイダンス + SGLangのH100 29%スループット優位が、コンシューマーGPU学習を2024年エンタープライズGPUベースラインに到達させる。2026年下半期までに、ハイパースケーラーがマネージドUnslothファインチューニング・ティアを出荷することが期待される。"
+    },
+    {
+      "id": "prediction.41589b1968c4543f",
+      "scope_hint": "business",
+      "title": "AMDが2026年Q3までに10-Qセグメント脚注でAIアクセラレータ売上を分離開示する",
+      "body": "**2026年Q3までに、AMD 5月5日 Q1 2026決算 — コンセンサスEPS $1.28 / 売上 $9.88B(前年比+33%); ガイダンス $9.8B(±$300M、前年比+32%); 粗利率は前期比-2ppの55%へ(Q4 2025の+$360M MI308在庫引当戻入が消失); MI308中国売上はQ4 約$390MからQ1 約$100Mへ(前期比-75%); MI400 Helios rack-scale + Ryzen AI 400 + OpenAI 6GW MI450 2026年下半期初回展開が焦点となる前向きシグナル — に、4月30日のAAPL Q3 +14〜17%ガイド(コンセンサス9.5%対比)が別建てAIサービスラインなしで発表されたこと + $700Bの2026年Big-Tech AI capexテープ + $100B AAPL自社株買い権限 + 4月29日のMSFT $37B AIランレート単一ライン項目前例 + 5月4日のAnthropic + OpenAI並行JV発表(フロンティアAIを構造化エクイティラッパーで収益化)が組み合わさり、少なくとも1社のチップベンダー(中国断崖開示プレッシャーを考慮するとAMDが最有力先駆者; またはNVIDIA / Broadcomが同型として)に対し、SECの強制以前にAIアクセラレータ専用売上を10-Qセグメント脚注として公表することを強いる。開示前例は、より侵襲的なクラウドセグメント開示体制ではなく、MSFT $37B AIランレート脚注の形(任意の補足ブレイクアウトを伴う単一ライン項目)に倣うことが期待される。** 強制関数は二重の非対称性: AMDのMI308中国崩壊は輸出規制売上開示形状を強い、AIアクセラレータ売上ギャップはAI売上開示形状を強いる; 最もクリーンなIRパスは両者を同時に出荷することである。5月5日の決算が自然なアンカー; AMD CFOのコメンタリーが先行指標。NVIDIA + Broadcomは競争的開示プレッシャーにより1〜2回の決算サイクル以内で追随する。In plain language: AMDの中国向けAIチップ売上は1四半期で75%も落ちた — ウォール街はチップ企業に対しAI売上を別ラインとして分けて出すよう要求するだろう。In plain language: In plain language:",
+      "reasoning": {
+        "because": "AMDのMI308中国売上が5月5日決算に向けて前期比-75%崩壊($390M → $100M)し、輸出規制の開示非対称性を露呈させた。",
+        "given": "MSFT $37B AIランレート単一ライン前例 + $700Bの2026年capexテープ + 並行AI-JVエクイティラッパーが、バイサイドの開示水準を引き上げている。",
+        "so_that": "1社以上のチップベンダーが、SEC強制以前にAIアクセラレータ専用売上を10-Qセグメント脚注として公表する。",
+        "landing": "2026年Q3まで; AMDが最有力の先駆者、NVIDIA + Broadcomは1〜2回の決算サイクル以内で追随。",
+        "plain_language": "AMDの中国向けAIチップ売上は1四半期で75%も落ちた — ウォール街はチップ企業に対しAI売上を別ラインとして分けて出すよう要求するだろう。"
+      },
+      "summary": "AMDの5月5日 Q1決算は、MI308中国売上崩壊(前期比-75%)と衝突する一方で、MSFTの$37B AIランレート開示と5月4日の並行AI-JVローンチが開示水準を硬化させている。2026年Q3までに、少なくとも1社のチップベンダー(AMDが最有力; NVIDIA、Broadcomが同型)が、AIアクセラレータ専用売上を10-Qセグメント脚注として公表することが期待される。"
+    }
+  ]
+}

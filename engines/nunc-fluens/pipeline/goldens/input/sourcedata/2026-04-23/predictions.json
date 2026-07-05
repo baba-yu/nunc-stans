@@ -1,0 +1,47 @@
+{
+  "date": "2026-04-23",
+  "predictions": [
+    {
+      "id": "prediction.99f1f0a5202acdbb",
+      "scope_hint": "cross",
+      "title": "Agent Control Plane becomes the new hyperscaler battleground by Q3 2026",
+      "body": "**The \"Agent Control Plane\" becomes the new battleground in hyperscaler competition.** Google's Gemini Enterprise Agent Platform, AWS Bedrock AgentCore's new Managed Harness / CLI / skills, and OpenAI's Workspace Agents all converge on the same strategy: **bind the agent lifecycle, audit, and governance into a single control plane.** By Q3 2026, Okta / Microsoft Entra ID / Google Workspace SSO layers will treat agent identifiers as first-class objects alongside humans and service accounts. CASB / SSPM vendors will measure \"API calls touched by AI agents\" with a separate SLO / risk score from human-user baselines. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Google Gemini Enterprise Agent Platform, AWS Bedrock AgentCore, and OpenAI Workspace Agents land in the same window with one control-plane shape.",
+        "given": "Enterprises need a single place to govern agent lifecycle, audit, and identity as agents proliferate across SaaS and infrastructure.",
+        "so_that": "SSO providers treat agent IDs as first-class principals and CASB / SSPM vendors track AI-agent API calls under a separate risk score.",
+        "landing": "By Q3 2026; Okta / Entra ID / Workspace agent-ID category + CASB / SSPM AI-agent metric live.",
+        "plain_language": "Three big clouds all built one place to manage AI agents this week. Soon login systems will treat agents like users with their own permissions."
+      },
+      "summary": "Google's Gemini Enterprise Agent Platform, AWS Bedrock AgentCore, and OpenAI Workspace Agents converge on a single agent-lifecycle control plane. By Q3 2026, Okta / Entra ID / Google Workspace are expected to treat agent IDs as first-class principals while CASB / SSPM vendors carve out a separate risk metric for AI-agent API calls."
+    },
+    {
+      "id": "prediction.bcace95fe3e753d1",
+      "scope_hint": "tech",
+      "title": "27B Dense + 1M context becomes default enterprise local-LLM recipe by Q3 2026",
+      "body": "**\"27B Dense + 1M context\" becomes the de facto standard for enterprise local LLMs in H2 2026.** Qwen3.6-27B demonstrates that the package — no MoE routing complexity, runs on a single RTX 4090, 1M context, Apache 2.0 — reaches flagship-grade coding ability. By Q3 2026, Mistral / Meta / DeepSeek / Google Gemma will each ship 20-30B Dense × 1M context × Apache/Llama-style models. The differentiators for 70B+ MoE narrow to multimodal understanding, tool breadth, and long-horizon reasoning. On-prem inference's default VRAM requirement shifts down from RTX 6000 48GB / H100 80GB to **RTX 4090 24GB / Apple M4 Max 64GB**. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Qwen3.6-27B Dense beats the 397B MoE on SWE-bench Verified at 77.2% on a single RTX 4090 with 1M context under Apache 2.0.",
+        "given": "Dense 20-30B at long context removes MoE routing complexity and fits commodity 24GB VRAM, collapsing on-prem deployment cost.",
+        "so_that": "Mistral / Meta / DeepSeek / Gemma converge on a 20-30B Dense × 1M context recipe and 70B+ MoE retreats to multimodal / tool / long-horizon niches.",
+        "landing": "By Q3 2026; ≥3 vendor 20-30B Dense releases + RTX 4090 / M4 Max as default on-prem VRAM.",
+        "plain_language": "A 27B model now matches a 400B one for coding and runs on one gaming GPU. Other labs will copy this recipe in months."
+      },
+      "summary": "Qwen3.6-27B Dense reaches flagship-grade coding (SWE-bench Verified 77.2%) on a single RTX 4090 with 1M context under Apache 2.0, beating its 397B MoE predecessor. By Q3 2026, Mistral, Meta, DeepSeek, and Gemma are expected to ship comparable 20-30B Dense × 1M context models, shifting on-prem VRAM defaults to RTX 4090 / M4 Max."
+    },
+    {
+      "id": "prediction.5acccd6cae1f9b03",
+      "scope_hint": "business",
+      "title": "Frontier-model previews require SOC 2 + FedRAMP + FMF baseline by Q3 2026",
+      "body": "**AI agent security standards extend to the \"third-party-vendor boundary\" and \"URL-naming entropy.\"** The Mythos unauthorized-access incident (contractor + naming-convention guess + third-party leaked data) replays the Vercel-Context.ai supply-chain pattern, this time at a frontier-model access-control layer. By Q3 2026, \"frontier model preview / early access third-party vendor environments\" will be required to clear a common security baseline of SOC 2 Type II + FedRAMP Moderate + Frontier Model Forum, and endpoint URLs / subdomains will move to randomized, hard-to-guess naming. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "The Mythos Preview breach combined contractor credentials, the Mercor leak, and naming-convention guessing — exactly replaying the Vercel-Context.ai supply-chain shape.",
+        "given": "Frontier-model preview environments rely on third-party vendors and predictable subdomains, so identity + naming entropy is the new attack surface.",
+        "so_that": "Third-party preview vendors must clear a SOC 2 Type II + FedRAMP Moderate + Frontier Model Forum baseline and endpoint URLs move to randomized naming.",
+        "landing": "By Q3 2026; common third-party-vendor security baseline + randomized endpoint naming visible at frontier labs.",
+        "plain_language": "Hackers reached Anthropic's secret model by guessing its web address and using a contractor's stolen login. Soon labs will randomize URLs and require stricter contractor checks."
+      },
+      "summary": "The Mythos Preview unauthorized-access incident — contractor credentials, the Mercor leak, and a guessed naming convention — replays the Vercel-Context.ai supply-chain pattern at a frontier-model access-control layer. By Q3 2026, third-party preview vendors are expected to clear a SOC 2 Type II + FedRAMP Moderate + Frontier Model Forum baseline and endpoint URLs to move to randomized naming."
+    }
+  ]
+}

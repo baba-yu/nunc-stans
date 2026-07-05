@@ -1,0 +1,47 @@
+{
+  "date": "2026-04-20",
+  "predictions": [
+    {
+      "id": "prediction.4bd33db2ea06e5b4",
+      "scope_hint": "tech",
+      "title": "ローカルファースト型コーディングエージェントが2026年Q3までにクラウドオーバーフローをデフォルトとして標準化",
+      "body": "**「ローカルファースト、クラウドはオーバーフロー」逆転の加速。** Qwen3.6-35B-A3BがSWE-bench Verifiedで73.4%、Bonsai 1.7BがCUDA上で674 tok/sを達成し、エッジ実装は実用領域へ押し上げられている。2026年Q3までに、個人/中小企業向けのコーディングエージェントは「ローカルをデフォルト、クラウドはオーバーフロー」へと標準化する。In plain language: In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Qwen3.6-35B-A3BがSWE-bench Verifiedで73.4%、Bonsai 1.7BがCUDA上で674 tok/sに達している。",
+        "given": "エッジで動作可能なモデルが、有用なコーディングエージェントの品質基準に達した一方、クラウド推論は依然として従量課金かつレイテンシ制約下にある。",
+        "so_that": "個人および中小企業向けのコーディングエージェントスタックは、ローカル実行をデフォルトとし、クラウドはオーバーフローと困難なタスク用に確保する。",
+        "landing": "2026年Q3まで、個人および中小企業向けコーディングエージェントツール領域で。",
+        "plain_language": "自分のコンピュータで動く小型のコーディングAIが十分に賢く速くなったため、ほとんどの人はまずローカルを使い、必要なときだけクラウドを呼び出すようになる。"
+      },
+      "summary": "Qwen3.6-35B-A3BがSWE-bench Verifiedで73.4%、Bonsai 1.7BがCUDA上で674 tok/sを達成し、エッジ向けコーディングエージェントが実用領域へ進入した。2026年Q3までに、個人および中小企業向けコーディングエージェントスタックは、ローカルをデフォルト、クラウドはオーバーフローという構成に標準化されると見込まれる。"
+    },
+    {
+      "id": "prediction.4ecb84808c9acc3f",
+      "scope_hint": "tech",
+      "title": "Agent-in-the-Loop型シークレット漏洩が2026年Q3までにCIS / OWASPリスクリストの首位に",
+      "body": "**CI / エージェント経由のシークレット漏洩が次の主戦場となる。** GitHub Actionsを介した間接プロンプトインジェクションのPoCが、Claude Code、Gemini CLI、Copilotの3ベンダーで同時期に再現されている。2026年Q2-Q3にかけて、新たなサプライチェーンセキュリティのカテゴリ「Agent-in-the-Loop Secret Exfiltration」がCIS / OWASPのリスクリストの上位に台頭する。In plain language: In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "OWASPが「State of Agentic AI Security and Governance v2.01」を公開し、CI/エージェント経由の漏洩リスクを明文化した。",
+        "given": "Claude Code、Gemini CLI、Copilotで再現されたPoCが、いまやOWASPのエージェント・ガバナンスの土台に取り込まれている。",
+        "so_that": "次の節目は、漠然とした言及にとどまらず「Agent-in-the-Loop Secret Exfiltration」が独立項目としてCIS / OWASPのリスクリスト首位に立つこと。",
+        "landing": "2026年Q3(7〜9月)まで、CIS / OWASPに名指しのトップリスト項目として。",
+        "plain_language": "OWASPがエージェント向けセキュリティ指針を公開した。次は、この漏洩リスクが独立した項目としてリストの首位に挙がるかを見守る段階だ。"
+      },
+      "summary": "GitHub Actionsを介した間接プロンプトインジェクションのPoCが、同時期にClaude Code、Gemini CLI、Copilotで再現されている。2026年Q2-Q3にかけて、新たなサプライチェーンカテゴリ「Agent-in-the-Loop Secret Exfiltration」がCISおよびOWASPのリスクリスト上位に台頭すると見込まれる。"
+    },
+    {
+      "id": "prediction.4bbf8ec79bafedd1",
+      "scope_hint": "tech",
+      "title": "Headless Everythingが2026年H2までにMCP/Agent Registry経由で標準化",
+      "body": "**「ヘッドレス・エブリシング」アーキテクチャの標準化。** Simon Willisonの4月19日のテーゼ — 個人向けAIはGUIを操作するよりもヘッドレスサービスを直接叩くほうが高速かつ信頼できる — は、ブラウザを操作するエージェント(Claude in Chromeなど)に対する軸を提示している。2026年下半期までに、MCP / Agent Registryのサーフェス上で「ヘッドレス優先」メタデータ標準が登場すると見込まれる。In plain language: In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Simon Willisonの4月19日のテーゼは、個人向けAIにおいてヘッドレスのサービス呼び出しがGUI操作よりも速度・信頼性で優ると主張している。",
+        "given": "ブラウザを操作するエージェント(Claude in Chromeなど)は、ヘッドレスサービスへの直接API呼び出しに比べて遅く、壊れやすい。",
+        "so_that": "MCP / Agent Registryのサーフェスは、エージェントがデフォルトでヘッドレス経路を選ぶよう「ヘッドレス優先」メタデータフィールドを追加する。",
+        "landing": "2026年下半期まで、MCP / Agent Registryのサーバーメタデータ上で可視化される。",
+        "plain_language": "サービスを直接呼び出すエージェントは、ウェブページ上でクリック操作するエージェントより速く、壊れにくい。そのため、レジストリはどちらの経路を優先すべきかをラベル付けし始める。"
+      },
+      "summary": "Simon Willisonの4月19日のテーゼは、個人向けAIにおいてヘッドレスのサービス呼び出しがGUI操作より高速かつ信頼性が高いと位置付け、Claude in Chromeのようなブラウザ操作エージェントに対する軸を形成している。2026年下半期までに、MCPおよびAgent Registryのサーフェスは「ヘッドレス優先」メタデータ標準を備えると見込まれる。"
+    }
+  ]
+}

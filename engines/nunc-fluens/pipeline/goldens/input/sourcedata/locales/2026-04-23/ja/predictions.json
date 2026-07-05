@@ -1,0 +1,47 @@
+{
+  "date": "2026-04-23",
+  "predictions": [
+    {
+      "id": "prediction.99f1f0a5202acdbb",
+      "scope_hint": "cross",
+      "title": "エージェント・コントロールプレーンが2026年Q3までにハイパースケーラー競争の新たな主戦場となる",
+      "body": "**「エージェント・コントロールプレーン」がハイパースケーラー競争の新たな主戦場となる。** GoogleのGemini Enterprise Agent Platform、AWS Bedrock AgentCoreの新Managed Harness / CLI / skills、そしてOpenAIのWorkspace Agentsはすべて同じ戦略に収斂している。**エージェントのライフサイクル、監査、ガバナンスを単一のコントロールプレーンに統合する**ことだ。2026年Q3までに、Okta / Microsoft Entra ID / Google Workspace SSOレイヤーは、エージェント識別子を人間やサービスアカウントと並ぶファーストクラスのオブジェクトとして扱うようになる。CASB / SSPMベンダーは「AIエージェントが触れたAPIコール」を、人間ユーザーのベースラインとは別のSLO / リスクスコアで測定するようになる。In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Google Gemini Enterprise Agent Platform、AWS Bedrock AgentCore、OpenAI Workspace Agentsが同じ時期に同じコントロールプレーンの形で着地した。",
+        "given": "エージェントがSaaSとインフラ全体に拡散する中、企業はエージェントのライフサイクル、監査、アイデンティティを統治する単一の場所を必要としている。",
+        "so_that": "SSOプロバイダがエージェントIDをファーストクラスのプリンシパルとして扱い、CASB / SSPMベンダーがAIエージェントのAPIコールを別のリスクスコアで追跡するようになる。",
+        "landing": "2026年Q3までに、Okta / Entra ID / WorkspaceのエージェントIDカテゴリ + CASB / SSPMのAIエージェント指標が稼働する。",
+        "plain_language": "今週、3大クラウドがすべてAIエージェントを管理する場所を構築した。まもなくログインシステムはエージェントを独自の権限を持つユーザーのように扱うようになる。"
+      },
+      "summary": "GoogleのGemini Enterprise Agent Platform、AWS Bedrock AgentCore、OpenAI Workspace Agentsが、単一のエージェントライフサイクル・コントロールプレーンに収斂した。2026年Q3までに、Okta / Entra ID / Google WorkspaceがエージェントIDをファーストクラスのプリンシパルとして扱い、CASB / SSPMベンダーがAIエージェントのAPIコールに対して別のリスク指標を切り出すと予想される。"
+    },
+    {
+      "id": "prediction.bcace95fe3e753d1",
+      "scope_hint": "tech",
+      "title": "27B Dense + 1Mコンテキストが2026年Q3までに企業向けローカルLLMのデフォルトレシピとなる",
+      "body": "**「27B Dense + 1Mコンテキスト」が2026年下半期の企業向けローカルLLMのデファクト標準になる。** Qwen3.6-27Bは、MoEルーティングの複雑さなし、単一のRTX 4090で動作、1Mコンテキスト、Apache 2.0というパッケージで、フラッグシップ級のコーディング能力に到達することを実証した。2026年Q3までに、Mistral / Meta / DeepSeek / Google Gemmaはそれぞれ20-30B Dense × 1Mコンテキスト × Apache/Llamaスタイルのモデルをリリースする。70B+ MoEの差別化要素は、マルチモーダル理解、ツールの幅、長期推論に絞られる。オンプレミス推論のデフォルトVRAM要件は、RTX 6000 48GB / H100 80GBから**RTX 4090 24GB / Apple M4 Max 64GB**へと下がる。In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Qwen3.6-27B Denseは、Apache 2.0ライセンスの下、1Mコンテキストで単一のRTX 4090上で、SWE-bench Verifiedで77.2%を記録し397B MoEを上回った。",
+        "given": "長コンテキストでの20-30B DenseはMoEルーティングの複雑さを取り除き、汎用品の24GB VRAMに収まるため、オンプレミス展開コストを大幅に削減する。",
+        "so_that": "Mistral / Meta / DeepSeek / Gemmaは20-30B Dense × 1Mコンテキストのレシピに収斂し、70B+ MoEはマルチモーダル / ツール / 長期推論のニッチに後退する。",
+        "landing": "2026年Q3までに、3社以上のベンダーが20-30B Dense版をリリース + RTX 4090 / M4 Maxがオンプレミスのデフォルトとなる。",
+        "plain_language": "27Bモデルが今や400Bモデルとコーディング能力で並び、ゲーミングGPU1枚で動く。他の研究所もこのレシピを数ヶ月以内に真似するだろう。"
+      },
+      "summary": "Qwen3.6-27B DenseはApache 2.0ライセンスの下、1Mコンテキストで単一のRTX 4090上でフラッグシップ級のコーディング能力(SWE-bench Verified 77.2%)に到達し、前世代の397B MoEを上回った。2026年Q3までに、Mistral、Meta、DeepSeek、Gemmaが同等の20-30B Dense × 1Mコンテキストモデルをリリースし、オンプレミスVRAMのデフォルトをRTX 4090 / M4 Maxへとシフトさせると予想される。"
+    },
+    {
+      "id": "prediction.5acccd6cae1f9b03",
+      "scope_hint": "business",
+      "title": "フロンティアモデルのプレビュー提供には2026年Q3までにSOC 2 + FedRAMP + FMFのベースライン準拠が必須となる",
+      "body": "**AIエージェントのセキュリティ標準が「サードパーティベンダー境界」と「URL命名エントロピー」に拡大する。** Mythosの不正アクセスインシデント(契約者 + 命名規則の推測 + サードパーティのデータ漏洩)は、Vercel-Context.aiのサプライチェーンパターンを再現しており、今度はフロンティアモデルのアクセス制御レイヤーで起きた。2026年Q3までに、「フロンティアモデルのプレビュー / 早期アクセスのサードパーティベンダー環境」は、SOC 2 Type II + FedRAMP Moderate + Frontier Model Forumの共通セキュリティベースラインのクリアが必要となり、エンドポイントURL / サブドメインはランダム化された推測困難な命名へ移行する。In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Mythos Previewの侵害は、契約者の認証情報、Mercorのリーク、命名規則の推測を組み合わせており、Vercel-Context.aiのサプライチェーンの形をそのまま再現している。",
+        "given": "フロンティアモデルのプレビュー環境はサードパーティベンダーと予測可能なサブドメインに依存しているため、アイデンティティと命名エントロピーが新たな攻撃面となっている。",
+        "so_that": "サードパーティのプレビューベンダーはSOC 2 Type II + FedRAMP Moderate + Frontier Model Forumのベースラインをクリアする必要があり、エンドポイントURLはランダム化された命名へ移行する。",
+        "landing": "2026年Q3までに、共通のサードパーティベンダーセキュリティベースライン + ランダム化されたエンドポイント命名がフロンティア研究所で確認される。",
+        "plain_language": "ハッカーはAnthropicの秘密モデルにそのウェブアドレスを推測し、契約者の盗まれたログイン情報を使ってアクセスした。まもなく研究所はURLをランダム化し、より厳格な契約者チェックを義務付けるようになる。"
+      },
+      "summary": "Mythos Previewの不正アクセスインシデント(契約者の認証情報、Mercorのリーク、推測された命名規則)は、フロンティアモデルのアクセス制御レイヤーでVercel-Context.aiのサプライチェーンパターンを再現している。2026年Q3までに、サードパーティのプレビューベンダーはSOC 2 Type II + FedRAMP Moderate + Frontier Model Forumのベースラインをクリアし、エンドポイントURLはランダム化された命名へ移行すると予想される。"
+    }
+  ]
+}

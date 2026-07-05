@@ -1,0 +1,47 @@
+{
+  "date": "2026-04-27",
+  "predictions": [
+    {
+      "id": "prediction.3a5f7303d1a57312",
+      "scope_hint": "business",
+      "title": "Los 3 grandes hyperscalers condicionan el capex en IA a un piso de margen por token para Q3 2026",
+      "body": "**Los resultados del Q1 de Mag 7 (29-30 de abril) reinician la narrativa del ROI del capex en IA — el Q3 2026 ve al primer hyperscaler que tiera públicamente el capex de IA por una valla de margen por token.** Con la guía combinada de capex 2026 de Alphabet ($175B-$185B), Amazon (~$200B), Meta ($115B-$135B) y Microsoft (riesgo de rerating por rezago de Azure) totalizando ~$650B-$700B contra el \"AI ROI reality check\" de Wall Street, las publicaciones del 29-30 de abril o validan la tesis de **velocidad-de-salida de ingresos por token** o disparan una compresión de múltiplos. Para el Q3 2026, al menos uno de los Big-3 hyperscalers públicamente **gatea el capex incremental de GPU sobre un piso de margen por token de Bedrock/Azure/Vertex** — el primer umbral explícito de \"ROI de infra de IA\" de una nube pública, terminando la doctrina de \"gastar o morir\" de 2024-2025. Los acuerdos ancla con laboratorios frontier (Google $40B / Anthropic, Amazon $25B / Anthropic, OpenAI $20B / Cerebras + Microsoft) se convierten en la válvula visible de alivio de presión. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "La guía combinada de capex de IA 2026 de Mag 7 ~$650B-$700B contra un AI ROI reality check explícito de Wall Street",
+        "given": "Las publicaciones del Q1 del 29-30 de abril aterrizan en una cinta con riesgo de compresión de múltiplos con la tensión de Hormuz superpuesta",
+        "so_that": "Al menos uno de los Big-3 hyperscalers tierará públicamente el gasto incremental en GPU mediante un piso de margen por token",
+        "landing": "Para el Q3 2026; primera divulgación en 10-Q o llamada de resultados de un umbral explícito de ROI de infra de IA",
+        "plain_language": "Los gigantes de la nube gastaron enormemente en chips de IA; los inversores ahora exigen pruebas de ganancias, así que uno limitará públicamente el nuevo gasto en GPU según el margen por token."
+      },
+      "summary": "La guía combinada de capex de IA 2026 de Mag 7 cerca de $650B-$700B se encuentra con el AI ROI reality check de Wall Street en las publicaciones del 29-30 de abril. Para el Q3 2026 al menos uno de los Big-3 hyperscalers tiera públicamente el gasto incremental en GPU sobre un piso de margen por token de Bedrock/Azure/Vertex, terminando la doctrina de gastar o morir de 2024-2025."
+    },
+    {
+      "id": "prediction.7db9cba24cef0f48",
+      "scope_hint": "tech",
+      "title": "CISA + NIST publican un sub-catálogo de CVE para servidores de inferencia y herramientas agénticas para Q4 2026",
+      "body": "**La \"clase CVE de AI-Infra\" se gradúa como primitiva regulatoria — el Q4 2026 ve a CISA / NIST publicar un sub-catálogo para runtimes de inference-server + agentic-CI, separado de KEV.** La secuencia del 19-27 de abril — **LMDeploy CVE-2026-33626 SSRF (12h31m)** + **SGLang CVE-2026-5760 (todavía sin parchear)** + **escape de sandbox de Pillar Antigravity vía `find_by_name -X`** + **simple-git CVE-2026-6951 RCE en una dependencia fundacional de CI/CD** + **cadena de prompt-injection Comment-and-Control del 21 de abril a través de Claude Code / Gemini CLI / Copilot** + **bypass de sandbox OpenClaw CVE-2026-41329** — ya no es una \"categoría emergente\". La actualización ops de NIST de abril (crecimiento récord de publicación de CVE, soporte de evaluación impulsado por IA) más el **aumento del 32% interanual de prompt-injection indirecto en la naturaleza** de Google fuerzan a CISA/NVD a entregar un **sub-catálogo CVE dedicado a inference-server + agentic-tool** con etiquetado SBOM obligatorio para el Q4 2026. El OWASP LLM Top 10 v2026 promueve \"Inference Server Template / Loader RCE\" al top-3. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "La secuencia del 19-27 de abril apila 6 CVE de inference-server + agentic-CI incluyendo el RCE SSTI de SGLang sin parchear",
+        "given": "Crecimiento récord de publicación de CVE de NIST + aumento interanual del 32% de prompt-injection indirecto en la naturaleza de Google",
+        "so_that": "CISA/NVD publican un sub-catálogo CVE dedicado a inference-server + agentic-tool con etiquetado SBOM obligatorio",
+        "landing": "Para el Q4 2026; sub-catálogo separado de KEV más OWASP LLM Top 10 v2026 promueve Loader RCE al top-3",
+        "plain_language": "Los servidores de IA y los agentes de codificación ahora siguen siendo hackeados de la misma manera, así que los reguladores crearán un catálogo dedicado con etiquetas de ingredientes obligatorias."
+      },
+      "summary": "Seis exploits del 19-27 de abril en inference-server y agentic-CI (SSRF de LMDeploy, SSTI sin parchear de SGLang, escape de sandbox de Antigravity, RCE de simple-git, prompt-injection multi-agente, bypass de OpenClaw) más el aumento del 32% de prompt-injection indirecto de Google fuerzan a CISA/NVD a publicar un sub-catálogo CVE dedicado a AI-Infra con etiquetado SBOM obligatorio para el Q4 2026."
+    },
+    {
+      "id": "prediction.b83721f72876a218",
+      "scope_hint": "cross",
+      "title": "Un estado de EE. UU. codifica un estatuto que reconoce al agente como identidad de primera clase para Q3 2026",
+      "body": "**La reacción de la opinión pública contra la IA se convierte en reglas vinculantes de gobernanza de agentes — para el Q3 2026 al menos un estado de EE.UU. entrega una Ley de \"Identidad Estatutaria para Agentes Autónomos\" reflejando el patrón Agent Discovery + Agent Gateway de Okta.** Los ataques del 16 de abril a la casa de Altman + la pieza del 15 de abril de CNBC sobre la reacción contra los datacenters + los datos de Salt Security del 26 de abril (\"48.9% de las organizaciones no pueden monitorear el tráfico de AI-agent\") + Okta for AI Agents GA el **30 de abril** (con Agent Discovery, Agent Gateway, registro virtual-MCP-server, vaulting de credenciales + auto-rotación, logout universal) componen un adelanto regulatorio. Un estado de EE.UU. (CA, NY o TX probable) entrega un estatuto para el Q3 2026 que obliga **el registro de agente como identidad de primera clase, el logging de la cadena de llamadas MCP y el consentimiento por acción**, reflejando la semántica del protocolo Cross App Access. La aplicación del Artículo 26 del EU AI Act se activa en paralelo. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Salt Security: 48.9% de las organizaciones no pueden monitorear el tráfico de AI-agent; Okta for AI Agents GA el 30 de abril entrega una plantilla utilizable",
+        "given": "El sentimiento público se agria (CNBC del 15 de abril), ataques físicos del 16 de abril a la casa de Altman, EU AI Act Artículo 26 en paralelo",
+        "so_that": "Un estado de EE.UU. codifica el registro de agente como identidad de primera clase, el logging de la cadena de llamadas MCP y el consentimiento por acción",
+        "landing": "Para el Q3 2026; CA, NY o TX entrega una Ley de Identidad Estatutaria para Agentes Autónomos",
+        "plain_language": "La gente está harta de los agentes de IA sin supervisión, así que un estado de EE.UU. aprobará una ley que obligue a cada agente a registrarse y registrar cada acción que tome."
+      },
+      "summary": "Los datos de opinión pública del 15 de abril de CNBC, los ataques del 16 de abril a la casa de Altman, el hallazgo del 26 de abril de Salt Security de que el 48.9% de las organizaciones no pueden monitorear el tráfico de AI-agent, y el GA de Okta for AI Agents del 30 de abril empujan juntos a al menos un estado de EE.UU. (CA, NY o TX) a entregar una Ley de Identidad Estatutaria para Agentes Autónomos para el Q3 2026."
+    }
+  ]
+}

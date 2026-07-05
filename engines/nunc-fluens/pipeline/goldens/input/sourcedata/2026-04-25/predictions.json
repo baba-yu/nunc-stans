@@ -1,0 +1,47 @@
+{
+  "date": "2026-04-25",
+  "predictions": [
+    {
+      "id": "prediction.81d3055dbb24f016",
+      "scope_hint": "cross",
+      "title": "Frontier-AI cloud capacity locks into three-cloud training oligopoly by Q3 2026",
+      "body": "**The \"frontier AI lab × Tier-1 cloud capacity capture\" splits the field cleanly by Q3 2026.** With Google Cloud confirming three deals in a single month — Anthropic (GB300 + large TPU), Meta (GB300 capacity), Thinking Machines Lab (A4X Max) — the structure crystallizes: clouds with enough capacity for frontier model development narrow to three (AWS / Azure / GCP). Amazon counters with **another $25B + 5GW Trainium2/3 capacity + 10-year $100B commit** for Anthropic; Azure holds OpenAI / Mistral / Inflection; GCP adds Anthropic / TML / Meta. By Q3 2026, \"fourth-hyperscaler candidates without their own cloud or long-term capacity contracts with frontier labs\" (Oracle Cloud / IBM / Coreweave) shift fully to **\"unable to train frontier-scale, specialize on inference.\"** AI silicon ecosystems lock into a two-tier shape: training capacity = three-cloud oligopoly / inference = layered. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Google Cloud closes Anthropic GB300 + TPU, Meta GB300, and Thinking Machines Lab A4X Max in a single month while Amazon adds $25B + 5GW Trainium for Anthropic.",
+        "given": "Frontier-scale training capacity is concentrated in only three hyperscalers with the GB300 / Trainium / TPU backlog to absorb 10-year commits.",
+        "so_that": "Oracle Cloud, IBM, and Coreweave lose access to frontier-scale training and reposition fully on inference workloads.",
+        "landing": "By Q3 2026; AI silicon locks into three-cloud oligopoly for training and a layered inference market.",
+        "plain_language": "Only three big clouds can fit the giant new AI training jobs. Smaller clouds will stop trying and instead run cheaper finished models."
+      },
+      "summary": "Google Cloud's Anthropic + Meta + Thinking Machines Lab deals plus Amazon's $25B + 5GW Trainium top-up for Anthropic narrow frontier-scale training capacity to AWS, Azure, and GCP. By Q3 2026, fourth-cloud candidates without long-term frontier-lab contracts are expected to refocus on inference."
+    },
+    {
+      "id": "prediction.70ad45e258b72e8c",
+      "scope_hint": "cross",
+      "title": "Physical AI league tables rank top-five OEM-adopted humanoids by H2 2026",
+      "body": "**\"Physical AI production-line records become league tables at IROS / GTC 2026\" starts H2 2026.** With Siemens Erlangen's **HMND 01 Alpha** (60 tote/h × 8h × 90%+), BMW Spartanburg's **Figure 02** (10 months / 30,000 vehicles / 90,000 parts), BMW Leipzig's **AEON** (Apr 2026 trial → summer pilot), and GXO's **Digit** (100K+ totes) all hit the same window — and Hannover Messe 2026 making Physical AI its first central theme — the industry's evaluation criterion is shifting from \"vendor-claimed demos\" to **\"OEM-adopted production records.\"** In H2 2026 at **IROS (October)** and **GTC Fall 2026**, league tables for \"OEM adoption count × continuous-operation hours × parts handled × MTBF\" begin, with Apptronik Apollo / Agility Digit / Figure 03 / Humanoid HMND 01 / Hexagon AEON's top five at the top. The 30+ companies still stuck in PoC phase get pushed into Q4 2026 funding shortfalls / acquisitions / exits. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Siemens Erlangen, BMW Spartanburg, BMW Leipzig, and GXO production records all surface together while Hannover Messe makes Physical AI its central theme.",
+        "given": "OEM-adopted production records are now concrete enough that buyers can rank vendors on continuous hours, parts handled, and MTBF.",
+        "so_that": "IROS October and GTC Fall publish OEM-adoption league tables that elevate a top-five cohort and squeeze out the PoC-stuck long tail.",
+        "landing": "Starts H2 2026; 30+ PoC vendors face Q4 2026 funding shortfalls, acquisitions, or exits.",
+        "plain_language": "Real factories now have humanoid robots logging real hours. Soon big AI conferences will rank them like sports leagues, and weaker startups disappear."
+      },
+      "summary": "Siemens Erlangen's HMND 01 Alpha 8-hour run, BMW Spartanburg's Figure 02 30,000-vehicle record, BMW Leipzig's AEON trial, and GXO's Digit 100K-tote run land in the same window as Hannover Messe 2026 spotlights Physical AI. H2 2026's IROS and GTC are expected to publish OEM-adoption league tables."
+    },
+    {
+      "id": "prediction.5094f95cbe8376d1",
+      "scope_hint": "tech",
+      "title": "MCP protocol redesign emerges as top enterprise AI bottleneck by Q3 2026",
+      "body": "**\"Attack surface against the MCP protocol itself\" becomes the biggest enterprise AI adoption bottleneck by Q3 2026.** Nginx UI's **CVE-2026-33032 (MCPwn, CVSS 9.8)** — a structural defect where the `/mcp_message` endpoint, with its empty default IP allowlist, exposes 12 unauthenticated tool calls — was added to VulnCheck KEV after a 2-request real-world takeover in production. That tells us the MCP protocol itself needs to be redesigned as a web standard if it's going to scale. By Q3 2026, OWASP MCP Top 10 will be officially published, **MCP-over-mTLS / standardized OAuth scope specs by Anthropic / Microsoft / Google / Cisco / Cloudflare** will become industry standard, and Keycard / Okta for AI Agents / Wiz / Levo.ai / Pillar Security will roll out \"MCP Gateway / MCP Firewall\" products through Q4. Enterprise compliance audits will start tracking \"number of MCP-connected tools / endpoints / authorization policies\" as a new audit category. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Nginx UI's CVE-2026-33032 (MCPwn, CVSS 9.8) lands in VulnCheck KEV after a 2-request real-world takeover via an empty default IP allowlist.",
+        "given": "MCP integrations expose unauthenticated tool calls at scale, making the protocol itself the failure mode rather than any single vendor's bug.",
+        "so_that": "OWASP MCP Top 10 ships, MCP-over-mTLS and OAuth scope specs become industry standard, and MCP Gateway / Firewall vendors roll out through Q4.",
+        "landing": "By Q3 2026; enterprise compliance audits add MCP-connected tools and authorization policies as a new audit category.",
+        "plain_language": "A popular MCP server got hacked because anyone on the internet could call its tools. The whole protocol now needs proper login walls before companies trust it."
+      },
+      "summary": "Nginx UI's CVE-2026-33032 (MCPwn, CVSS 9.8) — KEV-listed after a 2-request real-world takeover — exposes the MCP protocol itself as the failure mode. By Q3 2026, OWASP MCP Top 10, MCP-over-mTLS / OAuth scope specs, and MCP Gateway / Firewall products are expected to ship."
+    }
+  ]
+}

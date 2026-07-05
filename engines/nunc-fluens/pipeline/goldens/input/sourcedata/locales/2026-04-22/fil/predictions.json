@@ -1,0 +1,47 @@
+{
+  "date": "2026-04-22",
+  "predictions": [
+    {
+      "id": "prediction.36f4ab773b39713e",
+      "scope_hint": "tech",
+      "title": "Custom AI silicon ng mga hyperscaler, mahahati sa training vs inference SKUs pagsapit ng H1 2027",
+      "body": "**Ang \"Training-vs-inference SKU split\" ay nagiging pamantayan para sa custom AI silicon.** Ang TPU 8t / 8i split ng Google ay nag-eextend sa Trainium-vs-Inferentia line at nag-lo-lock in sa **hyperscaler in-house silicon bilang architecturally separate para sa training vs inference**. Sa H2 2026 / H1 2027, asahan na ang Microsoft MAIA at Meta MTIA ay magtitibay ng parehong dual-track SKU strategy — laban sa \"single architecture, both workloads\" ng NVIDIA Blackwell / Vera Rubin. Ang inference-tuned SKUs ay nag-aassume ng native FP4 / MXFP4 at nagtutulak ng **$/query competition** sa peak sa Q3 2026. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Ang TPU 8t / 8i split ng Google ay nag-eextend sa Trainium-vs-Inferentia, na nag-cocodify ng magkahiwalay na training vs inference SKUs.",
+        "given": "Ang inference at training ay may magkaibang compute profiles; ang FP4 / MXFP4 economics ay nagrere-reward sa dedicated inference silicon.",
+        "so_that": "Ang Microsoft MAIA at Meta MTIA ay magtitibay ng dual-track SKUs at ang inference-tuned chips ay magtutulak ng $/query competition sa peak.",
+        "landing": "H2 2026 / H1 2027; MAIA + MTIA dual-track SKUs nakikita, $/query peak sa Q3 2026.",
+        "plain_language": "Ang big tech ngayon ay gumagawa ng dalawang AI chips: isa para sa pag-train ng models at isa para sa pagpapatakbo ng mga ito. Mas mura at mas mabilis na sagot ang susunod sa lalong madaling panahon."
+      },
+      "summary": "Ang anunsyo ng TPU 8t / 8i ng Google ay nag-eextend sa Trainium-vs-Inferentia split at nag-cocodify ng hyperscaler in-house silicon bilang architecturally separate para sa training vs inference. Sa pamamagitan ng H2 2026 / H1 2027, ang Microsoft MAIA at Meta MTIA ay inaasahang magtitibay ng parehong dual-track SKU strategy, kung saan ang inference SKUs ay nagtutulak ng $/query competition sa peak."
+    },
+    {
+      "id": "prediction.8b1d0c5ea8a8550e",
+      "scope_hint": "cross",
+      "title": "Robot-control training, magsasama-sama sa cloud bilang per-robot SaaS pagsapit ng Q3 2026",
+      "body": "**Physical AI bilang SaaS, at ang \"Robot-as-a-Service\" infrastructure race.** Ang Neura x AWS, DEEPX x Hyundai, at ang serye ng NVIDIA Isaac GR00T / Cosmos partnerships ay lahat nakatuon sa parehong direksyon: **ang training pipeline para sa robot-control models ay nag-cocon-consolidate sa cloud.** Sa pamamagitan ng Q3 2026, ang per-robot cloud-compute charges (training + sync sim + policy updates) ay nagiging standard line item sa enterprise contracts. Ang robot mismo ay nagco-commoditize bilang \"moving compute endpoint,\" at ang manufacturers ay lumilipat sa **fleet-management software na may recurring revenue.** In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Ang Neura x AWS, DEEPX x Hyundai, at NVIDIA Isaac GR00T / Cosmos partnerships ay lahat nag-cocon-consolidate ng robot training sa cloud.",
+        "given": "Ang robot-control training, sim sync, at policy updates ay compute-heavy at natural na nakakasentro sa hyperscaler infrastructure.",
+        "so_that": "Ang per-robot cloud-compute charges ay nagiging standard enterprise contract line item at ang manufacturers ay lumilipat sa recurring fleet-mgmt revenue.",
+        "landing": "Sa pamamagitan ng Q3 2026; per-robot cloud-compute line items sa enterprise contracts.",
+        "plain_language": "Ang mga robot ay nagiging tulad ng phones: ang utak ay nasa cloud, at ang mga kumpanya ay nagbabayad ng monthly fees per robot sa halip na bumili ng one-time machine."
+      },
+      "summary": "Ang Neura x AWS, DEEPX x Hyundai, at NVIDIA Isaac GR00T / Cosmos partnerships ay lahat nag-cocon-consolidate ng robot-control model training sa cloud. Sa pamamagitan ng Q3 2026, ang per-robot cloud-compute charges ay inaasahang magiging standard enterprise contract line item, kung saan ang robot ay nagco-commoditize bilang moving compute endpoint at ang manufacturers ay lumilipat sa recurring fleet-management revenue."
+    },
+    {
+      "id": "prediction.c850d46b059e600c",
+      "scope_hint": "business",
+      "title": "Mga SSO provider, magbubukod ng AI-extension OAuth scope category pagsapit ng Q3 2026",
+      "body": "**Ang OAuth trust sa pagitan ng AI SaaS ay nagiging top enterprise risk.** Ipinapakita ng Vercel-Context.ai case kung paano ang personal AI Office SaaS connection ng isang empleyado ay maaaring maging breach path sa buong Google Workspace ng kumpanya. Sa pamamagitan ng Q3 2026, ang malalaking SSO providers (Okta / Entra ID / Google Workspace) ay **mag-cacarve out ng \"AI extension\" OAuth scope category**, na nagpapahintulot sa administrators na i-block ang \"Allow All\" defaults nang wholesale. Ang CASB / SSPM vendors ay magrereport ng \"data volume read by AI integrations\" bilang independent metric. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Ipinapakita ng Vercel-Context.ai breach na ang personal AI SaaS OAuth ng isang empleyado ay nagiging pivot sa buong Google Workspace ng kumpanya.",
+        "given": "Ang AI SaaS extensions ay humihingi ng broad OAuth scopes na inaaprubahan ng admins nang wholesale, na walang visibility sa per-integration data volume.",
+        "so_that": "Ang SSO providers ay nag-cacarve out ng AI-extension OAuth scope category at ang CASB / SSPM vendors ay nagta-track ng AI-integration read volume nang independent.",
+        "landing": "Sa pamamagitan ng Q3 2026; Okta / Entra ID / Google Workspace AI-extension scope category live + CASB metric.",
+        "plain_language": "Kapag kinokonekta ng isang manggagawa ang isang AI tool sa kanilang work email, maaaring ma-hack ang buong kumpanya. Sa lalong madaling panahon, makakakuha ang admins ng switch upang i-block ang mga ito nang malawak."
+      },
+      "summary": "Ang Vercel-Context.ai breach ay nagpapakita kung paano ang personal AI SaaS OAuth connection ng isang empleyado ay nagiging path papasok sa buong Google Workspace ng kumpanya. Sa pamamagitan ng Q3 2026, ang SSO providers na Okta, Entra ID, at Google Workspace ay inaasahang mag-cacarve out ng AI-extension OAuth scope category, at ang CASB / SSPM vendors ay magrereport ng AI-integration read volume bilang independent metric."
+    }
+  ]
+}

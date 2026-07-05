@@ -1,0 +1,47 @@
+{
+  "date": "2026-04-24",
+  "predictions": [
+    {
+      "id": "prediction.23c160efd9baa194",
+      "scope_hint": "tech",
+      "title": "オープンウェイトの1Mコンテキスト時代がQ3 2026までに新たな標準として到来する",
+      "body": "**「1Mコンテキストがデフォルト」のオープンウェイト時代がQ3 2026までに本格到来する。** DeepSeek V4の「1Mコンテキストは後付けではなく設計段階から組み込み」、Qwen3.6-27Bの262K → 1M拡張、Claude Opus 4.7の1Mコンテキスト(Bedrock)、GPT-5.5の長コンテキスト強化は、すべて同じ方向を指している。Q3 2026までに、「ネイティブ1Mコンテキスト」がオープンウェイトの最低水準となり、既存の32K-128Kモデルはレガシーに転落する。RAGパイプラインは「検索 → コンテキスト挿入」から「全部投入 + 動的プルーニング」へと反転し、ベクトルDBベンダーは「長コンテキスト・キャッシュ最適化レイヤー」への再定義を迫られる。In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "DeepSeek V4はネイティブ1Mコンテキストを搭載してリリースされ、Qwen3.6-27Bは262Kを1Mに拡張、Claude Opus 4.7はBedrockで1Mに到達し、GPT-5.5は長コンテキストを強化している。",
+        "given": "ハイブリッド・アテンションにより1MコンテキストのFLOPsはV3.2比で27%、KVキャッシュは10%まで低下し、オープンウェイトでも1Mコンテキストが手の届く価格となった。",
+        "so_that": "ネイティブ1Mコンテキストがオープンウェイトの最低水準となり、RAGは検索後挿入から全部投入+動的プルーニングのワークフローへと反転する。",
+        "landing": "Q3 2026までに、32K-128Kのオープンウェイトモデルはレガシーに転落し、ベクトルDBベンダーは再ポジショニングを迫られる。",
+        "plain_language": "巨大なAIモデルが今や図書館全体を一度に読み込めるようになり、安価なオープンウェイト版も追いついている。間もなくこのサイズ未満のどんなモデルも時代遅れに見えるだろう。"
+      },
+      "summary": "DeepSeek V4のネイティブ1Mコンテキスト、Qwen3.6-27Bの262Kから1Mへの拡張、Claude Opus 4.7のBedrockでの1M、GPT-5.5の長コンテキスト推進が収束している。Q3 2026までに、ネイティブ1Mコンテキストがオープンウェイトの最低水準となり、RAGパイプラインは検索-挿入から投入-プルーニングへと反転すると予想される。"
+    },
+    {
+      "id": "prediction.6f0a6061c079c28e",
+      "scope_hint": "cross",
+      "title": "Physical AIの8時間連続生産稼働がQ4 2026までに企業RFPの足切り要件となる",
+      "body": "**「Physical AIの8時間連続生産稼働」が2026年下半期に企業調達要件となる。** Siemens-Humanoid HMND 01 AlphaがErlangenで記録した**8時間 / 90%成功率 / 60トート/時間** ― デモではなく生産ラインでの実績 ― は、「ヒューマノイド = PoC」からの明確な卒業点である。Q4 2026までに、大手製造業のRFP(VW / Bosch / Mercedes / Foxconn / TSMC / Toyota)は「24時間連続稼働」「1週間MTBF」「90%以上の自律完了率」「MES / PLC統合」を事実上の足切り条件として組み込む。Physical AIの競争軸は「見栄えの良いデモ動画」から「既存OT環境への組み込みやすさ」へと完全に移行する。In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Siemens-Humanoid HMND 01 Alphaは、デモではなくErlangenの生産ラインで8時間 / 1時間あたり60トート / 90%成功率を記録した。",
+        "given": "大手製造業の調達チームは、ヒューマノイドのPoCベンダーに対するRFP足切りを定める具体的な生産ベンチマークを手にした。",
+        "so_that": "VW / Bosch / Mercedes / Foxconn / TSMC / ToyotaのRFPは、24時間連続稼働、1週間MTBF、90%自律性、MES / PLC統合を事実上の足切りとして採用する。",
+        "landing": "Q4 2026までに、競争軸はOT環境への組み込みやすさへと移行する。",
+        "plain_language": "工場のヒューマノイドが実際の生産ラインで8時間連続で働いた。間もなく大手メーカーはその水準をクリアするロボットしか購入しなくなるだろう。"
+      },
+      "summary": "Siemens-Humanoid HMND 01 AlphaがErlangenの実生産ラインで1時間あたり60トート、90%成功率の8時間稼働を達成し、ヒューマノイドはPoCから卒業した。Q4 2026までに、大手製造業のRFPは24時間連続稼働、1週間MTBF、90%自律性、MES / PLC統合を調達足切りに組み込むと予想される。"
+    },
+    {
+      "id": "prediction.11c2c648527fe212",
+      "scope_hint": "business",
+      "title": "資本市場はQ2 2026にエージェントが触れるAPIシェアでエージェントに置換されるSaaSをリプライスする",
+      "body": "**資本市場はQ2 2026中に「AIエージェントに置換される企業向けSaaS」のバリュエーションをリセットする。** 4月23日のServiceNowの**-18%(史上最悪の単日下落)**、IBMの同日下落、Salesforce / Workday / Oracleの連鎖的な下落は、資本市場が「AIによるコスト削減効果」と「AIによるレガシー・ワークフローSaaSの置換」をどう天秤にかけるかが転換したことを示している。Q2 2026中に、Gartner / Forresterのマジック・クアドラント / ウェーブ・レポートが「Agent-native vs Legacy SaaS」軸を明示し、時価総額の計算式は「シート数 × ARPU」から「エージェントが触れるAPIコールのシェア」へと移行すると予想される。アナリスト・コンセンサスの更新が遅れるため、今後2四半期でさらに3-5社(Workday / Atlassian / Box / Smartsheetなど)が15%以上の下落を見せる可能性が高い。In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "ServiceNowの4月23日における史上最悪の単日-18%、IBMの同日下落、Salesforce / Workday / Oracleの連鎖下落が、置換軸を露呈した。",
+        "given": "資本市場は今やAIによるレガシー・ワークフローSaaSの置換とAIによるコスト削減を天秤にかけ、シートベースの収益を再評価している。",
+        "so_that": "Gartner / ForresterはAgent-native vs Legacy SaaSを明示化し、時価総額の計算式はシート × ARPUからエージェントが触れるAPIコールのシェアへと移行する。",
+        "landing": "Q2 2026中に、さらに3-5社が2四半期で15%以上の下落を見せる可能性が高い。",
+        "plain_language": "ServiceNowの株価が史上最悪の日を迎えたのは、投資家がAIエージェントが同社のソフトウェアを置き換えると考えたからだ。他のワークフローSaaS企業がその次に来る。"
+      },
+      "summary": "4月23日のServiceNowの史上最悪-18%単日下落、IBMの同日下落、Salesforce / Workday / Oracleの連鎖下落は、AIエージェントによるレガシーSaaS置換に対する資本市場のリセットを示している。Q2 2026中に、Gartner / ForresterがAgent-native vs Legacy軸を明示化し、さらに3-5社が15%以上の下落を見せる可能性が高い。"
+    }
+  ]
+}

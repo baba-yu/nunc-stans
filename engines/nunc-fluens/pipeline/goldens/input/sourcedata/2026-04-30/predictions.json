@@ -1,0 +1,61 @@
+{
+  "date": "2026-04-30",
+  "predictions": [
+    {
+      "id": "prediction.fe9e46055f4a05b9",
+      "scope_hint": "cross",
+      "title": "Agent-skills threat sub-matrix lands as MITRE/NIST extension by Q3 2026",
+      "body": "By Q3 2026 a published agent-skills threat sub-matrix lands as a first-class MITRE ATT&CK extension or NIST AI-RMF appendix, and at least one major skill marketplace (Anthropic's official skills repo, ClawHub, Multica, Hermes, Hugging Face skills) ships an enforced signed + provenance-attested gate before publish. By Q3 2026 a published agent-skills threat sub-matrix lands as a first-class MITRE ATT&CK extension or NIST AI-RMF appendix, and at least one major skill marketplace (Anthropic's official skills repo, ClawHub, Multica, Hermes, Hugging Face skills) ships an enforced signed + provenance-attested gate before publish. By Q3 2026 a published agent-skills threat sub-matrix lands as a first-class MITRE ATT&CK extension or NIST AI-RMF appendix, and at least one major skill marketplace (Anthropic's official skills repo, ClawHub, Multica, Hermes, Hugging Face skills) ships an enforced signed + provenance-attested gate before publish. **By Q3 2026 a published agent-skills threat sub-matrix lands as a first-class MITRE ATT&CK extension or NIST AI-RMF appendix, and at least one major skill marketplace (Anthropic's official skills repo, ClawHub, Multica, Hermes, Hugging Face skills) ships an enforced signed + provenance-attested gate before publish.** Apr 28 ATT&CK v19 + v5.4 framework already names AI-agent context poisoning, tool invocation abuse, MCP server compromise, and malicious agent deployment as techniques; Apr 28 Novita Sandbox is the first commercial mitigation product purpose-built for OpenClaw + Hermes runtimes; Apr 28 SuiteCloud Agent Skills (Oracle NetSuite, SuiteConnect SF) is the first major non-foundation-lab vendor shipping skills-as-a-product with signed-distribution as the security frame; Apr 28 arxiv 2604.24026 (SSL representation for skills) + Apr 24 arxiv 2604.23374 NeuroTaint provide the academic scaffolding. The forcing function is the Cisco RSAC 2026 36%-prompt-injection-rate finding + ClawHavoc's 1,184 malicious skills + Apr 23-29 Google +32% IPI uptick; combined this is the same governance-gap arc that produced MITRE ATT&CK Mobile in 2017 and MITRE ATLAS in 2021. The first of these mandates likely originates from CISA / NIST or directly from the marketplace operators under enterprise-customer pressure rather than from a foundation lab.",
+      "reasoning": {
+        "because": "ATT&CK v19 already names agent context poisoning, tool-invocation abuse, MCP compromise, and malicious agent deployment.",
+        "given": "ClawHavoc's 1,184 malicious skills + Cisco RSAC 36% prompt-injection rate + Google +32% IPI uptick force a structured catalogue.",
+        "so_that": "A skill-marketplace-poisoning sub-matrix lands and at least one major marketplace mandates signed + provenance-attested skills before publish.",
+        "landing": "by Q3 2026; CISA/NIST or marketplace operator publishes first.",
+        "plain_language": "The biggest catalogue of cyber attacks just added entries for AI agents. Soon the rules will say agent skill stores must check who made each skill before sharing it."
+      },
+      "summary": "ATT&CK v19's named techniques (context poisoning, tool-invocation abuse, MCP compromise, malicious agent deployment) plus ClawHavoc's 1,184 malicious skills, Cisco's 36% prompt-injection rate, and a +32% IPI uptick force a published agent-skills threat sub-matrix and an enforced signed + provenance-attested marketplace gate by Q3 2026."
+    },
+    {
+      "id": "prediction.81e3e9b9a80e4cb7",
+      "scope_hint": "tech",
+      "title": "Local-LLM stacks expose unified compressed-KV-cache flag by H2 2026",
+      "body": "**By H2 2026 every major local-LLM ecosystem (vLLM, SGLang, TGI, Ollama, llama.cpp, NVIDIA TensorRT-LLM, Foundry Local) exposes a unified compressed-KV-cache deployment knob — TurboQuant + at least one alternative — and Foundry Local (Microsoft, GA Apr 9) ships native TurboQuant integration tied to Windows ML / WinML execution providers as a Windows-default optimization.** Apr 27-29 evidence: SGLang PR #21419 in-tree; SGLang #23134 fused-Triton-decode kernel rewrite hitting 93–105% bf16 throughput; vLLM v0.19.0 (Apr 2) torch 2.11 / Python 3.14 / async scheduler default + Model Runner V2; PolyKV (arxiv 2604.24971, Apr 27) shared asymmetric KV-pool for multi-agent inference; NVIDIA kvpress at Decoding-Press maturity; llama.cpp #20969 TurboQuant discussion thread active; Unsloth 2026.4.8 inference 20-30% faster. Foundry Local is the missing enterprise-Windows entry point — Microsoft ships it as a ~20MB native library that bundles local AI into any app with hardware-matched WinML execution providers, and the obvious next step for Q2 2026 is to surface a TurboQuant flag in the Foundry Catalog. The economic forcing function is the same Mag 7 capex tape: every memory-bandwidth-bound long-context workload that moves from FP16 to 3.5-bit cuts effective per-token cost ~5-6x, and Foundry Local makes that switch invisible to end-developers.",
+      "reasoning": {
+        "because": "TurboQuant + SGLang #21419/#23134 + PolyKV + NVIDIA kvpress + llama.cpp #20969 are landing in parallel across stacks.",
+        "given": "Memory-bandwidth-bound long-context workloads cut effective per-token cost ~5-6x by moving FP16 to 3.5-bit, and Mag 7 capex tape demands it.",
+        "so_that": "Every major inference stack exposes a unified compressed-KV-cache flag and Foundry Local ships native TurboQuant tied to WinML.",
+        "landing": "by H2 2026; Foundry Catalog flag + parallel stack flags visible.",
+        "plain_language": "Squeezing AI memory by six times saves a lot of money on chips. Soon every tool that runs models locally on your computer will turn that on by default."
+      },
+      "summary": "Parallel work across SGLang, vLLM, llama.cpp, and Microsoft's Foundry Local plus TurboQuant + PolyKV + NVIDIA kvpress points to a unified compressed-KV-cache deployment knob across every major local-LLM stack by H2 2026, with Foundry Local shipping native TurboQuant tied to WinML execution providers."
+    },
+    {
+      "id": "prediction.4d71e1d1457066ec",
+      "scope_hint": "business",
+      "title": "Foundation labs ship audited monthly revenue + per-token margin by Q3 2026",
+      "body": "**The Apr 28 WSJ OpenAI-revenue-miss report + Apr 29 Mag 7 print collision triggers a 2026 SEC + analyst push for AI-revenue disclosure rewrite — by Q3 2026 at least one foundation lab (OpenAI / Anthropic / xAI) ships an audited monthly-revenue or WAU disclosure cadence, and at least one Big-3 hyperscaler separates Bedrock / Azure-OpenAI / Vertex per-token margin in 10-Q footnotes from raw cloud revenue.** Apr 28 selloff (S&P -0.49%, Nasdaq -0.9%, Oracle -4%, AMD -3%, Broadcom -4%, SoftBank -10%) was the first material crack in the AI-capex-on-faith tape; Apr 29 prints were a mixed reset (MSFT/GOOGL beat hard, META -7% AH); Apr 30 AAPL prints close the Mag 7 cycle. Microsoft already cited a $37B AI run rate (+123%) explicitly — that is the disclosure precedent. With the Cerebras IPO mid-May at $22B-$25B (24% G42 / 62% MBZUAI revenue concentration), the SEC + buyside pressure for explicit per-token margin + WAU disclosure converges around Q2-Q3 2026 earnings cycles. Powell's choice to stay on Board as a check on Trump-admin Fed investigation also raises the political-risk premium on the entire AI-capex tape; demanding harder numbers is the lever public markets have.",
+      "reasoning": {
+        "because": "Apr 28 WSJ revenue-miss cracked the AI-capex-on-faith tape and Apr 29 Mag 7 prints landed mixed (META -7% AH).",
+        "given": "Microsoft's explicit $37B AI run-rate (+123%) sets a hyperscaler disclosure precedent and Cerebras's mid-May IPO concentrates SEC scrutiny.",
+        "so_that": "One foundation lab ships audited monthly revenue / WAU and one Big-3 hyperscaler separates per-token margin in 10-Q footnotes.",
+        "landing": "by Q3 2026; coverage cadence + 10-Q footnote disclosure visible.",
+        "plain_language": "Stocks dropped after a leak said OpenAI missed its targets. Now Wall Street wants real monthly numbers — soon AI labs and clouds will publish them."
+      },
+      "summary": "The Apr 28 WSJ OpenAI revenue-miss + Apr 29 Mag 7 prints + Microsoft's explicit $37B AI run-rate disclosure converge with Cerebras's mid-May IPO to push at least one foundation lab into audited monthly revenue / WAU cadence and at least one Big-3 hyperscaler into per-token-margin 10-Q footnotes by Q3 2026."
+    },
+    {
+      "id": "prediction.9fce1997ef699a48",
+      "scope_hint": "business",
+      "title": "Powell stays on Fed Board, becoming Fed-investigation swing vote by Q4 2026",
+      "body": "**Powell's Apr 29 decision to remain on the Board of Governors past his Chair-term expiration (May 15) reshapes 2026 monetary-policy market psychology — by Q4 2026 the FOMC reverts to a smaller-dissent norm (≤2 dissenters) under Warsh as Chair, but Powell's continued Board presence becomes the marginal swing vote on the Fed-investigation governance question, not on rates.** Apr 29 was the highest-dissent FOMC since Oct-1992 (8-4); Miran wanted -25bp; Hammack/Kashkari/Logan opposed easing-bias inclusion. Warsh nomination advanced from Senate Banking same day. The 2026-2027 setup: Powell on Board through term-end 2028 with Warsh in the Chair seat; the dissent posture compresses on rate calls because the Chair sets the framing; Powell's marginal vote becomes a governance signal whenever the Trump-admin Fed-investigation outcome moves. Markets price a smaller forward-guidance volatility on rates but a larger institutional-risk premium on the Fed itself. The 1992-precedent comparison stops being a curiosity and starts being a structural reference point in financial-press explanations of the new Fed governance regime.",
+      "reasoning": {
+        "because": "Apr 29 was the highest-dissent FOMC since Oct-1992 (8-4) and Powell announced he stays on the Board through term-end 2028.",
+        "given": "Warsh nomination advanced from Senate Banking the same day, so the Chair seat changes while Powell's Board seat does not.",
+        "so_that": "FOMC reverts to ≤2-dissenter norm on rates while Powell's Board vote becomes the marginal signal on Fed-investigation governance.",
+        "landing": "by Q4 2026; Warsh-led FOMCs + Powell governance-vote watch in financial press.",
+        "plain_language": "Powell's term as Fed leader is ending but he's keeping his board seat. Soon the focus will switch from rate fights to whether the Fed itself can be investigated."
+      },
+      "summary": "Powell's choice to stay on the Board through 2028 alongside the highest-dissent FOMC since 1992 and Warsh's pending Chair confirmation produces a 2026-2027 regime where rate-call dissent compresses under Warsh while Powell's Board vote becomes the marginal signal on the Trump-admin Fed-investigation governance question."
+    }
+  ]
+}

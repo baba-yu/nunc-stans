@@ -1,0 +1,47 @@
+{
+  "date": "2026-04-20",
+  "predictions": [
+    {
+      "id": "prediction.4bd33db2ea06e5b4",
+      "scope_hint": "tech",
+      "title": "Ginagawang default ng local-first coding agents ang cloud-overflow bilang standard pagsapit ng Q3 2026",
+      "body": "**Pagbilis ng \"local-first, cloud-overflow\" na inversion.** Ang 73.4% ng Qwen3.6-35B-A3B sa SWE-bench Verified at ang 674 tok/s ng Bonsai 1.7B sa CUDA ay nagtutulak sa edge implementations papasok sa praktikal na teritoryo. Pagsapit ng Q3 2026, ang individual at SMB coding agents ay magiging standard sa \"local by default, cloud as overflow.\" In plain language: In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Ang Qwen3.6-35B-A3B ay umaabot sa 73.4% sa SWE-bench Verified at ang Bonsai 1.7B ay umaabot sa 674 tok/s sa CUDA.",
+        "given": "Ang edge-runnable models ngayon ay kapantay na ng useful coding-agent quality bars, habang ang cloud inference ay nananatiling metered at latency-bound.",
+        "so_that": "Ang individual at SMB coding-agent stacks ay default na sa local execution, na ang cloud ay nakareserba para sa overflow at sa mahirap na tasks.",
+        "landing": "Pagsapit ng Q3 2026; individual + SMB coding-agent tooling.",
+        "plain_language": "Ang maliliit na coding AIs na tumatakbo sa sarili mong computer ay sapat na magaling at mabilis na ngayon, kaya karamihan ng tao ay gagamitin muna ang mga ito at tatawag lang sa cloud kapag kinakailangan."
+      },
+      "summary": "Ang 73.4% ng Qwen3.6-35B-A3B sa SWE-bench Verified at ang 674 tok/s ng Bonsai 1.7B sa CUDA ay nagtutulak sa edge coding agents papasok sa praktikal na teritoryo. Pagsapit ng Q3 2026, ang individual at SMB coding-agent stacks ay inaasahang magiging standard sa local-by-default execution, na ang cloud ay nakareserba para sa overflow."
+    },
+    {
+      "id": "prediction.4ecb84808c9acc3f",
+      "scope_hint": "tech",
+      "title": "Ang Agent-in-the-Loop Secret Exfiltration ang mangunguna sa CIS / OWASP risk lists pagsapit ng Q3 2026",
+      "body": "**Ang secret leakage sa pamamagitan ng CI / agents ay magiging susunod na battleground.** Ang GitHub Actions indirect prompt injection PoCs ay reproducible sa Claude Code, Gemini CLI, at Copilot — tatlong vendors nang sabay-sabay. Sa loob ng Q2-Q3 2026, isang bagong supply-chain security category, \"Agent-in-the-Loop Secret Exfiltration,\" ang aakyat sa tuktok ng CIS / OWASP risk lists. In plain language: In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Inilabas ng OWASP ang 'State of Agentic AI Security and Governance v2.01,' na nagtatakda sa panganib ng leak sa CI/agents.",
+        "given": "Ang mga PoC sa Claude Code, Gemini CLI, at Copilot ay nakapaloob na ngayon sa agentic governance baseline ng OWASP.",
+        "so_that": "Ang susunod na hakbang ay maging hiwalay na entry sa tuktok ng CIS / OWASP lists ang 'Agent-in-the-Loop Secret Exfiltration,' hindi lang pangkalahatang banggit.",
+        "landing": "Pagsapit ng Q3 2026 (Hul-Set); isang pinangalanang top-list entry sa CIS / OWASP.",
+        "plain_language": "Naglabas ang OWASP ng patnubay sa seguridad para sa agents. Susunod, bantayan kung makakakuha ang panganib na leak na ito ng sariling tuktok na puwesto sa listahan."
+      },
+      "summary": "Ang GitHub Actions indirect prompt injection proofs-of-concept ay reproducible sa Claude Code, Gemini CLI, at Copilot sa parehong window. Sa loob ng Q2-Q3 2026, isang bagong supply-chain category, ang Agent-in-the-Loop Secret Exfiltration, ay inaasahang aakyat sa tuktok ng CIS at OWASP risk lists."
+    },
+    {
+      "id": "prediction.4bbf8ec79bafedd1",
+      "scope_hint": "tech",
+      "title": "Magiging standard ang Headless Everything sa pamamagitan ng MCP/Agent Registry pagsapit ng H2 2026",
+      "body": "**Nagiging standard ang \"Headless Everything\" architecture.** Ang Apr 19 thesis ni Simon Willison — na ang personal AI ay mas mabilis at mas reliable kapag tumatama sa headless services kaysa sa pag-drive ng GUI — ay nagbibigay-balangkas ng axis laban sa browser-operating agents (Claude in Chrome, atbp.). Pagsapit ng H2 2026, asahan ang isang \"headless-preferred\" metadata standard sa MCP / Agent Registry surfaces. In plain language: In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Ang Apr 19 thesis ni Simon Willison ay nagsasaad na ang headless service calls ay nakakahigit sa GUI-driving para sa personal AI speed at reliability.",
+        "given": "Ang browser-operating agents (Claude in Chrome, atbp.) ay mas mabagal at mas brittle kaysa sa direct API calls papasok sa headless services.",
+        "so_that": "Ang MCP / Agent Registry surfaces ay magdadagdag ng 'headless-preferred' metadata field upang ang agents ay pumili sa headless path nang default.",
+        "landing": "Pagsapit ng H2 2026; nakikita sa MCP / Agent Registry server metadata.",
+        "plain_language": "Ang agents na tumatawag sa services nang direkta ay mas mabilis at mas kakaunti ang sira kaysa sa mga nag-click sa web pages, kaya magsisimulang mag-label ang registries kung aling path ang dapat unahin."
+      },
+      "summary": "Ang Apr 19 thesis ni Simon Willison ay nagbibigay-balangkas sa headless service calls bilang mas mabilis at mas reliable kaysa sa GUI-driving para sa personal AI, na nagtatakda ng axis laban sa browser-operating agents tulad ng Claude in Chrome. Pagsapit ng H2 2026, asahan na ang MCP at Agent Registry surfaces ay magdadala ng 'headless-preferred' metadata standard."
+    }
+  ]
+}

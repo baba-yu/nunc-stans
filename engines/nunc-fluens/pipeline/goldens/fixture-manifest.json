@@ -9,6 +9,11 @@
   "sundayDay": "2026-06-28",
   "dbRange": { "start": "2026-06-22", "end": "2026-06-28" },
   "reportWindow": { "start": "2026-06-15", "end": "2026-07-05" },
+  "historicalPredictionDates": {
+    "start": "2026-04-19",
+    "end": "2026-05-04",
+    "why": "predictions.json only (en + locales) — feeds the tests of the retired one-shot rename-future-titles skill (not DAG-invoked; reclassified out of the port at T1, tests retire with the Python at T12)"
+  },
   "locales": ["en", "ja", "es", "fil"],
   "normalization": {
     "isoTimestamps": "every YYYY-MM-DDTHH:MM:SS[.f][Z] in the DB dump and export JSON is rewritten to 1970-01-01T00:00:00Z before storing/comparing (created_at/updated_at/scored_at/generated_at metadata; content never carries time-of-day stamps)",

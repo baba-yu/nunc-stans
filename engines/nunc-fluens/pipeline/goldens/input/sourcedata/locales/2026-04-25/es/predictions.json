@@ -1,0 +1,47 @@
+{
+  "date": "2026-04-25",
+  "predictions": [
+    {
+      "id": "prediction.81d3055dbb24f016",
+      "scope_hint": "cross",
+      "title": "La capacidad de nube para IA frontier se consolida en un oligopolio de entrenamiento de tres nubes para el Q3 2026",
+      "body": "**La \"captura de capacidad de laboratorio frontier de IA × nube Tier-1\" divide el campo limpiamente para el Q3 2026.** Con Google Cloud confirmando tres acuerdos en un solo mes — Anthropic (GB300 + TPU grande), Meta (capacidad GB300), Thinking Machines Lab (A4X Max) — la estructura cristaliza: las nubes con capacidad suficiente para el desarrollo de modelos frontier se reducen a tres (AWS / Azure / GCP). Amazon contraataca con **otros $25B + 5GW de capacidad Trainium2/3 + compromiso a 10 años de $100B** para Anthropic; Azure mantiene OpenAI / Mistral / Inflection; GCP suma Anthropic / TML / Meta. Para el Q3 2026, los \"candidatos a cuarto hyperscaler sin nube propia o contratos de capacidad a largo plazo con laboratorios frontier\" (Oracle Cloud / IBM / Coreweave) cambian completamente a **\"incapaces de entrenar a escala frontier, especialización en inferencia.\"** Los ecosistemas de silicio de IA se bloquean en una forma de dos niveles: capacidad de entrenamiento = oligopolio de tres nubes / inferencia = en capas. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Google Cloud cierra Anthropic GB300 + TPU, Meta GB300, y Thinking Machines Lab A4X Max en un solo mes mientras Amazon suma $25B + 5GW Trainium para Anthropic.",
+        "given": "La capacidad de entrenamiento a escala frontier está concentrada en solo tres hyperscalers con el backlog de GB300 / Trainium / TPU para absorber compromisos a 10 años.",
+        "so_that": "Oracle Cloud, IBM y Coreweave pierden acceso al entrenamiento a escala frontier y se reposicionan completamente en cargas de trabajo de inferencia.",
+        "landing": "Para el Q3 2026; el silicio de IA se bloquea en un oligopolio de tres nubes para entrenamiento y un mercado de inferencia en capas.",
+        "plain_language": "Solo tres grandes nubes pueden encajar los enormes nuevos trabajos de entrenamiento de IA. Las nubes más pequeñas dejarán de intentarlo y en cambio ejecutarán modelos terminados más baratos."
+      },
+      "summary": "Los acuerdos Anthropic + Meta + Thinking Machines Lab de Google Cloud, más el refuerzo de $25B + 5GW Trainium de Amazon para Anthropic, reducen la capacidad de entrenamiento a escala frontier a AWS, Azure y GCP. Para el Q3 2026, se espera que los candidatos a cuarta nube sin contratos a largo plazo con laboratorios frontier reenfoquen su atención en inferencia."
+    },
+    {
+      "id": "prediction.70ad45e258b72e8c",
+      "scope_hint": "cross",
+      "title": "Las tablas de clasificación de Physical AI clasifican los cinco principales humanoides adoptados por OEM para el H2 2026",
+      "body": "**\"Los récords de líneas de producción de Physical AI se convierten en tablas de clasificación en IROS / GTC 2026\" comienza H2 2026.** Con el **HMND 01 Alpha** de Siemens Erlangen (60 totes/h × 8h × 90%+), el **Figure 02** de BMW Spartanburg (10 meses / 30,000 vehículos / 90,000 piezas), el **AEON** de BMW Leipzig (prueba abril 2026 → piloto de verano), y el **Digit** de GXO (100K+ totes) todos llegando a la misma ventana — y Hannover Messe 2026 haciendo de Physical AI su primer tema central — el criterio de evaluación de la industria está cambiando de \"demos reclamadas por proveedores\" a **\"récords de producción adoptados por OEM.\"** En H2 2026 en **IROS (octubre)** y **GTC Fall 2026**, comienzan las tablas de clasificación para \"recuento de adopción OEM × horas de operación continua × piezas manejadas × MTBF\", con los cinco principales de Apptronik Apollo / Agility Digit / Figure 03 / Humanoid HMND 01 / Hexagon AEON en la cima. Las 30+ empresas aún atascadas en fase PoC son empujadas a déficits de financiación / adquisiciones / salidas en Q4 2026. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Los récords de producción de Siemens Erlangen, BMW Spartanburg, BMW Leipzig y GXO emergen todos juntos mientras Hannover Messe hace de Physical AI su tema central.",
+        "given": "Los récords de producción adoptados por OEM ahora son lo suficientemente concretos como para que los compradores puedan clasificar a los proveedores por horas continuas, piezas manejadas y MTBF.",
+        "so_that": "IROS octubre y GTC Fall publican tablas de clasificación de adopción OEM que elevan a un quinteto top y exprimen al largo de la cola atascado en PoC.",
+        "landing": "Comienza H2 2026; 30+ proveedores en PoC enfrentan déficits de financiación, adquisiciones o salidas en Q4 2026.",
+        "plain_language": "Las fábricas reales ahora tienen robots humanoides registrando horas reales. Pronto las grandes conferencias de IA los clasificarán como ligas deportivas, y las startups más débiles desaparecen."
+      },
+      "summary": "El HMND 01 Alpha de 8 horas de Siemens Erlangen, el récord de 30,000 vehículos del Figure 02 de BMW Spartanburg, la prueba AEON de BMW Leipzig y la corrida de 100K-totes Digit de GXO aterrizan en la misma ventana en que Hannover Messe 2026 destaca a Physical AI. Se espera que IROS y GTC de H2 2026 publiquen tablas de clasificación de adopción OEM."
+    },
+    {
+      "id": "prediction.5094f95cbe8376d1",
+      "scope_hint": "tech",
+      "title": "El rediseño del protocolo MCP emerge como el principal cuello de botella de IA empresarial para el Q3 2026",
+      "body": "**\"La superficie de ataque contra el protocolo MCP en sí\" se convierte en el mayor cuello de botella de adopción empresarial de IA para el Q3 2026.** **CVE-2026-33032 (MCPwn, CVSS 9.8)** de Nginx UI — un defecto estructural donde el endpoint `/mcp_message`, con su lista de IPs permitidas vacía por defecto, expone 12 llamadas a herramientas no autenticadas — fue añadido a VulnCheck KEV tras una toma de control real de 2 solicitudes en producción. Eso nos dice que el protocolo MCP en sí necesita ser rediseñado como un estándar web si va a escalar. Para el Q3 2026, OWASP MCP Top 10 se publicará oficialmente, **MCP-over-mTLS / especificaciones estandarizadas de alcance OAuth por Anthropic / Microsoft / Google / Cisco / Cloudflare** se convertirán en estándar de la industria, y Keycard / Okta for AI Agents / Wiz / Levo.ai / Pillar Security lanzarán productos \"MCP Gateway / MCP Firewall\" durante el Q4. Las auditorías de cumplimiento empresarial comenzarán a rastrear \"número de herramientas conectadas a MCP / endpoints / políticas de autorización\" como una nueva categoría de auditoría. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "CVE-2026-33032 (MCPwn, CVSS 9.8) de Nginx UI aterriza en VulnCheck KEV tras una toma de control real de 2 solicitudes vía una lista de IPs permitidas vacía por defecto.",
+        "given": "Las integraciones MCP exponen llamadas a herramientas no autenticadas a escala, haciendo que el protocolo en sí sea el modo de fallo en lugar del bug de cualquier proveedor único.",
+        "so_that": "OWASP MCP Top 10 se envía, MCP-over-mTLS y las especificaciones de alcance OAuth se convierten en estándar de la industria, y los proveedores de MCP Gateway / Firewall lanzan durante el Q4.",
+        "landing": "Para el Q3 2026; las auditorías de cumplimiento empresarial añaden las herramientas conectadas a MCP y las políticas de autorización como una nueva categoría de auditoría.",
+        "plain_language": "Un servidor MCP popular fue hackeado porque cualquiera en internet podía llamar a sus herramientas. Todo el protocolo ahora necesita muros de inicio de sesión adecuados antes de que las empresas confíen en él."
+      },
+      "summary": "CVE-2026-33032 (MCPwn, CVSS 9.8) de Nginx UI — listado en KEV tras una toma de control real de 2 solicitudes — expone el protocolo MCP en sí como el modo de fallo. Para el Q3 2026, se espera que se envíen OWASP MCP Top 10, MCP-over-mTLS / especificaciones de alcance OAuth y productos MCP Gateway / Firewall."
+    }
+  ]
+}

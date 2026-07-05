@@ -1,0 +1,47 @@
+{
+  "date": "2026-04-21",
+  "predictions": [
+    {
+      "id": "prediction.082b0a07077870dd",
+      "scope_hint": "tech",
+      "title": "GGUFサプライチェーン、2026年Q3までに署名カードとSSTIスキャンによるアップロードゲートを導入",
+      "body": "**GGUFのサプライチェーンが新たな戦場になる。** SGLang CVE-2026-5760(GGUF経由のJinja2 SSTIによるRCE)は、「モデルファイル自体が実行可能コードのキャリアである」という事実を可視化した。2026年Q3までに、Hugging Face / Ollama Library / ModelScopeはmodel-card + chat_templateの署名検証またはサンドボックス実行をベースラインとして要求するようになる。Foundry Local / Bedrock / vLLMはGGUFロード時のSSTIスキャンをデフォルトで有効化する。In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "SGLang CVE-2026-5760は、GGUFのchat_templateパース処理にJinja2 SSTIを内包しており、モデルロード時にRCEを引き起こす。",
+        "given": "GGUFファイルは実行可能なテンプレートを埋め込んでいるため、モデルアーティファクトは任意コードのキャリアとして機能する。",
+        "so_that": "ハブは署名済みmodel-cardとchat_templateの背後でアップロードをゲーティングし、サービングランタイムはGGUFロード時にSSTIをスキャンする。",
+        "landing": "2026年Q3まで; HF / Ollama / ModelScope + Foundry Local / Bedrock / vLLM。",
+        "plain_language": "SGLangのバグはモデルファイルが有害コードを隠せることを示しており、大手モデルハブと推論サーバーは実行前にチェックを開始する。"
+      },
+      "summary": "SGLang CVE-2026-5760(GGUFのchat_templateパース経由のJinja2 SSTI)は、モデルファイルが実行可能コードを運んでいることを示した。2026年Q3までに、Hugging Face、Ollama、ModelScopeは署名済みmodel-cardまたはサンドボックスを要求し、Foundry Local、Bedrock、vLLMはGGUFロード時のSSTIスキャンを有効化する見込みだ。"
+    },
+    {
+      "id": "prediction.af6de8a1d9fd7731",
+      "scope_hint": "business",
+      "title": "Anthropic-AWS提携、2027年H1までに5極のハイパースケーラ・ラボ体制を固定化",
+      "body": "**「ハイパースケーラとフロンティアラボの排他的提携」時代**が到来した。Amazon-Anthropicの10年間 $100B コミットメントは、MS-OpenAIに続く2件目の「ハードウェア協調設計 + プラットフォーム排他」契約となる。2026年H2 / 2027年H1にかけて、**5極体制** — Google–(自社製Gemini)、Anthropic–AWS、OpenAI–MS、Meta–社内(Llama)、xAI–Oracle/NVDA — が固定化される見込みだ。Trainium / TPU / MAIA / MI300Xの設計差異はそのままモデル挙動の差異につながり、開発者は**バックエンドの可搬性**(MCPのようなランタイム非依存層)を必須要件として再評価することになる。In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Amazon-Anthropicの10年間 $100B + 5 GW Trainiumは、MS-OpenAIに続く2件目の協調設計型排他契約となる",
+        "given": "フロンティア訓練の経済性は、クラスタ建設を支えるために協調設計シリコンを持つ単一のハイパースケーラを必要とする",
+        "so_that": "ラボ-クラウド-チップの5極体制が固定化され、ランタイム非依存のバックエンド可搬性が必須要件となる",
+        "landing": "2026年H2 / 2027年H1; 5極体制が固定化され、可搬性層が採用される",
+        "plain_language": "各大手AIラボは1つのクラウドと1つのチップファミリーとペアを組んでいるため、アプリはそれらを切り替えるための翻訳層を必要とする。"
+      },
+      "summary": "Amazon-Anthropicの10年間 $100B Trainiumコミットメントは、MS-OpenAIに続く2件目のハードウェア協調設計型ハイパースケーラ-ラボ排他契約となる。2026年H2 / 2027年H1を通じて、Google、Anthropic-AWS、OpenAI-MS、Meta、xAIにわたる5極体制が固定化され、バックエンドの可搬性が必須要件として強制される。"
+    },
+    {
+      "id": "prediction.b60e425d646be753",
+      "scope_hint": "cross",
+      "title": "クローズドウェイトのフロンティアが結晶化、2026年Q3までにオープンウェイトは35B-A3Bで頭打ちに",
+      "body": "**オープンウェイトの地政学的分裂に対する独自モデルの再拡大。** Qwen3.6-Max-Previewの「独自仕様、APIのみ」への転換と、AnthropicによるMythos Previewの段階的ゲーティングが並行することで、2026年Q3は**「最強モデル = クローズドウェイト」**が結晶化する瞬間となる。一方でオープンウェイトは、本番運用において35B-A3B / Bonsai / Llama系列に集約され、「実用はローカル、フロンティアはクラウド」という線引きが定式化される。In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Qwen3.6-Max-PreviewがAPIのみへ転換し、Anthropicが同時期にMythos Previewをゲーティングした",
+        "given": "フロンティア層の計算資源と安全性オーバーヘッドにより、トップ層ラボにとってオープンウェイトリリースは経済的に成り立たない",
+        "so_that": "2026年Q3までに、公開されている最強モデルはすべてクローズドとなり、オープンウェイトは35B-A3B / Bonsai / Llamaの本番層に落ち着く",
+        "landing": "2026年Q3まで; ≥2 のフロンティアラボがAPIのみ + オープンウェイトの上限が ~35B-A3B クラス",
+        "plain_language": "最大級モデルは課金壁の向こう側に行き、より小さなオープンモデルは無料のままなので、人々は日常タスクにはローカルモデル、最難タスクにはクラウドを使うようになる。"
+      },
+      "summary": "Qwen3.6-Max-PreviewのAPIのみへの転換と、AnthropicによるMythos Previewのゲーティングが揃って、2026年Q3を「最強モデルが一様にクローズドウェイト」となる転換点として位置づける。オープンウェイトのリリースは35B-A3B、Bonsai、Llamaの本番層に集約され、ローカル実用モデルとクラウドフロンティアモデルとの分離が定式化される。"
+    }
+  ]
+}

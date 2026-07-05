@@ -1,0 +1,343 @@
+{
+  "date": "2026-07-05",
+  "validation_rows": [
+    {
+      "prediction_ref": {
+        "id": "prediction.9eb6e9888959d4b6",
+        "short_label": "Local-LLM runtimes ship in-model speculative decoding on by default by Q2 2027",
+        "prediction_date": "2026-07-05"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "Ang paglabas ng Ollama ngayon ang pinagmulang ebidensya ng bagong prediksyon na ito. Inilabas ng Ollama ang version 0.31 noong July 1 na naka-default ang multi-token prediction para sa Gemma 4 sa Apple Silicon. Ayon sa report, halos 90% na mas mabilis nang mag-generate ng token ang model sa average sa isang coding-agent benchmark, na byte-identical ang output. Ang mekanismo ay in-model speculative decoding: may nakabundle na maliit na draft model ang Gemma 4 na nagmumungkahi ng ilang susunod na token, at bini-verify ito ng pangunahing model sa isang pass, kaya maraming token ang lumalabas sa halagang halos katumbas ng iisa kapag tinanggap ang draft. Mahalaga na naka-default ito, hindi isang tuning flag. Ang small-batch MLX matmul kernel na na-upstream ng Ollama, na nagpapabilis nang 2x-2.5x sa pinakamalaking matmul ng Gemma 4 sa M5 Max na may nvfp4, ay magagamit ng kahit anong MLX model, hindi lang ng Gemma. Iyan mismo ang one-shipping-implementation-proves-the-accuracy-neutral-speedup na dinamika na inaasahang kumalat ng prediksyong ito. Dahil patuloy na tinatawag ng coding agents ang model sa mga tekstong madaling hulaan, nag-iipon ang mga tinanggap na draft sa buong session. Ang kulang pa ay isang pangalawang mainstream local runtime, gaya ng LM Studio, isang llama.cpp desktop, MLX-LM, o vLLM local mode, na magpalit tungo sa in-model o paired-draft speculative decoding bilang default path para sa isang sikat na open-weight family.",
+      "reference_links": [
+        {
+          "label": "Ollama Blog - Faster Gemma 4 on MLX with multi-token prediction",
+          "url": "https://ollama.com/blog/faster-gemma-4-mlx-mtp"
+        },
+        {
+          "label": "GitHub - Ollama v0.31.1 release",
+          "url": "https://github.com/ollama/ollama/releases/tag/v0.31.1"
+        },
+        {
+          "label": "Releasebot - Ollama release notes (June-July 2026)",
+          "url": "https://releasebot.io/updates/ollama"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Sa paglabas ng Ollama 0.31 noong July 1, naging default ang in-model speculative decoding para sa Gemma 4 sa Apple Silicon, na may halos 90% na mas mabilis na generation at byte-identical na output. Bini-verify ang nakabundle na draft sa isang pass at inilabas bilang default, hindi flag. Ang na-upstream na MLX kernel ay magagamit ng kahit anong model. Iyan mismo ang accuracy-neutral na speedup na inaasahang kumalat nito.",
+        "coherence": 4,
+        "remaining_gap": "Wala pang pangalawang mainstream runtime, gaya ng LM Studio, MLX-LM, isang llama.cpp desktop, o vLLM local mode, na nagpalit ng speculative decoding tungo sa default path para sa isang sikat na open-weight family."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.70512b58e932f532",
+        "short_label": "Open-model inference neocloud files a public-listing step by Q4 2027",
+        "prediction_date": "2026-07-05"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "Ang Together AI round ngayon ang pinagmulang ebidensya ng bagong prediksyon na ito. Inanunsyo ng Together AI ang isang $800 million Series C sa $8.3 billion post-money valuation noong July 1, isang 2.5x na pagtaas mula sa Series B nito noong February 2025 sa loob ng humigit-kumulang labimpitong buwan, na nagdadala sa kabuuang funding sa $1.3 billion. Tatlong senyales ang tumuturo sa iisang direksyon. Una, pinangunahan ang round ng Prosperity7 ng Aramco Ventures, ang uri ng sovereign-scale na tseke na karaniwang dumarating bilang late-stage, pre-liquidity na kapital sa halip na maagang venture. Pangalawa, inilarawan ni Prosperity7 managing director Abhishek Shukla ang kumpanya bilang patungo sa public markets, ang parehong IPO gravity na humihila na sa mga frontier lab. Pangatlo, hindi nag-iisa ang Together: inilagay ito ng report katabi ng Fireworks at Baseten bilang open-model hosting layer na kinakapitalisa bilang matibay na platform tier sa halip na manipis na commodity reseller, na naghahatid ng open weights gaya ng DeepSeek, Nemotron, MiniMax, at Kimi sa halagang bahagi lang ng closed-model. Ang GPU footprint na binalak lumaki nang humigit-kumulang 50-fold sa loob ng limang taon ay nangangailangan ng capital base na tumitigil sa pag-underwrite ng mga private syndicate, na siyang istrukturang puwersa tungo sa public liquidity na tinutukoy ng prediksyong ito. Ang kulang pa ay isang kongkreto at inihayag na hakbang, isang confidential o public S-1, o isang pormal na direct-listing o IPO na anunsyo, sa halip na komento lang ng investor.",
+      "reference_links": [
+        {
+          "label": "Business Wire - Together AI Raises $800M at $8.3B Valuation",
+          "url": "https://www.businesswire.com/news/home/20260701243402/en/Together-AI-Raises-$800-Million-at-$8.3-Billion-Valuation-to-Make-Frontier-AI-Accessible-to-All"
+        },
+        {
+          "label": "DataCenter Dynamics - Together AI raises $800m in Series C funding round",
+          "url": "https://www.datacenterdynamics.com/en/news/together-ai-raises-800m-in-series-c-funding-round/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "so_that",
+        "narrative": "Ang $800M Series C ng Together AI noong July 1 sa $8.3B valuation, isang 2.5x na pagtaas na pinangunahan ng Prosperity7 ng Aramco, ay may tahasang pagbabalangkas tungo sa public markets. Ang sovereign-scale na late-stage na tseke kasama ang GPU footprint na binalak lumaki nang 50-fold ay lalampas sa kayang i-underwrite ng mga private syndicate. Kinakapitalisa ang Together katabi ng Fireworks at Baseten bilang matibay na platform tier, ang puwersa tungo sa liquidity na tinutukoy nito.",
+        "coherence": 4,
+        "remaining_gap": "Komento lang ng investor ang ebidensya, hindi isang kongkretong inihayag na hakbang: walang confidential o public S-1, at walang pormal na direct-listing o IPO na anunsyo na inihain."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.a879b03610b9ab92",
+        "short_label": "Non-GPU AI-datacenter silicon draws standalone infrastructure funding by Q4 2027",
+        "prediction_date": "2026-07-05"
+      },
+      "today_relevance": 5,
+      "evidence_summary": "Ang balita ngayon ang pinagmulang ebidensya ng bagong prediksyon na ito, at dumating ito bilang dalawang nagpapatibay na senyales sa isang cycle. Isinara ng Stathera ang isang oversubscribed na $55 million Series B noong June 30, pinangunahan ng bagong investor na Maverick Silicon kasama ang MediaTek Innovation Fund, TXC, Celesta, at iba pa, na $75 million ang kabuuang naipon, tahasang pondohan ang isang GEN3 platform para sa AI-data-center clocks. Ipinapakita nito ang MEMS DualMode timing bilang humigit-kumulang $1.5 billion na pinagsama-samang synchronization opportunity hanggang 2030 sa loob ng $11 billion na taunang timing market, at binabalangkas ang tumpak na cross-node timing bilang tunay na hadlang kapag umabot ang accelerator clusters sa sampu-sampung libong GPU. Kasabay nito, tahasang itinanggi ni Tenstorrent CEO Jim Keller ang naiulat na $8-10 billion na Qualcomm buyout at muling pinagtibay ang isang independiyenteng landas sa isang IPO bridge at confidential S-1, na pinapanatili ang isang kapani-paniwalang RISC-V accelerator-IP house sa isang standalone-capitalization na landas sa halip na maisama sa isang mobile-SoC incumbent. Kung babasahin nang magkasama, tinutukoy at pinopondohan ng kapital ang mga non-GPU na layer ng AI datacenter, ang timing at synchronization silicon kasama ang independiyenteng accelerator IP, bilang magkakahiwalay na line item na may sariling tesis at espesyalistang tagasuporta gaya ng Maverick Silicon. Iyan mismo ang standalone-infrastructure-category na tesis na pinalalawak ng prediksyong ito. Ang kulang pa ay isang pangalawang non-GPU supplier na magsara ng institutional round o maghain para maging publiko na tahasang inibenta ang sarili bilang standalone AI-datacenter infrastructure category, kasama ang isang nakumpirmang independiyenteng listing sa halip na isang tinanggihang acquisition.",
+      "reference_links": [
+        {
+          "label": "PR Newswire - Stathera Announces US$55M Series B for AI Data Center Silicon Timing",
+          "url": "https://www.prnewswire.com/news-releases/stathera-announces-us55-million-series-b-to-scale-silicon-timing-and-accelerate-next-generation-ai-data-center-solutions-302813712.html"
+        },
+        {
+          "label": "citybiz - Stathera Raises $55M Series B to Expand Silicon Timing for AI Data Centers",
+          "url": "https://www.citybiz.co/article/867841/stathera-raises-55-million-series-b-to-expand-silicon-timing-for-ai-data-centers/"
+        },
+        {
+          "label": "GuruFocus - Tenstorrent CEO Denies Qualcomm Acquisition Talks",
+          "url": "https://www.gurufocus.com/news/8938157/tenstorrent-ceo-denies-qualcomm-acquisition-talks-amid-focus-on-ai-development"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Dalawang nagpapatibay na senyales ang dumating nang magkasama: ang oversubscribed na $55M Series B ng Stathera noong June 30, pinangunahan ng Maverick Silicon, ay pinopondohan ang AI-datacenter timing silicon na ipinapakita bilang $1.5B na synchronization opportunity, samantalang itinanggi ni Keller ang Qualcomm buyout at pinanatiling independiyente ang accelerator IP ng Tenstorrent. Tinutukoy at pinopondohan ng kapital ang mga non-GPU na layer ng datacenter bilang magkakahiwalay na line item na may espesyalistang tagasuporta, ang tesis na pinalalawak nito.",
+        "coherence": 4,
+        "remaining_gap": "Ang kulang ay isang pangalawang non-GPU supplier na magsara ng round o maghain na tahasang nag-iibenta ng standalone AI-datacenter category, kasama ang isang nakumpirmang independiyenteng listing sa halip na isang tinanggihang acquisition."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.14cd36ae7a6a8633",
+        "short_label": "Quantized-by-default serving lands as the OSS inference baseline by H1 2027",
+        "prediction_date": "2026-06-30"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "Pinatatalas ng Ollama 0.31 ang kaso para sa quantized-by-default serving mula sa panig ng local runtime. Ang performance win na iniulat ngayon ay nasukat sa isang M5 Max na may nvfp4 quantization, kung saan ginagawang 2x hanggang 2.5x na mas mabilis ng bagong small-batch MLX matmul kernel na na-upstream ng Ollama ang pinakamalaking matrix multiplication ng Gemma 4, sa pamamagitan ng pag-unpack ng bawat weight block nang isang beses at muling paggamit nito sa buong batch. Magagamit ang kernel ng kahit anong MLX model, hindi lang ng Gemma. Itinuturing nito ang isang low-bit quantized weight format bilang ipinagpapalagay na serving substrate na inio-optimize ng isang mainstream runtime at inihahatid sa mga end user bilang default, na siyang direksyong tinutukoy ng prediksyong ito para sa open-source inference. Nakasentro ang kuwento sa speculative-decoding throughput at isang magagamit-uling matmul kernel, sa halip na isang runtime na tahasang naglilipat ng quantized weights bilang nakatakdang default para sa isang model family. Kaya pinatitibay nito ang quantized-serving na baseline nang hindi mismo ang pinangalanang default-on na pagbabago sa config.",
+      "reference_links": [
+        {
+          "label": "Ollama Blog - Faster Gemma 4 on MLX with multi-token prediction",
+          "url": "https://ollama.com/blog/faster-gemma-4-mlx-mtp"
+        },
+        {
+          "label": "GitHub - Ollama v0.31.1 release",
+          "url": "https://github.com/ollama/ollama/releases/tag/v0.31.1"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "Nasukat ang win ngayon sa isang M5 Max na may nvfp4 quantization, kung saan ginagawang 2x-2.5x na mas mabilis ng na-upstream na small-batch MLX kernel ng Ollama ang pinakamalaking matmul ng Gemma 4, at magagamit ito ng kahit anong MLX model, hindi lang ng Gemma. Itinuturing nito ang isang low-bit quantized format bilang ipinagpapalagay na serving substrate na inio-optimize ng isang mainstream runtime at inihahatid sa mga end user bilang default.",
+        "coherence": 3,
+        "remaining_gap": "Nakasentro ang kuwento sa speculative-decoding throughput at isang magagamit-uling kernel, hindi sa isang runtime na tahasang naglilipat ng quantized weights bilang nakatakdang default para sa isang model family."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.a4f83081580b9a3d",
+        "short_label": "Launch-day vLLM/SGLang + Ollama support becomes open-weight MoE release bar",
+        "prediction_date": "2026-07-02"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "Pinatatatag ng paglabas ng Ollama ngayon ang panig ng local runtime sa tesis ng launch-day serving support. Hindi lang binuksan ng Ollama 0.31 ang multi-token prediction para sa Gemma 4 bilang default, kundi nagdagdag ang nakapaligid na 0.30.11-0.31 train ng thinking-capability detection, Claude Code at opencode auto-install hooks, Codex drift detection, at CUDA sm_86 support, at nireubo ang nakabundle na llama.cpp engine. Ipinapakita nito na nagmamadali ang runtime layer na gawing turnkey default ang first-class local coverage sa halip na isang advanced setting. Iyan ang local-optimization na landas kung saan nagiging open-weight minimum ang launch-day runtime support na tinutukoy ng prediksyong ito. Tungkol ang kuwento sa isang runtime na naghahatid ng speedups at integration hooks para sa isang umiiral na model, sa halip na isang open-weight MoE na naglalabas nang may same-day vLLM, SGLang, at Ollama packaging bilang tahasang release bar. Kaya pinatitibay nito ang direksyon nang hindi kinukumpirma ang pinangalanang launch-day serving norm.",
+      "reference_links": [
+        {
+          "label": "Ollama Blog - Faster Gemma 4 on MLX with multi-token prediction",
+          "url": "https://ollama.com/blog/faster-gemma-4-mlx-mtp"
+        },
+        {
+          "label": "Releasebot - Ollama release notes (June-July 2026)",
+          "url": "https://releasebot.io/updates/ollama"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "landing",
+        "narrative": "Ipinapares ng 0.30.11-0.31 train ng Ollama ang default na multi-token prediction para sa Gemma 4 sa thinking-capability detection, Claude Code at opencode auto-install hooks, Codex drift detection, at isang nireubong llama.cpp engine. Ipinapakita nito na nagmamadali ang runtime layer na gawing turnkey default ang first-class local coverage. Iyan ang local-optimization na landas kung saan nagiging open-weight minimum ang launch-day runtime support na tinutukoy nito.",
+        "coherence": 3,
+        "remaining_gap": "Ito ay speedups at integration hooks para sa isang umiiral na model, hindi isang open-weight MoE na naglalabas nang may same-day vLLM, SGLang, at Ollama packaging bilang tahasang release bar."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.cbba6275f880fc04",
+        "short_label": "Second hyperscaler names non-Nvidia data-center inference silicon by Q4 2027",
+        "prediction_date": "2026-06-29"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "Pinapanatili ng pag-unlad sa Tenstorrent ngayon ang isang kapani-paniwalang non-NVIDIA accelerator supplier sa isang independiyenteng landas sa halip na maabsorb. Sinabi ni Jim Keller noong June 30 at inulit hanggang July 3 na wala ang Tenstorrent sa acquisition talks sa Qualcomm, na sumasalungat sa isang ulat noong kalagitnaan ng June tungkol sa isang naiulat na $8-10 billion buyout. Binalangkas niya ang kumpanya bilang nakatuon sa pagbuo ng sariling negosyo kabilang ang IP licensing at high-end scalable AI work na nakaangkla sa Japan, na nananatili sa isang independiyenteng landas ang Galaxy rack roadmap. Mahalaga ito sa prediksyong ito dahil pinapanatili nito ang isa sa iilang merchant RISC-V accelerator-IP house na maaaring pangalanan ng isang hyperscaler para sa data-center inference, sa halip na iruta ang disenyo sa isang mobile-SoC incumbent, na pinapanatiling malinaw na opsyon ang non-NVIDIA supply. Ang ebidensya ay isang tinanggihang consolidation at isang senyales ng kalayaan, sa halip na isang pinangalanang hyperscaler deployment ng non-Nvidia inference silicon. Kaya sinusuportahan nito ang availability na panig ng tesis nang hindi mismo ang hyperscaler-naming na datapoint.",
+      "reference_links": [
+        {
+          "label": "GuruFocus - Tenstorrent CEO Denies Qualcomm Acquisition Talks",
+          "url": "https://www.gurufocus.com/news/8938157/tenstorrent-ceo-denies-qualcomm-acquisition-talks-amid-focus-on-ai-development"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "Pinapanatili ng pagtanggi ni Keller noong June 30 sa naiulat na Qualcomm buyout ang isa sa iilang merchant RISC-V accelerator-IP house na independiyente, nakaangkla sa Japan sa Galaxy rack roadmap sa halip na iruta sa isang mobile-SoC incumbent. Pinapanatili nito ang non-Nvidia supply na maaaring pangalanan ng isang pangalawang hyperscaler para sa data-center inference, na sinusustena ang availability na precondition nang hindi mismo ang naming event.",
+        "coherence": 2,
+        "remaining_gap": "Walang hyperscaler ang aktuwal na nagpangalan ng non-Nvidia inference silicon; pinapanatili lang nito na malinaw na opsyon ang isang kandidatong supplier, hindi isang nakumpirmang deployment."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.225d77f109a86780",
+        "short_label": "Inference-ASIC cohort gains a fourth named buyer-designed chip by H1 2027",
+        "prediction_date": "2026-06-25"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "Pinapanatili ng senyales ng kalayaan ng Tenstorrent ang IP-licensing model nito bilang isang ruta tungo sa mas maraming buyer-designed accelerator. Muling pinagtibay ni Keller na nakatuon ang Tenstorrent sa IP licensing at high-end scalable AI work na nakaangkla sa Japan habang itinatanggi ang Qualcomm buyout, at binanggit na nakikipag-usap ang kumpanya sa maraming kumpanya sa mga estratehikong lugar habang tumataas ang gana ng sektor para sa malalaking deal. Dahil ang licensable RISC-V accelerator IP ng Tenstorrent ay isang paraan para sa isang bagong buyer na magtayo ng sariling inference silicon nang hindi bumubuo ng design team mula sa wala, ang pagpapanatiling independiyente sa house na iyon ay sinusustena ang supply-side na mekanismo na sinasandigan ng prediksyong ito para sa isang pang-apat na pinangalanang buyer-designed chip. Ang ebidensya ay isang licensing-and-independence na tindig, sa halip na isang tiyak na bagong buyer na nagpapangalan ng custom inference ASIC. Kaya pinatitibay nito ang nagbibigay-daang kondisyon nang hindi mismo ang fourth-named-chip na datapoint.",
+      "reference_links": [
+        {
+          "label": "GuruFocus - Tenstorrent CEO Denies Qualcomm Acquisition Talks",
+          "url": "https://www.gurufocus.com/news/8938157/tenstorrent-ceo-denies-qualcomm-acquisition-talks-amid-focus-on-ai-development"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "Muling pinagtibay ni Keller ang pagtuon sa IP licensing at high-end scalable AI habang itinatanggi ang buyout, na binabanggit ang mga usapan sa maraming kumpanya habang tumataas ang gana sa deal. Ang licensable RISC-V accelerator IP ay nagbibigay-daan sa isang bagong buyer na magtayo ng custom inference silicon nang walang from-scratch na design team, kaya ang pagpapanatiling independiyente sa house na iyon ay sinusustena ang supply-side na mekanismo para sa isang pang-apat na buyer-designed chip.",
+        "coherence": 2,
+        "remaining_gap": "Walang tiyak na bagong buyer ang nagpangalan ng custom inference ASIC; pinatitibay nito ang nagbibigay-daang licensing na kondisyon, hindi ang fourth-chip na datapoint."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.b29d00f310d8ad2c",
+        "short_label": "Second open-weight frontier model discloses non-NVIDIA ASIC training by Q2 2027",
+        "prediction_date": "2026-07-04"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "Pinatitibay ng balita ng Tenstorrent ngayon ang panig ng supply sa non-NVIDIA compute-independence na landas na sinasakyan ng prediksyong ito. Ang pagtanggi ni Keller sa Qualcomm buyout at muling pagpapatibay ng isang independiyenteng IPO-bridge na landas ay pinapanatili ang isang kapani-paniwalang RISC-V accelerator-IP house na bumubuo ng sariling high-end scalable AI hardware at Galaxy rack roadmap, sa halip na maisama sa isang mobile-SoC incumbent. Sinusustena nito ang pool ng non-NVIDIA accelerators na maaaring pagsanayan ng isang lab ng isang frontier model. Iyan ang parehong alternatibong-silicon na larangan na sinandigan ng Meituan LongCat-2.0 Chinese-ASIC training run kahapon, na ngayon ay ipinapakitang nananatiling independiyente sa panig ng merchant IP. Ang ebidensya ay isang accelerator vendor na ipinagtatanggol ang kalayaan, sa halip na isang pangalawang open-weight model card na nagdodokumento ng isang end-to-end na non-NVIDIA training run. Kaya sinusuportahan nito ang nagbibigay-daang hardware na landas nang hindi mismo ang second-disclosure na datapoint na tinutukoy ng prediksyong ito.",
+      "reference_links": [
+        {
+          "label": "GuruFocus - Tenstorrent CEO Denies Qualcomm Acquisition Talks",
+          "url": "https://www.gurufocus.com/news/8938157/tenstorrent-ceo-denies-qualcomm-acquisition-talks-amid-focus-on-ai-development"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "Ang tinanggihang Qualcomm buyout at muling pinagtibay na independiyenteng landas ay pinapanatili ang isang kapani-paniwalang RISC-V house na bumubuo ng sariling high-end scalable hardware, na sinusustena ang pool ng non-Nvidia accelerators na maaaring pagsanayan ng isang lab ng isang frontier model. Ito ang parehong alternatibong-silicon na larangan na sinandigan ng Meituan LongCat-2.0 Chinese-ASIC run kahapon, na ngayon ay ipinapakitang nananatili sa panig ng merchant IP.",
+        "coherence": 2,
+        "remaining_gap": "Walang pangalawang open-weight model card na nagdodokumento ng isang end-to-end na non-Nvidia training run; sinusuportahan nito ang nagbibigay-daang hardware, hindi ang disclosure mismo."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.d6fc36093d611e94",
+        "short_label": "OpenAI files a public-listing step with a US-government stake by Q2 2027",
+        "prediction_date": "2026-07-04"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "Nagdadagdag ang Together AI round ngayon ng isang same-direction na datapoint sa IPO-window na backdrop na kinalalagyan ng prediksyong ito. Dumating ang $800 million Series C ng Together kasama ang lead investor nitong Prosperity7 na tahasang binabalangkas ang kumpanya bilang patungo sa public markets, na tinatawag ng report na parehong IPO gravity na humihila na sa mismong mga frontier lab. Pinatitibay nito ang mas malawak na pagbasa na ang pinakamalalaking AI player sa sektor ay itinutulak mula sa private mega-round tungo sa public liquidity, ang kapaligiran kung saan mapupunta ang pre-listing na hakbang ng OpenAI. Ang ebidensya ay isang inference-neocloud na nagpapahiwatig ng IPO intent, sa halip na anumang bagong pagsisiwalat tungkol sa sariling filing ng OpenAI o sa US-government equity structure na tahasang tinutukoy ng prediksyong ito. Kaya pinatitibay nito ang nakapaligid na IPO-window na presyon nang hindi ginagalaw ang OpenAI-specific na sovereign-stake na hakbang.",
+      "reference_links": [
+        {
+          "label": "Business Wire - Together AI Raises $800M at $8.3B Valuation",
+          "url": "https://www.businesswire.com/news/home/20260701243402/en/Together-AI-Raises-$800-Million-at-$8.3-Billion-Valuation-to-Make-Frontier-AI-Accessible-to-All"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Dumating ang $800 million Series C ng Together kasama ang lead investor nitong Prosperity7 na binabalangkas ang kumpanya bilang patungo sa public markets, na tinatawag ng report na parehong IPO gravity na humihila na sa mga frontier lab. Pinatitibay nito ang istrukturang puwersa mula sa private mega-round tungo sa public liquidity, ang kapaligiran kung saan mapupunta ang isang pre-listing na hakbang.",
+        "coherence": 2,
+        "remaining_gap": "Walang bagong pagsisiwalat tungkol sa sariling filing ng OpenAI o sa US-government equity structure; ginagalaw nito ang nakapaligid na window, hindi ang sovereign-stake na hakbang."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.9bc46d8a918d51a2",
+        "short_label": "AMD Instinct MI400 launches with a named ship, memory, or rack spec by Q3 2026",
+        "prediction_date": "2026-06-27"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "Pinapanatili ng AI-events roundup ngayon ang MI400 Instinct series at Helios rack-scale system ng AMD bilang pangunahing 2H-2026 hardware catalyst, ngunit lumipat na ang pinakamalapit na slot: ang agarang mga aytem sa kalendaryo ngayon ay ang Geneva AI Week sa July 6-10 at ang July 8 AI Tinkerers San Francisco meetup, habang umuurong ang MI400 at Helios tungo sa isang pangkalahatang second-half na watch item, at ang pinakamalapit na nakumpirmang hardware gathering ay ang Hot Chips 2026 sa Stanford sa August 23-25 at ang AI Infra Summit sa September 15-17. Pinapangalanan pa rin nito ang Helios bilang isang rack-scale system at pinapanatili ang MI400 sa loob ng second half, ngunit dahil hindi na ang Advancing AI keynote ang pinakamalapit na nakumpirmang slot, ang kongkretong ship, memory, at rack na numero na kailangan ng prediksyong ito ay nananatiling isang nakatakdang watch item sa halip na isang naihatid na spec, at humuhumipit ang Q3 window habang sumusulong ang kalendaryo.",
+      "reference_links": [
+        {
+          "label": "Hot Chips 2026 (Aug 23-25, Stanford)",
+          "url": "https://hotchips.org/"
+        },
+        {
+          "label": "AI Infra Summit 2026",
+          "url": "https://www.ai-infra-summit.com/agenda"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "landing",
+        "narrative": "Pinapangalanan pa rin ng events roundup ang MI400 series at Helios rack-scale system bilang pangunahing second-half catalyst, ngunit lumipat ang pinakamalapit na slot sa Geneva AI Week at sa July 8 meetup, at hindi na ang Advancing AI keynote ang pinakamalapit na nakumpirmang stage. Nananatiling isang nakatakdang watch item ang kongkretong ship, memory, at rack na numero habang humuhumipit ang Q3 window.",
+        "coherence": 2,
+        "remaining_gap": "Walang naihatid na ship, memory, o rack spec ngayon, at ang pinakamalapit na nakumpirmang hardware venue ay ang Hot Chips sa August 23-25, na humihigpit sa Q3 deadline."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.5e0beac647793331",
+        "short_label": "AMD MI400 will market memory bandwidth over peak FLOPS at Advancing AI",
+        "prediction_date": "2026-07-02"
+      },
+      "today_relevance": 2,
+      "evidence_summary": "Pinapangalanan pa rin ng events calendar ang MI400 Instinct series at Helios rack-scale system ng AMD bilang pangunahing 2H-2026 catalyst, na pinapanatiling buhay bilang watch item ang memory-and-rack na balangkas, at tinuturo ang Hot Chips sa August 23-25 at ang AI Risk Summit sa August 11-12 bilang natural na venue para sa secure-accelerator at confidential-inference na anunsyo. Ngunit inililipat ng roundup ngayon ang pinakamalapit na catalyst pasulong tungo sa July 6-10 Geneva sessions sa halip na ang Advancing AI keynote. Kaya ang tiyak na memory-bandwidth-over-FLOPS na marketing na tindig na inaasahan ng prediksyong ito ay walang nakumpirmang malapitang stage ni anumang naihatid na balangkas ngayon. Ito ay isang umuurong na banggit sa kalendaryo, sa halip na ebidensya ng headline-spec na pagpili mismo.",
+      "reference_links": [
+        {
+          "label": "Hot Chips 2026 (Aug 23-25, Stanford)",
+          "url": "https://hotchips.org/"
+        },
+        {
+          "label": "SecurityWeek AI Risk Summit 2026 (Aug 11-12, Half Moon Bay)",
+          "url": "https://www.airisksummit.com/agenda"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "landing",
+        "narrative": "Pinapangalanan pa rin ng roundup ngayon ang MI400 series at Helios rack-scale system bilang pangunahing second-half catalyst, ngunit inililipat nito ang pinakamalapit na stage pasulong tungo sa July 6-10 Geneva sessions sa halip na ang Advancing AI keynote. Walang nakumpirmang malapitang venue at walang naihatid na balangkas ang memory-bandwidth-over-FLOPS na tindig, kaya nananatiling isang banggit sa kalendaryo ang inaasahang headline-spec na pagpili, hindi ebidensya.",
+        "coherence": 2,
+        "remaining_gap": "Kailangan ng isang nakumpirmang Advancing AI slot at aktuwal na MI400 launch messaging na nagpapauna sa memory bandwidth kaysa peak FLOPS."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.d7abb993513f7449",
+        "short_label": "Tenstorrent S-1 anchors three-name AI-chip IPO set by early August 2026",
+        "prediction_date": "2026-05-24"
+      },
+      "today_relevance": 4,
+      "evidence_summary": "[REVIVED] Muling binubuksan ng balita ng Tenstorrent ngayon ang natutulog na AI-chip-IPO na longshot na ito sa pamamagitan ng isang direktang senyales. Itinanggi ni Keller ang naiulat na $8-10 billion na Qualcomm buyout noong June 30, inulit hanggang July 3, at tahasang sinasabi ng report na ang Tenstorrent ay nasa kalagitnaan na ng isang IPO bridge at confidential S-1 track sa halip na ibenta ang sarili, na nasa isang independiyenteng landas ang Galaxy rack roadmap at IP-licensing model. Iyan ang parehong Tenstorrent-S-1-anchors-the-AI-accelerator-IPO-cohort na mekanismo na sinasandigan ng prediksyong ito, na ngayon ay aktibong pinipili ng kumpanya ang isang public offering kaysa sa isang pagbebenta habang tumataas ang gana sa acquisition ng sektor. Ang inangat dito ay isang muling pinagtibay na confidential-S-1 na tindig at isang tinanggihang buyout, sa halip na isang public at hindi-confidential na S-1 filing na dumarating bilang una sa maihahambing na set. Kaya ang muling pagbabalik ay nasa antas ng intensyon-at-track, at ang aktuwal na public filing na tinutukoy ng prediksyong ito para sa maagang August ay nakabinbin pa rin.",
+      "reference_links": [
+        {
+          "label": "GuruFocus - Tenstorrent CEO Denies Qualcomm Acquisition Talks",
+          "url": "https://www.gurufocus.com/news/8938157/tenstorrent-ceo-denies-qualcomm-acquisition-talks-amid-focus-on-ai-development"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Pinapanatili ng pagtanggi ni Keller noong June 30 sa Qualcomm buyout, inulit hanggang July 3, ang Tenstorrent sa kalagitnaan ng isang IPO bridge at confidential S-1 track, na independiyente ang Galaxy roadmap at IP-licensing model. Ang pagpili ng isang public offering kaysa sa isang pagbebenta habang tumataas ang gana sa acquisition ay ang puwersang nagsusustena sa anchor-S-1 na mekanismo, bagaman nasa antas lang ng intensyon-at-track sa halip na isang naihaing filing.",
+        "coherence": 3,
+        "remaining_gap": "Kailangan ng isang public at hindi-confidential na S-1 na aktuwal na naihain bilang una sa maihahambing na AI-chip set, hindi isang muling pinagtibay na confidential track."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.d15f8427132cce7b",
+        "short_label": "A frontier AI lab files a public S-1 and prices its IPO by Q2 2027",
+        "prediction_date": "2026-06-12"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "[REVIVED] Pinapanatiling mainit ng Together AI round ngayon ang natutulog na IPO na longshot na ito sa antas ng setup. Dumating ang $800 million Series C kasama ang managing director ng lead investor na Prosperity7 na si Abhishek Shukla na binabalangkas ang Together bilang patungo sa public markets, na tahasang tinatawag ng report na parehong IPO gravity na humihila na sa mismong mga frontier lab, kasama ang isang 2.5x na pagtaas sa valuation at isang GPU footprint na binalak lumaki nang humigit-kumulang 50-fold na tumitigil sa pag-underwrite ng mga private syndicate. Iyan ang parehong private-mega-round-to-public-liquidity na mekanismo na sinasandigan ng prediksyong ito, na ngayon ay nakikita isang layer pababa sa stack sa open-model inference tier at binabalangkas bilang tuloy-tuloy sa sariling IPO pull ng mga lab. Ang lumitaw ay isang IPO na balangkas na nakakabit sa isang neocloud, sa halip na isang frontier lab na naghahain ng isang public at hindi-confidential na S-1 na may price range. Kaya ang muling pagbabalik ay nasa antas ng market-window, at ang aktuwal na lab filing na tinutukoy ng prediksyong ito ay nananatiling nakabinbin.",
+      "reference_links": [
+        {
+          "label": "Business Wire - Together AI Raises $800M at $8.3B Valuation",
+          "url": "https://www.businesswire.com/news/home/20260701243402/en/Together-AI-Raises-$800-Million-at-$8.3-Billion-Valuation-to-Make-Frontier-AI-Accessible-to-All"
+        },
+        {
+          "label": "DataCenter Dynamics - Together AI raises $800m in Series C funding round",
+          "url": "https://www.datacenterdynamics.com/en/news/together-ai-raises-800m-in-series-c-funding-round/"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "Dumating ang $800 million Series C ng Together kasama ang lead investor na Prosperity7 na binabalangkas ang kumpanya bilang patungo sa public markets, na tinatawag ng report na parehong IPO gravity na humihila sa mga frontier lab, kasama ang isang 2.5x na pagtaas at isang footprint na tumitigil sa pag-underwrite ng mga private syndicate. Iyan ang private-mega-round-to-public-liquidity na kondisyon na sinasandigan ng tesis na ito, na lumilitaw isang layer sa ilalim ng mga lab.",
+        "coherence": 2,
+        "remaining_gap": "Kailangan ng isang frontier lab, hindi isang neocloud, na maghain ng isang public at hindi-confidential na S-1 na may itinakdang price range."
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.82599b6cfd05751b",
+        "short_label": "Consumer-GPU coding agents displace cloud-only APIs for 30% of devs by Q3 2026",
+        "prediction_date": "2026-04-26"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "[REVIVED] Muling binubuhay ng paglabas ng Ollama ngayon ang natutulog na consumer-GPU-coding na tesis na ito sa pamamagitan ng pagpapaliit ng agwat sa pagitan ng on-device at hosted, mismo sa kinalalagyan ng tesis. Binuksan ng Ollama 0.31 ang multi-token prediction para sa Gemma 4 sa Apple Silicon bilang default at iniuulat na halos 90% na mas mabilis mag-generate ng token ang model sa isang coding-agent benchmark na hindi nagbabago ang output, kasama ang isang small-batch MLX kernel na ginagawang 2x-2.5x na mas mabilis ang pinakamalaking matmul ng Gemma 4 sa isang M5 Max na may nvfp4. Sinasabi ng report na istruktural ang bunga para sa coding agents dahil patuloy nilang tinatawag ang model sa mga code na madaling hulaan, kaya nag-iipon ang mga tinanggap na draft sa buong session, at ang konklusyon ay para sa sinumang nagpapatakbo ng local models sa likod ng isang OpenAI-compatible endpoint sa isang Mac, isinara na ng on-device agentic throughput ang isang makabuluhang bahagi ng agwat sa hosted inference nang walang bagong hardware. Iyan mismo ang local-coding-agents-undercut-cloud-APIs na mekanismo na sinasakyan ng prediksyong ito. Ang ebidensya ay isang pagbuti sa throughput para sa isang model family sa Apple Silicon, sa halip na isang nasukat na bahagi ng mga developer na aktuwal na lumilipat mula sa cloud-only APIs. Kaya ang muling pagbabalik ay nasa antas ng driver at hindi ginagalaw ang itinakdang 30%-of-devs na adoption bar.",
+      "reference_links": [
+        {
+          "label": "Ollama Blog - Faster Gemma 4 on MLX with multi-token prediction",
+          "url": "https://ollama.com/blog/faster-gemma-4-mlx-mtp"
+        },
+        {
+          "label": "GitHub - Ollama v0.31.1 release",
+          "url": "https://github.com/ollama/ollama/releases/tag/v0.31.1"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "Binuksan ng Ollama 0.31 ang multi-token prediction para sa Gemma 4 bilang default at nag-generate ng token nang 90% na mas mabilis sa isang coding benchmark na hindi nagbabago ang output, kasama ang isang kernel na ginagawang 2x-2.5x na mas mabilis ang pinakamalaking matmul nito sa isang M5 Max. Dahil patuloy na tinatawag ng coding agents ang model sa mga code na madaling hulaan, nag-iipon ang mga tinanggap na draft, na pinapaliit ang agwat sa pagitan ng on-device at hosted na nagtutulak sa local agents na i-undercut ang cloud APIs.",
+        "coherence": 3,
+        "remaining_gap": "Kailangan ng isang nasukat na bahagi ng mga developer na aktuwal na lumilipat mula sa cloud-only APIs, hindi isang throughput gain para sa isang model family."
+      }
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "date": "2026-04-26",
+  "predictions": [
+    {
+      "id": "prediction.24c0c80f954f5a45",
+      "scope_hint": "cross",
+      "title": "ハイパースケーラーとAIラボの資本連結が硬直化し、Q3 2026までにコンピュート・ロックインへ至る",
+      "body": "**「ハイパースケーラー × AIラボの資本連結」がQ3 2026までに金融提携からコンピュート・スタックのロックインへと格上げされる。** 4月24日のGoogleによるAnthropicへの**$40B + 5GW**コミット + 既存のAmazonの**$25B + 5GW Trainium2/3** + Microsoftの既存のOpenAI向け$13B+により、**トップ3フロンティアラボのそれぞれにハイパースケーラーの引受先がついた ― 一部は現金ではなくコンピュート・キャパシティで支払われる**。Q3 2026までに、**フロンティア・モデルのサービング・トポロジーは資金源によって決定される**:Anthropic Claude Opus 4.7 / 4.8はTrainium2 + TPU v8(Amazon + Googleパス)上でネイティブに出荷され、OpenAI GPT-5.5 / 6はAzureファーストを維持し、中国のフロンティアラボ(DeepSeek V4 / Qwen 3.6-3.7)はHuawei Ascendへの取り組みを倍加する(4月26日のBloomberg-CCTV記事による)。2024-2025年の「モデル・ポータビリティの約束」は静かに終了し、**企業のマルチクラウドLLM戦略は「マルチランタイム」から「マルチ・フロンティア・ベンダー」へとシフトする。** In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Googleの4月24日のAnthropic向け$40B + 5GWは、Amazonの$25B + 5GW Trainium2/3とMicrosoftのOpenAI向け$13B+の上に積み上がる。",
+        "given": "トップ3フロンティアラボそれぞれに、現金ではなく専用コンピュート・キャパシティで主に支払われるハイパースケーラーの引受先がついている。",
+        "so_that": "フロンティア・モデルのサービング・トポロジーが資金源と整合し、2024-2025年のモデル・ポータビリティの約束は静かに終了する。",
+        "landing": "Q3 2026までに;企業のマルチクラウド戦略がマルチランタイムからマルチ・フロンティア・ベンダーへとシフトする。",
+        "plain_language": "大手AIラボは現在、クラウド・キャパシティで支払いを受けているため、各モデルはスポンサーのチップ上で最も性能を発揮する。企業はランタイムだけでなくベンダーを選ばなければならない。"
+      },
+      "summary": "Googleの4月24日のAnthropicへの$40B + 5GWコミット、Amazonの$25B + 5GW Trainium2/3取引、MicrosoftのOpenAI向け$13B+により、トップ3フロンティアラボのそれぞれにコンピュートで支払われるハイパースケーラーの引受先がつく。Q3 2026までに、モデル・サービング・トポロジーは資金源を追跡し、企業のマルチクラウド戦略はマルチランタイムからマルチ・フロンティア・ベンダーへのシフトが予想される。"
+    },
+    {
+      "id": "prediction.678c96beb7ff20f6",
+      "scope_hint": "tech",
+      "title": "推論サーバーがサプライチェーンを形成し、Q3 2026までにAIインフラCVEクラスを引き起こす",
+      "body": "**推論サーバーが新たな「プリミティブ・サプライチェーン」となる ― Q3 2026に最初のAIインフラ専用CVEクラス(LLM-INFRA-CWE)がNVD強制タグ付きで登場する。** 4月19-26日のシーケンス ― **LMDeploy CVE-2026-33626 SSRF(12時間31分で悪用)** + **SGLang CVE-2026-5760(CVSS 9.8) Jinja2 SSTI RCE** + **PillarのAntigravityサンドボックス・エスケープ via `find_by_name -X`** + 4月21日のClaude Code / Gemini CLI / Copilot横断のComment-and-Controlプロンプト・インジェクション・チェーン ― が、明確な「推論ランタイム + エージェンティックCI」の攻撃面カテゴリーを構成する。Q3 2026までに、NIST/NVDがCVEスキーマに専用の**「AI-Infra」**タグを追加し、OWASPのLLM Top 10 v2026が**「Inference Server Template / Loader RCE」**をトップ3エントリーに格上げし、サプライチェーンSBOMツール(Snyk / Wiz / Pillar / Lasso / Lakera)が**vLLM / SGLang / LMDeploy / Triton / Ollamaのエンジン別シグネチャ・フィード**を標準SKUとして出荷する。In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "LMDeploy SSRF(12時間31分で悪用)、SGLang CVE-2026-5760(CVSS 9.8 Jinja2 SSTI RCE)、Antigravity find_by_nameサンドボックス・エスケープ、Comment-and-Controlチェーンが1つのウィンドウに着地した。",
+        "given": "推論ランタイムとエージェンティックCIは現在、レガシーSBOMツールが既存のCWEスキーマにマッピングできない一貫した攻撃面カテゴリーを形成している。",
+        "so_that": "NIST/NVDがAI-Infraタグを追加し、OWASP LLM Top 10がInference Server Template / Loader RCEをトップ3に格上げし、SBOMベンダーがエンジン別シグネチャ・フィードを出荷する。",
+        "landing": "Q3 2026までに;vLLM / SGLang / LMDeploy / Triton / OllamaがSnyk / Wiz / Pillar / Lasso / Lakeraからエンジン別シグネチャSKUを獲得する。",
+        "plain_language": "AIサーバーは1週間で4つの異なる方法でハッキングされた。間もなく公式の脆弱性カタログにAIインフラのバグ専用の新しいセクションが追加される。"
+      },
+      "summary": "4月19-26日のLMDeploy SSRF、SGLang CVE-2026-5760 Jinja2 SSTI RCE、Antigravityサンドボックス・エスケープ、Comment-and-Controlプロンプト・インジェクション・チェーンが、推論ランタイムとエージェンティックCIの攻撃面カテゴリーを構成する。Q3 2026までに、NIST/NVDがAI-Infra CVEタグを追加し、OWASP LLM Top 10がInference Server Template RCEをトップ3に格上げし、SBOMベンダーがエンジン別シグネチャ・フィードを出荷することが予想される。"
+    },
+    {
+      "id": "prediction.82599b6cfd05751b",
+      "scope_hint": "tech",
+      "title": "コンシューマGPUコーディング・エージェントが、Q3 2026までに開発者の30%においてクラウド専用APIを置き換える",
+      "body": "**「コンシューマGPUコーディング・エージェント」がQ3 2026までに開発者ワークロードの30%以上でクラウド専用コーディングAPIを置き換える。** 4月22日のQwen3.6-27B(密、SWE-bench Verifiedで397B-A17Bに勝利、**RTX 3090上Q4_K_M ~16.8 GBで40 tok/s**) + 4月23日のOllama MLXプレビュー(M5 Max上でQwen3.5-35B-A3Bが1.57x プリフィル / 1.93x デコード) + DeepSeek V4-Pro 75%オフAPI(**実質的にClaude Opus 4.7より~28x安い**)が、プロプライエタリ・フロンティアAPIのSaaSモデルに対する**3角圧搾**を構成する。Q3 2026までに、**企業の開発ツールはハイブリッド・ハーネスをデフォルトとする** ― 「コーディング、リファクタ、リント、テスト」にはローカルのQwen 3.6クラスを、「長期計画 / 多ツール推論」にはリモート・フロンティアAPIのみ ― そしてビッグ3 IDE(Cursor / Windsurf / Kiro Power)はすべて**ローカル・ファースト・トグル**をデフォルトで出荷する。「クラウド専用コーディング・エージェント」は2024年代の遺物となる。In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Qwen3.6-27BはRTX 3090上40 tok/sでSWE-bench Verifiedの397B-A17Bを上回り、Ollama MLXはM5 Max上で1.57x / 1.93xに達し、DeepSeek V4-ProはOpus 4.7より~28x安い。",
+        "given": "品質、スループット、価格すべてが、同じウィンドウ内でコンシューマGPUとApple Siliconスケールでプロプライエタリ・フロンティアAPIのバーをクリアする。",
+        "so_that": "企業の開発ツールはコーディング / リファクタ / リント / テストをローカルで、長期計画のみをリモートで実行するハイブリッド・ハーネスをデフォルトとする。",
+        "landing": "Q3 2026までに;Cursor / Windsurf / Kiro Powerがローカル・ファースト・トグルをデフォルトで出荷し、クラウド専用コーディングは2024年代の遺物となる。",
+        "plain_language": "ノートPCのGPUで、巨大なクラウドモデルを上回るコーディング・モデルを実行できるようになった。だから1年程度でほとんどのコーディング作業はクラウドの請求書から外れる。"
+      },
+      "summary": "4月22日のQwen3.6-27BがRTX 3090上40 tok/sでSWE-bench Verifiedの397B-A17Bを上回り、4月23日のOllama MLXプレビューがM5 Max上で1.57x プリフィル / 1.93x デコードに達し、DeepSeek V4-ProがOpus 4.7より~28x安いことが、クラウド専用コーディングAPIを圧搾する。Q3 2026までに、企業の開発ツールはハイブリッド・ハーネスをデフォルトとし、Cursor / Windsurf / Kiro Powerがローカル・ファースト・トグルを出荷することが予想される。"
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "date": "2026-04-27",
+  "predictions": [
+    {
+      "id": "prediction.3a5f7303d1a57312",
+      "scope_hint": "business",
+      "title": "Big-3 ハイパースケーラー、Q3 2026 までに AI capex をトークン単位マージン下限でゲート",
+      "body": "**Mag 7 の Q1 決算 (4/29-30) が AI capex の ROI ナラティブを再設定する — Q3 2026 までに、トークンマージンの閾値で AI capex を公に階層化する最初のハイパースケーラが登場する。** Alphabet ($175B-$185B)、Amazon (約 $200B)、Meta ($115B-$135B)、そして Microsoft (Azure 出遅れによる再評価リスク) を合算した 2026 capex ガイダンスは合計 ~$650B-$700B に達し、ウォール街の「AI ROI リアリティチェック」と対峙する。4/29-30 の決算は、**トークン単位売上のエグジットベロシティ**仮説を裏付けるか、それともマルチプル圧縮を引き起こすかのいずれかとなる。Q3 2026 までに、Big-3 ハイパースケーラの少なくとも 1 社は **Bedrock / Azure / Vertex のトークン単位マージン下限で増分 GPU capex を公にゲーティング** — パブリッククラウドからの初の明示的な「AI インフラ ROI 閾値」が登場し、2024-2025 の「使え、さもなくば死ね」ドクトリンに終止符を打つ。フロンティアラボのアンカーディール (Google $40B / Anthropic、Amazon $25B / Anthropic、OpenAI $20B / Cerebras + Microsoft) が可視的な圧力解放弁になる。In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Mag 7 の 2026 AI capex ガイダンス合計約 $650B-$700B が、ウォール街の明示的な ROI リアリティチェックと対峙している",
+        "given": "4/29-30 の Q1 決算がマルチプル圧縮リスクのテープにホルムズ緊張が重なる中で着地する",
+        "so_that": "Big-3 ハイパースケーラの少なくとも 1 社が、トークン単位マージンの下限で増分 GPU 支出を公に階層化する",
+        "landing": "Q3 2026 までに、明示的な AI インフラ ROI 閾値を最初に開示する 10-Q もしくは決算コール",
+        "plain_language": "クラウド大手は AI チップに巨額を投じてきた。投資家は今や利益の証明を求めており、1 社はトークンマージンによって新規 GPU 支出を公に制限することになる。"
+      },
+      "summary": "Mag 7 合算の 2026 AI capex ガイダンスは約 $650B-$700B に近く、4/29-30 の決算でウォール街の ROI リアリティチェックと対峙する。Q3 2026 までに、Big-3 ハイパースケーラの少なくとも 1 社が Bedrock / Azure / Vertex のトークン単位マージン下限で増分 GPU 支出を公に階層化し、2024-2025 の「使え、さもなくば死ね」ドクトリンに終止符を打つ。"
+    },
+    {
+      "id": "prediction.7db9cba24cef0f48",
+      "scope_hint": "tech",
+      "title": "CISA と NIST、Q4 2026 までに推論サーバ + エージェント型ツールの CVE サブカタログを公表",
+      "body": "**「AI インフラ CVE クラス」が規制プリミティブへ昇格する — Q4 2026 までに CISA / NIST が KEV とは別の、推論サーバ + エージェンティック CI ランタイム向けサブカタログを公表する。** 4/19-27 のシーケンス — **LMDeploy CVE-2026-33626 SSRF (12 時間 31 分)** + **SGLang CVE-2026-5760 (依然として未パッチ)** + **Pillar による Antigravity の `find_by_name -X` 経由サンドボックス エスケープ** + **基盤的な CI/CD 依存性における simple-git CVE-2026-6951 RCE** + **4/21 の Claude Code / Gemini CLI / Copilot をまたぐ Comment-and-Control プロンプトインジェクション連鎖** + **OpenClaw CVE-2026-41329 サンドボックス回避** — はもはや「カテゴリーが立ち現れている」段階ではない。NIST の 4 月運用アップデート (CVE 公表数の記録的増加、AI 駆動の評価サポート) と Google の **野生の間接プロンプトインジェクション 32% 前年比増** が CISA / NVD に対し、Q4 2026 までに **SBOM タグ付け必須化を伴う、推論サーバ + エージェンティックツール専用の CVE サブカタログ**を出荷するよう迫る。OWASP の LLM Top 10 v2026 は「Inference Server Template / Loader RCE」をトップ 3 へ格上げする。In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "4/19-27 のシーケンスが、未パッチの SGLang SSTI RCE を含む 6 件の推論サーバ + エージェンティック CI CVE を積み上げた",
+        "given": "NIST の記録的な CVE 公表数の増加 + Google の野生における間接プロンプトインジェクション 32% 前年比増",
+        "so_that": "CISA / NVD が SBOM タグ付け必須化を伴う、推論サーバ + エージェンティックツール専用の CVE サブカタログを公表する",
+        "landing": "Q4 2026 までに、KEV から分離されたサブカタログと、OWASP LLM Top 10 v2026 が Loader RCE をトップ 3 へ格上げ",
+        "plain_language": "AI サーバとコーディングエージェントは今や同じやり方で繰り返し攻撃されており、規制当局は必須の成分表示を伴う専用カタログを作成することになる。"
+      },
+      "summary": "4/19-27 の 6 件の推論サーバおよびエージェンティック CI 攻撃 (LMDeploy SSRF、未パッチの SGLang SSTI、Antigravity サンドボックス エスケープ、simple-git RCE、マルチエージェント プロンプトインジェクション、OpenClaw 回避) と Google の間接プロンプトインジェクション 32% 増が、CISA / NVD に対し Q4 2026 までに SBOM タグ付け必須化を伴う AI インフラ専用 CVE サブカタログを公表させる。"
+    },
+    {
+      "id": "prediction.b83721f72876a218",
+      "scope_hint": "cross",
+      "title": "米国の州、Q3 2026 までにエージェントを第一級アイデンティティとして法定化",
+      "body": "**AI への世論の反発が拘束力のあるエージェント・ガバナンス・ルールへ転化する — Q3 2026 までに、米国少なくとも 1 州が Okta の Agent Discovery + Agent Gateway パターンを反映した「自律エージェントの法定アイデンティティ」法を出荷する。** 4/16 の Altman 自宅への襲撃 + 4/15 の CNBC データセンター反発記事 + 4/26 の Salt Security データ (「組織の 48.9% が AI エージェントトラフィックを監視できない」) + **4/30** の Okta for AI Agents GA (Agent Discovery、Agent Gateway、仮想 MCP サーバレジストリ、認証情報の保管庫化 + 自動ローテーション、ユニバーサルログアウトを搭載) が、規制の前倒しを構成する。米国の 1 州 (CA、NY もしくは TX が有力) が Q3 2026 までに **エージェントをファーストクラスのアイデンティティとして登録すること、MCP コールチェーンのロギング、アクション単位の同意**を義務付ける法令を、Cross App Access プロトコルのセマンティクスを反映する形で出荷する。EU AI 法第 26 条の執行が並行して始動する。In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Salt Security: 組織の 48.9% が AI エージェントトラフィックを監視できない; Okta for AI Agents の 4/30 GA が利用可能なテンプレートを出荷する",
+        "given": "世論の悪化 (4/15 CNBC)、4/16 の Altman 自宅への物理的襲撃、並行して進む EU AI 法第 26 条",
+        "so_that": "米国の 1 州が、エージェントをファーストクラスのアイデンティティとして登録すること、MCP コールチェーンのロギング、アクション単位の同意を法律として明文化する",
+        "landing": "Q3 2026 までに、CA、NY もしくは TX が「自律エージェントの法定アイデンティティ」法を出荷する",
+        "plain_language": "監視されない AI エージェントへの不満が高まっており、米国の 1 州はそれぞれのエージェントに登録を義務付け、すべての行動をログに残すことを求める法律を可決することになる。"
+      },
+      "summary": "4/15 の CNBC 世論データ、4/16 の Altman 自宅への襲撃、4/26 の Salt Security による「組織の 48.9% が AI エージェントトラフィックを監視できない」との所見、そして 4/30 の Okta for AI Agents GA が一体となり、米国少なくとも 1 州 (CA、NY もしくは TX) を Q3 2026 までに「自律エージェントの法定アイデンティティ」法を出荷する方向へ押し出す。"
+    }
+  ]
+}

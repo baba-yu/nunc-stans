@@ -1,0 +1,47 @@
+{
+  "date": "2026-04-24",
+  "predictions": [
+    {
+      "id": "prediction.23c160efd9baa194",
+      "scope_hint": "tech",
+      "title": "La era del contexto de 1M con pesos abiertos llega como el nuevo piso para el Q3 2026",
+      "body": "**La era de \"contexto de 1M por defecto\" en pesos abiertos llega de lleno para el Q3 2026.** El \"contexto de 1M diseñado de origen, no añadido a la fuerza\" de DeepSeek V4, la extensión de 262K → 1M de Qwen3.6-27B, el contexto de 1M de Claude Opus 4.7 (Bedrock) y el refuerzo de contexto largo de GPT-5.5 apuntan todos en la misma dirección. Para el Q3 2026, el \"contexto de 1M nativo\" se convierte en el piso para los pesos abiertos, y los modelos existentes de 32K-128K caen al nivel legacy. Los pipelines RAG cambian de \"búsqueda → inserción de contexto\" a \"volcar todo + poda dinámica\", y los proveedores de bases de datos vectoriales son empujados a redefinirse como \"capas de optimización de caché de contexto largo\". In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "DeepSeek V4 envía contexto de 1M nativo, Qwen3.6-27B extiende de 262K a 1M, Claude Opus 4.7 alcanza 1M en Bedrock, y GPT-5.5 refuerza el contexto largo.",
+        "given": "La atención híbrida reduce los FLOPs de contexto de 1M al 27% y la caché KV al 10% de V3.2, haciendo el contexto de 1M asequible en pesos abiertos.",
+        "so_that": "El contexto de 1M nativo se convierte en el piso de pesos abiertos y RAG cambia de búsqueda-luego-inserción a flujos de volcar-todo-más-poda-dinámica.",
+        "landing": "Para el Q3 2026; los modelos de pesos abiertos de 32K-128K caen al nivel legacy y los proveedores de bases de datos vectoriales se reposicionan.",
+        "plain_language": "Los grandes modelos de IA ahora pueden leer una biblioteca entera de una sola vez, y las versiones baratas de pesos abiertos están alcanzándolos. Pronto cualquier modelo por debajo de ese tamaño parecerá obsoleto."
+      },
+      "summary": "El contexto de 1M nativo de DeepSeek V4, la extensión de 262K a 1M de Qwen3.6-27B, el 1M de Claude Opus 4.7 en Bedrock, y el empuje de contexto largo de GPT-5.5 convergen todos. Para el Q3 2026, se espera que el contexto de 1M nativo se convierta en el piso de pesos abiertos y que los pipelines RAG cambien de buscar-e-insertar a volcar-y-podar."
+    },
+    {
+      "id": "prediction.6f0a6061c079c28e",
+      "scope_hint": "cross",
+      "title": "Las corridas de producción de 8 horas de Physical AI se vuelven recortes en RFP empresariales para el Q4 2026",
+      "body": "**Las \"corridas de producción de 8 horas de Physical AI\" se convierten en un requisito de compras empresariales en H2 2026.** Las **8 horas / 90% de éxito / 60 totes/hora** de Siemens-Humanoid HMND 01 Alpha en Erlangen — en la línea de producción, no una demo — son un punto de graduación claro de \"humanoide = PoC\". Para el Q4 2026, las RFPs de grandes fabricantes (VW / Bosch / Mercedes / Foxconn / TSMC / Toyota) integrarán \"operación continua de 24h\", \"MTBF de 1 semana\", \"tasa de finalización autónoma del 90%+\", e \"integración MES / PLC\" como cortes de facto. El eje competitivo de Physical AI cambia completamente de \"videos de demo bonitos\" a \"facilidad de inserción en entornos OT existentes\". In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Siemens-Humanoid HMND 01 Alpha registra 8 horas / 60 totes por hora / 90% de éxito en la línea de producción de Erlangen, no una demo.",
+        "given": "Los equipos de compras de grandes fabricantes ahora tienen un benchmark de producción concreto para anclar los cortes de RFP frente a proveedores humanoides en PoC.",
+        "so_that": "Las RFPs de VW / Bosch / Mercedes / Foxconn / TSMC / Toyota adoptan operación continua de 24h, MTBF de 1 semana, autonomía del 90%, e integración MES / PLC como cortes de facto.",
+        "landing": "Para el Q4 2026; el eje competitivo cambia a la facilidad de inserción en entornos OT.",
+        "plain_language": "Un humanoide de fábrica acaba de trabajar 8 horas seguidas en una línea de producción real. Pronto los grandes fabricantes solo comprarán robots que pasen ese listón."
+      },
+      "summary": "La corrida de 8 horas en Erlangen de Siemens-Humanoid HMND 01 Alpha a 60 totes/hora y 90% de éxito en una línea de producción en vivo gradúa a los humanoides del PoC. Para el Q4 2026, se espera que las RFPs de grandes fabricantes integren operación continua de 24h, MTBF de 1 semana, autonomía del 90%, e integración MES / PLC en los cortes de compras."
+    },
+    {
+      "id": "prediction.11c2c648527fe212",
+      "scope_hint": "business",
+      "title": "Los mercados de capitales revaloran el SaaS desplazado por agentes según la cuota de API tocada por agentes en el Q2 2026",
+      "body": "**Los mercados de capitales restablecen su valoración del \"SaaS empresarial desplazado por agentes de IA\" dentro del Q2 2026.** El **-18% (peor caída en un solo día de la historia)** de ServiceNow el 23 de abril, el declive de IBM el mismo día, y las caídas encadenadas de Salesforce / Workday / Oracle revelan un cambio en cómo los mercados de capitales sopesan el \"beneficio de ahorro de costos por IA\" frente al \"desplazamiento por IA del SaaS de workflow legacy\". Dentro del Q2 2026, se espera que los reportes Magic Quadrant / Wave de Gartner / Forrester hagan explícito el eje \"Agent-native vs Legacy SaaS\", y que la matemática de capitalización de mercado pase de \"asientos × ARPU\" a \"cuota de llamadas a API tocadas por agentes\". Las actualizaciones rezagadas del consenso de analistas significan que probablemente otros 3-5 nombres (Workday / Atlassian / Box / Smartsheet etc.) verán caídas del 15%+ en los próximos dos trimestres. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "El peor -18% en un solo día de la historia de ServiceNow el 23 de abril, el declive de IBM el mismo día, y las caídas encadenadas de Salesforce / Workday / Oracle exponen el eje de desplazamiento.",
+        "given": "Los mercados de capitales ahora sopesan el desplazamiento por IA del SaaS de workflow legacy frente a los ahorros de costos por IA, recotizando los ingresos basados en asientos.",
+        "so_that": "Gartner / Forrester hacen explícito Agent-native vs Legacy SaaS y la matemática de capitalización de mercado pasa de asientos x ARPU a cuota de llamadas a API tocadas por agentes.",
+        "landing": "Dentro del Q2 2026; probablemente otros 3-5 nombres absorban caídas del 15%+ durante dos trimestres.",
+        "plain_language": "La acción de ServiceNow tuvo su peor día porque los inversores creen que los agentes de IA reemplazarán su software. Otras empresas de SaaS de workflow son las siguientes."
+      },
+      "summary": "La peor caída de -18% en un solo día de ServiceNow el 23 de abril, la caída de IBM el mismo día, y los declives encadenados de Salesforce / Workday / Oracle marcan un reinicio de los mercados de capitales sobre el desplazamiento por agentes de IA del SaaS legacy. Dentro del Q2 2026, se espera que Gartner / Forrester hagan explícito el eje Agent-native vs Legacy y que probablemente 3-5 nombres más vean caídas del 15%+."
+    }
+  ]
+}

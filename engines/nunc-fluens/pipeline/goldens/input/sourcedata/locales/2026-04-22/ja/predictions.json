@@ -1,0 +1,47 @@
+{
+  "date": "2026-04-22",
+  "predictions": [
+    {
+      "id": "prediction.36f4ab773b39713e",
+      "scope_hint": "tech",
+      "title": "ハイパースケーラーのカスタムAIシリコンが2027年上半期までに学習用と推論用のSKUに分化する",
+      "body": "**「学習用 vs 推論用のSKU分割」がカスタムAIシリコンの標準仕様になる。** GoogleのTPU 8t / 8i分割は、Trainium-Inferentiaのラインを延伸し、**ハイパースケーラの内製シリコンを学習用と推論用でアーキテクチャ的に分離**することを定着させる。2026年H2 / 2027年H1にかけて、Microsoft MAIAとMeta MTIAも同様のデュアルトラックSKU戦略を採用すると見込まれる — NVIDIA BlackwellやVera Rubinの「単一アーキテクチャで両ワークロード」路線と対立する形になる。推論向けにチューニングされたSKUはネイティブFP4 / MXFP4を前提とし、**$/queryの競争**を2026年Q3にピークへ押し上げる。In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "GoogleのTPU 8t / 8i分割はTrainium-Inferentiaの路線を延伸し、学習用と推論用のSKU分離を定式化する。",
+        "given": "推論と学習の計算プロファイルは大きく異なり、FP4 / MXFP4の経済性は専用推論シリコンを優位にする。",
+        "so_that": "Microsoft MAIAとMeta MTIAがデュアルトラックSKUを採用し、推論チューニング済みチップが$/queryの競争をピークへ押し上げる。",
+        "landing": "2026年H2 / 2027年H1; MAIA + MTIAのデュアルトラックSKUが顕在化し、$/queryは2026年Q3にピーク。",
+        "plain_language": "大手テックは現在、AIチップを2種類作っている:モデルを訓練するためのものと、実行するためのものだ。より安く、より速い回答がまもなく続くだろう。"
+      },
+      "summary": "GoogleのTPU 8t / 8i発表はTrainium-Inferentia型の分割を延伸し、ハイパースケーラの内製シリコンを学習用と推論用でアーキテクチャ的に分離することを定式化する。2026年H2 / 2027年H1までに、Microsoft MAIAとMeta MTIAも同じデュアルトラックSKU戦略を採用すると見込まれ、推論SKUが$/query競争をピークへ押し上げる。"
+    },
+    {
+      "id": "prediction.8b1d0c5ea8a8550e",
+      "scope_hint": "cross",
+      "title": "ロボット制御の学習が2026年Q3までにロボット単位課金のSaaSとしてクラウドに集約される",
+      "body": "**SaaSとしてのフィジカルAI、そして「Robot-as-a-Service」インフラ競争。** Neura × AWS、DEEPX × Hyundai、そしてNVIDIA Isaac GR00T / Cosmosの一連のパートナーシップは、いずれも同じ方向を指している:**ロボット制御モデルの学習パイプラインがクラウドに集約されつつある。** 2026年Q3までに、ロボット1台あたりのクラウド計算課金(学習 + シミュレーション同期 + ポリシー更新)はエンタープライズ契約の標準的なライン項目になる。ロボット本体は「移動可能な計算エンドポイント」としてコモディティ化し、メーカーは**継続課金型のフリート管理ソフトウェア**へとシフトする。In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Neura × AWS、DEEPX × Hyundai、NVIDIA Isaac GR00T / Cosmosのパートナーシップはいずれもロボット学習をクラウドに集約させる。",
+        "given": "ロボット制御の学習、シム同期、ポリシー更新は計算負荷が高く、自然にハイパースケーラインフラへ集中する。",
+        "so_that": "ロボット1台あたりのクラウド計算課金が標準的なエンタープライズ契約項目となり、メーカーは継続課金型のフリート管理事業へピボットする。",
+        "landing": "2026年Q3まで; エンタープライズ契約におけるロボット1台あたりのクラウド計算ライン項目。",
+        "plain_language": "ロボットはスマートフォンのようになりつつある:頭脳はクラウド側にあり、企業は一回限りの機械を購入する代わりにロボット1台ごとに月額料金を支払う。"
+      },
+      "summary": "Neura × AWS、DEEPX × Hyundai、そしてNVIDIA Isaac GR00T / Cosmosのパートナーシップは、いずれもロボット制御モデルの学習をクラウドに集約させる。2026年Q3までに、ロボット1台あたりのクラウド計算課金は標準的なエンタープライズ契約項目となる見込みで、ロボットは移動可能な計算エンドポイントとしてコモディティ化し、メーカーは継続課金型のフリート管理事業へとシフトする。"
+    },
+    {
+      "id": "prediction.c850d46b059e600c",
+      "scope_hint": "business",
+      "title": "SSOプロバイダーが2026年Q3までにAI拡張機能向けOAuthスコープのカテゴリーを切り出す",
+      "body": "**AI SaaS間のOAuth信頼関係がエンタープライズ最大のリスクになる。** Vercel-Context.aiの事例は、従業員個人によるAIオフィスSaaS接続が、いかにして企業全体のGoogle Workspaceへの侵入経路へと変わり得るかを示している。2026年Q3までに、主要なSSOプロバイダー(Okta / Entra ID / Google Workspace)は**「AI拡張」OAuthスコープのカテゴリを切り出す**ようになり、管理者が「Allow All」のデフォルトを一括で遮断できるようになる。CASB / SSPMベンダーは「AI連携によって読み取られたデータ量」を独立した指標として報告するようになる。In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Vercel-Context.ai侵害は、従業員個人のAI SaaS OAuthが企業全体のGoogle Workspaceへの侵入軸に転化することを示した。",
+        "given": "AI SaaS拡張は管理者が一括承認する広範なOAuthスコープを要求しており、連携別のデータ量は不可視のままだ。",
+        "so_that": "SSOプロバイダーがAI拡張用OAuthスコープのカテゴリを切り出し、CASB / SSPMベンダーがAI連携の読み取り量を独立して追跡する。",
+        "landing": "2026年Q3まで; Okta / Entra ID / Google WorkspaceのAI拡張スコープカテゴリと、CASB側の指標が稼働。",
+        "plain_language": "従業員がAIツールを業務メールに接続すると、会社全体がハッキングされる可能性がある。まもなく管理者はそれらを一括で遮断するスイッチを得るだろう。"
+      },
+      "summary": "Vercel-Context.aiの侵害は、従業員個人のAI SaaSへのOAuth接続が、企業全体のGoogle Workspaceへの侵入経路に転化する仕組みを実証している。2026年Q3までに、SSOプロバイダーであるOkta、Entra ID、Google WorkspaceはAI拡張用のOAuthスコープカテゴリを切り出すと見込まれ、CASB / SSPMベンダーはAI連携の読み取り量を独立した指標として報告するようになる。"
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "date": "2026-04-26",
+  "predictions": [
+    {
+      "id": "prediction.24c0c80f954f5a45",
+      "scope_hint": "cross",
+      "title": "Hyperscaler-AI-lab capital coupling hardens into compute lock-in by Q3 2026",
+      "body": "**\"Hyperscaler-AI-lab capital coupling\" graduates from finance pact to compute-stack lock-in by Q3 2026.** Apr 24's Google **$40B + 5GW** to Anthropic + the prior Amazon **$25B + 5GW Trainium2/3** + Microsoft's existing $13B+ to OpenAI mean the **top 3 frontier labs each have a hyperscaler underwriter — paid partly in compute capacity, not cash**. By Q3 2026, **frontier-model serving topology becomes dictated by funding origin**: Anthropic Claude Opus 4.7 / 4.8 ships natively on Trainium2 + TPU v8 (Amazon + Google paths), OpenAI GPT-5.5 / 6 stays Azure-first, and Chinese frontier labs (DeepSeek V4 / Qwen 3.6-3.7) double down on Huawei Ascend (per the Apr 26 Bloomberg-CCTV piece). The \"model-portability promise\" of 2024-2025 quietly ends; **enterprise multi-cloud LLM strategy shifts from \"multi-runtime\" to \"multi-frontier-vendor.\"** In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Google's Apr 24 $40B + 5GW to Anthropic stacks on Amazon's $25B + 5GW Trainium2/3 and Microsoft's $13B+ to OpenAI.",
+        "given": "Each top-3 frontier lab now has a hyperscaler underwriter paid largely in dedicated compute capacity rather than cash.",
+        "so_that": "Frontier-model serving topology aligns with funding origin and the 2024-2025 model-portability promise quietly ends.",
+        "landing": "By Q3 2026; enterprise multi-cloud strategy shifts from multi-runtime to multi-frontier-vendor.",
+        "plain_language": "Big AI labs now get paid in cloud capacity, so each model runs best on its sponsor's chips. Companies must pick vendors, not just runtimes."
+      },
+      "summary": "Google's Apr 24 $40B + 5GW commitment to Anthropic, Amazon's $25B + 5GW Trainium2/3 deal, and Microsoft's $13B+ to OpenAI mean each top-3 frontier lab has a hyperscaler underwriter paid in compute. By Q3 2026, model serving topology is expected to track funding origin and enterprise multi-cloud strategy is expected to shift from multi-runtime to multi-frontier-vendor."
+    },
+    {
+      "id": "prediction.678c96beb7ff20f6",
+      "scope_hint": "tech",
+      "title": "Inference servers form supply chain, triggering AI-Infra CVE class by Q3 2026",
+      "body": "**Inference servers become the new \"primitive supply chain\" — Q3 2026 sees the first AI Infra-specific CVE class (LLM-INFRA-CWE) with mandatory NVD tagging.** The Apr 19-26 sequence — **LMDeploy CVE-2026-33626 SSRF (12h31m exploited)** + **SGLang CVE-2026-5760 (CVSS 9.8) Jinja2 SSTI RCE** + **Pillar's Antigravity sandbox-escape via `find_by_name -X`** + the Apr 21 Comment-and-Control prompt-injection chain across Claude Code / Gemini CLI / Copilot — composes a clear \"inference-runtime + agentic-CI\" attack-surface category. By Q3 2026, NIST/NVD adds a dedicated **\"AI-Infra\"** tag to its CVE schema, OWASP's LLM Top 10 v2026 promotes **\"Inference Server Template / Loader RCE\"** to a top-3 entry, and supply-chain SBOM tooling (Snyk / Wiz / Pillar / Lasso / Lakera) ships **per-engine signature feeds for vLLM / SGLang / LMDeploy / Triton / Ollama** as standard SKUs. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "LMDeploy SSRF (12h31m exploited), SGLang CVE-2026-5760 (CVSS 9.8 Jinja2 SSTI RCE), Antigravity find_by_name sandbox escape, and Comment-and-Control chain land in one window.",
+        "given": "Inference runtimes plus agentic-CI now form a coherent attack-surface category that legacy SBOM tooling cannot map onto existing CWE schema.",
+        "so_that": "NIST/NVD adds an AI-Infra tag, OWASP LLM Top 10 promotes Inference Server Template / Loader RCE to top-3, and SBOM vendors ship per-engine signature feeds.",
+        "landing": "By Q3 2026; vLLM / SGLang / LMDeploy / Triton / Ollama get per-engine signature SKUs from Snyk / Wiz / Pillar / Lasso / Lakera.",
+        "plain_language": "AI servers got hacked four different ways in a week. Soon the official vulnerability catalog will get a new section just for AI infrastructure bugs."
+      },
+      "summary": "The Apr 19-26 LMDeploy SSRF, SGLang CVE-2026-5760 Jinja2 SSTI RCE, Antigravity sandbox escape, and Comment-and-Control prompt-injection chain compose an inference-runtime plus agentic-CI attack-surface category. By Q3 2026, NIST/NVD is expected to add an AI-Infra CVE tag, OWASP LLM Top 10 is expected to promote Inference Server Template RCE to top-3, and SBOM vendors are expected to ship per-engine signature feeds."
+    },
+    {
+      "id": "prediction.82599b6cfd05751b",
+      "scope_hint": "tech",
+      "title": "Consumer-GPU coding agents displace cloud-only APIs for 30% of devs by Q3 2026",
+      "body": "**The \"consumer-GPU coding agent\" displaces the cloud-only coding API for ≥30% of dev workloads by Q3 2026.** Apr 22's Qwen3.6-27B (dense, beats 397B-A17B on SWE-bench Verified, **40 tok/s on RTX 3090 at Q4_K_M ~16.8 GB**) + Apr 23 Ollama MLX preview (1.57x prefill / 1.93x decode on M5 Max for Qwen3.5-35B-A3B) + DeepSeek V4-Pro 75%-off API (**effectively ~28x cheaper than Claude Opus 4.7**) compose a **3-corner squeeze** on the proprietary frontier-API SaaS model. By Q3 2026, **enterprise dev tools default to a hybrid harness** — local Qwen 3.6-class for \"coding, refactor, lint, test\" + remote frontier API only for \"long-horizon planning / multi-tool reasoning\" — and all Big-3 IDEs (Cursor / Windsurf / Kiro Power) ship a **local-first toggle** by default. \"Cloud-only coding agent\" becomes a 2024-era artifact. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Qwen3.6-27B beats 397B-A17B on SWE-bench Verified at 40 tok/s on RTX 3090, Ollama MLX hits 1.57x / 1.93x on M5 Max, and DeepSeek V4-Pro is ~28x cheaper than Opus 4.7.",
+        "given": "Quality, throughput, and price all clear the proprietary-frontier-API bar at consumer-GPU and Apple-Silicon scale in the same window.",
+        "so_that": "Enterprise dev tools default to a hybrid harness running local for coding / refactor / lint / test and remote only for long-horizon planning.",
+        "landing": "By Q3 2026; Cursor / Windsurf / Kiro Power ship a local-first toggle as default and cloud-only coding becomes a 2024-era artifact.",
+        "plain_language": "A laptop GPU can now run a coding model that beats the giant cloud ones. So most coding work will move off the cloud bill in about a year."
+      },
+      "summary": "Apr 22's Qwen3.6-27B beating 397B-A17B on SWE-bench Verified at 40 tok/s on RTX 3090, Apr 23's Ollama MLX preview hitting 1.57x prefill / 1.93x decode on M5 Max, and DeepSeek V4-Pro at ~28x cheaper than Opus 4.7 squeeze the cloud-only coding API. By Q3 2026, enterprise dev tools are expected to default to a hybrid harness and Cursor / Windsurf / Kiro Power are expected to ship local-first toggles."
+    }
+  ]
+}

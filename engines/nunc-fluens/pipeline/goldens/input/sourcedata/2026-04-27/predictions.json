@@ -1,0 +1,47 @@
+{
+  "date": "2026-04-27",
+  "predictions": [
+    {
+      "id": "prediction.3a5f7303d1a57312",
+      "scope_hint": "business",
+      "title": "Big-3 hyperscalers gate AI capex on per-token-margin floor by Q3 2026",
+      "body": "**Mag 7 Q1 earnings (Apr 29-30) reset the AI-capex ROI narrative — Q3 2026 sees the first hyperscaler to publicly tier AI capex by token-margin gate.** With combined 2026 capex guidance from Alphabet ($175B-$185B), Amazon (~$200B), Meta ($115B-$135B), and Microsoft (Azure-laggard rerating risk) totaling ~$650B-$700B against Wall Street's \"AI ROI reality check,\" the Apr 29-30 prints either validate the **per-token-revenue exit-velocity** thesis or trigger a multiple compression. By Q3 2026, at least one Big-3 hyperscaler publicly **gates incremental GPU capex on a Bedrock/Azure/Vertex per-token-margin floor** — the first explicit \"AI infra ROI threshold\" from a public cloud, ending the 2024-2025 \"spend or die\" doctrine. Frontier-lab anchor deals (Google $40B / Anthropic, Amazon $25B / Anthropic, OpenAI $20B / Cerebras + Microsoft) become the visible pressure relief valve. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Combined Mag 7 2026 AI capex guidance ~$650B-$700B against an explicit Wall Street ROI reality check",
+        "given": "Apr 29-30 Q1 prints land into a multiple-compression-risk tape with Hormuz tension layered on",
+        "so_that": "At least one Big-3 hyperscaler will publicly tier incremental GPU spend by a per-token-margin floor",
+        "landing": "By Q3 2026; first 10-Q or earnings-call disclosure of an explicit AI-infra ROI threshold",
+        "plain_language": "Cloud giants spent huge on AI chips; investors now want proof of profit, so one will publicly limit new GPU spend by token-margin."
+      },
+      "summary": "Combined 2026 Mag 7 AI capex guidance near $650B-$700B meets Wall Street's ROI reality check at the Apr 29-30 prints. By Q3 2026 at least one Big-3 hyperscaler publicly tiers incremental GPU spend on a Bedrock/Azure/Vertex per-token-margin floor, ending the 2024-2025 spend-or-die doctrine."
+    },
+    {
+      "id": "prediction.7db9cba24cef0f48",
+      "scope_hint": "tech",
+      "title": "CISA + NIST publish inference-server + agentic-tool CVE sub-catalog by Q4 2026",
+      "body": "**The \"AI-Infra CVE class\" graduates into a regulatory primitive — Q4 2026 sees CISA / NIST publish a sub-catalog for inference-server + agentic-CI runtimes, separate from KEV.** The Apr 19-27 sequence — **LMDeploy CVE-2026-33626 SSRF (12h31m)** + **SGLang CVE-2026-5760 (still unpatched)** + **Pillar's Antigravity sandbox-escape via `find_by_name -X`** + **simple-git CVE-2026-6951 RCE in foundational CI/CD dep** + **Apr 21 Comment-and-Control prompt-injection chain across Claude Code / Gemini CLI / Copilot** + **OpenClaw CVE-2026-41329 sandbox bypass** — is no longer a \"category emerging.\" NIST's Apr ops update (record CVE-publication growth, AI-driven evaluation support) plus Google's **32% YoY indirect-prompt-injection rise in the wild** force CISA/NVD to ship a **dedicated inference-server + agentic-tool CVE sub-catalog** with mandatory SBOM tagging by Q4 2026. OWASP's LLM Top 10 v2026 promotes \"Inference Server Template / Loader RCE\" to top-3. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Apr 19-27 sequence stacks 6 inference-server + agentic-CI CVEs including unpatched SGLang SSTI RCE",
+        "given": "NIST record CVE-publication growth + Google 32% YoY indirect-prompt-injection rise in the wild",
+        "so_that": "CISA/NVD publish a dedicated inference-server + agentic-tool CVE sub-catalog with mandatory SBOM tagging",
+        "landing": "By Q4 2026; sub-catalog separate from KEV plus OWASP LLM Top 10 v2026 promotes Loader RCE to top-3",
+        "plain_language": "AI servers and coding agents now keep getting hacked the same way, so regulators will create a dedicated catalog with required ingredient labels."
+      },
+      "summary": "Six Apr 19-27 inference-server and agentic-CI exploits (LMDeploy SSRF, SGLang SSTI unpatched, Antigravity sandbox-escape, simple-git RCE, multi-agent prompt-injection, OpenClaw bypass) plus Google's 32% indirect-prompt-injection rise force CISA/NVD to publish a dedicated AI-Infra CVE sub-catalog with mandatory SBOM tagging by Q4 2026."
+    },
+    {
+      "id": "prediction.b83721f72876a218",
+      "scope_hint": "cross",
+      "title": "US state codifies agent-as-first-class-identity statute by Q3 2026",
+      "body": "**Public-opinion blowback against AI converts into binding agent-governance rules — by Q3 2026 at least one US state ships a \"Statutory Identity for Autonomous Agents\" Act mirroring Okta's Agent Discovery + Agent Gateway pattern.** Apr 16 attacks on Altman's home + the Apr 15 CNBC datacenter-blowback piece + Apr 26 Salt Security data (\"48.9% of orgs cannot monitor AI-agent traffic\") + Okta for AI Agents GA on **Apr 30** (with Agent Discovery, Agent Gateway, virtual-MCP-server registry, credential vaulting + auto-rotation, universal logout) compose a regulatory pull-forward. A US state (CA, NY, or TX likely) ships a statute by Q3 2026 mandating **agent-as-first-class-identity registration, MCP-call-chain logging, and per-action consent**, mirroring Cross App Access protocol semantics. EU AI Act Article 26 enforcement triggers in parallel. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Salt Security: 48.9% of orgs cannot monitor AI-agent traffic; Okta for AI Agents GA Apr 30 ships a usable template",
+        "given": "Public sentiment souring (Apr 15 CNBC), Apr 16 physical attacks on Altman's home, EU AI Act Article 26 in parallel",
+        "so_that": "A US state codifies agent-as-first-class-identity registration, MCP-call-chain logging, and per-action consent",
+        "landing": "By Q3 2026; CA, NY, or TX ships a Statutory Identity for Autonomous Agents Act",
+        "plain_language": "People are fed up with unsupervised AI agents, so a US state will pass a law making each agent register and log every action it takes."
+      },
+      "summary": "Apr 15 CNBC public-opinion data, Apr 16 attacks on Altman's home, Apr 26 Salt Security finding 48.9% of orgs cannot monitor AI-agent traffic, and Apr 30 Okta for AI Agents GA together push at least one US state (CA, NY, or TX) to ship a Statutory Identity for Autonomous Agents Act by Q3 2026."
+    }
+  ]
+}

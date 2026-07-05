@@ -1,0 +1,47 @@
+{
+  "date": "2026-04-21",
+  "predictions": [
+    {
+      "id": "prediction.082b0a07077870dd",
+      "scope_hint": "tech",
+      "title": "Bina-bantayan ng GGUF supply chains ang uploads sa pamamagitan ng signed cards + SSTI scans pagsapit ng Q3 2026",
+      "body": "**Ang GGUF supply chains ang bagong battleground.** Ginagawang nakikita ng SGLang CVE-2026-5760 (Jinja2 SSTI sa pamamagitan ng GGUF, RCE) ang katotohanan na \"ang model files mismo ay carriers ng executable code.\" Pagsapit ng Q3 2026, hihilingin ng Hugging Face / Ollama Library / ModelScope ang model-card + chat_template signature verification o sandboxed execution bilang baseline; i-eenable ng Foundry Local / Bedrock / vLLM ang SSTI scanning bilang default sa oras ng GGUF load. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Naglalathala ang SGLang CVE-2026-5760 ng Jinja2 SSTI sa GGUF chat_template parsing na nagdudulot ng RCE sa model load.",
+        "given": "Ang GGUF files ay nag-eembed ng executable templates, kaya ang model artifacts ay gumagana bilang carriers ng arbitrary code.",
+        "so_that": "Ang hubs ay nag-gate ng uploads sa likod ng signed model-cards at chat_templates, at ang serving runtimes ay nag-scan para sa SSTI sa oras ng GGUF load.",
+        "landing": "Pagsapit ng Q3 2026; HF / Ollama / ModelScope + Foundry Local / Bedrock / vLLM.",
+        "plain_language": "Ipinapakita ng isang bug sa SGLang na maaaring magtago ang model files ng nakakapinsalang code, kaya magsisimulang i-check ng malalaking model hubs at inference servers ang mga ito bago patakbuhin."
+      },
+      "summary": "Ang SGLang CVE-2026-5760, isang Jinja2 SSTI sa pamamagitan ng GGUF chat_template parsing, ay nagpapakita na ang model files ay nagdadala ng executable code. Pagsapit ng Q3 2026, ang Hugging Face, Ollama, at ModelScope ay inaasahang hihiling ng signed model-cards o sandboxes, at ang Foundry Local, Bedrock, at vLLM ay mag-eenable ng SSTI scanning sa GGUF load."
+    },
+    {
+      "id": "prediction.af6de8a1d9fd7731",
+      "scope_hint": "business",
+      "title": "Ki-kristalisahin ng Anthropic-AWS pact ang 5-pole hyperscaler-lab regime pagsapit ng H1 2027",
+      "body": "**Ang panahon ng \"exclusive alliance sa pagitan ng hyperscaler at frontier lab\"** ay narito na. Ang 10-year $100B commit ng Amazon-Anthropic ay nagiging pangalawang \"hardware-codesigned + platform-exclusive\" na kontrata pagkatapos ng MS-OpenAI. Sa pamamagitan ng H2 2026 / H1 2027, asahan ang **5-pole regime** — Google–(in-house Gemini), Anthropic–AWS, OpenAI–MS, Meta–internal (Llama), xAI–Oracle/NVDA — na mag-lock in. Ang Trainium / TPU / MAIA / MI300X design differences ay direktang isasalin sa model-behavior differences, at muling tatasa ng developers ang **backend portability** (isang runtime-agnostic layer tulad ng MCP) bilang isang hard requirement. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Ang Amazon-Anthropic 10-year $100B + 5 GW Trainium ay sumasama sa MS-OpenAI bilang 2nd codesigned exclusive",
+        "given": "Ang frontier training economics ay humihiling ng isang hyperscaler na may co-designed silicon upang pondohan ang cluster build",
+        "so_that": "Isang 5-pole lab-cloud-chip regime ang nag-lo-lock in at ang runtime-agnostic backend portability ay nagiging hard requirement",
+        "landing": "H2 2026 / H1 2027; 5-pole regime locked + portability layer adopted",
+        "plain_language": "Ang bawat malaking AI lab ay nagpapares sa isang cloud at isang chip family, kaya kakailanganin ng apps ang isang translator layer upang lumipat sa pagitan nila."
+      },
+      "summary": "Ang 10-year $100B Trainium commit ng Amazon-Anthropic ay sumasama sa MS-OpenAI bilang ika-2 hardware-codesigned hyperscaler-lab exclusive. Sa pamamagitan ng H2 2026 / H1 2027, isang 5-pole regime ang nag-lo-lock in sa Google, Anthropic-AWS, OpenAI-MS, Meta, at xAI, na pinipilit ang backend portability bilang hard requirement."
+    },
+    {
+      "id": "prediction.b60e425d646be753",
+      "scope_hint": "cross",
+      "title": "Sumusulpot ang closed-weight frontier habang nakakulong ang open weights sa 35B-A3B pagsapit ng Q3 2026",
+      "body": "**Proprietary re-expansion laban sa open-weight geopolitical split.** Ang \"proprietary, API-only\" pivot ng Qwen3.6-Max-Preview, kasabay ng staged gating ng Anthropic sa Mythos Preview, ay ginagawa ang Q3 2026 bilang sandali kung kailan **nag-cri-crystallize ang \"strongest model = closed weights\"**. Ang open weights, samantala, ay nakakonsentra sa 35B-A3B / Bonsai / Llama lines para sa production, na nag-formalize sa linya: local para sa utility, cloud para sa frontier. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Ang Qwen3.6-Max-Preview ay nag-pivot na API-only at ginating ng Anthropic ang Mythos Preview sa parehong window",
+        "given": "ang frontier-tier compute + safety overhead ay ginagawang uneconomic ang open-weight release para sa top-of-stack labs",
+        "so_that": "pagsapit ng Q3 2026 ang pinakamalakas na publicly available models ay uniformly closed, na ang open weights ay nakaupo sa 35B-A3B / Bonsai / Llama production tier",
+        "landing": "pagsapit ng Q3 2026; ≥2 frontier labs API-only + open-weight ceiling sa ~35B-A3B class",
+        "plain_language": "Ang pinakamalalaking models ay pumupunta sa likod ng paywalls habang ang mas maliliit na open ones ay nananatiling libre, kaya gagamitin ng mga tao ang local models para sa pang-araw-araw na tasks at cloud para sa pinakamahihirap."
+      },
+      "summary": "Ang API-only pivot ng Qwen3.6-Max-Preview at ang gating ng Anthropic sa Mythos Preview ay magkasamang nagmamarka sa Q3 2026 bilang punto kung saan ang pinakamalakas na models ay uniformly closed weights. Ang open-weight releases ay nakakonsentra sa 35B-A3B, Bonsai, at Llama production tiers, na nag-formalize ng split sa pagitan ng local utility models at cloud frontier models."
+    }
+  ]
+}

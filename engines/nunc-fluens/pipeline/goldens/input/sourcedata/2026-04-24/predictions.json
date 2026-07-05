@@ -1,0 +1,47 @@
+{
+  "date": "2026-04-24",
+  "predictions": [
+    {
+      "id": "prediction.23c160efd9baa194",
+      "scope_hint": "tech",
+      "title": "Open-weight 1M-context era arrives as the new floor by Q3 2026",
+      "body": "**The \"1M context as default\" open-weight era arrives in full by Q3 2026.** DeepSeek V4's \"1M context designed in, not bolted on,\" Qwen3.6-27B's 262K → 1M extension, Claude Opus 4.7's 1M context (Bedrock), and GPT-5.5's long-context strengthening all point the same direction. By Q3 2026, \"native 1M context\" becomes the floor for open weights, and existing 32K-128K models drop to legacy. RAG pipelines flip from \"search → context-insert\" to \"dump everything in + dynamic prune,\" and vector DB vendors are pushed to redefine themselves as \"long-context cache optimization layers.\" In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "DeepSeek V4 ships native 1M context, Qwen3.6-27B extends 262K to 1M, Claude Opus 4.7 hits 1M on Bedrock, and GPT-5.5 strengthens long context.",
+        "given": "Hybrid attention drops 1M-context FLOPs to 27% and KV cache to 10% of V3.2, making 1M context affordable in open weights.",
+        "so_that": "Native 1M context becomes the open-weight floor and RAG flips from search-then-insert to dump-everything-plus-dynamic-prune workflows.",
+        "landing": "By Q3 2026; 32K-128K open-weight models drop to legacy and vector-DB vendors reposition.",
+        "plain_language": "Big AI models can now read a whole library at once, and cheap open-weight versions are catching up. Soon any model under that size will look outdated."
+      },
+      "summary": "DeepSeek V4's native 1M context, Qwen3.6-27B's 262K to 1M extension, Claude Opus 4.7's 1M on Bedrock, and GPT-5.5's long-context push all converge. By Q3 2026, native 1M context is expected to become the open-weight floor and RAG pipelines flip from search-and-insert to dump-and-prune."
+    },
+    {
+      "id": "prediction.6f0a6061c079c28e",
+      "scope_hint": "cross",
+      "title": "Physical AI 8-hour production runs become enterprise RFP cuts by Q4 2026",
+      "body": "**\"Physical AI 8-hour production runs\" become an enterprise procurement requirement in H2 2026.** Siemens-Humanoid HMND 01 Alpha's **8 hours / 90% success / 60 totes/hour** at Erlangen — on the production line, not a demo — is a clear graduation point from \"humanoid = PoC.\" By Q4 2026, big-manufacturer RFPs (VW / Bosch / Mercedes / Foxconn / TSMC / Toyota) will fold \"24h continuous operation,\" \"1-week MTBF,\" \"90%+ autonomous completion rate,\" and \"MES / PLC integration\" into de facto cuts. The competitive axis for Physical AI shifts entirely from \"good-looking demo videos\" to \"ease of insertion into existing OT environments.\" In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "Siemens-Humanoid HMND 01 Alpha logs 8 hours / 60 totes per hour / 90% success on the Erlangen production line, not a demo.",
+        "given": "Big-manufacturer procurement teams now have a concrete production benchmark to anchor RFP cuts against humanoid PoC vendors.",
+        "so_that": "VW / Bosch / Mercedes / Foxconn / TSMC / Toyota RFPs adopt 24h continuous operation, 1-week MTBF, 90% autonomy, and MES / PLC integration as de facto cuts.",
+        "landing": "By Q4 2026; competitive axis shifts to OT-environment insertion ease.",
+        "plain_language": "A factory humanoid just worked 8 hours straight on a real production line. Soon big manufacturers will only buy robots that pass that bar."
+      },
+      "summary": "Siemens-Humanoid HMND 01 Alpha's 8-hour Erlangen run at 60 totes/hour and 90% success on a live production line graduates humanoids from PoC. By Q4 2026, big-manufacturer RFPs are expected to fold 24h continuous operation, 1-week MTBF, 90% autonomy, and MES / PLC integration into procurement cuts."
+    },
+    {
+      "id": "prediction.11c2c648527fe212",
+      "scope_hint": "business",
+      "title": "Capital markets reprice agent-displaced SaaS by agent-touched API share Q2 2026",
+      "body": "**Capital markets reset their valuation of \"AI-agent-displaced enterprise SaaS\" inside Q2 2026.** ServiceNow's **-18% (worst single-day drop ever)** on Apr 23, IBM's same-day decline, and the chained falls of Salesforce / Workday / Oracle reveal a shift in how capital markets weigh \"AI cost-savings benefit\" vs \"AI displacement of legacy workflow SaaS.\" Inside Q2 2026, expect Gartner / Forrester Magic Quadrant / Wave reports to make the \"Agent-native vs Legacy SaaS\" axis explicit, and market-cap math to move from \"seats × ARPU\" to \"share of API calls touched by agents.\" Lagging analyst consensus updates mean another 3-5 names (Workday / Atlassian / Box / Smartsheet etc.) likely see 15%+ drops in the next two quarters. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "ServiceNow's worst-ever single-day -18% on Apr 23, IBM same-day decline, and chained Salesforce / Workday / Oracle falls expose the displacement axis.",
+        "given": "Capital markets now weigh AI displacement of legacy workflow SaaS against AI cost savings, repricing seat-based revenue.",
+        "so_that": "Gartner / Forrester make Agent-native vs Legacy SaaS explicit and market-cap math moves from seats x ARPU to share of agent-touched API calls.",
+        "landing": "Inside Q2 2026; another 3-5 names likely take 15%+ drops over two quarters.",
+        "plain_language": "ServiceNow's stock had its worst day ever because investors think AI agents will replace its software. Other workflow SaaS firms are next."
+      },
+      "summary": "ServiceNow's worst-ever -18% single-day drop on Apr 23, IBM's same-day fall, and chained Salesforce / Workday / Oracle declines mark a capital-markets reset on AI-agent displacement of legacy SaaS. Inside Q2 2026, Gartner / Forrester are expected to make the Agent-native vs Legacy axis explicit and 3-5 more names likely see 15%+ drops."
+    }
+  ]
+}

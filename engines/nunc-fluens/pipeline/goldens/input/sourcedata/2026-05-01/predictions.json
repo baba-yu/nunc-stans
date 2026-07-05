@@ -1,0 +1,61 @@
+{
+  "date": "2026-05-01",
+  "predictions": [
+    {
+      "id": "prediction.02f6b0edac73535a",
+      "scope_hint": "cross",
+      "title": "Agentic-AI CVE class lands as CSAI CNA sub-corpus by Q3 2026",
+      "body": "By Q3 2026 the agentic-AI CVE class becomes its own first-class CNA-issued sub-corpus, with ≥50 agent-/skill-/harness-/sandbox-specific CVEs published under CSAI's MITRE-authorized CNA, and at least one major skill marketplace (Anthropic skills, ClawHub, Multica, Hermes, Hugging Face skills) ships a mandatory signed-+-provenance-attested gate before publish. Apr 29 CSAI MITRE-CNA authorization is the institutional spark; Apr 28 ATT&CK v19 names the techniques (context poisoning, tool invocation abuse, MCP server compromise, malicious agent deployment); Apr 30 OpenAI Agents SDK ships native sandbox execution as a default primitive across 7 sandbox providers (Blaxel/Cloudflare/Daytona/E2B/Modal/Runloop/Vercel); Apr 28 Novita Sandbox + Apr 28 AWS Bedrock Managed Agents + Apr 30 Microsoft Foundry hosted agents form the vendor-side counterpart; Apr 26 LiteLLM CVE-2026-42208 (single SQLi row leaks OpenAI + Anthropic + Bedrock keys) + Apr 28 Spring AI CVE-2026-40967 + carry-forward SGLang CVE-2026-5760 demonstrate the model-tooling-layer-injection blast radius. The forcing function is enterprise risk transfer — once a CNA exists with the explicit AI-agent mandate, the disclosure cadence will compress from random-publisher to coordinated-issuer-driven, and skill marketplaces will not be able to remain unsigned-by-default without losing enterprise customers. CSAI's first-pull-quarter (Q3 2026) is the most-likely landing zone for the threshold to be crossed.",
+      "reasoning": {
+        "because": "Apr 29 CSAI was authorized as a MITRE CNA specifically for agentic-AI vulnerabilities and Apr 28 ATT&CK v19 named the technique set.",
+        "given": "LiteLLM + Spring AI + SGLang model-tooling-layer-injection CVEs span the AI stack and OpenAI/AWS/Microsoft now ship sandbox execution as a primitive.",
+        "so_that": "≥50 agent/skill/harness/sandbox CVEs publish under the CSAI CNA and at least one major skill marketplace mandates signed + provenance-attested gates before publish.",
+        "landing": "by Q3 2026; CSAI first-pull quarter visible plus a marketplace gate live.",
+        "plain_language": "A new safety hub now hands out alerts for AI agent bugs. Soon dozens will land and stores selling agent skills will check who made each one before sharing it."
+      },
+      "summary": "CSAI's Apr 29 MITRE CNA authorization plus ATT&CK v19's named agentic techniques and parallel sandbox-as-primitive launches at OpenAI, AWS, and Microsoft point to ≥50 agent-/skill-/harness-/sandbox-specific CVEs publishing under the CSAI CNA and at least one major skill marketplace mandating signed + provenance-attested gates before publish by Q3 2026."
+    },
+    {
+      "id": "prediction.ed9d8bdccfe9d082",
+      "scope_hint": "business",
+      "title": "Multi-cloud frontier-model SLA standardization wave breaks by H2 2026",
+      "body": "By H2 2026 the OpenAI-on-AWS-Bedrock + Microsoft-license-non-exclusive reset triggers a multi-cloud frontier-model SLA standardization wave — at least one Big-3 hyperscaler (AWS, Azure, GCP) publishes per-model latency / throughput / availability SLAs as a single comparable disclosure, and at least one non-OpenAI foundation lab (Anthropic, Google DeepMind, xAI) ships a mirror \"frontier on every cloud\" deal with parallel SLA disclosure. Apr 27 Microsoft–OpenAI partnership reset removed the cloud-exclusivity clause; Apr 28 OpenAI-on-Bedrock (limited preview) is the first cross-cloud frontier-model deployment in the post-exclusivity world; Apr 30 Codex CLI 0.128.0 model-provider-owned discovery + AWS Bedrock account-state exposure is the developer-side primitive; Apr 28 AWS Bedrock AgentCore Node.js + AgentCore CLI 14-region GA + Managed Harness 4-region preview is the orchestration substrate; Apr 30 Microsoft Foundry Agent Framework 1.0 GA + Toolbox preview is the parallel non-Bedrock path. The forcing function is enterprise procurement — once frontier models cross-deploy, the buyer's first comparison stops being \"model\" and starts being \"model+SLA on cloud-of-record\". The first SLA-standardization mover is most likely AWS Bedrock (because Bedrock has the broadest model selection and the strongest enterprise compliance posture); the first non-OpenAI mirror is most likely Anthropic given the Apr 27 Microsoft non-exclusive language explicitly applies to \"OpenAI products\" and creates white-space for parallel deals.",
+      "reasoning": {
+        "because": "Apr 27 Microsoft–OpenAI reset dropped cloud exclusivity and Apr 28 OpenAI-on-Bedrock launched the first cross-cloud frontier deployment.",
+        "given": "Codex CLI 0.128.0 + Bedrock AgentCore Node.js + Foundry Agent Framework 1.0 GA compose the developer + orchestration substrate enterprises will compare on.",
+        "so_that": "One Big-3 hyperscaler publishes per-model latency / throughput / availability SLAs and one non-OpenAI lab ships a mirror frontier-on-every-cloud deal with matching disclosure.",
+        "landing": "by H2 2026; Bedrock SLA disclosure plus an Anthropic-class mirror deal visible.",
+        "plain_language": "Until last week OpenAI's models only ran on Microsoft's cloud. Now every big cloud will publish how fast and reliable each AI model is so buyers can compare."
+      },
+      "summary": "The Apr 27 Microsoft–OpenAI exclusivity unwind plus the Apr 28 OpenAI-on-Bedrock launch and parallel orchestration substrate at AWS AgentCore and Microsoft Foundry trigger a multi-cloud frontier-model SLA standardization wave by H2 2026, with one Big-3 hyperscaler publishing comparable per-model SLAs and one non-OpenAI lab shipping a mirror frontier-on-every-cloud deal."
+    },
+    {
+      "id": "prediction.c705e26533ea0dc7",
+      "scope_hint": "business",
+      "title": "Microsoft publishes audited monthly AI-business KPIs as 10-Q footnote by Q4 2026",
+      "body": "The Mag 7 super-week + $700B-2026-AI-capex print + Apr 30 Apple +$100B-buyback / 4%-dividend-hike combination cements 2026 as the year AI-capex disclosure splits into two reporting cadences — by Q4 2026, at least one Big-3 hyperscaler (most likely Microsoft, given the Apr 29 $37B AI run-rate precedent) publishes audited monthly AI-business KPIs (run-rate, paid seats, deployed agents) as a 10-Q footnote; the broader S&P AI cohort (Apple, Cerebras post-IPO, Broadcom) follows with quarterly per-AI-business margin disclosure. Apr 29 Microsoft's $37B AI run-rate (+123%) was the disclosure precedent; Apr 30 Apple's record Services $30.98B (+16%) included no separate AI-services line; Apr 30 Big Tech $130B+ Q1 capex (Alphabet+Meta+Microsoft+Amazon) on the way to $700B 2026 capex is the buyside-pressure number; mid-May Cerebras IPO at $22-25B with 24% G42 / 62% MBZUAI revenue concentration is the disclosure stress-test. Apr 28 WSJ OpenAI-revenue-miss + Apr 29 Mag 7 mixed reset (META -7.5%, MSFT -3.8% on print day) shows public-market price discrimination is already operating on imprecise AI-revenue numbers; the path of least resistance is for the most-disclosing hyperscaler to set the precedent and force the cohort to follow. SEC will not need to act ahead of voluntary disclosure here — the buyside is the forcing function.",
+      "reasoning": {
+        "because": "Microsoft's Apr 29 $37B AI run-rate (+123%) is the first per-AI-business single-line disclosure from a hyperscaler.",
+        "given": "$700B 2026 capex + Apr 30 Apple +$100B buyback + mid-May Cerebras IPO with 24%/62% revenue concentration concentrate buyside pressure.",
+        "so_that": "One Big-3 hyperscaler publishes audited monthly AI-business KPIs as a 10-Q footnote and the S&P AI cohort follows with quarterly per-AI-business margin disclosure.",
+        "landing": "by Q4 2026; 10-Q footnote + cohort quarterly margin disclosure visible.",
+        "plain_language": "Tech giants spent record amounts on AI but won't say how much it earns. Wall Street's pressure means soon they'll publish monthly AI revenue and profit margins."
+      },
+      "summary": "Microsoft's Apr 29 $37B AI run-rate disclosure precedent plus the $700B 2026 capex print, Apple's $100B buyback, and the mid-May Cerebras IPO push at least one Big-3 hyperscaler into monthly AI-business KPI 10-Q footnotes and the broader S&P AI cohort into quarterly per-AI-business margin disclosure by Q4 2026."
+    },
+    {
+      "id": "prediction.d6dd18c11bbbb0bb",
+      "scope_hint": "business",
+      "title": "FOMC reverts to <=2-dissent norm as Powell-Warsh split shifts Fed by Q4 2026",
+      "body": "Powell's decision to stay on the Federal Reserve Board through 2028 + the Apr 29 8-4 dissent (highest since Oct-1992) + the May 1 Apr-jobs print at the front of the May 15 Chair handoff window shifts 2026 monetary-policy market psychology from rate-volatility to institutional-volatility — by Q4 2026 the FOMC under Warsh as Chair reverts to a smaller-dissent norm (≤2) on rate calls but the Powell-Warsh disagreement on Fed-investigation governance becomes the marginal swing-vote on any Fed-independence question; equity-market AI-capex re-rating events become more sensitive to Fed-Board signaling than to FOMC statement language. Apr 29 was the first 4-dissenter FOMC since 1992; Powell-staying-on-Board is unprecedented since 1948; Warsh confirmed by Senate Banking on Apr 29 with full-Senate vote scheduled before May 15; Apr 30 Mag-7 monthly tape (best month since 2020) is partially priced on rate-cut hopes that the FOMC dissent posture has not yet validated; May 1 Apr jobs print at the consensus 135K (vs 178K Mar) is the first weakening data into the handoff window. The \"Powell as shadow chair\" framing was specifically rejected by Powell on Apr 29 (\"I won't be a shadow chair\") but the institutional reality of a 7-member Board with Powell as a dissenting governor under a Warsh chair creates exactly that dynamic on Fed-independence questions, even if not on rates. Markets will compress rate-volatility pricing and inflate institutional-risk pricing through 2026 H2.",
+      "reasoning": {
+        "because": "Apr 29 was the highest-dissent FOMC since Oct-1992 (8-4) and Powell's choice to remain on the Board past May 15 is unprecedented since 1948.",
+        "given": "Warsh advanced from Senate Banking on Apr 29 with full-Senate vote due before May 15 and the May 1 Apr jobs print lands first into the handoff window.",
+        "so_that": "FOMC reverts to ≤2-dissenter norm on rates while Powell's Board vote becomes the marginal swing on Fed-investigation governance and AI-capex re-rating tracks Board signaling.",
+        "landing": "by Q4 2026; Warsh-led FOMCs + Powell governance-vote tracking visible.",
+        "plain_language": "Powell's Fed leader job ends May 15 but he's keeping his board seat. Soon investors will worry less about rate fights and more about whether the Fed itself stays independent."
+      },
+      "summary": "Powell's choice to stay on the Board through 2028 plus the Apr 29 8-4 FOMC dissent, Warsh's pending Chair confirmation, and the May 1 Apr jobs print compress rate-volatility pricing while inflating institutional-risk pricing — by Q4 2026 FOMC dissent reverts to ≤2 on rates while Powell's Board vote becomes the marginal signal on Fed-independence questions."
+    }
+  ]
+}

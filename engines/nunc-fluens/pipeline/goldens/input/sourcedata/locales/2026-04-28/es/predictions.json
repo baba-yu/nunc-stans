@@ -1,0 +1,47 @@
+{
+  "date": "2026-04-28",
+  "predictions": [
+    {
+      "id": "prediction.9dd2833778239627",
+      "scope_hint": "business",
+      "title": "El desmontaje de la cláusula AGI se extiende a contratos de pares hyperscaler-laboratorio para Q4 2026",
+      "body": "**El \"desmontaje de la cláusula AGI\" sienta una plantilla — para Q4 2026 al menos otro contrato foundation-lab × hyperscaler se modifica públicamente para eliminar una cláusula discrecional de \"capability-trigger\", reemplazada por revenue-share de fecha-fin fija + distribución cloud no exclusiva.** La reescritura del 27 de abril Microsoft/OpenAI ya no se trata solo de la exclusividad de Azure — convierte un riesgo binario y discrecional del consejo de revocación de IP en un **límite de ingresos vinculado al calendario (2030)** y **distribución multi-cloud como nuevo estándar**. El acuerdo de Google × Anthropic de $40B / 5GW, el compromiso AWS de Amazon × Anthropic de $5B + $25B / $100B, OpenAI × Cerebras + Microsoft, y la próxima IPO de Cerebras ($22B-$25B a mediados de mayo) todos se basan en lenguaje similar de capability-trigger. **Para Q4 2026 vemos al menos uno de esos contratos reestructurado públicamente para reflejar el patrón del 27 de abril** — límite de ingresos con fecha fija, licencia no exclusiva, cláusula de distribución multi-cloud. La palabra \"AGI\" se convierte en una primitiva de instrumento financiero, no metafísica. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "La reescritura del 27 de abril Microsoft/OpenAI cambia el capability-trigger discrecional por un límite de ingresos para 2030 + distribución multi-cloud",
+        "given": "Google/Anthropic $40B, Amazon/Anthropic $100B, OpenAI/Cerebras + Microsoft todos se basan en lenguaje similar de capability-trigger",
+        "so_that": "Al menos un contrato par se modifica públicamente para eliminar el trigger discrecional a favor de revenue-share de fecha-fin fija y distribución no exclusiva",
+        "landing": "Para Q4 2026; ≥1 contrato foundation-lab × hyperscaler modificado públicamente refleja el patrón del 27 de abril",
+        "plain_language": "Microsoft y OpenAI acaban de eliminar la vaga cláusula de escape AGI y limitaron los pagos por fecha en su lugar, así que un acuerdo imitador seguirá en 2026."
+      },
+      "summary": "La reescritura del 27 de abril Microsoft/OpenAI convierte la revocación de IP discrecional del consejo en un límite de ingresos vinculado al calendario para 2030 con distribución multi-cloud no exclusiva, mientras que Google/Anthropic, Amazon/Anthropic, y OpenAI/Cerebras se basan en lenguaje similar de trigger; para Q4 2026 al menos un contrato par refleja el nuevo patrón."
+    },
+    {
+      "id": "prediction.4c31ca30d449311e",
+      "scope_hint": "tech",
+      "title": "CISA publica un sub-catálogo AI-Infra KEV con SBOM de inference-server para Q3 2026",
+      "body": "**El SSTI de inference-server pasa de CVE puntual a entrada del OWASP LLM Top-10 v2026; CISA publica un sub-catálogo \"AI-Infra KEV\" para Q3 2026.** SGLang CVE-2026-5760 (CVSS 9.8) **permanece sin parchear hasta el 28 de abril** (más de 10 días después de la divulgación), con un PoC público y la misma forma de Jinja2-sin-`ImmutableSandboxedEnvironment` ahora marcada como una clase de copy-paste que abarca vLLM, LMDeploy, y servidores de inferencia adyacentes. Combinado con el **cuádruple Totolink CVE del 27-28 de abril (7153/7154/7156/7202, todos 9.8)**, **Cisco ISE unauth-RCE**, **simple-git CVE-2026-6951 RCE en CI/CD**, **escape de sandbox de Pillar's Antigravity vía `find_by_name -X`**, y el aumento del 32% interanual de prompt-injection indirecta de Google/Forcepoint con 10 payloads in-the-wild — la presión sobre NIST/CISA cristaliza. **Para Q3 2026 CISA publica un sub-catálogo \"AI-Infra\" KEV dedicado** con etiquetado SBOM obligatorio en servidores de inferencia (vLLM/SGLang/Ollama/llama.cpp/LMDeploy) y runtimes agentic-CI (Claude Code/Codex/Antigravity/OpenClaw). OWASP LLM Top-10 v2026 promueve \"Inference Server Template/Loader RCE\" al top-3. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "SGLang CVE-2026-5760 sin parchear más de 10 días con PoC público, más una clase de copy-paste a través de vLLM, LMDeploy, y servidores adyacentes",
+        "given": "Cuádruple Totolink del 27-28 de abril, Cisco ISE unauth-RCE, simple-git RCE, escape de sandbox de Antigravity, aumento del 32% IPI de Google/Forcepoint",
+        "so_that": "CISA publica un sub-catálogo AI-Infra KEV dedicado con etiquetado SBOM obligatorio en servidores de inferencia y runtimes agentic-CI",
+        "landing": "Para Q3 2026; sub-catálogo se publica + OWASP LLM Top-10 v2026 promueve Loader RCE al top-3",
+        "plain_language": "Los servidores de inferencia AI y los agentes de codificación siguen siendo hackeados de la misma manera, así que los reguladores publicarán un catálogo dedicado con etiquetas de ingredientes requeridas."
+      },
+      "summary": "SGLang CVE-2026-5760 permanece sin parchear con un PoC público mientras la misma forma Jinja2-SSTI abarca vLLM, LMDeploy, y servidores adyacentes; superpuesto al cuádruple Totolink del 27-28 de abril, Cisco ISE unauth-RCE, simple-git RCE, escape de sandbox de Antigravity, y un aumento del 32% IPI, CISA publica un sub-catálogo AI-Infra KEV para Q3 2026."
+    },
+    {
+      "id": "prediction.140440d9ebffd489",
+      "scope_hint": "business",
+      "title": "Un hyperscaler revela un suelo de capex en GPU condicionado al margen por token para Q3 2026",
+      "body": "**Las publicaciones de Mag 7 + FOMC del 28-29 de abril fuerzan la primera divulgación de **capex con margen-por-token gateado** desde un hyperscaler para Q3 2026 — el pacto OpenAI/Microsoft del 27 de abril + el acuerdo Anthropic/AWS Trainium a nivel de silicio anclan la nueva doctrina.** El capex combinado de Mag 7 de ~$700B para 2026 (Alphabet $175B-$185B, Amazon ~$200B, Meta $115B-$135B, Microsoft ~$146B FY26 tendiendo a ~$170B FY27) aterriza en una cinta que ya ha pasado de \"recompensar el capex con fe\" a \"exigir ganancia tangible.\" **Las reestructuraciones de contratos del 27 de abril enrutan explícitamente la computación de los AI-labs a través del silicio propiedad del hyperscaler** (AWS Trainium/Graviton con Anthropic; CPUs Meta-Graviton a escala). Para Q3 2026 al menos un Big-3 hyperscaler **gatea públicamente el capex incremental de GPU sobre un piso de margen-por-token de Bedrock/Azure/Vertex** — primer \"umbral de ROI de AI-infra\" explícito de un cloud público. La capitalización de mercado de NVDA tipo $5T y la trayectoria de IPO AMD/Cerebras se mantienen; la curva de gasto no se rompe, pero su lenguaje de divulgación sí. In plain language: In plain language: In plain language:",
+      "reasoning": {
+        "because": "El capex AI combinado de Mag 7 2026 cerca de $700B aterriza en una cinta que exige ganancia tangible, no capex basado en fe",
+        "given": "El pacto OpenAI/Microsoft del 27 de abril + el acuerdo Anthropic/AWS Trainium a nivel de silicio enrutan la computación de los labs a través del silicio del hyperscaler",
+        "so_that": "Al menos un Big-3 hyperscaler gatea públicamente el capex incremental de GPU sobre un piso de margen-por-token de Bedrock/Azure/Vertex",
+        "landing": "Para Q3 2026; primer umbral de ROI de AI-infra con margen-por-token gateado explícito de un cloud público",
+        "plain_language": "Los hyperscalers gastan aproximadamente $700B en AI en 2026, y después de los nuevos contratos del 27 de abril una nube limitará públicamente el nuevo gasto de GPU por margen-de-token."
+      },
+      "summary": "El capex AI combinado de Mag 7 2026 cerca de $700B se encuentra con una cinta que exige ganancia tangible mientras los acuerdos del 27 de abril OpenAI/Microsoft y Anthropic/AWS-Trainium enrutan la computación de los labs a través del silicio del hyperscaler; para Q3 2026 al menos un Big-3 hyperscaler gatea públicamente el capex incremental de GPU sobre un piso de margen-por-token."
+    }
+  ]
+}
