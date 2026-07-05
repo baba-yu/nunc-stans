@@ -1,0 +1,45 @@
+{
+  "prediction_id": "prediction.3863162bc445e548",
+  "judgements": [
+    {
+      "prediction_id": "prediction.3863162bc445e548",
+      "stream": "reasoning",
+      "entry_id": "prediction.3863162bc445e548",
+      "verdict": "fresh",
+      "reason": "Target window (H2 2026, ends 2026-12-31) is now live. This week's Together AI $800M open-model inference neocloud is a managed open-model *inference/serving* play, and Ollama MTP is a local speedup — both adjacent to but distinct from the named landing (a single managed console fusing fine-tune + curated MCP catalog + synthetic-data generator). Neither delivers nor contradicts the fine-tune-to-MCP-agent-to-synthetic-data managed loop; the local-stack precondition (Unsloth Studio) is if anything reinforced by continued local-optimization momentum. Because/given/so_that intact.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.3863162bc445e548",
+      "stream": "bridge",
+      "entry_id": "validation.2146426d6c8b6323",
+      "verdict": "fresh",
+      "reason": "Most recent bridge (2026-06-28, support='because', rel=3) — Unsloth v0.1.471-beta tightening the consumer-class loop — remains accurate and un-superseded; this week's Ollama/Together news does not retract it.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.3863162bc445e548",
+      "stream": "bridge",
+      "entry_id": "prediction.3863162bc445e548",
+      "verdict": "fresh",
+      "reason": "Prior REVIVED bridges (Agent Bricks 06-16, Omnigent 06-15 as managed-platform pull) stay valid as adjacent-catalyst evidence; none contradicted by this week.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.3863162bc445e548",
+      "stream": "needs",
+      "entry_id": "prediction.3863162bc445e548",
+      "verdict": "fresh",
+      "reason": "Four needs (hyperscaler PM, local-stack maintainer, synthetic-data vendor, MCP ecosystem maintainer) remain open. No this-week bridge documents a hyperscaler shipping the fused managed console, so no task flips to done; Together AI's neocloud does not satisfy the fine-tune+synthetic-data legs.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.82
+    }
+  ]
+}

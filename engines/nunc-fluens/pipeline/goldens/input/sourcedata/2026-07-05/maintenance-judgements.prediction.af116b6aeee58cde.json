@@ -1,0 +1,55 @@
+{
+  "prediction_id": "prediction.af116b6aeee58cde",
+  "judgements": [
+    {
+      "prediction_id": "prediction.af116b6aeee58cde",
+      "stream": "reasoning",
+      "entry_id": "prediction.af116b6aeee58cde",
+      "verdict": "fresh",
+      "reason": "DiffusionGemma seeds an open-weight text-diffusion training category by Q2 2027. This week's news (Ollama Gemma-4 MTP speedup is autoregressive, not diffusion; Together AI; Tenstorrent) does not add a second open-weight text-diffusion family or a second stack with native diffusion-LM support, nor contradict the seed premise. Landing (Q2 2027) far out. No reframe.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.af116b6aeee58cde",
+      "stream": "bridge",
+      "entry_id": "validation.009784698efcdc4e",
+      "verdict": "broken",
+      "reason": "Data inconsistency, not this-week staleness: this bridge row's `bridge_text` describes AMD Advancing AI MI400 / Qualcomm ~$14B full-stack push and a 'confidential-inference part with attestation' (a hardware/security thesis) while its own `related_items_text` and the parent prediction are about Unsloth DiffusionGemma text-diffusion training. The bridge_text is mis-attached to the wrong prediction. Escalate to human; do not auto-fix.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.9
+    },
+    {
+      "prediction_id": "prediction.af116b6aeee58cde",
+      "stream": "bridge",
+      "entry_id": "prediction.af116b6aeee58cde",
+      "verdict": "fresh",
+      "reason": "The other bridges (2026-06-16 SGLang v0.5.13 serving four text-diffusion families; 2026-06-14 anchoring Unsloth 2026.6.7 DiffusionGemma seed at relevance 5) correctly support the seed/deployment-surface premise. This week added no new diffusion-LM bridge and did not outdate them.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.af116b6aeee58cde",
+      "stream": "needs",
+      "entry_id": "prediction.af116b6aeee58cde",
+      "verdict": "fresh",
+      "reason": "Three Needs (non-Google diffusion-LM pretraining lead, mainstream local-stack maintainer, on-device toolchain maintainer) all 'open' with windows through H1/Q2 2027. This week's news documents no actor delivering a second diffusion-LM family or second-stack native support. Not stale.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.af116b6aeee58cde",
+      "stream": "readings",
+      "entry_id": "prediction.af116b6aeee58cde",
+      "verdict": "fresh",
+      "reason": "No chain/relation rows for this prediction; nothing to update. No this-week edge candidate.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.9
+    }
+  ]
+}

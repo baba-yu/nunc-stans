@@ -1,0 +1,45 @@
+{
+  "prediction_id": "prediction.488b349d322d5c4a",
+  "judgements": [
+    {
+      "prediction_id": "prediction.488b349d322d5c4a",
+      "stream": "reasoning",
+      "entry_id": "prediction.488b349d322d5c4a",
+      "verdict": "fresh",
+      "reason": "This week's news (Ollama MTP, Together AI, Tenstorrent, Stathera, AI events) does not touch agent-framework SQL execution guards. The because (Langroid SELECT-only default fixing CVE-2026-25879) and so_that (>=3 frameworks ship safe-by-default SQL by Q1 2027) are unchanged; no contradicting CVE-retraction or framework-default reversal this week. Forward-looking landing intact.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.488b349d322d5c4a",
+      "stream": "bridge",
+      "entry_id": "validation.2e11cf73dd3712cb",
+      "verdict": "fresh",
+      "reason": "Most recent bridge (2026-07-02, support='given', rel=3) — Langflow cross-tenant IDOR in-the-wild reviving the execution-wrapper-enforcement case — remains valid; this week does not retract it.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.488b349d322d5c4a",
+      "stream": "bridge",
+      "entry_id": "prediction.488b349d322d5c4a",
+      "verdict": "fresh",
+      "reason": "The late-June CVE-cluster bridges (Flowise regex-bypass, AutoGen Studio, AutoGPT SSRF) stand as historical incident-pressure evidence; none contradicted by this week's chip/neocloud news.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.488b349d322d5c4a",
+      "stream": "needs",
+      "entry_id": "prediction.488b349d322d5c4a",
+      "verdict": "fresh",
+      "reason": "Needs (SQL-tool maintainer, docs maintainer, security researcher) remain open, Q1-2027 targeted; no this-week bridge shows a named framework shipping the read-only-by-default SQL guard, so no status flip.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.82
+    }
+  ]
+}

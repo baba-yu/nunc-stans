@@ -1,0 +1,35 @@
+{
+  "prediction_id": "prediction.9bc46d8a918d51a2",
+  "judgements": [
+    {
+      "prediction_id": "prediction.9bc46d8a918d51a2",
+      "stream": "reasoning",
+      "entry_id": "prediction.9bc46d8a918d51a2",
+      "verdict": "fresh",
+      "reason": "The `because` (AMD Advancing AI 2026 confirmed July 22-23 at Moscone SF, MI400 keynote July 23) is corroborated by this week's events roundup, which still names AMD's MI400 series and Helios rack as the marquee 2H-2026 catalyst and keeps Advancing AI locked to July 22-23. The `given` and `so_that` (checkable commitment: GA window / memory spec / Helios rack / named hyperscaler) are unchanged. The 2026-07-05 bridge language ('no longer the NEAREST confirmed stage') only reflects Geneva AI Week July 6-10 and the July 8 meetup landing sooner on the calendar; it does not move or cancel the July 23 keynote, which remains inside the Q3 2026 (by Sep 30) landing window with ~18 days of runway.",
+      "cross_stream_evidence": ["bridge:validation.405cbfa9d11383b1", "bridge:validation.89d197076ba925cd"],
+      "proposed_action": "noop",
+      "confidence": 0.82
+    },
+    {
+      "prediction_id": "prediction.9bc46d8a918d51a2",
+      "stream": "bridge",
+      "entry_id": "prediction.9bc46d8a918d51a2",
+      "verdict": "fresh",
+      "reason": "Five landing/because bridges consistently pin Advancing AI to July 22-23 inside the Q3 window and name the Helios rack + >2x MI350 memory bandwidth. The newest (2026-07-05, support=landing, relevance 3) softens to 'nearest slot rolled over to Geneva/July 8 meetup, Advancing AI no longer the nearest confirmed stage' but still names MI400 + Helios as the marquee catalyst and keeps concrete ship/memory/rack figures a scheduled watch item — an honest relevance step-down as the window narrows, not a contradiction of prior bridges. No mis-attribution.",
+      "cross_stream_evidence": ["bridge:validation.405cbfa9d11383b1"],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.9bc46d8a918d51a2",
+      "stream": "needs",
+      "entry_id": "prediction.9bc46d8a918d51a2",
+      "verdict": "fresh",
+      "reason": "All three Needs (GPU launch PM locking keynote spec slides; rack-scale systems engineer productizing Helios MI400; hyperscaler co-design partner closing a nameable deployment) have tasks status=open with tight 2026-07-22/07-23 targets that still align with the confirmed keynote date. No actor put an MI400 spec or named customer on the record this week; no Bridge documents delivery — consistent with a pre-keynote (July 23) state. Coalition intact and correctly dated.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    }
+  ]
+}

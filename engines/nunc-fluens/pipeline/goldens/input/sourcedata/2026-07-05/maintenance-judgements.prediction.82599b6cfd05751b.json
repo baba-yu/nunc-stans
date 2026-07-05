@@ -1,0 +1,45 @@
+{
+  "prediction_id": "prediction.82599b6cfd05751b",
+  "judgements": [
+    {
+      "prediction_id": "prediction.82599b6cfd05751b",
+      "stream": "reasoning",
+      "entry_id": "prediction.82599b6cfd05751b",
+      "verdict": "fresh",
+      "reason": "This week's Ollama 0.31 MTP-for-Gemma-4 local speedup (~90% faster on a coding-agent benchmark, unchanged output; 2x-2.5x matmul on M5 Max) directly reinforces the `because` precondition (on-device throughput closes the gap to hosted inference). The reasoning's throughput/price/quality three-corner squeeze framing is supported, not contradicted, by 2026-07-05 news. Landing window (Q3 2026) still open.",
+      "cross_stream_evidence": ["bridge:validation.4e1b739f20d4d8ad"],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.82599b6cfd05751b",
+      "stream": "bridge",
+      "entry_id": "prediction.82599b6cfd05751b",
+      "verdict": "fresh",
+      "reason": "A fresh 2026-07-05 bridge (validation.4e1b739f20d4d8ad, support='because', relevance=3) was already added this week off the Ollama 0.31 MTP release, correctly scoped as a driver-level revival that does not touch the 30%-of-devs adoption bar. Prior bridges (GLM-5.2, Kimi K2.7, VibeThinker) remain valid historical support. No bridge is outdated by this week.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.82599b6cfd05751b",
+      "stream": "needs",
+      "entry_id": "prediction.82599b6cfd05751b",
+      "verdict": "fresh",
+      "reason": "Three actor Needs (Qwen/DeepSeek release lead, Big-3 IDE PM, enterprise dev-platform lead) all remain 'open'. Their target windows ended 2026-06-30, but this week's Ollama news does not document any of these specific actors delivering (it is a runtime speedup, not an IDE local-first-default ship or an enterprise sign-off), so no task should flip to done and no coalition refresh is triggered by this week. Not stale on this week's evidence.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.7
+    },
+    {
+      "prediction_id": "prediction.82599b6cfd05751b",
+      "stream": "readings",
+      "entry_id": "prediction.82599b6cfd05751b",
+      "verdict": "fresh",
+      "reason": "Chain edges (upstream bcace95f 27B-dense substrate, 4bd33db2 individual/SMB local-first, 23c160ef 1M-context floor) and parallel/entails relations are unchanged this week; no upstream prediction landed or was contradicted by 2026-07-05 news, so no edge shortening or weakening applies.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    }
+  ]
+}

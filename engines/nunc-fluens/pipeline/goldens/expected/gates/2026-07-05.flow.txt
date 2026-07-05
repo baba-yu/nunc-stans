@@ -4,9 +4,7 @@ daily-flow-check :: date=<CAPTURE_DAY> (Sun)
 OK news+FP markdown files (<CAPTURE_DAY>)
 FAIL DB population via post_update_validation (<CAPTURE_DAY>): 1 issue(s)
   - post_update_validation exited 2 but produced no FAIL lines; stderr='FAIL: DB not found: <WORK>/app/data/analytics.sqlite\n'
-FAIL Sunday artifacts (dormant + theme-review + snapshots) (<CAPTURE_DAY>): 5 issue(s)
-  - missing Sunday artifact: memory/dormant/dormant-20260705.md (4_weekly_memory Step 5 did not run)
-  - missing Sunday artifact: memory/theme-review/theme-review-20260705.md (5_weekly_theme_review Step 5 did not run)
+FAIL Sunday artifacts (dormant + theme-review + snapshots) (<CAPTURE_DAY>): 3 issue(s)
   - missing Sunday artifact: memory/snapshots/20260705-pre-review/ (5_weekly_theme_review Step 2 did not snapshot rollback target)
   - missing Sunday artifact: docs/data/snapshots/20260705/ (5_weekly_theme_review Step 2 did not snapshot reader-facing dashboard)
   - missing: docs/data/snapshots/index.json

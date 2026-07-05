@@ -1,0 +1,45 @@
+{
+  "prediction_id": "prediction.a4ee0b5435860b21",
+  "judgements": [
+    {
+      "prediction_id": "prediction.a4ee0b5435860b21",
+      "stream": "reasoning",
+      "entry_id": "prediction.a4ee0b5435860b21",
+      "verdict": "fresh",
+      "reason": "AWS Continuum sandbox exploit-validation goes industry baseline by H1 2027. This week's news (Ollama, Together AI, Tenstorrent, Stathera) is unrelated to AI application-security / exploit-validation tooling. The alert-fatigue `given` and validation-by-construction `because` are untouched. Landing (H1 2027) far out.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.a4ee0b5435860b21",
+      "stream": "bridge",
+      "entry_id": "prediction.a4ee0b5435860b21",
+      "verdict": "fresh",
+      "reason": "Recent bridges (2026-07-04 Cato Cursor CVSS-9.8 sandbox escapes; 2026-07-03 Obsidian Flowise RCE PoC + patch bypass; June XBOW offensive-demo-night momentum) correctly surface exploit-validation-pattern support while flagging the gap to a named defensive vendor shipping it as a stage. No 2026-07-05 development changes this.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.a4ee0b5435860b21",
+      "stream": "needs",
+      "entry_id": "prediction.a4ee0b5435860b21",
+      "verdict": "fresh",
+      "reason": "Three Needs (incumbent SAST/ASPM vendor, autonomous-pentest startup, rival cloud) all 'open' with windows through H2 2026-H1 2027. No actor documented delivering this week. Not stale.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.a4ee0b5435860b21",
+      "stream": "readings",
+      "entry_id": "prediction.a4ee0b5435860b21",
+      "verdict": "fresh",
+      "reason": "No chain/relation rows for this prediction; nothing to update. No this-week edge candidate.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.9
+    }
+  ]
+}

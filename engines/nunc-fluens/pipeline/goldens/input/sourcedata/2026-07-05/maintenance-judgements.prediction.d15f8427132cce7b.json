@@ -1,0 +1,35 @@
+{
+  "prediction_id": "prediction.d15f8427132cce7b",
+  "judgements": [
+    {
+      "prediction_id": "prediction.d15f8427132cce7b",
+      "stream": "reasoning",
+      "entry_id": "prediction.d15f8427132cce7b",
+      "verdict": "fresh",
+      "reason": "The `because` (June 1 Anthropic confidential draft S-1, OpenAI prepping) and `given` (SpaceX June 11 pricing) remain valid historical preconditions. This week's Together AI $800M Series C at $8.3B (2026-07-05, Prosperity7 framing it as public-markets-bound) reinforces the private-mega-round-to-public-liquidity thesis one layer below the labs; it strengthens rather than invalidates any reasoning clause. Q2 2027 landing window is still 3+ quarters out and untouched.",
+      "cross_stream_evidence": ["bridge:validation.6fd0a7fd7ce1f1ad"],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.d15f8427132cce7b",
+      "stream": "bridge",
+      "entry_id": "prediction.d15f8427132cce7b",
+      "verdict": "fresh",
+      "reason": "Newest bridge (Together AI $800M, 2026-07-05, support=given) is on-thesis and correctly framed as one-layer-below supporting evidence, not a landing. Bridge chain (SpaceX IPO, Boston Dynamics IPO clock, Hyperliquid proxy) all remain valid as of this week. NOTE: bridge validation.0fb507ab48d01e70 (2026-07-04, support=so_that) reads as mis-attached content about Cursor coding-agent security and a 'named trifecta gate' which belongs to the coding-agent-gate prediction family, not this IPO thesis; flagged for possible cleanup but not blocking and not this-week-invalidating.",
+      "cross_stream_evidence": ["bridge:validation.0fb507ab48d01e70"],
+      "proposed_action": "noop",
+      "confidence": 0.7
+    },
+    {
+      "prediction_id": "prediction.d15f8427132cce7b",
+      "stream": "needs",
+      "entry_id": "prediction.d15f8427132cce7b",
+      "verdict": "fresh",
+      "reason": "Both Needs (IPO finance/legal lead refiling the S-1; underwriting team running the book-build) have tasks status=open with target 2027-04-01..06-30. No actor delivered this week; no Bridge documents either Need's task shipping. Coalition stays forward-looking and intact.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.9
+    }
+  ]
+}

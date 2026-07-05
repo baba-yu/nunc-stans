@@ -1,0 +1,35 @@
+{
+  "prediction_id": "prediction.3a5fa9315f58608d",
+  "judgements": [
+    {
+      "prediction_id": "prediction.3a5fa9315f58608d",
+      "stream": "reasoning",
+      "entry_id": "prediction.3a5fa9315f58608d",
+      "verdict": "fresh",
+      "reason": "The `because` (Gartner June 24 note tying steepest agentic-coding cost escalation to ungoverned autonomy) and `given` (consumption pricing makes per-seat token bills the cost center) hold. This week's Ollama MTP local-speedup and Together AI open-model economics touch inference cost but do not remove the per-seat governance need — cheaper/faster tokens raise loop volume, reinforcing the case for default budgets/caps. Q2 2027 landing untouched.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.3a5fa9315f58608d",
+      "stream": "bridge",
+      "entry_id": "prediction.3a5fa9315f58608d",
+      "verdict": "fresh",
+      "reason": "Bridge set (Gartner note, Sonnet 5 per-token cost drop, Cursor RCE, Unsloth GLM-5.2) remains valid; newest is 2026-07-04. No new this-week news contradicts. NOTE: the Cursor CVSS 9.8 RCE bridge (2026-07-04, support=given) and the Unsloth single-node-envelope bridge (2026-06-28) read as more relevant to capability-gate / local-model theses than to token-budget governance, but both are honestly scored (relevance 5 and 2) and neither is invalidated this week; borderline attribution, not blocking.",
+      "cross_stream_evidence": ["bridge:validation.d887a3618255b5bb"],
+      "proposed_action": "noop",
+      "confidence": 0.7
+    },
+    {
+      "prediction_id": "prediction.3a5fa9315f58608d",
+      "stream": "needs",
+      "entry_id": "prediction.3a5fa9315f58608d",
+      "verdict": "fresh",
+      "reason": "Both Needs (platform product lead shipping default budgets/caps/dashboards; enterprise FinOps lead mandating platform-enforced token discipline in procurement) have tasks status=open with target 2027-04-01..06-30. No vendor shipped default-on spend controls this week; no Bridge documents delivery. Coalition intact.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.9
+    }
+  ]
+}

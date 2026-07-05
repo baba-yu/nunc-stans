@@ -1,0 +1,35 @@
+{
+  "prediction_id": "prediction.1e6f56222db35798",
+  "judgements": [
+    {
+      "prediction_id": "prediction.1e6f56222db35798",
+      "stream": "reasoning",
+      "entry_id": "prediction.1e6f56222db35798",
+      "verdict": "fresh",
+      "reason": "The `because` (Langflow CVSS 9.9 IDOR, AutoGPT CVSS 8.5 SSRF) and `given` (orchestration layer ships without deny-by-default per-tenant authz or egress allowlisting) remain valid. This week's news (Ollama MTP, Together AI raise, Tenstorrent denial, Stathera timing, AI events) is orthogonal to agent zero-trust controls; nothing invalidates any clause. Q2 2027 landing untouched.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.9
+    },
+    {
+      "prediction_id": "prediction.1e6f56222db35798",
+      "stream": "bridge",
+      "entry_id": "prediction.1e6f56222db35798",
+      "verdict": "fresh",
+      "reason": "Latest bridge (2026-07-02, confirmed Langflow exploitation) correctly frames attack-evidence-and-vendor-intent as pressure, not a shipped default-on gate. No this-week news adds or contradicts a bridge; the NVIDIA Secure Agent Workspace bridge (2026-06-30, support=none) is honestly scored as adjacent context. Bridge set remains accurate.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.1e6f56222db35798",
+      "stream": "needs",
+      "entry_id": "prediction.1e6f56222db35798",
+      "verdict": "fresh",
+      "reason": "Both Needs (security PM driving deny-by-default per-tenant authz; networking engineer building default egress allowlisting/SSRF hardening) have tasks status=open with target 2027-04-01..06-30. No actor shipped a default-on release this week; no Bridge documents delivery. Coalition intact.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.9
+    }
+  ]
+}

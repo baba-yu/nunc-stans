@@ -1,0 +1,35 @@
+{
+  "prediction_id": "prediction.225d77f109a86780",
+  "judgements": [
+    {
+      "prediction_id": "prediction.225d77f109a86780",
+      "stream": "reasoning",
+      "entry_id": "prediction.225d77f109a86780",
+      "verdict": "fresh",
+      "reason": "The `because` (OpenAI+Broadcom Jalapeno unveil June 24) and `given` (gigawatt-scale merchant-GPU inference economics untenable, co-design ASIC path works) hold. This week's Tenstorrent/Keller news (2026-07-05: denies Qualcomm buyout, reaffirms IP-licensing + high-end scalable AI) actively supports the supply-side mechanism — licensable RISC-V accelerator IP staying independent lowers the barrier for a fourth buyer to stand up custom silicon. H1 2027 landing intact.",
+      "cross_stream_evidence": ["bridge:validation.2552bd6675b4c64b"],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.225d77f109a86780",
+      "stream": "bridge",
+      "entry_id": "prediction.225d77f109a86780",
+      "verdict": "fresh",
+      "reason": "Newest bridge (Tenstorrent independence, 2026-07-05, support=given) is correctly framed as sustaining the supply-side path for a fourth buyer-designed chip, not a landing. Prior bridges (Qualcomm Dragonfly AI300 + Meta buyer, Jalapeno unveil) remain valid; the Claude-on-GB300 bridge (2026-06-30, support=none) is honestly scored as mildly-against/neutral. No mis-attribution.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.225d77f109a86780",
+      "stream": "needs",
+      "entry_id": "prediction.225d77f109a86780",
+      "verdict": "fresh",
+      "reason": "Both Needs (buyer custom-silicon program lead taping out a rack-scale accelerator; merchant co-design partner engagement lead) have tasks status=open with target 2027-01-01..06-30. No fourth buyer committed or unveiled a named part this week; no Bridge documents a delivery. Coalition forward-looking and intact.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.9
+    }
+  ]
+}

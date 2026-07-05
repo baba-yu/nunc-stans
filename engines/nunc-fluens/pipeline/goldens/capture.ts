@@ -16,7 +16,7 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import * as os from 'node:os';
-import { spawnSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 
 const HERE = path.dirname(new URL(import.meta.url).pathname);
 const M = JSON.parse(fs.readFileSync(path.join(HERE, 'fixture-manifest.json'), 'utf8'));
@@ -50,7 +50,29 @@ function cpIf(src: string, dst: string) {
 function compact(d: string) { return d.replaceAll('-', ''); }
 
 // ---------------------------------------------------------------- stage ----
-function stage(upstream: string) {
+// Inputs come from `git archive` at the manifest's pinned commit — never
+// from the upstream working tree, so a mid-flight daily run cannot leak
+// into the fixtures (staging rule, 2026-07-06).
+function extractPinned(upstreamRepo: string): string {
+  const commit = M.upstream.commit as string;
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'nf-stage-'));
+  const wanted = ['app/sourcedata', 'report', 'future-prediction', 'memory', 'reference', 'references.txt'];
+  const tracked = execFileSync('git',
+    ['-C', upstreamRepo, 'ls-tree', '--name-only', commit, '--', ...wanted],
+    { encoding: 'utf8' }).split('\n').filter(Boolean);
+  execFileSync('sh', ['-c',
+    `git -C "${upstreamRepo}" archive ${commit} -- ${tracked.join(' ')} | tar -x -C "${tmp}"`,
+  ], { stdio: ['ignore', 'inherit', 'inherit'] });
+  for (const w of wanted)
+    if (!tracked.includes(w)) {
+      console.error(`warning: ${w} is not tracked at ${commit} — falling back to the working tree`);
+      cpIf(path.join(upstreamRepo, w), path.join(tmp, w));
+    }
+  return tmp;
+}
+
+function stage(upstreamRepo: string) {
+  const upstream = extractPinned(upstreamRepo);
   fs.rmSync(INPUT, { recursive: true, force: true });
   for (const d of ALL_SD_DAYS) {
     if (!cpIf(path.join(upstream, 'app/sourcedata', d), path.join(INPUT, 'sourcedata', d)))
@@ -80,7 +102,8 @@ function stage(upstream: string) {
       cpIf(path.join(upstream, 'app/sourcedata/locales', d, L, 'predictions.json'),
         path.join(INPUT, 'sourcedata/locales', d, L, 'predictions.json'));
   }
-  console.log(`staged: ${ALL_SD_DAYS.length} sourcedata days, ${staged} report/fp files`);
+  fs.rmSync(upstream, { recursive: true, force: true });
+  console.log(`staged: ${ALL_SD_DAYS.length} sourcedata days, ${staged} report/fp files (pinned ${M.upstream.commit})`);
 }
 
 // ------------------------------------------------------------- stage-ci ----

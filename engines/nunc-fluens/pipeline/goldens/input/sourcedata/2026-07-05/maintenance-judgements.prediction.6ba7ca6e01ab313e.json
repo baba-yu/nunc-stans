@@ -1,0 +1,35 @@
+{
+  "prediction_id": "prediction.6ba7ca6e01ab313e",
+  "judgements": [
+    {
+      "prediction_id": "prediction.6ba7ca6e01ab313e",
+      "stream": "reasoning",
+      "entry_id": "prediction.6ba7ca6e01ab313e",
+      "verdict": "fresh",
+      "reason": "The `because` (OWASP 2.01 mapping prompt injection to 6/10 agentic categories, naming coding agents the epicenter) and `given` (injection unpatchable, only durable mitigation caps the lethal trifecta at orchestration) hold. This week's news (Ollama, Together AI, Tenstorrent, Stathera, events) is orthogonal to the trifecta-gate thesis; nothing invalidates any clause. Q1 2027 landing untouched.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.9
+    },
+    {
+      "prediction_id": "prediction.6ba7ca6e01ab313e",
+      "stream": "bridge",
+      "entry_id": "prediction.6ba7ca6e01ab313e",
+      "verdict": "fresh",
+      "reason": "Bridge set (OWASP reframing relevance 5, Cursor zero-click escapes, Codex Remote GA + Flowise bypass, Flowise/AutoGen RCE + Sonnet 5, WorldEvolver) remains valid; newest is 2026-07-04. Each bridge honestly distinguishes mounting-pressure from the shipped default-on gate; the 2026-07-04 Cursor bridge (support=so_that) explicitly notes it is a workstation file-write escape, not the cross-tenant bypass the thesis rests on. No this-week news contradicts.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.6ba7ca6e01ab313e",
+      "stream": "needs",
+      "entry_id": "prediction.6ba7ca6e01ab313e",
+      "verdict": "fresh",
+      "reason": "Both Needs (platform security/orchestration lead shipping a default-on Rule-of-Two gate; OWASP-aligned standards author publishing the reframing guidance) have tasks status=open with target 2027-01-01..03-31. No platform shipped a default-on trifecta gate this week; no Bridge documents delivery. Coalition intact.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.9
+    }
+  ]
+}

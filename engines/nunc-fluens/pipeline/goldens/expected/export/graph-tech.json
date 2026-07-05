@@ -3446,7 +3446,7 @@
         "huge_longshot_hit_at": null,
         "target_start_date": "2027-04-01",
         "target_end_date": "2027-06-30",
-        "dormant": false,
+        "dormant": true,
         "evidence": [
           {
             "evidence_id": "evidence.cbf2587199466d4a",
@@ -4963,7 +4963,7 @@
         "huge_longshot_hit_at": null,
         "target_start_date": "2027-01-01",
         "target_end_date": "2027-03-31",
-        "dormant": false,
+        "dormant": true,
         "evidence": [
           {
             "evidence_id": "evidence.cbf2587199466d4a",
@@ -6002,7 +6002,7 @@
         "huge_longshot_hit_at": null,
         "target_start_date": "2027-04-01",
         "target_end_date": "2027-06-30",
-        "dormant": false,
+        "dormant": true,
         "evidence": [
           {
             "evidence_id": "evidence.1bcc84e04fa45fba",
@@ -6796,7 +6796,7 @@
         "huge_longshot_hit_at": null,
         "target_start_date": "2027-01-01",
         "target_end_date": "2027-03-31",
-        "dormant": false,
+        "dormant": true,
         "evidence": [
           {
             "evidence_id": "evidence.33c3a53abd87bf73",
@@ -10846,7 +10846,7 @@
         "huge_longshot_hit_at": null,
         "target_start_date": "2027-01-01",
         "target_end_date": "2027-03-31",
-        "dormant": false,
+        "dormant": true,
         "evidence": [
           {
             "evidence_id": "evidence.6f5fcc627445d802",
@@ -14138,7 +14138,7 @@
         "huge_longshot_hit_at": null,
         "target_start_date": "2027-01-01",
         "target_end_date": "2027-06-30",
-        "dormant": false,
+        "dormant": true,
         "evidence": [
           {
             "evidence_id": "evidence.66bced1ac4872916",
@@ -17154,7 +17154,7 @@
         "huge_longshot_hit_at": null,
         "target_start_date": "2027-01-01",
         "target_end_date": "2027-06-30",
-        "dormant": false,
+        "dormant": true,
         "evidence": [
           {
             "evidence_id": "evidence.76c9ee0c7749a8d0",
@@ -17780,7 +17780,7 @@
         "huge_longshot_hit_at": null,
         "target_start_date": "2026-07-01",
         "target_end_date": "2026-09-30",
-        "dormant": false,
+        "dormant": true,
         "evidence": [
           {
             "evidence_id": "evidence.6f5fcc627445d802",

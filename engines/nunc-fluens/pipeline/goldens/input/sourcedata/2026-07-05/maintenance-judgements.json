@@ -1,0 +1,836 @@
+{
+  "week_ending": "2026-07-05",
+  "judgements": [
+    {
+      "prediction_id": "prediction.1e6f56222db35798",
+      "stream": "bridge",
+      "entry_id": "prediction.1e6f56222db35798",
+      "verdict": "fresh",
+      "reason": "Latest bridge (2026-07-02, confirmed Langflow exploitation) correctly frames attack-evidence-and-vendor-intent as pressure, not a shipped default-on gate. No this-week news adds or contradicts a bridge; the NVIDIA Secure Agent Workspace bridge (2026-06-30, support=none) is honestly scored as adjacent context. Bridge set remains accurate.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.1e6f56222db35798",
+      "stream": "needs",
+      "entry_id": "prediction.1e6f56222db35798",
+      "verdict": "fresh",
+      "reason": "Both Needs (security PM driving deny-by-default per-tenant authz; networking engineer building default egress allowlisting/SSRF hardening) have tasks status=open with target 2027-04-01..06-30. No actor shipped a default-on release this week; no Bridge documents delivery. Coalition intact.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.9
+    },
+    {
+      "prediction_id": "prediction.1e6f56222db35798",
+      "stream": "reasoning",
+      "entry_id": "prediction.1e6f56222db35798",
+      "verdict": "fresh",
+      "reason": "The `because` (Langflow CVSS 9.9 IDOR, AutoGPT CVSS 8.5 SSRF) and `given` (orchestration layer ships without deny-by-default per-tenant authz or egress allowlisting) remain valid. This week's news (Ollama MTP, Together AI raise, Tenstorrent denial, Stathera timing, AI events) is orthogonal to agent zero-trust controls; nothing invalidates any clause. Q2 2027 landing untouched.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.9
+    },
+    {
+      "prediction_id": "prediction.225d77f109a86780",
+      "stream": "bridge",
+      "entry_id": "prediction.225d77f109a86780",
+      "verdict": "fresh",
+      "reason": "Newest bridge (Tenstorrent independence, 2026-07-05, support=given) is correctly framed as sustaining the supply-side path for a fourth buyer-designed chip, not a landing. Prior bridges (Qualcomm Dragonfly AI300 + Meta buyer, Jalapeno unveil) remain valid; the Claude-on-GB300 bridge (2026-06-30, support=none) is honestly scored as mildly-against/neutral. No mis-attribution.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.225d77f109a86780",
+      "stream": "needs",
+      "entry_id": "prediction.225d77f109a86780",
+      "verdict": "fresh",
+      "reason": "Both Needs (buyer custom-silicon program lead taping out a rack-scale accelerator; merchant co-design partner engagement lead) have tasks status=open with target 2027-01-01..06-30. No fourth buyer committed or unveiled a named part this week; no Bridge documents a delivery. Coalition forward-looking and intact.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.9
+    },
+    {
+      "prediction_id": "prediction.225d77f109a86780",
+      "stream": "reasoning",
+      "entry_id": "prediction.225d77f109a86780",
+      "verdict": "fresh",
+      "reason": "The `because` (OpenAI+Broadcom Jalapeno unveil June 24) and `given` (gigawatt-scale merchant-GPU inference economics untenable, co-design ASIC path works) hold. This week's Tenstorrent/Keller news (2026-07-05: denies Qualcomm buyout, reaffirms IP-licensing + high-end scalable AI) actively supports the supply-side mechanism — licensable RISC-V accelerator IP staying independent lowers the barrier for a fourth buyer to stand up custom silicon. H1 2027 landing intact.",
+      "cross_stream_evidence": [
+        "bridge:validation.2552bd6675b4c64b"
+      ],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.3863162bc445e548",
+      "stream": "bridge",
+      "entry_id": "prediction.3863162bc445e548",
+      "verdict": "fresh",
+      "reason": "Prior REVIVED bridges (Agent Bricks 06-16, Omnigent 06-15 as managed-platform pull) stay valid as adjacent-catalyst evidence; none contradicted by this week.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.3863162bc445e548",
+      "stream": "bridge",
+      "entry_id": "validation.2146426d6c8b6323",
+      "verdict": "fresh",
+      "reason": "Most recent bridge (2026-06-28, support='because', rel=3) — Unsloth v0.1.471-beta tightening the consumer-class loop — remains accurate and un-superseded; this week's Ollama/Together news does not retract it.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.3863162bc445e548",
+      "stream": "needs",
+      "entry_id": "prediction.3863162bc445e548",
+      "verdict": "fresh",
+      "reason": "Four needs (hyperscaler PM, local-stack maintainer, synthetic-data vendor, MCP ecosystem maintainer) remain open. No this-week bridge documents a hyperscaler shipping the fused managed console, so no task flips to done; Together AI's neocloud does not satisfy the fine-tune+synthetic-data legs.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.82
+    },
+    {
+      "prediction_id": "prediction.3863162bc445e548",
+      "stream": "reasoning",
+      "entry_id": "prediction.3863162bc445e548",
+      "verdict": "fresh",
+      "reason": "Target window (H2 2026, ends 2026-12-31) is now live. This week's Together AI $800M open-model inference neocloud is a managed open-model *inference/serving* play, and Ollama MTP is a local speedup — both adjacent to but distinct from the named landing (a single managed console fusing fine-tune + curated MCP catalog + synthetic-data generator). Neither delivers nor contradicts the fine-tune-to-MCP-agent-to-synthetic-data managed loop; the local-stack precondition (Unsloth Studio) is if anything reinforced by continued local-optimization momentum. Because/given/so_that intact.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.3a5fa9315f58608d",
+      "stream": "bridge",
+      "entry_id": "prediction.3a5fa9315f58608d",
+      "verdict": "fresh",
+      "reason": "Bridge set (Gartner note, Sonnet 5 per-token cost drop, Cursor RCE, Unsloth GLM-5.2) remains valid; newest is 2026-07-04. No new this-week news contradicts. NOTE: the Cursor CVSS 9.8 RCE bridge (2026-07-04, support=given) and the Unsloth single-node-envelope bridge (2026-06-28) read as more relevant to capability-gate / local-model theses than to token-budget governance, but both are honestly scored (relevance 5 and 2) and neither is invalidated this week; borderline attribution, not blocking.",
+      "cross_stream_evidence": [
+        "bridge:validation.d887a3618255b5bb"
+      ],
+      "proposed_action": "noop",
+      "confidence": 0.7
+    },
+    {
+      "prediction_id": "prediction.3a5fa9315f58608d",
+      "stream": "needs",
+      "entry_id": "prediction.3a5fa9315f58608d",
+      "verdict": "fresh",
+      "reason": "Both Needs (platform product lead shipping default budgets/caps/dashboards; enterprise FinOps lead mandating platform-enforced token discipline in procurement) have tasks status=open with target 2027-04-01..06-30. No vendor shipped default-on spend controls this week; no Bridge documents delivery. Coalition intact.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.9
+    },
+    {
+      "prediction_id": "prediction.3a5fa9315f58608d",
+      "stream": "reasoning",
+      "entry_id": "prediction.3a5fa9315f58608d",
+      "verdict": "fresh",
+      "reason": "The `because` (Gartner June 24 note tying steepest agentic-coding cost escalation to ungoverned autonomy) and `given` (consumption pricing makes per-seat token bills the cost center) hold. This week's Ollama MTP local-speedup and Together AI open-model economics touch inference cost but do not remove the per-seat governance need — cheaper/faster tokens raise loop volume, reinforcing the case for default budgets/caps. Q2 2027 landing untouched.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.488b349d322d5c4a",
+      "stream": "bridge",
+      "entry_id": "prediction.488b349d322d5c4a",
+      "verdict": "fresh",
+      "reason": "The late-June CVE-cluster bridges (Flowise regex-bypass, AutoGen Studio, AutoGPT SSRF) stand as historical incident-pressure evidence; none contradicted by this week's chip/neocloud news.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.488b349d322d5c4a",
+      "stream": "bridge",
+      "entry_id": "validation.2e11cf73dd3712cb",
+      "verdict": "fresh",
+      "reason": "Most recent bridge (2026-07-02, support='given', rel=3) — Langflow cross-tenant IDOR in-the-wild reviving the execution-wrapper-enforcement case — remains valid; this week does not retract it.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.488b349d322d5c4a",
+      "stream": "needs",
+      "entry_id": "prediction.488b349d322d5c4a",
+      "verdict": "fresh",
+      "reason": "Needs (SQL-tool maintainer, docs maintainer, security researcher) remain open, Q1-2027 targeted; no this-week bridge shows a named framework shipping the read-only-by-default SQL guard, so no status flip.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.82
+    },
+    {
+      "prediction_id": "prediction.488b349d322d5c4a",
+      "stream": "reasoning",
+      "entry_id": "prediction.488b349d322d5c4a",
+      "verdict": "fresh",
+      "reason": "This week's news (Ollama MTP, Together AI, Tenstorrent, Stathera, AI events) does not touch agent-framework SQL execution guards. The because (Langroid SELECT-only default fixing CVE-2026-25879) and so_that (>=3 frameworks ship safe-by-default SQL by Q1 2027) are unchanged; no contradicting CVE-retraction or framework-default reversal this week. Forward-looking landing intact.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.551be7cada1926f6",
+      "stream": "bridge",
+      "entry_id": "prediction.551be7cada1926f6",
+      "verdict": "fresh",
+      "reason": "This prediction has only the single 2026-07-03 bridge on record; it is the origin/landing signal and remains accurate.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.551be7cada1926f6",
+      "stream": "bridge",
+      "entry_id": "validation.b66d58be5031fb48",
+      "verdict": "fresh",
+      "reason": "Most recent bridge (2026-07-03, support='landing', rel=4) is the strongest supporting signal to date (June 30 lift + imminent White House framework); it is current and un-superseded by this week's other news.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.551be7cada1926f6",
+      "stream": "needs",
+      "entry_id": "prediction.551be7cada1926f6",
+      "verdict": "fresh",
+      "reason": "Needs (BIS rulemaking staff, House oversight, security-researcher community, frontier-lab gov-affairs) remain open, Q1-2027 targeted. The imminent White House framework is a voluntary standards document, not yet the BIS EAR capability-threshold rule the needs describe, so no task flips to done; the actor coalition remains as-is.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.82
+    },
+    {
+      "prediction_id": "prediction.551be7cada1926f6",
+      "stream": "reasoning",
+      "entry_id": "prediction.551be7cada1926f6",
+      "verdict": "fresh",
+      "reason": "The most recent bridge (2026-07-03) reports Commerce's June 30 lift of the emergency Fable 5/Mythos controls bundled with a four-point arrangement, and a White House voluntary frontier-model standards framework *expected the week of July 7* (i.e., next week relative to this 2026-07-05 run) defining covered-model thresholds. This STRENGTHENS the landing rather than invalidating it — a near-term actor and date now name the codified-framework path the prediction anticipated. The because (case-by-case freeze with no published rule) is now historical fact (the freeze was lifted), but the reasoning's forward thrust (BIS/Commerce publishes a capability-threshold framework by Q1 2027) is squarely still open and better-supported. Conservative verdict: fresh; the reframe is optional, not forced — the specific EAR capability-threshold rule has not yet published.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.6095c8445805dcf4",
+      "stream": "bridge",
+      "entry_id": "prediction.6095c8445805dcf4",
+      "verdict": "fresh",
+      "reason": "Both bridges (Qualcomm Modular $3.92B buy 2026-06-28 support=because relevance 5; Qualcomm Dragonfly roadmap 2026-06-29 support=given) remain valid and correctly framed as the structural force + competitive-pressure escalation. No this-week bridge was added and none is contradicted — the Keller/Qualcomm-buyout denial concerns Tenstorrent, a different asset, and does not undercut the Modular-removal evidence these bridges rest on.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.82
+    },
+    {
+      "prediction_id": "prediction.6095c8445805dcf4",
+      "stream": "needs",
+      "entry_id": "prediction.6095c8445805dcf4",
+      "verdict": "fresh",
+      "reason": "Both Needs (rival corp-dev team sourcing a compiler acquisition; inference-software team specifying the capability gap) have tasks status=open; targets 2027-01-01..03-31 and 2026-10-01..12-31. No rival announced a compiler buy/majority stake this week; no Bridge documents delivery. Coalition intact.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.9
+    },
+    {
+      "prediction_id": "prediction.6095c8445805dcf4",
+      "stream": "reasoning",
+      "entry_id": "prediction.6095c8445805dcf4",
+      "verdict": "fresh",
+      "reason": "The load-bearing `because` (Qualcomm's $3.92B Modular buy removed the largest neutral cross-vendor inference compiler) and `given` (silicon-agnostic compute layer is table stakes vs CUDA) are fully intact — nothing this week touches the Modular acquisition. Cross-stream note: the `summary` field's peripheral 'Tenstorrent talks' sub-clause is weakened by this week's Keller denial of the Qualcomm buyout (2026-07-05), but the `reasoning_because` proper does not cite Tenstorrent, so the reasoning bundle itself stands. Marginal — a summary tidy could drop the Tenstorrent mention, but not required and not stale. Q1 2027 landing untouched.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.78
+    },
+    {
+      "prediction_id": "prediction.6ba7ca6e01ab313e",
+      "stream": "bridge",
+      "entry_id": "prediction.6ba7ca6e01ab313e",
+      "verdict": "fresh",
+      "reason": "Bridge set (OWASP reframing relevance 5, Cursor zero-click escapes, Codex Remote GA + Flowise bypass, Flowise/AutoGen RCE + Sonnet 5, WorldEvolver) remains valid; newest is 2026-07-04. Each bridge honestly distinguishes mounting-pressure from the shipped default-on gate; the 2026-07-04 Cursor bridge (support=so_that) explicitly notes it is a workstation file-write escape, not the cross-tenant bypass the thesis rests on. No this-week news contradicts.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.6ba7ca6e01ab313e",
+      "stream": "needs",
+      "entry_id": "prediction.6ba7ca6e01ab313e",
+      "verdict": "fresh",
+      "reason": "Both Needs (platform security/orchestration lead shipping a default-on Rule-of-Two gate; OWASP-aligned standards author publishing the reframing guidance) have tasks status=open with target 2027-01-01..03-31. No platform shipped a default-on trifecta gate this week; no Bridge documents delivery. Coalition intact.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.9
+    },
+    {
+      "prediction_id": "prediction.6ba7ca6e01ab313e",
+      "stream": "reasoning",
+      "entry_id": "prediction.6ba7ca6e01ab313e",
+      "verdict": "fresh",
+      "reason": "The `because` (OWASP 2.01 mapping prompt injection to 6/10 agentic categories, naming coding agents the epicenter) and `given` (injection unpatchable, only durable mitigation caps the lethal trifecta at orchestration) hold. This week's news (Ollama, Together AI, Tenstorrent, Stathera, events) is orthogonal to the trifecta-gate thesis; nothing invalidates any clause. Q1 2027 landing untouched.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.9
+    },
+    {
+      "prediction_id": "prediction.7b2e55a251231fe9",
+      "stream": "bridge",
+      "entry_id": "prediction.7b2e55a251231fe9",
+      "verdict": "fresh",
+      "reason": "Prior bridges (Bridgewater/Thinking Machines Qwen3-235B fine-tune 07-03; Unsloth v0.1.471 auto-fit 07-02, rel=4 the direct mechanism) stand as valid; none contradicted this week.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.7b2e55a251231fe9",
+      "stream": "bridge",
+      "entry_id": "validation.265c9f216a6ee98a",
+      "verdict": "fresh",
+      "reason": "Most recent bridge (2026-07-04, support='given', rel=2) — Meituan LongCat-2.0 keeping the compute-independence lane alive at cluster scale — remains valid thesis-level support; this week's Ollama MTP does not supersede it and arguably reinforces the local-optimization lane.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.7b2e55a251231fe9",
+      "stream": "needs",
+      "entry_id": "prediction.7b2e55a251231fe9",
+      "verdict": "fresh",
+      "reason": "Needs (local FT-framework maintainer, low-bit quant/kernel maintainer, on-device retrieval maintainer) remain open. Ollama MTP does not by itself constitute the published 100K-on-24-32GB recipe (need #1 outcome), so no task flips to done; the maintainer coalition is unchanged.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.82
+    },
+    {
+      "prediction_id": "prediction.7b2e55a251231fe9",
+      "stream": "reasoning",
+      "entry_id": "prediction.7b2e55a251231fe9",
+      "verdict": "fresh",
+      "reason": "This week's Ollama MTP (multi-token prediction) local speedup is directly on-thesis: multi-token prediction is a named mechanism in the because ('auto-fit + multi-token prediction tripled fixed-memory context'). Ollama adopting MTP is a second local stack advancing the same fixed-memory-efficiency lever, corroborating the compounding-optimization trajectory rather than contradicting it. The reasoning cites Unsloth specifically for the 100K-on-one-card landing (Q2 2027), which this week does not retract. Because/given/so_that intact and mildly reinforced; no invalidation.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.81e3e9b9a80e4cb7",
+      "stream": "bridge",
+      "entry_id": "prediction.81e3e9b9a80e4cb7",
+      "verdict": "fresh",
+      "reason": "The May 1-6 cluster (SGLang #23134 near-bf16 fused-Triton, llama.cpp #20969 TurboQuant thread, Foundry Local GA on WinML, PolyKV/kvpress) stands as valid precondition evidence; none contradicted this week.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.81e3e9b9a80e4cb7",
+      "stream": "bridge",
+      "entry_id": "validation.5e79b082b2b6778f",
+      "verdict": "fresh",
+      "reason": "Most recent bridge (2026-06-30, support='because', rel=4) — vLLM v0.24.0 multi-tier KV-cache offload as a default-path Model Runner V2 capability, setting the baseline rival OSS servers must match — is current and un-superseded; this week's Ollama MTP is adjacent local-inference maturation that reinforces, not retracts, this direction.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.81e3e9b9a80e4cb7",
+      "stream": "needs",
+      "entry_id": "prediction.81e3e9b9a80e4cb7",
+      "verdict": "fresh",
+      "reason": "Needs (Foundry Local TurboQuant flag, OSS unified --kv-cache-dtype flag, hyperscaler compressed-cache pricing tier) remain open; targets 2026-09-30/12-31 still future. Ollama MTP does not satisfy the unified compressed-KV-cache flag (need #2 outcome), so no task flips to done; coalition unchanged.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.82
+    },
+    {
+      "prediction_id": "prediction.81e3e9b9a80e4cb7",
+      "stream": "readings",
+      "entry_id": "prediction.81e3e9b9a80e4cb7",
+      "verdict": "fresh",
+      "reason": "Three upstream chain edges (from prediction.f960d058dc42c7c6 str=0.85, prediction.bcace95fe3e753d1 str=0.45, prediction.23c160efd9baa194 str=0.5) and five relations (parallel/entails to bcace95f, 23c160ef, 82599b6c, f960d058, 9d68206f) are intact. No upstream landed or was contradicted this week (this week's news does not touch those predictions' subjects), so no chain-edge shortening/weakening and no new equivalent-transfer edge is triggered. Readings stream unchanged.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.82
+    },
+    {
+      "prediction_id": "prediction.81e3e9b9a80e4cb7",
+      "stream": "reasoning",
+      "entry_id": "prediction.81e3e9b9a80e4cb7",
+      "verdict": "fresh",
+      "reason": "Target window (H2 2026, ends 2026-12-31) is live. This week's Ollama MTP local speedup touches a *named* stack in the prediction (vLLM/SGLang/TGI/Ollama/llama.cpp/TensorRT-LLM/Foundry Local), but MTP is a decoding-throughput optimization, NOT a compressed-KV-cache flag — so it neither delivers nor contradicts the unified --kv-cache-dtype landing. The because (parallel TurboQuant/SGLang/PolyKV/kvpress/llama.cpp landings) and so_that (every major stack exposes a unified flag + Foundry Local native TurboQuant) remain forward-looking; the 06-30 vLLM v0.24.0 tiered-KV bridge is the freshest movement and is not retracted. Clock is ticking but nothing this week invalidates. Fresh.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.82599b6cfd05751b",
+      "stream": "bridge",
+      "entry_id": "prediction.82599b6cfd05751b",
+      "verdict": "fresh",
+      "reason": "A fresh 2026-07-05 bridge (validation.4e1b739f20d4d8ad, support='because', relevance=3) was already added this week off the Ollama 0.31 MTP release, correctly scoped as a driver-level revival that does not touch the 30%-of-devs adoption bar. Prior bridges (GLM-5.2, Kimi K2.7, VibeThinker) remain valid historical support. No bridge is outdated by this week.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.82599b6cfd05751b",
+      "stream": "needs",
+      "entry_id": "prediction.82599b6cfd05751b",
+      "verdict": "fresh",
+      "reason": "Three actor Needs (Qwen/DeepSeek release lead, Big-3 IDE PM, enterprise dev-platform lead) all remain 'open'. Their target windows ended 2026-06-30, but this week's Ollama news does not document any of these specific actors delivering (it is a runtime speedup, not an IDE local-first-default ship or an enterprise sign-off), so no task should flip to done and no coalition refresh is triggered by this week. Not stale on this week's evidence.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.7
+    },
+    {
+      "prediction_id": "prediction.82599b6cfd05751b",
+      "stream": "readings",
+      "entry_id": "prediction.82599b6cfd05751b",
+      "verdict": "fresh",
+      "reason": "Chain edges (upstream bcace95f 27B-dense substrate, 4bd33db2 individual/SMB local-first, 23c160ef 1M-context floor) and parallel/entails relations are unchanged this week; no upstream prediction landed or was contradicted by 2026-07-05 news, so no edge shortening or weakening applies.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.82599b6cfd05751b",
+      "stream": "reasoning",
+      "entry_id": "prediction.82599b6cfd05751b",
+      "verdict": "fresh",
+      "reason": "This week's Ollama 0.31 MTP-for-Gemma-4 local speedup (~90% faster on a coding-agent benchmark, unchanged output; 2x-2.5x matmul on M5 Max) directly reinforces the `because` precondition (on-device throughput closes the gap to hosted inference). The reasoning's throughput/price/quality three-corner squeeze framing is supported, not contradicted, by 2026-07-05 news. Landing window (Q3 2026) still open.",
+      "cross_stream_evidence": [
+        "bridge:validation.4e1b739f20d4d8ad"
+      ],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.9bc46d8a918d51a2",
+      "stream": "bridge",
+      "entry_id": "prediction.9bc46d8a918d51a2",
+      "verdict": "fresh",
+      "reason": "Five landing/because bridges consistently pin Advancing AI to July 22-23 inside the Q3 window and name the Helios rack + >2x MI350 memory bandwidth. The newest (2026-07-05, support=landing, relevance 3) softens to 'nearest slot rolled over to Geneva/July 8 meetup, Advancing AI no longer the nearest confirmed stage' but still names MI400 + Helios as the marquee catalyst and keeps concrete ship/memory/rack figures a scheduled watch item — an honest relevance step-down as the window narrows, not a contradiction of prior bridges. No mis-attribution.",
+      "cross_stream_evidence": [
+        "bridge:validation.405cbfa9d11383b1"
+      ],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.9bc46d8a918d51a2",
+      "stream": "needs",
+      "entry_id": "prediction.9bc46d8a918d51a2",
+      "verdict": "fresh",
+      "reason": "All three Needs (GPU launch PM locking keynote spec slides; rack-scale systems engineer productizing Helios MI400; hyperscaler co-design partner closing a nameable deployment) have tasks status=open with tight 2026-07-22/07-23 targets that still align with the confirmed keynote date. No actor put an MI400 spec or named customer on the record this week; no Bridge documents delivery — consistent with a pre-keynote (July 23) state. Coalition intact and correctly dated.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.9bc46d8a918d51a2",
+      "stream": "reasoning",
+      "entry_id": "prediction.9bc46d8a918d51a2",
+      "verdict": "fresh",
+      "reason": "The `because` (AMD Advancing AI 2026 confirmed July 22-23 at Moscone SF, MI400 keynote July 23) is corroborated by this week's events roundup, which still names AMD's MI400 series and Helios rack as the marquee 2H-2026 catalyst and keeps Advancing AI locked to July 22-23. The `given` and `so_that` (checkable commitment: GA window / memory spec / Helios rack / named hyperscaler) are unchanged. The 2026-07-05 bridge language ('no longer the NEAREST confirmed stage') only reflects Geneva AI Week July 6-10 and the July 8 meetup landing sooner on the calendar; it does not move or cancel the July 23 keynote, which remains inside the Q3 2026 (by Sep 30) landing window with ~18 days of runway.",
+      "cross_stream_evidence": [
+        "bridge:validation.405cbfa9d11383b1",
+        "bridge:validation.89d197076ba925cd"
+      ],
+      "proposed_action": "noop",
+      "confidence": 0.82
+    },
+    {
+      "prediction_id": "prediction.a2d6a1d80d9edd87",
+      "stream": "bridge",
+      "entry_id": "prediction.a2d6a1d80d9edd87",
+      "verdict": "fresh",
+      "reason": "Origin bridge (2026-06-24, support='because', rel=5, the Fugu/Mollick signal) is historical record of the thesis origin and remains accurate; nothing this week contradicts it.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.a2d6a1d80d9edd87",
+      "stream": "bridge",
+      "entry_id": "validation.17d7ffdcfa563e47",
+      "verdict": "fresh",
+      "reason": "Most recent bridge (2026-07-01, support='because', rel=3) — June 29 arXiv orchestration batch elevating orchestration to a first-order engineering concern — is unaffected by this week's news; it stands as valid supporting evidence and is not retracted or superseded.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.a2d6a1d80d9edd87",
+      "stream": "needs",
+      "entry_id": "prediction.a2d6a1d80d9edd87",
+      "verdict": "fresh",
+      "reason": "Needs actors (benchmark maintainer, independent evaluator, orchestration-vendor product lead) and their Q1-2027 tasks are still open and un-delivered; no this-week bridge documents any of these actors delivering, so no status flip and no coalition-refresh trigger.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.82
+    },
+    {
+      "prediction_id": "prediction.a2d6a1d80d9edd87",
+      "stream": "reasoning",
+      "entry_id": "prediction.a2d6a1d80d9edd87",
+      "verdict": "fresh",
+      "reason": "This week's 2026-07-05 news (Ollama MTP local speedup, Together AI $800M open-model inference neocloud, Tenstorrent/Qualcomm denial, Stathera timing-silicon Series B, AI events) does not touch orchestration-benchmark latency disclosure. The because (Fugu Ultra ~30-min runs vs published parity) and the so_that (an evaluator/vendor formalizes a latency/cost-per-task column by Q1 2027) remain intact and forward-looking; nothing this week retracts or outdates the origin signal. No cross-stream pressure from a contradicting bridge.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.a40a541ef73b240c",
+      "stream": "bridge",
+      "entry_id": "prediction.a40a541ef73b240c",
+      "verdict": "fresh",
+      "reason": "Most recent bridges (2026-07-04 LongCat-2.0 MIT; 2026-07-03 Qwen3-235B post-training win) correctly reinforce the recipe-over-scale premise at the lane level while noting they are large MoEs, not sub-7B AIME-80 hits. No 2026-07-05 development invalidates or outdates them.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.a40a541ef73b240c",
+      "stream": "needs",
+      "entry_id": "prediction.a40a541ef73b240c",
+      "verdict": "fresh",
+      "reason": "Three Needs (small-model research lab, inference/quant maintainer, independent leaderboard operator) all 'open' with target windows in Q4 2026-Q1 2027, still ahead. This week's news documents no actor delivering on these. Not stale.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.a40a541ef73b240c",
+      "stream": "readings",
+      "entry_id": "prediction.a40a541ef73b240c",
+      "verdict": "fresh",
+      "reason": "No chain or relation rows exist for this prediction; nothing to update. No this-week edge candidate created (this week's news is orthogonal to sub-7B reasoning).",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.9
+    },
+    {
+      "prediction_id": "prediction.a40a541ef73b240c",
+      "stream": "reasoning",
+      "entry_id": "prediction.a40a541ef73b240c",
+      "verdict": "fresh",
+      "reason": "Sub-7B open-weight AIME-80 by Q1 2027. This week's news (Ollama local speedup, Together AI neocloud round, Tenstorrent IPO) does not touch small-model reasoning benchmarks or the recipe-over-scale mechanism the `because`/`given` rest on. Landing window (Q1 2027) is far out and unchanged. No this-week reason to reframe.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.a4ee0b5435860b21",
+      "stream": "bridge",
+      "entry_id": "prediction.a4ee0b5435860b21",
+      "verdict": "fresh",
+      "reason": "Recent bridges (2026-07-04 Cato Cursor CVSS-9.8 sandbox escapes; 2026-07-03 Obsidian Flowise RCE PoC + patch bypass; June XBOW offensive-demo-night momentum) correctly surface exploit-validation-pattern support while flagging the gap to a named defensive vendor shipping it as a stage. No 2026-07-05 development changes this.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.a4ee0b5435860b21",
+      "stream": "needs",
+      "entry_id": "prediction.a4ee0b5435860b21",
+      "verdict": "fresh",
+      "reason": "Three Needs (incumbent SAST/ASPM vendor, autonomous-pentest startup, rival cloud) all 'open' with windows through H2 2026-H1 2027. No actor documented delivering this week. Not stale.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.a4ee0b5435860b21",
+      "stream": "readings",
+      "entry_id": "prediction.a4ee0b5435860b21",
+      "verdict": "fresh",
+      "reason": "No chain/relation rows for this prediction; nothing to update. No this-week edge candidate.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.9
+    },
+    {
+      "prediction_id": "prediction.a4ee0b5435860b21",
+      "stream": "reasoning",
+      "entry_id": "prediction.a4ee0b5435860b21",
+      "verdict": "fresh",
+      "reason": "AWS Continuum sandbox exploit-validation goes industry baseline by H1 2027. This week's news (Ollama, Together AI, Tenstorrent, Stathera) is unrelated to AI application-security / exploit-validation tooling. The alert-fatigue `given` and validation-by-construction `because` are untouched. Landing (H1 2027) far out.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.a96ff0bdaae351aa",
+      "stream": "bridge",
+      "entry_id": "prediction.a96ff0bdaae351aa",
+      "verdict": "fresh",
+      "reason": "The other bridges (2026-06-23 GLM-5.2 744B near-frontier open weights; 2026-06-20 Unsloth GLM-5.2 fine-tune/serving support) are correctly scoped as direction/deployment-tax support without a crossed 85.0 Terminal-Bench reading. This week added no new coding-benchmark bridge and did not outdate the existing ones.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.a96ff0bdaae351aa",
+      "stream": "bridge",
+      "entry_id": "validation.43bd5c4d3f8748ab",
+      "verdict": "broken",
+      "reason": "Data inconsistency, not this-week staleness: this bridge row's `bridge_text` describes OpenAI's ~5% US-government stake ahead of an IPO (a financing thesis) while its own `related_items_text` and the parent prediction are about Meituan LongCat-2.0 open-weight coding vs Terminal-Bench. The bridge_text is mis-attached (belongs to a different, financing/IPO prediction). Escalate to human; do not auto-fix.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.9
+    },
+    {
+      "prediction_id": "prediction.a96ff0bdaae351aa",
+      "stream": "needs",
+      "entry_id": "prediction.a96ff0bdaae351aa",
+      "verdict": "fresh",
+      "reason": "Three Needs (open-weight coding-model pretraining team, inference-engine maintainer, 4-bit quant team) all 'open'. Note target_start/end are both pinned to 2026-06-18 (creation date) which looks like a data artifact, but that pre-dates this week and is not a this-week staleness signal; the runway text says 'through Q4 2026'. This week's news documents no actor delivering. Not stale on this-week evidence.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.7
+    },
+    {
+      "prediction_id": "prediction.a96ff0bdaae351aa",
+      "stream": "readings",
+      "entry_id": "prediction.a96ff0bdaae351aa",
+      "verdict": "fresh",
+      "reason": "No chain/relation rows for this prediction; nothing to update. No this-week edge candidate.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.9
+    },
+    {
+      "prediction_id": "prediction.a96ff0bdaae351aa",
+      "stream": "reasoning",
+      "entry_id": "prediction.a96ff0bdaae351aa",
+      "verdict": "fresh",
+      "reason": "Open-weight coding model tops 85 on Terminal-Bench 2.1 by Q4 2026. This week's news (Ollama, Together AI, Tenstorrent, Stathera) does not report a new Terminal-Bench 2.1 score or invalidate the GLM-5.2-at-81 baseline / gap-closing-per-release mechanism. Landing (Q4 2026) still open. No this-week reframe needed.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.af116b6aeee58cde",
+      "stream": "bridge",
+      "entry_id": "prediction.af116b6aeee58cde",
+      "verdict": "fresh",
+      "reason": "The other bridges (2026-06-16 SGLang v0.5.13 serving four text-diffusion families; 2026-06-14 anchoring Unsloth 2026.6.7 DiffusionGemma seed at relevance 5) correctly support the seed/deployment-surface premise. This week added no new diffusion-LM bridge and did not outdate them.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.af116b6aeee58cde",
+      "stream": "bridge",
+      "entry_id": "validation.009784698efcdc4e",
+      "verdict": "broken",
+      "reason": "Data inconsistency, not this-week staleness: this bridge row's `bridge_text` describes AMD Advancing AI MI400 / Qualcomm ~$14B full-stack push and a 'confidential-inference part with attestation' (a hardware/security thesis) while its own `related_items_text` and the parent prediction are about Unsloth DiffusionGemma text-diffusion training. The bridge_text is mis-attached to the wrong prediction. Escalate to human; do not auto-fix.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.9
+    },
+    {
+      "prediction_id": "prediction.af116b6aeee58cde",
+      "stream": "needs",
+      "entry_id": "prediction.af116b6aeee58cde",
+      "verdict": "fresh",
+      "reason": "Three Needs (non-Google diffusion-LM pretraining lead, mainstream local-stack maintainer, on-device toolchain maintainer) all 'open' with windows through H1/Q2 2027. This week's news documents no actor delivering a second diffusion-LM family or second-stack native support. Not stale.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.af116b6aeee58cde",
+      "stream": "readings",
+      "entry_id": "prediction.af116b6aeee58cde",
+      "verdict": "fresh",
+      "reason": "No chain/relation rows for this prediction; nothing to update. No this-week edge candidate.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.9
+    },
+    {
+      "prediction_id": "prediction.af116b6aeee58cde",
+      "stream": "reasoning",
+      "entry_id": "prediction.af116b6aeee58cde",
+      "verdict": "fresh",
+      "reason": "DiffusionGemma seeds an open-weight text-diffusion training category by Q2 2027. This week's news (Ollama Gemma-4 MTP speedup is autoregressive, not diffusion; Together AI; Tenstorrent) does not add a second open-weight text-diffusion family or a second stack with native diffusion-LM support, nor contradict the seed premise. Landing (Q2 2027) far out. No reframe.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.cfaa5b5838122b38",
+      "stream": "bridge",
+      "entry_id": "prediction.cfaa5b5838122b38",
+      "verdict": "fresh",
+      "reason": "Most recent bridge (2026-06-30 vLLM v0.24.0 DeepEP v2 + DeepSeek-V4 expert-routing) correctly revives the thesis at the serving-surface level while noting the named stateful router-state-bank primitive itself has not shipped as a default. This week added no new reservoir-routing bridge and did not outdate the existing ones.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.cfaa5b5838122b38",
+      "stream": "needs",
+      "entry_id": "prediction.cfaa5b5838122b38",
+      "verdict": "fresh",
+      "reason": "Five Needs (serving-stack maintainer cohort, paper-author working group, hyperscaler-managed-inference PM, open-weights MoE fine-tuning group, agentic-workload tenant) all 'open' with windows through Q3/H2 2026. This week's news documents no actor delivering the knob. Not stale.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.75
+    },
+    {
+      "prediction_id": "prediction.cfaa5b5838122b38",
+      "stream": "readings",
+      "entry_id": "prediction.cfaa5b5838122b38",
+      "verdict": "fresh",
+      "reason": "No chain/relation rows for this prediction; nothing to update. No this-week edge candidate.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.9
+    },
+    {
+      "prediction_id": "prediction.cfaa5b5838122b38",
+      "stream": "reasoning",
+      "entry_id": "prediction.cfaa5b5838122b38",
+      "verdict": "fresh",
+      "reason": "Reservoir routing ships as default vLLM/SGLang serving knob by H2 2026. This week's news does not report reservoir-routing landing in either stack. Together AI's $800M round names a serving/neocloud provider (a demand-side actor in the thesis) but carries no reservoir-routing-knob signal, so it neither advances nor invalidates the `so_that`. Landing window (through Q4 2026) still open.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.d15f8427132cce7b",
+      "stream": "bridge",
+      "entry_id": "prediction.d15f8427132cce7b",
+      "verdict": "fresh",
+      "reason": "Newest bridge (Together AI $800M, 2026-07-05, support=given) is on-thesis and correctly framed as one-layer-below supporting evidence, not a landing. Bridge chain (SpaceX IPO, Boston Dynamics IPO clock, Hyperliquid proxy) all remain valid as of this week. NOTE: bridge validation.0fb507ab48d01e70 (2026-07-04, support=so_that) reads as mis-attached content about Cursor coding-agent security and a 'named trifecta gate' which belongs to the coding-agent-gate prediction family, not this IPO thesis; flagged for possible cleanup but not blocking and not this-week-invalidating.",
+      "cross_stream_evidence": [
+        "bridge:validation.0fb507ab48d01e70"
+      ],
+      "proposed_action": "noop",
+      "confidence": 0.7
+    },
+    {
+      "prediction_id": "prediction.d15f8427132cce7b",
+      "stream": "needs",
+      "entry_id": "prediction.d15f8427132cce7b",
+      "verdict": "fresh",
+      "reason": "Both Needs (IPO finance/legal lead refiling the S-1; underwriting team running the book-build) have tasks status=open with target 2027-04-01..06-30. No actor delivered this week; no Bridge documents either Need's task shipping. Coalition stays forward-looking and intact.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.9
+    },
+    {
+      "prediction_id": "prediction.d15f8427132cce7b",
+      "stream": "reasoning",
+      "entry_id": "prediction.d15f8427132cce7b",
+      "verdict": "fresh",
+      "reason": "The `because` (June 1 Anthropic confidential draft S-1, OpenAI prepping) and `given` (SpaceX June 11 pricing) remain valid historical preconditions. This week's Together AI $800M Series C at $8.3B (2026-07-05, Prosperity7 framing it as public-markets-bound) reinforces the private-mega-round-to-public-liquidity thesis one layer below the labs; it strengthens rather than invalidates any reasoning clause. Q2 2027 landing window is still 3+ quarters out and untouched.",
+      "cross_stream_evidence": [
+        "bridge:validation.6fd0a7fd7ce1f1ad"
+      ],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.d7abb993513f7449",
+      "stream": "bridge",
+      "entry_id": "prediction.d7abb993513f7449",
+      "verdict": "fresh",
+      "reason": "The historical bridge set (2026-06-14 SpaceX June-12 listing opening the AI-listing window at relevance 3; May 24-27 confidential-review / Galaxy-rack-capacity / Mag-7-cohort weekend notes) remains valid supporting record. This week's Keller denial reinforces rather than outdates them; no bridge is invalidated by 2026-07-05 news.",
+      "cross_stream_evidence": [
+        "bridge:validation.00689f03f4183a84"
+      ],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.d7abb993513f7449",
+      "stream": "bridge",
+      "entry_id": "validation.00689f03f4183a84",
+      "verdict": "fresh",
+      "reason": "Fresh 2026-07-05 bridge already captured this week's Keller Qualcomm-buyout denial (support='because', relevance=4), correctly scoped: a reaffirmed confidential-S-1 posture and rejected buyout at the intent-and-track level, with the actual public filing this prediction names by early August still pending. Accurate and well-calibrated; no change needed.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.d7abb993513f7449",
+      "stream": "needs",
+      "entry_id": "prediction.d7abb993513f7449",
+      "verdict": "fresh",
+      "reason": "Five Needs (Tenstorrent S-1 drafting lead, SambaNova confidential-submission lead, Mag-7 sell-side preview desk, Groq/Lightmatter third-name counsel, Galaxy-rack capacity-fulfillment lead) all 'open'. This week's Keller denial reaffirms the Tenstorrent S-1-track Need is still in-flight (not delivered — no public filing), so no task flips to done. The IPO-bridge financing angle stays consistent with the Tenstorrent Need's actor. Not stale on this-week evidence.",
+      "cross_stream_evidence": [
+        "bridge:validation.00689f03f4183a84"
+      ],
+      "proposed_action": "noop",
+      "confidence": 0.75
+    },
+    {
+      "prediction_id": "prediction.d7abb993513f7449",
+      "stream": "readings",
+      "entry_id": "prediction.d7abb993513f7449",
+      "verdict": "fresh",
+      "reason": "No chain/relation rows for this prediction; nothing to update. No this-week edge candidate created.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.9
+    },
+    {
+      "prediction_id": "prediction.d7abb993513f7449",
+      "stream": "reasoning",
+      "entry_id": "prediction.d7abb993513f7449",
+      "verdict": "fresh",
+      "reason": "Tenstorrent S-1 anchors three-name AI-chip IPO by early Aug 2026. This week's Keller denial (June 30, reiterated July 3) of the Qualcomm buyout, with reporting that Tenstorrent is 'mid-stride on an IPO bridge and confidential S-1 track' choosing a public offering over a sale, CONFIRMS the `given` (S-1 track holds) and `so_that` (Tenstorrent prints first) rather than contradicting them. Note the tension the Judge should flag: the reasoning asserts a public S-1 filing landing early-August, but this week's signal is a reaffirmed CONFIDENTIAL S-1 posture with the public filing 'still pending' and target_end 2026-09-30 approaching. The window is tight but not yet missed; this week is confirmatory, so fresh (not stale) — revisit next week if no public filing surfaces by mid-August.",
+      "cross_stream_evidence": [
+        "bridge:validation.00689f03f4183a84"
+      ],
+      "proposed_action": "noop",
+      "confidence": 0.75
+    },
+    {
+      "prediction_id": "prediction.f492c98e68ae3d89",
+      "stream": "bridge",
+      "entry_id": "prediction.f492c98e68ae3d89",
+      "verdict": "fresh",
+      "reason": "The mixed set of prior bridges (given/none across 2026-06-17..06-26) is historical corroboration; none is contradicted or superseded by this week's chip/neocloud news.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.f492c98e68ae3d89",
+      "stream": "bridge",
+      "entry_id": "validation.3c89328cecb80878",
+      "verdict": "fresh",
+      "reason": "Most recent bridge (2026-07-01, support='because', rel=4) — Flowise custom-MCP RCE + AutoGen Studio incident pressure motivating inline default enforcement — remains valid demand-side evidence; this week does not retract it.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.f492c98e68ae3d89",
+      "stream": "needs",
+      "entry_id": "prediction.f492c98e68ae3d89",
+      "verdict": "fresh",
+      "reason": "Needs (third-platform security PM, enterprise security architect, standards-body author) remain open, Q1-2027 targeted; no this-week bridge shows any actor shipping the third-platform default, so no status change.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.82
+    },
+    {
+      "prediction_id": "prediction.f492c98e68ae3d89",
+      "stream": "reasoning",
+      "entry_id": "prediction.f492c98e68ae3d89",
+      "verdict": "fresh",
+      "reason": "This week's news (Ollama MTP, Together AI neocloud, Tenstorrent, Stathera, AI events) is orthogonal to inline MCP-channel policy enforcement. The because (Zscaler AI Broker + Databricks Agent Bricks convergence) and so_that (a third platform ships inline MCP-channel enforcement by Q1 2027) are unchanged; no contradicting bridge and no retraction of the two-platform origin. Forward-looking landing intact.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    }
+  ]
+}

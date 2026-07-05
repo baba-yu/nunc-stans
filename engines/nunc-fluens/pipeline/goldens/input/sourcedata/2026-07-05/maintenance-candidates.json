@@ -1,0 +1,154 @@
+{
+  "week_ending": "2026-07-05",
+  "predictions": [
+    {
+      "prediction_id": "prediction.d15f8427132cce7b",
+      "change_signals": [
+        "landed_this_week",
+        "relevance_drift"
+      ],
+      "confidence_drift_score": 3.0
+    },
+    {
+      "prediction_id": "prediction.1e6f56222db35798",
+      "change_signals": [
+        "relevance_drift"
+      ],
+      "confidence_drift_score": 1.0
+    },
+    {
+      "prediction_id": "prediction.225d77f109a86780",
+      "change_signals": [
+        "relevance_drift"
+      ],
+      "confidence_drift_score": 1.0
+    },
+    {
+      "prediction_id": "prediction.3a5fa9315f58608d",
+      "change_signals": [
+        "relevance_drift"
+      ],
+      "confidence_drift_score": 1.0
+    },
+    {
+      "prediction_id": "prediction.6095c8445805dcf4",
+      "change_signals": [
+        "relevance_drift"
+      ],
+      "confidence_drift_score": 1.0
+    },
+    {
+      "prediction_id": "prediction.6ba7ca6e01ab313e",
+      "change_signals": [
+        "relevance_drift"
+      ],
+      "confidence_drift_score": 1.0
+    },
+    {
+      "prediction_id": "prediction.9bc46d8a918d51a2",
+      "change_signals": [
+        "relevance_drift"
+      ],
+      "confidence_drift_score": 1.0
+    },
+    {
+      "prediction_id": "prediction.a2d6a1d80d9edd87",
+      "change_signals": [
+        "relevance_drift"
+      ],
+      "confidence_drift_score": 1.0
+    },
+    {
+      "prediction_id": "prediction.f492c98e68ae3d89",
+      "change_signals": [
+        "relevance_drift"
+      ],
+      "confidence_drift_score": 1.0
+    },
+    {
+      "prediction_id": "prediction.3863162bc445e548",
+      "change_signals": [
+        "landed_this_week"
+      ],
+      "confidence_drift_score": 0.5
+    },
+    {
+      "prediction_id": "prediction.488b349d322d5c4a",
+      "change_signals": [
+        "landed_this_week"
+      ],
+      "confidence_drift_score": 0.5
+    },
+    {
+      "prediction_id": "prediction.551be7cada1926f6",
+      "change_signals": [
+        "landed_this_week"
+      ],
+      "confidence_drift_score": 0.5
+    },
+    {
+      "prediction_id": "prediction.7b2e55a251231fe9",
+      "change_signals": [
+        "landed_this_week"
+      ],
+      "confidence_drift_score": 0.5
+    },
+    {
+      "prediction_id": "prediction.81e3e9b9a80e4cb7",
+      "change_signals": [
+        "landed_this_week"
+      ],
+      "confidence_drift_score": 0.5
+    },
+    {
+      "prediction_id": "prediction.82599b6cfd05751b",
+      "change_signals": [
+        "landed_this_week"
+      ],
+      "confidence_drift_score": 0.5
+    },
+    {
+      "prediction_id": "prediction.a40a541ef73b240c",
+      "change_signals": [
+        "landed_this_week"
+      ],
+      "confidence_drift_score": 0.5
+    },
+    {
+      "prediction_id": "prediction.a4ee0b5435860b21",
+      "change_signals": [
+        "landed_this_week"
+      ],
+      "confidence_drift_score": 0.5
+    },
+    {
+      "prediction_id": "prediction.a96ff0bdaae351aa",
+      "change_signals": [
+        "landed_this_week"
+      ],
+      "confidence_drift_score": 0.5
+    },
+    {
+      "prediction_id": "prediction.af116b6aeee58cde",
+      "change_signals": [
+        "landed_this_week"
+      ],
+      "confidence_drift_score": 0.5
+    },
+    {
+      "prediction_id": "prediction.cfaa5b5838122b38",
+      "change_signals": [
+        "landed_this_week"
+      ],
+      "confidence_drift_score": 0.5
+    },
+    {
+      "prediction_id": "prediction.d7abb993513f7449",
+      "change_signals": [
+        "landed_this_week"
+      ],
+      "confidence_drift_score": 0.5
+    }
+  ],
+  "glossary_terms": []
+}

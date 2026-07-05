@@ -1,0 +1,45 @@
+{
+  "prediction_id": "prediction.a40a541ef73b240c",
+  "judgements": [
+    {
+      "prediction_id": "prediction.a40a541ef73b240c",
+      "stream": "reasoning",
+      "entry_id": "prediction.a40a541ef73b240c",
+      "verdict": "fresh",
+      "reason": "Sub-7B open-weight AIME-80 by Q1 2027. This week's news (Ollama local speedup, Together AI neocloud round, Tenstorrent IPO) does not touch small-model reasoning benchmarks or the recipe-over-scale mechanism the `because`/`given` rest on. Landing window (Q1 2027) is far out and unchanged. No this-week reason to reframe.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.a40a541ef73b240c",
+      "stream": "bridge",
+      "entry_id": "prediction.a40a541ef73b240c",
+      "verdict": "fresh",
+      "reason": "Most recent bridges (2026-07-04 LongCat-2.0 MIT; 2026-07-03 Qwen3-235B post-training win) correctly reinforce the recipe-over-scale premise at the lane level while noting they are large MoEs, not sub-7B AIME-80 hits. No 2026-07-05 development invalidates or outdates them.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.a40a541ef73b240c",
+      "stream": "needs",
+      "entry_id": "prediction.a40a541ef73b240c",
+      "verdict": "fresh",
+      "reason": "Three Needs (small-model research lab, inference/quant maintainer, independent leaderboard operator) all 'open' with target windows in Q4 2026-Q1 2027, still ahead. This week's news documents no actor delivering on these. Not stale.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.a40a541ef73b240c",
+      "stream": "readings",
+      "entry_id": "prediction.a40a541ef73b240c",
+      "verdict": "fresh",
+      "reason": "No chain or relation rows exist for this prediction; nothing to update. No this-week edge candidate created (this week's news is orthogonal to sub-7B reasoning).",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.9
+    }
+  ]
+}

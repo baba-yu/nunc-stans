@@ -1,0 +1,45 @@
+{
+  "prediction_id": "prediction.a2d6a1d80d9edd87",
+  "judgements": [
+    {
+      "prediction_id": "prediction.a2d6a1d80d9edd87",
+      "stream": "reasoning",
+      "entry_id": "prediction.a2d6a1d80d9edd87",
+      "verdict": "fresh",
+      "reason": "This week's 2026-07-05 news (Ollama MTP local speedup, Together AI $800M open-model inference neocloud, Tenstorrent/Qualcomm denial, Stathera timing-silicon Series B, AI events) does not touch orchestration-benchmark latency disclosure. The because (Fugu Ultra ~30-min runs vs published parity) and the so_that (an evaluator/vendor formalizes a latency/cost-per-task column by Q1 2027) remain intact and forward-looking; nothing this week retracts or outdates the origin signal. No cross-stream pressure from a contradicting bridge.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.a2d6a1d80d9edd87",
+      "stream": "bridge",
+      "entry_id": "validation.17d7ffdcfa563e47",
+      "verdict": "fresh",
+      "reason": "Most recent bridge (2026-07-01, support='because', rel=3) — June 29 arXiv orchestration batch elevating orchestration to a first-order engineering concern — is unaffected by this week's news; it stands as valid supporting evidence and is not retracted or superseded.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.a2d6a1d80d9edd87",
+      "stream": "bridge",
+      "entry_id": "prediction.a2d6a1d80d9edd87",
+      "verdict": "fresh",
+      "reason": "Origin bridge (2026-06-24, support='because', rel=5, the Fugu/Mollick signal) is historical record of the thesis origin and remains accurate; nothing this week contradicts it.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.a2d6a1d80d9edd87",
+      "stream": "needs",
+      "entry_id": "prediction.a2d6a1d80d9edd87",
+      "verdict": "fresh",
+      "reason": "Needs actors (benchmark maintainer, independent evaluator, orchestration-vendor product lead) and their Q1-2027 tasks are still open and un-delivered; no this-week bridge documents any of these actors delivering, so no status flip and no coalition-refresh trigger.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.82
+    }
+  ]
+}

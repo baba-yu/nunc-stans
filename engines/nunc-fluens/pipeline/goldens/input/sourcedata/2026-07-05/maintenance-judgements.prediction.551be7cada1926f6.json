@@ -1,0 +1,45 @@
+{
+  "prediction_id": "prediction.551be7cada1926f6",
+  "judgements": [
+    {
+      "prediction_id": "prediction.551be7cada1926f6",
+      "stream": "reasoning",
+      "entry_id": "prediction.551be7cada1926f6",
+      "verdict": "fresh",
+      "reason": "The most recent bridge (2026-07-03) reports Commerce's June 30 lift of the emergency Fable 5/Mythos controls bundled with a four-point arrangement, and a White House voluntary frontier-model standards framework *expected the week of July 7* (i.e., next week relative to this 2026-07-05 run) defining covered-model thresholds. This STRENGTHENS the landing rather than invalidating it — a near-term actor and date now name the codified-framework path the prediction anticipated. The because (case-by-case freeze with no published rule) is now historical fact (the freeze was lifted), but the reasoning's forward thrust (BIS/Commerce publishes a capability-threshold framework by Q1 2027) is squarely still open and better-supported. Conservative verdict: fresh; the reframe is optional, not forced — the specific EAR capability-threshold rule has not yet published.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.551be7cada1926f6",
+      "stream": "bridge",
+      "entry_id": "validation.b66d58be5031fb48",
+      "verdict": "fresh",
+      "reason": "Most recent bridge (2026-07-03, support='landing', rel=4) is the strongest supporting signal to date (June 30 lift + imminent White House framework); it is current and un-superseded by this week's other news.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.551be7cada1926f6",
+      "stream": "bridge",
+      "entry_id": "prediction.551be7cada1926f6",
+      "verdict": "fresh",
+      "reason": "This prediction has only the single 2026-07-03 bridge on record; it is the origin/landing signal and remains accurate.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.551be7cada1926f6",
+      "stream": "needs",
+      "entry_id": "prediction.551be7cada1926f6",
+      "verdict": "fresh",
+      "reason": "Needs (BIS rulemaking staff, House oversight, security-researcher community, frontier-lab gov-affairs) remain open, Q1-2027 targeted. The imminent White House framework is a voluntary standards document, not yet the BIS EAR capability-threshold rule the needs describe, so no task flips to done; the actor coalition remains as-is.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.82
+    }
+  ]
+}

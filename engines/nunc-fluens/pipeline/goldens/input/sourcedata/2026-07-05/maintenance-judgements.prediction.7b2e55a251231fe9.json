@@ -1,0 +1,45 @@
+{
+  "prediction_id": "prediction.7b2e55a251231fe9",
+  "judgements": [
+    {
+      "prediction_id": "prediction.7b2e55a251231fe9",
+      "stream": "reasoning",
+      "entry_id": "prediction.7b2e55a251231fe9",
+      "verdict": "fresh",
+      "reason": "This week's Ollama MTP (multi-token prediction) local speedup is directly on-thesis: multi-token prediction is a named mechanism in the because ('auto-fit + multi-token prediction tripled fixed-memory context'). Ollama adopting MTP is a second local stack advancing the same fixed-memory-efficiency lever, corroborating the compounding-optimization trajectory rather than contradicting it. The reasoning cites Unsloth specifically for the 100K-on-one-card landing (Q2 2027), which this week does not retract. Because/given/so_that intact and mildly reinforced; no invalidation.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.7b2e55a251231fe9",
+      "stream": "bridge",
+      "entry_id": "validation.265c9f216a6ee98a",
+      "verdict": "fresh",
+      "reason": "Most recent bridge (2026-07-04, support='given', rel=2) — Meituan LongCat-2.0 keeping the compute-independence lane alive at cluster scale — remains valid thesis-level support; this week's Ollama MTP does not supersede it and arguably reinforces the local-optimization lane.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.7b2e55a251231fe9",
+      "stream": "bridge",
+      "entry_id": "prediction.7b2e55a251231fe9",
+      "verdict": "fresh",
+      "reason": "Prior bridges (Bridgewater/Thinking Machines Qwen3-235B fine-tune 07-03; Unsloth v0.1.471 auto-fit 07-02, rel=4 the direct mechanism) stand as valid; none contradicted this week.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.7b2e55a251231fe9",
+      "stream": "needs",
+      "entry_id": "prediction.7b2e55a251231fe9",
+      "verdict": "fresh",
+      "reason": "Needs (local FT-framework maintainer, low-bit quant/kernel maintainer, on-device retrieval maintainer) remain open. Ollama MTP does not by itself constitute the published 100K-on-24-32GB recipe (need #1 outcome), so no task flips to done; the maintainer coalition is unchanged.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.82
+    }
+  ]
+}

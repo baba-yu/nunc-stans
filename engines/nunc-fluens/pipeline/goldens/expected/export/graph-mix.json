@@ -3447,7 +3447,7 @@
         "huge_longshot_hit_at": null,
         "target_start_date": "2027-04-01",
         "target_end_date": "2027-06-30",
-        "dormant": false,
+        "dormant": true,
         "evidence": [
           {
             "evidence_id": "evidence.cbf2587199466d4a",
@@ -4597,10 +4597,10 @@
         "tech.agent_control_plane",
         "tech.agent_runtime_security",
         "tech.model_supply_chain",
-        "business.inference_server_supply_chain",
-        "business.compute_capex_strategy",
         "business.ai_revenue_disclosure",
-        "business.developer_platformization"
+        "business.compute_capex_strategy",
+        "business.developer_platformization",
+        "business.inference_server_supply_chain"
       ],
       "child_ids": [],
       "metrics_by_window": {
@@ -4973,7 +4973,7 @@
         "huge_longshot_hit_at": null,
         "target_start_date": "2027-01-01",
         "target_end_date": "2027-03-31",
-        "dormant": false,
+        "dormant": true,
         "evidence": [
           {
             "evidence_id": "evidence.cbf2587199466d4a",
@@ -6014,7 +6014,7 @@
         "huge_longshot_hit_at": null,
         "target_start_date": "2027-04-01",
         "target_end_date": "2027-06-30",
-        "dormant": false,
+        "dormant": true,
         "evidence": [
           {
             "evidence_id": "evidence.1bcc84e04fa45fba",
@@ -6814,7 +6814,7 @@
         "huge_longshot_hit_at": null,
         "target_start_date": "2027-01-01",
         "target_end_date": "2027-03-31",
-        "dormant": false,
+        "dormant": true,
         "evidence": [
           {
             "evidence_id": "evidence.33c3a53abd87bf73",
@@ -10886,7 +10886,7 @@
         "huge_longshot_hit_at": null,
         "target_start_date": "2027-01-01",
         "target_end_date": "2027-03-31",
-        "dormant": false,
+        "dormant": true,
         "evidence": [
           {
             "evidence_id": "evidence.6f5fcc627445d802",
@@ -14194,7 +14194,7 @@
         "huge_longshot_hit_at": null,
         "target_start_date": "2027-01-01",
         "target_end_date": "2027-06-30",
-        "dormant": false,
+        "dormant": true,
         "evidence": [
           {
             "evidence_id": "evidence.66bced1ac4872916",
@@ -17233,7 +17233,7 @@
         "huge_longshot_hit_at": null,
         "target_start_date": "2027-01-01",
         "target_end_date": "2027-06-30",
-        "dormant": false,
+        "dormant": true,
         "evidence": [
           {
             "evidence_id": "evidence.76c9ee0c7749a8d0",
@@ -17862,7 +17862,7 @@
         "huge_longshot_hit_at": null,
         "target_start_date": "2026-07-01",
         "target_end_date": "2026-09-30",
-        "dormant": false,
+        "dormant": true,
         "evidence": [
           {
             "evidence_id": "evidence.6f5fcc627445d802",
@@ -18699,7 +18699,7 @@
       "metrics_by_window": {
         "7d": {
           "attention_score": 1.0,
-          "realization_score": 0.546,
+          "realization_score": 0.5300000000000001,
           "contradiction_score": 0.0,
           "grass_level": 4,
           "streak_days": 0,
@@ -18716,17 +18716,12 @@
               "date": "2026-06-27",
               "grass_level": 4,
               "attention_score": 1.0
-            },
-            {
-              "date": "2026-06-28",
-              "grass_level": 3,
-              "attention_score": 0.6666666666666666
             }
           ]
         },
         "30d": {
           "attention_score": 1.0,
-          "realization_score": 0.546,
+          "realization_score": 0.5300000000000001,
           "contradiction_score": 0.0,
           "grass_level": 4,
           "streak_days": 0,
@@ -18743,17 +18738,12 @@
               "date": "2026-06-27",
               "grass_level": 4,
               "attention_score": 1.0
-            },
-            {
-              "date": "2026-06-28",
-              "grass_level": 3,
-              "attention_score": 0.6666666666666666
             }
           ]
         },
         "90d": {
           "attention_score": 1.0,
-          "realization_score": 0.546,
+          "realization_score": 0.5300000000000001,
           "contradiction_score": 0.0,
           "grass_level": 4,
           "streak_days": 0,
@@ -18770,11 +18760,6 @@
               "date": "2026-06-27",
               "grass_level": 4,
               "attention_score": 1.0
-            },
-            {
-              "date": "2026-06-28",
-              "grass_level": 3,
-              "attention_score": 0.6666666666666666
             }
           ]
         }
@@ -18838,7 +18823,7 @@
       "metrics_by_window": {
         "7d": {
           "attention_score": 1.0,
-          "realization_score": 0.5027884615384616,
+          "realization_score": 0.5079732510288065,
           "contradiction_score": 0.0,
           "grass_level": 4,
           "streak_days": 0,
@@ -18885,7 +18870,7 @@
         },
         "30d": {
           "attention_score": 1.0,
-          "realization_score": 0.5027884615384616,
+          "realization_score": 0.5079732510288065,
           "contradiction_score": 0.0,
           "grass_level": 4,
           "streak_days": 0,
@@ -18932,7 +18917,7 @@
         },
         "90d": {
           "attention_score": 1.0,
-          "realization_score": 0.5027884615384616,
+          "realization_score": 0.5079732510288065,
           "contradiction_score": 0.0,
           "grass_level": 4,
           "streak_days": 0,
@@ -19036,6 +19021,7 @@
         "prediction.3d03e9edeb3b854c",
         "prediction.225d77f109a86780",
         "prediction.1e6f56222db35798",
+        "prediction.6ba7ca6e01ab313e",
         "prediction.caadd5e48e1d9489",
         "prediction.1ce328e19c9e6685",
         "prediction.a943725fb4046b01",
@@ -19058,7 +19044,6 @@
         "prediction.33fd149797573e02",
         "prediction.71427a4fdd178e43",
         "prediction.57ffda60c7453d2f",
-        "prediction.6ba7ca6e01ab313e",
         "prediction.01cc486a859af01b"
       ],
       "metrics_by_window": {
@@ -19267,6 +19252,7 @@
         "prediction.225d77f109a86780",
         "prediction.1e6f56222db35798",
         "prediction.0c569408626bbdd3",
+        "prediction.6ba7ca6e01ab313e",
         "prediction.1ce328e19c9e6685",
         "prediction.a943725fb4046b01",
         "prediction.b0ee98f79df6fe54",
@@ -19277,13 +19263,12 @@
         "prediction.6095c8445805dcf4",
         "prediction.33fd149797573e02",
         "prediction.71427a4fdd178e43",
-        "prediction.f3f7e18b691f1c39",
-        "prediction.6ba7ca6e01ab313e"
+        "prediction.f3f7e18b691f1c39"
       ],
       "metrics_by_window": {
         "7d": {
           "attention_score": 1.0,
-          "realization_score": 0.5850000000000001,
+          "realization_score": 0.5922222222222222,
           "contradiction_score": 0.0,
           "grass_level": 4,
           "streak_days": 6,
@@ -19325,7 +19310,7 @@
         },
         "30d": {
           "attention_score": 1.0,
-          "realization_score": 0.5850000000000001,
+          "realization_score": 0.5922222222222222,
           "contradiction_score": 0.0,
           "grass_level": 4,
           "streak_days": 6,
@@ -19367,7 +19352,7 @@
         },
         "90d": {
           "attention_score": 1.0,
-          "realization_score": 0.5850000000000001,
+          "realization_score": 0.5922222222222222,
           "contradiction_score": 0.0,
           "grass_level": 4,
           "streak_days": 6,
@@ -19699,14 +19684,14 @@
       ],
       "child_ids": [
         "prediction.1e6f56222db35798",
+        "prediction.6ba7ca6e01ab313e",
         "prediction.caadd5e48e1d9489",
         "prediction.2593e0dadb6a21a3",
         "prediction.67f059f9cf2cf506",
         "prediction.9262c2692ab05c8d",
         "prediction.3a5fa9315f58608d",
         "prediction.57ffda60c7453d2f",
-        "prediction.f3f7e18b691f1c39",
-        "prediction.6ba7ca6e01ab313e"
+        "prediction.f3f7e18b691f1c39"
       ],
       "metrics_by_window": {
         "7d": {
@@ -20127,6 +20112,7 @@
         "prediction.1d6d876dda44ddca",
         "prediction.1e6f56222db35798",
         "prediction.0c569408626bbdd3",
+        "prediction.6ba7ca6e01ab313e",
         "prediction.a943725fb4046b01",
         "prediction.68471e3864b2aa7e",
         "prediction.47a4eb0e8d95b76d",
@@ -20138,16 +20124,15 @@
         "prediction.625a7234dd6e9ed1",
         "prediction.7b31cbaef01800e6",
         "prediction.f52aeb7468446ca2",
-        "prediction.65d822d45accbf85",
-        "prediction.6ba7ca6e01ab313e"
+        "prediction.65d822d45accbf85"
       ],
       "metrics_by_window": {
         "7d": {
           "attention_score": 1.0,
-          "realization_score": 0.546,
+          "realization_score": 0.5300000000000001,
           "contradiction_score": 0.0,
           "grass_level": 4,
-          "streak_days": 3,
+          "streak_days": 0,
           "new_signal": 1.0,
           "continuing_signal": 0.0,
           "status": "active",
@@ -20161,20 +20146,15 @@
               "date": "2026-06-27",
               "grass_level": 4,
               "attention_score": 1.0
-            },
-            {
-              "date": "2026-06-28",
-              "grass_level": 3,
-              "attention_score": 0.6666666666666666
             }
           ]
         },
         "30d": {
           "attention_score": 1.0,
-          "realization_score": 0.546,
+          "realization_score": 0.5300000000000001,
           "contradiction_score": 0.0,
           "grass_level": 4,
-          "streak_days": 3,
+          "streak_days": 0,
           "new_signal": 1.0,
           "continuing_signal": 0.0,
           "status": "active",
@@ -20188,20 +20168,15 @@
               "date": "2026-06-27",
               "grass_level": 4,
               "attention_score": 1.0
-            },
-            {
-              "date": "2026-06-28",
-              "grass_level": 3,
-              "attention_score": 0.6666666666666666
             }
           ]
         },
         "90d": {
           "attention_score": 1.0,
-          "realization_score": 0.546,
+          "realization_score": 0.5300000000000001,
           "contradiction_score": 0.0,
           "grass_level": 4,
-          "streak_days": 3,
+          "streak_days": 0,
           "new_signal": 1.0,
           "continuing_signal": 0.0,
           "status": "active",
@@ -20215,11 +20190,6 @@
               "date": "2026-06-27",
               "grass_level": 4,
               "attention_score": 1.0
-            },
-            {
-              "date": "2026-06-28",
-              "grass_level": 3,
-              "attention_score": 0.6666666666666666
             }
           ]
         }
@@ -20875,7 +20845,7 @@
         "huge_longshot_hit_at": null,
         "target_start_date": "2027-01-01",
         "target_end_date": "2027-03-31",
-        "dormant": false,
+        "dormant": true,
         "evidence": [
           {
             "evidence_id": "evidence.4ae63f8f0ecc5dc6",
@@ -22853,8 +22823,8 @@
         "default_visible": false
       },
       "layout": {
-        "x": -492.2386513675976,
-        "y": -573.2362774406632,
+        "x": -452.5000000000003,
+        "y": -567.2466394788071,
         "z": 0.0,
         "radius": 9.0,
         "fixed": false
@@ -22939,8 +22909,8 @@
               "target_start_date": "2026-06-15",
               "target_end_date": "2026-06-21",
               "size_in_pool": 2,
-              "cluster_total": 7,
-              "share": 0.29,
+              "cluster_total": 6,
+              "share": 0.33,
               "trend": "accelerating",
               "companion_predictions": [
                 {
@@ -22992,14 +22962,6 @@
                   "target_end_date": "2027-03-31"
                 },
                 {
-                  "prediction_id": "prediction.6ba7ca6e01ab313e",
-                  "title": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
-                  "short_label": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
-                  "pred_date": "2026-06-28",
-                  "target_start_date": "2027-01-01",
-                  "target_end_date": "2027-03-31"
-                },
-                {
                   "prediction_id": "prediction.7b31cbaef01800e6",
                   "title": "Security vendor ships ML deserialization scanning as a named tier by Q1 2027",
                   "short_label": "Security vendor ships ML deserialization scanning as a named tier by Q1 2027",
@@ -23026,7 +22988,7 @@
               ]
             }
           ],
-          "cluster_narrative": "This prediction is supported by a single cluster: 2 of 7 items in 'Inference Server Supply Chain' (2026-25); the cluster is accelerating. Concentrated support — if this thread breaks, the prediction loses its base.",
+          "cluster_narrative": "This prediction is supported by a single cluster: 2 of 6 items in 'Inference Server Supply Chain' (2026-25); the cluster is accelerating. Concentrated support — if this thread breaks, the prediction loses its base.",
           "downstream": [],
           "upstream": [],
           "chain_narrative": "",
@@ -24079,6 +24041,38 @@
       "status": "active"
     },
     {
+      "id": "link.business.ai_revenue_disclosure__prediction.6ba7ca6e01ab313e",
+      "source": "business.ai_revenue_disclosure",
+      "target": "prediction.6ba7ca6e01ab313e",
+      "type": "contains",
+      "weight": 1.0,
+      "status": "active"
+    },
+    {
+      "id": "link.business.compute_capex_strategy__prediction.6ba7ca6e01ab313e",
+      "source": "business.compute_capex_strategy",
+      "target": "prediction.6ba7ca6e01ab313e",
+      "type": "contains",
+      "weight": 1.0,
+      "status": "active"
+    },
+    {
+      "id": "link.business.developer_platformization__prediction.6ba7ca6e01ab313e",
+      "source": "business.developer_platformization",
+      "target": "prediction.6ba7ca6e01ab313e",
+      "type": "contains",
+      "weight": 1.0,
+      "status": "active"
+    },
+    {
+      "id": "link.business.inference_server_supply_chain__prediction.6ba7ca6e01ab313e",
+      "source": "business.inference_server_supply_chain",
+      "target": "prediction.6ba7ca6e01ab313e",
+      "type": "contains",
+      "weight": 1.0,
+      "status": "active"
+    },
+    {
       "id": "link.business.cloud_vs_local_distribution__prediction.caadd5e48e1d9489",
       "source": "business.cloud_vs_local_distribution",
       "target": "prediction.caadd5e48e1d9489",
@@ -24602,38 +24596,6 @@
       "id": "link.business.inference_server_supply_chain__prediction.65d822d45accbf85",
       "source": "business.inference_server_supply_chain",
       "target": "prediction.65d822d45accbf85",
-      "type": "contains",
-      "weight": 1.0,
-      "status": "active"
-    },
-    {
-      "id": "link.business.inference_server_supply_chain__prediction.6ba7ca6e01ab313e",
-      "source": "business.inference_server_supply_chain",
-      "target": "prediction.6ba7ca6e01ab313e",
-      "type": "contains",
-      "weight": 1.0,
-      "status": "active"
-    },
-    {
-      "id": "link.business.compute_capex_strategy__prediction.6ba7ca6e01ab313e",
-      "source": "business.compute_capex_strategy",
-      "target": "prediction.6ba7ca6e01ab313e",
-      "type": "contains",
-      "weight": 1.0,
-      "status": "active"
-    },
-    {
-      "id": "link.business.ai_revenue_disclosure__prediction.6ba7ca6e01ab313e",
-      "source": "business.ai_revenue_disclosure",
-      "target": "prediction.6ba7ca6e01ab313e",
-      "type": "contains",
-      "weight": 1.0,
-      "status": "active"
-    },
-    {
-      "id": "link.business.developer_platformization__prediction.6ba7ca6e01ab313e",
-      "source": "business.developer_platformization",
-      "target": "prediction.6ba7ca6e01ab313e",
       "type": "contains",
       "weight": 1.0,
       "status": "active"

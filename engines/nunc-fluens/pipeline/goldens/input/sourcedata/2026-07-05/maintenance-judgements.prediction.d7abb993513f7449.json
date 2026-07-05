@@ -1,0 +1,55 @@
+{
+  "prediction_id": "prediction.d7abb993513f7449",
+  "judgements": [
+    {
+      "prediction_id": "prediction.d7abb993513f7449",
+      "stream": "reasoning",
+      "entry_id": "prediction.d7abb993513f7449",
+      "verdict": "fresh",
+      "reason": "Tenstorrent S-1 anchors three-name AI-chip IPO by early Aug 2026. This week's Keller denial (June 30, reiterated July 3) of the Qualcomm buyout, with reporting that Tenstorrent is 'mid-stride on an IPO bridge and confidential S-1 track' choosing a public offering over a sale, CONFIRMS the `given` (S-1 track holds) and `so_that` (Tenstorrent prints first) rather than contradicting them. Note the tension the Judge should flag: the reasoning asserts a public S-1 filing landing early-August, but this week's signal is a reaffirmed CONFIDENTIAL S-1 posture with the public filing 'still pending' and target_end 2026-09-30 approaching. The window is tight but not yet missed; this week is confirmatory, so fresh (not stale) — revisit next week if no public filing surfaces by mid-August.",
+      "cross_stream_evidence": ["bridge:validation.00689f03f4183a84"],
+      "proposed_action": "noop",
+      "confidence": 0.75
+    },
+    {
+      "prediction_id": "prediction.d7abb993513f7449",
+      "stream": "bridge",
+      "entry_id": "validation.00689f03f4183a84",
+      "verdict": "fresh",
+      "reason": "Fresh 2026-07-05 bridge already captured this week's Keller Qualcomm-buyout denial (support='because', relevance=4), correctly scoped: a reaffirmed confidential-S-1 posture and rejected buyout at the intent-and-track level, with the actual public filing this prediction names by early August still pending. Accurate and well-calibrated; no change needed.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.d7abb993513f7449",
+      "stream": "bridge",
+      "entry_id": "prediction.d7abb993513f7449",
+      "verdict": "fresh",
+      "reason": "The historical bridge set (2026-06-14 SpaceX June-12 listing opening the AI-listing window at relevance 3; May 24-27 confidential-review / Galaxy-rack-capacity / Mag-7-cohort weekend notes) remains valid supporting record. This week's Keller denial reinforces rather than outdates them; no bridge is invalidated by 2026-07-05 news.",
+      "cross_stream_evidence": ["bridge:validation.00689f03f4183a84"],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.d7abb993513f7449",
+      "stream": "needs",
+      "entry_id": "prediction.d7abb993513f7449",
+      "verdict": "fresh",
+      "reason": "Five Needs (Tenstorrent S-1 drafting lead, SambaNova confidential-submission lead, Mag-7 sell-side preview desk, Groq/Lightmatter third-name counsel, Galaxy-rack capacity-fulfillment lead) all 'open'. This week's Keller denial reaffirms the Tenstorrent S-1-track Need is still in-flight (not delivered — no public filing), so no task flips to done. The IPO-bridge financing angle stays consistent with the Tenstorrent Need's actor. Not stale on this-week evidence.",
+      "cross_stream_evidence": ["bridge:validation.00689f03f4183a84"],
+      "proposed_action": "noop",
+      "confidence": 0.75
+    },
+    {
+      "prediction_id": "prediction.d7abb993513f7449",
+      "stream": "readings",
+      "entry_id": "prediction.d7abb993513f7449",
+      "verdict": "fresh",
+      "reason": "No chain/relation rows for this prediction; nothing to update. No this-week edge candidate created.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.9
+    }
+  ]
+}

@@ -538,7 +538,7 @@
       "metrics_by_window": {
         "7d": {
           "attention_score": 1.0,
-          "realization_score": 0.546,
+          "realization_score": 0.5300000000000001,
           "contradiction_score": 0.0,
           "grass_level": 4,
           "streak_days": 0,
@@ -555,17 +555,12 @@
               "date": "2026-06-27",
               "grass_level": 4,
               "attention_score": 1.0
-            },
-            {
-              "date": "2026-06-28",
-              "grass_level": 3,
-              "attention_score": 0.6666666666666666
             }
           ]
         },
         "30d": {
           "attention_score": 1.0,
-          "realization_score": 0.546,
+          "realization_score": 0.5300000000000001,
           "contradiction_score": 0.0,
           "grass_level": 4,
           "streak_days": 0,
@@ -582,17 +577,12 @@
               "date": "2026-06-27",
               "grass_level": 4,
               "attention_score": 1.0
-            },
-            {
-              "date": "2026-06-28",
-              "grass_level": 3,
-              "attention_score": 0.6666666666666666
             }
           ]
         },
         "90d": {
           "attention_score": 1.0,
-          "realization_score": 0.546,
+          "realization_score": 0.5300000000000001,
           "contradiction_score": 0.0,
           "grass_level": 4,
           "streak_days": 0,
@@ -609,11 +599,6 @@
               "date": "2026-06-27",
               "grass_level": 4,
               "attention_score": 1.0
-            },
-            {
-              "date": "2026-06-28",
-              "grass_level": 3,
-              "attention_score": 0.6666666666666666
             }
           ]
         }
@@ -677,7 +662,7 @@
       "metrics_by_window": {
         "7d": {
           "attention_score": 1.0,
-          "realization_score": 0.5027884615384616,
+          "realization_score": 0.5079732510288065,
           "contradiction_score": 0.0,
           "grass_level": 4,
           "streak_days": 0,
@@ -724,7 +709,7 @@
         },
         "30d": {
           "attention_score": 1.0,
-          "realization_score": 0.5027884615384616,
+          "realization_score": 0.5079732510288065,
           "contradiction_score": 0.0,
           "grass_level": 4,
           "streak_days": 0,
@@ -771,7 +756,7 @@
         },
         "90d": {
           "attention_score": 1.0,
-          "realization_score": 0.5027884615384616,
+          "realization_score": 0.5079732510288065,
           "contradiction_score": 0.0,
           "grass_level": 4,
           "streak_days": 0,
@@ -875,6 +860,7 @@
         "prediction.3d03e9edeb3b854c",
         "prediction.225d77f109a86780",
         "prediction.1e6f56222db35798",
+        "prediction.6ba7ca6e01ab313e",
         "prediction.caadd5e48e1d9489",
         "prediction.1ce328e19c9e6685",
         "prediction.a943725fb4046b01",
@@ -897,7 +883,6 @@
         "prediction.33fd149797573e02",
         "prediction.71427a4fdd178e43",
         "prediction.57ffda60c7453d2f",
-        "prediction.6ba7ca6e01ab313e",
         "prediction.01cc486a859af01b"
       ],
       "metrics_by_window": {
@@ -1106,6 +1091,7 @@
         "prediction.225d77f109a86780",
         "prediction.1e6f56222db35798",
         "prediction.0c569408626bbdd3",
+        "prediction.6ba7ca6e01ab313e",
         "prediction.1ce328e19c9e6685",
         "prediction.a943725fb4046b01",
         "prediction.b0ee98f79df6fe54",
@@ -1116,13 +1102,12 @@
         "prediction.6095c8445805dcf4",
         "prediction.33fd149797573e02",
         "prediction.71427a4fdd178e43",
-        "prediction.f3f7e18b691f1c39",
-        "prediction.6ba7ca6e01ab313e"
+        "prediction.f3f7e18b691f1c39"
       ],
       "metrics_by_window": {
         "7d": {
           "attention_score": 1.0,
-          "realization_score": 0.5850000000000001,
+          "realization_score": 0.5922222222222222,
           "contradiction_score": 0.0,
           "grass_level": 4,
           "streak_days": 6,
@@ -1164,7 +1149,7 @@
         },
         "30d": {
           "attention_score": 1.0,
-          "realization_score": 0.5850000000000001,
+          "realization_score": 0.5922222222222222,
           "contradiction_score": 0.0,
           "grass_level": 4,
           "streak_days": 6,
@@ -1206,7 +1191,7 @@
         },
         "90d": {
           "attention_score": 1.0,
-          "realization_score": 0.5850000000000001,
+          "realization_score": 0.5922222222222222,
           "contradiction_score": 0.0,
           "grass_level": 4,
           "streak_days": 6,
@@ -1538,14 +1523,14 @@
       ],
       "child_ids": [
         "prediction.1e6f56222db35798",
+        "prediction.6ba7ca6e01ab313e",
         "prediction.caadd5e48e1d9489",
         "prediction.2593e0dadb6a21a3",
         "prediction.67f059f9cf2cf506",
         "prediction.9262c2692ab05c8d",
         "prediction.3a5fa9315f58608d",
         "prediction.57ffda60c7453d2f",
-        "prediction.f3f7e18b691f1c39",
-        "prediction.6ba7ca6e01ab313e"
+        "prediction.f3f7e18b691f1c39"
       ],
       "metrics_by_window": {
         "7d": {
@@ -1966,6 +1951,7 @@
         "prediction.1d6d876dda44ddca",
         "prediction.1e6f56222db35798",
         "prediction.0c569408626bbdd3",
+        "prediction.6ba7ca6e01ab313e",
         "prediction.a943725fb4046b01",
         "prediction.68471e3864b2aa7e",
         "prediction.47a4eb0e8d95b76d",
@@ -1977,16 +1963,15 @@
         "prediction.625a7234dd6e9ed1",
         "prediction.7b31cbaef01800e6",
         "prediction.f52aeb7468446ca2",
-        "prediction.65d822d45accbf85",
-        "prediction.6ba7ca6e01ab313e"
+        "prediction.65d822d45accbf85"
       ],
       "metrics_by_window": {
         "7d": {
           "attention_score": 1.0,
-          "realization_score": 0.546,
+          "realization_score": 0.5300000000000001,
           "contradiction_score": 0.0,
           "grass_level": 4,
-          "streak_days": 3,
+          "streak_days": 0,
           "new_signal": 1.0,
           "continuing_signal": 0.0,
           "status": "active",
@@ -2000,20 +1985,15 @@
               "date": "2026-06-27",
               "grass_level": 4,
               "attention_score": 1.0
-            },
-            {
-              "date": "2026-06-28",
-              "grass_level": 3,
-              "attention_score": 0.6666666666666666
             }
           ]
         },
         "30d": {
           "attention_score": 1.0,
-          "realization_score": 0.546,
+          "realization_score": 0.5300000000000001,
           "contradiction_score": 0.0,
           "grass_level": 4,
-          "streak_days": 3,
+          "streak_days": 0,
           "new_signal": 1.0,
           "continuing_signal": 0.0,
           "status": "active",
@@ -2027,20 +2007,15 @@
               "date": "2026-06-27",
               "grass_level": 4,
               "attention_score": 1.0
-            },
-            {
-              "date": "2026-06-28",
-              "grass_level": 3,
-              "attention_score": 0.6666666666666666
             }
           ]
         },
         "90d": {
           "attention_score": 1.0,
-          "realization_score": 0.546,
+          "realization_score": 0.5300000000000001,
           "contradiction_score": 0.0,
           "grass_level": 4,
-          "streak_days": 3,
+          "streak_days": 0,
           "new_signal": 1.0,
           "continuing_signal": 0.0,
           "status": "active",
@@ -2054,11 +2029,6 @@
               "date": "2026-06-27",
               "grass_level": 4,
               "attention_score": 1.0
-            },
-            {
-              "date": "2026-06-28",
-              "grass_level": 3,
-              "attention_score": 0.6666666666666666
             }
           ]
         }
@@ -2650,7 +2620,7 @@
         "huge_longshot_hit_at": null,
         "target_start_date": "2027-01-01",
         "target_end_date": "2027-03-31",
-        "dormant": false,
+        "dormant": true,
         "evidence": [
           {
             "evidence_id": "evidence.6f5fcc627445d802",
@@ -2790,8 +2760,8 @@
         "default_visible": false
       },
       "layout": {
-        "x": 154.2919391022304,
-        "y": -476.61451073492157,
+        "x": 158.89087296526017,
+        "y": -480.7243693054031,
         "z": 0.0,
         "radius": 9.0,
         "fixed": false
@@ -3123,8 +3093,8 @@
               "target_start_date": "2026-06-15",
               "target_end_date": "2026-06-21",
               "size_in_pool": 2,
-              "cluster_total": 9,
-              "share": 0.22,
+              "cluster_total": 11,
+              "share": 0.18,
               "trend": "accelerating",
               "companion_predictions": [
                 {
@@ -3160,6 +3130,14 @@
                   "target_end_date": null
                 },
                 {
+                  "prediction_id": "prediction.3a5fa9315f58608d",
+                  "title": "Agentic coding platforms ship token budgets and caps as default by Q2 2027",
+                  "short_label": "Agentic coding platforms ship token budgets and caps as default by Q2 2027",
+                  "pred_date": "2026-06-25",
+                  "target_start_date": "2027-04-01",
+                  "target_end_date": "2027-06-30"
+                },
+                {
                   "prediction_id": "prediction.4814a487eb010b3e",
                   "title": null,
                   "short_label": "DiffusionGemma seeds an open-weight text",
@@ -3184,6 +3162,14 @@
                   "target_end_date": null
                 },
                 {
+                  "prediction_id": "prediction.6ba7ca6e01ab313e",
+                  "title": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
+                  "short_label": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
+                  "pred_date": "2026-06-28",
+                  "target_start_date": "2027-01-01",
+                  "target_end_date": "2027-03-31"
+                },
+                {
                   "prediction_id": "prediction.c2b0ba20d4477cec",
                   "title": null,
                   "short_label": "AWS Continuum's sandbox exploit-validati",
@@ -3194,7 +3180,7 @@
               ]
             }
           ],
-          "cluster_narrative": "This prediction is supported by a single cluster: 2 of 9 items in 'AI-Revenue Disclosure Rewrite' (2026-25); the cluster is accelerating. Concentrated support — if this thread breaks, the prediction loses its base.",
+          "cluster_narrative": "This prediction is supported by a single cluster: 2 of 11 items in 'AI-Revenue Disclosure Rewrite' (2026-25); the cluster is accelerating. Concentrated support — if this thread breaks, the prediction loses its base.",
           "downstream": [],
           "upstream": [],
           "chain_narrative": "",
@@ -3370,8 +3356,8 @@
         "default_visible": false
       },
       "layout": {
-        "x": 107.76134863240277,
-        "y": -465.9942071006629,
+        "x": 120.00000000000006,
+        "y": -464.6152422706632,
         "z": 0.0,
         "radius": 9.0,
         "fixed": false
@@ -3456,8 +3442,8 @@
               "target_start_date": "2026-06-15",
               "target_end_date": "2026-06-21",
               "size_in_pool": 2,
-              "cluster_total": 9,
-              "share": 0.22,
+              "cluster_total": 11,
+              "share": 0.18,
               "trend": "accelerating",
               "companion_predictions": [
                 {
@@ -3483,6 +3469,14 @@
                   "pred_date": "2026-06-03",
                   "target_start_date": null,
                   "target_end_date": null
+                },
+                {
+                  "prediction_id": "prediction.3a5fa9315f58608d",
+                  "title": "Agentic coding platforms ship token budgets and caps as default by Q2 2027",
+                  "short_label": "Agentic coding platforms ship token budgets and caps as default by Q2 2027",
+                  "pred_date": "2026-06-25",
+                  "target_start_date": "2027-04-01",
+                  "target_end_date": "2027-06-30"
                 },
                 {
                   "prediction_id": "prediction.3abbcb892f7919d6",
@@ -3517,6 +3511,14 @@
                   "target_end_date": null
                 },
                 {
+                  "prediction_id": "prediction.6ba7ca6e01ab313e",
+                  "title": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
+                  "short_label": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
+                  "pred_date": "2026-06-28",
+                  "target_start_date": "2027-01-01",
+                  "target_end_date": "2027-03-31"
+                },
+                {
                   "prediction_id": "prediction.c2b0ba20d4477cec",
                   "title": null,
                   "short_label": "AWS Continuum's sandbox exploit-validati",
@@ -3527,7 +3529,7 @@
               ]
             }
           ],
-          "cluster_narrative": "This prediction is supported by a single cluster: 2 of 9 items in 'AI-Revenue Disclosure Rewrite' (2026-25); the cluster is accelerating. Concentrated support — if this thread breaks, the prediction loses its base.",
+          "cluster_narrative": "This prediction is supported by a single cluster: 2 of 11 items in 'AI-Revenue Disclosure Rewrite' (2026-25); the cluster is accelerating. Concentrated support — if this thread breaks, the prediction loses its base.",
           "downstream": [],
           "upstream": [],
           "chain_narrative": "",
@@ -3701,8 +3703,8 @@
         "default_visible": false
       },
       "layout": {
-        "x": 70.44671226536701,
-        "y": -495.7516366191975,
+        "x": 81.10912703473994,
+        "y": -480.7243693054031,
         "z": 0.0,
         "radius": 9.0,
         "fixed": false
@@ -4034,8 +4036,8 @@
               "target_start_date": "2026-06-15",
               "target_end_date": "2026-06-21",
               "size_in_pool": 1,
-              "cluster_total": 9,
-              "share": 0.11,
+              "cluster_total": 11,
+              "share": 0.09,
               "trend": "accelerating",
               "companion_predictions": [
                 {
@@ -4071,6 +4073,14 @@
                   "target_end_date": null
                 },
                 {
+                  "prediction_id": "prediction.3a5fa9315f58608d",
+                  "title": "Agentic coding platforms ship token budgets and caps as default by Q2 2027",
+                  "short_label": "Agentic coding platforms ship token budgets and caps as default by Q2 2027",
+                  "pred_date": "2026-06-25",
+                  "target_start_date": "2027-04-01",
+                  "target_end_date": "2027-06-30"
+                },
+                {
                   "prediction_id": "prediction.3abbcb892f7919d6",
                   "title": "Frontier-class open-weight LLM runs single-node under 256GB by Q4 2026",
                   "short_label": "Frontier-class open-weight LLM runs single-node under 256GB by Q4 2026",
@@ -4093,6 +4103,14 @@
                   "pred_date": "2026-06-17",
                   "target_start_date": null,
                   "target_end_date": null
+                },
+                {
+                  "prediction_id": "prediction.6ba7ca6e01ab313e",
+                  "title": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
+                  "short_label": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
+                  "pred_date": "2026-06-28",
+                  "target_start_date": "2027-01-01",
+                  "target_end_date": "2027-03-31"
                 },
                 {
                   "prediction_id": "prediction.c2b0ba20d4477cec",
@@ -4198,7 +4216,7 @@
               ]
             }
           ],
-          "cluster_narrative": "Broad support across 2 clusters. Largest is 'AI-Revenue Disclosure Rewrite' (1 of 9 items, accelerating). Multi-thread support is more robust than single-cluster concentration.",
+          "cluster_narrative": "Broad support across 2 clusters. Largest is 'AI-Revenue Disclosure Rewrite' (1 of 11 items, accelerating). Multi-thread support is more robust than single-cluster concentration.",
           "downstream": [],
           "upstream": [],
           "chain_narrative": "",
@@ -4235,7 +4253,7 @@
         "huge_longshot_hit_at": null,
         "target_start_date": "2027-01-01",
         "target_end_date": "2027-06-30",
-        "dormant": false,
+        "dormant": true,
         "evidence": [
           {
             "evidence_id": "evidence.76c9ee0c7749a8d0",
@@ -4373,8 +4391,8 @@
         "default_visible": false
       },
       "layout": {
-        "x": 70.44671226536701,
-        "y": -543.4788479221289,
+        "x": 65.00000000000006,
+        "y": -519.6152422706632,
         "z": 0.0,
         "radius": 9.0,
         "fixed": false
@@ -4624,8 +4642,8 @@
               "target_start_date": "2026-06-15",
               "target_end_date": "2026-06-21",
               "size_in_pool": 2,
-              "cluster_total": 9,
-              "share": 0.22,
+              "cluster_total": 11,
+              "share": 0.18,
               "trend": "accelerating",
               "companion_predictions": [
                 {
@@ -4651,6 +4669,14 @@
                   "pred_date": "2026-06-03",
                   "target_start_date": null,
                   "target_end_date": null
+                },
+                {
+                  "prediction_id": "prediction.3a5fa9315f58608d",
+                  "title": "Agentic coding platforms ship token budgets and caps as default by Q2 2027",
+                  "short_label": "Agentic coding platforms ship token budgets and caps as default by Q2 2027",
+                  "pred_date": "2026-06-25",
+                  "target_start_date": "2027-04-01",
+                  "target_end_date": "2027-06-30"
                 },
                 {
                   "prediction_id": "prediction.3abbcb892f7919d6",
@@ -4683,6 +4709,14 @@
                   "pred_date": "2026-06-17",
                   "target_start_date": null,
                   "target_end_date": null
+                },
+                {
+                  "prediction_id": "prediction.6ba7ca6e01ab313e",
+                  "title": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
+                  "short_label": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
+                  "pred_date": "2026-06-28",
+                  "target_start_date": "2027-01-01",
+                  "target_end_date": "2027-03-31"
                 },
                 {
                   "prediction_id": "prediction.c2b0ba20d4477cec",
@@ -4788,7 +4822,7 @@
               ]
             }
           ],
-          "cluster_narrative": "Broad support across 2 clusters. Largest is 'AI-Revenue Disclosure Rewrite' (2 of 9 items, accelerating). Multi-thread support is more robust than single-cluster concentration.",
+          "cluster_narrative": "Broad support across 2 clusters. Largest is 'AI-Revenue Disclosure Rewrite' (2 of 11 items, accelerating). Multi-thread support is more robust than single-cluster concentration.",
           "downstream": [],
           "upstream": [],
           "chain_narrative": "",
@@ -4976,8 +5010,8 @@
         "default_visible": false
       },
       "layout": {
-        "x": 107.76134863240276,
-        "y": -573.2362774406635,
+        "x": 81.10912703473994,
+        "y": -558.5061152359233,
         "z": 0.0,
         "radius": 9.0,
         "fixed": false
@@ -5227,8 +5261,8 @@
               "target_start_date": "2026-06-15",
               "target_end_date": "2026-06-21",
               "size_in_pool": 2,
-              "cluster_total": 7,
-              "share": 0.29,
+              "cluster_total": 6,
+              "share": 0.33,
               "trend": "accelerating",
               "companion_predictions": [
                 {
@@ -5280,14 +5314,6 @@
                   "target_end_date": null
                 },
                 {
-                  "prediction_id": "prediction.6ba7ca6e01ab313e",
-                  "title": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
-                  "short_label": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
-                  "pred_date": "2026-06-28",
-                  "target_start_date": "2027-01-01",
-                  "target_end_date": "2027-03-31"
-                },
-                {
                   "prediction_id": "prediction.7b31cbaef01800e6",
                   "title": "Security vendor ships ML deserialization scanning as a named tier by Q1 2027",
                   "short_label": "Security vendor ships ML deserialization scanning as a named tier by Q1 2027",
@@ -5314,7 +5340,7 @@
               ]
             }
           ],
-          "cluster_narrative": "This prediction is supported by a single cluster: 2 of 7 items in 'Inference Server Supply Chain' (2026-25); the cluster is accelerating. Concentrated support — if this thread breaks, the prediction loses its base.",
+          "cluster_narrative": "This prediction is supported by a single cluster: 2 of 6 items in 'Inference Server Supply Chain' (2026-25); the cluster is accelerating. Concentrated support — if this thread breaks, the prediction loses its base.",
           "downstream": [],
           "upstream": [],
           "chain_narrative": "",
@@ -5490,8 +5516,8 @@
         "default_visible": false
       },
       "layout": {
-        "x": 154.2919391022304,
-        "y": -562.6159738064049,
+        "x": 120.00000000000004,
+        "y": -574.6152422706632,
         "z": 0.0,
         "radius": 9.0,
         "fixed": false
@@ -5741,8 +5767,8 @@
               "target_start_date": "2026-06-15",
               "target_end_date": "2026-06-21",
               "size_in_pool": 3,
-              "cluster_total": 9,
-              "share": 0.33,
+              "cluster_total": 11,
+              "share": 0.27,
               "trend": "accelerating",
               "companion_predictions": [
                 {
@@ -5768,6 +5794,14 @@
                   "pred_date": "2026-06-03",
                   "target_start_date": null,
                   "target_end_date": null
+                },
+                {
+                  "prediction_id": "prediction.3a5fa9315f58608d",
+                  "title": "Agentic coding platforms ship token budgets and caps as default by Q2 2027",
+                  "short_label": "Agentic coding platforms ship token budgets and caps as default by Q2 2027",
+                  "pred_date": "2026-06-25",
+                  "target_start_date": "2027-04-01",
+                  "target_end_date": "2027-06-30"
                 },
                 {
                   "prediction_id": "prediction.3abbcb892f7919d6",
@@ -5802,6 +5836,14 @@
                   "target_end_date": null
                 },
                 {
+                  "prediction_id": "prediction.6ba7ca6e01ab313e",
+                  "title": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
+                  "short_label": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
+                  "pred_date": "2026-06-28",
+                  "target_start_date": "2027-01-01",
+                  "target_end_date": "2027-03-31"
+                },
+                {
                   "prediction_id": "prediction.c2b0ba20d4477cec",
                   "title": null,
                   "short_label": "AWS Continuum's sandbox exploit-validati",
@@ -5812,7 +5854,7 @@
               ]
             }
           ],
-          "cluster_narrative": "This prediction is supported by a single cluster: 3 of 9 items in 'AI-Revenue Disclosure Rewrite' (2026-25); the cluster is accelerating. Concentrated support — if this thread breaks, the prediction loses its base.",
+          "cluster_narrative": "This prediction is supported by a single cluster: 3 of 11 items in 'AI-Revenue Disclosure Rewrite' (2026-25); the cluster is accelerating. Concentrated support — if this thread breaks, the prediction loses its base.",
           "downstream": [],
           "upstream": [],
           "chain_narrative": "",
@@ -5879,6 +5921,520 @@
             "evidence_id": "evidence.4eb6c255f77fc7b7",
             "title": "GitHub - unslothai/unsloth release v0.1.471-beta (June 18 2026)",
             "url": "https://github.com/unslothai/unsloth/releases/tag/v0.1.471-beta",
+            "source_name": null,
+            "source_type": "news",
+            "support_direction": "support",
+            "relatedness_score": 1.0,
+            "evidence_strength": 1.0,
+            "validation_date": "2026-06-28",
+            "evidence_recency_type": "new"
+          }
+        ]
+      }
+    },
+    {
+      "id": "prediction.6ba7ca6e01ab313e",
+      "type": "prediction",
+      "scope_id": "business",
+      "label": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
+      "short_label": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
+      "title": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
+      "description": "At least one leading coding-agent platform (the category OWASP names as prompt injection's epicenter, with Claude Code, AutoGPT, Dify and Roo-Code among the most-advisoried repositories) will ship a default-on capability gate that enforces a 'Rule of Two'-style constraint: an agent run may combine at most two of private-data access, exposure to untrusted content, and external communication before it must pause for explicit human approval. The move follows OWASP's reframing of prompt injection as a structural, unpatchable property of agentic systems rather than a patchable CVE, which leaves vendors to mitigate by capping the lethal trifecta at the orchestration layer instead of filtering the token stream. Because the architectural argument denies any reliable way to separate command tokens from data tokens, the only durable defense is to deny the dangerous combination by default, and competitive pressure plus advisory volume will push the largest platforms there first.",
+      "labels": {
+        "label": {
+          "en": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
+          "ja": "コーディングエージェント基盤、2027年第1四半期までに三要素の権限ゲートを既定で搭載",
+          "es": "Una plataforma de agentes de código incorpora un control de capacidades de tríada como opción predeterminada para el primer trimestre de 2027",
+          "fil": "Magsa-ship ang isang coding-agent platform ng trifecta capability gate bilang default pagsapit ng Q1 2027"
+        },
+        "short_label": {
+          "en": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
+          "ja": "コーディングエージェント基盤、2027年第1四半期までに三要素の権限ゲートを既定で搭載",
+          "es": "Una plataforma de agentes de código incorpora un control de capacidades de tríada como opción predeterminada para el primer trimestre de 2027",
+          "fil": "Magsa-ship ang isang coding-agent platform ng trifecta capability gate bilang default pagsapit ng Q1 2027"
+        },
+        "title": {
+          "en": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
+          "ja": "コーディングエージェント基盤、2027年第1四半期までに三要素の権限ゲートを既定で搭載",
+          "es": "Una plataforma de agentes de código incorpora un control de capacidades de tríada como opción predeterminada para el primer trimestre de 2027",
+          "fil": "Magsa-ship ang isang coding-agent platform ng trifecta capability gate bilang default pagsapit ng Q1 2027"
+        },
+        "description": {
+          "en": "At least one leading coding-agent platform (the category OWASP names as prompt injection's epicenter, with Claude Code, AutoGPT, Dify and Roo-Code among the most-advisoried repositories) will ship a default-on capability gate that enforces a 'Rule of Two'-style constraint: an agent run may combine at most two of private-data access, exposure to untrusted content, and external communication before it must pause for explicit human approval. The move follows OWASP's reframing of prompt injection as a structural, unpatchable property of agentic systems rather than a patchable CVE, which leaves vendors to mitigate by capping the lethal trifecta at the orchestration layer instead of filtering the token stream. Because the architectural argument denies any reliable way to separate command tokens from data tokens, the only durable defense is to deny the dangerous combination by default, and competitive pressure plus advisory volume will push the largest platforms there first.",
+          "ja": "少なくとも1つの主要なコーディングエージェント基盤（OWASPがプロンプトインジェクションの震源地として挙げる分野で、Claude Code、AutoGPT、Dify、Roo-Codeが最も多く勧告を受けたリポジトリに含まれる）が、「ルール・オブ・トゥー」型の制約を強制する既定オンの権限ゲートを搭載する。これは、エージェントの実行が、プライベートデータへのアクセス・信頼できないコンテンツへの露出・外部通信のうち最大2つまでしか組み合わせられず、3つ目を加える前には明示的な人間の承認を求めて一時停止しなければならない、というものだ。この動きは、OWASPがプロンプトインジェクションをパッチ可能なCVEではなくエージェント型システムの構造的で修正不能な性質として捉え直したことを受けたものだ。その結果、ベンダーはトークン列をフィルタリングするのではなく、オーケストレーション層でこの致命的な三要素の組み合わせに上限を設けて緩和するしかなくなる。命令トークンとデータトークンを確実に分離する手段がないという構造的な議論ゆえに、唯一の持続的な防御は危険な組み合わせを既定で拒否することであり、競争圧力と勧告の多さが最大手の基盤をまずそこへ向かわせる。",
+          "es": "Al menos una plataforma líder de agentes de código (la categoría que OWASP señala como epicentro de la inyección de prompts, con Claude Code, AutoGPT, Dify y Roo-Code entre los repositorios con más advertencias) incorporará un control de capacidades activado por defecto que impone una restricción de estilo 'Regla de Dos': una ejecución de agente puede combinar como máximo dos de tres propiedades — acceso a datos privados, exposición a contenido no confiable y comunicación externa — antes de tener que detenerse para una aprobación humana explícita. La medida sigue al replanteamiento de OWASP de la inyección de prompts como una propiedad estructural y no parcheable de los sistemas agénticos, más que como un CVE parcheable, lo que obliga a los fabricantes a mitigar limitando la tríada letal en la capa de orquestación en lugar de filtrar el flujo de tokens. Como el argumento arquitectónico niega cualquier forma fiable de separar los tokens de comando de los tokens de datos, la única defensa duradera es denegar por defecto la combinación peligrosa, y la presión competitiva más el volumen de advertencias empujarán primero a las plataformas más grandes hacia esa solución.",
+          "fil": "Hindi bababa sa isang nangungunang coding-agent platform (ang kategoryang tinawag ng OWASP na sentro ng prompt injection, kung saan kabilang ang Claude Code, AutoGPT, Dify at Roo-Code sa pinakamaraming-advisory na repositories) ang magsa-ship ng isang default-on na capability gate na nagpapatupad ng 'Rule of Two'-style na hadlang: maaaring pagsamahin ng isang agent run ang hanggang dalawa lamang sa private-data access, exposure sa untrusted content, at external communication bago ito kailangang huminto para sa tahasang pag-apruba ng tao. Sumusunod ang hakbang na ito sa muling pagbabalangkas ng OWASP sa prompt injection bilang isang structural, hindi-mapa-patch na katangian ng agentic systems sa halip na isang mapa-patch na CVE, na nag-iiwan sa mga vendor na magmitiga sa pamamagitan ng paglilimita sa lethal trifecta sa orchestration layer sa halip na i-filter ang token stream. Dahil itinatanggi ng argumentong arkitektural ang anumang maaasahang paraan para ihiwalay ang command tokens mula sa data tokens, ang tanging matibay na depensa ay tanggihan ang mapanganib na kombinasyon bilang default, at itutulak ng presyon ng kompetisyon kasama ng dami ng advisory ang pinakamalalaking platform doon una."
+        },
+        "summary": {
+          "en": "At least one leading coding-agent platform (the category OWASP names as prompt injection's epicenter, with Claude Code, AutoGPT, Dify and Roo-Code among the most-advisoried repositories) will ship a default-on capability gate that enforces a 'Rule of Two'-style constraint: an agent run may combine at most two of private-data access, exposure to untrusted content, and external communication before it must pause for explicit human approval. The move follows OWASP's reframing of prompt injection as a structural, unpatchable property of agentic systems rather than a patchable CVE, which leaves vendors to mitigate by capping the lethal trifecta at the orchestration layer instead of filtering the token stream. Because the architectural argument denies any reliable way to separate command tokens from data tokens, the only durable defense is to deny the dangerous combination by default, and competitive pressure plus advisory volume will push the largest platforms there first.",
+          "ja": "少なくとも1つの主要なコーディングエージェント基盤（OWASPがプロンプトインジェクションの震源地として挙げる分野で、Claude Code、AutoGPT、Dify、Roo-Codeが最も多く勧告を受けたリポジトリに含まれる）が、「ルール・オブ・トゥー」型の制約を強制する既定オンの権限ゲートを搭載する。これは、エージェントの実行が、プライベートデータへのアクセス・信頼できないコンテンツへの露出・外部通信のうち最大2つまでしか組み合わせられず、3つ目を加える前には明示的な人間の承認を求めて一時停止しなければならない、というものだ。この動きは、OWASPがプロンプトインジェクションをパッチ可能なCVEではなくエージェント型システムの構造的で修正不能な性質として捉え直したことを受けたものだ。その結果、ベンダーはトークン列をフィルタリングするのではなく、オーケストレーション層でこの致命的な三要素の組み合わせに上限を設けて緩和するしかなくなる。命令トークンとデータトークンを確実に分離する手段がないという構造的な議論ゆえに、唯一の持続的な防御は危険な組み合わせを既定で拒否することであり、競争圧力と勧告の多さが最大手の基盤をまずそこへ向かわせる。",
+          "es": "Al menos una plataforma líder de agentes de código (la categoría que OWASP señala como epicentro de la inyección de prompts, con Claude Code, AutoGPT, Dify y Roo-Code entre los repositorios con más advertencias) incorporará un control de capacidades activado por defecto que impone una restricción de estilo 'Regla de Dos': una ejecución de agente puede combinar como máximo dos de tres propiedades — acceso a datos privados, exposición a contenido no confiable y comunicación externa — antes de tener que detenerse para una aprobación humana explícita. La medida sigue al replanteamiento de OWASP de la inyección de prompts como una propiedad estructural y no parcheable de los sistemas agénticos, más que como un CVE parcheable, lo que obliga a los fabricantes a mitigar limitando la tríada letal en la capa de orquestación en lugar de filtrar el flujo de tokens. Como el argumento arquitectónico niega cualquier forma fiable de separar los tokens de comando de los tokens de datos, la única defensa duradera es denegar por defecto la combinación peligrosa, y la presión competitiva más el volumen de advertencias empujarán primero a las plataformas más grandes hacia esa solución.",
+          "fil": "Hindi bababa sa isang nangungunang coding-agent platform (ang kategoryang tinawag ng OWASP na sentro ng prompt injection, kung saan kabilang ang Claude Code, AutoGPT, Dify at Roo-Code sa pinakamaraming-advisory na repositories) ang magsa-ship ng isang default-on na capability gate na nagpapatupad ng 'Rule of Two'-style na hadlang: maaaring pagsamahin ng isang agent run ang hanggang dalawa lamang sa private-data access, exposure sa untrusted content, at external communication bago ito kailangang huminto para sa tahasang pag-apruba ng tao. Sumusunod ang hakbang na ito sa muling pagbabalangkas ng OWASP sa prompt injection bilang isang structural, hindi-mapa-patch na katangian ng agentic systems sa halip na isang mapa-patch na CVE, na nag-iiwan sa mga vendor na magmitiga sa pamamagitan ng paglilimita sa lethal trifecta sa orchestration layer sa halip na i-filter ang token stream. Dahil itinatanggi ng argumentong arkitektural ang anumang maaasahang paraan para ihiwalay ang command tokens mula sa data tokens, ang tanging matibay na depensa ay tanggihan ang mapanganib na kombinasyon bilang default, at itutulak ng presyon ng kompetisyon kasama ng dami ng advisory ang pinakamalalaking platform doon una."
+        }
+      },
+      "category_id": "business.capital-supply-chain",
+      "theme_id": "business.ai_revenue_disclosure",
+      "subtheme_id": null,
+      "prediction_id": "prediction.6ba7ca6e01ab313e",
+      "parent_ids": [
+        "business.ai_revenue_disclosure",
+        "business.compute_capex_strategy",
+        "business.developer_platformization",
+        "business.inference_server_supply_chain"
+      ],
+      "child_ids": [],
+      "metrics_by_window": {
+        "7d": {
+          "attention_score": 1.0,
+          "realization_score": 1.0,
+          "contradiction_score": 0.0,
+          "grass_level": 4,
+          "streak_days": 0,
+          "new_signal": 1.0,
+          "continuing_signal": 0.0,
+          "status": "supported",
+          "grass_daily": [
+            {
+              "date": "2026-06-28",
+              "grass_level": 4,
+              "attention_score": 1.0
+            }
+          ]
+        },
+        "30d": {
+          "attention_score": 1.0,
+          "realization_score": 1.0,
+          "contradiction_score": 0.0,
+          "grass_level": 4,
+          "streak_days": 0,
+          "new_signal": 1.0,
+          "continuing_signal": 0.0,
+          "status": "supported",
+          "grass_daily": [
+            {
+              "date": "2026-06-28",
+              "grass_level": 4,
+              "attention_score": 1.0
+            }
+          ]
+        },
+        "90d": {
+          "attention_score": 1.0,
+          "realization_score": 1.0,
+          "contradiction_score": 0.0,
+          "grass_level": 4,
+          "streak_days": 0,
+          "new_signal": 1.0,
+          "continuing_signal": 0.0,
+          "status": "supported",
+          "grass_daily": [
+            {
+              "date": "2026-06-28",
+              "grass_level": 4,
+              "attention_score": 1.0
+            }
+          ]
+        }
+      },
+      "visibility": {
+        "min_zoom": 2.0,
+        "max_zoom": null,
+        "default_visible": false
+      },
+      "layout": {
+        "x": 158.89087296526014,
+        "y": -558.5061152359233,
+        "z": 0.0,
+        "radius": 9.0,
+        "fixed": false
+      },
+      "detail": {
+        "title": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
+        "title_clean": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
+        "reasoning": {
+          "because": "OWASP 2.01 maps prompt injection to 6 of 10 agentic categories and names coding agents the epicenter",
+          "given": "Injection is unpatchable, so the only durable mitigation caps the lethal trifecta at orchestration",
+          "so_that": "A coding-agent platform makes a Rule-of-Two capability gate default-on, pausing for approval on the third property",
+          "landing": "by Q1 2027; >=1 leading coding-agent platform ships a default-on trifecta gate",
+          "plain_language": "AI coding helpers can be tricked by hidden instructions, so the big tools will start blocking the risky combo unless a human says ok."
+        },
+        "reasoning_locales": {
+          "because": {
+            "en": "OWASP 2.01 maps prompt injection to 6 of 10 agentic categories and names coding agents the epicenter",
+            "ja": "OWASP 2.01はプロンプトインジェクションをエージェント型10分類のうち6つに対応づけ、コーディングエージェントを震源地と名指しした",
+            "es": "OWASP 2.01 vincula la inyección de prompts con 6 de 10 categorías agénticas y señala a los agentes de código como el epicentro",
+            "fil": "Ini-map ng OWASP 2.01 ang prompt injection sa 6 ng 10 agentic categories at tinawag na sentro ang coding agents"
+          },
+          "given": {
+            "en": "Injection is unpatchable, so the only durable mitigation caps the lethal trifecta at orchestration",
+            "ja": "インジェクションは修正不能であり、唯一の持続的な緩和策はオーケストレーション層で致命的な三要素に上限を設けることだ",
+            "es": "La inyección no es parcheable, por lo que la única mitigación duradera limita la tríada letal en la orquestación",
+            "fil": "Hindi-mapa-patch ang injection, kaya ang tanging matibay na mitigasyon ay paglimita sa lethal trifecta sa orchestration"
+          },
+          "so_that": {
+            "en": "A coding-agent platform makes a Rule-of-Two capability gate default-on, pausing for approval on the third property",
+            "ja": "あるコーディングエージェント基盤がルール・オブ・トゥーの権限ゲートを既定オンにし、3つ目の性質では承認のため一時停止する",
+            "es": "Una plataforma de agentes de código activa por defecto un control de capacidades de Regla de Dos, deteniéndose para aprobación ante la tercera propiedad",
+            "fil": "Gagawing default-on ng isang coding-agent platform ang isang Rule-of-Two capability gate, na huminto para sa pag-apruba sa ikatlong katangian"
+          },
+          "landing": {
+            "en": "by Q1 2027; >=1 leading coding-agent platform ships a default-on trifecta gate",
+            "ja": "2027年第1四半期までに、1社以上の主要コーディングエージェント基盤が既定オンの三要素ゲートを搭載する",
+            "es": "para el primer trimestre de 2027; >=1 plataforma líder de agentes de código incorpora un control de tríada activado por defecto",
+            "fil": "pagsapit ng Q1 2027; >=1 nangungunang coding-agent platform ang magsa-ship ng default-on trifecta gate"
+          },
+          "plain_language": {
+            "en": "AI coding helpers can be tricked by hidden instructions, so the big tools will start blocking the risky combo unless a human says ok.",
+            "ja": "AIのコーディング補助は隠された指示にだまされうるため、大手ツールは人間がOKと言わない限り危険な組み合わせを止めるようになる。",
+            "es": "A los asistentes de IA para programar se les puede engañar con instrucciones ocultas, así que las grandes herramientas empezarán a bloquear la combinación arriesgada salvo que una persona dé el visto bueno.",
+            "fil": "Maaaring malinlang ng nakatagong instruksyon ang AI coding helpers, kaya sisimulan ng malalaking tool na harangan ang mapanganib na kombinasyon maliban kung papayag ang isang tao."
+          }
+        },
+        "title_locales": {
+          "en": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
+          "ja": "コーディングエージェント基盤、2027年第1四半期までに三要素の権限ゲートを既定で搭載",
+          "es": "Una plataforma de agentes de código incorpora un control de capacidades de tríada como opción predeterminada para el primer trimestre de 2027",
+          "fil": "Magsa-ship ang isang coding-agent platform ng trifecta capability gate bilang default pagsapit ng Q1 2027"
+        },
+        "summary_short": "OWASP now calls prompt injection a structural, unpatchable trait of agentic AI and names coding agents the epicenter. With no way to separate commands from data, vendors must cap the lethal trifecta at the orchestration layer. Expect a coding-agent platform to ship a default-on Rule-of-Two gate.",
+        "summary_short_locales": {
+          "en": "OWASP now calls prompt injection a structural, unpatchable trait of agentic AI and names coding agents the epicenter. With no way to separate commands from data, vendors must cap the lethal trifecta at the orchestration layer. Expect a coding-agent platform to ship a default-on Rule-of-Two gate.",
+          "ja": "OWASPは今やプロンプトインジェクションをエージェント型AIの構造的で修正不能な性質と呼び、コーディングエージェントを震源地と名指しする。命令とデータを分離する手段がない以上、ベンダーはオーケストレーション層で致命的な三要素に上限を設けるしかない。コーディングエージェント基盤が既定オンのルール・オブ・トゥーのゲートを搭載すると見込まれる。",
+          "es": "OWASP ahora califica la inyección de prompts como un rasgo estructural y no parcheable de la IA agéntica y señala a los agentes de código como el epicentro. Sin forma de separar comandos de datos, los fabricantes deben limitar la tríada letal en la capa de orquestación. Se espera que una plataforma de agentes de código incorpore un control de Regla de Dos activado por defecto.",
+          "fil": "Tinatawag na ngayon ng OWASP ang prompt injection na isang structural, hindi-mapa-patch na katangian ng agentic AI at tinawag na sentro ang coding agents. Dahil walang paraan para ihiwalay ang commands sa data, kailangang limitahan ng mga vendor ang lethal trifecta sa orchestration layer. Asahan na magsa-ship ang isang coding-agent platform ng default-on Rule-of-Two gate."
+        },
+        "bridges": [
+          {
+            "date": "2026-06-28",
+            "text": "OWASP's June 28 reframing makes prompt injection an unpatchable design constraint mapping to six of ten agentic categories, and names coding agents the epicenter with Claude Code, n8n and AutoGPT topping the advisory tally. That forces the conclusion the prediction rests on: defenses must be orchestration-layer capability budgets, exactly the Rule-of-Two gate the thesis expects a platform to ship default-on.",
+            "text_locales": {
+              "en": "OWASP's June 28 reframing makes prompt injection an unpatchable design constraint mapping to six of ten agentic categories, and names coding agents the epicenter with Claude Code, n8n and AutoGPT topping the advisory tally. That forces the conclusion the prediction rests on: defenses must be orchestration-layer capability budgets, exactly the Rule-of-Two gate the thesis expects a platform to ship default-on.",
+              "ja": "OWASPの6月28日の捉え直しは、プロンプトインジェクションをパッチ不能な設計上の制約とし、10あるエージェント型カテゴリのうち6つに対応づける。さらにコーディングエージェントを震源地と名指しし、勧告件数ではClaude Code、n8n、AutoGPTが上位を占める。これは予測が立脚する結論を強いる。すなわち、防御はオーケストレーション層の機能予算でなければならず、それはまさに、プラットフォームがデフォルト有効で出荷すると本仮説が見込むRule-of-Twoゲートそのものだ。",
+              "es": "El replanteamiento de OWASP del 28 de junio convierte la inyección de prompts en una restricción de diseño imposible de parchear, asignada a seis de diez categorías agénticas, y señala a los agentes de programación como el epicentro, con Claude Code, n8n y AutoGPT encabezando el recuento de advisories. Eso fuerza la conclusión sobre la que descansa la predicción: las defensas deben ser presupuestos de capacidades en la capa de orquestación, justamente la compuerta Rule-of-Two que la tesis espera que una plataforma incorpore activada por defecto.",
+              "fil": "Ang muling pagbabalangkas ng OWASP noong June 28 ay ginagawang isang hindi-mapapatch na design constraint ang prompt injection na tumutugma sa anim sa sampung agentic na kategorya, at pinangalanan ang mga coding agent bilang sentro na ang Claude Code, n8n at AutoGPT ang nangunguna sa bilang ng advisory. Pinipilit nito ang konklusyong pinagbabatayan ng prediksyon: ang mga depensa ay dapat na capability budgets sa orchestration layer, mismong ang Rule-of-Two na gate na inaasahan ng tesis na ihahatid na default-on ng isang platform."
+            },
+            "dimension": "because",
+            "target_start_date": null,
+            "target_end_date": null
+          }
+        ],
+        "needs": [
+          {
+            "need_id": "need.71ca6443e51abfb1",
+            "actor": "agentic-AI security standards author (OWASP-aligned)",
+            "job": "Publishing and refining the guidance that reframes prompt injection as a structural, unpatchable property and maps it across agentic categories.",
+            "outcome": "Authoritative guidance naming coding agents the epicenter and prescribing trifecta-capping mitigation, giving vendors cover to ship the gate.",
+            "motivation": "Standardize a durable mitigation pattern so the ecosystem stops treating prompt injection as a patchable CVE.",
+            "actor_locales": {
+              "en": "agentic-AI security standards author (OWASP-aligned)",
+              "ja": "エージェント型AIセキュリティ標準の策定者（OWASP準拠）",
+              "es": "autor de estándares de seguridad de IA agéntica (alineado con OWASP)",
+              "fil": "may-akda ng agentic-AI security standards (OWASP-aligned)"
+            },
+            "job_locales": {
+              "en": "Publishing and refining the guidance that reframes prompt injection as a structural, unpatchable property and maps it across agentic categories.",
+              "ja": "プロンプトインジェクションを構造的で修正不能な性質として捉え直し、エージェント型の各分類にわたって対応づける指針を公開し精緻化している。",
+              "es": "Publicar y refinar la guía que replantea la inyección de prompts como una propiedad estructural y no parcheable, y la asigna a las categorías agénticas.",
+              "fil": "Naglalathala at nirerebisa ang gabay na muling nagbabalangkas sa prompt injection bilang isang structural, hindi-mapa-patch na katangian at nima-map ito sa mga agentic categories."
+            },
+            "outcome_locales": {
+              "en": "Authoritative guidance naming coding agents the epicenter and prescribing trifecta-capping mitigation, giving vendors cover to ship the gate.",
+              "ja": "コーディングエージェントを震源地と名指しし、三要素に上限を設ける緩和策を規定する権威ある指針。ベンダーがゲートを出荷する大義を与える。",
+              "es": "Una guía autorizada que señala a los agentes de código como el epicentro y prescribe la mitigación de limitar la tríada, dando a los fabricantes cobertura para incorporar el control.",
+              "fil": "Awtoritatibong gabay na tumatawag sa coding agents bilang sentro at nagrereseta ng trifecta-capping na mitigasyon, na nagbibigay sa mga vendor ng saligan para mag-ship ng gate."
+            },
+            "motivation_locales": {
+              "en": "Standardize a durable mitigation pattern so the ecosystem stops treating prompt injection as a patchable CVE.",
+              "ja": "持続的な緩和パターンを標準化し、エコシステムがプロンプトインジェクションをパッチ可能なCVEとして扱うのをやめさせる。",
+              "es": "Estandarizar un patrón de mitigación duradero para que el ecosistema deje de tratar la inyección de prompts como un CVE parcheable.",
+              "fil": "Istandardisahin ang isang matibay na pattern ng mitigasyon para tigilan ng ecosystem ang pagtrato sa prompt injection bilang isang mapa-patch na CVE."
+            },
+            "reviewed_by_human": false,
+            "target_start_date": "2027-01-01",
+            "target_end_date": "2027-03-31",
+            "task": {
+              "task_id": "need_task.cedfde5028b372f2",
+              "who": "OWASP agentic-security working group / standards authors",
+              "what": "Publish guidance reframing prompt injection as structural and unpatchable",
+              "where": "OWASP agentic-AI advisory / Top 10 framework",
+              "when": "ongoing through 2026 into Q1 2027",
+              "why": "Drive vendors toward orchestration-layer trifecta caps",
+              "how": "OWASP 2.01 agentic-category mapping",
+              "who_locales": {
+                "en": "OWASP agentic-security working group / standards authors",
+                "ja": "OWASPのエージェント型セキュリティ作業部会／標準策定者",
+                "es": "grupo de trabajo de seguridad agéntica de OWASP / autores de estándares",
+                "fil": "OWASP agentic-security working group / standards authors"
+              },
+              "what_locales": {
+                "en": "Publish guidance reframing prompt injection as structural and unpatchable",
+                "ja": "プロンプトインジェクションを構造的で修正不能なものとして捉え直す指針を公開する",
+                "es": "Publicar guía que replantea la inyección de prompts como estructural y no parcheable",
+                "fil": "Maglathala ng gabay na muling nagbabalangkas sa prompt injection bilang structural at hindi-mapa-patch"
+              },
+              "where_locales": {
+                "en": "OWASP agentic-AI advisory / Top 10 framework",
+                "ja": "OWASPのエージェント型AI勧告／Top 10フレームワーク",
+                "es": "advertencia de IA agéntica de OWASP / marco Top 10",
+                "fil": "OWASP agentic-AI advisory / Top 10 framework"
+              },
+              "when_locales": {
+                "en": "ongoing through 2026 into Q1 2027",
+                "ja": "2026年を通じて2027年第1四半期まで継続",
+                "es": "continuo a lo largo de 2026 hasta el primer trimestre de 2027",
+                "fil": "patuloy hanggang 2026 papasok sa Q1 2027"
+              },
+              "why_locales": {
+                "en": "Drive vendors toward orchestration-layer trifecta caps",
+                "ja": "ベンダーをオーケストレーション層での三要素の上限設定へ向かわせるため",
+                "es": "Impulsar a los fabricantes hacia límites de la tríada en la capa de orquestación",
+                "fil": "Itulak ang mga vendor patungo sa orchestration-layer trifecta caps"
+              },
+              "how_locales": {
+                "en": "OWASP 2.01 agentic-category mapping",
+                "ja": "OWASP 2.01のエージェント型分類の対応づけ",
+                "es": "Mapeo de categorías agénticas de OWASP 2.01",
+                "fil": "OWASP 2.01 agentic-category mapping"
+              },
+              "status": "open",
+              "target_start_date": "2027-01-01",
+              "target_end_date": "2027-03-31"
+            }
+          },
+          {
+            "need_id": "need.262db198b3d721da",
+            "actor": "coding-agent platform security/orchestration product lead",
+            "job": "Designing and shipping a default-on capability gate that caps the lethal trifecta at the orchestration layer rather than filtering the token stream.",
+            "outcome": "A shipped, default-on Rule-of-Two gate that pauses an agent run for human approval before combining a third dangerous property.",
+            "motivation": "Prompt injection is unpatchable, so capping the trifecta is the only durable defense; advisory volume and competitive pressure force the largest platforms to move first.",
+            "actor_locales": {
+              "en": "coding-agent platform security/orchestration product lead",
+              "ja": "コーディングエージェント基盤のセキュリティ／オーケストレーション製品責任者",
+              "es": "responsable de producto de seguridad/orquestación de la plataforma de agentes de código",
+              "fil": "security/orchestration product lead ng coding-agent platform"
+            },
+            "job_locales": {
+              "en": "Designing and shipping a default-on capability gate that caps the lethal trifecta at the orchestration layer rather than filtering the token stream.",
+              "ja": "トークン列をフィルタリングするのではなく、オーケストレーション層で致命的な三要素に上限を設ける既定オンの権限ゲートを設計し出荷している。",
+              "es": "Diseñar e incorporar un control de capacidades activado por defecto que limite la tríada letal en la capa de orquestación en lugar de filtrar el flujo de tokens.",
+              "fil": "Nagdidisenyo at nagsa-ship ng isang default-on capability gate na naglilimita sa lethal trifecta sa orchestration layer sa halip na i-filter ang token stream."
+            },
+            "outcome_locales": {
+              "en": "A shipped, default-on Rule-of-Two gate that pauses an agent run for human approval before combining a third dangerous property.",
+              "ja": "3つ目の危険な性質を組み合わせる前に、エージェントの実行を人間の承認のため一時停止させる、出荷済みで既定オンのルール・オブ・トゥーのゲート。",
+              "es": "Un control de Regla de Dos activado por defecto, ya incorporado, que detiene una ejecución de agente para aprobación humana antes de combinar una tercera propiedad peligrosa.",
+              "fil": "Isang nai-ship, default-on na Rule-of-Two gate na huminto sa isang agent run para sa pag-apruba ng tao bago pagsamahin ang ikatlong mapanganib na katangian."
+            },
+            "motivation_locales": {
+              "en": "Prompt injection is unpatchable, so capping the trifecta is the only durable defense; advisory volume and competitive pressure force the largest platforms to move first.",
+              "ja": "プロンプトインジェクションは修正不能であり、三要素に上限を設けることが唯一の持続的な防御だ。勧告の多さと競争圧力が最大手の基盤をまず動かす。",
+              "es": "La inyección de prompts no es parcheable, así que limitar la tríada es la única defensa duradera; el volumen de advertencias y la presión competitiva obligan a las plataformas más grandes a moverse primero.",
+              "fil": "Hindi-mapa-patch ang prompt injection, kaya ang paglilimita sa trifecta ang tanging matibay na depensa; pinipilit ng dami ng advisory at presyon ng kompetisyon ang pinakamalalaking platform na kumilos muna."
+            },
+            "reviewed_by_human": false,
+            "target_start_date": "2027-01-01",
+            "target_end_date": "2027-03-31",
+            "task": {
+              "task_id": "need_task.58272020b02c4782",
+              "who": "agent security / orchestration engineering team",
+              "what": "Implement default-on Rule-of-Two capability gate with human-approval pause",
+              "where": "agent orchestration layer / permission enforcement runtime",
+              "when": "H2 2026 through Q1 2027",
+              "why": "Deny the dangerous combination since injection is unpatchable",
+              "how": "Rule-of-Two capability gating at orchestration layer",
+              "who_locales": {
+                "en": "agent security / orchestration engineering team",
+                "ja": "エージェントセキュリティ／オーケストレーションエンジニアリングチーム",
+                "es": "equipo de ingeniería de seguridad / orquestación de agentes",
+                "fil": "agent security / orchestration engineering team"
+              },
+              "what_locales": {
+                "en": "Implement default-on Rule-of-Two capability gate with human-approval pause",
+                "ja": "人間の承認による一時停止を備えた既定オンのルール・オブ・トゥーの権限ゲートを実装する",
+                "es": "Implementar un control de capacidades de Regla de Dos activado por defecto con pausa de aprobación humana",
+                "fil": "Ipatupad ang default-on Rule-of-Two capability gate na may human-approval na pause"
+              },
+              "where_locales": {
+                "en": "agent orchestration layer / permission enforcement runtime",
+                "ja": "エージェントオーケストレーション層／権限強制ランタイム",
+                "es": "capa de orquestación de agentes / runtime de aplicación de permisos",
+                "fil": "agent orchestration layer / permission enforcement runtime"
+              },
+              "when_locales": {
+                "en": "H2 2026 through Q1 2027",
+                "ja": "2026年下半期から2027年第1四半期まで",
+                "es": "segunda mitad de 2026 hasta el primer trimestre de 2027",
+                "fil": "H2 2026 hanggang Q1 2027"
+              },
+              "why_locales": {
+                "en": "Deny the dangerous combination since injection is unpatchable",
+                "ja": "インジェクションが修正不能である以上、危険な組み合わせを拒否するため",
+                "es": "Denegar la combinación peligrosa, ya que la inyección no es parcheable",
+                "fil": "Tanggihan ang mapanganib na kombinasyon dahil hindi-mapa-patch ang injection"
+              },
+              "how_locales": {
+                "en": "Rule-of-Two capability gating at orchestration layer",
+                "ja": "オーケストレーション層でのルール・オブ・トゥーの権限ゲート",
+                "es": "Control de capacidades de Regla de Dos en la capa de orquestación",
+                "fil": "Rule-of-Two capability gating sa orchestration layer"
+              },
+              "status": "open",
+              "target_start_date": "2027-01-01",
+              "target_end_date": "2027-03-31"
+            }
+          }
+        ],
+        "readings": {
+          "clusters": [
+            {
+              "theme_id": "business.ai_revenue_disclosure",
+              "theme_label": "AI-Revenue Disclosure Rewrite",
+              "week_bucket": "2026-25",
+              "target_start_date": "2026-06-15",
+              "target_end_date": "2026-06-21",
+              "size_in_pool": 2,
+              "cluster_total": 11,
+              "share": 0.18,
+              "trend": "accelerating",
+              "companion_predictions": [
+                {
+                  "prediction_id": "prediction.0c569408626bbdd3",
+                  "title": "Sub-gigabyte on-device LLM gains same-week Unsloth tuning support by Q3 2026",
+                  "short_label": "Sub-gigabyte on-device LLM gains same-week Unsloth tuning support by Q3 2026",
+                  "pred_date": "2026-06-28",
+                  "target_start_date": "2026-07-01",
+                  "target_end_date": "2026-09-30"
+                },
+                {
+                  "prediction_id": "prediction.1d6d876dda44ddca",
+                  "title": null,
+                  "short_label": "\"Agent-in-the-Loop Secret Exfiltration\" ",
+                  "pred_date": "2026-04-20",
+                  "target_start_date": null,
+                  "target_end_date": null
+                },
+                {
+                  "prediction_id": "prediction.225d77f109a86780",
+                  "title": "Inference-ASIC cohort gains a fourth named buyer-designed chip by H1 2027",
+                  "short_label": "Inference-ASIC cohort gains a fourth named buyer-designed chip by H1 2027",
+                  "pred_date": "2026-06-25",
+                  "target_start_date": "2027-01-01",
+                  "target_end_date": "2027-06-30"
+                },
+                {
+                  "prediction_id": "prediction.33fd149797573e02",
+                  "title": null,
+                  "short_label": "Local fine-tune-to-agent stack ships as ",
+                  "pred_date": "2026-06-03",
+                  "target_start_date": null,
+                  "target_end_date": null
+                },
+                {
+                  "prediction_id": "prediction.3a5fa9315f58608d",
+                  "title": "Agentic coding platforms ship token budgets and caps as default by Q2 2027",
+                  "short_label": "Agentic coding platforms ship token budgets and caps as default by Q2 2027",
+                  "pred_date": "2026-06-25",
+                  "target_start_date": "2027-04-01",
+                  "target_end_date": "2027-06-30"
+                },
+                {
+                  "prediction_id": "prediction.3abbcb892f7919d6",
+                  "title": "Frontier-class open-weight LLM runs single-node under 256GB by Q4 2026",
+                  "short_label": "Frontier-class open-weight LLM runs single-node under 256GB by Q4 2026",
+                  "pred_date": "2026-06-23",
+                  "target_start_date": "2026-10-01",
+                  "target_end_date": "2026-12-31"
+                },
+                {
+                  "prediction_id": "prediction.4814a487eb010b3e",
+                  "title": null,
+                  "short_label": "DiffusionGemma seeds an open-weight text",
+                  "pred_date": "2026-06-14",
+                  "target_start_date": null,
+                  "target_end_date": null
+                },
+                {
+                  "prediction_id": "prediction.568eecc474844ffb",
+                  "title": "General-purpose mobile cobots cross 100K production-operation hours by H1 2027",
+                  "short_label": "General-purpose mobile cobots cross 100K production-operation hours by H1 2027",
+                  "pred_date": "2026-06-24",
+                  "target_start_date": "2027-01-01",
+                  "target_end_date": "2027-06-30"
+                },
+                {
+                  "prediction_id": "prediction.68471e3864b2aa7e",
+                  "title": null,
+                  "short_label": "Corsair-class inference silicon books a ",
+                  "pred_date": "2026-06-17",
+                  "target_start_date": null,
+                  "target_end_date": null
+                },
+                {
+                  "prediction_id": "prediction.c2b0ba20d4477cec",
+                  "title": null,
+                  "short_label": "AWS Continuum's sandbox exploit-validati",
+                  "pred_date": "2026-06-21",
+                  "target_start_date": null,
+                  "target_end_date": null
+                }
+              ]
+            }
+          ],
+          "cluster_narrative": "This prediction is supported by a single cluster: 2 of 11 items in 'AI-Revenue Disclosure Rewrite' (2026-25); the cluster is accelerating. Concentrated support — if this thread breaks, the prediction loses its base.",
+          "downstream": [],
+          "upstream": [],
+          "chain_narrative": "",
+          "relations": [],
+          "relation_narrative": ""
+        },
+        "subtitle": "Prediction · Business",
+        "description": "At least one leading coding-agent platform (the category OWASP names as prompt injection's epicenter, with Claude Code, AutoGPT, Dify and Roo-Code among the most-advisoried repositories) will ship a default-on capability gate that enforces a 'Rule of Two'-style constraint: an agent run may combine at most two of private-data access, exposure to untrusted content, and external communication before it must pause for explicit human approval. The move follows OWASP's reframing of prompt injection as a structural, unpatchable property of agentic systems rather than a patchable CVE, which leaves vendors to mitigate by capping the lethal trifecta at the orchestration layer instead of filtering the token stream. Because the architectural argument denies any reliable way to separate command tokens from data tokens, the only durable defense is to deny the dangerous combination by default, and competitive pressure plus advisory volume will push the largest platforms there first.",
+        "scope_id": "business",
+        "node_type": "prediction",
+        "prediction_summary": "At least one leading coding-agent platform (the category OWASP names as prompt injection's epicenter, with Claude Code, AutoGPT, Dify and Roo-Code among the most-advisoried repositories) will ship a default-on capability gate that enforces a 'Rule of Two'-style constraint: an agent run may combine at most two of private-data access, exposure to untrusted content, and external communication before it must pause for explicit human approval. The move follows OWASP's reframing of prompt injection as a structural, unpatchable property of agentic systems rather than a patchable CVE, which leaves vendors to mitigate by capping the lethal trifecta at the orchestration layer instead of filtering the token stream. Because the architectural argument denies any reliable way to separate command tokens from data tokens, the only durable defense is to deny the dangerous combination by default, and competitive pressure plus advisory volume will push the largest platforms there first.",
+        "prediction_summary_locales": {
+          "en": "At least one leading coding-agent platform (the category OWASP names as prompt injection's epicenter, with Claude Code, AutoGPT, Dify and Roo-Code among the most-advisoried repositories) will ship a default-on capability gate that enforces a 'Rule of Two'-style constraint: an agent run may combine at most two of private-data access, exposure to untrusted content, and external communication before it must pause for explicit human approval. The move follows OWASP's reframing of prompt injection as a structural, unpatchable property of agentic systems rather than a patchable CVE, which leaves vendors to mitigate by capping the lethal trifecta at the orchestration layer instead of filtering the token stream. Because the architectural argument denies any reliable way to separate command tokens from data tokens, the only durable defense is to deny the dangerous combination by default, and competitive pressure plus advisory volume will push the largest platforms there first.",
+          "ja": "少なくとも1つの主要なコーディングエージェント基盤（OWASPがプロンプトインジェクションの震源地として挙げる分野で、Claude Code、AutoGPT、Dify、Roo-Codeが最も多く勧告を受けたリポジトリに含まれる）が、「ルール・オブ・トゥー」型の制約を強制する既定オンの権限ゲートを搭載する。これは、エージェントの実行が、プライベートデータへのアクセス・信頼できないコンテンツへの露出・外部通信のうち最大2つまでしか組み合わせられず、3つ目を加える前には明示的な人間の承認を求めて一時停止しなければならない、というものだ。この動きは、OWASPがプロンプトインジェクションをパッチ可能なCVEではなくエージェント型システムの構造的で修正不能な性質として捉え直したことを受けたものだ。その結果、ベンダーはトークン列をフィルタリングするのではなく、オーケストレーション層でこの致命的な三要素の組み合わせに上限を設けて緩和するしかなくなる。命令トークンとデータトークンを確実に分離する手段がないという構造的な議論ゆえに、唯一の持続的な防御は危険な組み合わせを既定で拒否することであり、競争圧力と勧告の多さが最大手の基盤をまずそこへ向かわせる。",
+          "es": "Al menos una plataforma líder de agentes de código (la categoría que OWASP señala como epicentro de la inyección de prompts, con Claude Code, AutoGPT, Dify y Roo-Code entre los repositorios con más advertencias) incorporará un control de capacidades activado por defecto que impone una restricción de estilo 'Regla de Dos': una ejecución de agente puede combinar como máximo dos de tres propiedades — acceso a datos privados, exposición a contenido no confiable y comunicación externa — antes de tener que detenerse para una aprobación humana explícita. La medida sigue al replanteamiento de OWASP de la inyección de prompts como una propiedad estructural y no parcheable de los sistemas agénticos, más que como un CVE parcheable, lo que obliga a los fabricantes a mitigar limitando la tríada letal en la capa de orquestación en lugar de filtrar el flujo de tokens. Como el argumento arquitectónico niega cualquier forma fiable de separar los tokens de comando de los tokens de datos, la única defensa duradera es denegar por defecto la combinación peligrosa, y la presión competitiva más el volumen de advertencias empujarán primero a las plataformas más grandes hacia esa solución.",
+          "fil": "Hindi bababa sa isang nangungunang coding-agent platform (ang kategoryang tinawag ng OWASP na sentro ng prompt injection, kung saan kabilang ang Claude Code, AutoGPT, Dify at Roo-Code sa pinakamaraming-advisory na repositories) ang magsa-ship ng isang default-on na capability gate na nagpapatupad ng 'Rule of Two'-style na hadlang: maaaring pagsamahin ng isang agent run ang hanggang dalawa lamang sa private-data access, exposure sa untrusted content, at external communication bago ito kailangang huminto para sa tahasang pag-apruba ng tao. Sumusunod ang hakbang na ito sa muling pagbabalangkas ng OWASP sa prompt injection bilang isang structural, hindi-mapa-patch na katangian ng agentic systems sa halip na isang mapa-patch na CVE, na nag-iiwan sa mga vendor na magmitiga sa pamamagitan ng paglilimita sa lethal trifecta sa orchestration layer sa halip na i-filter ang token stream. Dahil itinatanggi ng argumentong arkitektural ang anumang maaasahang paraan para ihiwalay ang command tokens mula sa data tokens, ang tanging matibay na depensa ay tanggihan ang mapanganib na kombinasyon bilang default, at itutulak ng presyon ng kompetisyon kasama ng dami ng advisory ang pinakamalalaking platform doon una."
+        },
+        "prediction_date": "2026-06-28",
+        "source_report_path": "app/sourcedata/2026-06-28/predictions.json",
+        "validation_report_path": "app/sourcedata/2026-06-28/bridges.json",
+        "validation_reports": [
+          {
+            "date": "2026-06-28",
+            "path": "app/sourcedata/2026-06-28/bridges.json"
+          }
+        ],
+        "parent_category_id": "business.capital-supply-chain",
+        "parent_theme_id": "business.ai_revenue_disclosure",
+        "parent_subtheme_id": null,
+        "latest_observed_relevance": 5,
+        "latest_realization_score": 1.0,
+        "latest_contradiction_score": 0.0,
+        "latest_observation_status": "supported",
+        "huge_longshot_hit_at": null,
+        "target_start_date": "2027-01-01",
+        "target_end_date": "2027-03-31",
+        "dormant": true,
+        "evidence": [
+          {
+            "evidence_id": "evidence.cbf2587199466d4a",
+            "title": "OWASP GenAI Security Project - State of Agentic AI Security and Governance 2.01",
+            "url": "https://genai.owasp.org/resource/state-of-agentic-ai-security-and-governance/",
+            "source_name": null,
+            "source_type": "news",
+            "support_direction": "support",
+            "relatedness_score": 1.0,
+            "evidence_strength": 1.0,
+            "validation_date": "2026-06-28",
+            "evidence_recency_type": "new"
+          },
+          {
+            "evidence_id": "evidence.65eac5afb6446a86",
+            "title": "Simon Willison - The lethal trifecta for AI agents: private data, untrusted content, and external communication",
+            "url": "https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/",
             "source_name": null,
             "source_type": "news",
             "support_direction": "support",
@@ -7387,7 +7943,7 @@
         "huge_longshot_hit_at": null,
         "target_start_date": "2027-01-01",
         "target_end_date": "2027-03-31",
-        "dormant": false,
+        "dormant": true,
         "evidence": [
           {
             "evidence_id": "evidence.4ae63f8f0ecc5dc6",
@@ -8658,8 +9214,8 @@
               "target_start_date": "2026-06-15",
               "target_end_date": "2026-06-21",
               "size_in_pool": 1,
-              "cluster_total": 9,
-              "share": 0.11,
+              "cluster_total": 11,
+              "share": 0.09,
               "trend": "accelerating",
               "companion_predictions": [
                 {
@@ -8695,6 +9251,14 @@
                   "target_end_date": null
                 },
                 {
+                  "prediction_id": "prediction.3a5fa9315f58608d",
+                  "title": "Agentic coding platforms ship token budgets and caps as default by Q2 2027",
+                  "short_label": "Agentic coding platforms ship token budgets and caps as default by Q2 2027",
+                  "pred_date": "2026-06-25",
+                  "target_start_date": "2027-04-01",
+                  "target_end_date": "2027-06-30"
+                },
+                {
                   "prediction_id": "prediction.3abbcb892f7919d6",
                   "title": "Frontier-class open-weight LLM runs single-node under 256GB by Q4 2026",
                   "short_label": "Frontier-class open-weight LLM runs single-node under 256GB by Q4 2026",
@@ -8725,6 +9289,14 @@
                   "pred_date": "2026-06-17",
                   "target_start_date": null,
                   "target_end_date": null
+                },
+                {
+                  "prediction_id": "prediction.6ba7ca6e01ab313e",
+                  "title": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
+                  "short_label": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
+                  "pred_date": "2026-06-28",
+                  "target_start_date": "2027-01-01",
+                  "target_end_date": "2027-03-31"
                 }
               ]
             }
@@ -9467,8 +10039,8 @@
               "target_start_date": "2026-06-15",
               "target_end_date": "2026-06-21",
               "size_in_pool": 2,
-              "cluster_total": 7,
-              "share": 0.29,
+              "cluster_total": 6,
+              "share": 0.33,
               "trend": "accelerating",
               "companion_predictions": [
                 {
@@ -9518,14 +10090,6 @@
                   "pred_date": "2026-06-10",
                   "target_start_date": null,
                   "target_end_date": null
-                },
-                {
-                  "prediction_id": "prediction.6ba7ca6e01ab313e",
-                  "title": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
-                  "short_label": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
-                  "pred_date": "2026-06-28",
-                  "target_start_date": "2027-01-01",
-                  "target_end_date": "2027-03-31"
                 },
                 {
                   "prediction_id": "prediction.7b31cbaef01800e6",
@@ -9647,7 +10211,7 @@
               ]
             }
           ],
-          "cluster_narrative": "Broad support across 2 clusters. Largest is 'Inference Server Supply Chain' (2 of 7 items, accelerating). Multi-thread support is more robust than single-cluster concentration.",
+          "cluster_narrative": "Broad support across 2 clusters. Largest is 'Inference Server Supply Chain' (2 of 6 items, accelerating). Multi-thread support is more robust than single-cluster concentration.",
           "downstream": [],
           "upstream": [],
           "chain_narrative": "",
@@ -11517,8 +12081,8 @@
               "target_start_date": "2026-06-15",
               "target_end_date": "2026-06-21",
               "size_in_pool": 1,
-              "cluster_total": 9,
-              "share": 0.11,
+              "cluster_total": 11,
+              "share": 0.09,
               "trend": "accelerating",
               "companion_predictions": [
                 {
@@ -11554,6 +12118,14 @@
                   "target_end_date": null
                 },
                 {
+                  "prediction_id": "prediction.3a5fa9315f58608d",
+                  "title": "Agentic coding platforms ship token budgets and caps as default by Q2 2027",
+                  "short_label": "Agentic coding platforms ship token budgets and caps as default by Q2 2027",
+                  "pred_date": "2026-06-25",
+                  "target_start_date": "2027-04-01",
+                  "target_end_date": "2027-06-30"
+                },
+                {
                   "prediction_id": "prediction.3abbcb892f7919d6",
                   "title": "Frontier-class open-weight LLM runs single-node under 256GB by Q4 2026",
                   "short_label": "Frontier-class open-weight LLM runs single-node under 256GB by Q4 2026",
@@ -11576,6 +12148,14 @@
                   "pred_date": "2026-06-24",
                   "target_start_date": "2027-01-01",
                   "target_end_date": "2027-06-30"
+                },
+                {
+                  "prediction_id": "prediction.6ba7ca6e01ab313e",
+                  "title": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
+                  "short_label": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
+                  "pred_date": "2026-06-28",
+                  "target_start_date": "2027-01-01",
+                  "target_end_date": "2027-03-31"
                 },
                 {
                   "prediction_id": "prediction.c2b0ba20d4477cec",
@@ -13457,7 +14037,7 @@
         "huge_longshot_hit_at": null,
         "target_start_date": "2027-01-01",
         "target_end_date": "2027-06-30",
-        "dormant": false,
+        "dormant": true,
         "evidence": [
           {
             "evidence_id": "evidence.66bced1ac4872916",
@@ -14076,7 +14656,7 @@
         "huge_longshot_hit_at": null,
         "target_start_date": "2026-07-01",
         "target_end_date": "2026-09-30",
-        "dormant": false,
+        "dormant": true,
         "evidence": [
           {
             "evidence_id": "evidence.6f5fcc627445d802",
@@ -14814,8 +15394,8 @@
               "target_start_date": "2026-06-15",
               "target_end_date": "2026-06-21",
               "size_in_pool": 1,
-              "cluster_total": 9,
-              "share": 0.11,
+              "cluster_total": 11,
+              "share": 0.09,
               "trend": "accelerating",
               "companion_predictions": [
                 {
@@ -14851,6 +15431,14 @@
                   "target_end_date": null
                 },
                 {
+                  "prediction_id": "prediction.3a5fa9315f58608d",
+                  "title": "Agentic coding platforms ship token budgets and caps as default by Q2 2027",
+                  "short_label": "Agentic coding platforms ship token budgets and caps as default by Q2 2027",
+                  "pred_date": "2026-06-25",
+                  "target_start_date": "2027-04-01",
+                  "target_end_date": "2027-06-30"
+                },
+                {
                   "prediction_id": "prediction.3abbcb892f7919d6",
                   "title": "Frontier-class open-weight LLM runs single-node under 256GB by Q4 2026",
                   "short_label": "Frontier-class open-weight LLM runs single-node under 256GB by Q4 2026",
@@ -14875,6 +15463,14 @@
                   "target_end_date": null
                 },
                 {
+                  "prediction_id": "prediction.6ba7ca6e01ab313e",
+                  "title": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
+                  "short_label": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
+                  "pred_date": "2026-06-28",
+                  "target_start_date": "2027-01-01",
+                  "target_end_date": "2027-03-31"
+                },
+                {
                   "prediction_id": "prediction.c2b0ba20d4477cec",
                   "title": null,
                   "short_label": "AWS Continuum's sandbox exploit-validati",
@@ -14885,7 +15481,7 @@
               ]
             }
           ],
-          "cluster_narrative": "This prediction is supported by a single cluster: 1 of 9 items in 'AI-Revenue Disclosure Rewrite' (2026-25); the cluster is accelerating. Concentrated support — if this thread breaks, the prediction loses its base.",
+          "cluster_narrative": "This prediction is supported by a single cluster: 1 of 11 items in 'AI-Revenue Disclosure Rewrite' (2026-25); the cluster is accelerating. Concentrated support — if this thread breaks, the prediction loses its base.",
           "downstream": [],
           "upstream": [],
           "chain_narrative": "",
@@ -15134,8 +15730,8 @@
               "target_start_date": "2026-06-15",
               "target_end_date": "2026-06-21",
               "size_in_pool": 1,
-              "cluster_total": 9,
-              "share": 0.11,
+              "cluster_total": 11,
+              "share": 0.09,
               "trend": "accelerating",
               "companion_predictions": [
                 {
@@ -15160,6 +15756,14 @@
                   "short_label": "Inference-ASIC cohort gains a fourth named buyer-designed chip by H1 2027",
                   "pred_date": "2026-06-25",
                   "target_start_date": "2027-01-01",
+                  "target_end_date": "2027-06-30"
+                },
+                {
+                  "prediction_id": "prediction.3a5fa9315f58608d",
+                  "title": "Agentic coding platforms ship token budgets and caps as default by Q2 2027",
+                  "short_label": "Agentic coding platforms ship token budgets and caps as default by Q2 2027",
+                  "pred_date": "2026-06-25",
+                  "target_start_date": "2027-04-01",
                   "target_end_date": "2027-06-30"
                 },
                 {
@@ -15195,6 +15799,14 @@
                   "target_end_date": null
                 },
                 {
+                  "prediction_id": "prediction.6ba7ca6e01ab313e",
+                  "title": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
+                  "short_label": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
+                  "pred_date": "2026-06-28",
+                  "target_start_date": "2027-01-01",
+                  "target_end_date": "2027-03-31"
+                },
+                {
                   "prediction_id": "prediction.c2b0ba20d4477cec",
                   "title": null,
                   "short_label": "AWS Continuum's sandbox exploit-validati",
@@ -15205,7 +15817,7 @@
               ]
             }
           ],
-          "cluster_narrative": "This prediction is supported by a single cluster: 1 of 9 items in 'AI-Revenue Disclosure Rewrite' (2026-25); the cluster is accelerating. Concentrated support — if this thread breaks, the prediction loses its base.",
+          "cluster_narrative": "This prediction is supported by a single cluster: 1 of 11 items in 'AI-Revenue Disclosure Rewrite' (2026-25); the cluster is accelerating. Concentrated support — if this thread breaks, the prediction loses its base.",
           "downstream": [],
           "upstream": [],
           "chain_narrative": "",
@@ -15639,16 +16251,80 @@
         "readings": {
           "clusters": [
             {
-              "theme_id": "business.developer_platformization",
-              "theme_label": "Developer Toolchain Platformization",
+              "theme_id": "business.ai_revenue_disclosure",
+              "theme_label": "AI-Revenue Disclosure Rewrite",
               "week_bucket": "2026-25",
               "target_start_date": "2026-06-15",
               "target_end_date": "2026-06-21",
-              "size_in_pool": 2,
-              "cluster_total": 2,
-              "share": 1.0,
+              "size_in_pool": 1,
+              "cluster_total": 11,
+              "share": 0.09,
               "trend": "accelerating",
               "companion_predictions": [
+                {
+                  "prediction_id": "prediction.0c569408626bbdd3",
+                  "title": "Sub-gigabyte on-device LLM gains same-week Unsloth tuning support by Q3 2026",
+                  "short_label": "Sub-gigabyte on-device LLM gains same-week Unsloth tuning support by Q3 2026",
+                  "pred_date": "2026-06-28",
+                  "target_start_date": "2026-07-01",
+                  "target_end_date": "2026-09-30"
+                },
+                {
+                  "prediction_id": "prediction.1d6d876dda44ddca",
+                  "title": null,
+                  "short_label": "\"Agent-in-the-Loop Secret Exfiltration\" ",
+                  "pred_date": "2026-04-20",
+                  "target_start_date": null,
+                  "target_end_date": null
+                },
+                {
+                  "prediction_id": "prediction.225d77f109a86780",
+                  "title": "Inference-ASIC cohort gains a fourth named buyer-designed chip by H1 2027",
+                  "short_label": "Inference-ASIC cohort gains a fourth named buyer-designed chip by H1 2027",
+                  "pred_date": "2026-06-25",
+                  "target_start_date": "2027-01-01",
+                  "target_end_date": "2027-06-30"
+                },
+                {
+                  "prediction_id": "prediction.33fd149797573e02",
+                  "title": null,
+                  "short_label": "Local fine-tune-to-agent stack ships as ",
+                  "pred_date": "2026-06-03",
+                  "target_start_date": null,
+                  "target_end_date": null
+                },
+                {
+                  "prediction_id": "prediction.3abbcb892f7919d6",
+                  "title": "Frontier-class open-weight LLM runs single-node under 256GB by Q4 2026",
+                  "short_label": "Frontier-class open-weight LLM runs single-node under 256GB by Q4 2026",
+                  "pred_date": "2026-06-23",
+                  "target_start_date": "2026-10-01",
+                  "target_end_date": "2026-12-31"
+                },
+                {
+                  "prediction_id": "prediction.4814a487eb010b3e",
+                  "title": null,
+                  "short_label": "DiffusionGemma seeds an open-weight text",
+                  "pred_date": "2026-06-14",
+                  "target_start_date": null,
+                  "target_end_date": null
+                },
+                {
+                  "prediction_id": "prediction.568eecc474844ffb",
+                  "title": "General-purpose mobile cobots cross 100K production-operation hours by H1 2027",
+                  "short_label": "General-purpose mobile cobots cross 100K production-operation hours by H1 2027",
+                  "pred_date": "2026-06-24",
+                  "target_start_date": "2027-01-01",
+                  "target_end_date": "2027-06-30"
+                },
+                {
+                  "prediction_id": "prediction.68471e3864b2aa7e",
+                  "title": null,
+                  "short_label": "Corsair-class inference silicon books a ",
+                  "pred_date": "2026-06-17",
+                  "target_start_date": null,
+                  "target_end_date": null
+                },
                 {
                   "prediction_id": "prediction.6ba7ca6e01ab313e",
                   "title": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
@@ -15656,11 +16332,31 @@
                   "pred_date": "2026-06-28",
                   "target_start_date": "2027-01-01",
                   "target_end_date": "2027-03-31"
+                },
+                {
+                  "prediction_id": "prediction.c2b0ba20d4477cec",
+                  "title": null,
+                  "short_label": "AWS Continuum's sandbox exploit-validati",
+                  "pred_date": "2026-06-21",
+                  "target_start_date": null,
+                  "target_end_date": null
                 }
               ]
+            },
+            {
+              "theme_id": "business.developer_platformization",
+              "theme_label": "Developer Toolchain Platformization",
+              "week_bucket": "2026-25",
+              "target_start_date": "2026-06-15",
+              "target_end_date": "2026-06-21",
+              "size_in_pool": 1,
+              "cluster_total": 1,
+              "share": 1.0,
+              "trend": "flat",
+              "companion_predictions": []
             }
           ],
-          "cluster_narrative": "This prediction is supported by a single cluster: 2 of 2 items in 'Developer Toolchain Platformization' (2026-25); the cluster is accelerating. Concentrated support — if this thread breaks, the prediction loses its base.",
+          "cluster_narrative": "Broad support across 2 clusters. Largest is 'AI-Revenue Disclosure Rewrite' (1 of 11 items, accelerating). Multi-thread support is more robust than single-cluster concentration.",
           "downstream": [],
           "upstream": [],
           "chain_narrative": "",
@@ -15701,7 +16397,7 @@
         "huge_longshot_hit_at": null,
         "target_start_date": "2027-04-01",
         "target_end_date": "2027-06-30",
-        "dormant": false,
+        "dormant": true,
         "evidence": [
           {
             "evidence_id": "evidence.cbf2587199466d4a",
@@ -16313,8 +17009,8 @@
               "target_start_date": "2026-06-15",
               "target_end_date": "2026-06-21",
               "size_in_pool": 3,
-              "cluster_total": 7,
-              "share": 0.43,
+              "cluster_total": 6,
+              "share": 0.5,
               "trend": "accelerating",
               "companion_predictions": [
                 {
@@ -16366,14 +17062,6 @@
                   "target_end_date": null
                 },
                 {
-                  "prediction_id": "prediction.6ba7ca6e01ab313e",
-                  "title": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
-                  "short_label": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
-                  "pred_date": "2026-06-28",
-                  "target_start_date": "2027-01-01",
-                  "target_end_date": "2027-03-31"
-                },
-                {
                   "prediction_id": "prediction.7b31cbaef01800e6",
                   "title": "Security vendor ships ML deserialization scanning as a named tier by Q1 2027",
                   "short_label": "Security vendor ships ML deserialization scanning as a named tier by Q1 2027",
@@ -16400,7 +17088,7 @@
               ]
             }
           ],
-          "cluster_narrative": "This prediction is supported by a single cluster: 3 of 7 items in 'Inference Server Supply Chain' (2026-25); the cluster is accelerating. Concentrated support — if this thread breaks, the prediction loses its base.",
+          "cluster_narrative": "This prediction is supported by a single cluster: 3 of 6 items in 'Inference Server Supply Chain' (2026-25); the cluster is accelerating. Concentrated support — if this thread breaks, the prediction loses its base.",
           "downstream": [],
           "upstream": [],
           "chain_narrative": "",
@@ -16925,8 +17613,8 @@
               "target_start_date": "2026-06-15",
               "target_end_date": "2026-06-21",
               "size_in_pool": 2,
-              "cluster_total": 7,
-              "share": 0.29,
+              "cluster_total": 6,
+              "share": 0.33,
               "trend": "accelerating",
               "companion_predictions": [
                 {
@@ -16986,14 +17674,6 @@
                   "target_end_date": null
                 },
                 {
-                  "prediction_id": "prediction.6ba7ca6e01ab313e",
-                  "title": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
-                  "short_label": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
-                  "pred_date": "2026-06-28",
-                  "target_start_date": "2027-01-01",
-                  "target_end_date": "2027-03-31"
-                },
-                {
                   "prediction_id": "prediction.7b31cbaef01800e6",
                   "title": "Security vendor ships ML deserialization scanning as a named tier by Q1 2027",
                   "short_label": "Security vendor ships ML deserialization scanning as a named tier by Q1 2027",
@@ -17012,7 +17692,7 @@
               ]
             }
           ],
-          "cluster_narrative": "This prediction is supported by a single cluster: 2 of 7 items in 'Inference Server Supply Chain' (2026-25); the cluster is accelerating. Concentrated support — if this thread breaks, the prediction loses its base.",
+          "cluster_narrative": "This prediction is supported by a single cluster: 2 of 6 items in 'Inference Server Supply Chain' (2026-25); the cluster is accelerating. Concentrated support — if this thread breaks, the prediction loses its base.",
           "downstream": [],
           "upstream": [],
           "chain_narrative": "",
@@ -17200,8 +17880,8 @@
         "default_visible": false
       },
       "layout": {
-        "x": -445.70806089776994,
-        "y": -476.61451073492134,
+        "x": -452.5000000000003,
+        "y": -471.98384506251887,
         "z": 0.0,
         "radius": 9.0,
         "fixed": false
@@ -17546,8 +18226,8 @@
               "target_start_date": "2026-06-15",
               "target_end_date": "2026-06-21",
               "size_in_pool": 1,
-              "cluster_total": 7,
-              "share": 0.14,
+              "cluster_total": 6,
+              "share": 0.17,
               "trend": "accelerating",
               "companion_predictions": [
                 {
@@ -17597,14 +18277,6 @@
                   "pred_date": "2026-06-10",
                   "target_start_date": null,
                   "target_end_date": null
-                },
-                {
-                  "prediction_id": "prediction.6ba7ca6e01ab313e",
-                  "title": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
-                  "short_label": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
-                  "pred_date": "2026-06-28",
-                  "target_start_date": "2027-01-01",
-                  "target_end_date": "2027-03-31"
                 },
                 {
                   "prediction_id": "prediction.7b31cbaef01800e6",
@@ -17726,7 +18398,7 @@
               ]
             }
           ],
-          "cluster_narrative": "Broad support across 2 clusters. Largest is 'Inference Server Supply Chain' (1 of 7 items, accelerating). Multi-thread support is more robust than single-cluster concentration.",
+          "cluster_narrative": "Broad support across 2 clusters. Largest is 'Inference Server Supply Chain' (1 of 6 items, accelerating). Multi-thread support is more robust than single-cluster concentration.",
           "downstream": [],
           "upstream": [],
           "chain_narrative": "",
@@ -17767,7 +18439,7 @@
         "huge_longshot_hit_at": null,
         "target_start_date": "2027-04-01",
         "target_end_date": "2027-06-30",
-        "dormant": false,
+        "dormant": true,
         "evidence": [
           {
             "evidence_id": "evidence.1bcc84e04fa45fba",
@@ -17903,8 +18575,8 @@
         "default_visible": false
       },
       "layout": {
-        "x": -492.2386513675976,
-        "y": -465.99420710066266,
+        "x": -507.5000000000003,
+        "y": -471.98384506251887,
         "z": 0.0,
         "radius": 9.0,
         "fixed": false
@@ -18154,8 +18826,8 @@
               "target_start_date": "2026-06-15",
               "target_end_date": "2026-06-21",
               "size_in_pool": 2,
-              "cluster_total": 7,
-              "share": 0.29,
+              "cluster_total": 6,
+              "share": 0.33,
               "trend": "accelerating",
               "companion_predictions": [
                 {
@@ -18207,14 +18879,6 @@
                   "target_end_date": null
                 },
                 {
-                  "prediction_id": "prediction.6ba7ca6e01ab313e",
-                  "title": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
-                  "short_label": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
-                  "pred_date": "2026-06-28",
-                  "target_start_date": "2027-01-01",
-                  "target_end_date": "2027-03-31"
-                },
-                {
                   "prediction_id": "prediction.7b31cbaef01800e6",
                   "title": "Security vendor ships ML deserialization scanning as a named tier by Q1 2027",
                   "short_label": "Security vendor ships ML deserialization scanning as a named tier by Q1 2027",
@@ -18241,7 +18905,7 @@
               ]
             }
           ],
-          "cluster_narrative": "This prediction is supported by a single cluster: 2 of 7 items in 'Inference Server Supply Chain' (2026-25); the cluster is accelerating. Concentrated support — if this thread breaks, the prediction loses its base.",
+          "cluster_narrative": "This prediction is supported by a single cluster: 2 of 6 items in 'Inference Server Supply Chain' (2026-25); the cluster is accelerating. Concentrated support — if this thread breaks, the prediction loses its base.",
           "downstream": [],
           "upstream": [],
           "chain_narrative": "",
@@ -18415,8 +19079,8 @@
         "default_visible": false
       },
       "layout": {
-        "x": -529.5532877346334,
-        "y": -495.75163661919726,
+        "x": -535.0000000000002,
+        "y": -519.615242270663,
         "z": 0.0,
         "radius": 9.0,
         "fixed": false
@@ -18666,8 +19330,8 @@
               "target_start_date": "2026-06-15",
               "target_end_date": "2026-06-21",
               "size_in_pool": 2,
-              "cluster_total": 7,
-              "share": 0.29,
+              "cluster_total": 6,
+              "share": 0.33,
               "trend": "accelerating",
               "companion_predictions": [
                 {
@@ -18727,14 +19391,6 @@
                   "target_end_date": null
                 },
                 {
-                  "prediction_id": "prediction.6ba7ca6e01ab313e",
-                  "title": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
-                  "short_label": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
-                  "pred_date": "2026-06-28",
-                  "target_start_date": "2027-01-01",
-                  "target_end_date": "2027-03-31"
-                },
-                {
                   "prediction_id": "prediction.f3f7e18b691f1c39",
                   "title": "OpenClaw ships default-deny tool and network gating out-of-box by Q4 2026",
                   "short_label": "OpenClaw ships default-deny tool and network gating out-of-box by Q4 2026",
@@ -18753,7 +19409,7 @@
               ]
             }
           ],
-          "cluster_narrative": "This prediction is supported by a single cluster: 2 of 7 items in 'Inference Server Supply Chain' (2026-25); the cluster is accelerating. Concentrated support — if this thread breaks, the prediction loses its base.",
+          "cluster_narrative": "This prediction is supported by a single cluster: 2 of 6 items in 'Inference Server Supply Chain' (2026-25); the cluster is accelerating. Concentrated support — if this thread breaks, the prediction loses its base.",
           "downstream": [],
           "upstream": [],
           "chain_narrative": "",
@@ -18790,7 +19446,7 @@
         "huge_longshot_hit_at": null,
         "target_start_date": "2027-01-01",
         "target_end_date": "2027-03-31",
-        "dormant": false,
+        "dormant": true,
         "evidence": [
           {
             "evidence_id": "evidence.33c3a53abd87bf73",
@@ -18926,8 +19582,8 @@
         "default_visible": false
       },
       "layout": {
-        "x": -529.5532877346334,
-        "y": -543.4788479221287,
+        "x": -507.5000000000003,
+        "y": -567.2466394788071,
         "z": 0.0,
         "radius": 9.0,
         "fixed": false
@@ -19177,8 +19833,8 @@
               "target_start_date": "2026-06-15",
               "target_end_date": "2026-06-21",
               "size_in_pool": 3,
-              "cluster_total": 7,
-              "share": 0.43,
+              "cluster_total": 6,
+              "share": 0.5,
               "trend": "accelerating",
               "companion_predictions": [
                 {
@@ -19238,14 +19894,6 @@
                   "target_end_date": null
                 },
                 {
-                  "prediction_id": "prediction.6ba7ca6e01ab313e",
-                  "title": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
-                  "short_label": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
-                  "pred_date": "2026-06-28",
-                  "target_start_date": "2027-01-01",
-                  "target_end_date": "2027-03-31"
-                },
-                {
                   "prediction_id": "prediction.7b31cbaef01800e6",
                   "title": "Security vendor ships ML deserialization scanning as a named tier by Q1 2027",
                   "short_label": "Security vendor ships ML deserialization scanning as a named tier by Q1 2027",
@@ -19264,7 +19912,7 @@
               ]
             }
           ],
-          "cluster_narrative": "This prediction is supported by a single cluster: 3 of 7 items in 'Inference Server Supply Chain' (2026-25); the cluster is accelerating. Concentrated support — if this thread breaks, the prediction loses its base.",
+          "cluster_narrative": "This prediction is supported by a single cluster: 3 of 6 items in 'Inference Server Supply Chain' (2026-25); the cluster is accelerating. Concentrated support — if this thread breaks, the prediction loses its base.",
           "downstream": [],
           "upstream": [],
           "chain_narrative": "",
@@ -19449,8 +20097,8 @@
         "default_visible": false
       },
       "layout": {
-        "x": -492.2386513675976,
-        "y": -573.2362774406632,
+        "x": -452.5000000000003,
+        "y": -567.2466394788071,
         "z": 0.0,
         "radius": 9.0,
         "fixed": false
@@ -19535,8 +20183,8 @@
               "target_start_date": "2026-06-15",
               "target_end_date": "2026-06-21",
               "size_in_pool": 2,
-              "cluster_total": 7,
-              "share": 0.29,
+              "cluster_total": 6,
+              "share": 0.33,
               "trend": "accelerating",
               "companion_predictions": [
                 {
@@ -19588,14 +20236,6 @@
                   "target_end_date": "2027-03-31"
                 },
                 {
-                  "prediction_id": "prediction.6ba7ca6e01ab313e",
-                  "title": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
-                  "short_label": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
-                  "pred_date": "2026-06-28",
-                  "target_start_date": "2027-01-01",
-                  "target_end_date": "2027-03-31"
-                },
-                {
                   "prediction_id": "prediction.7b31cbaef01800e6",
                   "title": "Security vendor ships ML deserialization scanning as a named tier by Q1 2027",
                   "short_label": "Security vendor ships ML deserialization scanning as a named tier by Q1 2027",
@@ -19622,7 +20262,7 @@
               ]
             }
           ],
-          "cluster_narrative": "This prediction is supported by a single cluster: 2 of 7 items in 'Inference Server Supply Chain' (2026-25); the cluster is accelerating. Concentrated support — if this thread breaks, the prediction loses its base.",
+          "cluster_narrative": "This prediction is supported by a single cluster: 2 of 6 items in 'Inference Server Supply Chain' (2026-25); the cluster is accelerating. Concentrated support — if this thread breaks, the prediction loses its base.",
           "downstream": [],
           "upstream": [],
           "chain_narrative": "",
@@ -19683,541 +20323,6 @@
             "relatedness_score": 0.8,
             "evidence_strength": 0.8,
             "validation_date": "2026-06-27",
-            "evidence_recency_type": "new"
-          }
-        ]
-      }
-    },
-    {
-      "id": "prediction.6ba7ca6e01ab313e",
-      "type": "prediction",
-      "scope_id": "business",
-      "label": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
-      "short_label": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
-      "title": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
-      "description": "At least one leading coding-agent platform (the category OWASP names as prompt injection's epicenter, with Claude Code, AutoGPT, Dify and Roo-Code among the most-advisoried repositories) will ship a default-on capability gate that enforces a 'Rule of Two'-style constraint: an agent run may combine at most two of private-data access, exposure to untrusted content, and external communication before it must pause for explicit human approval. The move follows OWASP's reframing of prompt injection as a structural, unpatchable property of agentic systems rather than a patchable CVE, which leaves vendors to mitigate by capping the lethal trifecta at the orchestration layer instead of filtering the token stream. Because the architectural argument denies any reliable way to separate command tokens from data tokens, the only durable defense is to deny the dangerous combination by default, and competitive pressure plus advisory volume will push the largest platforms there first.",
-      "labels": {
-        "label": {
-          "en": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
-          "ja": "コーディングエージェント基盤、2027年第1四半期までに三要素の権限ゲートを既定で搭載",
-          "es": "Una plataforma de agentes de código incorpora un control de capacidades de tríada como opción predeterminada para el primer trimestre de 2027",
-          "fil": "Magsa-ship ang isang coding-agent platform ng trifecta capability gate bilang default pagsapit ng Q1 2027"
-        },
-        "short_label": {
-          "en": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
-          "ja": "コーディングエージェント基盤、2027年第1四半期までに三要素の権限ゲートを既定で搭載",
-          "es": "Una plataforma de agentes de código incorpora un control de capacidades de tríada como opción predeterminada para el primer trimestre de 2027",
-          "fil": "Magsa-ship ang isang coding-agent platform ng trifecta capability gate bilang default pagsapit ng Q1 2027"
-        },
-        "title": {
-          "en": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
-          "ja": "コーディングエージェント基盤、2027年第1四半期までに三要素の権限ゲートを既定で搭載",
-          "es": "Una plataforma de agentes de código incorpora un control de capacidades de tríada como opción predeterminada para el primer trimestre de 2027",
-          "fil": "Magsa-ship ang isang coding-agent platform ng trifecta capability gate bilang default pagsapit ng Q1 2027"
-        },
-        "description": {
-          "en": "At least one leading coding-agent platform (the category OWASP names as prompt injection's epicenter, with Claude Code, AutoGPT, Dify and Roo-Code among the most-advisoried repositories) will ship a default-on capability gate that enforces a 'Rule of Two'-style constraint: an agent run may combine at most two of private-data access, exposure to untrusted content, and external communication before it must pause for explicit human approval. The move follows OWASP's reframing of prompt injection as a structural, unpatchable property of agentic systems rather than a patchable CVE, which leaves vendors to mitigate by capping the lethal trifecta at the orchestration layer instead of filtering the token stream. Because the architectural argument denies any reliable way to separate command tokens from data tokens, the only durable defense is to deny the dangerous combination by default, and competitive pressure plus advisory volume will push the largest platforms there first.",
-          "ja": "少なくとも1つの主要なコーディングエージェント基盤（OWASPがプロンプトインジェクションの震源地として挙げる分野で、Claude Code、AutoGPT、Dify、Roo-Codeが最も多く勧告を受けたリポジトリに含まれる）が、「ルール・オブ・トゥー」型の制約を強制する既定オンの権限ゲートを搭載する。これは、エージェントの実行が、プライベートデータへのアクセス・信頼できないコンテンツへの露出・外部通信のうち最大2つまでしか組み合わせられず、3つ目を加える前には明示的な人間の承認を求めて一時停止しなければならない、というものだ。この動きは、OWASPがプロンプトインジェクションをパッチ可能なCVEではなくエージェント型システムの構造的で修正不能な性質として捉え直したことを受けたものだ。その結果、ベンダーはトークン列をフィルタリングするのではなく、オーケストレーション層でこの致命的な三要素の組み合わせに上限を設けて緩和するしかなくなる。命令トークンとデータトークンを確実に分離する手段がないという構造的な議論ゆえに、唯一の持続的な防御は危険な組み合わせを既定で拒否することであり、競争圧力と勧告の多さが最大手の基盤をまずそこへ向かわせる。",
-          "es": "Al menos una plataforma líder de agentes de código (la categoría que OWASP señala como epicentro de la inyección de prompts, con Claude Code, AutoGPT, Dify y Roo-Code entre los repositorios con más advertencias) incorporará un control de capacidades activado por defecto que impone una restricción de estilo 'Regla de Dos': una ejecución de agente puede combinar como máximo dos de tres propiedades — acceso a datos privados, exposición a contenido no confiable y comunicación externa — antes de tener que detenerse para una aprobación humana explícita. La medida sigue al replanteamiento de OWASP de la inyección de prompts como una propiedad estructural y no parcheable de los sistemas agénticos, más que como un CVE parcheable, lo que obliga a los fabricantes a mitigar limitando la tríada letal en la capa de orquestación en lugar de filtrar el flujo de tokens. Como el argumento arquitectónico niega cualquier forma fiable de separar los tokens de comando de los tokens de datos, la única defensa duradera es denegar por defecto la combinación peligrosa, y la presión competitiva más el volumen de advertencias empujarán primero a las plataformas más grandes hacia esa solución.",
-          "fil": "Hindi bababa sa isang nangungunang coding-agent platform (ang kategoryang tinawag ng OWASP na sentro ng prompt injection, kung saan kabilang ang Claude Code, AutoGPT, Dify at Roo-Code sa pinakamaraming-advisory na repositories) ang magsa-ship ng isang default-on na capability gate na nagpapatupad ng 'Rule of Two'-style na hadlang: maaaring pagsamahin ng isang agent run ang hanggang dalawa lamang sa private-data access, exposure sa untrusted content, at external communication bago ito kailangang huminto para sa tahasang pag-apruba ng tao. Sumusunod ang hakbang na ito sa muling pagbabalangkas ng OWASP sa prompt injection bilang isang structural, hindi-mapa-patch na katangian ng agentic systems sa halip na isang mapa-patch na CVE, na nag-iiwan sa mga vendor na magmitiga sa pamamagitan ng paglilimita sa lethal trifecta sa orchestration layer sa halip na i-filter ang token stream. Dahil itinatanggi ng argumentong arkitektural ang anumang maaasahang paraan para ihiwalay ang command tokens mula sa data tokens, ang tanging matibay na depensa ay tanggihan ang mapanganib na kombinasyon bilang default, at itutulak ng presyon ng kompetisyon kasama ng dami ng advisory ang pinakamalalaking platform doon una."
-        },
-        "summary": {
-          "en": "At least one leading coding-agent platform (the category OWASP names as prompt injection's epicenter, with Claude Code, AutoGPT, Dify and Roo-Code among the most-advisoried repositories) will ship a default-on capability gate that enforces a 'Rule of Two'-style constraint: an agent run may combine at most two of private-data access, exposure to untrusted content, and external communication before it must pause for explicit human approval. The move follows OWASP's reframing of prompt injection as a structural, unpatchable property of agentic systems rather than a patchable CVE, which leaves vendors to mitigate by capping the lethal trifecta at the orchestration layer instead of filtering the token stream. Because the architectural argument denies any reliable way to separate command tokens from data tokens, the only durable defense is to deny the dangerous combination by default, and competitive pressure plus advisory volume will push the largest platforms there first.",
-          "ja": "少なくとも1つの主要なコーディングエージェント基盤（OWASPがプロンプトインジェクションの震源地として挙げる分野で、Claude Code、AutoGPT、Dify、Roo-Codeが最も多く勧告を受けたリポジトリに含まれる）が、「ルール・オブ・トゥー」型の制約を強制する既定オンの権限ゲートを搭載する。これは、エージェントの実行が、プライベートデータへのアクセス・信頼できないコンテンツへの露出・外部通信のうち最大2つまでしか組み合わせられず、3つ目を加える前には明示的な人間の承認を求めて一時停止しなければならない、というものだ。この動きは、OWASPがプロンプトインジェクションをパッチ可能なCVEではなくエージェント型システムの構造的で修正不能な性質として捉え直したことを受けたものだ。その結果、ベンダーはトークン列をフィルタリングするのではなく、オーケストレーション層でこの致命的な三要素の組み合わせに上限を設けて緩和するしかなくなる。命令トークンとデータトークンを確実に分離する手段がないという構造的な議論ゆえに、唯一の持続的な防御は危険な組み合わせを既定で拒否することであり、競争圧力と勧告の多さが最大手の基盤をまずそこへ向かわせる。",
-          "es": "Al menos una plataforma líder de agentes de código (la categoría que OWASP señala como epicentro de la inyección de prompts, con Claude Code, AutoGPT, Dify y Roo-Code entre los repositorios con más advertencias) incorporará un control de capacidades activado por defecto que impone una restricción de estilo 'Regla de Dos': una ejecución de agente puede combinar como máximo dos de tres propiedades — acceso a datos privados, exposición a contenido no confiable y comunicación externa — antes de tener que detenerse para una aprobación humana explícita. La medida sigue al replanteamiento de OWASP de la inyección de prompts como una propiedad estructural y no parcheable de los sistemas agénticos, más que como un CVE parcheable, lo que obliga a los fabricantes a mitigar limitando la tríada letal en la capa de orquestación en lugar de filtrar el flujo de tokens. Como el argumento arquitectónico niega cualquier forma fiable de separar los tokens de comando de los tokens de datos, la única defensa duradera es denegar por defecto la combinación peligrosa, y la presión competitiva más el volumen de advertencias empujarán primero a las plataformas más grandes hacia esa solución.",
-          "fil": "Hindi bababa sa isang nangungunang coding-agent platform (ang kategoryang tinawag ng OWASP na sentro ng prompt injection, kung saan kabilang ang Claude Code, AutoGPT, Dify at Roo-Code sa pinakamaraming-advisory na repositories) ang magsa-ship ng isang default-on na capability gate na nagpapatupad ng 'Rule of Two'-style na hadlang: maaaring pagsamahin ng isang agent run ang hanggang dalawa lamang sa private-data access, exposure sa untrusted content, at external communication bago ito kailangang huminto para sa tahasang pag-apruba ng tao. Sumusunod ang hakbang na ito sa muling pagbabalangkas ng OWASP sa prompt injection bilang isang structural, hindi-mapa-patch na katangian ng agentic systems sa halip na isang mapa-patch na CVE, na nag-iiwan sa mga vendor na magmitiga sa pamamagitan ng paglilimita sa lethal trifecta sa orchestration layer sa halip na i-filter ang token stream. Dahil itinatanggi ng argumentong arkitektural ang anumang maaasahang paraan para ihiwalay ang command tokens mula sa data tokens, ang tanging matibay na depensa ay tanggihan ang mapanganib na kombinasyon bilang default, at itutulak ng presyon ng kompetisyon kasama ng dami ng advisory ang pinakamalalaking platform doon una."
-        }
-      },
-      "category_id": "business.regulation-compliance",
-      "theme_id": "business.inference_server_supply_chain",
-      "subtheme_id": null,
-      "prediction_id": "prediction.6ba7ca6e01ab313e",
-      "parent_ids": [
-        "business.inference_server_supply_chain",
-        "business.compute_capex_strategy",
-        "business.ai_revenue_disclosure",
-        "business.developer_platformization"
-      ],
-      "child_ids": [],
-      "metrics_by_window": {
-        "7d": {
-          "attention_score": 1.0,
-          "realization_score": 1.0,
-          "contradiction_score": 0.0,
-          "grass_level": 4,
-          "streak_days": 0,
-          "new_signal": 1.0,
-          "continuing_signal": 0.0,
-          "status": "supported",
-          "grass_daily": [
-            {
-              "date": "2026-06-28",
-              "grass_level": 4,
-              "attention_score": 1.0
-            }
-          ]
-        },
-        "30d": {
-          "attention_score": 1.0,
-          "realization_score": 1.0,
-          "contradiction_score": 0.0,
-          "grass_level": 4,
-          "streak_days": 0,
-          "new_signal": 1.0,
-          "continuing_signal": 0.0,
-          "status": "supported",
-          "grass_daily": [
-            {
-              "date": "2026-06-28",
-              "grass_level": 4,
-              "attention_score": 1.0
-            }
-          ]
-        },
-        "90d": {
-          "attention_score": 1.0,
-          "realization_score": 1.0,
-          "contradiction_score": 0.0,
-          "grass_level": 4,
-          "streak_days": 0,
-          "new_signal": 1.0,
-          "continuing_signal": 0.0,
-          "status": "supported",
-          "grass_daily": [
-            {
-              "date": "2026-06-28",
-              "grass_level": 4,
-              "attention_score": 1.0
-            }
-          ]
-        }
-      },
-      "visibility": {
-        "min_zoom": 2.0,
-        "max_zoom": null,
-        "default_visible": false
-      },
-      "layout": {
-        "x": -445.70806089776994,
-        "y": -562.6159738064047,
-        "z": 0.0,
-        "radius": 9.0,
-        "fixed": false
-      },
-      "detail": {
-        "title": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
-        "title_clean": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
-        "reasoning": {
-          "because": "OWASP 2.01 maps prompt injection to 6 of 10 agentic categories and names coding agents the epicenter",
-          "given": "Injection is unpatchable, so the only durable mitigation caps the lethal trifecta at orchestration",
-          "so_that": "A coding-agent platform makes a Rule-of-Two capability gate default-on, pausing for approval on the third property",
-          "landing": "by Q1 2027; >=1 leading coding-agent platform ships a default-on trifecta gate",
-          "plain_language": "AI coding helpers can be tricked by hidden instructions, so the big tools will start blocking the risky combo unless a human says ok."
-        },
-        "reasoning_locales": {
-          "because": {
-            "en": "OWASP 2.01 maps prompt injection to 6 of 10 agentic categories and names coding agents the epicenter",
-            "ja": "OWASP 2.01はプロンプトインジェクションをエージェント型10分類のうち6つに対応づけ、コーディングエージェントを震源地と名指しした",
-            "es": "OWASP 2.01 vincula la inyección de prompts con 6 de 10 categorías agénticas y señala a los agentes de código como el epicentro",
-            "fil": "Ini-map ng OWASP 2.01 ang prompt injection sa 6 ng 10 agentic categories at tinawag na sentro ang coding agents"
-          },
-          "given": {
-            "en": "Injection is unpatchable, so the only durable mitigation caps the lethal trifecta at orchestration",
-            "ja": "インジェクションは修正不能であり、唯一の持続的な緩和策はオーケストレーション層で致命的な三要素に上限を設けることだ",
-            "es": "La inyección no es parcheable, por lo que la única mitigación duradera limita la tríada letal en la orquestación",
-            "fil": "Hindi-mapa-patch ang injection, kaya ang tanging matibay na mitigasyon ay paglimita sa lethal trifecta sa orchestration"
-          },
-          "so_that": {
-            "en": "A coding-agent platform makes a Rule-of-Two capability gate default-on, pausing for approval on the third property",
-            "ja": "あるコーディングエージェント基盤がルール・オブ・トゥーの権限ゲートを既定オンにし、3つ目の性質では承認のため一時停止する",
-            "es": "Una plataforma de agentes de código activa por defecto un control de capacidades de Regla de Dos, deteniéndose para aprobación ante la tercera propiedad",
-            "fil": "Gagawing default-on ng isang coding-agent platform ang isang Rule-of-Two capability gate, na huminto para sa pag-apruba sa ikatlong katangian"
-          },
-          "landing": {
-            "en": "by Q1 2027; >=1 leading coding-agent platform ships a default-on trifecta gate",
-            "ja": "2027年第1四半期までに、1社以上の主要コーディングエージェント基盤が既定オンの三要素ゲートを搭載する",
-            "es": "para el primer trimestre de 2027; >=1 plataforma líder de agentes de código incorpora un control de tríada activado por defecto",
-            "fil": "pagsapit ng Q1 2027; >=1 nangungunang coding-agent platform ang magsa-ship ng default-on trifecta gate"
-          },
-          "plain_language": {
-            "en": "AI coding helpers can be tricked by hidden instructions, so the big tools will start blocking the risky combo unless a human says ok.",
-            "ja": "AIのコーディング補助は隠された指示にだまされうるため、大手ツールは人間がOKと言わない限り危険な組み合わせを止めるようになる。",
-            "es": "A los asistentes de IA para programar se les puede engañar con instrucciones ocultas, así que las grandes herramientas empezarán a bloquear la combinación arriesgada salvo que una persona dé el visto bueno.",
-            "fil": "Maaaring malinlang ng nakatagong instruksyon ang AI coding helpers, kaya sisimulan ng malalaking tool na harangan ang mapanganib na kombinasyon maliban kung papayag ang isang tao."
-          }
-        },
-        "title_locales": {
-          "en": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
-          "ja": "コーディングエージェント基盤、2027年第1四半期までに三要素の権限ゲートを既定で搭載",
-          "es": "Una plataforma de agentes de código incorpora un control de capacidades de tríada como opción predeterminada para el primer trimestre de 2027",
-          "fil": "Magsa-ship ang isang coding-agent platform ng trifecta capability gate bilang default pagsapit ng Q1 2027"
-        },
-        "summary_short": "OWASP now calls prompt injection a structural, unpatchable trait of agentic AI and names coding agents the epicenter. With no way to separate commands from data, vendors must cap the lethal trifecta at the orchestration layer. Expect a coding-agent platform to ship a default-on Rule-of-Two gate.",
-        "summary_short_locales": {
-          "en": "OWASP now calls prompt injection a structural, unpatchable trait of agentic AI and names coding agents the epicenter. With no way to separate commands from data, vendors must cap the lethal trifecta at the orchestration layer. Expect a coding-agent platform to ship a default-on Rule-of-Two gate.",
-          "ja": "OWASPは今やプロンプトインジェクションをエージェント型AIの構造的で修正不能な性質と呼び、コーディングエージェントを震源地と名指しする。命令とデータを分離する手段がない以上、ベンダーはオーケストレーション層で致命的な三要素に上限を設けるしかない。コーディングエージェント基盤が既定オンのルール・オブ・トゥーのゲートを搭載すると見込まれる。",
-          "es": "OWASP ahora califica la inyección de prompts como un rasgo estructural y no parcheable de la IA agéntica y señala a los agentes de código como el epicentro. Sin forma de separar comandos de datos, los fabricantes deben limitar la tríada letal en la capa de orquestación. Se espera que una plataforma de agentes de código incorpore un control de Regla de Dos activado por defecto.",
-          "fil": "Tinatawag na ngayon ng OWASP ang prompt injection na isang structural, hindi-mapa-patch na katangian ng agentic AI at tinawag na sentro ang coding agents. Dahil walang paraan para ihiwalay ang commands sa data, kailangang limitahan ng mga vendor ang lethal trifecta sa orchestration layer. Asahan na magsa-ship ang isang coding-agent platform ng default-on Rule-of-Two gate."
-        },
-        "bridges": [
-          {
-            "date": "2026-06-28",
-            "text": "OWASP's June 28 reframing makes prompt injection an unpatchable design constraint mapping to six of ten agentic categories, and names coding agents the epicenter with Claude Code, n8n and AutoGPT topping the advisory tally. That forces the conclusion the prediction rests on: defenses must be orchestration-layer capability budgets, exactly the Rule-of-Two gate the thesis expects a platform to ship default-on.",
-            "text_locales": {
-              "en": "OWASP's June 28 reframing makes prompt injection an unpatchable design constraint mapping to six of ten agentic categories, and names coding agents the epicenter with Claude Code, n8n and AutoGPT topping the advisory tally. That forces the conclusion the prediction rests on: defenses must be orchestration-layer capability budgets, exactly the Rule-of-Two gate the thesis expects a platform to ship default-on.",
-              "ja": "OWASPの6月28日の捉え直しは、プロンプトインジェクションをパッチ不能な設計上の制約とし、10あるエージェント型カテゴリのうち6つに対応づける。さらにコーディングエージェントを震源地と名指しし、勧告件数ではClaude Code、n8n、AutoGPTが上位を占める。これは予測が立脚する結論を強いる。すなわち、防御はオーケストレーション層の機能予算でなければならず、それはまさに、プラットフォームがデフォルト有効で出荷すると本仮説が見込むRule-of-Twoゲートそのものだ。",
-              "es": "El replanteamiento de OWASP del 28 de junio convierte la inyección de prompts en una restricción de diseño imposible de parchear, asignada a seis de diez categorías agénticas, y señala a los agentes de programación como el epicentro, con Claude Code, n8n y AutoGPT encabezando el recuento de advisories. Eso fuerza la conclusión sobre la que descansa la predicción: las defensas deben ser presupuestos de capacidades en la capa de orquestación, justamente la compuerta Rule-of-Two que la tesis espera que una plataforma incorpore activada por defecto.",
-              "fil": "Ang muling pagbabalangkas ng OWASP noong June 28 ay ginagawang isang hindi-mapapatch na design constraint ang prompt injection na tumutugma sa anim sa sampung agentic na kategorya, at pinangalanan ang mga coding agent bilang sentro na ang Claude Code, n8n at AutoGPT ang nangunguna sa bilang ng advisory. Pinipilit nito ang konklusyong pinagbabatayan ng prediksyon: ang mga depensa ay dapat na capability budgets sa orchestration layer, mismong ang Rule-of-Two na gate na inaasahan ng tesis na ihahatid na default-on ng isang platform."
-            },
-            "dimension": "because",
-            "target_start_date": null,
-            "target_end_date": null
-          }
-        ],
-        "needs": [
-          {
-            "need_id": "need.71ca6443e51abfb1",
-            "actor": "agentic-AI security standards author (OWASP-aligned)",
-            "job": "Publishing and refining the guidance that reframes prompt injection as a structural, unpatchable property and maps it across agentic categories.",
-            "outcome": "Authoritative guidance naming coding agents the epicenter and prescribing trifecta-capping mitigation, giving vendors cover to ship the gate.",
-            "motivation": "Standardize a durable mitigation pattern so the ecosystem stops treating prompt injection as a patchable CVE.",
-            "actor_locales": {
-              "en": "agentic-AI security standards author (OWASP-aligned)",
-              "ja": "エージェント型AIセキュリティ標準の策定者（OWASP準拠）",
-              "es": "autor de estándares de seguridad de IA agéntica (alineado con OWASP)",
-              "fil": "may-akda ng agentic-AI security standards (OWASP-aligned)"
-            },
-            "job_locales": {
-              "en": "Publishing and refining the guidance that reframes prompt injection as a structural, unpatchable property and maps it across agentic categories.",
-              "ja": "プロンプトインジェクションを構造的で修正不能な性質として捉え直し、エージェント型の各分類にわたって対応づける指針を公開し精緻化している。",
-              "es": "Publicar y refinar la guía que replantea la inyección de prompts como una propiedad estructural y no parcheable, y la asigna a las categorías agénticas.",
-              "fil": "Naglalathala at nirerebisa ang gabay na muling nagbabalangkas sa prompt injection bilang isang structural, hindi-mapa-patch na katangian at nima-map ito sa mga agentic categories."
-            },
-            "outcome_locales": {
-              "en": "Authoritative guidance naming coding agents the epicenter and prescribing trifecta-capping mitigation, giving vendors cover to ship the gate.",
-              "ja": "コーディングエージェントを震源地と名指しし、三要素に上限を設ける緩和策を規定する権威ある指針。ベンダーがゲートを出荷する大義を与える。",
-              "es": "Una guía autorizada que señala a los agentes de código como el epicentro y prescribe la mitigación de limitar la tríada, dando a los fabricantes cobertura para incorporar el control.",
-              "fil": "Awtoritatibong gabay na tumatawag sa coding agents bilang sentro at nagrereseta ng trifecta-capping na mitigasyon, na nagbibigay sa mga vendor ng saligan para mag-ship ng gate."
-            },
-            "motivation_locales": {
-              "en": "Standardize a durable mitigation pattern so the ecosystem stops treating prompt injection as a patchable CVE.",
-              "ja": "持続的な緩和パターンを標準化し、エコシステムがプロンプトインジェクションをパッチ可能なCVEとして扱うのをやめさせる。",
-              "es": "Estandarizar un patrón de mitigación duradero para que el ecosistema deje de tratar la inyección de prompts como un CVE parcheable.",
-              "fil": "Istandardisahin ang isang matibay na pattern ng mitigasyon para tigilan ng ecosystem ang pagtrato sa prompt injection bilang isang mapa-patch na CVE."
-            },
-            "reviewed_by_human": false,
-            "target_start_date": "2027-01-01",
-            "target_end_date": "2027-03-31",
-            "task": {
-              "task_id": "need_task.cedfde5028b372f2",
-              "who": "OWASP agentic-security working group / standards authors",
-              "what": "Publish guidance reframing prompt injection as structural and unpatchable",
-              "where": "OWASP agentic-AI advisory / Top 10 framework",
-              "when": "ongoing through 2026 into Q1 2027",
-              "why": "Drive vendors toward orchestration-layer trifecta caps",
-              "how": "OWASP 2.01 agentic-category mapping",
-              "who_locales": {
-                "en": "OWASP agentic-security working group / standards authors",
-                "ja": "OWASPのエージェント型セキュリティ作業部会／標準策定者",
-                "es": "grupo de trabajo de seguridad agéntica de OWASP / autores de estándares",
-                "fil": "OWASP agentic-security working group / standards authors"
-              },
-              "what_locales": {
-                "en": "Publish guidance reframing prompt injection as structural and unpatchable",
-                "ja": "プロンプトインジェクションを構造的で修正不能なものとして捉え直す指針を公開する",
-                "es": "Publicar guía que replantea la inyección de prompts como estructural y no parcheable",
-                "fil": "Maglathala ng gabay na muling nagbabalangkas sa prompt injection bilang structural at hindi-mapa-patch"
-              },
-              "where_locales": {
-                "en": "OWASP agentic-AI advisory / Top 10 framework",
-                "ja": "OWASPのエージェント型AI勧告／Top 10フレームワーク",
-                "es": "advertencia de IA agéntica de OWASP / marco Top 10",
-                "fil": "OWASP agentic-AI advisory / Top 10 framework"
-              },
-              "when_locales": {
-                "en": "ongoing through 2026 into Q1 2027",
-                "ja": "2026年を通じて2027年第1四半期まで継続",
-                "es": "continuo a lo largo de 2026 hasta el primer trimestre de 2027",
-                "fil": "patuloy hanggang 2026 papasok sa Q1 2027"
-              },
-              "why_locales": {
-                "en": "Drive vendors toward orchestration-layer trifecta caps",
-                "ja": "ベンダーをオーケストレーション層での三要素の上限設定へ向かわせるため",
-                "es": "Impulsar a los fabricantes hacia límites de la tríada en la capa de orquestación",
-                "fil": "Itulak ang mga vendor patungo sa orchestration-layer trifecta caps"
-              },
-              "how_locales": {
-                "en": "OWASP 2.01 agentic-category mapping",
-                "ja": "OWASP 2.01のエージェント型分類の対応づけ",
-                "es": "Mapeo de categorías agénticas de OWASP 2.01",
-                "fil": "OWASP 2.01 agentic-category mapping"
-              },
-              "status": "open",
-              "target_start_date": "2027-01-01",
-              "target_end_date": "2027-03-31"
-            }
-          },
-          {
-            "need_id": "need.262db198b3d721da",
-            "actor": "coding-agent platform security/orchestration product lead",
-            "job": "Designing and shipping a default-on capability gate that caps the lethal trifecta at the orchestration layer rather than filtering the token stream.",
-            "outcome": "A shipped, default-on Rule-of-Two gate that pauses an agent run for human approval before combining a third dangerous property.",
-            "motivation": "Prompt injection is unpatchable, so capping the trifecta is the only durable defense; advisory volume and competitive pressure force the largest platforms to move first.",
-            "actor_locales": {
-              "en": "coding-agent platform security/orchestration product lead",
-              "ja": "コーディングエージェント基盤のセキュリティ／オーケストレーション製品責任者",
-              "es": "responsable de producto de seguridad/orquestación de la plataforma de agentes de código",
-              "fil": "security/orchestration product lead ng coding-agent platform"
-            },
-            "job_locales": {
-              "en": "Designing and shipping a default-on capability gate that caps the lethal trifecta at the orchestration layer rather than filtering the token stream.",
-              "ja": "トークン列をフィルタリングするのではなく、オーケストレーション層で致命的な三要素に上限を設ける既定オンの権限ゲートを設計し出荷している。",
-              "es": "Diseñar e incorporar un control de capacidades activado por defecto que limite la tríada letal en la capa de orquestación en lugar de filtrar el flujo de tokens.",
-              "fil": "Nagdidisenyo at nagsa-ship ng isang default-on capability gate na naglilimita sa lethal trifecta sa orchestration layer sa halip na i-filter ang token stream."
-            },
-            "outcome_locales": {
-              "en": "A shipped, default-on Rule-of-Two gate that pauses an agent run for human approval before combining a third dangerous property.",
-              "ja": "3つ目の危険な性質を組み合わせる前に、エージェントの実行を人間の承認のため一時停止させる、出荷済みで既定オンのルール・オブ・トゥーのゲート。",
-              "es": "Un control de Regla de Dos activado por defecto, ya incorporado, que detiene una ejecución de agente para aprobación humana antes de combinar una tercera propiedad peligrosa.",
-              "fil": "Isang nai-ship, default-on na Rule-of-Two gate na huminto sa isang agent run para sa pag-apruba ng tao bago pagsamahin ang ikatlong mapanganib na katangian."
-            },
-            "motivation_locales": {
-              "en": "Prompt injection is unpatchable, so capping the trifecta is the only durable defense; advisory volume and competitive pressure force the largest platforms to move first.",
-              "ja": "プロンプトインジェクションは修正不能であり、三要素に上限を設けることが唯一の持続的な防御だ。勧告の多さと競争圧力が最大手の基盤をまず動かす。",
-              "es": "La inyección de prompts no es parcheable, así que limitar la tríada es la única defensa duradera; el volumen de advertencias y la presión competitiva obligan a las plataformas más grandes a moverse primero.",
-              "fil": "Hindi-mapa-patch ang prompt injection, kaya ang paglilimita sa trifecta ang tanging matibay na depensa; pinipilit ng dami ng advisory at presyon ng kompetisyon ang pinakamalalaking platform na kumilos muna."
-            },
-            "reviewed_by_human": false,
-            "target_start_date": "2027-01-01",
-            "target_end_date": "2027-03-31",
-            "task": {
-              "task_id": "need_task.58272020b02c4782",
-              "who": "agent security / orchestration engineering team",
-              "what": "Implement default-on Rule-of-Two capability gate with human-approval pause",
-              "where": "agent orchestration layer / permission enforcement runtime",
-              "when": "H2 2026 through Q1 2027",
-              "why": "Deny the dangerous combination since injection is unpatchable",
-              "how": "Rule-of-Two capability gating at orchestration layer",
-              "who_locales": {
-                "en": "agent security / orchestration engineering team",
-                "ja": "エージェントセキュリティ／オーケストレーションエンジニアリングチーム",
-                "es": "equipo de ingeniería de seguridad / orquestación de agentes",
-                "fil": "agent security / orchestration engineering team"
-              },
-              "what_locales": {
-                "en": "Implement default-on Rule-of-Two capability gate with human-approval pause",
-                "ja": "人間の承認による一時停止を備えた既定オンのルール・オブ・トゥーの権限ゲートを実装する",
-                "es": "Implementar un control de capacidades de Regla de Dos activado por defecto con pausa de aprobación humana",
-                "fil": "Ipatupad ang default-on Rule-of-Two capability gate na may human-approval na pause"
-              },
-              "where_locales": {
-                "en": "agent orchestration layer / permission enforcement runtime",
-                "ja": "エージェントオーケストレーション層／権限強制ランタイム",
-                "es": "capa de orquestación de agentes / runtime de aplicación de permisos",
-                "fil": "agent orchestration layer / permission enforcement runtime"
-              },
-              "when_locales": {
-                "en": "H2 2026 through Q1 2027",
-                "ja": "2026年下半期から2027年第1四半期まで",
-                "es": "segunda mitad de 2026 hasta el primer trimestre de 2027",
-                "fil": "H2 2026 hanggang Q1 2027"
-              },
-              "why_locales": {
-                "en": "Deny the dangerous combination since injection is unpatchable",
-                "ja": "インジェクションが修正不能である以上、危険な組み合わせを拒否するため",
-                "es": "Denegar la combinación peligrosa, ya que la inyección no es parcheable",
-                "fil": "Tanggihan ang mapanganib na kombinasyon dahil hindi-mapa-patch ang injection"
-              },
-              "how_locales": {
-                "en": "Rule-of-Two capability gating at orchestration layer",
-                "ja": "オーケストレーション層でのルール・オブ・トゥーの権限ゲート",
-                "es": "Control de capacidades de Regla de Dos en la capa de orquestación",
-                "fil": "Rule-of-Two capability gating sa orchestration layer"
-              },
-              "status": "open",
-              "target_start_date": "2027-01-01",
-              "target_end_date": "2027-03-31"
-            }
-          }
-        ],
-        "readings": {
-          "clusters": [
-            {
-              "theme_id": "business.developer_platformization",
-              "theme_label": "Developer Toolchain Platformization",
-              "week_bucket": "2026-25",
-              "target_start_date": "2026-06-15",
-              "target_end_date": "2026-06-21",
-              "size_in_pool": 1,
-              "cluster_total": 2,
-              "share": 0.5,
-              "trend": "accelerating",
-              "companion_predictions": [
-                {
-                  "prediction_id": "prediction.3a5fa9315f58608d",
-                  "title": "Agentic coding platforms ship token budgets and caps as default by Q2 2027",
-                  "short_label": "Agentic coding platforms ship token budgets and caps as default by Q2 2027",
-                  "pred_date": "2026-06-25",
-                  "target_start_date": "2027-04-01",
-                  "target_end_date": "2027-06-30"
-                }
-              ]
-            },
-            {
-              "theme_id": "business.inference_server_supply_chain",
-              "theme_label": "Inference Server Supply Chain",
-              "week_bucket": "2026-25",
-              "target_start_date": "2026-06-15",
-              "target_end_date": "2026-06-21",
-              "size_in_pool": 1,
-              "cluster_total": 7,
-              "share": 0.14,
-              "trend": "accelerating",
-              "companion_predictions": [
-                {
-                  "prediction_id": "prediction.01cc486a859af01b",
-                  "title": null,
-                  "short_label": "Agent-framework SQL tools ship read-only",
-                  "pred_date": "2026-06-05",
-                  "target_start_date": null,
-                  "target_end_date": null
-                },
-                {
-                  "prediction_id": "prediction.1e6f56222db35798",
-                  "title": "Major AI-agent platform ships zero-trust controls as default-on by Q2 2027",
-                  "short_label": "Major AI-agent platform ships zero-trust controls as default-on by Q2 2027",
-                  "pred_date": "2026-06-27",
-                  "target_start_date": "2027-04-01",
-                  "target_end_date": "2027-06-30"
-                },
-                {
-                  "prediction_id": "prediction.2593e0dadb6a21a3",
-                  "title": null,
-                  "short_label": "Coding-agent harnesses adopt default-den",
-                  "pred_date": "2026-06-20",
-                  "target_start_date": null,
-                  "target_end_date": null
-                },
-                {
-                  "prediction_id": "prediction.3e6e8b6ae1e7c76e",
-                  "title": "AI-agent procurement adds a numeric prompt-injection-resistance bar by Q2 2027",
-                  "short_label": "AI-agent procurement adds a numeric prompt-injection-resistance bar by Q2 2027",
-                  "pred_date": "2026-06-23",
-                  "target_start_date": "2027-04-01",
-                  "target_end_date": "2027-06-30"
-                },
-                {
-                  "prediction_id": "prediction.57ffda60c7453d2f",
-                  "title": null,
-                  "short_label": "Managed model-serving platforms default ",
-                  "pred_date": "2026-06-17",
-                  "target_start_date": null,
-                  "target_end_date": null
-                },
-                {
-                  "prediction_id": "prediction.625a7234dd6e9ed1",
-                  "title": "ML registry servers log a second max-severity deserialization RCE by Q1 2027",
-                  "short_label": "ML registry servers log a second max-severity deserialization RCE by Q1 2027",
-                  "pred_date": "2026-06-26",
-                  "target_start_date": "2027-01-01",
-                  "target_end_date": "2027-03-31"
-                },
-                {
-                  "prediction_id": "prediction.65d822d45accbf85",
-                  "title": null,
-                  "short_label": "AI inference proxies gain named CISA KEV",
-                  "pred_date": "2026-06-10",
-                  "target_start_date": null,
-                  "target_end_date": null
-                },
-                {
-                  "prediction_id": "prediction.7b31cbaef01800e6",
-                  "title": "Security vendor ships ML deserialization scanning as a named tier by Q1 2027",
-                  "short_label": "Security vendor ships ML deserialization scanning as a named tier by Q1 2027",
-                  "pred_date": "2026-06-26",
-                  "target_start_date": "2027-01-01",
-                  "target_end_date": "2027-03-31"
-                },
-                {
-                  "prediction_id": "prediction.f3f7e18b691f1c39",
-                  "title": "OpenClaw ships default-deny tool and network gating out-of-box by Q4 2026",
-                  "short_label": "OpenClaw ships default-deny tool and network gating out-of-box by Q4 2026",
-                  "pred_date": "2026-06-23",
-                  "target_start_date": "2026-10-01",
-                  "target_end_date": "2026-12-31"
-                },
-                {
-                  "prediction_id": "prediction.f52aeb7468446ca2",
-                  "title": "Multi-tenant agent builders draw a 9.0+ cross-tenant authz CVE by Q1 2027",
-                  "short_label": "Multi-tenant agent builders draw a 9.0+ cross-tenant authz CVE by Q1 2027",
-                  "pred_date": "2026-06-27",
-                  "target_start_date": "2027-01-01",
-                  "target_end_date": "2027-03-31"
-                }
-              ]
-            }
-          ],
-          "cluster_narrative": "Broad support across 2 clusters. Largest is 'Developer Toolchain Platformization' (1 of 2 items, accelerating). Multi-thread support is more robust than single-cluster concentration.",
-          "downstream": [],
-          "upstream": [],
-          "chain_narrative": "",
-          "relations": [],
-          "relation_narrative": ""
-        },
-        "subtitle": "Prediction · Business",
-        "description": "At least one leading coding-agent platform (the category OWASP names as prompt injection's epicenter, with Claude Code, AutoGPT, Dify and Roo-Code among the most-advisoried repositories) will ship a default-on capability gate that enforces a 'Rule of Two'-style constraint: an agent run may combine at most two of private-data access, exposure to untrusted content, and external communication before it must pause for explicit human approval. The move follows OWASP's reframing of prompt injection as a structural, unpatchable property of agentic systems rather than a patchable CVE, which leaves vendors to mitigate by capping the lethal trifecta at the orchestration layer instead of filtering the token stream. Because the architectural argument denies any reliable way to separate command tokens from data tokens, the only durable defense is to deny the dangerous combination by default, and competitive pressure plus advisory volume will push the largest platforms there first.",
-        "scope_id": "business",
-        "node_type": "prediction",
-        "prediction_summary": "At least one leading coding-agent platform (the category OWASP names as prompt injection's epicenter, with Claude Code, AutoGPT, Dify and Roo-Code among the most-advisoried repositories) will ship a default-on capability gate that enforces a 'Rule of Two'-style constraint: an agent run may combine at most two of private-data access, exposure to untrusted content, and external communication before it must pause for explicit human approval. The move follows OWASP's reframing of prompt injection as a structural, unpatchable property of agentic systems rather than a patchable CVE, which leaves vendors to mitigate by capping the lethal trifecta at the orchestration layer instead of filtering the token stream. Because the architectural argument denies any reliable way to separate command tokens from data tokens, the only durable defense is to deny the dangerous combination by default, and competitive pressure plus advisory volume will push the largest platforms there first.",
-        "prediction_summary_locales": {
-          "en": "At least one leading coding-agent platform (the category OWASP names as prompt injection's epicenter, with Claude Code, AutoGPT, Dify and Roo-Code among the most-advisoried repositories) will ship a default-on capability gate that enforces a 'Rule of Two'-style constraint: an agent run may combine at most two of private-data access, exposure to untrusted content, and external communication before it must pause for explicit human approval. The move follows OWASP's reframing of prompt injection as a structural, unpatchable property of agentic systems rather than a patchable CVE, which leaves vendors to mitigate by capping the lethal trifecta at the orchestration layer instead of filtering the token stream. Because the architectural argument denies any reliable way to separate command tokens from data tokens, the only durable defense is to deny the dangerous combination by default, and competitive pressure plus advisory volume will push the largest platforms there first.",
-          "ja": "少なくとも1つの主要なコーディングエージェント基盤（OWASPがプロンプトインジェクションの震源地として挙げる分野で、Claude Code、AutoGPT、Dify、Roo-Codeが最も多く勧告を受けたリポジトリに含まれる）が、「ルール・オブ・トゥー」型の制約を強制する既定オンの権限ゲートを搭載する。これは、エージェントの実行が、プライベートデータへのアクセス・信頼できないコンテンツへの露出・外部通信のうち最大2つまでしか組み合わせられず、3つ目を加える前には明示的な人間の承認を求めて一時停止しなければならない、というものだ。この動きは、OWASPがプロンプトインジェクションをパッチ可能なCVEではなくエージェント型システムの構造的で修正不能な性質として捉え直したことを受けたものだ。その結果、ベンダーはトークン列をフィルタリングするのではなく、オーケストレーション層でこの致命的な三要素の組み合わせに上限を設けて緩和するしかなくなる。命令トークンとデータトークンを確実に分離する手段がないという構造的な議論ゆえに、唯一の持続的な防御は危険な組み合わせを既定で拒否することであり、競争圧力と勧告の多さが最大手の基盤をまずそこへ向かわせる。",
-          "es": "Al menos una plataforma líder de agentes de código (la categoría que OWASP señala como epicentro de la inyección de prompts, con Claude Code, AutoGPT, Dify y Roo-Code entre los repositorios con más advertencias) incorporará un control de capacidades activado por defecto que impone una restricción de estilo 'Regla de Dos': una ejecución de agente puede combinar como máximo dos de tres propiedades — acceso a datos privados, exposición a contenido no confiable y comunicación externa — antes de tener que detenerse para una aprobación humana explícita. La medida sigue al replanteamiento de OWASP de la inyección de prompts como una propiedad estructural y no parcheable de los sistemas agénticos, más que como un CVE parcheable, lo que obliga a los fabricantes a mitigar limitando la tríada letal en la capa de orquestación en lugar de filtrar el flujo de tokens. Como el argumento arquitectónico niega cualquier forma fiable de separar los tokens de comando de los tokens de datos, la única defensa duradera es denegar por defecto la combinación peligrosa, y la presión competitiva más el volumen de advertencias empujarán primero a las plataformas más grandes hacia esa solución.",
-          "fil": "Hindi bababa sa isang nangungunang coding-agent platform (ang kategoryang tinawag ng OWASP na sentro ng prompt injection, kung saan kabilang ang Claude Code, AutoGPT, Dify at Roo-Code sa pinakamaraming-advisory na repositories) ang magsa-ship ng isang default-on na capability gate na nagpapatupad ng 'Rule of Two'-style na hadlang: maaaring pagsamahin ng isang agent run ang hanggang dalawa lamang sa private-data access, exposure sa untrusted content, at external communication bago ito kailangang huminto para sa tahasang pag-apruba ng tao. Sumusunod ang hakbang na ito sa muling pagbabalangkas ng OWASP sa prompt injection bilang isang structural, hindi-mapa-patch na katangian ng agentic systems sa halip na isang mapa-patch na CVE, na nag-iiwan sa mga vendor na magmitiga sa pamamagitan ng paglilimita sa lethal trifecta sa orchestration layer sa halip na i-filter ang token stream. Dahil itinatanggi ng argumentong arkitektural ang anumang maaasahang paraan para ihiwalay ang command tokens mula sa data tokens, ang tanging matibay na depensa ay tanggihan ang mapanganib na kombinasyon bilang default, at itutulak ng presyon ng kompetisyon kasama ng dami ng advisory ang pinakamalalaking platform doon una."
-        },
-        "prediction_date": "2026-06-28",
-        "source_report_path": "app/sourcedata/2026-06-28/predictions.json",
-        "validation_report_path": "app/sourcedata/2026-06-28/bridges.json",
-        "validation_reports": [
-          {
-            "date": "2026-06-28",
-            "path": "app/sourcedata/2026-06-28/bridges.json"
-          }
-        ],
-        "parent_category_id": "business.regulation-compliance",
-        "parent_theme_id": "business.inference_server_supply_chain",
-        "parent_subtheme_id": null,
-        "latest_observed_relevance": 5,
-        "latest_realization_score": 1.0,
-        "latest_contradiction_score": 0.0,
-        "latest_observation_status": "supported",
-        "huge_longshot_hit_at": null,
-        "target_start_date": "2027-01-01",
-        "target_end_date": "2027-03-31",
-        "dormant": false,
-        "evidence": [
-          {
-            "evidence_id": "evidence.cbf2587199466d4a",
-            "title": "OWASP GenAI Security Project - State of Agentic AI Security and Governance 2.01",
-            "url": "https://genai.owasp.org/resource/state-of-agentic-ai-security-and-governance/",
-            "source_name": null,
-            "source_type": "news",
-            "support_direction": "support",
-            "relatedness_score": 1.0,
-            "evidence_strength": 1.0,
-            "validation_date": "2026-06-28",
-            "evidence_recency_type": "new"
-          },
-          {
-            "evidence_id": "evidence.65eac5afb6446a86",
-            "title": "Simon Willison - The lethal trifecta for AI agents: private data, untrusted content, and external communication",
-            "url": "https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/",
-            "source_name": null,
-            "source_type": "news",
-            "support_direction": "support",
-            "relatedness_score": 1.0,
-            "evidence_strength": 1.0,
-            "validation_date": "2026-06-28",
             "evidence_recency_type": "new"
           }
         ]
@@ -20417,8 +20522,8 @@
               "target_start_date": "2026-06-15",
               "target_end_date": "2026-06-21",
               "size_in_pool": 2,
-              "cluster_total": 7,
-              "share": 0.29,
+              "cluster_total": 6,
+              "share": 0.33,
               "trend": "accelerating",
               "companion_predictions": [
                 {
@@ -20470,14 +20575,6 @@
                   "target_end_date": null
                 },
                 {
-                  "prediction_id": "prediction.6ba7ca6e01ab313e",
-                  "title": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
-                  "short_label": "Coding-agent platform ships trifecta capability gate as default by Q1 2027",
-                  "pred_date": "2026-06-28",
-                  "target_start_date": "2027-01-01",
-                  "target_end_date": "2027-03-31"
-                },
-                {
                   "prediction_id": "prediction.7b31cbaef01800e6",
                   "title": "Security vendor ships ML deserialization scanning as a named tier by Q1 2027",
                   "short_label": "Security vendor ships ML deserialization scanning as a named tier by Q1 2027",
@@ -20504,7 +20601,7 @@
               ]
             }
           ],
-          "cluster_narrative": "This prediction is supported by a single cluster: 2 of 7 items in 'Inference Server Supply Chain' (2026-25); the cluster is accelerating. Concentrated support — if this thread breaks, the prediction loses its base.",
+          "cluster_narrative": "This prediction is supported by a single cluster: 2 of 6 items in 'Inference Server Supply Chain' (2026-25); the cluster is accelerating. Concentrated support — if this thread breaks, the prediction loses its base.",
           "downstream": [],
           "upstream": [],
           "chain_narrative": "",
@@ -20832,6 +20929,38 @@
       "id": "link.business.inference_server_supply_chain__prediction.0c569408626bbdd3",
       "source": "business.inference_server_supply_chain",
       "target": "prediction.0c569408626bbdd3",
+      "type": "contains",
+      "weight": 1.0,
+      "status": "active"
+    },
+    {
+      "id": "link.business.ai_revenue_disclosure__prediction.6ba7ca6e01ab313e",
+      "source": "business.ai_revenue_disclosure",
+      "target": "prediction.6ba7ca6e01ab313e",
+      "type": "contains",
+      "weight": 1.0,
+      "status": "active"
+    },
+    {
+      "id": "link.business.compute_capex_strategy__prediction.6ba7ca6e01ab313e",
+      "source": "business.compute_capex_strategy",
+      "target": "prediction.6ba7ca6e01ab313e",
+      "type": "contains",
+      "weight": 1.0,
+      "status": "active"
+    },
+    {
+      "id": "link.business.developer_platformization__prediction.6ba7ca6e01ab313e",
+      "source": "business.developer_platformization",
+      "target": "prediction.6ba7ca6e01ab313e",
+      "type": "contains",
+      "weight": 1.0,
+      "status": "active"
+    },
+    {
+      "id": "link.business.inference_server_supply_chain__prediction.6ba7ca6e01ab313e",
+      "source": "business.inference_server_supply_chain",
+      "target": "prediction.6ba7ca6e01ab313e",
       "type": "contains",
       "weight": 1.0,
       "status": "active"
@@ -21360,38 +21489,6 @@
       "id": "link.business.inference_server_supply_chain__prediction.65d822d45accbf85",
       "source": "business.inference_server_supply_chain",
       "target": "prediction.65d822d45accbf85",
-      "type": "contains",
-      "weight": 1.0,
-      "status": "active"
-    },
-    {
-      "id": "link.business.inference_server_supply_chain__prediction.6ba7ca6e01ab313e",
-      "source": "business.inference_server_supply_chain",
-      "target": "prediction.6ba7ca6e01ab313e",
-      "type": "contains",
-      "weight": 1.0,
-      "status": "active"
-    },
-    {
-      "id": "link.business.compute_capex_strategy__prediction.6ba7ca6e01ab313e",
-      "source": "business.compute_capex_strategy",
-      "target": "prediction.6ba7ca6e01ab313e",
-      "type": "contains",
-      "weight": 1.0,
-      "status": "active"
-    },
-    {
-      "id": "link.business.ai_revenue_disclosure__prediction.6ba7ca6e01ab313e",
-      "source": "business.ai_revenue_disclosure",
-      "target": "prediction.6ba7ca6e01ab313e",
-      "type": "contains",
-      "weight": 1.0,
-      "status": "active"
-    },
-    {
-      "id": "link.business.developer_platformization__prediction.6ba7ca6e01ab313e",
-      "source": "business.developer_platformization",
-      "target": "prediction.6ba7ca6e01ab313e",
       "type": "contains",
       "weight": 1.0,
       "status": "active"

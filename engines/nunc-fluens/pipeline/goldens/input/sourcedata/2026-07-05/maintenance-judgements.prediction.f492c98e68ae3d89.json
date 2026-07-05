@@ -1,0 +1,45 @@
+{
+  "prediction_id": "prediction.f492c98e68ae3d89",
+  "judgements": [
+    {
+      "prediction_id": "prediction.f492c98e68ae3d89",
+      "stream": "reasoning",
+      "entry_id": "prediction.f492c98e68ae3d89",
+      "verdict": "fresh",
+      "reason": "This week's news (Ollama MTP, Together AI neocloud, Tenstorrent, Stathera, AI events) is orthogonal to inline MCP-channel policy enforcement. The because (Zscaler AI Broker + Databricks Agent Bricks convergence) and so_that (a third platform ships inline MCP-channel enforcement by Q1 2027) are unchanged; no contradicting bridge and no retraction of the two-platform origin. Forward-looking landing intact.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.f492c98e68ae3d89",
+      "stream": "bridge",
+      "entry_id": "validation.3c89328cecb80878",
+      "verdict": "fresh",
+      "reason": "Most recent bridge (2026-07-01, support='because', rel=4) — Flowise custom-MCP RCE + AutoGen Studio incident pressure motivating inline default enforcement — remains valid demand-side evidence; this week does not retract it.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.85
+    },
+    {
+      "prediction_id": "prediction.f492c98e68ae3d89",
+      "stream": "bridge",
+      "entry_id": "prediction.f492c98e68ae3d89",
+      "verdict": "fresh",
+      "reason": "The mixed set of prior bridges (given/none across 2026-06-17..06-26) is historical corroboration; none is contradicted or superseded by this week's chip/neocloud news.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.f492c98e68ae3d89",
+      "stream": "needs",
+      "entry_id": "prediction.f492c98e68ae3d89",
+      "verdict": "fresh",
+      "reason": "Needs (third-platform security PM, enterprise security architect, standards-body author) remain open, Q1-2027 targeted; no this-week bridge shows any actor shipping the third-platform default, so no status change.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.82
+    }
+  ]
+}

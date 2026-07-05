@@ -1,0 +1,35 @@
+{
+  "prediction_id": "prediction.6095c8445805dcf4",
+  "judgements": [
+    {
+      "prediction_id": "prediction.6095c8445805dcf4",
+      "stream": "reasoning",
+      "entry_id": "prediction.6095c8445805dcf4",
+      "verdict": "fresh",
+      "reason": "The load-bearing `because` (Qualcomm's $3.92B Modular buy removed the largest neutral cross-vendor inference compiler) and `given` (silicon-agnostic compute layer is table stakes vs CUDA) are fully intact — nothing this week touches the Modular acquisition. Cross-stream note: the `summary` field's peripheral 'Tenstorrent talks' sub-clause is weakened by this week's Keller denial of the Qualcomm buyout (2026-07-05), but the `reasoning_because` proper does not cite Tenstorrent, so the reasoning bundle itself stands. Marginal — a summary tidy could drop the Tenstorrent mention, but not required and not stale. Q1 2027 landing untouched.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.78
+    },
+    {
+      "prediction_id": "prediction.6095c8445805dcf4",
+      "stream": "bridge",
+      "entry_id": "prediction.6095c8445805dcf4",
+      "verdict": "fresh",
+      "reason": "Both bridges (Qualcomm Modular $3.92B buy 2026-06-28 support=because relevance 5; Qualcomm Dragonfly roadmap 2026-06-29 support=given) remain valid and correctly framed as the structural force + competitive-pressure escalation. No this-week bridge was added and none is contradicted — the Keller/Qualcomm-buyout denial concerns Tenstorrent, a different asset, and does not undercut the Modular-removal evidence these bridges rest on.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.82
+    },
+    {
+      "prediction_id": "prediction.6095c8445805dcf4",
+      "stream": "needs",
+      "entry_id": "prediction.6095c8445805dcf4",
+      "verdict": "fresh",
+      "reason": "Both Needs (rival corp-dev team sourcing a compiler acquisition; inference-software team specifying the capability gap) have tasks status=open; targets 2027-01-01..03-31 and 2026-10-01..12-31. No rival announced a compiler buy/majority stake this week; no Bridge documents delivery. Coalition intact.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.9
+    }
+  ]
+}

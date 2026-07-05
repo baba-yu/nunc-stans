@@ -1,9 +1,14 @@
 {
   "upstream": {
     "repo": "~/news",
-    "commit": "9e86e01",
-    "stagedAt": "2026-07-05",
-    "subtreeParity": "engines/nunc-fluens/app diff-clean against upstream at staging time"
+    "commit": "5059fa1",
+    "stagedAt": "2026-07-06",
+    "subtreeParity": "engines/nunc-fluens/app diff-clean against upstream at staging time (code tip 529f2e1; data advanced to the completed 2026-07-05 day)",
+    "stagingRules": [
+      "stage reads `git archive` at the pinned commit, never the working tree — a mid-flight daily run cannot leak into the fixtures",
+      "fixture days must be CLOSED days (their daily-master commit exists at the pinned commit)",
+      "`stage` and `run` always travel together: restaging without recapturing desynchronizes input/ and expected/"
+    ]
   },
   "renderDays": ["2026-07-03", "2026-07-04", "2026-07-05", "2026-06-28"],
   "sundayDay": "2026-06-28",

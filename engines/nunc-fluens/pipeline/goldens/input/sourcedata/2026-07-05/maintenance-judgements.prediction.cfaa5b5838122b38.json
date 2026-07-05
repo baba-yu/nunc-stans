@@ -1,0 +1,45 @@
+{
+  "prediction_id": "prediction.cfaa5b5838122b38",
+  "judgements": [
+    {
+      "prediction_id": "prediction.cfaa5b5838122b38",
+      "stream": "reasoning",
+      "entry_id": "prediction.cfaa5b5838122b38",
+      "verdict": "fresh",
+      "reason": "Reservoir routing ships as default vLLM/SGLang serving knob by H2 2026. This week's news does not report reservoir-routing landing in either stack. Together AI's $800M round names a serving/neocloud provider (a demand-side actor in the thesis) but carries no reservoir-routing-knob signal, so it neither advances nor invalidates the `so_that`. Landing window (through Q4 2026) still open.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.cfaa5b5838122b38",
+      "stream": "bridge",
+      "entry_id": "prediction.cfaa5b5838122b38",
+      "verdict": "fresh",
+      "reason": "Most recent bridge (2026-06-30 vLLM v0.24.0 DeepEP v2 + DeepSeek-V4 expert-routing) correctly revives the thesis at the serving-surface level while noting the named stateful router-state-bank primitive itself has not shipped as a default. This week added no new reservoir-routing bridge and did not outdate the existing ones.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.cfaa5b5838122b38",
+      "stream": "needs",
+      "entry_id": "prediction.cfaa5b5838122b38",
+      "verdict": "fresh",
+      "reason": "Five Needs (serving-stack maintainer cohort, paper-author working group, hyperscaler-managed-inference PM, open-weights MoE fine-tuning group, agentic-workload tenant) all 'open' with windows through Q3/H2 2026. This week's news documents no actor delivering the knob. Not stale.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.75
+    },
+    {
+      "prediction_id": "prediction.cfaa5b5838122b38",
+      "stream": "readings",
+      "entry_id": "prediction.cfaa5b5838122b38",
+      "verdict": "fresh",
+      "reason": "No chain/relation rows for this prediction; nothing to update. No this-week edge candidate.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.9
+    }
+  ]
+}

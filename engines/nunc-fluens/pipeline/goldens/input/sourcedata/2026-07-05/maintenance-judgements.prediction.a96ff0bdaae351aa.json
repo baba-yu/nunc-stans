@@ -1,0 +1,55 @@
+{
+  "prediction_id": "prediction.a96ff0bdaae351aa",
+  "judgements": [
+    {
+      "prediction_id": "prediction.a96ff0bdaae351aa",
+      "stream": "reasoning",
+      "entry_id": "prediction.a96ff0bdaae351aa",
+      "verdict": "fresh",
+      "reason": "Open-weight coding model tops 85 on Terminal-Bench 2.1 by Q4 2026. This week's news (Ollama, Together AI, Tenstorrent, Stathera) does not report a new Terminal-Bench 2.1 score or invalidate the GLM-5.2-at-81 baseline / gap-closing-per-release mechanism. Landing (Q4 2026) still open. No this-week reframe needed.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.a96ff0bdaae351aa",
+      "stream": "bridge",
+      "entry_id": "validation.43bd5c4d3f8748ab",
+      "verdict": "broken",
+      "reason": "Data inconsistency, not this-week staleness: this bridge row's `bridge_text` describes OpenAI's ~5% US-government stake ahead of an IPO (a financing thesis) while its own `related_items_text` and the parent prediction are about Meituan LongCat-2.0 open-weight coding vs Terminal-Bench. The bridge_text is mis-attached (belongs to a different, financing/IPO prediction). Escalate to human; do not auto-fix.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.9
+    },
+    {
+      "prediction_id": "prediction.a96ff0bdaae351aa",
+      "stream": "bridge",
+      "entry_id": "prediction.a96ff0bdaae351aa",
+      "verdict": "fresh",
+      "reason": "The other bridges (2026-06-23 GLM-5.2 744B near-frontier open weights; 2026-06-20 Unsloth GLM-5.2 fine-tune/serving support) are correctly scoped as direction/deployment-tax support without a crossed 85.0 Terminal-Bench reading. This week added no new coding-benchmark bridge and did not outdate the existing ones.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.8
+    },
+    {
+      "prediction_id": "prediction.a96ff0bdaae351aa",
+      "stream": "needs",
+      "entry_id": "prediction.a96ff0bdaae351aa",
+      "verdict": "fresh",
+      "reason": "Three Needs (open-weight coding-model pretraining team, inference-engine maintainer, 4-bit quant team) all 'open'. Note target_start/end are both pinned to 2026-06-18 (creation date) which looks like a data artifact, but that pre-dates this week and is not a this-week staleness signal; the runway text says 'through Q4 2026'. This week's news documents no actor delivering. Not stale on this-week evidence.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.7
+    },
+    {
+      "prediction_id": "prediction.a96ff0bdaae351aa",
+      "stream": "readings",
+      "entry_id": "prediction.a96ff0bdaae351aa",
+      "verdict": "fresh",
+      "reason": "No chain/relation rows for this prediction; nothing to update. No this-week edge candidate.",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.9
+    }
+  ]
+}
