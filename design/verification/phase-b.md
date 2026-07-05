@@ -68,6 +68,13 @@ review gate). Plan: `design/development/2026-07-04-phase-b-plan.md`
   fallback answered 200/index.html for ANY missing path, which would have
   fooled the manifest probe (and any curl check) — file-like misses now
   stay 404 (bf3f5f4, regression-tested in gate/tests).
+- T9 (2026-07-05): timeline — pure week model (`timeline.ts`: isoWeekKey
+  incl. the 2026-W53 year boundary, buildWeeks with contiguous gap weeks,
+  weekly mix over opened commitments, subjective outcomes excluded from
+  close markers) with 6 unit tests; SVG view on the 56px cold grid with
+  lanes commitments/edges/provenance + the two reserved lanes labeled
+  "no records yet (Phase D+)"; markers jump to `/?focus=<id>`. Formans:
+  3 test files (16 tests) green, build green.
 
 ## Decisions log
 
