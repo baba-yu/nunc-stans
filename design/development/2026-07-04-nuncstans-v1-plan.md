@@ -478,6 +478,14 @@ v0 scope (built in Phase D):
 - **Memory exclusively through the manda MCP gateway** — append / candidate /
   committed lanes, mandate-gated writes, audited. manda stays a separate OSS
   dependency (§5 note 13); this agent is its first real consumer.
+- **manda acquisition (decided 2026-07-04):** runtime dependency only, never
+  vendored. Prerequisite owner steps: push `~/manda` to
+  `github.com/baba-yu/manda` and tag `v0.2.0`. At Phase D the setup line is
+  `cargo install --locked --git https://github.com/baba-yu/manda --tag v0.2.0`,
+  `just bootstrap`'s doctor gains a `manda` check, and S-10 extends to cover
+  it. Once published: crates.io + cargo-dist releases, so
+  `cargo binstall manda` (prebuilt) with `cargo install --locked manda` as
+  the fallback becomes the standard route.
 - MCP client for tools — including, from Phase E, the CRUD tools of generated
   apps: this agent is how "the agent co-uses the app" is proven (S-7).
 - Profile-driven (model, prompt, skills, memory scope) and subject to the
