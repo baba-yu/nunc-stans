@@ -1,0 +1,418 @@
+# Phase C Implementation Plan — News newstack (pipeline as code + packages/ai)
+
+**Goal:** the News daily DAG runs as **TypeScript code** — steps are functions,
+I/O is the existing sourcedata JSON schemas, gates are the existing
+deterministic checks — orchestrated by a CLI that a systemd timer starts and
+finishes **with no conversational step**. `frontend/packages/ai` exists as the
+one place that talks to models (providers + the claude-code runtime + the
+search-source × synthesis-model split). The Python compute is ported to TS
+against golden-master fixtures (Python is the oracle until parity, then
+retired — D4). `analytics.sqlite` moves to `<data store>/world/`. `~/news` is
+split into a data+publish remnant renamed `nunc-fluens` (D3). Exit: one full
+daily run each on (a) claude-code, (b) a local provider + external search,
+(c) replay with zero LLM calls; ported tests green against goldens; stories
+S-3 and S-4 pass; S-10 re-run; 3-OS CI green.
+
+**Architecture:** a new workspace package `engines/nunc-fluens/pipeline/`
+(bin `nunc-fluens`) implements the day-of-week DAG from
+`design/scheduled/0_daily_master.md` as a typed step graph: LLM steps call
+`frontend/packages/ai` and are schema-validated at the boundary; deterministic
+steps are TS ports of the `app/` Python (renderers via nunjucks reusing the
+Jinja2 templates). Read/write topology after C: **run inputs and published
+outputs live in the remnant repo checkout** (sourcedata, report/, FP,
+README, docs/, memory/, reference/, references.txt — the world SoR per the
+constitution), **the DB cache and run logs live in the data store**
+(`world/analytics.sqlite`, `runs/ai-runs.jsonl`). `NEWS_WORLD` is retired: the
+remnant checkout location becomes app config (`newsRepo`), env override
+`NS_NEWS_REPO`.
+
+**Tech stack:** TypeScript on node 24 (type-stripping, as `tools/*.ts`
+already runs); nunjucks (Jinja2-compatible) for renderers; better-sqlite3
+(^12); zod or ajv against `design/sourcedata-layout.md` schemas; vitest;
+pnpm workspace; systemd user timer (cron fallback documented); Rust (gate)
+only if C5 lands on the gate endpoint.
+
+**Plan doc convention:** plans live in `design/development/` (repo rule).
+Work runs on branch **`newstack`** off `dev` (v1 plan §3); owner pushes for
+CI; merge back to `dev` at phase close.
+
+---
+
+## Design decisions (owner-approved 2026-07-05)
+
+| # | Decision | Choice |
+|---|---|---|
+| C1 | Pipeline home | `engines/nunc-fluens/pipeline/`, workspace package, bin `nunc-fluens`. The Python `app/` stays beside it as oracle until the T12 parity gate, then is deleted. |
+| C2 | Renderer parity strategy | nunjucks consuming the existing two `.j2` templates (minimal syntax edits, byte-identical goldens). Alternative: hand-rolled string builders (rejected: parity risk). |
+| C3 | External search adapters | **Owner: make them interchangeable, not one blessed engine.** `SearchSource` is a first-class plugin interface; Phase C implements **Brave** (owner holds a key — the S-3 exercise pair), **SearXNG** (keyless path for users without accounts), **Tavily**, and **Perplexity Search** (keyed) as thin HTTP adapters. **DuckDuckGo has no official search API** — recorded as a wanted adapter, deferred until a ToS-clean route exists (their HTML endpoint is scraping). |
+| C4 | Exit-run (b) provider | ollama + `qwen3.6:27b` (already installed on this box) + an external adapter. Acceptance is structural validity, not content quality (v1 plan §3 Phase C). |
+| C5 | S-3 settings surface | **Owner: gate gains a minimal config API** (`GET/PUT /api/world/news-config` → atomic JSON at `<data store>/world/news-config.json`) + a settings drawer in the Formans world view. No new process; the gate stays the one door (B1 continuity). |
+| C6 | Exit-run publish policy | **Owner: all three runs publish.** (a) is the timer-launched real day; (b) publishes its local-model day as real data — provider differences are allowed to show on the public dashboard; (c) replays an already-published day, so its push is naturally a no-op on content and lands only the run manifest/evidence. |
+| C7 | Python retirement timing | At T12, in-phase (per D4): after goldens are green and runs (a)(b)(c) pass, delete `engines/nunc-fluens/app/` (git history keeps it) and swap the CI news job pytest → vitest. The remnant repo drops its `app/` too. |
+
+Derived decisions:
+
+- **Data placement (§2.9 applied):** `analytics.sqlite` →
+  `<data store>/world/analytics.sqlite` (same file, same schema; the
+  `.partial/.dud/.bak` junk siblings in `~/news/app/data/` are *not*
+  migrated; `PRAGMA integrity_check` gates the copy). AI run log →
+  `<data store>/runs/ai-runs.jsonl`. Sourcedata **stays committed in the
+  remnant repo** (it is world SoR and the replay input; 2 982 files already
+  tracked there today).
+- **Config resolution:** the pipeline resolves the data store exactly as
+  `tools/data-dir.ts` does (NS_DATA > FED_DATA-warn > app config). The
+  resolver is extracted to `tools/lib/data-dir.ts` and imported by both
+  callers (node 24 runs TS relative imports fine). New config key `newsRepo`
+  (path to the remnant checkout), env override `NS_NEWS_REPO`; set via
+  `just news-link <dir>`. Unset ⇒ Formans world view keeps its Phase-B
+  empty state; the pipeline refuses to run with a clear message.
+- **`NEWS_WORLD` retired:** `tools/build-world.ts` stages the dashboard from
+  the `newsRepo` checkout (`docs/` + `docs/data/`) instead of the env var.
+  Grep-clean at T12 (naming.md updated).
+- **LLM step boundary:** every LLM step = prompt asset + expected JSON
+  schema + re-prompt-on-schema-error policy (the existing failure-mode
+  rules). Prompts are ported from `~/news/design/skills/compose-*.md` and
+  writer-rules into `engines/nunc-fluens/pipeline/prompts/` with provenance
+  headers. The sub-agent dispatch policy becomes per-step concurrency
+  (promise pools): 3× predictions, 3× locales, N× bridges, 4× READMEs.
+- **claude-code runtime:** one headless `claude -p` invocation per LLM step
+  (fresh context = the old sub-agent shape), `--output-format json`,
+  WebSearch allowed only for steps that search, timeout + one retry.
+  Headless-under-systemd auth is verified early (T2 risk probe).
+- **Run manifest (S-3 record):** every run writes
+  `sourcedata/<date>/run.json` — provider, model, search source×model pair
+  per step, tokens, durations, verdicts, replay flag. Committed with the
+  day's data (public: names no secrets). `ai-runs.jsonl` gets the per-call
+  detail.
+- **Replay (S-4):** `nunc-fluens run --date D --replay` reads the stored
+  sourcedata JSON instead of calling any provider (asserted: the AI layer is
+  handed a `forbid` provider that throws on use), re-runs the deterministic
+  chain, and diffs against the published day. Allowed diffs: run metadata
+  only (timestamps, run ids) — enumerated in the story spec.
+- **Weekly tasks are in scope:** the DOW table (Sun: 4_weekly_memory,
+  5_weekly_theme_review, 6_weekly_maintenance before 3_daily_briefing) is
+  part of the DAG. `apply-schema-edit` stays in `manual` mode by default.
+- **Port scope rule:** everything the daily/weekly DAG invokes is ported;
+  one-off backfills are retired un-ported (`backfill_*`,
+  `build_evidence_reverse`, `migrate_to_sourcedata`, `super_backfill`,
+  `migrations/01_*`). `fastembed` semantic matching is not ported — the
+  in-code LCS fallback is the ported behavior (recorded as a documented
+  degradation; revisit only if fuzzy-match quality regresses).
+- **Commit areas:** `nf` (engines/nunc-fluens/**), `fe` (frontend/** incl.
+  packages/ai), `gate`, `tool`, `design`. One commit = one area as usual.
+- **Scheduling is Linux/WSL-only in v1** (the three-OS scheduling adapters
+  of §5.14 are explicitly deferred; CI still tests the pipeline 3-OS).
+
+---
+
+## Component specs
+
+### `frontend/packages/ai` (v0 — what Phase C needs, shaped for D)
+
+- `Provider` interface: `chat(messages, opts) → {text|json, usage}`,
+  streaming optional (not needed by the pipeline), `capabilities:
+  {chat, stream, tools, structured, web_search: native|none, thinking,
+  memory}` (§2.6).
+- Providers: `anthropic-api` (native web_search tool), `ollama`
+  (localhost:11434), `mock` (fixture-driven, used by tests and goldens).
+- Agent runtime: `claude-code` — spawns headless CLI per call; maps
+  step→allowed tools; parses JSON output envelope; surfaces token usage.
+- Search axis: `SearchSource` = `native` (provider tool) | external adapter.
+  Adapters (C3): `brave`, `searxng` (instance URL config), `tavily`,
+  `perplexity` — one small module each behind the same
+  `search(query, opts) → results[]` shape, keys via env/config, registry
+  keyed by name so a future `duckduckgo` drops in without core changes.
+  A step's config picks `{search: source, synth: provider+model}` — the
+  pair S-3 switches and `run.json` records.
+- Goal-verify middleware: config parsed and logged, **default off**
+  (`{verify:off}`) — the full loop with judge/retry surfaces is Phase D
+  (S-6); the call-site plumbing exists now so D wires UI, not internals.
+- Run log: append JSONL `{ts, caller, provider, model, search, tokens_in,
+  tokens_out, duration_ms, verify, outcome}` to
+  `<data store>/runs/ai-runs.jsonl`.
+
+### `engines/nunc-fluens/pipeline/`
+
+```
+pipeline/
+  package.json          name nunc-fluens-pipeline, bin nunc-fluens
+  src/
+    cli.ts              run [--date D] [--replay] [--dry-run] [--only step]
+                        status | migrate-db | link <dir>
+    config.ts           data store + newsRepo resolution
+    dag.ts              DOW table, step graph, resume (flow-check), gating
+    steps/              one module per step (compose-*, render-*, ingest, checks…)
+    ai/                 step→packages/ai glue (prompt loading, schemas, pools)
+    db/                 schema.sql apply, better-sqlite3 access layer
+    render/             nunjucks env + the two templates
+    publish/            README window, commit+push to newsRepo (ported
+                        bindfs-safe-commit-push logic; plain-git path)
+  prompts/              ported compose-* prompt assets + writer rules
+  schemas/              sourcedata JSON schemas (from design/sourcedata-layout.md)
+  systemd/              nunc-fluens-daily.{service,timer} + install notes
+  test/                 vitest: unit ports of the 122-test intent + golden suite
+  goldens/              fixture days (inputs) + captured oracle outputs
+```
+
+### Orchestrator step map (source of truth: the three scheduled specs)
+
+| Step (1_daily_update) | Kind | Port source |
+|---|---|---|
+| compose-news-section | LLM+search (1) | prompt asset |
+| compose-prediction ×3 | LLM (pool 3) | prompt asset |
+| compose-headlines-pair / compose-change-log | LLM | prompt assets |
+| extract/define/validate glossary | det + LLM-fill | `extract_glossary_candidates.py`, `define_glossary_terms.py`, `validate_glossary_terms.py` |
+| extract-needs ×3 + merge | LLM (pool 3) + det | `extract_needs.py` |
+| citation-restriction-check | det | `citation_restriction_check.py` |
+| append-references-txt | det | (inline) |
+| translate-sourcedata ×3 | LLM (pool 3) | locale-fanout contract |
+| render-news-md ×4 | det | `render_news_md.py` + `news.md.j2` |
+| ingest-sourcedata | det | `ingest_sourcedata.py`, parsers |
+| post-write-integrity / lint-markdown-clean | det | ports |
+| verify-topic-coverage | LLM (1) | prompt asset |
+| check-topic-coverage / post-update-validation | det | ports |
+
+2_future_prediction (compose-validation-rows, compose-bridge ×N,
+compose-summary, citation check, fan-out, render, ingest, lint, validation)
+and 3_daily_briefing (FP-exists gate, README ×4 LLM, link/structural checks,
+update-pages/export rebuild, integrity, export validation, commit+push) map
+the same way; Sunday adds 4/5/6 (dormant snapshot LLM, theme review LLM +
+apply-schema-edit, weekly-maintenance port).
+
+### Settings surface (C5 default)
+
+- Gate: `GET/PUT /api/world/news-config` — serde-validated
+  `{search: "native"|"external", searchEngine, synthProvider, synthModel,
+  runtime}` written atomically to `<data store>/world/news-config.json`.
+  Loopback + Host-guard as everywhere; no other gate scope change.
+- Formans: settings drawer on `/world` (nunc-ui controls) reading/writing
+  that endpoint. The pipeline reads the same file at run start; CLI flags
+  override per invocation.
+
+### Scheduling
+
+- `systemd/nunc-fluens-daily.timer` (OnCalendar= owner-chosen time,
+  `Persistent=true` so a sleeping laptop catches up) → service runs
+  `just news-daily` (which is `nunc-fluens run` with defaults: runtime
+  claude-code per D7). `just news-schedule` installs user units;
+  cron fallback line documented in the engine README.
+- Proof of "no conversational step": exit run (a) is launched by
+  `systemctl --user start nunc-fluens-daily.service` (same unit the timer
+  fires), not by an interactive prompt.
+
+---
+
+## Execution notes
+
+- Build/test inside WSL (better-sqlite3 native, pnpm, systemd all live
+  there); drive via `wsl.exe` scripts per repo convention.
+- **Oracle discipline:** the Python app is read-only reference until T12.
+  Any bug found in it during the port is fixed **in the TS port** and
+  recorded; the goldens capture current behavior, warts included (behavior
+  changes are out of scope for the port).
+- **`~/news` keeps running the old stack daily until T9 cutover.** Before
+  T8 (remnant split), re-diff the subtree against upstream and fold in any
+  drift (code freeze makes this unlikely but the check is cheap — today's
+  diff: clean at upstream 9e86e01 / last code commit 529f2e1).
+- Cutover day: old Cowork routine stops, timer starts. Pick a date with the
+  owner at T9; keep one manual-run day in between if wanted.
+- Cost: (a) rides the subscription (claude-code). (b) is local (ollama).
+  Goal-verify stays off. API providers are configured but not exercised in
+  exit runs unless the owner opts in.
+
+## Risks
+
+1. **Port surface** (~7 kLoC Python, 122 tests, 24 skills): mitigated by
+   goldens-first ordering (T1 before any port), oracle-until-parity, and
+   the T4 a/b/c split at session boundaries.
+2. **Jinja2→nunjucks byte parity** (whitespace control, filter edge cases):
+   goldens catch every divergence; target is byte-identical, any residual
+   cosmetic diff needs explicit owner sign-off (default: fix, not waive).
+3. **claude-code headless under systemd** (no TTY; auth store): probed at
+   T2 with a one-call unit test; fallback for the timer is `anthropic-api`
+   (owner key) while investigating — the DAG doesn't care.
+4. **qwen3.6:27b JSON discipline**: schema-validate + bounded re-prompts
+   (existing failure-mode policy); 35b is on disk as fallback; acceptance
+   is structural.
+5. **Public dashboard shows provider variance**: C6 — the owner chose to
+   publish all three exit runs; (b)'s local-model day appears on Pages as
+   real data. Accepted deliberately; `run.json` makes the provenance of
+   every published day inspectable.
+6. **Pages URL changes on rename** (no redirect): T8 updates links
+   deliberately; owner announces where relevant.
+7. **DB migration**: integrity-check gate + backup copy before move; junk
+   siblings dropped consciously.
+8. **Scope creep via settings UI**: C5 default is one endpoint + one
+   drawer; run-log viewer and richer config are Phase D.
+
+## File map (new/changed)
+
+- `frontend/packages/ai/**` (new)
+- `engines/nunc-fluens/pipeline/**` (new; includes prompts/, schemas/,
+  goldens/, systemd/)
+- `engines/nunc-fluens/design/**` (new: imported spec corpus —
+  sourcedata-layout.md, scheduled/, the DAG-relevant skills/ specs — with
+  provenance headers; the port's source of truth)
+- `engines/nunc-fluens/app/**` (deleted at T12)
+- `engines/nunc-fluens/INTEGRATION.md` (rewritten: direction reversal +
+  the stale `engines/news` paths fixed)
+- `gate/src/**` (C5 config endpoint) · `frontend/nunc-stans-formans/**`
+  (world settings drawer) · `tools/build-world.ts` + `tools/lib/data-dir.ts`
+  · `justfile` (news-daily, news-schedule, news-link, news-migrate-db)
+  · `.github/workflows/*` (news job: exclusions removed at T1, pytest→vitest
+  at T12) · `design/naming.md`, v1 plan (in-place updates at T12)
+  · `design/stories/S-3.md`, `S-4.md` (new) ·
+  `design/verification/phase-c.md` (new)
+
+## Tasks
+
+### Task 0: Preflight
+- [ ] Branch `newstack` off `dev`; record upstream tip (`~/news` 9e86e01)
+      and verify subtree diff clean (re-run today's check).
+- [ ] Import the spec corpus into `engines/nunc-fluens/design/` with
+      provenance headers (sourcedata-layout.md, scheduled/*.md, the
+      DAG-relevant skills/*.md).
+- [ ] Fix INTEGRATION.md's stale `engines/news` prefix now (small honest
+      commit; full rewrite waits for T8).
+
+### Task 1: Golden-master harness (before any port)
+- [ ] Pick fixture days: 3 weekdays with distinct shapes + 1 Sunday
+      (weekly chain) from committed sourcedata; copy inputs (sourcedata,
+      last-7 reports, dormant snapshot, glossary.yml, references slice)
+      into `pipeline/goldens/input/`.
+- [ ] Capture oracle outputs with the Python app: rendered md ×4 locales,
+      DB row dumps (deterministic order), graph-*.json exports, check
+      exit codes → `pipeline/goldens/expected/`.
+- [ ] Restore the 12 excluded CI tests with fixture data; news job green
+      with zero `--ignore/--deselect`.
+
+### Task 2: packages/ai v0
+- [ ] Types + capabilities; providers `anthropic-api`, `ollama`, `mock`;
+      runtime `claude-code` (headless spawn, JSON envelope, timeout+retry).
+- [ ] `SearchSource` registry: native + adapters `brave`, `searxng`,
+      `tavily`, `perplexity` (env/config-keyed; shared result shape;
+      per-adapter smoke test behind a key-present guard).
+- [ ] Goal-verify config plumbing (off) + run-log JSONL writer.
+- [ ] Unit tests on `mock`; headless-under-systemd probe (risk 3).
+
+### Task 3: Pipeline scaffold + data moves
+- [ ] Package skeleton, CLI, config resolution (`tools/lib/data-dir.ts`
+      extraction + `newsRepo` key + `just news-link`).
+- [ ] Port `sourcedata_schemas.py` → `schemas/` (zod/ajv) from
+      sourcedata-layout.md; validate the fixture days as a self-test.
+- [ ] `nunc-fluens migrate-db` (+ `just news-migrate-db`): integrity-check,
+      backup, copy to `<data store>/world/`, junk siblings excluded;
+      engine README documents the move.
+
+### Task 4a: Deterministic port — render chain
+- [ ] nunjucks env + `news.md.j2` + `future_prediction.md.j2`;
+      `render-news-md`, `render-future-prediction-md`,
+      `post-write-integrity`, `lint-markdown-clean` — byte-identical on
+      goldens, all 4 locales.
+
+### Task 4b: Deterministic port — DB chain
+- [ ] `db/` (schema.sql apply, access layer), parsers (news, prediction,
+      `_strip_scope_prefix_anywhere`), `ingest-sourcedata`, `ingest`/cli
+      paths, `timewindow`, `score` + `analytics/{scoring,windows}`,
+      `glossary_link`, glossary skills (candidates seed modes, validate),
+      `daily-flow-check`, `post-update-validation` — row-dump parity on
+      goldens.
+
+### Task 4c: Deterministic port — export + gates + weekly
+- [ ] `export` + `run-update-pages` (graph-*.json, manifest, dashboard
+      rebuild), `citation-restriction-check`, `check-topic-coverage`,
+      `apply-schema-edit` (manual mode), `weekly-maintenance`,
+      `rename_future_titles` — export parity on goldens; vitest suite
+      covering the 122-test intent green.
+
+### Task 5: Orchestrator
+- [ ] DAG runner: DOW table, artifact-presence resume, DRY_RUN, `--only`;
+      failure-mode policies from the specs (re-prompt rules, aborts).
+- [ ] LLM steps: prompt assets + schemas + per-step search/synth config +
+      concurrency pools; `run.json` manifest writer.
+- [ ] Publish: README 3-day window (LLM ×4), link/structural checks,
+      commit+push to `newsRepo` (ported safe-push), DRY_RUN skips push.
+- [ ] Full pipeline DRY run on a golden day with `mock` — deterministic
+      end-to-end pass.
+
+### Task 6: Replay mode (S-4 substrate)
+- [ ] `--replay`: stored-sourcedata path, `forbid` provider assertion,
+      diff-vs-published-day report with the allowed-metadata list.
+
+### Task 7: Settings surface (S-3 substrate)
+- [ ] Gate config endpoint (C5) + tests; Formans world settings drawer;
+      pipeline reads `news-config.json`; CLI overrides.
+
+### Task 8: Remnant split
+- [ ] Re-diff subtree; then in `~/news`: remove `app/` + orchestration
+      docs superseded by the pipeline (README pointer to the monorepo);
+      keep data dirs, docs/ Pages, reference/, references.txt.
+- [ ] Owner: rename GitHub repo → `nunc-fluens` (+ local dir
+      `~/nunc-fluens`); `just news-link` re-point; deliberate link-update
+      sweep (Pages URL changed, no redirect).
+- [ ] Rewrite INTEGRATION.md (monorepo executes; remnant is data+publish;
+      resync recipe retired).
+
+### Task 9: Scheduling + cutover
+- [ ] systemd user units + `just news-schedule`; cron fallback doc.
+- [ ] Agree cutover date; stop the Cowork routine; timer-launched run
+      lands a real day end-to-end (this is exit run (a)).
+
+### Task 10: Stories S-3 / S-4 — write and execute
+- [ ] Write `design/stories/S-3.md`, `S-4.md` (concrete steps, allowed
+      replay diffs enumerated).
+- [ ] Execute S-3: settings drawer native→external+local, next run
+      completes, `run.json` records the pair. Evidence saved.
+- [ ] Execute S-4: network+LLM disabled replay → identical dashboard
+      modulo metadata. Evidence saved.
+
+### Task 11: Exit runs + portability
+- [ ] (a) timer-launched claude-code day — published (done in T9).
+- [ ] (b) ollama qwen3.6:27b + external search — published as that day's
+      real run (C6).
+- [ ] (c) replay — published (content no-op; the run manifest/evidence
+      lands). All three `run.json`s archived in the verification doc.
+- [ ] S-10 re-run (container; native Windows unaffected but re-checked);
+      CI 3-OS green on `newstack`.
+
+### Task 12: Retire Python + close
+- [ ] Delete `engines/nunc-fluens/app/`; CI news job → vitest; root README
+      + engine README updated.
+- [ ] `NEWS_WORLD` grep-clean; naming.md rows updated (~/news → executed);
+      v1 plan in-place updates (D3/D4 executed; §2.2 layout note).
+- [ ] `design/verification/phase-c.md` (stories, exit runs, goldens
+      summary, deviations); merge `newstack` → `dev`; owner push + PR gate.
+
+## Exit criteria (phase closes when all hold)
+
+1. Runs (a) claude-code / (b) ollama+external / (c) zero-LLM replay each
+   produce a valid dashboard; (c) identical modulo run metadata.
+2. Golden suite green (byte-identical renders, row/export parity); the
+   122-test intent ported; CI news job runs the TS suite with no
+   exclusions, 3-OS matrix green.
+3. S-3 and S-4 executed with evidence; S-10 re-run passes.
+4. The timer (not a conversation) started run (a); the Cowork routine is
+   retired.
+5. `analytics.sqlite` lives in `<data store>/world/`; `NEWS_WORLD` is gone;
+   `newsRepo` config governs; Formans world view works (and empty-states
+   without it).
+6. `~/news` → `nunc-fluens` remnant (data+publish, no app/); INTEGRATION.md
+   rewritten; Python deleted from the monorepo.
+7. `design/verification/phase-c.md` written; `newstack` merged to `dev`;
+   owner pushed; PR gate per workflow.
+
+## Self-review (done at write time)
+
+- The v1-plan Phase C paragraph is fully covered: orchestrator-as-code ✓,
+  packages/ai ✓, golden-master port ✓, subtree sync ✓ (verified clean
+  today), analytics.sqlite move ✓, remnant split + rename ✓, scheduler with
+  no conversational step ✓, exit runs (a)(b)(c) ✓, S-3/S-4 ✓.
+- Constitution: world stays News's scope (§6); sourcedata remains in the
+  News-side repo (SoR), the data store holds only the rebuildable cache —
+  consistent with §2.9 and §11. No self-scope surface changes.
+- F-rules: no remote for self/ untouched; the pipeline never writes
+  self-scope (F3 irrelevant here but preserved by construction).
+- Deviations from the v1 plan: none structural. Additions: the gate config
+  endpoint (C5 — extends the B1 gate deliberately, recorded), prompts/spec
+  corpus imported under the engine (the plan's "steps = functions" needs
+  the specs in-repo).
