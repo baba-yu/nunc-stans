@@ -1,9 +1,9 @@
-# NuncStans v1 — Consolidation and Rebuild Plan
+# Nunc Stans v1 — Consolidation and Rebuild Plan
 
 - Date: 2026-07-04
 - Status: DRAFT — awaiting owner approval before any execution
-- Updated 2026-07-04 (owner feedback round 1): monorepo named
-  `nuncstans-formans` (the engine keeps `nuncstans`), agent-runtime selection
+- Updated 2026-07-04 (owner feedback round 1): monorepo named per owner
+  (naming superseded by round 4), agent-runtime selection
   added, orchestrator reality corrected (manual daily prompt, not Cowork),
   timeline view + S-9 added, git identity directive recorded, monorepo
   rationale re-examined at owner request (§2.1).
@@ -12,9 +12,15 @@
   on any WSL2/Linux environment, real data excluded (§2.10, S-10, D9).
 - Updated 2026-07-04 (owner feedback round 3): D9 confirmed (BYOL noted;
   start signal still pending); portability targets widened to Ubuntu +
-  Windows + macOS (§2.10); `nuncstans-agent` added as a first-party CLI
+  Windows + macOS (§2.10); `nunc-stans-agent` added as a first-party CLI
   agent stack (§2.11, Phase D, S-11); the per-phase implementation-plan
   gate made explicit (§7, Phase E precondition).
+- Updated 2026-07-04 (owner feedback round 4, naming): hyphenation across
+  the board — monorepo `nunc-stans-formans`, engine `engines/nunc-stans`
+  (crate `nunc-stans-engine`), agent `nunc-stans-agent`, data
+  `~/nunc-stans-data`, prose "Nunc Stans"; the news stack becomes
+  **Nunc Fluens** (`engines/nunc-fluens`; the external `~/news` repo is
+  renamed at Phase C). manda and fourfive keep their names.
 - Executor: Claude (Fable), phase by phase, with an owner review gate per phase
 - Relation to existing docs: extends `design/development/development-plan.md`
   (the HTAS M-milestones remain the product-side roadmap). The old
@@ -25,8 +31,8 @@
 
 Owner direction (2026-07-04), restated as requirements:
 
-1. The product is **NuncStans**; the monorepo (the integrated environment) is
-   named **`nuncstans-formans`** — the workshop where NuncStans is formed —
+1. The product is **Nunc Stans**; the monorepo (the integrated environment) is
+   named **`nunc-stans-formans`** — the workshop where Nunc Stans is formed —
    so the product/engine name and the environment name never collide. The
    name "federation" is retired everywhere (repo name, env vars, document
    vocabulary). One monorepo holds every stack.
@@ -59,7 +65,7 @@ explicitly instead of forgetting it.
 | AI presents predicted futures and options | world predictions + mandate-scoped intervention cards (L1–L3) | News + ledger mandates |
 | Human selects or writes a future | self predictions + commitments (append-only, user-authored — rule F3) | ledger (self scope) |
 | Human + AI turn the path into an app | FourFive blueprint → **runnable app bundle (new)** | FourFive + apps-host |
-| Both use the app; data accumulates | per-app SQLite in the vault (new) | `~/nuncstans-data/apps/` |
+| Both use the app; data accumulates | per-app SQLite in the vault (new) | `~/nunc-stans-data/apps/` |
 | AI remembers *why* the app exists | `serves` / `produced` / `informed_by` edges + stage-3 strategy read-out | edges + shell |
 
 The "indirect goal" example is exactly the edge chain
@@ -71,11 +77,11 @@ and the discipline of reading the chain back. This plan builds both.
 
 | Location | What it is | State |
 |---|---|---|
-| `~/federation` | The real build. `engines/nuncstans` (Rust ledger v0, append-only, loopback-only, hardened), `engines/fourfive` (subtree copy), `engines/news` (subtree copy, code only), `frontend/` ME view (Vue 3 + TS + Pinia), `contracts/`, `design/`, justfile, boundary checks | Active. Local-only (no remote), single `main`. Federation Phases 0–3 done. |
+| `~/federation` | The real build. `engines/nunc-stans` (Rust ledger v0, append-only, loopback-only, hardened), `engines/fourfive` (subtree copy), `engines/nunc-fluens` (subtree copy, code only), `frontend/` ME view (Vue 3 + TS + Pinia), `contracts/`, `design/`, justfile, boundary checks | Active. Local-only (no remote), single `main`. Federation Phases 0–3 done. |
 | `~/news` | Standalone News product: deterministic Python pipeline (SQLite cache, 134 tests, Jinja2 render) + static D3 dashboard on GitHub Pages. Content authored daily by Claude via Cowork Routines (`design/scheduled/*.md`) | Active, **evolving daily outside the monorepo** |
 | `~/fourfive` | Standalone FourFive: Vue 3 + Hono + better-sqlite3; chat → blueprint → markdown export; LLM providers mock/ollama/claude behind an interface | **Frozen since 2026-06-10** (superseded by the monorepo copy) |
 | `~/nuncstans` | Design corpus (`plan/**`: PRD, constitution, contracts, journeys) + scratch Rust bin; GitHub remote `baba-yu/nuncstans` | Design docs **duplicated** with `~/federation/design` |
-| `~/federation-data` | The vault. `self/` is a git repo (no remote, rule F11) holding 3 commitments + 3 edges; `world/` and `artifact/` empty | Active. One commitment is literally "consolidate News/NuncStans/FourFive locally" — this plan serves it. |
+| `~/federation-data` | The vault. `self/` is a git repo (no remote, rule F11) holding 3 commitments + 3 edges; `world/` and `artifact/` empty | Active. One commitment is literally "consolidate News/Nunc Stans/FourFive locally" — this plan serves it. |
 | `~/manda` | OSS memory-governance MCP gateway (Rust; append/candidate/committed lanes, mandates, audit) | Separate product. Stays out (see §5.13). |
 | Others | `old/` (superseded prototypes: hermes stack, SPL v2 backend, agent), `nuncstans-hermes-stack` remnant, `multi-stakeholder-simulater`, `second_brain`, `llmsec`, `honeypot`, stray pptx/js at `~` | Dormant or junk — archive in Phase A |
 
@@ -126,7 +132,7 @@ app/update_pages.sh                   # same, from repo root
    but its Claude streaming is a one-shot stub, its default model id is stale,
    and it has no agent-facing surface (no MCP tools, no CRUD generation).
 5. **The vault has no backup.** F11 forbids remotes and nothing replaces them.
-6. **Naming collision.** The product name NuncStans currently belongs to the
+6. **Naming collision.** The product name Nunc Stans currently belongs to the
    self-scope engine; "federation" is burned into the repo name, `FED_DATA`,
    and the document vocabulary.
 
@@ -134,7 +140,7 @@ app/update_pages.sh                   # same, from repo root
 
 ### 2.1 One repository, one history
 
-Decision: a **single-git monorepo named `nuncstans-formans`**, evolved in
+Decision: a **single-git monorepo named `nunc-stans-formans`**, evolved in
 place from `~/federation` (it already contains every stack, imported with
 history).
 
@@ -164,7 +170,7 @@ development. Re-examined honestly:
 
 Placement criterion: **things that are products for others live outside**
 (manda as OSS; the published News dashboard as the public remnant). **Organs
-of this one product live inside** (news, fourfive, the nuncstans engine, the
+of this one product live inside** (nunc-fluens, fourfive, the nunc-stans engine, the
 shell) — the constitution itself frames them as three scopes of one system.
 
 Also considered and rejected:
@@ -182,17 +188,17 @@ is hard; splitting later is easy — so default to one repo now.
 ### 2.2 Layout
 
 ```
-nuncstans-formans/              (monorepo root; was ~/federation)
+nunc-stans-formans/              (monorepo root; was ~/federation)
   justfile                      just up / news-run / journey / check / backup
   contracts/                    scope-id, edge schema, glossary, agent-abi v0 (new)
   design/                       canonical design corpus (deduped; ~/nuncstans/plan absorbed)
   engines/
-    nuncstans/                  Rust self-scope engine (keeps its name — the product's core)
-    news/                       News pipeline (canonical here after Phase C)
+    nunc-stans/                 Rust self-scope engine (crate nunc-stans-engine)
+    nunc-fluens/                the news pipeline (canonical here after Phase C)
     fourfive/                   FourFive server + app factory
   apps-host/                    host server for generated app bundles (new, Phase E)
   agents/
-    nuncstans-agent/            first-party CLI agent (new, Phase D — §2.11)
+    nunc-stans-agent/            first-party CLI agent (new, Phase D — §2.11)
   frontend/
     shell/                      single-origin shell: ME + world + /fourfive/ + /apps/ + profiles + timeline
     packages/
@@ -206,25 +212,29 @@ pnpm workspace across the TS packages; Cargo stays per-engine.
 
 ### 2.3 Naming migration
 
-- Directory: `~/federation` → `~/nuncstans-formans` (owner's naming, feedback
-  round 1: the integrated environment is *nuncstans-formans*, so it never
+- Directory: `~/federation` → `~/nunc-stans-formans` (owner's naming, feedback
+  round 1: the integrated environment is *nunc-stans-formans*, so it never
   collides with the product/engine name). The current `~/nuncstans` design
   repo is absorbed first (subtree merge, history preserved), then archived to
   `~/old/`.
-- Engine: `engines/nuncstans` **keeps its name** — with the monorepo named
-  `nuncstans-formans`, the collision that motivated a rename is gone. In
-  prose: "NuncStans" is the product; "the nuncstans engine" is the self-scope
-  core.
+- Engine: `engines/nuncstans` → `engines/nunc-stans`, crate
+  `nuncstans-engine` → `nunc-stans-engine` (round-4 hyphenation). News:
+  `engines/news` → `engines/nunc-fluens` — *nunc fluens*, the flowing now,
+  paired with *nunc stans*, the standing now. The external `~/news` repo is
+  renamed to `nunc-fluens` at Phase C (its daily routine and Pages URL live
+  there until then; `NEWS_WORLD` keeps its name until Phase C). In prose:
+  "Nunc Stans" is the product; "the nunc-stans engine" is the self-scope
+  core. manda and fourfive keep their names.
 - Env: `FED_DATA` → `NS_DATA` (both read for one phase; warn on the old name).
-- Data dir: `~/federation-data` → `~/nuncstans-data`.
+- Data dir: `~/federation-data` → `~/nunc-stans-data`.
 - Vocabulary: "federation edge" → "edge", "federation ID" → "scope ID",
-  "federation constitution" → "NuncStans constitution". Documents are renamed
+  "federation constitution" → "Nunc Stans constitution". Documents are renamed
   in place; `design/naming.md` records the mapping (the Rosetta stone) so
   historical text stays interpretable without rewriting history.
 - Git identity: the monorepo (and later the `~/news` remnant) get repo-local
   `user.email = yukibaba3912@gmail.com` (owner directive, feedback round 1;
   existing history stays untouched). Already applied to `~/federation`.
-- GitHub: a new private repo `baba-yu/nuncstans-formans` (owner creates and
+- GitHub: a new private repo `baba-yu/nunc-stans-formans` (owner creates and
   pushes — D2). The old `baba-yu/nuncstans` design repo is archived as is.
 
 ### 2.4 Stack policy
@@ -242,7 +252,7 @@ End state: **TypeScript for every app and pipeline; Rust for the ledger.**
   Python suite**; Python remains as a parity oracle until goldens match, then
   retires (fallback: D4).
 - DB: SQLite everywhere, one file per concern, always under
-  `~/nuncstans-data`, never inside the repo.
+  `~/nunc-stans-data`, never inside the repo.
 
 ### 2.5 Design system: `nunc-ui`
 
@@ -277,11 +287,11 @@ One place where models are called; nothing else talks to a provider directly.
   `anthropic-api`, `openai`, `google`, `ollama`, `mock`. **Agent runtimes**
   are selectable executors that bring their own tooling and memory:
   `claude-code` (headless CLI — rides the subscription, no API key),
-  **`nuncstans-agent`** (first-party, local-LLM-first, manda-gated memory —
+  **`nunc-stans-agent`** (first-party, local-LLM-first, manda-gated memory —
   §2.11), and optionally external runtimes such as a Honcho-backed agent
   (Hermes) for comparison. Per the owner: News may want claude-code, while
   sparring and custom agents (DB, skills, memory, MCP) run on
-  `nuncstans-agent`. Every
+  `nunc-stans-agent`. Every
   context that calls AI — News steps, FourFive chat, app agents — selects a
   runtime or provider through its profile. Each entry declares capabilities:
   `{chat, stream, tools, structured, web_search: native|none, thinking,
@@ -307,14 +317,14 @@ One place where models are called; nothing else talks to a provider directly.
   defaults from the active profile. Every verdict and retry is logged with
   token counts.
 - **Run log:** every call (provider, model, profile, tokens, duration,
-  verdict chain) appends to `~/nuncstans-data/runs/ai-runs.jsonl` — the audit
+  verdict chain) appends to `~/nunc-stans-data/runs/ai-runs.jsonl` — the audit
   substrate agent-abi needs.
 
 ### 2.7 Agent profiles + agent-abi v0 (requirement 5)
 
 Profile = `{id, name, provider, model, system_prompt, skills (tool
 allowlist), memory_scope {read[], write[]}, goal_verify defaults, ui prefs}`,
-stored as files in `~/nuncstans-data/profiles/` (versioned by the vault's own
+stored as files in `~/nunc-stans-data/profiles/` (versioned by the vault's own
 git). The shell gets a Profiles screen: create, edit, duplicate, and set the
 default profile per context (FourFive chat / News steps / app agents).
 
@@ -338,7 +348,7 @@ workspace/apps/<slug>/versions/<N>/   (design-time, as today)
    mcp-tools.json  the same CRUD exposed as MCP tools (<slug>.<entity>.{list,get,create,update,archive})
    ui/             generated Vue screens from mock_ui (forms, tables) on nunc-ui
    tests/          scenario tests generated from the app's user stories
-data: ~/nuncstans-data/apps/<slug>/data.sqlite   (per-user, local — requirement 8)
+data: ~/nunc-stans-data/apps/<slug>/data.sqlite   (per-user, local — requirement 8)
 ```
 
 - **apps-host** (one Hono server) serves every bundle under the single origin
@@ -356,7 +366,7 @@ data: ~/nuncstans-data/apps/<slug>/data.sqlite   (per-user, local — requiremen
 ### 2.9 Data topology (requirement 8)
 
 ```
-~/nuncstans-data/
+~/nunc-stans-data/
   self/         ledger vault (git, NO remote — F11 unchanged)
   world/        News DB cache (analytics.sqlite moves here; rebuildable from report/ markdown)
   artifact/     FourFive workspace (blueprints, versions) — moves out of the repo
@@ -373,7 +383,7 @@ multi-tenancy would be its own plan).
 
 **Backup (new obligation):** F11 forbids remotes for `self/`, which today
 means zero copies of the most irreplaceable data. `just backup` produces an
-encrypted archive (age or 7z-AES) of `~/nuncstans-data` to a second disk
+encrypted archive (age or 7z-AES) of `~/nunc-stans-data` to a second disk
 and/or an owner-chosen offsite target (D8). F11's intent is "no plaintext
 ledger on someone else's server"; an encrypted bundle you carry yourself is
 compatible with that intent.
@@ -427,14 +437,14 @@ nothing in the product may depend on them.
     a full manual pass before v1 is called done (hardware-dependent).
   - Phase F extends S-10 with `just journey`.
 
-### 2.11 `nuncstans-agent`: the first-party agent (owner requirement, round 3)
+### 2.11 `nunc-stans-agent`: the first-party agent (owner requirement, round 3)
 
 The owner wants a Hermes-Agent-like experience — a conversational agent in
 the terminal — built from this project's own parts: **manda plus a self-made
 agent, tryable from the CLI.** No such stack exists today (`~/manda` is a
-gateway with no agent attached; `old/nuncstans-agent` is a superseded
+gateway with no agent attached; `old/nunc-stans-agent` is a superseded
 prototype), so it becomes a first-class deliverable:
-`agents/nuncstans-agent/` (TypeScript).
+`agents/nunc-stans-agent/` (TypeScript).
 
 v0 scope (built in Phase D):
 
@@ -446,7 +456,7 @@ v0 scope (built in Phase D):
 - MCP client for tools — including, from Phase E, the CRUD tools of generated
   apps: this agent is how "the agent co-uses the app" is proven (S-7).
 - Profile-driven (model, prompt, skills, memory scope) and subject to the
-  goal-verify loop (§2.6); every run logged to `~/nuncstans-data/runs/`.
+  goal-verify loop (§2.6); every run logged to `~/nunc-stans-data/runs/`.
 
 Not in v0: autonomous coding-agent behavior (file-editing loops). That is a
 later extension; until then, coding tasks go through the `claude-code`
@@ -460,7 +470,7 @@ self-scope commitments (F3).
 | A | Consolidation and naming | — | 1–2 |
 | B | Single-origin shell + nunc-ui | A | 2–3 |
 | C | News newstack: coded pipeline + provider layer | A (B can run in parallel) | 4–6 |
-| D | Profiles + goal-loop + agent-abi v0 + nuncstans-agent v0 | C (`packages/ai`) | 3–5 |
+| D | Profiles + goal-loop + agent-abi v0 + nunc-stans-agent v0 | C (`packages/ai`) | 3–5 |
 | E | FourFive app factory + apps-host | B, D | 5–8 |
 | F | Journey validation: CI + 4-week live gate | E | 2 + 4 weeks calendar |
 
@@ -489,17 +499,17 @@ retires it; apply §2.3 renames (dirs, crate, env, vocabulary,
 unified-product direction — engines are now internal components of one
 product and may be modified freely, while the contracts keep defining the
 scope boundaries;
-move `~/federation` → `~/nuncstans-formans`; rename `~/federation-data` →
-`~/nuncstans-data` (engine flags, justfile, env shim); archive `~/fourfive`,
+move `~/federation` → `~/nunc-stans-formans`; rename `~/federation-data` →
+`~/nunc-stans-data` (engine flags, justfile, env shim); archive `~/fourfive`,
 `nuncstans-hermes-stack`, `multi-stakeholder-simulater`, and the stray `~`
 junk into `~/old/` (nothing deleted); carry LICENSE/NOTICE (Apache-2.0) to the
 monorepo root; write a `README.md` per stack with a working one-command run; write
 `just bootstrap` and purge machine-specific paths per §2.10; set the
 repo-local git identity (`yukibaba3912@gmail.com`; history untouched);
-prepare the new private remote `baba-yu/nuncstans-formans` (owner creates
+prepare the new private remote `baba-yu/nunc-stans-formans` (owner creates
 and pushes).
 
-Exit: `just up` works from `~/nuncstans-formans`; `just check` green;
+Exit: `just up` works from `~/nunc-stans-formans`; `just check` green;
 `rg -i federation` hits only `design/naming.md` and git history; every stack
 README has a verified run command; stories S-0 and S-10 pass (S-10 in a
 pristine WSL distro or container).
@@ -525,10 +535,12 @@ DAG as code (steps = functions, I/O = the existing sourcedata JSON schemas,
 gates = the existing deterministic checks); build `packages/ai` (§2.6);
 port the Python compute to TS against golden-master fixtures (Python stays as
 the oracle until parity); sync the news subtree to the `~/news` tip before
-any code change here (follow the re-sync recipe in `engines/news/FEDERATION.md`); move `analytics.sqlite` out of the repo to
-`~/nuncstans-data/world/` (same file, same schema, same data — new location);
+any code change here (follow the re-sync recipe in `engines/nunc-fluens/INTEGRATION.md`); move `analytics.sqlite` out of the repo to
+`~/nunc-stans-data/world/` (same file, same schema, same data — new location);
 split `~/news` into a data+publishing remnant
-(report/, docs/ Pages) fed by the monorepo pipeline (D3); schedule via a WSL
+(report/, docs/ Pages) fed by the monorepo pipeline (D3), renaming that repo
+to `nunc-fluens` at this point (GitHub Pages URLs change and do not
+redirect — update links deliberately); schedule via a WSL
 systemd timer (or cron) calling the CLI — the daily run must start and finish
 with **no conversational step**; the current manual "run today's scheduled
 tasks" prompt to Claude Code is retired.
@@ -541,12 +553,12 @@ ported tests green against goldens; stories S-3 and S-4 pass. Content quality
 across providers will differ; acceptance is structural validity, and quality
 tuning is ongoing operations, not a phase gate.
 
-### Phase D — Profiles + goal-loop surfaces + nuncstans-agent v0
+### Phase D — Profiles + goal-loop surfaces + nunc-stans-agent v0
 
 Work: profile store and Profiles screen; wire FourFive chat and News step
 config to profiles; goal-verify toggle per chat message and per pipeline
 step; run-log viewer in the shell; draft `contracts/agent-abi.md` v0; build
-**`nuncstans-agent` v0** (§2.11) — terminal chat on `packages/ai`,
+**`nunc-stans-agent` v0** (§2.11) — terminal chat on `packages/ai`,
 manda-gated memory, MCP tool client, profile-driven; Hermes/Honcho remains
 an optional comparison runtime (external process; license verified and
 recorded first if integrated); while touching that code, fix FourFive's
@@ -554,7 +566,7 @@ Claude streaming stub and stale default model id.
 
 Exit: profiles can be created and switched from the UI; a verify-on message
 visibly loops (≤ max_iters), reports unmet gaps, and shows cost; a local
-model via Ollama works under a profile; `nuncstans-agent chat` works in a
+model via Ollama works under a profile; `nunc-stans-agent chat` works in a
 terminal with mandate-gated memory operations through manda; stories S-5,
 S-6, and S-11 pass.
 
@@ -564,12 +576,12 @@ Precondition (owner gate, round 3): Phase E starts only after its own design
 spec and implementation plan — bundle format, apps-host API, MCP surface,
 codegen approach, security rails — are written and owner-approved. It is
 deliberately written after Phases C–D exist, because `packages/ai`, profiles,
-and `nuncstans-agent` fix the shapes it must target.
+and `nunc-stans-agent` fix the shapes it must target.
 
 Work: bundle generator (DDL, CRUD, MCP tools, UI, scenario tests — §2.8);
 apps-host mounted at `/apps/`; metrics contract consumed by the strategy
 read-out; generate `runway-tracker@v1`; prove agent co-use with
-`nuncstans-agent` doing CRUD through MCP alongside the human UI.
+`nunc-stans-agent` doing CRUD through MCP alongside the human UI.
 
 Exit: runway-tracker usable by human (generated UI) and agent (MCP) with data
 in the vault; a second, unrelated small app generated end-to-end in one
@@ -613,7 +625,7 @@ during its phase and executed before the phase closes:
 - **S-6 (D):** I send a message with goal-verify ON and an unmeetable goal;
   the loop stops at max_iters, reports the unmet gaps, and the cost is
   visible.
-- **S-7 (E):** Human (generated UI) and `nuncstans-agent` (MCP) both add rows
+- **S-7 (E):** Human (generated UI) and `nunc-stans-agent` (MCP) both add rows
   to runway-tracker; each sees the other's rows; the metrics view updates;
   the strategy read-out quotes only declared metrics.
 - **S-8 (E):** I design a new tiny app in FourFive chat and use its generated
@@ -626,7 +638,7 @@ during its phase and executed before the phase closes:
   screen with no manual steps beyond documented prerequisites; from Phase B
   the same passes on native Windows; at Phase F the run also passes
   `just journey`. The 3-OS CI matrix stays green throughout.
-- **S-11 (D):** In a terminal I start `nuncstans-agent chat` under a profile
+- **S-11 (D):** In a terminal I start `nunc-stans-agent chat` under a profile
   with a local model; the agent answers with streaming and visible thinking,
   reads and writes memory only through manda within its mandate and refuses a
   write outside it; the run appears in the run log.
@@ -677,10 +689,10 @@ during its phase and executed before the phase closes:
    Without scheduling it, the stories stay "tested" only in the CI sense.
 10. **Naming has a blast radius.** "nuncstans" currently names the design
     repo, the Rust engine, a GitHub remote, and (in docs) the self system.
-    The owner's `nuncstans-formans` name for the monorepo dissolves the
-    collision without renaming the engine; historical documents will still
-    read oddly in places, and `design/naming.md` is the Rosetta stone rather
-    than rewriting history.
+    The owner's round-4 naming settles it: monorepo `nunc-stans-formans`,
+    engine `engines/nunc-stans`, news `nunc-fluens`. Historical documents
+    will still read oddly in places, and `design/naming.md` is the Rosetta
+    stone rather than rewriting history.
 11. **The vault has zero backup today,** and F11 (no remote) is the reason.
     Encrypted offline bundles square the circle (§2.9); pick a destination
     (D8). Losing `self/` loses the product's point.
@@ -697,7 +709,7 @@ during its phase and executed before the phase closes:
     past commits stay untouched — already applied to `~/federation`).
 13. **Out of scope on purpose:** `manda` stays a separate OSS repo (the
     public/private boundary is why it was carved out); the monorepo *depends*
-    on it — `nuncstans-agent` is its first real consumer (§2.11) — but never
+    on it — `nunc-stans-agent` is its first real consumer (§2.11) — but never
     absorbs it. `work/`, `obsidian-vault`, and `second_brain` are untouched.
     `old/` remains the graveyard and receives the newly archived items.
 14. **Three-OS portability has a real cost.** Windows and macOS as targets
@@ -715,10 +727,10 @@ any of them.
 | # | Decision | Default | Alternative |
 |---|---|---|---|
 | D1 | Repo topology | Single git monorepo — re-examined at owner request, analysis in §2.1 | Nested per-stack repos (institutionalizes the two-homes problem; not recommended) |
-| D2 | GitHub remote | **Decided (round 1):** new private repo `baba-yu/nuncstans-formans`; owner creates and pushes | Stay local-only |
+| D2 | GitHub remote | **Decided (round 1):** new private repo `baba-yu/nunc-stans-formans`; owner creates and pushes | Stay local-only |
 | D3 | Public News dashboard | Keep: `~/news` becomes a data+publish remnant fed by the monorepo pipeline | Go fully local; retire Pages |
 | D4 | Python pipeline | Port to TS with golden-master parity, then retire Python | Keep Python permanently as a pinned CLI |
-| D5 | Naming | **Decided (round 1):** monorepo `nuncstans-formans`; the engine keeps `engines/nuncstans` | — |
+| D5 | Naming | **Decided (rounds 1+4):** monorepo `nunc-stans-formans`; engine `engines/nunc-stans` (crate `nunc-stans-engine`); news → `nunc-fluens` (external repo renamed at Phase C); agent `nunc-stans-agent`; manda and fourfive unchanged | — |
 | D6 | Primary accent | News cyan `#18c7d8` | FourFive blue `#5b8cff` |
 | D7 | Default pipeline provider | **Approved (round 1**, condition: no GPL-style copyleft — claude-code is proprietary freeware**):** `claude-code`; runtimes and providers selectable per profile | API-first |
 | D8 | Vault backup destination | Encrypted weekly bundle to a second local disk; owner adds an offsite copy | Owner-specified (e.g., encrypted cloud object storage) |

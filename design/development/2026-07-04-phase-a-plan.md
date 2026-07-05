@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** One monorepo named `nuncstans-formans` holds every stack with the
+**Goal:** One monorepo named `nunc-stans-formans` holds every stack with the
 "federation" name retired, the design corpus deduplicated, the data dir
 renamed, peripheral stacks archived, a bootstrap + CI skeleton in place, and
 stories S-0/S-10 passing.
@@ -24,13 +24,14 @@ the skill default location).
 ## Execution notes (read first)
 
 - All commands below run **inside WSL at the repo root** (`~/federation`
-  until Task 10; `~/nuncstans-formans` after). When driving from a
+  until Task 10; `~/nunc-stans-formans` after). When driving from a
   Windows-side session, wrap each block:
   `wsl.exe -e sh -c 'cd ~/federation && <commands>'`. Never rely on the
   Windows session cwd — Tasks 9–10 move directories.
 - Commit style: `area: lowercase description` (areas seen in history:
-  `design`, `contracts`, `ns`, `fe`, `ff`, `news`, `tool`). No AI
-  attribution. Identity is already repo-local `yukibaba3912@gmail.com`.
+  `design`, `contracts`, `ns`, `fe`, `ff`, `news`, `tool`; new work on
+  `engines/nunc-fluens` uses `nf`). No AI attribution. Identity is already
+  repo-local `yukibaba3912@gmail.com`.
 - `node tools/commit-scope.ts` (Task 5+; `bash tools/commit-scope.sh` before
   that) must pass after every commit: one commit = one area unless
   `contracts/` is touched. Evidence appends to
@@ -46,16 +47,16 @@ Create: `design/verification/phase-a.md`, `design/naming.md`,
 `tools/check.ts`, `tools/commit-scope.ts`, `tools/bootstrap.sh`,
 `rust-toolchain.toml`, `.node-version`, `.github/workflows/ci.yml`,
 `README.md` (root), `CONTRIBUTING.md`, `frontend/README.md`,
-`engines/news/README.md`, `design/stories/S-0.md`, `design/stories/S-10.md`,
+`engines/nunc-fluens/README.md`, `design/stories/S-0.md`, `design/stories/S-10.md`,
 `LICENSE` + `NOTICE` (copied from the design repo).
 Modify: `justfile`, `contracts/edge.schema.json` (text only), `design/**`
-(sweep + moves), `engines/news/FEDERATION.md → INTEGRATION.md`,
-`engines/nuncstans/src/**` (cfg(unix) pass + string sweep),
+(sweep + moves), `engines/nunc-fluens/FEDERATION.md → INTEGRATION.md`,
+`engines/nunc-stans/src/**` (cfg(unix) pass + string sweep),
 `frontend/src/**` (identifier sweep),
 `design/development/2026-07-04-nuncstans-v1-plan.md` (exit-check refinement).
 Delete: `tools/check.sh`, `tools/commit-scope.sh` (after ports verified).
-Filesystem: `~/federation-data → ~/nuncstans-data`; archives into `~/old/`;
-`~/federation → ~/nuncstans-formans`; `~/nuncstans → ~/old/nuncstans-design-repo`.
+Filesystem: `~/federation-data → ~/nunc-stans-data`; archives into `~/old/`;
+`~/federation → ~/nunc-stans-formans`; `~/nuncstans → ~/old/nuncstans-design-repo`.
 
 ---
 
@@ -156,7 +157,7 @@ git subtree add --prefix=design-import ~/nuncstans main -m "design: import the n
 
 Counterpart mapping: `design-import/plan/contracts/* → contracts/*`,
 `design-import/plan/design/* → design/*`,
-`design-import/plan/engines/nuncstans/docs/* → engines/nuncstans/docs/*`,
+`design-import/plan/engines/nunc-stans/docs/* → engines/nunc-stans/docs/*`,
 `design-import/plan/README-plan.md → design/README-plan.md`.
 
 ```bash
@@ -165,7 +166,7 @@ cd design-import/plan
 find . -type f | while read -r f; do
   case "$f" in ./contracts/*) c="../../contracts/${f#./contracts/}";;
     ./design/*) c="../../design/${f#./design/}";;
-    ./engines/nuncstans/docs/*) c="../../engines/nuncstans/docs/${f#./engines/nuncstans/docs/}";;
+    ./engines/nunc-stans/docs/*) c="../../engines/nunc-stans/docs/${f#./engines/nunc-stans/docs/}";;
     *) c="../../design/${f#./}";; esac
   if [ ! -f "$c" ]; then echo "ONLY-IN-IMPORT $f"; elif ! diff -q "$f" "$c" >/dev/null; then echo "DIFFERS $f"; fi
 done
@@ -200,14 +201,21 @@ bash tools/check.sh    # expected: 3× ok
 - [ ] **Step 3.1: File and directory renames**
 
 ```bash
+git mv engines/news engines/nunc-fluens
+git mv engines/nuncstans engines/nunc-stans
 git mv design/federation design/constitution
 git mv design/constitution/federation-constitution.md design/constitution/constitution.md
 mkdir -p design/stories
 git mv design/constitution/journey-examples.md  design/stories/journey-examples.md
 git mv design/constitution/test-spec-journey.md design/stories/test-spec-journey.md
 git mv contracts/federation-id.md contracts/scope-id.md
-git mv engines/news/FEDERATION.md engines/news/INTEGRATION.md
-git commit -m "contracts: rename the federation-named files and move journeys to design/stories"
+git mv engines/nunc-fluens/FEDERATION.md engines/nunc-fluens/INTEGRATION.md
+# keep the build/tooling working across the dir renames:
+sed -i 's|engines/nuncstans|engines/nunc-stans|g; s|engines/news|engines/nunc-fluens|g' justfile tools/check.sh tools/commit-scope.sh
+sed -i 's/name = "nuncstans-engine"/name = "nunc-stans-engine"/' engines/nunc-stans/Cargo.toml
+cargo build --manifest-path engines/nunc-stans/Cargo.toml >/dev/null   # refreshes Cargo.lock with the new crate name
+git add -A
+git commit -m "contracts: rename the engines (nunc-stans, nunc-fluens) and the federation-named files per naming.md"
 ```
 
 (`contracts/` is touched, so the multi-area commit is allowed.)
@@ -220,13 +228,16 @@ Apply over tracked text files, excluding `design/development/`,
 ```bash
 FILES=$(git ls-files | grep -vE '^design/(development|verification)/' )
 perl -pi -e '
-  s/federation-data/nuncstans-data/g;
+  s/federation-data/nunc-stans-data/g;
   s/Federation:Phase/Pre-v1 Phase/g;
   s/FederationEdge/Edge/g;
   s/[Ff]ederation edge/edge/g;
   s/federation-id/scope-id/g;
   s/[Ff]ederation ID/scope ID/g;
-  s/[Ff]ederation [Cc]onstitution/NuncStans Constitution/g;
+  s/[Ff]ederation [Cc]onstitution/Nunc Stans Constitution/g;
+  s/nuncstans-engine/nunc-stans-engine/g;
+  s/NuncStans/Nunc Stans/g;
+  s/nuncstans/nunc-stans/g;
 ' $FILES
 git grep -iI federation -- ':!design/development' ':!design/verification' | head -50
 ```
@@ -234,33 +245,45 @@ git grep -iI federation -- ':!design/development' ':!design/verification' | head
 - [ ] **Step 3.3: Manual catch-all pass**
 
 Every remaining hit from Step 3.2's grep is reworded by hand ("the
-federation" → "NuncStans" or "the contracts layer", per context). Review the
-full diff hunk-by-hunk (`git diff`) before staging — meaning must survive.
-Code identifiers (frontend `types.ts`, engine strings/tests) are included;
-builds verify them in Step 3.6.
+federation" → "Nunc Stans" or "the contracts layer", per context). In the
+same pass: capital-N "News" meaning the stack is reworded to "Nunc Fluens"
+(the common noun "news" stays); `NEWS_WORLD` keeps its name until Phase C;
+any leftover bare "nuncstans" may remain only when it names the old design
+repo path `~/nuncstans`. Review the full diff hunk-by-hunk (`git diff`)
+before staging — meaning must survive. Code identifiers (frontend
+`types.ts`, engine strings/tests) are included; builds verify them in
+Step 3.6.
 
 - [ ] **Step 3.4: Write `design/naming.md`**
 
 ```markdown
 # Naming map (2026-07)
 
-The product is **NuncStans**. The monorepo (integrated environment) is
-**nuncstans-formans**. The self-scope engine keeps the name `nuncstans`
-(`engines/nuncstans`). The name "federation" is retired.
+The product is **Nunc Stans**. The monorepo (integrated environment) is
+**nunc-stans-formans**. The self-scope engine is `engines/nunc-stans` (crate
+`nunc-stans-engine`); the news engine is `engines/nunc-fluens` — *nunc
+fluens*, the flowing now, paired with *nunc stans*, the standing now. manda
+and fourfive keep their names. The name "federation" is retired.
 
 | Old | New |
 |---|---|
-| federation (the system) | NuncStans |
+| federation (the system) | Nunc Stans |
 | the federation layer / agreement | the contracts layer |
 | federation edge / FederationEdge | edge / Edge |
 | federation ID / federation-id | scope ID / scope-id |
-| Federation Constitution | NuncStans Constitution |
+| Federation Constitution | Nunc Stans Constitution |
 | Federation:Phase N | Pre-v1 Phase N |
 | FED_DATA | NS_DATA (deprecated fallback kept one phase) |
-| ~/federation-data | ~/nuncstans-data |
-| ~/federation (repo) | ~/nuncstans-formans |
+| ~/federation-data | ~/nunc-stans-data |
+| ~/federation (repo) | ~/nunc-stans-formans |
 | ~/nuncstans (design repo) | absorbed; archived at ~/old/nuncstans-design-repo |
-| engines/news/FEDERATION.md | engines/news/INTEGRATION.md |
+| nuncstans / NuncStans | nunc-stans / Nunc Stans (hyphenation, round 4) |
+| engines/nuncstans, crate nuncstans-engine | engines/nunc-stans, crate nunc-stans-engine |
+| News (the stack), engines/news | Nunc Fluens, engines/nunc-fluens |
+| ~/news (external repo) | ~/nunc-fluens — renamed at Phase C (live daily routine; Pages URL changes without redirect) |
+| NEWS_WORLD (env) | kept until Phase C |
+| nuncstans-agent | nunc-stans-agent |
+| engines/nunc-fluens/FEDERATION.md | engines/nunc-fluens/INTEGRATION.md |
 
 Rule IDs (`F1`–`F14`, `FD-x.y`, `NS-x`, Inv N) are retained as opaque
 historical identifiers; the letters no longer expand to anything.
@@ -289,7 +312,7 @@ exit sentence `rg -i federation` … to:
 ```bash
 git grep -iI federation -- ':!design/naming.md' ':!design/development' ':!design/verification'
 # expected: no output
-cargo test --manifest-path engines/nuncstans/Cargo.toml    # expected: pass
+cargo test --manifest-path engines/nunc-stans/Cargo.toml    # expected: pass
 corepack pnpm -C frontend install && corepack pnpm -C frontend test && corepack pnpm -C frontend build   # pass
 corepack pnpm -C engines/fourfive test                     # pass
 bash tools/check.sh                                        # 3× ok
@@ -300,8 +323,8 @@ bash tools/check.sh                                        # 3× ok
 ```bash
 # stage and commit in area groups, each followed by: bash tools/commit-scope.sh
 git add design contracts && git commit -m "design: retire the federation vocabulary per naming.md"
-git add engines/news && git commit -m "news: sweep the retired vocabulary in the news engine docs"
-git add engines/nuncstans && git commit -m "ns: sweep the retired vocabulary in engine strings and tests"
+git add engines/nunc-fluens && git commit -m "nf: sweep the retired vocabulary in the nunc-fluens engine docs"
+git add engines/nunc-stans && git commit -m "ns: sweep the retired vocabulary in engine strings and tests"
 git add frontend && git commit -m "fe: rename FederationEdge to Edge and sweep strings"
 ```
 
@@ -327,7 +350,7 @@ _require_data:
     @if [ -z "${NS_DATA:-}" ] && [ -n "${FED_DATA:-}" ]; then echo "warning: FED_DATA is deprecated; use NS_DATA"; fi
 
 up: _require_data build-frontend
-    cargo run --manifest-path engines/nuncstans/Cargo.toml --release -- \
+    cargo run --manifest-path engines/nunc-stans/Cargo.toml --release -- \
       --self-dir "{{data_dir}}/self" \
       --static-dir frontend/dist \
       --port "${NS_PORT:-8720}"
@@ -337,7 +360,7 @@ build-frontend: build-world
     pnpm -C frontend build
 
 # Flatten News's world export into frontend/public/world-headlines.json
-# (§13-B: conversion on the NuncStans side; News is not asked to change).
+# (§13-B: conversion on the Nunc Stans side; News is not asked to change).
 build-world:
     node frontend/scripts/build-world.mjs
 
@@ -351,7 +374,7 @@ ritual: _require_data
     echo "ritual: nothing to commit"
 
 test:
-    cargo test --manifest-path engines/nuncstans/Cargo.toml
+    cargo test --manifest-path engines/nunc-stans/Cargo.toml
     pnpm -C frontend test
 
 check:
@@ -361,19 +384,19 @@ check:
 - [ ] **Step 4.2: Move the data dir**
 
 ```bash
-mv ~/federation-data ~/nuncstans-data
-ls ~/nuncstans-data        # expected: artifact self world
-git -C ~/nuncstans-data/self remote -v   # expected: empty (F11 intact)
+mv ~/federation-data ~/nunc-stans-data
+ls ~/nunc-stans-data        # expected: artifact self world
+git -C ~/nunc-stans-data/self remote -v   # expected: empty (F11 intact)
 ```
 
 - [ ] **Step 4.3: Verify both env names boot the engine**
 
 ```bash
-NS_DATA=~/nuncstans-data timeout 90 just up & sleep 60
+NS_DATA=~/nunc-stans-data timeout 90 just up & sleep 60
 curl -s http://127.0.0.1:8720/health          # expected: ok/200 JSON
 curl -s http://127.0.0.1:8720/self/commitments | head -c 200   # expected: 3 commitments JSON
 kill %1 2>/dev/null; wait
-FED_DATA=~/nuncstans-data just _require_data  # expected: deprecation warning, exit 0
+FED_DATA=~/nunc-stans-data just _require_data  # expected: deprecation warning, exit 0
 ```
 
 - [ ] **Step 4.4: Commit**
@@ -419,13 +442,13 @@ function gitGrep(args: string[]): string {
 }
 
 // FD-3.2: the data-store path must not leak into tracked code/config
-const leak = gitGrep(['-e', 'nuncstans-data', '-e', 'federation-data', '--',
+const leak = gitGrep(['-e', 'nunc-stans-data', '-e', 'federation-data', '--',
   '.', ':!tools/check.ts', ':!design/', ':!**/prd-override.md'])
 if (leak.trim()) ng(`FD-3.2: data-store path leaked into code/config\n${leak}`)
 else ok('FD-3.2: no vault path leak')
 
 // FD-7.4: frontend must not reference engine internals
-const imports = gitGrep(['-E', 'engines/(news|nuncstans|fourfive)', '--', 'frontend'])
+const imports = gitGrep(['-E', 'engines/(nunc-fluens|nunc-stans|fourfive)', '--', 'frontend'])
 const bad = imports.split('\n').filter(l => l && !l.includes('contracts/'))
 if (bad.length) ng(`import: frontend references engine internals\n${bad.join('\n')}`)
 else ok('import: frontend→contracts only (so far)')
@@ -448,7 +471,7 @@ const range = process.argv[2] ?? 'HEAD~1..HEAD'
 const files = execFileSync('git', ['diff', '--name-only', range], { encoding: 'utf8' })
   .split('\n').filter(Boolean)
 const areas = new Set(files
-  .map(f => f.match(/^(engines\/news|engines\/nuncstans|engines\/fourfive|frontend)/)?.[1])
+  .map(f => f.match(/^(engines\/nunc-fluens|engines\/nunc-stans|engines\/fourfive|frontend)/)?.[1])
   .filter((a): a is string => Boolean(a)))
 const hasContracts = files.some(f => f.startsWith('contracts/'))
 if (areas.size > 1 && !hasContracts) {
@@ -472,7 +495,7 @@ Edit the justfile `check` recipe: `@bash tools/check.sh` → `@node tools/check.
 - [ ] **Step 5.5: Engine Windows-compat pass**
 
 ```bash
-grep -rn "os::unix" engines/nuncstans/src
+grep -rn "os::unix" engines/nunc-stans/src
 ```
 
 Wrap each hit so non-unix builds compile, using this pattern (adapt names to
@@ -491,7 +514,7 @@ the actual code at each site):
 ```
 
 ```bash
-cargo test --manifest-path engines/nuncstans/Cargo.toml   # expected: pass (Linux)
+cargo test --manifest-path engines/nunc-stans/Cargo.toml   # expected: pass (Linux)
 ```
 
 (True Windows compilation is proven by the CI matrix after the owner pushes.)
@@ -501,7 +524,7 @@ cargo test --manifest-path engines/nuncstans/Cargo.toml   # expected: pass (Linu
 ```bash
 git add tools justfile rust-toolchain.toml .node-version
 git commit -m "tool: port check and commit-scope to TypeScript and pin toolchains"
-git add engines/nuncstans && git commit -m "ns: gate unix permission calls behind cfg(unix)"
+git add engines/nunc-stans && git commit -m "ns: gate unix permission calls behind cfg(unix)"
 node tools/commit-scope.ts   # ok commit-scope
 ```
 
@@ -512,7 +535,7 @@ node tools/commit-scope.ts   # ok commit-scope
 
 ```sh
 #!/bin/sh
-# nuncstans-formans bootstrap: doctor + NS_DATA skeleton. Idempotent.
+# nunc-stans-formans bootstrap: doctor + NS_DATA skeleton. Idempotent.
 set -u
 missing=0
 say() { printf '%s\n' "$*"; }
@@ -534,7 +557,7 @@ command -v python3 >/dev/null 2>&1 || say "warn python3 missing (needed until Ph
 command -v ollama  >/dev/null 2>&1 || say "info ollama not found (optional — local models)"
 
 say "== data store =="
-NS_DATA="${NS_DATA:-${FED_DATA:-$HOME/nuncstans-data}}"
+NS_DATA="${NS_DATA:-${FED_DATA:-$HOME/nunc-stans-data}}"
 say "NS_DATA=$NS_DATA"
 for d in self world artifact profiles runs; do mkdir -p "$NS_DATA/$d"; done
 if [ ! -d "$NS_DATA/self/.git" ]; then
@@ -577,11 +600,11 @@ git commit -m "tool: add just bootstrap with a doctor report and NS_DATA skeleto
 - [ ] **Step 7.1: Root `README.md`**
 
 ```markdown
-# nuncstans-formans
+# nunc-stans-formans
 
-The workshop where **NuncStans** is formed — a local-first personal system:
+The workshop where **Nunc Stans** is formed — a local-first personal system:
 AI reads the world and proposes futures worth committing to (news); you
-choose or write your own future and put resources behind it (the nuncstans
+choose or write your own future and put resources behind it (the nunc-stans
 engine — the self ledger); together you turn the path into small apps
 (fourfive) that human and agent use side by side.
 
@@ -591,15 +614,15 @@ Targets Ubuntu (native/WSL2), Windows 11, macOS.
 ## Quickstart
 
     sh tools/bootstrap.sh     # doctor + data-store init (or: just bootstrap)
-    export NS_DATA=~/nuncstans-data
+    export NS_DATA=~/nunc-stans-data
     just up                   # build + serve on http://127.0.0.1:8720
 
 ## Layout
 
 | Path | What |
 |---|---|
-| `engines/nuncstans` | Rust self-scope engine (append-only ledger + vault guard) |
-| `engines/news` | News pipeline (world scope). Code canonical here; `~/news` is data+publishing. **Code-frozen there since 2026-07 — code changes land here.** |
+| `engines/nunc-stans` | Rust self-scope engine (append-only ledger + vault guard) |
+| `engines/nunc-fluens` | Nunc Fluens — the news pipeline (world scope). Code canonical here; `~/news` is data+publishing. **Code-frozen there since 2026-07 — code changes land here.** |
 | `engines/fourfive` | FourFive design tool (artifact scope) |
 | `frontend/` | ME view / world view (Vue 3 + TS) |
 | `contracts/` | scope IDs, edge schema, glossary, agent ABI |
@@ -615,7 +638,7 @@ See `CONTRIBUTING.md` for conventions; `design/development/2026-07-04-nuncstans-
 
 - English for all documents and commit messages.
 - Commit style: `area: lowercase description.`-free form, one sentence, no
-  AI attribution. Areas: design, contracts, ns, fe, ff, news, tool.
+  AI attribution. Areas: design, contracts, ns, fe, ff, nf, tool.
 - One commit = one area unless `contracts/` is touched
   (`node tools/commit-scope.ts` enforces).
 - `node tools/check.ts` must be green before pushing.
@@ -629,10 +652,10 @@ See `CONTRIBUTING.md` for conventions; `design/development/2026-07-04-nuncstans-
 
 `frontend/README.md` (create): dev commands (`just web`, engine in second
 terminal), build (`just build-frontend`).
-`engines/news/README.md` (create): purpose, pointer to `INTEGRATION.md`, the
+`engines/nunc-fluens/README.md` (create): purpose, pointer to `INTEGRATION.md`, the
 deterministic pipeline commands (`python -m src.cli update` from `app/`), and
 the code-freeze note.
-`engines/nuncstans/README.md`, `engines/fourfive/README.md` (verify): update
+`engines/nunc-stans/README.md`, `engines/fourfive/README.md` (verify): update
 any stale paths/env names from the sweeps (`FED_DATA`, old repo names).
 
 - [ ] **Step 7.4: Verify every README command literally, then commit per area**
@@ -642,7 +665,7 @@ Run each documented command once; fix the README if reality disagrees.
 ```bash
 git add README.md CONTRIBUTING.md && git commit -m "design: add the root README and contribution guide"
 git add frontend/README.md && git commit -m "fe: add the frontend README"
-git add engines/news && git commit -m "news: add the engine README with the code-freeze note"
+git add engines/nunc-fluens && git commit -m "nf: add the engine README with the code-freeze note"
 # ns/ff README fixes, if any, as their own commits
 ```
 
@@ -651,7 +674,7 @@ git add engines/news && git commit -m "news: add the engine README with the code
 - [ ] **Step 8.1: Scope the news test set**
 
 ```bash
-cd engines/news/app && python3 -m pytest tests -q; cd ../../..
+cd engines/nunc-fluens/app && python3 -m pytest tests -q; cd ../../..
 ```
 
 Record which tests fail for lack of external data (they reference `~/news`
@@ -673,7 +696,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
-      - run: cargo test --manifest-path engines/nuncstans/Cargo.toml
+      - run: cargo test --manifest-path engines/nunc-stans/Cargo.toml
   web:
     strategy: { fail-fast: false, matrix: { os: [ubuntu-latest, windows-latest, macos-latest] } }
     runs-on: ${{ matrix.os }}
@@ -696,7 +719,7 @@ jobs:
         with: { python-version: '3.12' }
       - run: pip install jinja2 pyyaml pytest
       - run: python -m pytest tests -q   # + the Step-8.1 scoping flags
-        working-directory: engines/news/app
+        working-directory: engines/nunc-fluens/app
   invariants:
     runs-on: ubuntu-latest
     steps:
@@ -750,25 +773,25 @@ git add design/verification/phase-a.md && git commit -m "design: record the home
 - [ ] **Step 10.2: Move both directories**
 
 ```bash
-mv ~/federation ~/nuncstans-formans
+mv ~/federation ~/nunc-stans-formans
 mv ~/nuncstans ~/old/nuncstans-design-repo   # its uncommitted scratchbin goes along, as-is
 ```
 
 - [ ] **Step 10.3: Post-move verification (absolute paths only)**
 
 ```bash
-cd ~/nuncstans-formans
+cd ~/nunc-stans-formans
 git status --porcelain                        # empty
 git config user.email                         # yukibaba3912@gmail.com (repo-local survives the move)
 node tools/check.ts                           # 3× ok
-NS_DATA=~/nuncstans-data just test            # engine + frontend tests pass
-NS_DATA=~/nuncstans-data timeout 90 just up & sleep 60
+NS_DATA=~/nunc-stans-data just test            # engine + frontend tests pass
+NS_DATA=~/nunc-stans-data timeout 90 just up & sleep 60
 curl -s http://127.0.0.1:8720/health && curl -s http://127.0.0.1:8720/ | head -c 100
 kill %1 2>/dev/null; wait
 ```
 
 - [ ] **Step 10.4: Update the assistant memory files** (Claude-side): paths
-  `~/federation → ~/nuncstans-formans`, design repo archived — in
+  `~/federation → ~/nunc-stans-formans`, design repo archived — in
   `MEMORY.md` + `federation-build.md`.
 
 - [ ] **Step 10.5: Evidence commit**
@@ -778,7 +801,7 @@ git add design/verification/phase-a.md && git commit -m "design: record the phas
 ```
 
 Note: any Claude session anchored at the old paths must switch to absolute
-paths or reopen at `~/nuncstans-formans` (WSL-side recommended from here on).
+paths or reopen at `~/nunc-stans-formans` (WSL-side recommended from here on).
 
 ### Task 11: Stories, verification, owner handoff
 
@@ -807,7 +830,7 @@ Pass: home screen reachable with no steps beyond documented prerequisites.
 - [ ] **Step 11.3: Execute S-10 (pristine Ubuntu container)**
 
 ```bash
-docker run --rm -it -v ~/nuncstans-formans:/src:ro ubuntu:24.04 bash -c '
+docker run --rm -it -v ~/nunc-stans-formans:/src:ro ubuntu:24.04 bash -c '
   set -e
   apt-get update && apt-get install -y git curl build-essential python3 pkg-config
   curl -fsSL https://deb.nodesource.com/setup_24.x | bash - && apt-get install -y nodejs
@@ -816,7 +839,7 @@ docker run --rm -it -v ~/nuncstans-formans:/src:ro ubuntu:24.04 bash -c '
   cargo install just
   git clone /src /work && cd /work
   sh tools/bootstrap.sh
-  NS_DATA=$HOME/nuncstans-data just up & sleep 240
+  NS_DATA=$HOME/nunc-stans-data just up & sleep 240
   curl -sf http://127.0.0.1:8720/health && echo S-10-PASS
 '
 ```
@@ -831,7 +854,7 @@ Fill `design/verification/phase-a.md` exit-criteria checklist with evidence:
 
 ```markdown
 ## Exit criteria
-- [ ] `just up` works from ~/nuncstans-formans (log excerpt)
+- [ ] `just up` works from ~/nunc-stans-formans (log excerpt)
 - [ ] `node tools/check.ts` green
 - [ ] vocabulary grep clean (command + empty output)
 - [ ] every stack README verified by running its command
@@ -850,10 +873,10 @@ git add design/stories design/verification && git commit -m "design: close phase
 Owner, in a native shell:
 
 ```bash
-# 1. Create the private repo baba-yu/nuncstans-formans on GitHub (empty, no README)
+# 1. Create the private repo baba-yu/nunc-stans-formans on GitHub (empty, no README)
 wsl
-cd ~/nuncstans-formans
-git remote add origin https://github.com/baba-yu/nuncstans-formans.git
+cd ~/nunc-stans-formans
+git remote add origin https://github.com/baba-yu/nunc-stans-formans.git
 git push -u origin main --follow-tags
 # 2. Watch the first CI run; report any Windows/macOS failures back for in-phase fixes.
 ```
