@@ -35,22 +35,22 @@ jobs:
       - run: corepack pnpm -C engines/fourfive typecheck
       - run: corepack pnpm -C engines/fourfive test
 
-  # Data-independent subset only until Phase C brings golden masters; the
-  # excluded tests need the live report/prediction data that stays in ~/news
-  # (see engines/nunc-fluens/INTEGRATION.md and design/verification/phase-a.md).
+  # Full suite: the golden fixture corpus supplies the live-data days the
+  # previously excluded tests need (Phase C T1 — see
+  # engines/nunc-fluens/pipeline/goldens/fixture-manifest.json).
   nunc-fluens:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
       - run: pip install pytest jinja2 pyyaml
-      - run: >-
-          python -m pytest tests -q
-          --ignore=tests/test_rename_future_titles.py
-          --deselect tests/test_export.py::test_prediction_nodes_include_evidence
-          --deselect tests/test_plain_language_quick_def_rename.py::test_news_markdown_renders_plain_language_prose
+      - run: node engines/nunc-fluens/pipeline/goldens/capture.ts stage-ci
+      - run: python -m pytest tests -q
         working-directory: engines/nunc-fluens/app
 
   invariants:
