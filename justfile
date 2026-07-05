@@ -5,7 +5,7 @@ set shell := ["bash", "-uc"]
 # design/development/setup-phase0.md.
 
 up: build-frontend
-    cargo run --manifest-path engines/nuncstans/Cargo.toml --release -- \
+    cargo run --manifest-path engines/nunc-stans/Cargo.toml --release -- \
       --self-dir "${FED_DATA:?set FED_DATA to the data-store root}/self" \
       --static-dir frontend/dist \
       --port "${NS_PORT:-8720}"
@@ -35,7 +35,7 @@ ritual:
     echo "ritual: nothing to commit"
 
 test:
-    cargo test --manifest-path engines/nuncstans/Cargo.toml
+    cargo test --manifest-path engines/nunc-stans/Cargo.toml
     pnpm -C frontend test
 
 check:

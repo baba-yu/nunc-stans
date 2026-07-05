@@ -12,7 +12,7 @@ fi
 # FD-7.4 (foundation): naive detection of engine-to-engine imports / references
 # from frontend into engine internals. Federation:Phase 0 is a minimal
 # string-based check; the full version uses per-language analysis.
-if grep -rnE --exclude-dir={node_modules,dist,.git} "engines/(news|nuncstans|fourfive)" frontend 2>/dev/null | grep -v "contracts/" >/dev/null; then
+if grep -rnE --exclude-dir={node_modules,dist,.git} "engines/(nunc-fluens|nunc-stans|fourfive)" frontend 2>/dev/null | grep -v "contracts/" >/dev/null; then
   echo "NG import: frontend references engine internals directly"; fail=1
 else
   echo "ok import: frontend→contracts only (so far)"

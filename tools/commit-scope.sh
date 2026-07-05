@@ -2,7 +2,7 @@
 set -uo pipefail
 range="${1:-HEAD~1..HEAD}"
 files=$(git diff --name-only $range)
-areas=$(echo "$files" | grep -oE '^(engines/news|engines/nuncstans|engines/fourfive|frontend)' | sort -u)
+areas=$(echo "$files" | grep -oE '^(engines/nunc-fluens|engines/nunc-stans|engines/fourfive|frontend)' | sort -u)
 n=$(echo "$areas" | grep -c . )
 has_contracts=$(echo "$files" | grep -c '^contracts/')
 if [ "$n" -gt 1 ] && [ "$has_contracts" -eq 0 ]; then
