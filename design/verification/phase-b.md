@@ -39,10 +39,28 @@ review gate). Plan: `design/development/2026-07-04-phase-b-plan.md`
   `nest()` discards a nested router's fallback, so the fourfive static
   mount uses `nest_service()` instead. CI engine job gains the gate test
   step; commit-scope gains the `gate` area.
+- T4 (2026-07-05): fourfive under the mount — vite `base: '/fourfive/'`,
+  API client base-relative, `cors()` removed. 24 tests + typecheck + build
+  green; dist assets reference `/fourfive/assets/*`; live server smoke
+  (mock): health, session create, SSE stream events. Workspace-warning
+  cleanup: per-package `pnpm.onlyBuiltDependencies` dropped (root owns it).
+- T5 (2026-07-05): `just up` = engine(:8721) + fourfive(:8787) +
+  gate(:8720) via concurrently sub-recipes (see Decisions). Verified
+  through :8720: /gate/health, /health (engine JSON via proxy),
+  /self/commitments (real vault, read-only), /fourfive/api/health (mock,
+  prefix strip), /fourfive/ HTML, / formans HTML, foreign-Host 403;
+  teardown clean; engine solo boot on :8731 (F12). `windows-shell` set.
 
 ## Decisions log
 
-(appended as deviations arise)
+- T5: the plan's `up` recipe put full command strings (env prefixes, quoted
+  paths) inside the `concurrently` arguments; on Windows concurrently
+  spawns via cmd.exe where `PORT=x` prefixes and single quotes break. The
+  three commands moved into just sub-recipes (`_up-engine`, `_up-fourfive`,
+  `_up-gate`) and concurrently runs `just <name>` — quoting and env
+  expansion stay inside just's sh on every OS. Same processes, same ports.
+- T3: axum `nest()` drops a nested router's fallback; the fourfive mount
+  uses `nest_service()` (found by the gate's own integration test).
 
 ## Exit criteria
 
