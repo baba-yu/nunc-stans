@@ -1,7 +1,8 @@
 target/
 node_modules/
-frontend/dist/
-frontend/public/world-headlines.json
+frontend/nunc-stans-formans/dist/
+frontend/nunc-stans-formans/public/world-headlines.json
+frontend/nunc-stans-formans/public/world-graph/
 *.swp
 CLAUDE.md
 AGENTS.md

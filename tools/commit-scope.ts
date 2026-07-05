@@ -6,7 +6,7 @@ const range = process.argv[2] ?? 'HEAD~1..HEAD'
 const files = execFileSync('git', ['diff', '--name-only', range], { encoding: 'utf8' })
   .split('\n').filter(Boolean)
 const areas = new Set(files
-  .map(f => f.match(/^(engines\/nunc-fluens|engines\/nunc-stans|engines\/fourfive|frontend)/)?.[1])
+  .map(f => f.match(/^(engines\/nunc-fluens|engines\/nunc-stans|engines\/fourfive|frontend|gate)/)?.[1])
   .filter((a): a is string => Boolean(a)))
 const hasContracts = files.some(f => f.startsWith('contracts/'))
 if (areas.size > 1 && !hasContracts) {

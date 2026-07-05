@@ -2,5 +2,12 @@
   "name": "nunc-stans",
   "private": true,
   "type": "module",
-  "packageManager": "pnpm@10.33.0"
+  "packageManager": "pnpm@10.33.0",
+  "devDependencies": {
+    "concurrently": "^9.1.0",
+    "d3": "^7.9.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["better-sqlite3", "esbuild", "vue-demi"]
+  }
 }

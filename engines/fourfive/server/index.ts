@@ -7,7 +7,6 @@ try {
 
 import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
-import { cors } from 'hono/cors'
 import { streamSSE } from 'hono/streaming'
 import { randomUUID } from 'node:crypto'
 import { db, nowIso, DEFAULT_SESSION_TITLE } from './db'
@@ -19,8 +18,9 @@ import { listComposableApps, updateDependencyPin, DependencyError } from './depe
 import { renderBlueprintMarkdown } from './markdown'
 import type { ChatMessage, Message } from '../shared/types'
 
+// Single origin in production (behind the gate) and a same-origin vite
+// proxy in dev: the browser never needs CORS, so none is offered.
 const app = new Hono()
-app.use('/api/*', cors())
 
 const provider = getProvider()
 

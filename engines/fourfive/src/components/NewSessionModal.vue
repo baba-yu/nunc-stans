@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
+import { Modal } from 'nunc-ui'
 import { useSessionStore } from '../stores/session'
 import { api } from '../api/client'
 import type { AppListItem } from '../../shared/types'
@@ -60,14 +61,13 @@ async function confirmCompose() {
 </script>
 
 <template>
-  <div v-if="store.showNewSessionModal" class="modal" @click.self="store.showNewSessionModal = false">
-    <div class="modal__box modal__box--narrow">
-      <header class="modal__bar">
-        <span class="modal__title">New session</span>
-        <div class="modal__actions">
-          <button class="btn" @click="store.showNewSessionModal = false">Close</button>
-        </div>
-      </header>
+  <Modal :open="store.showNewSessionModal" @close="store.showNewSessionModal = false">
+    <header class="modal__bar">
+      <span class="modal__title">New session</span>
+      <div class="modal__actions">
+        <button class="btn" @click="store.showNewSessionModal = false">Close</button>
+      </div>
+    </header>
 
       <div v-if="mode === 'choose'" class="newsess">
         <button class="newsess__choice" :disabled="creating" @click="createNew">
@@ -111,6 +111,5 @@ async function confirmCompose() {
           </button>
         </footer>
       </div>
-    </div>
-  </div>
+  </Modal>
 </template>

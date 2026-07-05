@@ -1,16 +1,19 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
-// The Vue dev server proxies /api to the local Hono server so the browser
-// always talks to a single origin (no CORS needed in the browser path).
+// Mounted at /fourfive/ on the single origin (the gate). Standalone dev
+// serves under the same base; its proxy rewrites the mount prefix away so
+// the browser path stays identical in both worlds (no CORS either way).
 export default defineConfig({
   plugins: [vue()],
+  base: '/fourfive/',
   server: {
     port: 5173,
     proxy: {
-      '/api': {
+      '/fourfive/api': {
         target: `http://localhost:${process.env.PORT ?? 8787}`,
         changeOrigin: true,
+        rewrite: (p) => p.replace(/^\/fourfive/, ''),
       },
     },
   },

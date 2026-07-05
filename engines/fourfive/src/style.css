@@ -1,16 +1,18 @@
 :root {
-  --bg: #0f1115;
-  --bg-elev: #171a21;
-  --bg-elev2: #1e222b;
-  --border: #2a2f3a;
-  --text: #e6e8ec;
-  --text-dim: #9aa3b2;
-  --accent: #5b8cff;
-  --accent-press: #4a78e6;
+  /* Aliased onto the nunc-ui tokens (the shared design system): the neutral
+     base came FROM this app, and the primary accent flips to cyan (D6).
+     FourFive blue lives on as --nui-secondary; chat-bubble colors stay local. */
+  --bg: var(--nui-bg);
+  --bg-elev: var(--nui-elev1);
+  --bg-elev2: var(--nui-elev2);
+  --border: var(--nui-border);
+  --text: var(--nui-text);
+  --text-dim: var(--nui-dim);
+  --accent: var(--nui-accent);
+  --accent-press: var(--nui-accent-press);
   --user: #243150;
-  --assistant: #1e222b;
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Hiragino Kaku Gothic ProN',
-    'Noto Sans JP', sans-serif;
+  --assistant: var(--nui-elev2);
+  font-family: var(--nui-font);
   color-scheme: dark;
 }
 
@@ -220,7 +222,7 @@ body {
 .btn--primary {
   background: var(--accent);
   border-color: var(--accent);
-  color: #fff;
+  color: var(--bg); /* dark-on-cyan: the accent is light now */
   font-weight: 600;
   align-self: flex-end;
 }
@@ -254,29 +256,7 @@ body {
   font-size: 13px;
   white-space: nowrap;
 }
-.temp__tabs {
-  display: flex;
-  gap: 4px;
-  flex-wrap: wrap;
-}
-.temp__tab {
-  background: transparent;
-  border: 1px solid transparent;
-  color: var(--text-dim);
-  padding: 4px 10px;
-  border-radius: 999px;
-  cursor: pointer;
-  font: inherit;
-  font-size: 13px;
-}
-.temp__tab:hover {
-  color: var(--text);
-}
-.temp__tab--active {
-  background: var(--bg-elev2);
-  border-color: var(--border);
-  color: var(--text);
-}
+/* view switcher: the nunc-ui Tabs primitive */
 .temp__body {
   flex: 1;
   overflow: auto;
@@ -553,26 +533,8 @@ body {
   gap: 4px;
 }
 
-/* markdown export modal */
-.modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.55);
-  display: grid;
-  place-items: center;
-  z-index: 50;
-  padding: 24px;
-}
-.modal__box {
-  width: min(900px, 100%);
-  max-height: 86vh;
-  display: flex;
-  flex-direction: column;
-  background: var(--bg-elev);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  overflow: hidden;
-}
+/* markdown export modal — the shell (backdrop + box) is the nunc-ui Modal;
+   only the internal layout lives here */
 .modal__bar {
   display: flex;
   align-items: center;
@@ -601,6 +563,7 @@ body {
   margin: 0;
   padding: 16px;
   overflow: auto;
+  max-height: 58vh; /* scrolls itself so the action bar stays reachable */
   white-space: pre-wrap;
   word-break: break-word;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -771,14 +734,12 @@ body {
 }
 
 /* --- New-session modal --- */
-.modal__box--narrow {
-  max-width: 480px;
-}
 .newsess {
   display: flex;
   flex-direction: column;
   gap: 10px;
   padding: 4px 2px;
+  width: min(440px, 84vw); /* keeps the narrow feel inside the shared shell */
 }
 .newsess__choice {
   display: flex;

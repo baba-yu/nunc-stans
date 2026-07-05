@@ -1,56 +1,67 @@
 # Documentation Reading Order
 
-Scope: Human Thought Augmentation System / the contracts layer / News / Nunc Stans / FourFive  
-Purpose: Organize the reading order and placement of related documents, and the documents to hand off at implementation time.
+Scope: Nunc Stans (product) / the contracts layer / Nunc Fluens / FourFive / HTAS
+Purpose: the reading order and placement of the design corpus, and which
+documents are operative today versus historical.
+Updated: 2026-07-04 (post Phase A — monorepo consolidated, naming settled).
 
 ---
 
-## 1. Basic route
-
-The documents for this project are read in the following order.
+## 1. Start here (the operative route)
 
 ```text
-1. What we are building
-2. What must not be mixed together
-3. Where the source of truth lives
-4. What WRITE / READ do
-5. What each engine owns
-6. How to implement it
-7. What counts as passing
+1. What this repo is and how to run it
+2. What we are building next, and every decision taken (D1–D10)
+3. What every name means (and used to mean)
+4. What must not be mixed together (the constitution)
+5. What WRITE / READ mean for memory
+6. What counts as passing
+7. What has actually been built and verified
 ```
-
-The shortest reading order is as follows.
 
 ```text
-design/product/htas-integrated-prd.md
+README.md                                            (repo root)
 ↓
-design/architecture/htas-positioning-in-nunc-stans.md
+design/development/2026-07-04-nuncstans-v1-plan.md   (the operative plan, Phases A–F, D1–D10)
 ↓
-design/constitution/constitution.md
+design/naming.md                                     (the naming map — read before any older doc)
 ↓
-design/architecture/memory-write-read-contract.md
+design/constitution/constitution.md                  (world / self / artifact boundaries, F-rules)
 ↓
-design/development/development-plan.md
+design/architecture/memory-write-read-contract.md    (WRITE / READ / Reconnection)
 ↓
-design/development/setup-phase0.md
+design/stories/                                      (journeys + S-0..S-11 — the acceptance bar)
 ↓
-design/stories/test-spec-journey.md
+design/verification/phase-a.md                       (what is done, with evidence)
 ```
+
+For the product's philosophy and origin, add
+`design/product/htas-integrated-prd.md` and
+`design/architecture/htas-positioning-in-nunc-stans.md` after step 4.
 
 ---
 
-## 2. Recommended placement
+## 2. Current inventory
 
 ```text
 nunc-stans/
+├── README.md                        ← run instructions (bootstrap / up)
+├── CONTRIBUTING.md                  ← commit style, areas, dev workflow, checks
 ├── design/
+│   ├── README.md                    ← what this tree is
 │   ├── documentation-reading-order.md
+│   ├── naming.md                    ← the naming map (federation → Nunc Stans era)
+│   │
+│   ├── development/                 ← operative plans live here
+│   │   ├── 2026-07-04-nuncstans-v1-plan.md    ← THE plan (Phases A–F, decisions D1–D10)
+│   │   ├── 2026-07-04-phase-a-plan.md         ← Phase A implementation plan (executed)
+│   │   ├── 2026-07-04-phase-b-plan.md         ← Phase B implementation plan (executed; decisions B1–B4)
+│   │   ├── development-plan.md                ← HISTORICAL (HTAS M-milestones; product-side reference)
+│   │   └── setup-phase0.md                    ← HISTORICAL (superseded by `just bootstrap` + README)
 │   │
 │   ├── product/
-│   │   ├── htas-integrated-prd.md
-│   │   └── archive/
-│   │       ├── htas-prd-round1.md
-│   │       └── htas-round2-output.md
+│   │   ├── htas-integrated-prd.md   ← HTAS product definition (v0.2)
+│   │   └── archive/                 ← earlier PRD rounds
 │   │
 │   ├── architecture/
 │   │   ├── htas-positioning-in-nunc-stans.md
@@ -62,121 +73,73 @@ nunc-stans/
 │   │   └── ip-server-readiness.md
 │   │
 │   ├── constitution/
-│   │   └── constitution.md
+│   │   └── constitution.md          ← §13 amended 2026-07 (engines are product organs)
 │   │
-│   ├── stories/
-│   │   ├── journey-examples.md
-│   │   └── test-spec-journey.md
+│   ├── stories/                     ← acceptance: executed per phase, evidence required
+│   │   ├── journey-examples.md      ← the five-stage loop, four personas
+│   │   ├── test-spec-journey.md     ← Yu's 19 steps (T0–T18, checks 1–11) — Phase F
+│   │   ├── S-0.md                   ← cold start (PASS, Phase A)
+│   │   ├── S-1.md / S-2.md / S-9.md ← one origin / headline commit / timeline (PASS, Phase B)
+│   │   └── S-10.md                  ← pristine environment (PASS, Phases A+B)
 │   │
-│   └── development/
-│       ├── development-plan.md
-│       └── setup-phase0.md
+│   ├── ui/
+│   │   └── phase-b/                 ← screenshot set (home, world, timeline, fourfive)
+│   │
+│   └── verification/
+│       ├── phase-a.md               ← Phase A evidence, decisions, exit criteria
+│       └── phase-b.md               ← Phase B evidence, decisions, exit criteria
 │
-├── contracts/
+├── contracts/                       ← the only cross-engine coupling surface
 │   ├── edge.schema.json
 │   ├── scope-id.md
 │   ├── glossary.md
-│   └── agent-abi.md
+│   └── agent-abi.md                 ← reserved; drafted in Phase D
 │
 ├── engines/
-│   ├── news/
-│   │   └── docs/
-│   ├── nunc-stans/
-│   │   └── docs/
-│   │       ├── prd-override.md
-│   │       └── spl-plan.md
-│   └── fourfive/
-│       └── docs/
+│   ├── nunc-stans/docs/             ← spl-plan.md, prd-override.md (self-engine plans)
+│   ├── nunc-fluens/                 ← news pipeline; INTEGRATION.md = code/data split
+│   └── fourfive/docs/               ← specs and plans of the design tool
 │
-├── frontend/
-├── tools/
-└── tests/
-    └── journey/
+├── frontend/                        ← ME view / world view → Nunc Stans Formans (Phase B)
+├── tools/                           ← check.ts, commit-scope.ts, data-dir.ts, bootstrap.sh
+└── tests/journey/                   ← arrives with Phase F
 ```
+
+Planned additions: `frontend/nunc-stans-formans/` and
+`frontend/packages/{nunc-ui,ai}` (Phase B–C), `agents/nunc-stans-agent/`
+(Phase D), `apps-host/` (Phase E).
 
 ---
 
-## 3. Current placement table
+## 3. Role-based routes
 
-| Placement | Original file |
+| I want to… | Read |
 |---|---|
-| `design/documentation-reading-order.md` | generated |
-| `design/product/htas-integrated-prd.md` | `第3回統合PRD.txt` |
-| `design/product/archive/htas-prd-round1.md` | `第1回PRD.txt` |
-| `design/product/archive/htas-round2-output.md` | `第2回成果物.txt` |
-| `design/architecture/htas-positioning-in-nunc-stans.md` | `HTAS_Positioning_in_Nunc_Stans_v0.1.md` |
-| `design/architecture/memory-write-read-contract.md` | `Memory_WRITE_READ_Contract_v0.2_Nunc_Stans.md` |
-| `design/architecture/memory-io-contract-mvp-decisions.md` | `Memory_IO_Contract_MVP_Decisions_v0.1.md` |
-| `design/architecture/actor-model.md` | `Actor Model Specification.docx` converted |
-| `design/architecture/continuity-kernel.md` | `Continuity Kernel 設計書.docx` converted |
-| `design/architecture/microservice-readiness.md` | `Microservice_Readiness_Development_Principles_v0.1.md` |
-| `design/architecture/ip-server-readiness.md` | `IP_Server_Readiness_Development_Principles_v0.1.md` |
-| `design/constitution/constitution.md` | `nunc-stans-constitution-v0.3.1.md` |
-| `design/stories/journey-examples.md` | `journey-examples.md` |
-| `design/stories/test-spec-journey.md` | `test-spec-journey-v2.3.md` |
-| `design/development/development-plan.md` | `開発進行ドキュメント v0.1.docx` converted |
-| `design/development/setup-phase0.md` | `SETUP-phase0.md` |
-| `engines/nunc-stans/docs/prd-override.md` | `prd-override-nunc-stans.md` |
-| `engines/nunc-stans/docs/spl-plan.md` | `SPL_v3_Plan.docx` converted |
-| `contracts/edge.schema.json` | generated from Pre-v1 Phase 0 setup |
-| `contracts/scope-id.md` | generated from Nunc Stans Constitution |
-| `contracts/glossary.md` | generated project glossary |
-| `contracts/agent-abi.md` | reserved contract |
+| Run the thing | `README.md`, then `CONTRIBUTING.md` |
+| Know what happens next | `design/development/2026-07-04-nuncstans-v1-plan.md` (§3 phases, §6 decisions) |
+| Understand a name (old doc, new doc) | `design/naming.md` |
+| Understand the governance and boundaries | `design/constitution/constitution.md`, then `contracts/` |
+| Understand the memory model | `design/architecture/memory-write-read-contract.md` → `memory-io-contract-mvp-decisions.md` → `actor-model.md` → `continuity-kernel.md` |
+| Understand the product philosophy | `design/product/htas-integrated-prd.md` → `design/architecture/htas-positioning-in-nunc-stans.md` |
+| Know what "done" means | `design/stories/` (S-* per phase; the journey spec for Phase F) |
+| Audit what was actually built | `design/verification/phase-a.md` + git history |
+| Work on the self engine | `engines/nunc-stans/docs/prd-override.md` → `spl-plan.md` |
+| Work on the news engine | `engines/nunc-fluens/INTEGRATION.md` (code/data split, resync recipe) |
 
 ---
 
-## 4. Shortest route
+## 4. Historical documents
 
-This is the minimal route; the tree in §2 is the complete inventory.
+Kept unedited in meaning; read them through `design/naming.md` (vocabulary
+was swept 2026-07, structure and old IDs preserved).
 
-| Order | Document | Reading purpose |
-|---:|---|---|
-| 1 | `design/product/htas-integrated-prd.md` | Read the product definition of HTAS |
-| 2 | `design/architecture/htas-positioning-in-nunc-stans.md` | Read what HTAS owns on top of Nunc Stans |
-| 3 | `design/constitution/constitution.md` | Read the world / self / artifact boundaries and the permission table |
-| 4 | `design/architecture/memory-write-read-contract.md` | Read the WRITE / READ / Reconnection contract |
-| 5 | `design/development/development-plan.md` | Read in what order to build |
-| 6 | `design/development/setup-phase0.md` | Read the starting procedure for the monorepo / data location / check |
-| 7 | `design/stories/test-spec-journey.md` | Read the acceptance criteria for the whole system |
-
----
-
-## 5. Implementation route
-
-### Pre-v1 Phase 0
-
-```text
-design/constitution/constitution.md
-design/development/setup-phase0.md
-contracts/edge.schema.json
-contracts/scope-id.md
-contracts/glossary.md
-contracts/agent-abi.md
-engines/nunc-stans/docs/prd-override.md
-```
-
-### Memory WRITE / READ
-
-```text
-design/architecture/memory-write-read-contract.md
-design/architecture/memory-io-contract-mvp-decisions.md
-design/development/development-plan.md
-design/architecture/actor-model.md
-design/architecture/continuity-kernel.md
-```
-
-### Nunc Stans Journey
-
-```text
-design/stories/journey-examples.md
-design/stories/test-spec-journey.md
-engines/nunc-stans/docs/spl-plan.md
-```
-
-### Boundary / Extraction Readiness
-
-```text
-design/architecture/htas-positioning-in-nunc-stans.md
-design/architecture/microservice-readiness.md
-design/architecture/ip-server-readiness.md
-```
+- `design/development/development-plan.md` — the HTAS M0–M11 milestone plan.
+  Still the product-side reference for HTAS concepts (modes, ACC, DMN); the
+  operative build order is the v1 plan.
+- `design/development/setup-phase0.md` — the Pre-v1 Phase 0 setup procedure.
+  Superseded by `just bootstrap` and the root README; the data-location
+  rules it introduced (FD-3.2, F11) live on in the constitution and
+  `tools/check.ts`.
+- `design/product/archive/` — earlier PRD rounds.
+- The "original file" import map of the pre-monorepo corpus lives in git
+  history (this document's earlier revisions), not maintained here anymore.

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import { Tabs } from 'nunc-ui'
 import { useSessionStore } from '../stores/session'
 import MockUiView from './MockUiView.vue'
 import EntitiesView from './EntitiesView.vue'
@@ -12,6 +13,7 @@ const store = useSessionStore()
 const tabs = ['Mock UI', 'ERD', 'Logic', 'State', 'API', 'Terminology'] as const
 type Tab = (typeof tabs)[number]
 const active = ref<Tab>('Mock UI')
+const tabItems = tabs.map((t) => ({ id: t, label: t }))
 const bp = computed(() => store.blueprint)
 // Read-only slices of each dependency's pinned blueprint for the merged views.
 const depEntities = computed(() =>
@@ -34,17 +36,7 @@ const hasContent = computed(() => !!bp.value || store.dependencies.length > 0)
       <span class="temp__title">
         Temp app<template v-if="bp">: {{ bp.app.name }}</template>
       </span>
-      <nav class="temp__tabs">
-        <button
-          v-for="t in tabs"
-          :key="t"
-          class="temp__tab"
-          :class="{ 'temp__tab--active': active === t }"
-          @click="active = t"
-        >
-          {{ t }}
-        </button>
-      </nav>
+      <Tabs :tabs="tabItems" :model-value="active" @update:model-value="active = $event as Tab" />
     </header>
 
     <div v-if="store.dependencies.length" class="temp__deps">

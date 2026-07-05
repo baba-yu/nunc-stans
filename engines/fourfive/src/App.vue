@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
+import { Badge } from 'nunc-ui'
 import { useSessionStore } from './stores/session'
 import ChatPanel from './components/ChatPanel.vue'
 import TempAppPanel from './components/TempAppPanel.vue'
@@ -53,14 +54,13 @@ onMounted(() => store.init())
             @change="onMaxTokens"
           />
         </div>
-        <span
+        <Badge
           v-if="store.usage.total > 0"
-          class="badge"
           :title="`input ${store.usage.input} / output ${store.usage.output} tokens`"
         >
           {{ store.usage.total }} tok
-        </span>
-        <span class="badge">LLM: {{ store.provider }}</span>
+        </Badge>
+        <Badge>LLM: {{ store.provider }}</Badge>
       </div>
     </header>
     <main class="panes">

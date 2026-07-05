@@ -20,7 +20,8 @@
   },
   "dependencies": {
     "@hono/node-server": "^1.13.0",
-    "better-sqlite3": "^11.8.0",
+    "nunc-ui": "workspace:*",
+    "better-sqlite3": "^12.11.1",
     "hono": "^4.6.0",
     "mermaid": "^11.4.0",
     "pinia": "^2.3.0",
@@ -37,12 +38,5 @@
     "vite": "^6.0.0",
     "vitest": "^4.1.8",
     "vue-tsc": "^2.2.0"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "better-sqlite3",
-      "esbuild",
-      "vue-demi"
-    ]
   }
 }

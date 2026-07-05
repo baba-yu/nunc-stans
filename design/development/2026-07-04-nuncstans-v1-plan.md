@@ -200,6 +200,9 @@ is hard; splitting later is easy — so default to one repo now.
 ```
 nunc-stans/                     (monorepo root; was ~/federation)
   justfile                      just up / news-run / journey / check / backup
+  gate/                         Rust single-origin front door (added Phase B, B1):
+                                static UI serving + loopback proxies to the engine
+                                and fourfive; apps-host mounts behind it at /apps/ (Phase E)
   contracts/                    scope-id, edge schema, glossary, agent-abi v0 (new)
   design/                       canonical design corpus (deduped; ~/nuncstans/plan absorbed)
   engines/
@@ -478,6 +481,14 @@ v0 scope (built in Phase D):
 - **Memory exclusively through the manda MCP gateway** — append / candidate /
   committed lanes, mandate-gated writes, audited. manda stays a separate OSS
   dependency (§5 note 13); this agent is its first real consumer.
+- **manda acquisition (decided 2026-07-04):** runtime dependency only, never
+  vendored. Prerequisite owner steps: push `~/manda` to
+  `github.com/baba-yu/manda` and tag `v0.2.0`. At Phase D the setup line is
+  `cargo install --locked --git https://github.com/baba-yu/manda --tag v0.2.0`,
+  `just bootstrap`'s doctor gains a `manda` check, and S-10 extends to cover
+  it. Once published: crates.io + cargo-dist releases, so
+  `cargo binstall manda` (prebuilt) with `cargo install --locked manda` as
+  the fallback becomes the standard route.
 - MCP client for tools — including, from Phase E, the CRUD tools of generated
   apps: this agent is how "the agent co-uses the app" is proven (S-7).
 - Profile-driven (model, prompt, skills, memory scope) and subject to the
@@ -504,8 +515,10 @@ Rules that apply to every phase:
 - **A phase closes only when its user stories run and pass** (§4). Each
   closure writes `design/verification/<phase>.md` with the evidence — fixing
   the Phase 0–3 pattern of undocumented completion.
-- Each phase runs on a branch (`phase/a-consolidation`, …; Phase C uses
-  `newstack`), merged to `main` at the review gate.
+- Work lands on `dev` (owner directive, 2026-07-04): the owner pushes `dev`
+  and merges to `main` via PR at the review gates. A phase may still cut a
+  topic branch off `dev` (e.g. `newstack` for Phase C) when isolation
+  helps. (Phase A ran on `phase/a-consolidation` under the earlier rule.)
 - Execution happens inside WSL (native modules, pnpm, cargo). Commit style
   follows the repo convention (`area: message`, English, no AI attribution).
 
@@ -556,6 +569,13 @@ companion (week counter, ritual log).
 
 Exit: one origin serves ME + world + FourFive with the shared language;
 stories S-1, S-2, and S-9 pass; a screenshot set is saved under `design/ui/`.
+
+Executed 2026-07-05 per `design/development/2026-07-04-phase-b-plan.md`
+(owner decisions B1–B4: the single origin is fronted by an independent Rust
+gate crate — `gate/`, a deliberate §2.2 layout addition; fourfive adopted
+nunc-ui in-phase; the News dashboard is wrapped as-is with d3 vendored; the
+timeline ships real lanes plus reserved intervention/mandate lanes).
+Evidence: `design/verification/phase-b.md`.
 
 ### Phase C — News newstack
 
