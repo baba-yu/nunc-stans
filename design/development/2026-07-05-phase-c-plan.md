@@ -344,13 +344,26 @@ apply-schema-edit, weekly-maintenance port).
       the engine's unanchored data-path ignores had swallowed the
       committed golden report/FP fixtures (772c887).
 
-### Task 4b: Deterministic port — DB chain
-- [ ] `db/` (schema.sql apply, access layer), parsers (news, prediction,
-      `_strip_scope_prefix_anywhere`), `ingest-sourcedata`, `ingest`/cli
-      paths, `timewindow`, `score` + `analytics/{scoring,windows}`,
-      `glossary_link`, glossary skills (candidates seed modes, validate),
-      `daily-flow-check`, `post-update-validation` — row-dump parity on
-      goldens.
+### Task 4b: Deterministic port — DB chain — core DONE 2026-07-06
+- [x] `db/` (schema apply + a dump serializer shared by capture and
+      pipeline — REAL formatting differs across libsqlite3 versions, so
+      one serializer dumps both sides; round-trip proof green). 620568b.
+- [x] `ingest-sourcedata` (predictions/needs/bridges/readings + locale
+      fan-in), ingest core (idf theme matching, upserts, LCS
+      match-or-create — no fastembed, matching the capture env),
+      `commit_need`, glossary extract + seed (yaml dep), `timewindow`,
+      `score` + `analytics/{scoring,windows}`. **Parity gate green: the
+      full 7-day TS rebuild reproduces the oracle's normalized dump
+      byte-for-byte** (53f2ed7, 16a3f36). Oracle determinism fix landed
+      per the code-freeze rule (fixes live in the monorepo copy):
+      `_idf_score` sums over sorted tokens — exact rational theme ties
+      exist on the live corpus and were previously broken by
+      hash-seed-dependent float ordering; capture pins PYTHONHASHSEED=0.
+- [ ] Deferred into T4c/T5 where their consumers land: legacy md parsers
+      (`news_parser`, `prediction_parser` — only if `run-update-pages`
+      needs the markdown rebuild path), `glossary_link`,
+      `validate-glossary-terms` form checks, `daily-flow-check`,
+      `post-update-validation`.
 
 ### Task 4c: Deterministic port — export + gates + weekly
 - [ ] `export` + `run-update-pages` (graph-*.json, manifest, dashboard
