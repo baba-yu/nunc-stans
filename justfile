@@ -52,10 +52,11 @@ build: build-world
     cargo build --release --manifest-path engines/nunc-stans/Cargo.toml
     cargo build --release --manifest-path gate/Cargo.toml
 
-# Flatten News's world export into the formans public dir
+# Flatten News's world export into the formans public dir AND stage the News
+# dashboard (as-is, d3 vendored — no CDN) for the /world-graph/ wrap
 # (§13-B: conversion on the Nunc Stans side; News is not asked to change).
 build-world:
-    node frontend/nunc-stans-formans/scripts/build-world.mjs
+    node tools/build-world.ts
 
 # Fast dev loop: Vite dev server for formans (HMR). Run `just up` in
 # another terminal — the dev proxy points at the gate (:8720).
