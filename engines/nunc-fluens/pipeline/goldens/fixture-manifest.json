@@ -23,7 +23,9 @@
   "normalization": {
     "isoTimestamps": "every YYYY-MM-DDTHH:MM:SS[.f][Z] in the DB dump and export JSON is rewritten to 1970-01-01T00:00:00Z before storing/comparing (created_at/updated_at/scored_at/generated_at metadata; content never carries time-of-day stamps)",
     "captureDateTokens": "the capture-run date (date-only ISO) is rewritten to <CAPTURE_DAY> in the DB dump and export JSON (glossary first_seen/last_seen, needs extracted_on and similar); the TS parity test applies the same rewrite with its own run date",
-    "workPath": "the absolute work/ directory path is rewritten to <WORK> in captured tool output (daily-flow-check prints its repo root)"
+    "workPath": "the absolute work/ directory path is rewritten to <WORK> in captured tool output (daily-flow-check prints its repo root)",
+    "jsonNumberFormatting": "export JSON parity is asserted on PARSED values, not bytes: python json.dumps writes repr floats (1.0), JS writes 1 — JSON numbers are typeless and every consumer parses the file",
+    "layoutTrigUlp": "ring-layout x/y come from sin/cos, which differ between python's libm and V8 in the last ULP; the export parity test rounds layout.x/.y to 9 decimals (they only seed the frontend force layout)"
   },
   "deferredCaptures": {
     "T4b": ["validate-glossary-terms form checks"],

@@ -690,7 +690,9 @@ def _build_scope_graph(conn: sqlite3.Connection, scope_id: str) -> dict:
             return []
         scored: list[tuple[float, str, str]] = []
         for th, t_tokens in zip(themes, theme_tokens_list):
-            s = sum(1.0 / df[t] for t in (toks & t_tokens) if df.get(t, 0) > 0)
+            # Sorted for order-deterministic float sums (same rationale as
+            # ingest._idf_score — Phase C determinism fix).
+            s = sum(1.0 / df[t] for t in sorted(toks & t_tokens) if df.get(t, 0) > 0)
             if s > 0:
                 scored.append((s, th["theme_id"], th["category_id"]))
         if not scored:
@@ -1803,7 +1805,8 @@ def _build_scope_graph(conn: sqlite3.Connection, scope_id: str) -> dict:
             shared = th_tokens & pt
             if not shared:
                 continue
-            score = sum(1.0 / df[t] for t in shared if df.get(t, 0) > 0)
+            # Sorted for order-deterministic float sums (Phase C fix).
+            score = sum(1.0 / df[t] for t in sorted(shared) if df.get(t, 0) > 0)
             if score > best_score:
                 best_score = score
                 best_pred = p
