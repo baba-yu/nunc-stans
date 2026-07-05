@@ -1,15 +1,15 @@
-# News in the federation
+# Nunc Fluens (news) in the monorepo
 
 News owns the `world` scope: world prediction, observation, and external
 context (constitution §6.1). This directory is the News **pipeline code**,
-consolidated into the federation monorepo. The News **data** is deliberately
+consolidated into the nunc-stans monorepo. The News **data** is deliberately
 not here.
 
 ## Code here, data external
 
 The upstream `~/news` repository is a live, data-heavy repo (~960 MB, mostly
 generated graph snapshots under `docs/data/` and `memory/snapshots/`, plus
-multilingual reports and predictions). Committing that into the federation
+multilingual reports and predictions). Committing that into the monorepo
 would bloat the monorepo and duplicate the world source of truth — and the
 constitution treats News data as "a rebuildable cache," with News keeping the
 world SoR in its own repository.
@@ -22,7 +22,7 @@ data paths (`docs/data`, `memory`, `app/sourcedata`, `future-prediction`,
 here can never commit them back.
 
 **The world source of truth remains `~/news`.** It has its own remote and runs
-the daily pipeline. Federation:Phase 3 ("News view integration") is where
+the daily pipeline. Pre-v1 Phase 3 ("News view integration") is where
 News's `export.py` output is retargeted from GitHub Pages to local serving and
 a read-only world view is added to the ME screen (with `informed_by` edges
 auto-attached on "create a commitment from this headline"). Until then,
@@ -41,7 +41,7 @@ uvx git-filter-repo --force \
   --path app/update_pages.sh --path app/update_pages.bat \
   --path reference/ --path docs/index.html --path docs/assets \
   --path README.md --path README.ja.md --path README.es.md --path README.fil.md
-cd ~/federation
+cd ~/nunc-stans
 git subtree pull --prefix=engines/news /tmp/news-code dev
 ```
 

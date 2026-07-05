@@ -1,6 +1,6 @@
-# In the federation, engines/news holds the News pipeline CODE only. The
+# In the nunc-stans monorepo, engines/nunc-fluens holds the news pipeline CODE only. The
 # world source of truth (data) lives in the external ~/news repo, which runs
-# the live daily pipeline (see FEDERATION.md). Everything below is either
+# the live daily pipeline (see INTEGRATION.md). Everything below is either
 # runtime byproduct or world-SoR data and must never be committed here — a
 # single pipeline run would otherwise add ~900 MB of graph snapshots back.
 app/data/
