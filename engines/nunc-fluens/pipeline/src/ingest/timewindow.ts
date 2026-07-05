@@ -98,6 +98,43 @@ function modifierBounds(y: number, m: number, modifier: string): [Ymd, Ymd] {
   }
 }
 
+/** Python date.fromisocalendar(year, week, 1) — the Monday of the ISO
+ * week — as epoch ms, or null when the week is invalid for that year. */
+function weeksInIsoYear(y: number): number {
+  const p = (yy: number) =>
+    (yy + Math.floor(yy / 4) - Math.floor(yy / 100) + Math.floor(yy / 400)) % 7;
+  return p(y) === 4 || p(y - 1) === 3 ? 53 : 52;
+}
+
+function isoWeekMonday(year: number, week: number): number | null {
+  if (week < 1 || week > weeksInIsoYear(year)) return null;
+  const jan4 = Date.UTC(year, 0, 4);
+  const dow = (new Date(jan4).getUTCDay() + 6) % 7; // Mon=0
+  const monday1 = jan4 - dow * 86400000;
+  return monday1 + (week - 1) * 7 * 86400000;
+}
+
+/** Port of timewindow.parse_week_bucket: `%Y-%W` bucket → (Mon, Sun). */
+export function parseWeekBucket(weekBucket: string): [string | null, string | null] {
+  if (!weekBucket || !weekBucket.includes('-')) return [null, null];
+  const dash = weekBucket.indexOf('-');
+  const year = Number(weekBucket.slice(0, dash));
+  const week = Number(weekBucket.slice(dash + 1));
+  if (!Number.isInteger(year) || !Number.isInteger(week)) return [null, null];
+  let monday = isoWeekMonday(year, Math.max(week, 1));
+  if (monday === null) {
+    // Fallback: approximate via day-of-year arithmetic (mirrors the
+    // oracle's except-branch).
+    const jan1 = Date.UTC(year, 0, 1);
+    if (!Number.isFinite(jan1)) return [null, null];
+    const wd = (new Date(jan1).getUTCDay() + 6) % 7; // Mon=0
+    const offset = (7 - wd) % 7;
+    monday = jan1 + (offset + (week - 1) * 7) * 86400000;
+  }
+  const iso = (t: number) => new Date(t).toISOString().slice(0, 10);
+  return [iso(monday), iso(monday + 6 * 86400000)];
+}
+
 export function parseTimeWindow(
   text: string, anchor?: string | null,
 ): [string | null, string | null] {
