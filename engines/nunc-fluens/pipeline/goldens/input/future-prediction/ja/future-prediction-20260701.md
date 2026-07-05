@@ -1,0 +1,70 @@
+# Future Prediction Validation Report 2026-07-01
+
+<!-- ai-notice -->
+> **ご注意:** 本ページの記事および要約は、Anthropic 社の生成AI「Claude」によって作成されています。
+
+Coverage window: predictions from 2026-06-24 through 2026-06-30 (last 7 days, excluding today). Today's news report is for 2026-07-01.
+
+## Validation findings
+
+| Prediction (summary) | Prediction date | Today's relevance | Evidence summary | Reference link(s) |
+|---|---|---|---|---|
+| Multi-tenant agent builders draw a 9.0+ cross-tenant authz CVE by Q1 2027 | 2026-06-27 | 5 | 6月下旬のCVEの波は、この予測が対象とするマルチテナント型エージェント構築ツールの領域を正面から突いている。中心となるのはFlowiseのMCPコマンドインジェクションによるRCEで、CVE-2026-56274として報告された。これはFlowise Custom MCP Server（3.1.2より前）に存在するCVSS 9.9のOSコマンドインジェクションの欠陥だ。コマンドフラグの検証が不完全なうえ、ローカルファイルアクセス制限の正規表現を回避できるため、認証済みのユーザーであれば誰でも悪意あるMCPサーバーを設定できる。それがvalidateCommandFlagsの拒否リストをすり抜け、ホスト上で任意のコマンドを実行してしまう。これはより広い時期の一連の事案の中に位置づけられる。Crawl4AI（CVE-2026-53753）、Langflow、picklescanはいずれも9.6〜9.8を記録し、Microsoft AutoGen Studioのコード実行は、コンテナ分離が不十分なためエージェント生成コードが過剰な権限でホストプロセス上で走る点に由来する。攻撃経路は、認証済みテナントからホストへの権限昇格であり、まさにこの予測が見込むものだ。しかもFlowiseは9.0以上の基準を明確に上回っている。厳密な予測内容との唯一の隔たりは、Flowiseが認証済みユーザーを起点とする点であって、明示的にテナントをまたぐ認可の破綻と名指しされたものではないことだ。したがって深刻度の基準は満たすものの、テナントをまたぐという厳密な枠組みには部分的にしか一致しない。 | [NVD - CVE-2026-56274 (Flowise Custom MCP Server command injection, CVSS 9.9)](https://nvd.nist.gov/vuln/detail/CVE-2026-56274), [Threat-Modeling.com - Microsoft AutoGen Studio code execution (June 2026)](https://threat-modeling.com/microsoft-autogen-studio-code-execution-june-2026/) |
+| Inline MCP-channel policy enforcement ships as a platform default by Q1 2027 | 2026-06-16 | 4 | 本日の材料は、MCPサーバーとツール実行の境界を、悪用可能なコードが集中する地点として明確に名指しした。これはまさに、この予測がインラインの既定ポリシー強制を得るべきだとする経路そのものだ。FlowiseのカスタムMCPコマンドインジェクションによるRCE（CVE-2026-56274、CVSS 9.9）は、正規表現の回避を用いてvalidateCommandFlagsの拒否リストをすり抜け、ホスト上で任意のコマンドを実行する。一方でMicrosoft AutoGen Studioのコード実行は、コンテナ分離が不十分なため、エージェント生成コードを過剰な権限でホストプロセス上で走らせる。この報告が引く共通の筋は、エージェントがツールを呼び出す仕組みこそ悪用可能なコードが潜む場所だ、というものだ。それがインラインのMCPチャネル強制を求める需要側の圧力になる。しかし、許可リストに基づくインラインのMCPポリシーを既定として出荷したプラットフォームはまだ存在しない。本日はそれを促す事案の証拠であって、製品化された既定そのものではない。 | [NVD - CVE-2026-56274 (Flowise Custom MCP Server command injection, CVSS 9.9)](https://nvd.nist.gov/vuln/detail/CVE-2026-56274), [Threat-Modeling.com - Microsoft AutoGen Studio code execution (June 2026)](https://threat-modeling.com/microsoft-autogen-studio-code-execution-june-2026/) |
+| Coding-agent platform ships trifecta capability gate as default by Q1 2027 | 2026-06-28 | 3 | 本日の兆候のうち二つが、この予測が立脚するエージェント基盤の信頼性と認可の領域に触れている。セキュリティ面では、FlowiseのカスタムMCPによるRCE（CVE-2026-56274）とAutoGen Studioのホストプロセスでのコード実行がある。いずれも、認証済みユーザーを信頼してホスト上で走らせるという型に由来し、これは既定で拒否する権限ゲートが封じるために設計されたものだ。モデル面では、Anthropicが望ましくない挙動の発生率を前世代より下げ、プロンプトインジェクションによる乗っ取りへの耐性を高めたとするClaude Sonnet 5を出荷した。しかしいずれも、この予測を支える中核の仕組みではない。それは、非公開データへのアクセス・信頼できないコンテンツ・外部との通信という致命的な三点の組み合わせに上限をかける、既定で有効なゲートだ。モデル層でのインジェクション耐性やフレームワークのRCEの公表は、そうしたゲートへの圧力を高める。しかし、既定で拒否する認可制御そのものを出荷したコーディングエージェントのプラットフォームはない。そのため関連性は、直接の充足ではなく主題的なものにとどまる。 | [NVD - CVE-2026-56274 (Flowise Custom MCP Server command injection, CVSS 9.9)](https://nvd.nist.gov/vuln/detail/CVE-2026-56274), [Anthropic - Introducing Claude Sonnet 5](https://www.anthropic.com/news/claude-sonnet-5) |
+| Agent-framework SQL tools ship read-only-by-default execution guards by Q1 2027 | 2026-06-05 | 3 | [REVIVED] 6月下旬のエージェントツール群のCVEの集中が、実行層のガードという主張を改めて裏づける。FlowiseのカスタムMCPコマンドインジェクション（CVE-2026-56274、CVSS 9.9）は、フラグ検証の不完全さと正規表現の回避が拒否リストを打ち破るため、ホスト上で任意のコマンドを実行する。またAutoGen Studioは、コンテナ分離が不十分なため、エージェント生成コードを過剰な権限でホストプロセス上で実行する。いずれも、プロンプトからツール、そして実行へと至る同じ悪用であり、既定で読み取り専用かつ最小権限の実行ガードが弱めようとするものだ。そして、回避によって拒否リストが破られるという点こそ、この予測がフレームワークを許可リストと最小権限の既定へ向かわせると論じる、まさにその失敗の型だ。証拠は、名指しされたフレームワークで出荷された既定の読み取り専用SQLや実行ガードではなく、インジェクション系の事案がもたらす圧力にとどまる。そのため、休眠していた主張を蘇らせはするが、それを充足するには至らない。 | [NVD - CVE-2026-56274 (Flowise Custom MCP Server command injection, CVSS 9.9)](https://nvd.nist.gov/vuln/detail/CVE-2026-56274), [Threat-Modeling.com - Microsoft AutoGen Studio code execution (June 2026)](https://threat-modeling.com/microsoft-autogen-studio-code-execution-june-2026/) |
+| Agentic coding platforms ship token budgets and caps as default by Q2 2027 | 2026-06-25 | 3 | Anthropicは6月30日にClaude Sonnet 5を公開した。旗艦級に近い品質で長時間のエージェントを走らせる最も安価な手段と位置づけている。BrowseCompのエージェント検索とOSWorld-Verifiedのコンピュータ操作のベンチマークでOpus 4.8とコスト性能の同等性を主張し、導入価格は入力100万トークンあたり2ドル・出力100万トークンあたり10ドル（8月31日以降は通常価格の3ドル／15ドル）で、FreeとProの既定として出荷される。有能なエージェントのループにおける1トークンあたりのコストを旗艦のおよそ3分の1へ引き下げることは、プラットフォームが既定で予算と上限を用意する動機となる、企業のトークン請求の圧力そのものだ。トークンが安くなっても、長時間のエージェントの支出を抑える必要はなくならない。むしろ、自律的に走るループの量が増える。これは、既定の予算をめぐる経済的な論拠を鋭くする基盤コストの文脈であって、トークン上限の制御そのものを出荷したプラットフォームではない。 | [Anthropic - Introducing Claude Sonnet 5](https://www.anthropic.com/news/claude-sonnet-5), [9to5Mac - Anthropic upgrades Claude with new Sonnet 5 model](https://9to5mac.com/2026/06/30/anthropic-upgrades-claude-with-new-sonnet-5-model-details-here/) |
+| A frontier lab ships beneficial-trait RL in a production model by H1 2027 | 2026-06-21 | 3 | Claude Sonnet 5は、この主張に関わる安全性の向上を明言して出荷された。望ましくない挙動の発生率を前世代より下げ、プロンプトインジェクションによる乗っ取りへの耐性を高めており、それが研究成果ではなく一般提供の実運用モデルへ直接組み込まれている。これはこの予測が見込む形そのものだ。すなわち、先端の研究所が挙動と整合性の改善を、ベンチマークの実演としてではなく、事後学習の標準的な成果として出荷モデルに焼き込むという形だ。隔たりは、Anthropicがこの改善を、望ましくない挙動の低減とインジェクション耐性として位置づけている点にある。システムカードの手法に関する記載を伴う、有益な特性を狙った強化学習の段階と明示的に名指ししているわけではない。そのため軌道は支えるものの、この予測が名指しする特定の強化学習による人格形成の仕組みを確認するには至らない。 | [Anthropic - Introducing Claude Sonnet 5](https://www.anthropic.com/news/claude-sonnet-5), [9to5Mac - Anthropic upgrades Claude with new Sonnet 5 model](https://9to5mac.com/2026/06/30/anthropic-upgrades-claude-with-new-sonnet-5-model-details-here/) |
+| Orchestration benchmarks add a latency-disclosure column by Q1 2027 | 2026-06-24 | 3 | 6月29日のarXivのまとまりは、エージェントの連携統合を研究の議題の前面へ押し出した。「Design and Implementation of Agentic Orchestrations and Orchestration of Agents」（2606.31518）は、エージェントをどう構成し連携させるかを、後回しの課題ではなく第一級の工学上の関心事として扱う。加えて自己進化する生物学的プロトコルのエージェント（2606.31763）や植物の表現型解析の枠組みもあり、いずれも特定領域における連携統合と自己進化型の自律性へ収れんしている。連携統合を第一級の工学的対象へ引き上げることは、連携統合に特化したベンチマークと、この予測が見込む開示の項目が生まれる前提条件だ。しかしこれらの論文は、標準化された遅延の報告ではなく、構成と自己進化を扱っている。そのため証拠は、連携統合ベンチマークの方向を前進させるものの、特定の遅延開示の項目を加えるには至らない。 | [arXiv - Design and Implementation of Agentic Orchestrations and Orchestration of Agents (2606.31518)](https://arxiv.org/abs/2606.31518), [arXiv - A Self-Evolving Agentic System for Automated Generation and Execution of Biological Protocols (2606.31763)](https://arxiv.org/abs/2606.31763) |
+| Agent meta-harness becomes the cross-vendor policy plane for agents by H1 2027 | 2026-06-15 | 3 | AnthropicのClaude Scienceは6月30日に、新しいモデルではなく基盤として立ち上げられた。既存のClaudeモデル（Opus 4.8を含み、特別なアクセスは不要）を動かし、ゲノミクス・プロテオミクス・構造生物学・ケモインフォマティクスにまたがる60を超える科学データベースと計算ツールへの設定済みコネクターを備える。差別化された製品は重みそのものではなく、汎用モデルを取り巻くツール統合と領域スキルの層にある。6月29日の連携統合に関するarXivの成果（2606.31518）が構成と連携統合を第一級の関心事として扱うことと合わせると、この兆候は、モデルの上に立つ基盤とポリシー・統合の層こそ競争上の価値が移っていく先だ、という点を補強する。これは、基盤が持続的な制御面になることへの方向的な裏づけだ。ただしClaude Scienceは単一ベンダーの領域向け作業台であって、複数の研究所のモデルにまたがるベンダー横断のポリシー面ではない。後者こそがこの予測の具体的な主張だ。 | [Northeastern Global News - Anthropic Claude Science aims to boost drug discovery](https://news.northeastern.edu/2026/06/30/anthropic-claude-science-launch/), [arXiv - Design and Implementation of Agentic Orchestrations and Orchestration of Agents (2606.31518)](https://arxiv.org/abs/2606.31518) |
+
+
+## Bridge
+
+
+On the "Multi-tenant agent builders draw a 9.0+ cross-tenant authz CVE by Q1 2027" prediction (2026-06-27): 6月下旬のCVEの波は、この予測が対象とするマルチテナント型エージェント構築ツールの領域を直接突いている。中でもFlowise Custom MCP ServerのコマンドインジェクションによるRCE（CVSS 9.9）は、9.0以上の基準を明確に上回る。認証済みユーザーが破綻したコマンドフラグの拒否リストを乗り越え、ホスト上で任意のコマンドを実行するものだ。これはCrawl4AI、Langflow、AutoGen Studioにまたがる9.6〜9.8の一群の中で起きている。
+
+
+On the "Inline MCP-channel policy enforcement ships as a platform default by Q1 2027" prediction (2026-06-16): 本日の材料は、MCPサーバーとツール実行の境界を、悪用可能なコードが集中する地点として名指しした。FlowiseのカスタムMCPによるRCE（CVSS 9.9）は正規表現の回避でvalidateCommandFlagsの拒否リストをすり抜け、AutoGen Studioはエージェント生成コードを過剰な権限でホストプロセス上で走らせる。これは、この予測がインラインの既定ポリシー強制を得ると見込むまさにその経路に対して、事案が生む圧力となる。
+
+
+On the "Coding-agent platform ships trifecta capability gate as default by Q1 2027" prediction (2026-06-28): FlowiseのカスタムMCPによるRCEとAutoGen Studioのホストプロセスでのコード実行は、いずれも認証済みユーザーを信頼してホスト上で走らせるという型に由来する。これは既定で拒否する権限ゲートが封じるために設計されたものだ。一方でClaude Sonnet 5はプロンプトインジェクションへの耐性を高めて出荷された。両者は合わせて、そうしたゲートへの圧力を高め、この予測が土台とする前提条件を後押しする。
+
+
+On the "Agent-framework SQL tools ship read-only-by-default execution guards by Q1 2027" prediction (2026-06-05): 6月下旬のエージェントツール群のCVEの集中は、この主張が拠り所とする事案の圧力だ。FlowiseのカスタムMCPコマンドインジェクションがホスト上で任意のコマンドを実行したのは、まさに拒否リストが正規表現の回避で破られたからであり、AutoGen Studioはコンテナ分離の不十分さからエージェント生成コードをホストプロセス上で実行した。回避によって拒否リストが破られるという点は、フレームワークを許可リストと最小権限、そして既定で読み取り専用の実行ガードへ向かわせると論じる、まさにその失敗の型だ。したがって本日は、休眠のあとにこの前提条件を改めて裏づける。
+
+
+On the "Agentic coding platforms ship token budgets and caps as default by Q2 2027" prediction (2026-06-25): Claude Sonnet 5が有能な長時間エージェントの1トークンあたりのコストを旗艦のおよそ3分の1へ引き下げることは、この予測を支える経済的な論拠を鋭くする。トークンが安くなっても自律的な支出を抑える必要はなくならず、むしろ走るループの量が増える。それが、プラットフォームに既定で予算と上限を用意させる、企業のトークン請求の圧力だ。本日は、既定の支出制御をより必要にする基盤コストの条件を供給する。
+
+
+On the "A frontier lab ships beneficial-trait RL in a production model by H1 2027" prediction (2026-06-21): Claude Sonnet 5は、望ましくない挙動の発生率が前世代より低く、プロンプトインジェクションによる乗っ取りへの耐性が高いと明言して出荷された。しかもそれが研究成果ではなく、一般提供の実運用モデルへ直接組み込まれている。これはこの予測が見込む軌道そのものだ。すなわち、先端の研究所が挙動と整合性の改善を、事後学習の標準的な成果として出荷モデルに焼き込むという軌道であり、実運用化された安全性の向上へ向かう構造的な力を裏づける。
+
+
+On the "Orchestration benchmarks add a latency-disclosure column by Q1 2027" prediction (2026-06-24): 6月29日のarXivのまとまりは、エージェントをどう構成し連携させるかを、後回しの課題ではなく第一級の工学上の関心事へ引き上げる。これは、連携統合に特化したベンチマークがそもそも存在するための前提条件だ。ひとたび連携統合が測る対象になれば、遅延は標準化して開示すべき明白な軸となる。
+
+
+On the "Agent meta-harness becomes the cross-vendor policy plane for agents by H1 2027" prediction (2026-06-15): Claude Scienceは既存のモデルの上に立つ基盤として立ち上げられ、差別化された価値は重みではなくコネクターと領域スキルの層にある。また連携統合のarXivの成果は構成を第一級の関心事として扱う。両者は合わせて、競争上の価値をモデルから、制御面を担いうる統合とポリシーの層へと動かす構造的な引力を映し出す。
+
+
+## Summary (Plain Language)
+
+より安価なClaudeモデルが、AIエージェントを最高品質で走らせる。AIエージェント構築ソフトを重大なセキュリティの穴が直撃した。夏のAI関連イベントの日程が固まった。
+
+
+## Summary of Findings
+
+本日の流れは、6月30日にAnthropicがモデルと基盤の面で何を出荷したかと、セキュリティの面で悪用可能なコードが実際にどこへ集中しているか、この二つにきれいに分かれる。そして研究とイベントの層が両者をつなぐ。製品面では、Anthropicが旗艦級に近い品質で長時間のエージェントを走らせる最も安価な手段としてClaude Sonnet 5を公開した。BrowseCompのエージェント検索とOSWorld-Verifiedのコンピュータ操作のベンチマークでOpus 4.8とコスト性能の同等性を主張し、導入価格は入力100万トークンあたり2ドル・出力100万トークンあたり10ドル（8月31日以降は通常価格の3ドル／15ドル）で、FreeとProの既定として出荷される。同じ流れの中でClaude Scienceも出荷された。これは注目すべきことに新しいモデルではなく、既存のClaudeモデル（Opus 4.8を含み、特別なアクセスは不要）を動かす基盤であり、ゲノミクス・プロテオミクス・構造生物学・ケモインフォマティクスにまたがる60を超える科学データベースと計算ツールへの設定済みコネクターを備える。この二つの立ち上げが共に帯びる構造的な兆候は、差別化された製品が重みではなく、汎用モデルを取り巻くツール統合と領域スキルの層にある、という点だ。これは同じコーディングエージェント基盤の型が、ソフトウェアから実験科学へと広がったものだ。
+
+セキュリティの側面は、本日で最も密度の高い裏づけだ。6月下旬のCVEの波が、オープンソースのエージェント構築ツールを正面から突いている。Flowise Custom MCP ServerのコマンドインジェクションによるRCE（CVE-2026-56274、CVSS 9.9）は、認証済みユーザーが正規表現の回避でvalidateCommandFlagsの拒否リストをすり抜け、悪意あるMCPサーバーを差し込んでホスト上で任意のコマンドを実行できるものだ。これはより広い時期の一連の事案の中にあり、Crawl4AI（CVE-2026-53753）、Langflow、picklescanはいずれも9.6〜9.8を記録し、Microsoft AutoGen Studioはコンテナ分離が不十分なためエージェント生成コードを過剰な権限でホストプロセス上で走らせる。マルチテナントの認可CVEに関する予測（6月27日）は関連度5/5となり、Flowiseは9.0以上の基準を明確に上回る。同じ一群は、休眠していたエージェントフレームワークの既定で読み取り専用の実行ガードという主張（6月5日）を3/5で蘇らせる。というのも、拒否リストが正規表現の回避で破られるという点は、その主張がフレームワークを許可リストと最小権限の既定へ向かわせると論じる、まさにその失敗の型だからだ。この報告が引く共通の筋は、MCPサーバーとツール実行の境界を、悪用可能なコードが集中する地点とすることであり、そこはインラインのMCPチャネルポリシーの予測（6月16日）がその動機となる圧力を引く場所でもある。
+
+研究とイベントの側面も、同じ収れんを反映する。6月29日のarXivのまとまりは、エージェントの連携統合を前面へ押し出した。「Design and Implementation of Agentic Orchestrations and Orchestration of Agents」（2606.31518）はエージェントをどう構成するかを第一級の工学上の関心事として扱い、自己進化する生物学的プロトコルのエージェント（2606.31763）や植物の表現型解析の枠組み（2606.31831）が、Anthropicが翌日に製品化した実験科学向けの基盤の方向と響き合う。ストリームをまたぐ型は、モデルの経済性・基盤の価値・連携統合の研究・エージェントツールの攻撃面が、いずれも同じ統合と連携統合の層へ向かっているというものだ。そして今後の日程が、これらが対面でどこに決着するかを定めている。Moscone WestでのAI Engineer World's Fairは最終2日間に入り（Harness Engineeringの基調講演が7月2日に締めくくる）、AMDのAdvancing AI（7月22〜23日）、Hot Chips（8月23〜25日）、そして8月のAIセキュリティの一群（AI Risk Summit、Black Hat、AI Villageを擁するDEF CON）が続く。
+
+
+## Relation to My Own Predictions
+
+ユーザーの第一の継続予測（悪意あるローカルLLMをマルウェアとみなし、ゼロトラストを根本的な防護策とするもの）は、そのエージェントワークフローのCVEの側面において、本日最も密度が高く直接的な材料を得た。ただし、証明（アテステーション）と調達の側面は静かなままだ。6月下旬の波は、この主張が追う エージェントツールの攻撃面を正面から突いている。Flowise Custom MCP ServerのコマンドインジェクションによるRCE（CVE-2026-56274、CVSS 9.9）は、認証済みユーザーが正規表現の回避でvalidateCommandFlagsの拒否リストをすり抜け、悪意あるMCPサーバーを差し込んでホスト上で任意のコマンドを実行できるものだ。これはCrawl4AI（CVE-2026-53753）、Langflow、picklescanが9.6〜9.8を記録した一群の中にあり、同時にMicrosoft AutoGen Studioはエージェント生成コードを過剰な権限でホストプロセス上で実行し、LiteLLMのSSRF／デシリアライズの欠陥はCISAの既知の悪用脆弱性カタログに追加され、同じ時期にはMastraのプロンプトインジェクションからRCEへ至る事案がLazarus Groupに悪用されたと報じられた。これはまさに、この主張が名指しするLangGraph／LiteLLM／AutoGen系のCVEの連鎖とCISA-KEVの執行であり、Claude Sonnet 5がプロンプトインジェクションによる乗っ取りへの耐性を高めたとする点は、ゼロトラストの姿勢へ向けたモデル層での後押しだ。一方で示されなかったのは、この主張が拠り所とする構造的な答えだ。署名付きチェックポイントによる証明も、テナントごとの権限ゲートの基本要素も、同盟陣営による調達ゲートの条項も表に出ていない。したがって本日は、悪意あるツールという脅威の側を固める一方で、既定で拒否する証明という防御の側は開いたままだ。
+
+ユーザーの第二の継続予測（高度あるいは先端的な作業にはクラウドAPIを、日常の作業にはローカルLLMを、SaaSの値上げが後押しするというもの）は、直接のローカル実行の材料ではなくモデルの経済性を通じて、そのクラウドAPIの極に接点を得た。Claude Sonnet 5が有能な長時間エージェントの1トークンあたりのコストを旗艦のおよそ3分の1へ、導入価格の100万トークンあたり2ドル／10ドルから3ドル／15ドルへと進めることは、この主張が高度な作業も汎用の作業も先端の研究所のAPIに留めると見込む、ハイパースケール規模のクラウドAPIの側面だ。そして報告が引くGartnerの企業トークン請求の圧力は、この主張が くさびと名指しするSaaSコストの強制力そのものだ。Claude Scienceが特別なアクセスなしに既存の有料モデルを動かす点は、クラウドAPIの基盤こそ先端の能力が置かれ続ける場所だ、という点を補強する。しかしUnsloth系の量子化の手法も、コンシューマー向けGPUの範囲（Mixtral／Qwen／DeepSeek）も、主権クラウドのテナンシーの材料も本日は示されなかった。そのため、この二分化のうち日常のローカルの極には新しい材料が現れず、本日は高度なクラウドの側面とそのコスト圧力の論理を前進させる一方で、端末上で動かす半分は静かなままだ。
+
+ユーザーの第三の継続予測（RL／LLMに基づく予測性能の向上で、基盤・ガバナンス・実世界への展開の側面が並行して固まるというもの）は、その基盤と先端研究所のCLIの側面に意味のある接点を得た一方、実世界への展開には接点がない。6月29日のarXivのまとまりが最も直接的な兆候だ。「Design and Implementation of Agentic Orchestrations and Orchestration of Agents」（2606.31518）はエージェントの構成と連携統合を第一級の工学的対象へ引き上げ、自己進化する生物学的プロトコルのエージェント（2606.31763）は、この主張が見込む長時間かつ自己適応する自律エージェントの仕組みそのものだ。またClaude Scienceと、それが広げるClaude Code型の基盤の型は、この主張が追う先端研究所のサブエージェント配下の基盤だ。Claude Sonnet 5が望ましくない挙動の低い発生率とより強いインジェクション耐性を出荷済みの実運用モデルへ折り込んだことは、自律的な予測エージェントに必要な証明と安全性の境界へ向けた、かすかなガバナンス寄りの兆候だ。しかし、ルーターのみのLoRAも超長文脈のRL安定性のプレプリントも、署名付きスキルレジストリの相互運用もNISTの非人間アイデンティティの制御プロファイルも、そして物理AIの生産ループの完結（Optimus／Atlas／Figure／OEMのライン）も示されなかった。そのため本日は基盤と基盤層の側面が前進した一方で、形式的なガバナンスと実世界への展開の証しは後日に持ち越しとなる。
+
