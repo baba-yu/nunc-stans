@@ -388,15 +388,31 @@ apply-schema-edit, weekly-maintenance port).
       `run-update-pages` wrapper, `validate-glossary-terms`,
       `apply-schema-edit` (manual mode), `weekly-maintenance`.
 
-### Task 5: Orchestrator
-- [ ] DAG runner: DOW table, artifact-presence resume, DRY_RUN, `--only`;
-      failure-mode policies from the specs (re-prompt rules, aborts).
-- [ ] LLM steps: prompt assets + schemas + per-step search/synth config +
-      concurrency pools; `run.json` manifest writer.
-- [ ] Publish: README 3-day window (LLM ×4), link/structural checks,
-      commit+push to `newsRepo` (ported safe-push), DRY_RUN skips push.
-- [ ] Full pipeline DRY run on a golden day with `mock` — deterministic
-      end-to-end pass.
+### Task 5: Orchestrator — core DONE 2026-07-05 (Sunday chain open)
+- [x] DAG runner (`src/orchestrator/dag.ts`): DOW plan,
+      artifact-presence replay/resume, DRY_RUN, `--only`; `run.json`
+      manifest (S-3's provider/search record). CLI `nunc-fluens run
+      [--date|--replay|--dry-run|--only]` wired (ef921a0).
+- [x] Steps for the Mon–Sat chains as typed defs; generic LLM machinery
+      (prompt = frozen skill spec + framing, schema validation, one
+      re-prompt, replay-from-stored-artifact); readme link-routing
+      check; `build_evidence_reverse` ported (misfiled as one-off at
+      T1 — it runs daily via `cli update`).
+- [x] **E2E gate green: orchestrator replay of golden 2026-06-27**
+      (news+fp chains, zero LLM calls) — renders byte-match, DB effect
+      identical to the golden dump. Deviations recorded in-code:
+      glossary post-render (capture order), citation check on rendered
+      md, update-pages = score+export+evidence-reverse on the
+      persistent DB (full-rebuild retired), publish = plain git
+      (bindfs workaround host-specific), replay skips the second
+      live-incremental ingest pass.
+- [ ] Sunday chain (4_weekly_memory / 5_weekly_theme_review /
+      6_weekly_maintenance) + `define-glossary-terms` /
+      `validate-glossary-terms` / `apply-schema-edit` live paths —
+      the runner refuses Sundays loudly until these land.
+- [ ] Live-mode plumbing check: `node` refuses to strip types inside
+      node_modules, so the CLI's runtime `import('nunc-ai')` needs a
+      launcher fix (tsx devDep or a tiny build) — resolve with T9.
 
 ### Task 6: Replay mode (S-4 substrate)
 - [ ] `--replay`: stored-sourcedata path, `forbid` provider assertion,
