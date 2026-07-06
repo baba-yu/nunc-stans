@@ -428,9 +428,14 @@ apply-schema-edit, weekly-maintenance port).
       reasoning/bridge → DB columns; needs/readings deltas recorded as
       artifacts, escalated — recorded deviation), Step 3 validation.
       Glossary define/validate live steps landed in the daily chain.
-- [ ] Live-mode plumbing check: `node` refuses to strip types inside
-      node_modules, so the CLI's runtime `import('nunc-ai')` needs a
-      launcher fix (tsx devDep or a tiny build) — resolve with T9.
+- [x] Live-mode plumbing check DONE 2026-07-06: the nunc-ai import was
+      already solved (relative source import); the real breakage was
+      plain named imports of interfaces, which node's type stripping
+      leaves in place at runtime (vitest's esbuild masked it). Fixed
+      with explicit `import type` + `verbatimModuleSyntax` enforced in
+      tsconfig. Proof: raw `node src/cli.ts run --date 2026-07-05
+      --replay --only lint-news` on the real checkout — Sunday plan
+      resolves, 8 real files lint clean, run.json manifest written.
 
 **Port-time oracle findings (fixed in the TS port per the oracle
 discipline, upstream untouched):**
@@ -477,9 +482,20 @@ discipline, upstream untouched):**
       the same file at run start and stamps the pair into `run.json`.
 
 ### Task 8: Remnant split
-- [ ] Re-diff subtree; then in `~/news`: remove `app/` + orchestration
-      docs superseded by the pipeline (README pointer to the monorepo);
-      keep data dirs, docs/ Pages, reference/, references.txt.
+- [x] Re-diff subtree DONE 2026-07-06: upstream moved past the freeze
+      (9e86e01 → 17682e9). Drift folded in: upstream fixed the
+      apply-schema-edit H3 no-op independently (f8bab37 — same root
+      cause the TS port found; its next Sunday auto-run will finally
+      apply the two pending rewrites upstream too) and added
+      `archive_snapshots.py` (aged-out dashboard snapshots MOVE to
+      gitignored docs/archives/snapshots — ~70MB/week was breaking the
+      Pages deploy) + test + pyyaml hard dep + README WSL note. Oracle
+      pytest 140/1skip; TS retention + proposal parsing re-aligned to
+      the upstream semantics. Subtree now matches 17682e9 except the
+      two recorded determinism fixes.
+- [ ] In `~/news`: remove `app/` + orchestration docs superseded by the
+      pipeline (README pointer to the monorepo); keep data dirs, docs/
+      Pages, reference/, references.txt.
 - [ ] Owner: rename GitHub repo → `nunc-fluens` (+ local dir
       `~/nunc-fluens`); `just news-link` re-point; deliberate link-update
       sweep (Pages URL changed, no redirect).
@@ -492,8 +508,8 @@ discipline, upstream untouched):**
       lands a real day end-to-end (this is exit run (a)).
 
 ### Task 10: Stories S-3 / S-4 — write and execute
-- [ ] Write `design/stories/S-3.md`, `S-4.md` (concrete steps, allowed
-      replay diffs enumerated).
+- [x] Write `design/stories/S-3.md`, `S-4.md` (concrete steps, allowed
+      replay diffs enumerated) — DONE 2026-07-06.
 - [ ] Execute S-3: settings drawer native→external+local, next run
       completes, `run.json` records the pair. Evidence saved.
 - [ ] Execute S-4: network+LLM disabled replay → identical dashboard
