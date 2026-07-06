@@ -118,35 +118,70 @@ export function dailyUpdateSteps(): StepDef[] {
   return [
     {
       id: 'compose-news-section', kind: 'llm',
-      run: (ctx) => llmArtifactStep(ctx, {
-        id: 'compose-news-section',
-        artifact: sdFile(ctx, 'news_section.json'),
-        validate: parseNewsSectionFile,
-        webSearch: true,
-        // Headless steps have no file access — every input is inlined
-        // (the first live run proved the point: a prompt that only NAMES
-        // its input files gets an honest empty answer back).
-        prompt: () => {
-          const topics = readFileSync(
+      run: async (ctx) => {
+        // The search axis (S-3): 'native' rides the runtime's own web
+        // tool; an external source runs the fan-out HERE — one query per
+        // topic through the configured adapter — and inlines the results
+        // (a local model has no search of its own).
+        let searchBlock = '';
+        if (ctx.search !== 'native' && !ctx.replay && ctx.ai
+          && !existsSync(sdFile(ctx, 'news_section.json'))) {
+          const topicsMd = readFileSync(
             join(ctx.newsRepo, REFERENCE_DIR, 'news-topics.md'), 'utf8');
-          const refPath = join(ctx.newsRepo, REFERENCES_TXT);
-          const recentRefs = existsSync(refPath)
-            ? readFileSync(refPath, 'utf8').trim().split('\n').slice(-300).join('\n')
-            : '';
-          return buildStepPrompt({
-            skill: 'compose-news-section', date: ctx.date,
-            writerRules: loadWriterRules('1_daily_update'),
-            extra: [
-              'Reference topic list (reference/news-topics.md — search the trusted '
-              + 'sources for the last 3 days; always include Unsloth):',
-              topics,
-              'Recently cited URLs to SKIP (tail of references.txt):',
-              recentRefs,
-            ].join('\n\n'),
-            outputNote: 'the news_section.json document ({date, sections[]}).',
-          });
-        },
-      }),
+          const listSection = /## Topic list\n([\s\S]*?)\n## /.exec(topicsMd)?.[1] ?? '';
+          const topics = listSection.split('\n')
+            .filter(l => l.startsWith('- ') && !/For each of the above/i.test(l))
+            .map(l => l.slice(2).replace(/\(.*?\)/g, '').trim())
+            .filter(Boolean);
+          const chunks: string[] = [];
+          for (const topic of topics) {
+            try {
+              const results = await ctx.ai.search(ctx.search, `${topic} AI news`, { count: 5 });
+              chunks.push(`### ${topic}\n` + results.map(r =>
+                `- ${r.title} — ${r.url}\n  ${(r.snippet ?? '').slice(0, 300)}`).join('\n'));
+            } catch (e) {
+              ctx.log(`  search '${topic}' failed via ${ctx.search}: `
+                + `${e instanceof Error ? e.message.slice(0, 120) : e}`);
+            }
+            await new Promise(res => setTimeout(res, 1100)); // free-tier rate limit
+          }
+          if (!chunks.length)
+            throw new StepFailure('compose-news-section',
+              `external search via '${ctx.search}' returned nothing for any topic`);
+          searchBlock = `\n\nToday's research results (${ctx.search} search, `
+            + 'gathered by the orchestrator — base the sections on THESE):\n\n'
+            + chunks.join('\n\n');
+        }
+        return llmArtifactStep(ctx, {
+          id: 'compose-news-section',
+          artifact: sdFile(ctx, 'news_section.json'),
+          validate: parseNewsSectionFile,
+          webSearch: ctx.search === 'native',
+          // Headless steps have no file access — every input is inlined
+          // (the first live run proved the point: a prompt that only
+          // NAMES its input files gets an honest empty answer back).
+          prompt: () => {
+            const topics = readFileSync(
+              join(ctx.newsRepo, REFERENCE_DIR, 'news-topics.md'), 'utf8');
+            const refPath = join(ctx.newsRepo, REFERENCES_TXT);
+            const recentRefs = existsSync(refPath)
+              ? readFileSync(refPath, 'utf8').trim().split('\n').slice(-300).join('\n')
+              : '';
+            return buildStepPrompt({
+              skill: 'compose-news-section', date: ctx.date,
+              writerRules: loadWriterRules('1_daily_update'),
+              extra: [
+                'Reference topic list (reference/news-topics.md — search the '
+                + 'trusted sources for the last 3 days; always include Unsloth):',
+                topics,
+                'Recently cited URLs to SKIP (tail of references.txt):',
+                recentRefs,
+              ].join('\n\n') + searchBlock,
+              outputNote: 'the news_section.json document ({date, sections[]}).',
+            });
+          },
+        });
+      },
     },
     {
       id: 'compose-predictions', kind: 'llm',
@@ -219,7 +254,12 @@ export function dailyUpdateSteps(): StepDef[] {
           ['news_section.json', parseNewsSectionFile],
           ['needs.json', parseNeedsFile],
         ];
-        await Promise.all(NON_EN.map(async (L) => {
+        // Local runtimes serve one request at a time — parallel locale
+        // fan-out just parks the queued sockets until they time out.
+        const fanout = ctx.runtime === 'claude-code'
+          ? <T>(xs: readonly T[], f: (x: T) => Promise<void>) => Promise.all(xs.map(f)).then(() => undefined)
+          : async <T>(xs: readonly T[], f: (x: T) => Promise<void>) => { for (const x of xs) await f(x); };
+        await fanout(NON_EN, async (L) => {
           for (const [name, validate] of kinds) {
             await llmArtifactStep(ctx, {
               id: `translate-news:${L}:${name}`,
@@ -233,7 +273,7 @@ export function dailyUpdateSteps(): StepDef[] {
               }),
             });
           }
-        }));
+        });
       },
     },
     {
@@ -569,7 +609,11 @@ export function futurePredictionSteps(): StepDef[] {
     {
       id: 'translate-fp', kind: 'llm',
       run: async (ctx) => {
-        await Promise.all(NON_EN.map(async (L) => {
+        // Same serial-for-local-runtimes rule as translate-news.
+        const fanout = ctx.runtime === 'claude-code'
+          ? <T>(xs: readonly T[], f: (x: T) => Promise<void>) => Promise.all(xs.map(f)).then(() => undefined)
+          : async <T>(xs: readonly T[], f: (x: T) => Promise<void>) => { for (const x of xs) await f(x); };
+        await fanout(NON_EN, async (L) => {
           await llmArtifactStep(ctx, {
             id: `translate-fp:${L}:bridges.json`,
             artifact: locFile(ctx, L, 'bridges.json'),
@@ -601,7 +645,7 @@ export function futurePredictionSteps(): StepDef[] {
               }),
             });
           }
-        }));
+        });
       },
     },
     {
