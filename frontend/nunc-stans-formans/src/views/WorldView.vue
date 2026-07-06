@@ -14,7 +14,7 @@ const draft = reactive({ slug: '', title: '', started_at: '' })
 // The last commit outcome, keyed to a headline so it renders in that row
 // independently of whether the form is still open.
 const result = ref<{ id: string; ok: boolean; message: string } | null>(null)
-// Whether a staged dashboard exists (build-world ran with NEWS_WORLD set).
+// Whether a staged dashboard exists (build-world ran with a news checkout linked).
 const graphAvailable = ref(false)
 
 function today(): string {
@@ -101,7 +101,7 @@ onMounted(async () => {
             </div>
           </li>
           <li v-if="!store.world.length" class="meta">
-            no world headlines — run <code>just build-world</code> with <code>NEWS_WORLD</code> set
+            no world headlines — link a news checkout (<code>just news-link &lt;dir&gt;</code>) and run <code>just build-world</code>
           </li>
         </ul>
       </Panel>
@@ -118,7 +118,7 @@ onMounted(async () => {
           title="News prediction dashboard (wrapped as-is)"
         />
         <p v-else class="meta">
-          no staged dashboard — set <code>NEWS_WORLD</code> and run <code>just build-world</code>
+          no staged dashboard — link a news checkout (<code>just news-link &lt;dir&gt;</code>) and run <code>just build-world</code>
         </p>
       </Panel>
     </main>
