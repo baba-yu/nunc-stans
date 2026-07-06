@@ -49,6 +49,7 @@ CI; merge back to `dev` at phase close.
 | C5 | S-3 settings surface | **Owner: gate gains a minimal config API** (`GET/PUT /api/world/news-config` → atomic JSON at `<data store>/world/news-config.json`) + a settings drawer in the Formans world view. No new process; the gate stays the one door (B1 continuity). |
 | C6 | Exit-run publish policy | **Owner: all three runs publish.** (a) is the timer-launched real day; (b) publishes its local-model day as real data — provider differences are allowed to show on the public dashboard; (c) replays an already-published day, so its push is naturally a no-op on content and lands only the run manifest/evidence. |
 | C7 | Python retirement timing | At T12, in-phase (per D4): after goldens are green and runs (a)(b)(c) pass, delete `engines/nunc-fluens/app/` (git history keeps it) and swap the CI news job pytest → vitest. The remnant repo drops its `app/` too. |
+| C8 | Taxonomy edits in the persistent-store arch (owner-approved 2026-07-06) | `apply-schema-edit` targets **DB rows directly** (`themes`/`categories`/`theme_candidates` in `analytics.sqlite`), not `schema.sql`. Rationale: the DB is now the persistent store and `schema.sql` is monorepo code — a user's weekly run must not mutate shared source. `schema.sql` remains the first-boot seed only. Manual approval mode stays the default; the pre-edit rollback target becomes a DB snapshot instead of a schema.sql copy. Recorded deviation from oracle behavior (architecturally forced; the replay path is unaffected — committed corpus already embodies applied edits, proven by the DB parity gate). |
 
 Derived decisions:
 
@@ -477,6 +478,36 @@ apply-schema-edit, weekly-maintenance port).
       v1 plan in-place updates (D3/D4 executed; §2.2 layout note).
 - [ ] `design/verification/phase-c.md` (stories, exit runs, goldens
       summary, deviations); merge `newstack` → `dev`; owner push + PR gate.
+
+## Post-C refactoring backlog (owner decisions 2026-07-06 — NOT in phase)
+
+Recorded here so the decisions survive; execution is a separate effort after
+T12 (single implementation, synthetic goldens — rename cost is minimal then).
+In-phase preparation only: path names centralized in one constants module
+(`pipeline/src/world-paths.ts`) so each rename is one constant + `git mv`.
+
+1. **Remnant repo layout** (after the split + rename; the remnant is free to
+   diverge from the old `~/news` shape once nothing shares code with it):
+   - `report/` → `daily-news/`; `future-prediction/` keeps its name.
+   - `daily-news/`, `future-prediction/`, `memory/`, `reference/` move under
+     `data/`.
+   - The published dashboard leaves `docs/` (the name was a GitHub Pages
+     branch-deploy constraint, root-or-`/docs` only): dashboard moves to the
+     repo root or, more likely, Pages switches to **Actions-based deploy** so
+     the publish root is arbitrary. `docs/` then becomes what it says:
+     documentation for `nunc-fluens` itself. Pages deploy-mode switch is part
+     of this item.
+2. **Engine `design/` reorganization:** `engines/nunc-fluens/design/` mixes
+   true design docs with `scheduled/` task specs and `skills/` (imported as
+   the port's source of truth at T0). After T12 the specs that became code
+   are history, not living design — re-home or archive them; scheduled task
+   specs and operational skills should not sit under `design/`.
+3. **Locale model:** hardcoded en+ja/es/fil does not scale and personal use
+   does not need 4 languages. Target: **EN + an owner-configured set of
+   languages**; translation/render/README fan-out runs only over the
+   configured set. This is a behavior change (out of port scope); natural
+   home is the news-config settings surface (per-user config), after C.
+   In-phase code keeps the locale list as a single constant to ease this.
 
 ## Exit criteria (phase closes when all hold)
 
