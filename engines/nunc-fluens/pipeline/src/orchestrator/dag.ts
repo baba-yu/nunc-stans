@@ -21,8 +21,9 @@ export function taskPlanFor(dow: number): DayPlanTask[] {
   ];
   if (dow === 0) {
     // Sunday ordering per 0_daily_master: 1 → 2 → 4 → 5 → 6 → 3.
-    // Replay verifies the committed weekly artifacts; the live weekly
-    // paths fail loudly inside their steps until ported.
+    // Replay verifies the committed weekly artifacts; live computes
+    // the week's transitions (dormant rotation, theme review +
+    // apply-schema-edit on DB rows, maintenance judge/apply).
     daily.push({ task: '4_weekly_memory', steps: weeklyMemorySteps() });
     daily.push({ task: '5_weekly_theme_review', steps: themeReviewSteps() });
     daily.push({ task: '6_weekly_maintenance', steps: weeklyMaintenanceSteps() });

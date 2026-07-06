@@ -7,7 +7,8 @@ import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import {
-  llmJson, llmMarkdown, loadMemoryPolicy, RunCtx, StepDef, StepFailure,
+  buildStepPrompt, llmArtifactStep, llmJson, llmMarkdown, loadMemoryPolicy,
+  RunCtx, StepDef, StepFailure,
 } from './core.ts';
 import { postWriteIntegrity, structuralErrors } from '../render/post-write-integrity.ts';
 import {
@@ -17,7 +18,13 @@ import {
   collectPainPoints, preReviewDir, snapshotThreeTimeState,
 } from '../weekly/theme-review.ts';
 import {
-  parseMaintenanceCandidatesFile, parseMaintenanceJudgementsFile,
+  buildJudgeContext, computeCandidates, mergeJudgementsFiles,
+  mergeSpilloverIntoQueue, resolveDormantSha, validateRun,
+  writeCandidatesFile, writeHealthLog,
+} from '../weekly/maintenance.ts';
+import {
+  MaintenanceJudgement, parseMaintenanceCandidatesFile,
+  parseMaintenanceJudgement, parseMaintenanceJudgementsFile,
 } from '../schemas/sourcedata.ts';
 import { dateDir } from '../ingest/ingest-sourcedata.ts';
 import { MEMORY_DIR } from '../world-paths.ts';
@@ -367,40 +374,348 @@ export function themeReviewSteps(): StepDef[] {
   ];
 }
 
+async function promisePool(limit: number, thunks: Array<() => Promise<unknown>>): Promise<void> {
+  const queue = [...thunks];
+  const workers = Array.from({ length: Math.min(limit, queue.length) }, async () => {
+    for (let t = queue.shift(); t !== undefined; t = queue.shift()) await t();
+  });
+  await Promise.all(workers);
+}
+
+function validateJudgeFragment(expectedPid: string) {
+  return (raw: unknown): unknown => {
+    const o = raw as any;
+    if (!o || typeof o !== 'object' || !Array.isArray(o.judgements))
+      throw new Error('output must be {prediction_id, judgements: [...]}');
+    if (!o.judgements.length)
+      throw new Error('at least one judgement is required (reasoning at minimum)');
+    o.judgements.forEach((j: unknown, i: number) => {
+      const rec = parseMaintenanceJudgement(j, `judgements[${i}]`);
+      if (expectedPid && rec.prediction_id !== expectedPid)
+        throw new Error(`judgements[${i}].prediction_id must be '${expectedPid}' `
+          + 'ON the entry — wrapper-level keys do not propagate');
+    });
+    return o;
+  };
+}
+
+function maintenanceDir(ctx: RunCtx): string {
+  return join(ctx.newsRepo, MEMORY_DIR, 'maintenance');
+}
+
 export function weeklyMaintenanceSteps(): StepDef[] {
   return [
     {
       id: 'maintenance-candidates', kind: 'det',
       run: (ctx) => {
         const p = join(dateDir(ctx.sourcedataRoot, ctx.date), 'maintenance-candidates.json');
-        if (!existsSync(p)) {
-          // Selection is skippable when the week produced no candidates.
+        if (existsSync(p)) {
+          parseMaintenanceCandidatesFile(JSON.parse(readFileSync(p, 'utf8')));
+          return;
+        }
+        if (ctx.replay) {
+          // Selection is skippable when the committed week produced no
+          // candidates file.
           ctx.log('  maintenance-candidates.json absent — no candidates this week');
           return;
         }
-        parseMaintenanceCandidatesFile(JSON.parse(readFileSync(p, 'utf8')));
+        // Live Step 0: change-signal gate + caps + spillover + health.
+        const snapshot = join(dormantDir(ctx.newsRepo), `dormant-${stem(ctx.date)}.md`);
+        let dormantSha = new Set<string>();
+        if (existsSync(snapshot)) {
+          dormantSha = resolveDormantSha(ctx.sourcedataRoot, readFileSync(snapshot, 'utf8'));
+        } else {
+          ctx.log('  WARNING: no dormant snapshot for today (4_weekly_memory '
+            + 'runs first) — the 90d health check may over-fire');
+        }
+        const payload = computeCandidates(ctx.db, ctx.date, dormantSha);
+        const spill = payload.spillover.predictions.length
+          + payload.spillover.glossary_terms.length;
+        ctx.log(`  candidates: ${payload.predictions.length} predictions, `
+          + `${payload.glossary_terms.length} glossary terms, spillover=${spill}, `
+          + `health_warnings=${payload.health_warnings.length}`);
+        if (ctx.dryRun) return;
+        writeCandidatesFile(dateDir(ctx.sourcedataRoot, ctx.date), payload);
+        mergeSpilloverIntoQueue(
+          join(maintenanceDir(ctx), 'queue.md'), payload.spillover, ctx.date);
+        writeHealthLog(
+          join(maintenanceDir(ctx), ctx.date, 'health.md'),
+          ctx.date, payload.health_warnings);
       },
     },
     {
       id: 'maintenance-judgements', kind: 'llm',
-      run: (ctx) => {
-        const p = join(dateDir(ctx.sourcedataRoot, ctx.date), 'maintenance-judgements.json');
-        requireReplayArtifact(ctx, 'maintenance-judgements', p);
-        parseMaintenanceJudgementsFile(JSON.parse(readFileSync(p, 'utf8')));
+      run: async (ctx) => {
+        const dir = dateDir(ctx.sourcedataRoot, ctx.date);
+        const merged = join(dir, 'maintenance-judgements.json');
+        if (existsSync(merged) || ctx.replay) {
+          requireReplayArtifact(ctx, 'maintenance-judgements', merged);
+          parseMaintenanceJudgementsFile(JSON.parse(readFileSync(merged, 'utf8')));
+          return;
+        }
+        const candidatesPath = join(dir, 'maintenance-candidates.json');
+        if (!existsSync(candidatesPath))
+          throw new StepFailure('maintenance-judgements',
+            `${candidatesPath} missing — Step 0 did not run`);
+        const cands = parseMaintenanceCandidatesFile(
+          JSON.parse(readFileSync(candidatesPath, 'utf8')));
+        if (!cands.predictions.length && !cands.glossary_terms.length) {
+          if (!ctx.dryRun)
+            writeAtomic(merged, JSON.stringify(
+              { week_ending: ctx.date, judgements: [] }, null, 2) + '\n');
+          ctx.log('  no candidates — empty judgements file');
+          return;
+        }
+        if (ctx.dryRun) {
+          ctx.log(`  DRY_RUN: would judge ${cands.predictions.length} predictions `
+            + `+ ${cands.glossary_terms.length} glossary terms`);
+          return;
+        }
+        // One judge sub-call per candidate prediction, ≤ 6 concurrent
+        // (the spec's dispatch shape); each fragment is a resumable
+        // artifact so a crashed Sunday re-runs only the missing ones.
+        const weekContext = [-6, -5, -4, -3, -2, -1, 0].map(off => {
+          const d = addDays(ctx.date, off);
+          const h = join(dateDir(ctx.sourcedataRoot, d), 'headlines.json');
+          const c = join(dateDir(ctx.sourcedataRoot, d), 'change_log.json');
+          return {
+            date: d,
+            headlines: existsSync(h) ? JSON.parse(readFileSync(h, 'utf8')) : null,
+            change_log: existsSync(c) ? JSON.parse(readFileSync(c, 'utf8')) : null,
+          };
+        });
+        await promisePool(6, cands.predictions.map(cand => () =>
+          llmArtifactStep(ctx, {
+            id: `maintenance-judge:${cand.prediction_id}`,
+            artifact: join(dir, `maintenance-judgements.${cand.prediction_id}.json`),
+            validate: validateJudgeFragment(cand.prediction_id),
+            prompt: () => buildStepPrompt({
+              skill: 'compose-maintenance-judgement', date: ctx.date,
+              extra: [
+                `Candidate prediction: ${cand.prediction_id}`,
+                `This week's change signals: ${cand.change_signals.join(', ')} `
+                + `(confidence_drift_score ${cand.confidence_drift_score})`,
+                '',
+                'Full 4-stream state:',
+                JSON.stringify(buildJudgeContext(ctx.db, cand.prediction_id), null, 2),
+                '',
+                'Last 7 days headlines + change-log (context):',
+                JSON.stringify(weekContext),
+              ].join('\n'),
+              outputNote: `{"prediction_id": "${cand.prediction_id}", "judgements": `
+                + `[{"prediction_id": "${cand.prediction_id}", "stream": `
+                + '"reasoning"|"bridge"|"needs"|"readings", "entry_id": "...", '
+                + '"verdict": "fresh"|"stale"|"broken"|"retire", "reason": "...", '
+                + '"cross_stream_evidence": [...], "proposed_action": '
+                + '"rewrite"|"retire"|"noop", "confidence": 0.0-1.0}]} — '
+                + 'prediction_id AND entry_id required ON EVERY entry.',
+            }),
+          })));
+        if (cands.glossary_terms.length) {
+          await llmArtifactStep(ctx, {
+            id: 'maintenance-judge:glossary',
+            artifact: join(dir, 'maintenance-judgements.glossary.json'),
+            validate: validateJudgeFragment(''),
+            prompt: () => buildStepPrompt({
+              skill: 'compose-maintenance-judgement', date: ctx.date,
+              extra: 'Glossary batch. TTL-stale active terms:\n'
+                + JSON.stringify(cands.glossary_terms, null, 2),
+              outputNote: '{"prediction_id": "", "judgements": [{"prediction_id": "", '
+                + '"stream": "glossary", "entry_id": "<term>", "verdict": ..., '
+                + '"reason": ..., "cross_stream_evidence": [], "proposed_action": ..., '
+                + '"confidence": ...}]} — one judgement per term.',
+            }),
+          });
+        }
+        mergeJudgementsFiles(dir);
+        const bundle = parseMaintenanceJudgementsFile(
+          JSON.parse(readFileSync(merged, 'utf8')));
+        const counts = new Map<string, number>();
+        for (const j of bundle.judgements)
+          counts.set(j.verdict, (counts.get(j.verdict) ?? 0) + 1);
+        ctx.log(`  merged ${bundle.judgements.length} judgements: `
+          + [...counts.entries()].map(([v, n]) => `${v} ${n}`).join(' · '));
       },
     },
     {
       id: 'maintenance-apply', kind: 'llm',
-      run: (ctx) => {
+      run: async (ctx) => {
         if (ctx.replay) {
           // Applied deltas live in the committed sourcedata; the day's
           // ingest already folded them in.
           ctx.log('  replay: judgement deltas are the committed sourcedata');
           return;
         }
-        throw new StepFailure('maintenance-apply',
-          'live maintenance updates are not ported yet (Phase C plan T5 checklist)');
+        const dir = dateDir(ctx.sourcedataRoot, ctx.date);
+        const merged = join(dir, 'maintenance-judgements.json');
+        if (!existsSync(merged))
+          throw new StepFailure('maintenance-apply', `${merged} missing — Step 1 did not run`);
+        const bundle = parseMaintenanceJudgementsFile(
+          JSON.parse(readFileSync(merged, 'utf8')));
+        const report = await applyMaintenance(ctx, dir, bundle);
+        ctx.log(`  applied: stale ${report.staleApplied} · retired ${report.retired} · `
+          + `broken ${report.broken} (escalated, not auto-fixed)`);
+        if (ctx.dryRun) return;
+        writeMaintenanceSummary(ctx, report);
+        const errs = validateRun({
+          db: ctx.db, sourcedataRoot: ctx.sourcedataRoot,
+          newsRepo: ctx.newsRepo, weekEnding: ctx.date,
+        });
+        if (errs.length)
+          throw new StepFailure('maintenance-apply',
+            `Step 3 validate failed: ${errs.join('; ')}`);
+        commitOnly(ctx, 'maintenance-apply',
+          [join(MEMORY_DIR, 'maintenance')],
+          `Weekly maintenance ${stem(ctx.date)}`);
       },
     },
   ];
+}
+
+interface MaintenanceReport {
+  total: number;
+  fresh: number;
+  staleApplied: number;
+  retired: number;
+  broken: number;
+  notes: string[];
+}
+
+/** Step 2 — apply the non-fresh verdicts. stale reasoning/bridge deltas
+ * are LLM rewrites applied to the DB columns + recorded as
+ * maintenance-update artifacts; stale needs/readings deltas are
+ * recorded as artifacts and escalated in the summary (their DB
+ * application needs its own design pass — recorded deviation); retire
+ * hits the glossary status (or a marker file for non-glossary streams);
+ * broken is escalated to broken.md, never auto-fixed. */
+async function applyMaintenance(
+  ctx: RunCtx, dir: string,
+  bundle: { week_ending: string; judgements: MaintenanceJudgement[] },
+): Promise<MaintenanceReport> {
+  const report: MaintenanceReport = {
+    total: bundle.judgements.length,
+    fresh: 0, staleApplied: 0, retired: 0, broken: 0, notes: [],
+  };
+  const brokenEntries: MaintenanceJudgement[] = [];
+
+  // Over-eager-judge downgrade (spec failure mode): 4 stale verdicts on
+  // one prediction, all confidence < 0.7 → treat as broken + escalate.
+  const stalePerPid = new Map<string, MaintenanceJudgement[]>();
+  for (const j of bundle.judgements)
+    if (j.verdict === 'stale')
+      stalePerPid.set(j.prediction_id,
+        [...(stalePerPid.get(j.prediction_id) ?? []), j]);
+  const downgraded = new Set<MaintenanceJudgement>();
+  for (const [pid, js] of stalePerPid) {
+    if (js.length >= 4 && js.every(j => j.confidence < 0.7)) {
+      for (const j of js) downgraded.add(j);
+      report.notes.push(`${pid}: 4 low-confidence stale verdicts downgraded to `
+        + 'broken (likely judge prompt regression)');
+    }
+  }
+
+  for (const j of bundle.judgements) {
+    const verdict = downgraded.has(j) ? 'broken' : j.verdict;
+    if (verdict === 'fresh') { report.fresh++; continue; }
+    if (verdict === 'broken') { report.broken++; brokenEntries.push(j); continue; }
+    if (ctx.dryRun) continue;
+    if (verdict === 'retire') {
+      if (j.stream === 'glossary') {
+        ctx.db.prepare(
+          `UPDATE glossary_terms SET status='retired', reviewed_by_human=1,
+             updated_at=? WHERE term=?`).run(ctx.todayIso, j.entry_id);
+      } else {
+        writeAtomic(join(dir, `retired.${j.stream}.${j.prediction_id}.json`),
+          JSON.stringify({ ...j, retired_at: ctx.todayIso }, null, 2) + '\n');
+      }
+      report.retired++;
+      continue;
+    }
+    // stale → LLM rewrite delta, recorded as an artifact; reasoning and
+    // bridge deltas also land on their DB columns.
+    const artifact = join(dir, `maintenance-update.${j.stream}.${j.prediction_id}.json`);
+    const delta = await llmJson(ctx, {
+      id: `maintenance-update:${j.stream}:${j.prediction_id}`,
+      prompt: buildStepPrompt({
+        skill: 'apply-maintenance-update', date: ctx.date,
+        extra: [
+          `Judgement to apply (stream=${j.stream}):`,
+          JSON.stringify(j, null, 2),
+          '',
+          'Current state:',
+          JSON.stringify(buildJudgeContext(ctx.db, j.prediction_id), null, 2),
+        ].join('\n'),
+        outputNote: j.stream === 'reasoning'
+          ? '{"prediction_id", "reasoning_because", "reasoning_given", '
+          + '"reasoning_so_that", "reasoning_landing"} — rewritten per the '
+          + 'judgement reason; keep untouched dimensions verbatim.'
+          : j.stream === 'bridge'
+            ? '{"validation_row_id", "bridge_text"} — the rewritten bridge paragraph.'
+            : '{"prediction_id", "stream", "delta": {...}} — the rewritten entries.',
+      }),
+      validate: (raw) => {
+        const o = raw as any;
+        if (!o || typeof o !== 'object') throw new Error('delta must be an object');
+        if (j.stream === 'reasoning')
+          for (const k of ['reasoning_because', 'reasoning_given',
+            'reasoning_so_that', 'reasoning_landing'])
+            if (typeof o[k] !== 'string' || !o[k].trim())
+              throw new Error(`reasoning delta missing '${k}'`);
+        if (j.stream === 'bridge' && (typeof o.bridge_text !== 'string' || !o.bridge_text.trim()))
+          throw new Error('bridge delta missing bridge_text');
+        return o;
+      },
+    }) as any;
+    writeAtomic(artifact, JSON.stringify(delta, null, 2) + '\n');
+    if (j.stream === 'reasoning') {
+      ctx.db.prepare(
+        `UPDATE predictions SET reasoning_because=?, reasoning_given=?,
+           reasoning_so_that=?, reasoning_landing=?, updated_at=?
+         WHERE prediction_id=?`,
+      ).run(delta.reasoning_because, delta.reasoning_given,
+        delta.reasoning_so_that, delta.reasoning_landing,
+        ctx.todayIso, j.prediction_id);
+    } else if (j.stream === 'bridge') {
+      ctx.db.prepare(
+        `UPDATE validation_rows SET bridge_text=? WHERE validation_row_id=?`,
+      ).run(delta.bridge_text, str(delta.validation_row_id) ?? j.entry_id);
+    } else {
+      report.notes.push(`${j.prediction_id} (${j.stream}): delta recorded as `
+        + 'artifact; DB application for this stream is a recorded deviation');
+    }
+    report.staleApplied++;
+  }
+
+  if (!ctx.dryRun && brokenEntries.length) {
+    const brokenPath = join(maintenanceDir(ctx), ctx.date, 'broken.md');
+    const lines = [
+      `# Maintenance — broken entries (week ending ${ctx.date})`, '',
+      'Flagged `broken` by the Step-1 Judge. Per 6_weekly_maintenance.md '
+      + '§Step 2, broken verdicts are logged for human review and NOT auto-fixed.', '',
+      '| Prediction | Stream | Entry | Reason |',
+      '|---|---|---|---|',
+      ...brokenEntries.map(j =>
+        `| ${j.prediction_id} | ${j.stream} | ${j.entry_id} | `
+        + `${j.reason.replaceAll('|', '/')} |`),
+      '',
+    ];
+    writeAtomic(brokenPath, lines.join('\n'));
+  }
+  return report;
+}
+
+function str(v: unknown): string | null {
+  return typeof v === 'string' && v.trim() ? v : null;
+}
+
+function writeMaintenanceSummary(ctx: RunCtx, r: MaintenanceReport): void {
+  const path = join(maintenanceDir(ctx), ctx.date, 'summary.md');
+  const lines = [
+    `# Weekly maintenance — week ending ${ctx.date}`, '',
+    `- Judgements: ${r.total} (fresh ${r.fresh} · stale-applied ${r.staleApplied} `
+    + `· retired ${r.retired} · broken ${r.broken}).`,
+    ...(r.notes.length ? ['', '## Notes', '', ...r.notes.map(n => `- ${n}`)] : []),
+    '',
+  ];
+  writeAtomic(path, lines.join('\n'));
 }

@@ -707,7 +707,7 @@ export interface MaintenanceJudgement {
   confidence: number;
 }
 
-function parseMaintenanceJudgement(d: unknown, path = 'judgements[]'): MaintenanceJudgement {
+export function parseMaintenanceJudgement(d: unknown, path = 'judgements[]'): MaintenanceJudgement {
   if (!isDict(d)) fail(`${path}: expected object, got ${typeName(d)}`);
   const stream = requireStr(d, 'stream', path);
   if (!(MAINTENANCE_STREAMS as readonly string[]).includes(stream))
