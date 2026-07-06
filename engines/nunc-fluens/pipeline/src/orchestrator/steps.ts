@@ -468,6 +468,18 @@ export function futurePredictionSteps(): StepDef[] {
           if (!parsed.validation_rows.length)
             throw new Error('validation_rows is empty — §1.3 rule 1 requires a row '
               + 'for every prediction from the last 7 days');
+          // Writer contract: EVERY row carries a filled bridge paragraph
+          // — a no-signal day gets a bridge that says what today's news
+          // failed to touch and the remaining gap (the puv gate rejects
+          // empty bridge_text row by row; live run 2 shipped 10 empties).
+          const empty = parsed.validation_rows
+            .filter(r => !r.bridge.narrative.trim())
+            .map(r => r.prediction_ref.id);
+          if (empty.length)
+            throw new Error(`bridge.narrative is empty on ${empty.length} row(s) `
+              + `(${empty.slice(0, 5).join(', ')}…) — every row needs a bridge `
+              + 'paragraph; on no-signal days it states what today\'s news did '
+              + 'not touch and the remaining gap');
           return parsed;
         },
         // All inputs inlined (headless steps cannot read files): the
@@ -518,7 +530,11 @@ export function futurePredictionSteps(): StepDef[] {
               JSON.stringify(layer1, null, 1),
               'All dormant shorts (for layer-2 semantic scan):',
               JSON.stringify(dormantRows.map(r => ({ id: r.id, short: r.short }))),
-              'Fill the bridge narratives too (compose-bridge contract).',
+              'Fill the bridge narratives too (compose-bridge contract). '
+              + 'EVERY row must carry a non-empty bridge narrative — on '
+              + 'no-signal days the bridge states what today\'s news did NOT '
+              + 'touch for this prediction and the remaining gap (coherence '
+              + 'low, not zero-length).',
             ].join('\n\n'),
             outputNote: 'the bridges.json document ({date, validation_rows[]}) with bridges filled.',
           });
