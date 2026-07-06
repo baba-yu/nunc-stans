@@ -151,6 +151,37 @@ export function extractJson(text: string): unknown {
   throw new Error('no JSON found in model reply');
 }
 
+/** One validated LLM markdown call: the whole reply is the document
+ * (an outer ``` fence is stripped if the model wrapped it). validate
+ * throws with the reasons; one re-prompt carries them back. */
+export async function llmMarkdown(ctx: RunCtx, args: {
+  id: string;
+  prompt: string;
+  validate: (text: string) => void;
+}): Promise<string> {
+  if (ctx.ai === null)
+    throw new StepFailure(args.id, 'no AI runtime configured');
+  let lastErr = '';
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const res = await ctx.ai.chat(ctx.runtime, [{
+      role: 'user',
+      content: attempt === 0 ? args.prompt
+        : `${args.prompt}\n\nYour previous reply failed validation: ${lastErr}\nEmit the corrected markdown document only.`,
+    }], { caller: args.id, webSearch: false, model: ctx.synthModel ?? undefined });
+    try {
+      let text = res.text.trim();
+      const fenced = /^```(?:markdown|md)?\s*\n([\s\S]*?)\n```$/.exec(text);
+      if (fenced) text = fenced[1];
+      if (!text.endsWith('\n')) text += '\n';
+      args.validate(text);
+      return text;
+    } catch (e) {
+      lastErr = e instanceof Error ? e.message : String(e);
+    }
+  }
+  throw new StepFailure(args.id, `model output failed validation twice: ${lastErr}`);
+}
+
 /** One validated LLM JSON call: extract, validate, one re-prompt with
  * the validation error. For steps whose result lands in the DB (or a
  * markdown file) rather than a sourcedata JSON artifact. */

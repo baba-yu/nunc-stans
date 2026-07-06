@@ -6,8 +6,16 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
-import { llmJson, RunCtx, StepDef, StepFailure } from './core.ts';
-import { postWriteIntegrity } from '../render/post-write-integrity.ts';
+import {
+  llmJson, llmMarkdown, loadMemoryPolicy, RunCtx, StepDef, StepFailure,
+} from './core.ts';
+import { postWriteIntegrity, structuralErrors } from '../render/post-write-integrity.ts';
+import {
+  applyOps, parseProposal, planLines, restoreTaxonomy, validateTaxonomy,
+} from '../weekly/apply-schema-edit.ts';
+import {
+  collectPainPoints, preReviewDir, snapshotThreeTimeState,
+} from '../weekly/theme-review.ts';
 import {
   parseMaintenanceCandidatesFile, parseMaintenanceJudgementsFile,
 } from '../schemas/sourcedata.ts';
@@ -199,20 +207,124 @@ export function weeklyMemorySteps(): StepDef[] {
   ];
 }
 
+function proposalPath(ctx: RunCtx): string {
+  return join(ctx.newsRepo, MEMORY_DIR, 'theme-review', `theme-review-${stem(ctx.date)}.md`);
+}
+
+function validateProposal(text: string): void {
+  const errs = structuralErrors('theme-review', text);
+  if (errs.length)
+    throw new Error(`theme-review integrity: ${errs.join('; ')}`);
+  const ops = parseProposal(text);
+  if (!ops.length)
+    throw new Error('the `## Recommended actions` section parsed to zero '
+      + 'operations — use `### Action N:` headings (or a numbered list) and '
+      + 'give each schema-editing action a fenced ```action JSON block');
+  for (const op of ops)
+    if (op.kind !== 'log-only' && !op.block)
+      throw new Error(`recommendation '${op.rawLine.slice(0, 60)}…' is a `
+        + `${op.kind} without a fenced action block (required for auto-apply)`);
+}
+
 export function themeReviewSteps(): StepDef[] {
   return [
     {
-      id: 'theme-review-proposal', kind: 'llm',
+      // Step 2 of the spec: rollback target + reader-facing time series.
+      // Replay skips (the fixture corpus does not stage snapshot dirs;
+      // the committed day already embodies them).
+      id: 'theme-snapshots', kind: 'det',
       run: (ctx) => {
-        const proposal = join(
-          ctx.newsRepo, MEMORY_DIR, 'theme-review', `theme-review-${stem(ctx.date)}.md`);
-        requireReplayArtifact(ctx, 'theme-review-proposal', proposal);
-        const r = postWriteIntegrity('theme-review', [proposal]);
-        for (const l of r.lines) ctx.log(`  ${l}`);
-        if (r.exit !== 0) throw new StepFailure('theme-review-proposal', 'integrity failed');
+        if (ctx.replay || ctx.dryRun) {
+          ctx.log('  skipped (replay/dry-run)');
+          return;
+        }
+        const paths = snapshotThreeTimeState(ctx.db, ctx.newsRepo, ctx.date);
+        ctx.log(`  wrote ${paths[0]} + docs/data/snapshots/${stem(ctx.date)} (retention 5)`);
+        commitOnly(ctx, 'theme-snapshots', paths,
+          `Snapshot pre-review state ${stem(ctx.date)}`);
       },
     },
     {
+      id: 'theme-review-proposal', kind: 'llm',
+      run: async (ctx) => {
+        const proposal = proposalPath(ctx);
+        if (existsSync(proposal) || ctx.replay) {
+          requireReplayArtifact(ctx, 'theme-review-proposal', proposal);
+          const r = postWriteIntegrity('theme-review', [proposal]);
+          for (const l of r.lines) ctx.log(`  ${l}`);
+          if (r.exit !== 0) throw new StepFailure('theme-review-proposal', 'integrity failed');
+          return;
+        }
+        const pain = collectPainPoints(ctx.db, ctx.newsRepo);
+        if (ctx.dryRun) {
+          ctx.log(`  DRY_RUN: pain points — `
+            + pain.scopes.map(s =>
+              `${s.scope}: ${s.underused.length} underused, `
+              + `${s.overpopulated.length} overpopulated, `
+              + `dominant [${s.dominant.join(', ')}]`).join('; ')
+            + `; ${pain.pendingCandidates.length} pending candidates`);
+          return;
+        }
+        const text = await llmMarkdown(ctx, {
+          id: 'theme-review-proposal',
+          prompt: [
+            'You are the compose-theme-proposal step of the nunc-fluens weekly',
+            'theme review (design/scheduled/5_weekly_theme_review.md steps 4-5).',
+            `Today's date: ${ctx.date}.`,
+            '',
+            'Write memory/theme-review/theme-review-' + stem(ctx.date) + '.md.',
+            'Required structure: H1 `# Theme review — week ending ' + ctx.date + '`,',
+            'then H2 sections `## Empty / underused themes`,',
+            '`## Overpopulated themes`, `## Theme candidates`, and',
+            '`## Recommended actions` (at most 5 actions, each as a',
+            '`### Action N: <title>` heading). Every schema-editing action MUST',
+            'carry a fenced ```action JSON block per the schema in the policy',
+            'excerpt below; advisory items use {"kind": "log-only"}.',
+            'Supported kinds in this pipeline: rewrite-description, add,',
+            'promote-candidate, log-only. Do NOT propose rename/merge/split —',
+            'flag such needs as log-only observations instead.',
+            '',
+            '--- POLICY (design/memory-policy.md §2) ---',
+            loadMemoryPolicy().split('## 2. Taxonomy maintenance')[1] ?? loadMemoryPolicy(),
+            '--- END POLICY ---',
+            '',
+            '--- THIS WEEK\'S DETERMINISTIC ANALYSIS ---',
+            JSON.stringify({
+              scopes: pain.scopes.map(s => ({
+                scope: s.scope,
+                totalPredictions: s.totalPredictions,
+                themes: s.themes,
+                underused: s.underused,
+                overpopulated: s.overpopulated,
+                categoryDensity: s.categoryDensity.map(c => ({
+                  ...c, share: Math.round(c.share * 1000) / 10,
+                })),
+                dominantCategories: s.dominant,
+              })),
+              pendingCandidates: pain.pendingCandidates,
+              glossaryRepeatWarnings: pain.glossaryRepeatWarnings,
+              currentTaxonomy: pain.taxonomy,
+            }, null, 2),
+            '--- END ANALYSIS ---',
+            '',
+            'OUTPUT: the complete markdown document, nothing else.',
+          ].join('\n'),
+          validate: validateProposal,
+        });
+        writeAtomic(proposal, text);
+        const r = postWriteIntegrity('theme-review', [proposal]);
+        for (const l of r.lines) ctx.log(`  ${l}`);
+        if (r.exit !== 0) throw new StepFailure('theme-review-proposal', 'integrity failed');
+        commitOnly(ctx, 'theme-review-proposal',
+          [join(MEMORY_DIR, 'theme-review', `theme-review-${stem(ctx.date)}.md`)],
+          `Theme review ${stem(ctx.date)} (proposal)`);
+      },
+    },
+    {
+      // C8: taxonomy edits land on DB rows. Manual approval mode is the
+      // phase-plan default: the pipeline plans and logs, and the owner
+      // applies deliberately (NF_SCHEMA_EDIT_MODE=auto opts the chained
+      // run into applying, with taxonomy.json as the rollback target).
       id: 'apply-schema-edit', kind: 'det',
       run: (ctx) => {
         if (ctx.replay) {
@@ -221,9 +333,35 @@ export function themeReviewSteps(): StepDef[] {
           ctx.log('  replay: schema state is the committed one — nothing to apply');
           return;
         }
-        throw new StepFailure('apply-schema-edit',
-          'live apply-schema-edit is not ported yet (taxonomy edits move to DB rows '
-          + 'in the persistent-store architecture — see the Phase C plan T5 checklist)');
+        const proposal = proposalPath(ctx);
+        if (!existsSync(proposal))
+          throw new StepFailure('apply-schema-edit', `proposal not found: ${proposal}`);
+        const ops = parseProposal(readFileSync(proposal, 'utf8'));
+        for (const l of planLines(ops)) ctx.log(`  ${l}`);
+        const mode = process.env.NF_SCHEMA_EDIT_MODE === 'auto' ? 'auto' : 'manual';
+        if (ctx.dryRun || mode === 'manual') {
+          ctx.log(`  ${ctx.dryRun ? 'DRY_RUN' : 'manual mode'}: plan only — apply with `
+            + 'NF_SCHEMA_EDIT_MODE=auto or via `nunc-fluens run --only apply-schema-edit` '
+            + 'after review');
+          return;
+        }
+        const snapFile = join(preReviewDir(ctx.newsRepo, stem(ctx.date)), 'taxonomy.json');
+        if (!existsSync(snapFile))
+          throw new StepFailure('apply-schema-edit',
+            `rollback target missing: ${snapFile} — run theme-snapshots first`);
+        const snap = JSON.parse(readFileSync(snapFile, 'utf8'));
+        const result = applyOps(ctx.db, ops, ctx.todayIso);
+        for (const a of result.applied) ctx.log(`  applied: ${a.detail}`);
+        for (const s of result.skipped) ctx.log(`  skipped: ${s.reason}`);
+        const errs = result.failures.length ? result.failures : validateTaxonomy(ctx.db);
+        if (errs.length) {
+          ctx.log(`  FAIL: ${errs.join('; ')} — restoring taxonomy from snapshot`);
+          restoreTaxonomy(ctx.db, snap);
+          throw new StepFailure('apply-schema-edit',
+            `apply failed and was rolled back: ${errs.join('; ')}`);
+        }
+        ctx.log(`  ${result.applied.length} applied, ${result.skipped.length} skipped; `
+          + 'taxonomy validated');
       },
     },
   ];

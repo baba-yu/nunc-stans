@@ -233,6 +233,15 @@ function structuralCompleteness(path: string, kind: IntegrityKind): string[] {
   return fn(text);
 }
 
+/** Text-level structural check (no file involved) — used to validate
+ * LLM output before it is ever written. dashboard-asset is path-based
+ * and not supported here. */
+export function structuralErrors(kind: Exclude<IntegrityKind, 'dashboard-asset'>, text: string): string[] {
+  const fn = CHECKERS[kind];
+  if (!fn) return [`unknown kind: '${kind}'`];
+  return fn(text);
+}
+
 export interface IntegrityResult { exit: number; lines: string[] }
 
 /** In-process equivalent of `python -m app.skills.post_write_integrity
