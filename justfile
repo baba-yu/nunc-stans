@@ -37,6 +37,22 @@ news-migrate-db: _require_data
 news-validate date:
     node engines/nunc-fluens/pipeline/src/cli.ts validate "{{date}}"
 
+# Disposable run instance: local clone of the linked (read-only) news
+# checkout + its own seeded data store. Runs only ever target sandboxes;
+# the view checkout is never written (Phase C redirection).
+news-sandbox dir:
+    node engines/nunc-fluens/pipeline/src/cli.ts sandbox "{{dir}}"
+
+# One pipeline run against a sandbox (see news-sandbox).
+news-daily sandbox:
+    NS_SANDBOX="{{sandbox}}" node engines/nunc-fluens/pipeline/src/cli.ts run
+
+# Install the daily systemd user units for a sandbox (Linux/WSL).
+# Optional second arg = OnCalendar (default "*-*-* 06:30:00"); cron
+# fallback is documented inside install.sh.
+news-schedule sandbox oncalendar='*-*-* 06:30:00':
+    sh engines/nunc-fluens/pipeline/systemd/install.sh "{{sandbox}}" "{{oncalendar}}"
+
 # One origin (the gate, :8720) fronts everything; the ledger engine (:8721)
 # and the fourfive server (:8787) stay loopback-internal behind it.
 # NS_PORT moves the gate; NS_ENGINE_PORT moves the engine. The three
