@@ -385,9 +385,13 @@ apply-schema-edit, weekly-maintenance port).
       capture-day rule, and parity tests self-skip via
       `goldenCaptureCollision` until the corpus is **recaptured on a
       non-fixture UTC day (≥ 2026-07-06) — required next session**.
-- [ ] Remaining, ported inside the T5 orchestrator work:
-      `run-update-pages` wrapper, `validate-glossary-terms`,
-      `apply-schema-edit` (manual mode), `weekly-maintenance`.
+- [x] Remaining items ported inside the T5 orchestrator work
+      (2026-07-06): `run-update-pages` (the T5 `update-pages` step),
+      `validate-glossary-terms` + `define-glossary-terms` (daily-chain
+      live steps; skipped under replay/dry-run — the golden capture
+      never ran them, they were conversational-orchestrator calls
+      upstream), `apply-schema-edit` (C8 DB rows, manual default),
+      `weekly-maintenance` (full select/judge/apply/validate).
 
 ### Task 5: Orchestrator — core DONE 2026-07-05 (Sunday chain open)
 - [x] DAG runner (`src/orchestrator/dag.ts`): DOW plan,
@@ -407,13 +411,53 @@ apply-schema-edit, weekly-maintenance port).
       persistent DB (full-rebuild retired), publish = plain git
       (bindfs workaround host-specific), replay skips the second
       live-incremental ingest pass.
-- [ ] Sunday chain (4_weekly_memory / 5_weekly_theme_review /
-      6_weekly_maintenance) + `define-glossary-terms` /
-      `validate-glossary-terms` / `apply-schema-edit` live paths —
-      the runner refuses Sundays loudly until these land.
+- [x] Sunday chain live paths DONE 2026-07-06 (132 tests green; replay
+      E2E unchanged). 4_weekly_memory: dormant tier transitions are
+      deterministic code (the exact algorithm the oracle documented in
+      the dormant-20260705.md preamble; interval decoded from the
+      next-ping weekday); only entrant signal extraction stays LLM.
+      5_weekly_theme_review: 3-time-state snapshot (+ taxonomy.json as
+      the C8 rollback target, retention 5 + index regen), deterministic
+      §2.1 pain-point analysis feeding the proposal LLM step,
+      apply-schema-edit against DB rows (manual default;
+      NF_SCHEMA_EDIT_MODE=auto opts in; ops: rewrite-description / add /
+      promote-candidate / log-only; rename/merge/split refused pending a
+      C8 design pass). 6_weekly_maintenance: Step 0 SQL port (merge
+      proven parsed-equal vs the committed 06-28 file), per-candidate
+      judge (≤6 pool, resumable artifacts), Step 2 apply (stale
+      reasoning/bridge → DB columns; needs/readings deltas recorded as
+      artifacts, escalated — recorded deviation), Step 3 validation.
+      Glossary define/validate live steps landed in the daily chain.
 - [ ] Live-mode plumbing check: `node` refuses to strip types inside
       node_modules, so the CLI's runtime `import('nunc-ai')` needs a
       launcher fix (tsx devDep or a tiny build) — resolve with T9.
+
+**Port-time oracle findings (fixed in the TS port per the oracle
+discipline, upstream untouched):**
+
+1. **Upstream auto-apply was a silent no-op for 6+ Sundays:**
+   `apply_schema_edit.py` only parsed `1.`-numbered recommendations, but
+   proposals moved to `### Action N:` headings — zero ops parsed, exit
+   0. theme-review-20260705.md itself documents the two never-applied
+   rewrite blocks. The TS parser accepts both forms and the proposal
+   validator refuses documents that parse to zero operations. The two
+   pending rewrites (disclosure sharpening + cloud-vs-local widen) will
+   finally land on the first live Sunday with auto mode (or via a
+   deliberate manual apply).
+2. **Dormant-id type mismatch:** `weekly_maintenance.py` compared the
+   snapshot's short ids (`YYYYMMDD-i`) against sha prediction ids —
+   dormant exclusion never fired; the 90d health check would have
+   warned on every dormant row from mid-July on. TS resolves short ids
+   via the committed predictions.json (origin date + 1-based index).
+3. **Spillover queue intro duplication:** the oracle's section-preserving
+   rewrite re-appended the intro paragraph weekly (visible in the live
+   queue.md). TS keeps one intro.
+4. **Spec corpus gaps found:** `memory-policy.md` was missing from the
+   T0 import (added, upstream af344f1); `6_weekly_maintenance.md` is
+   head-truncated on disk upstream (starts mid-fence; `design/` is
+   gitignored upstream so no history exists) — the Step 0 selection was
+   ported from `weekly_maintenance.py` directly, which is authoritative
+   anyway.
 
 ### Task 6: Replay mode (S-4 substrate) — DONE 2026-07-05
 - [x] `nunc-fluens run --replay`: every LLM step sources its stored
