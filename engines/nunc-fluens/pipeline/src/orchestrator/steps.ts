@@ -784,9 +784,21 @@ export function dailyBriefingSteps(): StepDef[] {
         }
         const git = (...args: string[]) =>
           execFileSync('git', ['-C', ctx.newsRepo, ...args], { encoding: 'utf8' });
-        git('add', 'README.md', ...NON_EN.map(l => `README.${l}.md`),
+        // Add what exists and is not gitignored — instances legitimately
+        // ignore some of these (upstream keeps references.txt untracked).
+        const addable = ['README.md', ...NON_EN.map(l => `README.${l}.md`),
           `${DOCS_DIR}/data`, REPORT_DIR, FP_DIR, MEMORY_DIR, REFERENCES_TXT,
-          `${REFERENCE_DIR}/citation-policy-review.md`, 'app/sourcedata');
+          `${REFERENCE_DIR}/citation-policy-review.md`, 'app/sourcedata']
+          .filter(p => existsSync(join(ctx.newsRepo, p)))
+          .filter(p => {
+            try {
+              execFileSync('git', ['-C', ctx.newsRepo, 'check-ignore', '-q', p]);
+              return false; // exit 0 = ignored
+            } catch {
+              return true;
+            }
+          });
+        git('add', ...addable);
         try {
           git('commit', '-m', `daily-master ${ctx.date}: news + future-prediction + 3-day README + dashboard`);
         } catch (e) {
