@@ -96,6 +96,14 @@ export function loadWriterRules(task: '1_daily_update' | '2_future_prediction'):
   return readFileSync(join(designDir(), 'scheduled', `${task}-writer-rules.md`), 'utf8');
 }
 
+export function loadScheduledSpec(name: string): string {
+  return readFileSync(join(designDir(), 'scheduled', `${name}.md`), 'utf8');
+}
+
+export function loadMemoryPolicy(): string {
+  return readFileSync(join(designDir(), 'memory-policy.md'), 'utf8');
+}
+
 /** Compose a single headless prompt for an LLM step: the skill spec is
  * the contract; the framing pins date, output shape, and "JSON only". */
 export function buildStepPrompt(args: {
