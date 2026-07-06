@@ -69,14 +69,36 @@ phase). This supersedes the operational-takeover parts of the plan:
 | C7 (tail) | "the remnant repo drops its `app/` too" | **Dropped.** Only the monorepo's oracle copy is deleted at T12; upstream keeps its Python. |
 | Exit criteria 1/4/6 | publish/cutover/remnant wording | Rewritten below in place. |
 
+**Vision background (owner, 2026-07-06)** — why the fork, in the owner's
+words: today's news is *"nunc-fluens のプロトタイプみたいなもん"* — it
+works as a news board, so it stays, but it is deliberately **fixed** in
+shape (stable taxonomy, same daily routine). The product's nunc-fluens
+diverges from it on two axes: **what it investigates is not fixed**
+(research targets become configurable/dynamic rather than a standing
+news routine), and **its data exists to ground decisions** — feeding
+fourfive sessions and strategy-making, i.e. the constitution's
+world→self provenance (F9: commitments `informed_by` world/*) becomes
+the actual working loop, not just a display. A view-only news board and
+a decision-grounding investigation substrate are different products;
+hence the fork. (Where the fourfive/strategy grounding gets built is a
+later-phase design question — Phase D/E territory — recorded here so
+the divergence has its motivation on paper.)
+
 Consequences and rules going forward:
 
+- **Displaying the current `~/news` data through the world view is a
+  guaranteed, permanent feature** (owner requirement 2026-07-06: "現状の
+  news のデータが nunc-fluens でちゃんと表示できることは担保する").
+  Executed same day: `tools/build-world.ts` now resolves the checkout
+  via `news_repo`/`NS_NEWS_REPO` (shared resolver) and stages
+  `<checkout>/docs` + `docs/data` read-only; `NEWS_WORLD` is retired
+  (warned-and-ignored if set). Verified against the live checkout: 240
+  headlines + dashboard staged.
 - **The pipeline must never write the real `~/news` checkout.** Runs
-  target a sandbox copy; the real checkout is at most a *read-only*
-  source for the Formans world view (existing `build-world.ts` staging)
-  and for creating sandboxes. (The 2026-07-06 plumbing check wrote one
-  untracked `run.json` into the real sourcedata before this rule was
-  stated — removed, checkout clean.)
+  target a sandbox copy; the real checkout is a *read-only* source for
+  the Formans world view and for creating sandboxes. (The 2026-07-06
+  plumbing check wrote one untracked `run.json` into the real
+  sourcedata before this rule was stated — removed, checkout clean.)
 - The subtree oracle (`engines/nunc-fluens/app/`) stays frozen at
   upstream 17682e9 (+ the two recorded determinism fixes) until its T12
   deletion; upstream evolves independently from here — no further
@@ -546,9 +568,13 @@ discipline, upstream untouched):**
       production adoption** (redirection).
 - [ ] Sandbox instance recipe (`just news-sandbox <dir>` or a documented
       copy procedure): disposable copy of a news checkout + its own data
-      store, so runs never touch the real `~/news`. Consider splitting
-      the view-source config from the run-target config if one
-      `news_repo` key proves too coarse.
+      store, so runs never touch the real `~/news`. **Required (not
+      optional): split the view-source config from the run-target
+      config** — `news_repo` stays the read-only view source (the
+      guaranteed news-board display), and `nunc-fluens run` takes its
+      target from a separate key/flag and refuses to run when the
+      target equals the view source. One key serving both was how the
+      plumbing check wrote into production.
 - [ ] Timer-launched run completes end-to-end **against the sandbox**
       (this is exit run (a)).
 
