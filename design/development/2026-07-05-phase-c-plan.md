@@ -552,6 +552,16 @@ In-phase preparation only: path names centralized in one constants module
    configured set. This is a behavior change (out of port scope); natural
    home is the news-config settings surface (per-user config), after C.
    In-phase code keeps the locale list as a single constant to ease this.
+4. **Owner's upstream refactor ledger** (original design workspace:
+   `C:\Users\Yuki Baba\work\research\design\refactoring.md` — the source
+   the `~/news/design` copy mirrors; also holds non-imported history docs
+   like PRD/UI/export_layer). Still-open items to fold into post-C work:
+   subtheme-layer removal (schema + export + dashboard, inert today),
+   `glossary_audit` 30d retention, `cleanPredictionTitle` prefix-token
+   sharing via an exported JSON, LIST-view "all scopes". Already resolved
+   by the port: evidence-reverse now runs in the daily `update-pages`
+   step (item 2.2); the semantic glossary judge only queues rows with no
+   prior pass/fail audit (item 2.6's cost concern).
 
 ## Exit criteria (phase closes when all hold)
 
