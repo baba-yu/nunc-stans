@@ -110,6 +110,28 @@ function gateOrFail(id: string, r: { exit: number; lines: string[] }, ctx: RunCt
   if (r.exit !== 0) throw new StepFailure(id, `gate exited ${r.exit}`);
 }
 
+/** Spec: the parent runs citation-restriction-check on the composed
+ * URLs and re-prompts the writer on a RESTRICT hit — enforced at each
+ * citation-producing step (news_section, headlines) so it fails there,
+ * not three steps later at the rendered-markdown gate. Live only:
+ * replay must accept the committed artifact verbatim. */
+function assertCitationsAllowed(ctx: RunCtx, urls: string[]): void {
+  if (ctx.replay) return;
+  const policy = parsePolicy(join(ctx.newsRepo, REFERENCE_DIR, 'citation-restrictions.md'));
+  const restricted = new Set<string>();
+  for (const url of urls) {
+    let host = '';
+    try { host = new URL(url).hostname.replace(/^www\./, ''); } catch { /* skip */ }
+    if (!host) continue;
+    const cls = classifyHost(host, policy);
+    if (cls === 'denylist' || cls === 'parent_inherited' || cls === 'unconfirmed_denylist')
+      restricted.add(host);
+  }
+  if (restricted.size)
+    throw new Error(`citations use restricted hosts: ${[...restricted].join(', ')} `
+      + '— substitute an allowed source for the same factual claim (or drop the bullet)');
+}
+
 // ---------------------------------------------------------------------------
 // 1_daily_update
 // ---------------------------------------------------------------------------
@@ -162,27 +184,8 @@ export function dailyUpdateSteps(): StepDef[] {
           // Live only: replay must accept the committed artifact as-is.
           validate: (raw) => {
             const parsed = parseNewsSectionFile(raw);
-            if (!ctx.replay) {
-              const policy = parsePolicy(
-                join(ctx.newsRepo, REFERENCE_DIR, 'citation-restrictions.md'));
-              const restricted = new Set<string>();
-              for (const s of parsed.sections)
-                for (const b of s.bullets)
-                  for (const c of b.citations) {
-                    const host = (() => {
-                      try { return new URL(c.url).hostname.replace(/^www\./, ''); }
-                      catch { return ''; }
-                    })();
-                    const cls = host ? classifyHost(host, policy) : '';
-                    if (cls === 'denylist' || cls === 'parent_inherited'
-                      || cls === 'unconfirmed_denylist')
-                      restricted.add(host);
-                  }
-              if (restricted.size)
-                throw new Error(`citations use restricted hosts: `
-                  + `${[...restricted].join(', ')} — substitute an allowed `
-                  + 'source for the same factual claim (or drop the bullet)');
-            }
+            assertCitationsAllowed(ctx,
+              parsed.sections.flatMap(s => s.bullets.flatMap(b => b.citations.map(c => c.url))));
             return parsed;
           },
           webSearch: ctx.search === 'native',
@@ -233,11 +236,17 @@ export function dailyUpdateSteps(): StepDef[] {
       run: (ctx) => llmArtifactStep(ctx, {
         id: 'compose-headlines',
         artifact: sdFile(ctx, 'headlines.json'),
-        validate: parseHeadlinesFile,
+        validate: (raw) => {
+          const parsed = parseHeadlinesFile(raw);
+          assertCitationsAllowed(ctx,
+            parsed.technical.flatMap(t => t.citations.map(c => c.url)));
+          return parsed;
+        },
         prompt: () => buildStepPrompt({
           skill: 'compose-headlines-pair', date: ctx.date,
           writerRules: loadWriterRules('1_daily_update'),
-          extra: `Today's news_section.json:\n`
+          extra: `Today's news_section.json (cite ONLY sources already used `
+            + `here — do not introduce new hosts):\n`
             + readFileSync(sdFile(ctx, 'news_section.json'), 'utf8'),
           outputNote: 'the headlines.json document ({date, technical[], plain[]}).',
         }),
