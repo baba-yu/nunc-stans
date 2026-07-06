@@ -8,8 +8,9 @@ import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import {
   buildStepPrompt, llmArtifactStep, llmJson, llmMarkdown, loadMemoryPolicy,
-  RunCtx, StepDef, StepFailure,
+  StepFailure,
 } from './core.ts';
+import type { RunCtx, StepDef } from './core.ts';
 import { postWriteIntegrity, structuralErrors } from '../render/post-write-integrity.ts';
 import {
   applyOps, parseProposal, planLines, restoreTaxonomy, validateTaxonomy,
@@ -23,17 +24,19 @@ import {
   writeCandidatesFile, writeHealthLog,
 } from '../weekly/maintenance.ts';
 import {
-  MaintenanceJudgement, parseMaintenanceCandidatesFile,
-  parseMaintenanceJudgement, parseMaintenanceJudgementsFile,
+  parseMaintenanceCandidatesFile, parseMaintenanceJudgement,
+  parseMaintenanceJudgementsFile,
 } from '../schemas/sourcedata.ts';
+import type { MaintenanceJudgement } from '../schemas/sourcedata.ts';
 import { dateDir } from '../ingest/ingest-sourcedata.ts';
 import { MEMORY_DIR } from '../world-paths.ts';
 import { writeAtomic } from '../render/render-news-md.ts';
 import {
-  addDays, AgedOutCandidate, computeTransitions, dormantDir,
-  formatDormantSnapshot, hitsFor, latestDormantSnapshot, latestSummaryFor,
-  originPredictions, parseDormantSnapshot, windowValidationRows,
+  addDays, computeTransitions, dormantDir, formatDormantSnapshot, hitsFor,
+  latestDormantSnapshot, latestSummaryFor, originPredictions,
+  parseDormantSnapshot, windowValidationRows,
 } from '../weekly/dormant.ts';
+import type { AgedOutCandidate } from '../weekly/dormant.ts';
 
 function stem(date: string): string {
   return date.replaceAll('-', '');

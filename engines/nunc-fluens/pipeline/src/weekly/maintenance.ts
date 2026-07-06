@@ -13,9 +13,10 @@ import { existsSync, mkdirSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import type { Db } from '../ingest/ingest-core.ts';
 import {
-  MaintenanceJudgement, parseMaintenanceCandidatesFile,
-  parseMaintenanceJudgement, parseMaintenanceJudgementsFile,
+  parseMaintenanceCandidatesFile, parseMaintenanceJudgement,
+  parseMaintenanceJudgementsFile,
 } from '../schemas/sourcedata.ts';
+import type { MaintenanceJudgement } from '../schemas/sourcedata.ts';
 import { writeAtomic } from '../render/render-news-md.ts';
 import { addDays, originIsoOf, originPredictions } from './dormant.ts';
 

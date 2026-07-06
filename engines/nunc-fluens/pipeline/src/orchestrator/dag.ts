@@ -2,7 +2,8 @@
 // run.json manifest, DRY_RUN / --only / replay modes.
 import { connect } from '../db/db.ts';
 import { sourcedataDir, worldDbFile } from '../config.ts';
-import { RunCtx, RunManifest, StepDef } from './core.ts';
+import { RunManifest } from './core.ts';
+import type { RunCtx, StepDef } from './core.ts';
 import { dailyUpdateSteps, futurePredictionSteps, dailyBriefingSteps } from './steps.ts';
 import {
   themeReviewSteps, weeklyMaintenanceSteps, weeklyMemorySteps,

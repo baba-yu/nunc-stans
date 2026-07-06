@@ -7,9 +7,9 @@ import { appendFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } fr
 import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import {
-  buildStepPrompt, llmArtifactStep, llmJson, loadWriterRules, RunCtx, StepDef,
-  StepFailure,
+  buildStepPrompt, llmArtifactStep, llmJson, loadWriterRules, StepFailure,
 } from './core.ts';
+import type { RunCtx, StepDef } from './core.ts';
 import {
   parseBridgesFile, parseChangeLogFile, parseHeadlinesFile, parseNeedsFile,
   parseNewsSectionFile, parsePredictionsFile,

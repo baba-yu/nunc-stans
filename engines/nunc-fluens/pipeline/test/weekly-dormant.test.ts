@@ -7,10 +7,11 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { INPUT } from './helpers/build-db.ts';
 import {
-  addDays, advanceInterval, computeTransitions, daysDiff, DormantRow,
+  addDays, advanceInterval, computeTransitions, daysDiff,
   formatDormantSnapshot, hitsFor, intervalOf, parseDormantSnapshot, relStamp,
   sortRows,
 } from '../src/weekly/dormant.ts';
+import type { DormantRow } from '../src/weekly/dormant.ts';
 import { postWriteIntegrity } from '../src/render/post-write-integrity.ts';
 
 const SNAP_0628 = join(INPUT, 'memory', 'dormant', 'dormant-20260628.md');
