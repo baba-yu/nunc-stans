@@ -90,13 +90,13 @@ export function parseProposal(text: string): Operation[] {
   if (!section)
     throw new Error('no `## Recommended actions` section found');
   const body = section[1];
-  // Numbered-list form (the format the oracle parsed) …
-  let items = [...body.matchAll(/^\s*\d+\.\s+([\s\S]+?)(?=^\s*\d+\.\s+|(?![\s\S]))/gm)]
+  // An item begins at EITHER a numbered-list marker (`N. `, the
+  // convention through 2026-05-24) OR an H3 header (`### …`, every
+  // weekly proposal since 2026-05-31) — the single-pass split upstream
+  // adopted in its own fix (f8bab37) after the same no-op finding.
+  const items = [...body.matchAll(
+    /(?:^\s*\d+\.\s+|^###\s+)([\s\S]+?)(?=^\s*\d+\.\s+|^###\s+|(?![\s\S]))/gm)]
     .map(m => m[1]);
-  // … or the `### Action N:` heading form real proposals moved to.
-  if (!items.length)
-    items = [...body.matchAll(/^###\s+Action\s+\d+[:.]?\s*([\s\S]+?)(?=^###\s+Action\s+\d+|(?![\s\S]))/gm)]
-      .map(m => m[1]);
   const ops: Operation[] = [];
   for (const raw of items) {
     const flat = raw.split('\n').map(l => l.trim()).join(' ').trim();

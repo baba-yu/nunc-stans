@@ -5,7 +5,7 @@
 // themes/categories/theme_candidates rows) alongside the seed
 // schema.sql copy the Sunday flow-check gate expects.
 import {
-  copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync,
+  copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, renameSync,
   writeFileSync,
 } from 'node:fs';
 import { join } from 'node:path';
@@ -23,8 +23,12 @@ export function preReviewDir(newsRepo: string, stem: string): string {
 
 /** Step 2: write memory/snapshots/<stem>-pre-review/ (rollback target:
  * graphs + manifest + seed schema.sql + taxonomy.json) and
- * docs/data/snapshots/<stem>/ (reader-facing: graphs + manifest),
- * prune the reader-facing set to 5 and regenerate index.json.
+ * docs/data/snapshots/<stem>/ (reader-facing: graphs + manifest).
+ * Retention mirrors upstream archive_snapshots.py: keep the 5 most
+ * recent under docs/data/snapshots (the Pages artifact tars ./docs and
+ * ~70MB per week broke the deploy past ~100MB); older ones MOVE to the
+ * gitignored docs/archives/snapshots/, never deleted. index.json is
+ * regenerated with its `default` field preserved.
  * Returns the repo-relative paths to commit. */
 export function snapshotThreeTimeState(db: Db, newsRepo: string, date: string): string[] {
   const stem = date.replaceAll('-', '');
@@ -49,10 +53,21 @@ export function snapshotThreeTimeState(db: Db, newsRepo: string, date: string): 
     .filter(f => /^\d{8}$/.test(f))
     .sort();
   const keep = stems.slice(-SNAP_RETENTION);
-  for (const s of stems)
-    if (!keep.includes(s)) rmSync(join(snapRoot, s), { recursive: true, force: true });
-  writeFileSync(join(snapRoot, 'index.json'),
-    JSON.stringify({ snapshots: keep, default: 'live' }, null, 2) + '\n', 'utf8');
+  const archiveRoot = join(newsRepo, 'docs', 'archives', 'snapshots');
+  for (const s of stems) {
+    if (keep.includes(s)) continue;
+    mkdirSync(archiveRoot, { recursive: true });
+    renameSync(join(snapRoot, s), join(archiveRoot, s));
+  }
+  const indexPath = join(snapRoot, 'index.json');
+  let indexDefault = 'live';
+  if (existsSync(indexPath)) {
+    try {
+      indexDefault = JSON.parse(readFileSync(indexPath, 'utf8')).default ?? 'live';
+    } catch { /* regenerate from scratch */ }
+  }
+  writeFileSync(indexPath,
+    JSON.stringify({ snapshots: keep, default: indexDefault }, null, 2) + '\n', 'utf8');
 
   return [
     join(MEMORY_DIR, 'snapshots', `${stem}-pre-review`),

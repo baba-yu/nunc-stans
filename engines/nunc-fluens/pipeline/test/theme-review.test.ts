@@ -202,7 +202,11 @@ describe('snapshots + pain points', () => {
     expect(a.dominant).toEqual(['tech.cat_a']); // 2/3 ≈ 66.7 %
   });
 
-  it('snapshotThreeTimeState writes both dirs, prunes to 5, regenerates index', () => {
+  it('snapshotThreeTimeState writes both dirs, archives past 5, regenerates index', () => {
+    // Pre-existing index: its `default` must survive the regeneration
+    // (upstream archive_snapshots.py semantics).
+    writeFileSync(join(repo, 'docs', 'data', 'snapshots', 'index.json'),
+      JSON.stringify({ snapshots: [], default: '20260628' }), 'utf8');
     snapshotThreeTimeState(db, repo, '2026-07-05');
     const pre = join(repo, 'memory', 'snapshots', '20260705-pre-review');
     for (const f of ['graph-tech.json', 'graph-business.json', 'graph-mix.json',
@@ -212,10 +216,13 @@ describe('snapshots + pain points', () => {
       join(repo, 'docs', 'data', 'snapshots', 'index.json'), 'utf8'));
     expect(idx).toEqual({
       snapshots: ['20260607', '20260614', '20260621', '20260628', '20260705'],
-      default: 'live',
+      default: '20260628',
     });
-    expect(existsSync(join(repo, 'docs', 'data', 'snapshots', '20260524'))).toBe(false);
-    expect(existsSync(join(repo, 'docs', 'data', 'snapshots', '20260531'))).toBe(false);
+    // Aged-out weeks are MOVED to the gitignored archive, not deleted.
+    for (const s of ['20260524', '20260531']) {
+      expect(existsSync(join(repo, 'docs', 'data', 'snapshots', s))).toBe(false);
+      expect(existsSync(join(repo, 'docs', 'archives', 'snapshots', s))).toBe(true);
+    }
   });
 
   it('collectPainPoints bundles scopes, candidates, and taxonomy', () => {
