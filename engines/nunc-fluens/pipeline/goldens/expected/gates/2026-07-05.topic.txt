@@ -1,4 +1,4 @@
-check-topic-coverage :: date=<CAPTURE_DAY>
+check-topic-coverage :: date=2026-07-05
   mode=verification (verification.json present — LLM auditor verdict)
      LLM Workflow: verdict=uncovered, alignment=consistent
      Multi-profiling for Local LLM (e.g. Multica) [news-driven]: verdict=uncovered, alignment=consistent

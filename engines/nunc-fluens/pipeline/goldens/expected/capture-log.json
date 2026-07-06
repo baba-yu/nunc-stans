@@ -1,6 +1,6 @@
 {
   "python": "/home/baba-y/.pyenv/versions/3.11.11/bin/python",
-  "captureDay": "2026-07-05",
+  "captureDay": "2026-07-06",
   "sanity": {
     "news-2026-07-03.en": "match",
     "future-prediction-2026-07-03.en": "match",

@@ -137,8 +137,11 @@ function py(PY: string, args: string[], allowFail = false): Ran {
     cwd: WORK, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024,
     // PYTHONHASHSEED pinned: set-iteration order feeds float sums in the
     // oracle; unpinned hashing made captures run-dependent (see the
-    // idf-tie determinism fix in app/src/ingest.py).
-    env: { ...process.env, PYTHONPATH: WORK, PYTHONHASHSEED: '0' },
+    // idf-tie determinism fix in app/src/ingest.py). TZ pinned to UTC:
+    // python's date.today() is local while capture.ts and the TS
+    // pipeline use UTC dates — a capture in the PDT evening straddles
+    // midnight and splits the two sides' "today".
+    env: { ...process.env, PYTHONPATH: WORK, PYTHONHASHSEED: '0', TZ: 'UTC' },
   });
   if (r.error) throw r.error;
   const exit = r.status ?? -1;

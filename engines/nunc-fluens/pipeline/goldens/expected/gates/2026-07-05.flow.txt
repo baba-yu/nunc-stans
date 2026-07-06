@@ -1,14 +1,14 @@
-daily-flow-check :: date=<CAPTURE_DAY> (Sun)
+daily-flow-check :: date=2026-07-05 (Sun)
   repo-root: <WORK>
 
-OK news+FP markdown files (<CAPTURE_DAY>)
-FAIL DB population via post_update_validation (<CAPTURE_DAY>): 1 issue(s)
+OK news+FP markdown files (2026-07-05)
+FAIL DB population via post_update_validation (2026-07-05): 1 issue(s)
   - post_update_validation exited 2 but produced no FAIL lines; stderr='FAIL: DB not found: <WORK>/app/data/analytics.sqlite\n'
-FAIL Sunday artifacts (dormant + theme-review + snapshots) (<CAPTURE_DAY>): 3 issue(s)
+FAIL Sunday artifacts (dormant + theme-review + snapshots) (2026-07-05): 3 issue(s)
   - missing Sunday artifact: memory/snapshots/20260705-pre-review/ (5_weekly_theme_review Step 2 did not snapshot rollback target)
   - missing Sunday artifact: docs/data/snapshots/20260705/ (5_weekly_theme_review Step 2 did not snapshot reader-facing dashboard)
   - missing: docs/data/snapshots/index.json
-FAIL READMEs (3-day window including <CAPTURE_DAY>): 4 issue(s)
+FAIL READMEs (3-day window including 2026-07-05): 4 issue(s)
   - missing: README.md
   - missing: README.ja.md
   - missing: README.es.md
