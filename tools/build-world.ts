@@ -4,16 +4,20 @@
 //
 // 1. Flatten News's exported prediction graph into the minimal headline list
 //    the world view reads (world-headlines.json).
-// 2. Stage the News dashboard (engines/nunc-fluens/docs) plus the export's
-//    data directory into the formans public dir so the world view can wrap
-//    it as-is at /world-graph/ — with d3 vendored locally, because the
+// 2. Stage the News dashboard (docs/ of the configured news checkout) plus
+//    its data directory into the formans public dir so the world view can
+//    wrap it as-is at /world-graph/ — with d3 vendored locally, because the
 //    product allows no CDN dependency (§10-B: one origin, local).
 //
-// Input comes from $NEWS_WORLD (a graph JSON file, or a dir containing
-// graph-mix.json). Unset or missing ⇒ empty headline list and the stage is
+// The source is the user-designated news checkout (`just news-link <dir>`,
+// config key news_repo, env override NS_NEWS_REPO) — a READ-ONLY path: per
+// the Phase C redirection the dev repo never writes the real checkout, but
+// displaying its current data through the world view is a guaranteed,
+// permanent feature (the owner's news board keeps living there). NEWS_WORLD
+// is retired. Unset or missing ⇒ empty headline list and the stage is
 // removed, so `just up` still works and the world view degrades honestly.
 // This script lives in tools/ (not frontend/) because it legitimately names
-// an engine path — FD-7.4 keeps frontend/ itself engine-free.
+// engine/tool paths — FD-7.4 keeps frontend/ itself engine-free.
 import {
   cpSync,
   existsSync,
@@ -26,17 +30,23 @@ import {
 } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { resolveNewsRepo } from './lib/data-dir.ts'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const formansPublic = join(root, 'frontend', 'nunc-stans-formans', 'public')
 const outFile = join(formansPublic, 'world-headlines.json')
 const stageDir = join(formansPublic, 'world-graph')
-const dashboardSrc = join(root, 'engines', 'nunc-fluens', 'docs')
+
+const newsRepo = resolveNewsRepo()
+const dashboardSrc = newsRepo ? join(newsRepo, 'docs') : null
 
 function resolveInput(): string | null {
-  const p = process.env.NEWS_WORLD
-  if (!p || !existsSync(p)) return null
-  return statSync(p).isDirectory() ? join(p, 'graph-mix.json') : p
+  if (process.env.NEWS_WORLD)
+    console.warn('[build-world] NEWS_WORLD is retired and ignored — the news '
+      + 'checkout comes from `just news-link <dir>` (or NS_NEWS_REPO).')
+  if (!dashboardSrc) return null
+  const p = join(dashboardSrc, 'data', 'graph-mix.json')
+  return existsSync(p) ? p : null
 }
 
 function write(list: unknown[]) {
@@ -72,10 +82,11 @@ function copyTreeFresh(srcDir: string, destDir: string): [number, number] {
 }
 
 const input = resolveInput()
-if (!input || !existsSync(input)) {
+if (!input || !existsSync(input) || !dashboardSrc) {
   console.warn(
-    '[build-world] NEWS_WORLD not set or graph not found; writing an empty world list and removing the stage.\n' +
-      "             Set NEWS_WORLD to News's exported graph (e.g. ~/news/docs/data/graph-mix.json).",
+    '[build-world] no news checkout configured (or no exported graph in it); '
+    + 'writing an empty world list and removing the stage.\n'
+    + '             Run: just news-link <dir>  (or set NS_NEWS_REPO).',
   )
   write([])
   rmSync(stageDir, { recursive: true, force: true })
@@ -124,7 +135,7 @@ const headlines = nodes
   .sort((a, b) => String(b.date ?? '').localeCompare(String(a.date ?? '')))
 
 write(headlines)
-console.log(`[build-world] wrote ${headlines.length} headlines from ${input}`)
+console.log(`[build-world] wrote ${headlines.length} headlines from ${input} (read-only source)`)
 
 // --- stage the dashboard, as-is except the d3 script goes local ---
 let copied = 0

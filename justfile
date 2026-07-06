@@ -64,9 +64,10 @@ _up-gate:
       --data-dir "{{data_dir}}"
 
 # Build everything the gate serves. The world adapter runs first so the
-# read-only world view has fresh headlines. NEWS_WORLD points at News's
-# exported graph (e.g. ~/news/docs/data/graph-mix.json); its path lives
-# outside this repo, like the data store. Unset = empty world view.
+# read-only world view has fresh headlines. It reads the news checkout
+# designated via `just news-link <dir>` (config news_repo, NS_NEWS_REPO
+# override) — strictly read-only; the path lives outside this repo, like
+# the data store. No checkout linked = empty world view.
 build: build-world
     pnpm install --frozen-lockfile || pnpm install
     pnpm -r build
