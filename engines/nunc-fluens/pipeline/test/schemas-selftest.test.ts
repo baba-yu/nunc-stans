@@ -25,7 +25,7 @@ describe('sourcedata schemas vs the golden fixture corpus', () => {
   const dates = readdirSync(SD).filter(d => /^\d{4}-\d{2}-\d{2}$/.test(d)).sort();
 
   it('has the fixture corpus staged', () => {
-    expect(dates.length).toBeGreaterThanOrEqual(20); // 10 full days + 16 historical
+    expect(dates.length).toBeGreaterThanOrEqual(3); // the synthetic micro-world days
   });
 
   it('parses every canonical EN file of every fixture day', () => {
@@ -37,7 +37,7 @@ describe('sourcedata schemas vs the golden fixture corpus', () => {
         count++;
       }
     }
-    expect(count).toBeGreaterThanOrEqual(60);
+    expect(count).toBeGreaterThanOrEqual(20);
   });
 
   it('parses every canonical locale file of every fixture day', () => {
@@ -53,6 +53,6 @@ describe('sourcedata schemas vs the golden fixture corpus', () => {
         }
       }
     }
-    expect(count).toBeGreaterThanOrEqual(100);
+    expect(count).toBeGreaterThanOrEqual(40);
   });
 });

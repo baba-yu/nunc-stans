@@ -10,7 +10,6 @@ import {
 } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { INPUT } from './helpers/build-db.ts';
 import { schemaPath } from '../src/db/db.ts';
 import {
   applyOps, dumpTaxonomy, parseProposal, planLines, restoreTaxonomy,
@@ -21,8 +20,52 @@ import {
 } from '../src/weekly/theme-review.ts';
 
 const TODAY = '2026-07-06';
-const REAL_PROPOSAL = readFileSync(
-  join(INPUT, 'memory', 'theme-review', 'theme-review-20260705.md'), 'utf8');
+// An inline `### Action` proposal targeting two themes that exist in the
+// schema.sql seed. Mirrors the real weekly proposal shape (2 rewrites +
+// 2 log-only) — the parse/apply path is what's under test, not any
+// particular editorial content. Uses the `### Action N:` heading form
+// whose absence made the upstream auto-apply a silent no-op.
+const INLINE_PROPOSAL = [
+  '# Theme review — week ending 2026-07-05', '',
+  '## Empty / underused themes', '', 'None material.', '',
+  '## Overpopulated themes', '', 'One persistent pain point.', '',
+  '## Theme candidates', '', 'No candidate reaches the bar.', '',
+  '## Recommended actions', '',
+  '### Action 1: Sharpen `business.ai_revenue_disclosure`', '',
+  'Re-emit the vetted sharpening.', '',
+  '```action',
+  JSON.stringify({
+    kind: 'rewrite-description',
+    theme_id: 'business.ai_revenue_disclosure',
+    new_description_en: 'The 2026 rewrite focused on disclosure-mechanic vocabulary: '
+      + 'SEC AI-revenue concept release; audited monthly-revenue cadence; per-token-margin '
+      + 'disclosure; 10-Q segment footnote breakouts; S-1 disclosure cohort mechanics.',
+    new_description_ja: '2026年のAI売上開示再構築、開示メカニクスの語彙に焦点。',
+    new_description_es: 'La reescritura de 2026 sobre vocabulario de mecánicas de divulgación.',
+    new_description_fil: 'Ang 2026 rewrite na nakatuon sa disclosure-mechanic vocabulary.',
+  }),
+  '```', '',
+  '### Action 2: Widen `business.cloud_vs_local_distribution`', '',
+  'Re-emit the 6/28 widen.', '',
+  '```action',
+  JSON.stringify({
+    kind: 'rewrite-description',
+    theme_id: 'business.cloud_vs_local_distribution',
+    new_description_en: 'How AI capability is distributed — local on-device versus '
+      + 'hosted cloud, and the channel shifts between them.',
+    new_description_ja: 'AI能力の配布 — ローカル対クラウド、およびチャネルシフト。',
+    new_description_es: 'Cómo se distribuye la IA — local frente a nube alojada.',
+    new_description_fil: 'Paano idinidistribute ang AI — local kontra hosted cloud.',
+  }),
+  '```', '',
+  '### Action 3: Observation (no schema edit)', '',
+  'Category carve-out remains overdue.', '',
+  '```action', '{"kind": "log-only"}', '```', '',
+  '### Action 4: Investigation (no schema edit)', '',
+  'export.py secondary-attach threshold.', '',
+  '```action', '{"kind": "log-only"}', '```', '',
+].join('\n');
+const REAL_PROPOSAL = INLINE_PROPOSAL;
 
 let db: Database.Database;
 beforeEach(() => {
@@ -33,14 +76,14 @@ beforeEach(() => {
 afterEach(() => db.close());
 
 describe('proposal parsing', () => {
-  it('parses the real 07-05 proposal (### Action form): 2 rewrites + 2 log-only', () => {
+  it('parses the ### Action form: 2 rewrites + 2 log-only', () => {
     const ops = parseProposal(REAL_PROPOSAL);
     expect(ops.map(o => o.kind)).toEqual(
       ['rewrite-description', 'rewrite-description', 'log-only', 'log-only']);
     expect(ops[0].block?.theme_id).toBe('business.ai_revenue_disclosure');
     expect(ops[1].block?.theme_id).toBe('business.cloud_vs_local_distribution');
-    // The oracle's numbered-only parser returned [] here — the silent
-    // no-op the proposal itself complains about. Guard the fix.
+    // The oracle's numbered-only parser returned [] on this heading form
+    // — the silent no-op the fix corrects. Guard it.
     expect(ops.length).toBeGreaterThan(0);
   });
 
@@ -77,12 +120,12 @@ describe('proposal parsing', () => {
 });
 
 describe('C8 apply on DB rows', () => {
-  it('applies the real 07-05 rewrite-description blocks to the seeded taxonomy', () => {
+  it('applies the rewrite-description blocks to the seeded taxonomy', () => {
     const ops = parseProposal(REAL_PROPOSAL);
     const before = db.prepare(
       'SELECT description FROM themes WHERE theme_id = ?')
       .get('business.ai_revenue_disclosure') as any;
-    expect(before.description).toContain('Big-3'); // the broad pre-sharpen anchors
+    expect(before.description).toContain('Big-3'); // the broad pre-sharpen seed anchors
     const r = applyOps(db, ops, TODAY);
     expect(r.failures).toEqual([]);
     expect(r.applied.length).toBe(2);

@@ -19,8 +19,9 @@ import {
   normalizeVolatile, TODAY,
 } from './helpers/build-db.ts';
 
-const REPLAY_DAY = '2026-06-27'; // Saturday inside the golden DB range
-const SUNDAY = '2026-06-28'; // the golden Sunday (weekly-chain artifacts committed)
+const SUNDAY: string = MANIFEST.sundayDay; // weekly-chain artifacts staged
+// A non-Sunday fixture day to exercise the weekday news+fp chains.
+const REPLAY_DAY: string = MANIFEST.renderDays.filter((d: string) => d !== SUNDAY).at(-1);
 const ALL_DAYS: string[] = daysBetween(MANIFEST.dbRange.start, MANIFEST.dbRange.end);
 
 function stageWritableRepo(): string {

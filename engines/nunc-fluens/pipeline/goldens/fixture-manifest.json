@@ -1,42 +1,15 @@
 {
-  "upstream": {
-    "repo": "~/news",
-    "commit": "5059fa1",
-    "stagedAt": "2026-07-06",
-    "subtreeParity": "engines/nunc-fluens/app diff-clean against upstream at staging time (code tip 529f2e1; data advanced to the completed 2026-07-05 day)",
-    "stagingRules": [
-      "stage reads `git archive` at the pinned commit, never the working tree — a mid-flight daily run cannot leak into the fixtures",
-      "fixture days must be CLOSED days (their daily-master commit exists at the pinned commit)",
-      "`stage` and `run` always travel together: restaging without recapturing desynchronizes input/ and expected/"
-    ]
-  },
-  "renderDays": ["2026-07-03", "2026-07-04", "2026-07-05", "2026-06-28"],
-  "sundayDay": "2026-06-28",
-  "dbRange": { "start": "2026-06-22", "end": "2026-06-28" },
-  "reportWindow": { "start": "2026-06-15", "end": "2026-07-05" },
-  "historicalPredictionDates": {
-    "start": "2026-04-19",
-    "end": "2026-05-04",
-    "why": "predictions.json only (en + locales) — feeds the tests of the retired one-shot rename-future-titles skill (not DAG-invoked; reclassified out of the port at T1, tests retire with the Python at T12)"
-  },
+  "synthetic": true,
+  "generator": "goldens/synthesize.ts (node synthesize.ts all)",
+  "why": "T12: the real-content golden corpus validated the TS port against the Python oracle and was dropped with it — the redistributable repo carries no personal editorial data. From here the suite is TS self-regression: expected/ is frozen from the pipeline's own output over this schema-shaped micro-world. The oracle-parity record lives in git history and design/verification/phase-c.md.",
+  "renderDays": ["2026-01-02", "2026-01-03", "2026-01-04"],
+  "sundayDay": "2026-01-04",
+  "prevSunday": "2025-12-28",
+  "dbRange": { "start": "2026-01-02", "end": "2026-01-04" },
+  "todayIso": "2026-01-04",
   "locales": ["en", "ja", "es", "fil"],
   "normalization": {
-    "isoTimestamps": "every YYYY-MM-DDTHH:MM:SS[.f][Z] in the DB dump and export JSON is rewritten to 1970-01-01T00:00:00Z before storing/comparing (created_at/updated_at/scored_at/generated_at metadata; content never carries time-of-day stamps)",
-    "captureDateTokens": "the capture-run date (date-only ISO) is rewritten to <CAPTURE_DAY> in the DB dump and export JSON (glossary first_seen/last_seen, needs extracted_on and similar); the TS parity test applies the same rewrite with its own run date",
-    "workPath": "the absolute work/ directory path is rewritten to <WORK> in captured tool output (daily-flow-check prints its repo root)",
-    "jsonNumberFormatting": "export JSON parity is asserted on PARSED values, not bytes: python json.dumps writes repr floats (1.0), JS writes 1 — JSON numbers are typeless and every consumer parses the file",
-    "layoutTrigUlp": "ring-layout x/y come from sin/cos, which differ between python's libm and V8 in the last ULP; the export parity test rounds layout.x/.y to 9 decimals (they only seed the frontend force layout)"
-  },
-  "deferredCaptures": {
-    "T4b": ["validate-glossary-terms form checks"],
-    "T4c": [
-      "citation-restriction-check no-op pass on committed data",
-      "weekly-maintenance / apply-schema-edit / rename-future-titles",
-      "run-update-pages full rebuild parity (cli export is captured in T1)"
-    ]
-  },
-  "notes": [
-    "Inputs are verbatim copies of committed upstream data for the listed days/window; the work/ tree is disposable and rebuilt by capture.ts run.",
-    "Renders are compared byte-for-byte; a sanity diff against the historically committed report files is logged but is not the gate (the gate is oracle-vs-port)."
-  ]
+    "isoTimestamps": "every timestamp in the DB dump is rewritten to the epoch before comparing (CURRENT_TIMESTAMP metadata); with todayIso pinned to the fixture Sunday there is no capture-day token — the corpus is fully deterministic",
+    "jsonNumberFormatting": "export JSON comparisons stay parsed-value based (formatting-neutral)"
+  }
 }

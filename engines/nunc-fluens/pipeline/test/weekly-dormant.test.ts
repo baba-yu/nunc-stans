@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 import { readFileSync, writeFileSync, mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { INPUT } from './helpers/build-db.ts';
+import { INPUT, MANIFEST } from './helpers/build-db.ts';
 import {
   addDays, advanceInterval, computeTransitions, daysDiff,
   formatDormantSnapshot, hitsFor, intervalOf, parseDormantSnapshot, relStamp,
@@ -14,8 +14,9 @@ import {
 import type { DormantRow } from '../src/weekly/dormant.ts';
 import { postWriteIntegrity } from '../src/render/post-write-integrity.ts';
 
-const SNAP_0628 = join(INPUT, 'memory', 'dormant', 'dormant-20260628.md');
-const SNAP_0705 = join(INPUT, 'memory', 'dormant', 'dormant-20260705.md');
+const stem = (d: string) => d.replaceAll('-', '');
+const SNAP_SUNDAY = join(INPUT, 'memory', 'dormant', `dormant-${stem(MANIFEST.sundayDay)}.md`);
+const SNAP_PREV = join(INPUT, 'memory', 'dormant', `dormant-${stem(MANIFEST.prevSunday)}.md`);
 
 function row(over: Partial<DormantRow> & { id: string }): DormantRow {
   return {
@@ -26,28 +27,32 @@ function row(over: Partial<DormantRow> & { id: string }): DormantRow {
 }
 
 describe('snapshot parse / format', () => {
-  it('parses the real 06-28 corpus snapshot (85 rows)', () => {
-    const rows = parseDormantSnapshot(readFileSync(SNAP_0628, 'utf8'));
-    expect(rows.length).toBe(85);
-    const r = rows.find(x => x.id === '20260421-1')!;
-    expect(r.firstSeen).toBe('2026-04-21');
-    expect(r.lastRelevance).toBe('3 (5/17)');
-    expect(r.nextPing).toBe('2026-07-30');
-    expect(r.daysQuiet).toBe(42);
+  it('parses the synthetic dormant snapshot', () => {
+    const rows = parseDormantSnapshot(readFileSync(SNAP_SUNDAY, 'utf8'));
+    expect(rows.length).toBe(1);
+    const r = rows.find(x => x.id === '20251215-1')!;
+    expect(r.firstSeen).toBe('2025-12-15');
+    expect(r.lastRelevance).toBe('2 (12/20)');
+    expect(r.nextPing).toBe('2026-02-03');
+    expect(r.daysQuiet).toBe(15);
   });
 
   it('round-trips through format and passes dormant integrity', () => {
-    const rows = parseDormantSnapshot(readFileSync(SNAP_0705, 'utf8'));
-    expect(rows.length).toBe(95);
+    // A multi-row table (both synthetic snapshots) exercises the table
+    // format/parse fixpoint and the integrity gate.
+    const rows = [
+      ...parseDormantSnapshot(readFileSync(SNAP_PREV, 'utf8')),
+      ...parseDormantSnapshot(readFileSync(SNAP_SUNDAY, 'utf8')),
+    ];
     const text = formatDormantSnapshot({
-      today: '2026-07-05',
+      today: MANIFEST.sundayDay,
       preamble: ['Mode: round-trip test.'],
       rows,
     });
     expect(parseDormantSnapshot(text)).toEqual(sortRows(rows));
     const dir = mkdtempSync(join(tmpdir(), 'nf-dormant-'));
     try {
-      const p = join(dir, 'dormant-20260705.md');
+      const p = join(dir, `dormant-${stem(MANIFEST.sundayDay)}.md`);
       writeFileSync(p, text, 'utf8');
       const r = postWriteIntegrity('dormant', [p]);
       expect(r.exit).toBe(0);

@@ -1,0 +1,47 @@
+{
+  "date": "2026-01-03",
+  "predictions": [
+    {
+      "id": "prediction.3596f21913b0edf3",
+      "scope_hint": "tech",
+      "title": "[es] Widgetly ships synthetic milestone 20260103-0 by Q3 2026",
+      "body": "[es] Widgetly announced a synthetic milestone on 2026-01-03. This fixture prediction exists to exercise the pipeline shape: it claims the vendor lands milestone 0 within two quarters, citing the fixture announcement. No real product, vendor, or person is referenced.",
+      "reasoning": {
+        "because": "[es] fixture announcement observed on 2026-01-03",
+        "given": "[es] the synthetic market always follows its announcements",
+        "so_that": "[es] Widgetly lands milestone 0 within two quarters",
+        "landing": "[es] Q3 2026, fixture scope",
+        "plain_language": "[es] Widgetly will finish milestone 0 soon."
+      },
+      "summary": "[es] Widgetly is expected to land synthetic milestone 0. This is fixture prose used only by the test suite."
+    },
+    {
+      "id": "prediction.3596f21913b0edf4",
+      "scope_hint": "business",
+      "title": "[es] Acme Metrics ships synthetic milestone 20260103-1 by Q3 2026",
+      "body": "[es] Acme Metrics announced a synthetic milestone on 2026-01-03. This fixture prediction exists to exercise the pipeline shape: it claims the vendor lands milestone 1 within two quarters, citing the fixture announcement. No real product, vendor, or person is referenced.",
+      "reasoning": {
+        "because": "[es] fixture announcement observed on 2026-01-03",
+        "given": "[es] the synthetic market always follows its announcements",
+        "so_that": "[es] Acme Metrics lands milestone 1 within two quarters",
+        "landing": "[es] Q3 2026, fixture scope",
+        "plain_language": "[es] Acme Metrics will finish milestone 1 soon."
+      },
+      "summary": "[es] Acme Metrics is expected to land synthetic milestone 1. This is fixture prose used only by the test suite."
+    },
+    {
+      "id": "prediction.3596f21913b0edf5",
+      "scope_hint": "tech",
+      "title": "[es] Exampletron ships synthetic milestone 20260103-2 by Q3 2026",
+      "body": "[es] Exampletron announced a synthetic milestone on 2026-01-03. This fixture prediction exists to exercise the pipeline shape: it claims the vendor lands milestone 2 within two quarters, citing the fixture announcement. No real product, vendor, or person is referenced.",
+      "reasoning": {
+        "because": "[es] fixture announcement observed on 2026-01-03",
+        "given": "[es] the synthetic market always follows its announcements",
+        "so_that": "[es] Exampletron lands milestone 2 within two quarters",
+        "landing": "[es] Q3 2026, fixture scope",
+        "plain_language": "[es] Exampletron will finish milestone 2 soon."
+      },
+      "summary": "[es] Exampletron is expected to land synthetic milestone 2. This is fixture prose used only by the test suite."
+    }
+  ]
+}

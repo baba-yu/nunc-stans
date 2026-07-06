@@ -1,0 +1,217 @@
+{
+  "generated_at": "2026-01-04",
+  "top_n": 200,
+  "evidence_count": 6,
+  "evidence": [
+    {
+      "linked_predictions": [
+        {
+          "prediction_id": "prediction.ea9dc188119c4848",
+          "scope_id": "business",
+          "support_direction": "support",
+          "score": 0.6,
+          "validation_date": "2026-01-04",
+          "prediction_summary": "Widgetly announced a synthetic milestone on 2026-01-02. This fixture prediction exists to exercise the pipeline shape: it claims the vendor lands milestone 0 within two quarters, citing the fixture announcement. No real product, vendor, or person is referenced.",
+          "prediction_short_label": "Widgetly ships synthetic milestone 20260102-0 by Q3 2026",
+          "prediction_date": "2026-01-02"
+        },
+        {
+          "prediction_id": "prediction.394e027e97187004",
+          "scope_id": "business",
+          "support_direction": "support",
+          "score": 0.6,
+          "validation_date": "2026-01-04",
+          "prediction_summary": "Widgetly announced a synthetic milestone on 2026-01-03. This fixture prediction exists to exercise the pipeline shape: it claims the vendor lands milestone 0 within two quarters, citing the fixture announcement. No real product, vendor, or person is referenced.",
+          "prediction_short_label": "Widgetly ships synthetic milestone 20260103-0 by Q3 2026",
+          "prediction_date": "2026-01-03"
+        },
+        {
+          "prediction_id": "prediction.5ef4de1cc1f71cd0",
+          "scope_id": "business",
+          "support_direction": "support",
+          "score": 0.6,
+          "validation_date": "2026-01-04",
+          "prediction_summary": "Exampletron announced a synthetic milestone on 2026-01-04. This fixture prediction exists to exercise the pipeline shape: it claims the vendor lands milestone 2 within two quarters, citing the fixture announcement. No real product, vendor, or person is referenced.",
+          "prediction_short_label": "Exampletron ships synthetic milestone 20260104-2 by Q3 2026",
+          "prediction_date": "2026-01-04"
+        },
+        {
+          "prediction_id": "prediction.9bcf1ecbcbd67a64",
+          "scope_id": "business",
+          "support_direction": "support",
+          "score": 0.2,
+          "validation_date": "2026-01-04",
+          "prediction_summary": "Widgetly announced a synthetic milestone on 2026-01-04. This fixture prediction exists to exercise the pipeline shape: it claims the vendor lands milestone 0 within two quarters, citing the fixture announcement. No real product, vendor, or person is referenced.",
+          "prediction_short_label": "Widgetly ships synthetic milestone 20260104-0 by Q3 2026",
+          "prediction_date": "2026-01-04"
+        }
+      ],
+      "evidence_id": "evidence.379dcf7af643066f",
+      "title": "Example 0 (2026-01-04)",
+      "url": "https://example.com/20260104/0",
+      "source_type": "news",
+      "reported_at": "2026-01-04",
+      "total_score": 2
+    },
+    {
+      "linked_predictions": [
+        {
+          "prediction_id": "prediction.ea9dc188119c4848",
+          "scope_id": "business",
+          "support_direction": "support",
+          "score": 0.6,
+          "validation_date": "2026-01-04",
+          "prediction_summary": "Widgetly announced a synthetic milestone on 2026-01-02. This fixture prediction exists to exercise the pipeline shape: it claims the vendor lands milestone 0 within two quarters, citing the fixture announcement. No real product, vendor, or person is referenced.",
+          "prediction_short_label": "Widgetly ships synthetic milestone 20260102-0 by Q3 2026",
+          "prediction_date": "2026-01-02"
+        },
+        {
+          "prediction_id": "prediction.394e027e97187004",
+          "scope_id": "business",
+          "support_direction": "support",
+          "score": 0.6,
+          "validation_date": "2026-01-04",
+          "prediction_summary": "Widgetly announced a synthetic milestone on 2026-01-03. This fixture prediction exists to exercise the pipeline shape: it claims the vendor lands milestone 0 within two quarters, citing the fixture announcement. No real product, vendor, or person is referenced.",
+          "prediction_short_label": "Widgetly ships synthetic milestone 20260103-0 by Q3 2026",
+          "prediction_date": "2026-01-03"
+        },
+        {
+          "prediction_id": "prediction.a56031469a9a7ed3",
+          "scope_id": "business",
+          "support_direction": "support",
+          "score": 0.6,
+          "validation_date": "2026-01-04",
+          "prediction_summary": "Acme Metrics announced a synthetic milestone on 2026-01-04. This fixture prediction exists to exercise the pipeline shape: it claims the vendor lands milestone 1 within two quarters, citing the fixture announcement. No real product, vendor, or person is referenced.",
+          "prediction_short_label": "Acme Metrics ships synthetic milestone 20260104-1 by Q3 2026",
+          "prediction_date": "2026-01-04"
+        }
+      ],
+      "evidence_id": "evidence.ab28c88510d47e29",
+      "title": "Example 1 (2026-01-04)",
+      "url": "https://example.com/20260104/1",
+      "source_type": "news",
+      "reported_at": "2026-01-04",
+      "total_score": 1.8
+    },
+    {
+      "linked_predictions": [
+        {
+          "prediction_id": "prediction.394e027e97187004",
+          "scope_id": "business",
+          "support_direction": "support",
+          "score": 0.5586,
+          "validation_date": "2026-01-03",
+          "prediction_summary": "Widgetly announced a synthetic milestone on 2026-01-03. This fixture prediction exists to exercise the pipeline shape: it claims the vendor lands milestone 0 within two quarters, citing the fixture announcement. No real product, vendor, or person is referenced.",
+          "prediction_short_label": "Widgetly ships synthetic milestone 20260103-0 by Q3 2026",
+          "prediction_date": "2026-01-03"
+        },
+        {
+          "prediction_id": "prediction.ea9dc188119c4848",
+          "scope_id": "business",
+          "support_direction": "support",
+          "score": 0.3724,
+          "validation_date": "2026-01-03",
+          "prediction_summary": "Widgetly announced a synthetic milestone on 2026-01-02. This fixture prediction exists to exercise the pipeline shape: it claims the vendor lands milestone 0 within two quarters, citing the fixture announcement. No real product, vendor, or person is referenced.",
+          "prediction_short_label": "Widgetly ships synthetic milestone 20260102-0 by Q3 2026",
+          "prediction_date": "2026-01-02"
+        },
+        {
+          "prediction_id": "prediction.55acc78b25e9754a",
+          "scope_id": "business",
+          "support_direction": "support",
+          "score": 0.3724,
+          "validation_date": "2026-01-03",
+          "prediction_summary": "Exampletron announced a synthetic milestone on 2026-01-03. This fixture prediction exists to exercise the pipeline shape: it claims the vendor lands milestone 2 within two quarters, citing the fixture announcement. No real product, vendor, or person is referenced.",
+          "prediction_short_label": "Exampletron ships synthetic milestone 20260103-2 by Q3 2026",
+          "prediction_date": "2026-01-03"
+        }
+      ],
+      "evidence_id": "evidence.af2606d520cb85e6",
+      "title": "Example 0 (2026-01-03)",
+      "url": "https://example.com/20260103/0",
+      "source_type": "news",
+      "reported_at": "2026-01-03",
+      "total_score": 1.3034
+    },
+    {
+      "linked_predictions": [
+        {
+          "prediction_id": "prediction.ea9dc188119c4848",
+          "scope_id": "business",
+          "support_direction": "support",
+          "score": 0.5201,
+          "validation_date": "2026-01-02",
+          "prediction_summary": "Widgetly announced a synthetic milestone on 2026-01-02. This fixture prediction exists to exercise the pipeline shape: it claims the vendor lands milestone 0 within two quarters, citing the fixture announcement. No real product, vendor, or person is referenced.",
+          "prediction_short_label": "Widgetly ships synthetic milestone 20260102-0 by Q3 2026",
+          "prediction_date": "2026-01-02"
+        },
+        {
+          "prediction_id": "prediction.fffecc9edf856be3",
+          "scope_id": "business",
+          "support_direction": "support",
+          "score": 0.1734,
+          "validation_date": "2026-01-02",
+          "prediction_summary": "Exampletron announced a synthetic milestone on 2026-01-02. This fixture prediction exists to exercise the pipeline shape: it claims the vendor lands milestone 2 within two quarters, citing the fixture announcement. No real product, vendor, or person is referenced.",
+          "prediction_short_label": "Exampletron ships synthetic milestone 20260102-2 by Q3 2026",
+          "prediction_date": "2026-01-02"
+        }
+      ],
+      "evidence_id": "evidence.b97a67ea313db741",
+      "title": "Example 0 (2026-01-02)",
+      "url": "https://example.com/20260102/0",
+      "source_type": "news",
+      "reported_at": "2026-01-02",
+      "total_score": 0.6935
+    },
+    {
+      "linked_predictions": [
+        {
+          "prediction_id": "prediction.653d833667c2e642",
+          "scope_id": "business",
+          "support_direction": "support",
+          "score": 0.5201,
+          "validation_date": "2026-01-02",
+          "prediction_summary": "Acme Metrics announced a synthetic milestone on 2026-01-02. This fixture prediction exists to exercise the pipeline shape: it claims the vendor lands milestone 1 within two quarters, citing the fixture announcement. No real product, vendor, or person is referenced.",
+          "prediction_short_label": "Acme Metrics ships synthetic milestone 20260102-1 by Q3 2026",
+          "prediction_date": "2026-01-02"
+        }
+      ],
+      "evidence_id": "evidence.9a2977faa98767b9",
+      "title": "Example 1 (2026-01-02)",
+      "url": "https://example.com/20260102/1",
+      "source_type": "news",
+      "reported_at": "2026-01-02",
+      "total_score": 0.5201
+    },
+    {
+      "linked_predictions": [
+        {
+          "prediction_id": "prediction.ea9dc188119c4848",
+          "scope_id": "business",
+          "support_direction": "support",
+          "score": 0.1862,
+          "validation_date": "2026-01-03",
+          "prediction_summary": "Widgetly announced a synthetic milestone on 2026-01-02. This fixture prediction exists to exercise the pipeline shape: it claims the vendor lands milestone 0 within two quarters, citing the fixture announcement. No real product, vendor, or person is referenced.",
+          "prediction_short_label": "Widgetly ships synthetic milestone 20260102-0 by Q3 2026",
+          "prediction_date": "2026-01-02"
+        },
+        {
+          "prediction_id": "prediction.bcfbfe1298ff4ec1",
+          "scope_id": "business",
+          "support_direction": "support",
+          "score": 0.1862,
+          "validation_date": "2026-01-03",
+          "prediction_summary": "Acme Metrics announced a synthetic milestone on 2026-01-03. This fixture prediction exists to exercise the pipeline shape: it claims the vendor lands milestone 1 within two quarters, citing the fixture announcement. No real product, vendor, or person is referenced.",
+          "prediction_short_label": "Acme Metrics ships synthetic milestone 20260103-1 by Q3 2026",
+          "prediction_date": "2026-01-03"
+        }
+      ],
+      "evidence_id": "evidence.b91fdbac666442b6",
+      "title": "Example 1 (2026-01-03)",
+      "url": "https://example.com/20260103/1",
+      "source_type": "news",
+      "reported_at": "2026-01-03",
+      "total_score": 0.3724
+    }
+  ]
+}

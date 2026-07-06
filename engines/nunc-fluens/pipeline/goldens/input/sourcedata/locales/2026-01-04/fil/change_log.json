@@ -1,0 +1,11 @@
+{
+  "date": "2026-01-04",
+  "vs_date": "2026-01-03",
+  "items": [
+    {
+      "kind": "updated",
+      "headline": "Fixture update 20260104-0",
+      "diff_narrative": "[fil] Compared to 2026-01-03, the fixture advanced one synthetic step."
+    }
+  ]
+}

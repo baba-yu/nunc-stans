@@ -1,0 +1,62 @@
+{
+  "date": "2026-01-02",
+  "technical": [
+    {
+      "lead": "Fixture lead 20260102-0",
+      "body": "[es] Technical fixture body 0 for 2026-01-02, citation-backed.",
+      "citations": [
+        {
+          "label": "Example 0 (2026-01-02)",
+          "url": "https://example.com/20260102/0"
+        }
+      ]
+    },
+    {
+      "lead": "Fixture lead 20260102-1",
+      "body": "[es] Technical fixture body 1 for 2026-01-02, citation-backed.",
+      "citations": [
+        {
+          "label": "Example 1 (2026-01-02)",
+          "url": "https://example.com/20260102/1"
+        }
+      ]
+    },
+    {
+      "lead": "Fixture lead 20260102-2",
+      "body": "[es] Technical fixture body 2 for 2026-01-02, citation-backed.",
+      "citations": [
+        {
+          "label": "Example 2 (2026-01-02)",
+          "url": "https://example.com/20260102/2"
+        }
+      ]
+    },
+    {
+      "lead": "Fixture lead 20260102-3",
+      "body": "[es] Technical fixture body 3 for 2026-01-02, citation-backed.",
+      "citations": [
+        {
+          "label": "Example 3 (2026-01-02)",
+          "url": "https://example.com/20260102/3"
+        }
+      ]
+    },
+    {
+      "lead": "Fixture lead 20260102-4",
+      "body": "[es] Technical fixture body 4 for 2026-01-02, citation-backed.",
+      "citations": [
+        {
+          "label": "Example 4 (2026-01-02)",
+          "url": "https://example.com/20260102/4"
+        }
+      ]
+    }
+  ],
+  "plain": [
+    "[es] Plain fixture headline 0 for 2026-01-02",
+    "[es] Plain fixture headline 1 for 2026-01-02",
+    "[es] Plain fixture headline 2 for 2026-01-02",
+    "[es] Plain fixture headline 3 for 2026-01-02",
+    "[es] Plain fixture headline 4 for 2026-01-02"
+  ]
+}

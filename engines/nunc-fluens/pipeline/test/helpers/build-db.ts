@@ -12,21 +12,21 @@ import { runScore } from '../../src/ingest/score.ts';
 export const GOLDENS = join(import.meta.dirname, '..', '..', 'goldens');
 export const INPUT = join(GOLDENS, 'input');
 export const MANIFEST = JSON.parse(readFileSync(join(GOLDENS, 'fixture-manifest.json'), 'utf8'));
-export const TODAY = new Date().toISOString().slice(0, 10);
+/** The synthetic corpus pins its run day (fully deterministic dumps);
+ * the pre-T12 real corpus keyed normalization on the capture day. */
+export const TODAY: string = MANIFEST.todayIso ?? new Date().toISOString().slice(0, 10);
 
 export function normalizeVolatile(text: string): string {
-  return text
+  const base = text
     .replace(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z?/g, '1970-01-01T00:00:00Z')
-    .replace(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/g, '1970-01-01 00:00:00')
-    .replaceAll(TODAY, '<CAPTURE_DAY>');
+    .replace(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/g, '1970-01-01 00:00:00');
+  return MANIFEST.synthetic ? base : base.replaceAll(TODAY, '<CAPTURE_DAY>');
 }
 
-/** Goldens captured ON a fixture day have that day's date strings
- * clobbered by the <CAPTURE_DAY> normalization token — comparisons are
- * then only meaningful on that same day. capture.ts now refuses such
- * runs; this guard keeps the suite honest until the next recapture.
- * Returns null when valid, else a skip reason. */
+/** Pre-T12 guard against goldens captured ON a fixture day. The
+ * synthetic corpus has no capture day at all — never skips. */
 export function goldenCaptureCollision(): string | null {
+  if (MANIFEST.synthetic) return null;
   const log = JSON.parse(
     readFileSync(join(GOLDENS, 'expected', 'capture-log.json'), 'utf8'));
   const captured: string = log.captureDay;

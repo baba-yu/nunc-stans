@@ -1,0 +1,42 @@
+{
+  "date": "2026-01-02",
+  "sections": [
+    {
+      "category": "Synthetic fixtures",
+      "bullets": [
+        {
+          "body": "[es] Widgetly published fixture update 20260102-0, a schema-shaped stand-in for a news bullet.",
+          "citations": [
+            {
+              "label": "Example 0 (2026-01-02)",
+              "url": "https://example.com/20260102/0"
+            }
+          ]
+        },
+        {
+          "body": "[es] Acme Metrics published fixture update 20260102-1, a schema-shaped stand-in for a news bullet.",
+          "citations": [
+            {
+              "label": "Example 1 (2026-01-02)",
+              "url": "https://example.com/20260102/1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category": "Bay Area / SV AI meet-up events",
+      "bullets": [
+        {
+          "body": "[es] Fixture Meetup 20260102 is scheduled for 2026-03-01 at Example Hall (synthetic, always upcoming).",
+          "citations": [
+            {
+              "label": "Example 9 (2026-01-02)",
+              "url": "https://example.com/20260102/9"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
