@@ -9,13 +9,15 @@
 //    wrap it as-is at /world-graph/ — with d3 vendored locally, because the
 //    product allows no CDN dependency (§10-B: one origin, local).
 //
-// The source is the user-designated news checkout (`just news-link <dir>`,
-// config key news_repo, env override NS_NEWS_REPO) — a READ-ONLY path: per
-// the Phase C redirection the dev repo never writes the real checkout, but
-// displaying its current data through the world view is a guaranteed,
-// permanent feature (the owner's news board keeps living there). NEWS_WORLD
-// is retired. Unset or missing ⇒ empty headline list and the stage is
-// removed, so `just up` still works and the world view degrades honestly.
+// The source is a user-designated news-shaped data checkout
+// (`just news-link <dir>`, config key news_repo, env override
+// NS_NEWS_REPO) — a READ-ONLY path this repo never writes (Phase C
+// redirection). Which checkout that is is ordinary user configuration:
+// nunc-stans has no relationship to any particular news project; the
+// stable contract is the data *shape* (docs/ + docs/data/graph-*.json).
+// NEWS_WORLD is retired. Unset or missing ⇒ empty headline list and the
+// stage is removed, so `just up` still works and the view degrades
+// honestly.
 // This script lives in tools/ (not frontend/) because it legitimately names
 // engine/tool paths — FD-7.4 keeps frontend/ itself engine-free.
 import {
