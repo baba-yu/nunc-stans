@@ -34,7 +34,7 @@ import {
 import { runScore } from '../ingest/score.ts';
 import { runExport } from '../export/export.ts';
 import { buildEvidenceReverse } from '../export/evidence-reverse.ts';
-import { citationCheck } from '../gates/citation-check.ts';
+import { citationCheck, classifyHost, parsePolicy } from '../gates/citation-check.ts';
 import { checkTopicCoverage } from '../gates/check-topic-coverage.ts';
 import { postUpdateValidation } from '../gates/post-update-validation.ts';
 import { checkReadmeLinks } from './readme-checks.ts';
@@ -155,7 +155,36 @@ export function dailyUpdateSteps(): StepDef[] {
         return llmArtifactStep(ctx, {
           id: 'compose-news-section',
           artifact: sdFile(ctx, 'news_section.json'),
-          validate: parseNewsSectionFile,
+          // Spec: the parent runs citation-restriction-check on the
+          // composed URLs and re-prompts the writer on a RESTRICT hit —
+          // handle it HERE, not three steps later at citation-check-news
+          // (exit run (b)'s local model chose a denylisted host).
+          // Live only: replay must accept the committed artifact as-is.
+          validate: (raw) => {
+            const parsed = parseNewsSectionFile(raw);
+            if (!ctx.replay) {
+              const policy = parsePolicy(
+                join(ctx.newsRepo, REFERENCE_DIR, 'citation-restrictions.md'));
+              const restricted = new Set<string>();
+              for (const s of parsed.sections)
+                for (const b of s.bullets)
+                  for (const c of b.citations) {
+                    const host = (() => {
+                      try { return new URL(c.url).hostname.replace(/^www\./, ''); }
+                      catch { return ''; }
+                    })();
+                    const cls = host ? classifyHost(host, policy) : '';
+                    if (cls === 'denylist' || cls === 'parent_inherited'
+                      || cls === 'unconfirmed_denylist')
+                      restricted.add(host);
+                  }
+              if (restricted.size)
+                throw new Error(`citations use restricted hosts: `
+                  + `${[...restricted].join(', ')} — substitute an allowed `
+                  + 'source for the same factual claim (or drop the bullet)');
+            }
+            return parsed;
+          },
           webSearch: ctx.search === 'native',
           // Headless steps have no file access — every input is inlined
           // (the first live run proved the point: a prompt that only
