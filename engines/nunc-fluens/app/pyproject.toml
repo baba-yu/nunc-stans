@@ -10,6 +10,15 @@ dependencies = [
     # (renderer modules use a soft import), so the dependency only matters
     # for the new sourcedata writer flow.
     "jinja2>=3.0",
+    # Glossary seed loader (skills/extract_glossary_candidates.py::init_glossary_seed)
+    # parses the glossary seed YAML to populate term definitions and to support
+    # the `upsert` seed mode. Without PyYAML it silently degrades to a bootstrap
+    # that inserts blank definitions and cannot upsert (see _seed_without_yaml),
+    # so PyYAML must be a hard dependency. It was previously present only
+    # transitively via the optional `semantic` extra (-> fastembed ->
+    # huggingface-hub), which is why the glossary seed tests failed under a plain
+    # `uv run --with pytest` invocation.
+    "pyyaml>=6.0",
 ]
 
 [project.optional-dependencies]

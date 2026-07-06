@@ -67,13 +67,19 @@ app/
 
 ## Daily update
 
-From the repo root:
+From the repo root — on Windows:
 
 ```bat
 app\update_pages.bat
 ```
 
-The script runs `python -m src.cli update`, which:
+On WSL2 / Linux / macOS, run the POSIX equivalent instead:
+
+```bash
+app/update_pages.sh
+```
+
+Both scripts run `python -m src.cli update`, which:
 
 1. Parses every `report/news-*.md` and `future-prediction/future-prediction-*.md`.
 2. Upserts source files, predictions, validation rows, evidence items, prediction<->evidence links.

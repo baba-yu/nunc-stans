@@ -42,10 +42,12 @@ class RunResult:
 def parse_proposal(path: Path) -> list[Operation]:
     """Parse the `## Recommended actions` section into typed operations.
 
-    Each numbered recommendation may carry a fenced ```action / ```json block
-    with the authoritative machine-parseable directive (`kind`, ids, new
-    description, locale fields). The block, when present, overrides the prose
-    classification — the prose stays for human review, the JSON drives apply.
+    Items are delimited by either `N. ` numbered-list markers or `### Action N:`
+    H3 headers (both forms are accepted — see the item_start note below). Each
+    recommendation may carry a fenced ```action / ```json block with the
+    authoritative machine-parseable directive (`kind`, ids, new description,
+    locale fields). The block, when present, overrides the prose classification
+    — the prose stays for human review, the JSON drives apply.
     """
     text = path.read_text(encoding="utf-8")
     m = re.search(
@@ -57,7 +59,20 @@ def parse_proposal(path: Path) -> list[Operation]:
         raise ValueError(f"{path}: no `## Recommended actions` section found")
 
     body = m.group(1)
-    items = re.findall(r"^\s*\d+\.\s+(.+?)(?=^\s*\d+\.\s+|\Z)", body, re.MULTILINE | re.DOTALL)
+    # A recommendation item begins at EITHER a numbered-list marker (`N. `, the
+    # convention through 2026-05-24) OR an H3 header (`### Action N: …`, the
+    # format every weekly proposal has used since 2026-05-31). Matching only the
+    # numbered form made this return 0 items on every H3-style proposal, so
+    # `apply-schema-edit --mode auto` silently no-op'd for 6+ weeks. Splitting on
+    # either boundary parses both styles; the numbered branch is unchanged, so
+    # older proposals still parse identically. The authoritative directive is the
+    # fenced ```action block inside each item (see design/memory-policy.md §2.1).
+    item_start = r"(?:^\s*\d+\.\s+|^###\s+)"
+    items = re.findall(
+        rf"{item_start}(.+?)(?={item_start}|\Z)",
+        body,
+        re.MULTILINE | re.DOTALL,
+    )
     ops: list[Operation] = []
     for raw in items:
         flat = " ".join(line.strip() for line in raw.splitlines()).strip()
