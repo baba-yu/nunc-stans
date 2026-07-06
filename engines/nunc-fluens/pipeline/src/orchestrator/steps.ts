@@ -334,13 +334,16 @@ export function dailyUpdateSteps(): StepDef[] {
     {
       id: 'citation-check-news', kind: 'det',
       // DEVIATION: run on the rendered markdown (same link surface) —
-      // the JSON files carry citations as {label,url} objects.
+      // the JSON files carry citations as {label,url} objects. The
+      // unclassified-host ledger is a cumulative sighting counter, so
+      // replay must not re-increment it (S-4: the day was already
+      // counted when it ran live) — gates still run.
       run: (ctx) => {
         for (const L of LOCALES) {
           const r = citationCheck({
             draft: newsOutputPath(ctx.newsRepo, ctx.date, L),
             policyFile: join(ctx.newsRepo, REFERENCE_DIR, 'citation-restrictions.md'),
-            unclassifiedOut: L === 'en'
+            unclassifiedOut: L === 'en' && !ctx.replay
               ? join(ctx.newsRepo, REFERENCE_DIR, 'citation-policy-review.md') : null,
             todayIso: ctx.todayIso,
           });
@@ -527,7 +530,7 @@ export function futurePredictionSteps(): StepDef[] {
           const r = citationCheck({
             draft: fpOutputPath(ctx.newsRepo, ctx.date, L),
             policyFile: join(ctx.newsRepo, REFERENCE_DIR, 'citation-restrictions.md'),
-            unclassifiedOut: L === 'en'
+            unclassifiedOut: L === 'en' && !ctx.replay
               ? join(ctx.newsRepo, REFERENCE_DIR, 'citation-policy-review.md') : null,
             todayIso: ctx.todayIso,
           });
@@ -691,6 +694,12 @@ export function dailyBriefingSteps(): StepDef[] {
         } catch (e) {
           const msg = e instanceof Error ? e.message : String(e);
           if (!msg.includes('nothing to commit')) throw e;
+        }
+        // Instances without a remote (sandboxes have origin removed by
+        // design) publish locally only — the commit IS the publish.
+        if (git('remote').trim() === '') {
+          ctx.log('  no git remote — committed locally, push skipped');
+          return;
         }
         git('push');
       },

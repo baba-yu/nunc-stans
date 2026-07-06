@@ -1,18 +1,21 @@
 #!/usr/bin/env node
 // nunc-fluens — the news pipeline CLI (Phase C).
-//   link <dir>     designate the news data+publish checkout (config news_repo)
-//   status         show resolved config and world-cache state
-//   migrate-db     copy analytics.sqlite into <data store>/world/ (verified)
+//   link <dir>      designate the read-only news-shaped checkout (news_repo)
+//   status          show resolved config and world-cache state
+//   migrate-db      copy analytics.sqlite into <data store>/world/ (verified)
 //   validate <date> schema-validate a day's sourcedata (incl. locales)
-//   run            the daily DAG — lands with T5 (orchestrator)
-import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
+//   sandbox <dir>   create a disposable run instance (clone + seeded store)
+//   run             the daily DAG — always against a sandbox, never the
+//                   view checkout (Phase C redirection)
+import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, realpathSync, statSync } from 'node:fs'
 import { join } from 'node:path'
+import { execFileSync } from 'node:child_process'
 import {
-  configFile, linkNewsRepo, requireConfig, requireNewsRepo,
+  configFile, linkNewsRepo, newsDbFile, requireConfig, requireNewsRepo,
   resolveDataDir, resolveNewsRepo, runLogFile, sourcedataDir,
   worldDbFile, worldDir,
 } from './config.ts'
-import { migrateDb } from './migrate.ts'
+import { integrityCheck, migrateDb } from './migrate.ts'
 import { CANONICAL_FILES } from './schemas/sourcedata.ts'
 import { REPORT_DIR } from './world-paths.ts'
 
@@ -85,22 +88,109 @@ function cmdValidate(date: string | undefined): number {
 }
 
 const [cmd, arg] = process.argv.slice(2)
+
+/** Create a disposable run instance: a local clone of the (read-only)
+ * view checkout plus its own data store seeded with the checkout's
+ * analytics.sqlite. Runs only ever target such an instance — the
+ * Phase C redirection forbids writing the real checkout. */
+function cmdSandbox(dir: string | undefined): number {
+  if (!dir) { console.error('usage: nunc-fluens sandbox <dir>'); return 2 }
+  const src = requireNewsRepo()
+  const news = join(dir, 'news')
+  const store = join(dir, 'store')
+  if (existsSync(news)) {
+    console.error(`sandbox: ${news} already exists — pick a fresh dir (sandboxes are disposable)`)
+    return 1
+  }
+  mkdirSync(dir, { recursive: true })
+  console.log(`cloning ${src} -> ${news} (local clone; objects are shared read-only)`)
+  execFileSync('git', ['clone', '--local', src, news], { stdio: 'inherit' })
+  // A sandbox must not be able to push back into the source checkout.
+  execFileSync('git', ['-C', news, 'remote', 'remove', 'origin'])
+  // Seed the sandbox DB. The checkout's own DB is gitignored upstream
+  // (a rebuildable cache), so the clone won't carry one — fall back to
+  // the source checkout's working tree, then to the main store's copy.
+  const mainStore = resolveDataDir().dir
+  const seedCandidates = [
+    newsDbFile(news),                                    // clone carried one
+    newsDbFile(src),                                     // source working tree
+    mainStore ? worldDbFile(mainStore) : null,           // migrated main copy
+  ].filter((p): p is string => p !== null && existsSync(p))
+  if (!seedCandidates.length) {
+    console.error('sandbox: no analytics.sqlite to seed from (checkout carries none, '
+      + 'main store has none) — run `just news-migrate-db` first or provide a DB')
+    return 1
+  }
+  const seed = seedCandidates[0]
+  integrityCheck(seed)
+  const target = worldDbFile(store)
+  mkdirSync(join(store, 'world'), { recursive: true })
+  copyFileSync(seed, target)
+  integrityCheck(target)
+  console.log(`seeded ${target} from ${seed} (${statSync(target).size} bytes, integrity ok)`)
+  console.log('')
+  console.log('sandbox ready. Run with either:')
+  console.log(`  just news-daily "${dir}"`)
+  console.log(`  NS_SANDBOX="${dir}" nunc-fluens run [--date D] [--replay] …`)
+  return 0
+}
+
+interface SandboxPaths { newsRepo: string; dataDir: string }
+
+/** Resolve and validate the run target. Never the view checkout. */
+function requireSandbox(dirArg: string | null): SandboxPaths {
+  const dir = dirArg ?? process.env.NS_SANDBOX ?? null
+  if (!dir)
+    throw new Error(
+      'run refuses to start without a sandbox: pass --sandbox <dir> (or set NS_SANDBOX).\n'
+      + 'The pipeline never runs against the view checkout (Phase C redirection) — '
+      + 'create an instance with: just news-sandbox <dir>')
+  const newsRepo = join(dir, 'news')
+  const dataDir = join(dir, 'store')
+  if (!existsSync(newsRepo) || !existsSync(worldDbFile(dataDir)))
+    throw new Error(
+      `sandbox at ${dir} is missing news/ or store/world/analytics.sqlite — `
+      + 'create it with: just news-sandbox <dir>')
+  const view = resolveNewsRepo()
+  if (view && existsSync(view)
+    && realpathSync(view) === realpathSync(newsRepo))
+    throw new Error(
+      `refusing to run: the sandbox news dir resolves to the view checkout (${view}). `
+      + 'The view source is read-only; runs target disposable copies only.')
+  return { newsRepo, dataDir }
+}
+
 async function cmdRun(argv: string[]): Promise<number> {
-  const opts = { date: new Date().toISOString().slice(0, 10), replay: false, dryRun: false, only: null as string | null }
+  const opts = {
+    date: new Date().toISOString().slice(0, 10), replay: false, dryRun: false,
+    only: null as string | null, sandbox: null as string | null,
+  }
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i]
     if (a === '--date') opts.date = argv[++i]
     else if (a === '--replay') opts.replay = true
     else if (a === '--dry-run') opts.dryRun = true
     else if (a === '--only') opts.only = argv[++i]
+    else if (a === '--sandbox') opts.sandbox = argv[++i]
     else { console.error(`run: unknown flag ${a}`); return 2 }
   }
-  const cfg = requireConfig()
-  // Runtime/search pair from the settings file (S-3; the gate API and
-  // Formans drawer read/write the same file), CLI-overridable later.
-  const newsConfigFile = join(worldDir(cfg.dataDir), 'news-config.json')
+  let box: SandboxPaths
+  try {
+    box = requireSandbox(opts.sandbox)
+  } catch (e) {
+    console.error(`run: ${e instanceof Error ? e.message : e}`)
+    return 1
+  }
+  // Runtime/search pair from the settings file in the MAIN data store
+  // (S-3; the gate API and Formans drawer read/write that file) — the
+  // pair is user preference, not sandbox state. Defaults apply when no
+  // main store is configured.
+  const mainStore = resolveDataDir().dir
   let newsCfg: Record<string, unknown> = {}
-  if (existsSync(newsConfigFile)) newsCfg = JSON.parse(readFileSync(newsConfigFile, 'utf8'))
+  if (mainStore) {
+    const newsConfigFile = join(worldDir(mainStore), 'news-config.json')
+    if (existsSync(newsConfigFile)) newsCfg = JSON.parse(readFileSync(newsConfigFile, 'utf8'))
+  }
   const runtime = (newsCfg.runtime as string) ?? 'claude-code'
   const search = (newsCfg.search as string) === 'external'
     ? (newsCfg.searchEngine as string) ?? 'brave'
@@ -113,11 +203,11 @@ async function cmdRun(argv: string[]): Promise<number> {
   const { createAi } = await import('../../../../frontend/packages/ai/src/index.ts') as
     typeof import('nunc-ai')
   const { runDay } = await import('./orchestrator/dag.ts')
-  const ai = opts.replay ? null : createAi({ runLogFile: runLogFile(cfg.dataDir) })
+  const ai = opts.replay ? null : createAi({ runLogFile: runLogFile(box.dataDir) })
   const r = await runDay({
     date: opts.date,
-    dataDir: cfg.dataDir,
-    newsRepo: cfg.newsRepo,
+    dataDir: box.dataDir,
+    newsRepo: box.newsRepo,
     ai, runtime, search, synthModel,
     replay: opts.replay,
     dryRun: opts.dryRun,
@@ -134,9 +224,10 @@ switch (cmd) {
   case 'status': code = cmdStatus(); break
   case 'migrate-db': code = cmdMigrateDb(); break
   case 'validate': code = cmdValidate(arg); break
+  case 'sandbox': code = cmdSandbox(arg); break
   case 'run': code = await cmdRun(argvRest); break
   default:
-    console.error('usage: nunc-fluens link <dir> | status | migrate-db | validate <date> | run [--date D] [--replay] [--dry-run] [--only step]')
+    console.error('usage: nunc-fluens link <dir> | status | migrate-db | validate <date> | sandbox <dir> | run --sandbox <dir> [--date D] [--replay] [--dry-run] [--only step]')
     code = 2
 }
 process.exit(code)
