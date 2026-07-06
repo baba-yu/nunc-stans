@@ -7,9 +7,13 @@ import { appendFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } fr
 import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import {
-  buildStepPrompt, llmArtifactStep, llmJson, loadWriterRules, StepFailure,
+  buildStepPrompt, llmArtifactStep, llmJson, loadScheduledSpec,
+  loadWriterRules, StepFailure,
 } from './core.ts';
 import type { RunCtx, StepDef } from './core.ts';
+import {
+  addDays, latestDormantSnapshot, originPredictions, parseDormantSnapshot,
+} from '../weekly/dormant.ts';
 import {
   parseBridgesFile, parseChangeLogFile, parseHeadlinesFile, parseNeedsFile,
   parseNewsSectionFile, parsePredictionsFile,
@@ -119,16 +123,29 @@ export function dailyUpdateSteps(): StepDef[] {
         artifact: sdFile(ctx, 'news_section.json'),
         validate: parseNewsSectionFile,
         webSearch: true,
-        prompt: () => buildStepPrompt({
-          skill: 'compose-news-section', date: ctx.date,
-          writerRules: loadWriterRules('1_daily_update'),
-          extra: [
-            'Reference topic list: reference/news-topics.md in the news checkout '
-            + '(search the trusted sources for the last 3 days; always include Unsloth).',
-            `Existing citations to skip: see references.txt in the checkout.`,
-          ].join('\n'),
-          outputNote: 'the news_section.json document ({date, sections[]}).',
-        }),
+        // Headless steps have no file access — every input is inlined
+        // (the first live run proved the point: a prompt that only NAMES
+        // its input files gets an honest empty answer back).
+        prompt: () => {
+          const topics = readFileSync(
+            join(ctx.newsRepo, REFERENCE_DIR, 'news-topics.md'), 'utf8');
+          const refPath = join(ctx.newsRepo, REFERENCES_TXT);
+          const recentRefs = existsSync(refPath)
+            ? readFileSync(refPath, 'utf8').trim().split('\n').slice(-300).join('\n')
+            : '';
+          return buildStepPrompt({
+            skill: 'compose-news-section', date: ctx.date,
+            writerRules: loadWriterRules('1_daily_update'),
+            extra: [
+              'Reference topic list (reference/news-topics.md — search the trusted '
+              + 'sources for the last 3 days; always include Unsloth):',
+              topics,
+              'Recently cited URLs to SKIP (tail of references.txt):',
+              recentRefs,
+            ].join('\n\n'),
+            outputNote: 'the news_section.json document ({date, sections[]}).',
+          });
+        },
       }),
     },
     {
@@ -442,15 +459,70 @@ export function futurePredictionSteps(): StepDef[] {
       run: (ctx) => llmArtifactStep(ctx, {
         id: 'compose-validation-rows',
         artifact: sdFile(ctx, 'bridges.json'),
-        validate: parseBridgesFile,
-        prompt: () => buildStepPrompt({
-          skill: 'compose-validation-rows', date: ctx.date,
-          writerRules: loadWriterRules('2_future_prediction'),
-          extra: 'Inputs: report/en/news-*.md for the last 7 days and the '
-            + 'latest memory/dormant snapshot in the news checkout. Fill the '
-            + 'bridge narratives too (compose-bridge contract).',
-          outputNote: 'the bridges.json document ({date, validation_rows[]}) with bridges filled.',
-        }),
+        validate: (raw) => {
+          const parsed = parseBridgesFile(raw);
+          // §1.3 rule 1: every last-7-days prediction gets a row — an
+          // empty table on a day with recent predictions is a refusal,
+          // not a result (the first live run shipped one and the puv
+          // gate caught it three steps later).
+          if (!parsed.validation_rows.length)
+            throw new Error('validation_rows is empty — §1.3 rule 1 requires a row '
+              + 'for every prediction from the last 7 days');
+          return parsed;
+        },
+        // All inputs inlined (headless steps cannot read files): the
+        // last-7-days predictions, the dormant due/revival material
+        // (layer 1 computed here, deterministically), and today's news.
+        prompt: () => {
+          const preds: Array<Record<string, string>> = [];
+          for (let off = -6; off <= 0; off++) {
+            const d = addDays(ctx.date, off);
+            originPredictions(ctx.sourcedataRoot, d).forEach((p, i) => preds.push({
+              prediction_id: p.hash,
+              short_id: `${d.replaceAll('-', '')}-${i + 1}`,
+              origin_date: d,
+              title: p.title,
+              body: p.body.slice(0, 600),
+            }));
+          }
+          const snap = latestDormantSnapshot(ctx.newsRepo, ctx.date);
+          const dormantRows = snap
+            ? parseDormantSnapshot(readFileSync(snap.path, 'utf8')) : [];
+          const due = dormantRows
+            .filter(r => r.nextPing <= ctx.date)
+            .map(r => ({ id: r.id, short: r.short, first_seen: r.firstSeen }));
+          const newsText = readFileSync(sdFile(ctx, 'news_section.json'), 'utf8');
+          const newsLower = newsText.toLowerCase();
+          const layer1 = dormantRows
+            .map(r => ({
+              id: r.id, short: r.short,
+              matched_signals: r.signals.split(',').map(s => s.trim())
+                .filter(s => s && newsLower.includes(s.toLowerCase())),
+            }))
+            .filter(h => h.matched_signals.length);
+          return buildStepPrompt({
+            skill: 'compose-validation-rows', date: ctx.date,
+            writerRules: loadWriterRules('2_future_prediction'),
+            extra: [
+              "Today's news_section.json (evaluate relevance against THIS):",
+              newsText,
+              'Predictions from the last 7 days — §1.3 rule 1: EVERY one of '
+              + 'these gets a validation row (honest relevance 1-5):',
+              JSON.stringify(preds, null, 1),
+              'Dormant predictions due for a forced re-check (§1.3 rule 2 — '
+              + 'include each as a row):',
+              JSON.stringify(due, null, 1),
+              'Layer-1 dormant signal hits in today\'s news (§1.5 — candidates '
+              + 'for [REVIVED] rows; apply layer 2 yourself over the dormant '
+              + 'shorts below and union the layers):',
+              JSON.stringify(layer1, null, 1),
+              'All dormant shorts (for layer-2 semantic scan):',
+              JSON.stringify(dormantRows.map(r => ({ id: r.id, short: r.short }))),
+              'Fill the bridge narratives too (compose-bridge contract).',
+            ].join('\n\n'),
+            outputNote: 'the bridges.json document ({date, validation_rows[]}) with bridges filled.',
+          });
+        },
       }),
     },
     {
@@ -605,20 +677,30 @@ export function dailyBriefingSteps(): StepDef[] {
           if (ctx.ai === null) throw new StepFailure('readme-window', 'no AI runtime');
           const locSeg = L === '' ? 'en' : L.slice(1);
           const prev = existsSync(path) ? readFileSync(path, 'utf8') : '';
+          // Inline today's rendered files — headless steps cannot read
+          // them, and a README block written blind would be fabrication.
+          const todayNews = readFileSync(
+            newsOutputPath(ctx.newsRepo, ctx.date, locSeg), 'utf8');
+          const todayFp = readFileSync(
+            fpOutputPath(ctx.newsRepo, ctx.date, locSeg), 'utf8');
           const res = await ctx.ai.chat(ctx.runtime, [{
             role: 'user',
-            content: buildStepPrompt({
-              skill: 'bindfs-safe-commit-push', date: ctx.date,
-              extra: [
-                `Rewrite README${L}.md as the 3-day window ending ${ctx.date} `
-                + `for locale '${locSeg}' per design/scheduled/3_daily_briefing.md Step 2.`,
-                `Current file:\n${prev}`,
-                `Today's news file: report/${locSeg}/news-${ctx.date.replaceAll('-', '')}.md`,
-                `Today's FP file: future-prediction/${locSeg}/future-prediction-${ctx.date.replaceAll('-', '')}.md`,
-                'Reply with the FULL new README content, nothing else.',
-              ].join('\n\n'),
-              outputNote: 'the complete README markdown (not JSON).',
-            }),
+            content: [
+              'You are the readme-window step of the nunc-fluens daily pipeline, '
+              + 'run headlessly.',
+              `Today's date: ${ctx.date}.`,
+              '',
+              '--- SPEC (design/scheduled/3_daily_briefing.md) ---',
+              loadScheduledSpec('3_daily_briefing'),
+              '--- END SPEC ---',
+              '',
+              `Rewrite README${L}.md as the 3-day window ending ${ctx.date} `
+              + `for locale '${locSeg}' per Step 2 of the spec.`,
+              `Current file:\n${prev}`,
+              `Today's news file (report/${locSeg}/news-${ctx.date.replaceAll('-', '')}.md):\n${todayNews}`,
+              `Today's FP file (future-prediction/${locSeg}/future-prediction-${ctx.date.replaceAll('-', '')}.md):\n${todayFp}`,
+              'Reply with the FULL new README content, nothing else — no fences, no prose around it.',
+            ].join('\n\n'),
           }], { caller: `readme-window:${locSeg}` });
           if (!ctx.dryRun) writeFileSync(path, res.text.endsWith('\n') ? res.text : res.text + '\n');
         }
