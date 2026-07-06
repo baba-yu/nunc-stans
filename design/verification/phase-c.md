@@ -58,10 +58,45 @@ the first execution double-counted the day's sightings; gates still run.
 Requires a live sandbox run with the settings pair switched
 (ollama qwen3.6:27b + brave) and back; evidence lands here.
 
-## Exit runs (a) timer / (b) local-model — pending
+## Exit run (a) — timer-launched live day — EXECUTED 2026-07-06
 
-The systemd user units + installer are in `pipeline/systemd/`
-(`just news-schedule <sandbox> [OnCalendar]`); run (a) = timer-launched
-sandbox day; run (b) = the S-3 pair. Both publish nothing (redirection).
+`just news-schedule ~/nf-sandbox` installed + enabled the user units
+(OnCalendar `*-*-* 06:30:00`, Persistent=true); the run was launched
+with `systemctl --user start nunc-fluens-daily.service` — the same unit
+the timer fires — and completed the full Mon–Sat chain for 2026-07-06
+**with no conversational step**: headless claude-code under systemd
+(risk 3 closed: auth + spawn + WebSearch all work from a user unit).
+
+    run 2026-07-06: OK — 32 steps ok (run.json mode=live,
+    runtime=claude-code, search=native)
+    sandbox git log: d125e91 "daily-master 2026-07-06: news +
+    future-prediction + 3-day README + dashboard" (local commit;
+    no remote by design — publish push skipped, logged)
+    DB: 31 validation rows for 2026-07-06, 0 empty bridges
+    dashboard manifest latest_report_date: 2026-07-06
+    ai-runs.jsonl: 55 headless calls across the attempts
+
+The run needed three attempts, each catching a live-path bug that the
+replay/golden validation could not see (all fixed in the pipeline, each
+now failing at the step instead of a later gate):
+
+1. **Headless steps have no file access** — three prompts NAMED their
+   input files instead of carrying content; compose-validation-rows
+   honestly returned an empty table. Inputs are now inlined (last-7-days
+   predictions, dormant due/revival material with the layer-1 signal
+   scan computed deterministically, news-topics list + references tail,
+   today's rendered files for the READMEs).
+2. **Empty bridge narratives on no-signal rows** — schema-valid,
+   rejected row-by-row by the puv gate. The writer contract (a
+   no-signal day still gets a bridge stating what today's news did not
+   touch) is now enforced by the step validator.
+3. **`git add` of an ignored path aborts the publish commit** —
+   upstream keeps references.txt untracked; the publish step now adds
+   only existing, non-ignored paths.
+
+## Exit run (b) — local model + external search — pending
+
+The S-3 pair (ollama qwen3.6:27b + brave) in the same sandbox;
+prerequisites: ollama up, BRAVE_API_KEY set.
 
 ## S-10 re-run — pending (T11)

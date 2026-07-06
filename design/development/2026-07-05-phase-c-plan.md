@@ -583,8 +583,13 @@ discipline, upstream untouched):**
       remote-less instances (commit-only). The settings pair still
       comes from the main store's news-config.json (user preference,
       not sandbox state).
-- [ ] Timer-launched run completes end-to-end **against the sandbox**
-      (this is exit run (a)).
+- [x] Timer-launched run completes end-to-end against the sandbox DONE
+      2026-07-06 (= exit run (a)): `run 2026-07-06: OK`, headless
+      claude-code under systemd verified (risk 3 closed), local publish
+      commit d125e91 in the sandbox, dashboard advanced to 07-06.
+      Three live-path bugs found and fixed by the run (headless input
+      inlining, empty-bridge enforcement, ignored-path git add) —
+      details in design/verification/phase-c.md.
 
 ### Task 10: Stories S-3 / S-4 — write and execute
 - [x] Write `design/stories/S-3.md`, `S-4.md` (concrete steps, allowed
@@ -600,7 +605,8 @@ discipline, upstream untouched):**
       `design/verification/phase-c.md`. This doubles as exit run (c).
 
 ### Task 11: Exit runs + portability (all sandbox — redirection)
-- [ ] (a) timer-launched claude-code day in the sandbox (done in T9).
+- [x] (a) timer-launched claude-code day in the sandbox DONE 2026-07-06
+      (see T9; evidence in the verification doc).
 - [ ] (b) ollama qwen3.6:27b + external search — sandbox day; acceptance
       is structural validity (C4), nothing published.
 - [x] (c) replay of a committed day in a pristine sandbox copy DONE
