@@ -86,14 +86,19 @@ the divergence has its motivation on paper.)
 
 Consequences and rules going forward:
 
-- **Displaying the current `~/news` data through the world view is a
-  guaranteed, permanent feature** (owner requirement 2026-07-06: "現状の
-  news のデータが nunc-fluens でちゃんと表示できることは担保する").
-  Executed same day: `tools/build-world.ts` now resolves the checkout
-  via `news_repo`/`NS_NEWS_REPO` (shared resolver) and stages
-  `<checkout>/docs` + `docs/data` read-only; `NEWS_WORLD` is retired
-  (warned-and-ignored if set). Verified against the live checkout: 240
-  headlines + dashboard staged.
+- **nunc-stans has no relationship to the news *project*** (owner,
+  2026-07-06: "いまの news は nunc-stans とは全く関係なくなる"). What is
+  guaranteed is a *product capability*, not a link: the engine can load
+  and display a news-shaped data checkout — including the owner's
+  current corpus ("現状の news のデータがちゃんと表示できることは担保").
+  That the owner's `news_repo` happens to point at `~/news` today is
+  ordinary user configuration, not architecture; when nunc-fluens has
+  its own data, the contact surface with `~/news` is zero. The data
+  *shape* is what's held stable (schemas; synthetic fixtures after T12).
+  Executed same day: `tools/build-world.ts` resolves the checkout via
+  `news_repo`/`NS_NEWS_REPO` (shared resolver) and stages
+  `<checkout>/docs` + `docs/data` read-only; `NEWS_WORLD` retired.
+  Verified against the owner's corpus: 240 headlines + dashboard staged.
 - **The pipeline must never write the real `~/news` checkout.** Runs
   target a sandbox copy; the real checkout is a *read-only* source for
   the Formans world view and for creating sandboxes. (The 2026-07-06
@@ -557,10 +562,13 @@ discipline, upstream untouched):**
 - ~~In `~/news`: remove `app/` …~~ / ~~Owner: rename GitHub repo →
   `nunc-fluens` …~~ — **DROPPED per the 2026-07-06 redirection.**
   `~/news` stays intact and independently operated.
-- [ ] Rewrite INTEGRATION.md for the fork: the monorepo carries the
-      ported pipeline as a *product*; upstream `~/news` continues on its
-      own stack; the `app/` subtree here is a frozen oracle deleted at
-      T12; resync recipe retired (no further drift-sync after T12).
+- [ ] Rewrite INTEGRATION.md for the fork — or fold it into the engine
+      README as a short historical note: there is no integration
+      relationship left to document (owner: the news project and
+      nunc-stans become completely unrelated). Content: the pipeline's
+      lineage (ported from the news prototype), the `app/` subtree =
+      frozen oracle deleted at T12, resync retired, and "news-shaped
+      checkout" as a data-format concept rather than a named repo.
 
 ### Task 9: Scheduling as a product feature + sandbox instance
 - [ ] systemd user units + `just news-schedule`; cron fallback doc.

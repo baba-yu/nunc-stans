@@ -23,7 +23,7 @@ stans*, the standing now. manda and fourfive keep their names. The name
 | nuncstans / NuncStans | nunc-stans / Nunc Stans (hyphenation) |
 | engines/nuncstans, crate nuncstans-engine | engines/nunc-stans, crate nunc-stans-engine |
 | News (the stack), engines/news | Nunc Fluens, engines/nunc-fluens (commit area `nf`) |
-| ~/news (external repo) | **keeps its name** — the Phase C rename was superseded by the 2026-07-06 redirection (dev repo never operates production news; `~/news` runs on independently as the owner's news board, a read-only view source here). "nunc-fluens" names the engine only. |
+| ~/news (external repo) | **keeps its name and leaves the picture** — the Phase C rename was superseded by the 2026-07-06 redirection: the news project and nunc-stans are unrelated; `~/news` runs on independently as the owner's news board. The product only knows "a news-shaped data checkout" (`just news-link <dir>`, read-only) — that the owner points it at ~/news today is user config, not architecture. "nunc-fluens" names the engine only. |
 | NEWS_WORLD (env) | retired 2026-07-06 — `tools/build-world.ts` resolves the checkout via `news_repo` config / `NS_NEWS_REPO` |
 | nuncstans-agent | nunc-stans-agent (`agents/nunc-stans-agent`, Phase D) |
 | integrated UI ("shell") | Nunc Stans Formans — `frontend/nunc-stans-formans` (Phase B) |
