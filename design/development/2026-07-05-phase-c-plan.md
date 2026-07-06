@@ -51,6 +51,45 @@ CI; merge back to `dev` at phase close.
 | C7 | Python retirement timing | At T12, in-phase (per D4): after goldens are green and runs (a)(b)(c) pass, delete `engines/nunc-fluens/app/` (git history keeps it) and swap the CI news job pytest → vitest. The remnant repo drops its `app/` too. |
 | C8 | Taxonomy edits in the persistent-store arch (owner-approved 2026-07-06) | `apply-schema-edit` targets **DB rows directly** (`themes`/`categories`/`theme_candidates` in `analytics.sqlite`), not `schema.sql`. Rationale: the DB is now the persistent store and `schema.sql` is monorepo code — a user's weekly run must not mutate shared source. `schema.sql` remains the first-boot seed only. Manual approval mode stays the default; the pre-edit rollback target becomes a DB snapshot instead of a schema.sql copy. Recorded deviation from oracle behavior (architecturally forced; the replay path is unaffected — committed corpus already embodies applied edits, proven by the DB parity gate). |
 
+## REDIRECTION 2026-07-06 (owner) — the dev repo never operates production news
+
+Owner principle, stated while reviewing the cutover question: **nunc-stans
+is product development; `~/news` holds real data and must not be operated
+from here.** Production news stays on the existing Cowork + Python stack
+**indefinitely** (complete fork — the product and the news implementation
+diverge from now on; a future *released* nunc-fluens could be adopted on
+the production side someday, but that is a separate track, not this
+phase). This supersedes the operational-takeover parts of the plan:
+
+| Superseded | Was | Now |
+|---|---|---|
+| D3 / T8 | `~/news` split into a remnant renamed `nunc-fluens` | **Dropped.** `~/news` stays intact (keeps `app/`, keeps its name, keeps publishing). "nunc-fluens" names the engine only. |
+| C6 / T11 | all three exit runs publish to the real dashboard | **Reversed.** Exit runs execute against a **sandbox instance** (disposable copy of the news checkout); nothing is pushed or published. |
+| T9 | cutover: Cowork routine stops, timer takes over | **Dropped.** No cutover. The timer + units ship as a *product feature*, proven by a timer-launched sandbox run (exit run (a)). |
+| C7 (tail) | "the remnant repo drops its `app/` too" | **Dropped.** Only the monorepo's oracle copy is deleted at T12; upstream keeps its Python. |
+| Exit criteria 1/4/6 | publish/cutover/remnant wording | Rewritten below in place. |
+
+Consequences and rules going forward:
+
+- **The pipeline must never write the real `~/news` checkout.** Runs
+  target a sandbox copy; the real checkout is at most a *read-only*
+  source for the Formans world view (existing `build-world.ts` staging)
+  and for creating sandboxes. (The 2026-07-06 plumbing check wrote one
+  untracked `run.json` into the real sourcedata before this rule was
+  stated — removed, checkout clean.)
+- The subtree oracle (`engines/nunc-fluens/app/`) stays frozen at
+  upstream 17682e9 (+ the two recorded determinism fixes) until its T12
+  deletion; upstream evolves independently from here — no further
+  drift-sync obligation after T12.
+- The post-C layout renames (backlog above) now describe the **product's
+  own data layout**, free to evolve — there is no production migration
+  to coordinate, and `docs/`-as-Pages constraints belong to whoever
+  deploys an instance.
+- The dev data store's migrated `analytics.sqlite` and the real-content
+  goldens remain **dev-time validation data only**, replaced by synthetic
+  fixtures at T12 as already decided; the store copy should be treated
+  the same way (rebuild from synthetic after T12).
+
 Derived decisions:
 
 - **Data placement (§2.9 applied):** `analytics.sqlite` →
@@ -493,34 +532,41 @@ discipline, upstream untouched):**
       pytest 140/1skip; TS retention + proposal parsing re-aligned to
       the upstream semantics. Subtree now matches 17682e9 except the
       two recorded determinism fixes.
-- [ ] In `~/news`: remove `app/` + orchestration docs superseded by the
-      pipeline (README pointer to the monorepo); keep data dirs, docs/
-      Pages, reference/, references.txt.
-- [ ] Owner: rename GitHub repo → `nunc-fluens` (+ local dir
-      `~/nunc-fluens`); `just news-link` re-point; deliberate link-update
-      sweep (Pages URL changed, no redirect).
-- [ ] Rewrite INTEGRATION.md (monorepo executes; remnant is data+publish;
-      resync recipe retired).
+- ~~In `~/news`: remove `app/` …~~ / ~~Owner: rename GitHub repo →
+  `nunc-fluens` …~~ — **DROPPED per the 2026-07-06 redirection.**
+  `~/news` stays intact and independently operated.
+- [ ] Rewrite INTEGRATION.md for the fork: the monorepo carries the
+      ported pipeline as a *product*; upstream `~/news` continues on its
+      own stack; the `app/` subtree here is a frozen oracle deleted at
+      T12; resync recipe retired (no further drift-sync after T12).
 
-### Task 9: Scheduling + cutover
+### Task 9: Scheduling as a product feature + sandbox instance
 - [ ] systemd user units + `just news-schedule`; cron fallback doc.
-- [ ] Agree cutover date; stop the Cowork routine; timer-launched run
-      lands a real day end-to-end (this is exit run (a)).
+      Shipped and documented as product features — **no cutover, no
+      production adoption** (redirection).
+- [ ] Sandbox instance recipe (`just news-sandbox <dir>` or a documented
+      copy procedure): disposable copy of a news checkout + its own data
+      store, so runs never touch the real `~/news`. Consider splitting
+      the view-source config from the run-target config if one
+      `news_repo` key proves too coarse.
+- [ ] Timer-launched run completes end-to-end **against the sandbox**
+      (this is exit run (a)).
 
 ### Task 10: Stories S-3 / S-4 — write and execute
 - [x] Write `design/stories/S-3.md`, `S-4.md` (concrete steps, allowed
       replay diffs enumerated) — DONE 2026-07-06.
-- [ ] Execute S-3: settings drawer native→external+local, next run
-      completes, `run.json` records the pair. Evidence saved.
-- [ ] Execute S-4: network+LLM disabled replay → identical dashboard
-      modulo metadata. Evidence saved.
+- [ ] Execute S-3: settings drawer native→external+local, next sandbox
+      run completes, `run.json` records the pair. Evidence saved.
+- [ ] Execute S-4: network+LLM disabled replay **on a pristine sandbox
+      copy** → identical dashboard modulo metadata. Evidence saved.
 
-### Task 11: Exit runs + portability
-- [ ] (a) timer-launched claude-code day — published (done in T9).
-- [ ] (b) ollama qwen3.6:27b + external search — published as that day's
-      real run (C6).
-- [ ] (c) replay — published (content no-op; the run manifest/evidence
-      lands). All three `run.json`s archived in the verification doc.
+### Task 11: Exit runs + portability (all sandbox — redirection)
+- [ ] (a) timer-launched claude-code day in the sandbox (done in T9).
+- [ ] (b) ollama qwen3.6:27b + external search — sandbox day; acceptance
+      is structural validity (C4), nothing published.
+- [ ] (c) replay of a committed day in a pristine sandbox copy — only
+      run.json changes. All three `run.json`s archived in the
+      verification doc.
 - [ ] S-10 re-run (container; native Windows unaffected but re-checked);
       CI 3-OS green on `newstack`.
 
@@ -534,8 +580,10 @@ discipline, upstream untouched):**
       no personal content) and drop the real corpus from the monorepo —
       its home is the owner's production `nunc-fluens` remnant. The
       redistributable repo must not carry one user's editorial data.
-- [ ] `NEWS_WORLD` grep-clean; naming.md rows updated (~/news → executed);
-      v1 plan in-place updates (D3/D4 executed; §2.2 layout note).
+- [ ] `NEWS_WORLD` grep-clean; naming.md rows updated (nunc-fluens = the
+      engine; `~/news` keeps its name and its own life — redirection);
+      v1 plan in-place updates (D4 executed; **D3 superseded by the
+      2026-07-06 redirection**; §2.2 layout note).
 - [ ] `design/verification/phase-c.md` (stories, exit runs, goldens
       summary, deviations); merge `newstack` → `dev`; owner push + PR gate.
 
@@ -579,21 +627,23 @@ In-phase preparation only: path names centralized in one constants module
    step (item 2.2); the semantic glossary judge only queues rows with no
    prior pass/fail audit (item 2.6's cost concern).
 
-## Exit criteria (phase closes when all hold)
+## Exit criteria (phase closes when all hold; rewritten per the 2026-07-06 redirection)
 
 1. Runs (a) claude-code / (b) ollama+external / (c) zero-LLM replay each
-   produce a valid dashboard; (c) identical modulo run metadata.
+   produce a valid dashboard **in the sandbox instance**; (c) identical
+   modulo run metadata; nothing written to the real `~/news`.
 2. Golden suite green (byte-identical renders, row/export parity); the
    122-test intent ported; CI news job runs the TS suite with no
    exclusions, 3-OS matrix green.
-3. S-3 and S-4 executed with evidence; S-10 re-run passes.
-4. The timer (not a conversation) started run (a); the Cowork routine is
-   retired.
+3. S-3 and S-4 executed with evidence (sandbox); S-10 re-run passes.
+4. The timer (not a conversation) started run (a) in the sandbox. The
+   Cowork routine keeps running production — **not** retired (fork).
 5. `analytics.sqlite` lives in `<data store>/world/`; `NEWS_WORLD` is gone;
    `newsRepo` config governs; Formans world view works (and empty-states
    without it).
-6. `~/news` → `nunc-fluens` remnant (data+publish, no app/); INTEGRATION.md
-   rewritten; Python deleted from the monorepo.
+6. The fork is documented: INTEGRATION.md rewritten (product vs the
+   independently-operated `~/news`); Python deleted from the monorepo;
+   goldens replaced with synthetic fixtures.
 7. `design/verification/phase-c.md` written; `newstack` merged to `dev`;
    owner pushed; PR gate per workflow.
 
