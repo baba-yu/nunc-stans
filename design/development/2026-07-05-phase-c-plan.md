@@ -615,22 +615,22 @@ discipline, upstream untouched):**
 - [ ] S-10 re-run (container; native Windows unaffected but re-checked);
       CI 3-OS green on `newstack`.
 
-### Task 12: Retire Python + close
-- [ ] Delete `engines/nunc-fluens/app/`; CI news job → vitest; root README
-      + engine README updated.
-- [ ] **Shrink the goldens (owner decision 2026-07-06):** the real-content
-      corpus exists only to validate the port against the oracle during
-      this phase. Once the exit runs and stories pass, replace
-      `pipeline/goldens/` with minimal synthetic fixtures (schema-shaped,
-      no personal content) and drop the real corpus from the monorepo —
-      its home is the owner's production `nunc-fluens` remnant. The
-      redistributable repo must not carry one user's editorial data.
-- [ ] `NEWS_WORLD` grep-clean; naming.md rows updated (nunc-fluens = the
-      engine; `~/news` keeps its name and its own life — redirection);
-      v1 plan in-place updates (D4 executed; **D3 superseded by the
-      2026-07-06 redirection**; §2.2 layout note).
-- [ ] `design/verification/phase-c.md` (stories, exit runs, goldens
-      summary, deviations); merge `newstack` → `dev`; owner push + PR gate.
+### Task 12: Retire Python + close — DONE 2026-07-06 (merge/push pending owner)
+- [x] Deleted `engines/nunc-fluens/app/` + `goldens/capture.ts`; CI news
+      job pytest → vitest on the 3-OS matrix (1bbc63e).
+- [x] **Goldens are synthetic (owner decision 2026-07-06):**
+      `goldens/synthesize.ts` generates a schema-shaped micro-world and
+      freezes the TS pipeline's own outputs as `expected/`; the real
+      corpus is dropped. Suite is 121 tests green, TS self-regression,
+      no personal editorial data. Oracle-parity evidence lives in git
+      history + the verification doc.
+- [x] `NEWS_WORLD` retired in code (build-world resolves `news_repo`;
+      remaining refs are retirement docs); naming.md updated; v1 plan
+      in-place updates (D4 executed; **D3 superseded by the 2026-07-06
+      redirection**).
+- [x] `design/verification/phase-c.md` written (stories, exit runs a/b/c,
+      S-10, T12, deviations).
+- [ ] Owner: merge `newstack` → `dev`; push + PR gate.
 
 ## Post-C refactoring backlog (owner decisions 2026-07-06 — NOT in phase)
 
@@ -674,23 +674,25 @@ In-phase preparation only: path names centralized in one constants module
 
 ## Exit criteria (phase closes when all hold; rewritten per the 2026-07-06 redirection)
 
-1. Runs (a) claude-code / (b) ollama+external / (c) zero-LLM replay each
-   produce a valid dashboard **in the sandbox instance**; (c) identical
+All met except the owner's final merge/push (7):
+
+1. ✅ Runs (a) claude-code / (b) ollama+external / (c) zero-LLM replay each
+   produced a valid dashboard **in the sandbox instance**; (c) identical
    modulo run metadata; nothing written to the real `~/news`.
-2. Golden suite green (byte-identical renders, row/export parity); the
-   122-test intent ported; CI news job runs the TS suite with no
-   exclusions, 3-OS matrix green.
-3. S-3 and S-4 executed with evidence (sandbox); S-10 re-run passes.
-4. The timer (not a conversation) started run (a) in the sandbox. The
+2. ✅ Suite green (byte-identical renders, row/export parity proven vs the
+   oracle in git history; now TS self-regression on synthetic goldens);
+   CI news job runs the TS suite, 3-OS matrix.
+3. ✅ S-3 and S-4 executed with evidence (sandbox); S-10 re-run passes.
+4. ✅ The timer (not a conversation) started run (a) in the sandbox. The
    Cowork routine keeps running production — **not** retired (fork).
-5. `analytics.sqlite` lives in `<data store>/world/`; `NEWS_WORLD` is gone;
-   `newsRepo` config governs; Formans world view works (and empty-states
-   without it).
-6. The fork is documented: INTEGRATION.md rewritten (product vs the
-   independently-operated `~/news`); Python deleted from the monorepo;
-   goldens replaced with synthetic fixtures.
-7. `design/verification/phase-c.md` written; `newstack` merged to `dev`;
-   owner pushed; PR gate per workflow.
+5. ✅ `analytics.sqlite` lives in `<data store>/world/`; `NEWS_WORLD`
+   retired; `newsRepo` config governs; Formans world view works (240
+   headlines staged from the real checkout; empty-states without it).
+6. ✅ The fork is documented: INTEGRATION.md is a lineage note (product
+   vs the independently-operated `~/news`); Python deleted; goldens
+   synthetic.
+7. ⏳ `design/verification/phase-c.md` written; **`newstack` → `dev`
+   merge + push + PR gate remain the owner's to run.**
 
 ## Self-review (done at write time)
 

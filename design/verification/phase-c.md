@@ -5,16 +5,23 @@ Running record; completed as the exit items execute. Plan:
 2026-07-06 REDIRECTION: the dev repo never operates production news —
 all runs target sandbox instances).
 
-## Test / parity state (as of 2026-07-06)
+## Test / parity state
 
-- Pipeline suite: **132 tests green, unconditional** (goldens recaptured
-  off fixture days with the oracle TZ pinned; capture-day collision
-  guard active). Includes byte-identical render parity (32/32),
-  normalized DB dump parity for the 7-day rebuild, parsed-equal export
-  parity (5 JSONs), gate output parity, Sunday replay E2E, and the
-  Sunday live-chain unit suites.
-- Oracle pytest: 140 passed / 1 skipped (post-drift-fold, upstream
-  17682e9 + two recorded determinism fixes).
+Two phases of the suite:
+
+- **During the port (oracle parity, git history):** the TS pipeline
+  reproduced the Python oracle byte-for-byte over the real-content
+  golden corpus — 132 pipeline tests + oracle pytest 140/1skip at the
+  drift-fold (upstream 17682e9 + two recorded determinism fixes).
+  Byte-identical render parity (32/32), normalized DB dump parity,
+  parsed-equal export parity, gate output parity, Sunday replay E2E.
+- **After T12 (self-regression, current):** the Python oracle and the
+  real corpus are deleted. `goldens/synthesize.ts` generates a
+  schema-shaped synthetic micro-world and freezes the TS pipeline's own
+  outputs as `expected/`; the suite is **121 tests green, TS-only, on
+  the 3-OS CI matrix** — no Python, no personal editorial data in the
+  repo. The parity evidence above is the git-history record that the
+  port was faithful before the oracle was retired.
 
 ## Story S-4 / exit run (c) — EXECUTED 2026-07-06
 
@@ -53,10 +60,40 @@ Fix that fell out of executing the story: replay no longer re-increments
 the cumulative unclassified-host ledger (`citation-policy-review.md`) —
 the first execution double-counted the day's sightings; gates still run.
 
-## Story S-3 — spec written, execution pending
+## Story S-3 — switch EXECUTED 2026-07-06 (run = exit run (b), below)
 
-Requires a live sandbox run with the settings pair switched
-(ollama qwen3.6:27b + brave) and back; evidence lands here.
+Via the gate (the same endpoint the Formans drawer reads/writes — the
+drawer UI itself was integration-tested at T7):
+
+    GET  /api/world/news-config → {"runtime":"claude-code","search":"native"}
+    PUT  {"runtime":"ollama","search":"external","searchEngine":"brave",
+          "synthModel":"qwen3.6:27b"}     → echoed back
+    (a PUT carrying an unknown field `synthProvider` was REJECTED —
+     deny-unknown works)
+    GET  → the switched pair; <data store>/world/news-config.json
+    matches byte-for-byte (atomic write).
+
+The next run picked the pair up with no flags (exit run (b)). Switch-back
+to claude-code/native recorded below after the run.
+
+Executing the pair surfaced one integration gap, fixed in the pipeline:
+the external-search adapters existed in `nunc-ai` but nothing CALLED
+them — `compose-news-section` now runs the topic fan-out through the
+configured adapter parent-side (one query per news-topics.md topic,
+rate-limited, results inlined into the writer prompt) when
+search≠native. Verified live: brave answered every topic and the local
+model produced a schema-valid news_section.json from the inlined
+research.
+
+## S-10 re-run — PASS 2026-07-06
+
+Pristine `ubuntu:24.04` container (repo mounted read-only, cloned
+inside; apt + Node 24 + rustup 1.96.1 + `cargo install just`):
+`git clone /src` → `sh tools/bootstrap.sh /root/my-data` → `just up` →
+through :8720 `/health`, `/gate/health`, `/fourfive/api/health`, and
+the `Nunc Stans` title all answered — `S-10-PASS`, exit 0. (Two launch
+mistakes were harness-side, not product-side: the script wasn't mounted
+into the container, then `safe.directory` for the read-only mount.)
 
 ## Exit run (a) — timer-launched live day — EXECUTED 2026-07-06
 
@@ -94,9 +131,37 @@ now failing at the step instead of a later gate):
    upstream keeps references.txt untracked; the publish step now adds
    only existing, non-ignored paths.
 
-## Exit run (b) — local model + external search — pending
+## Exit run (b) — local model + external search — EXECUTED 2026-07-06
 
-The S-3 pair (ollama qwen3.6:27b + brave) in the same sandbox;
-prerequisites: ollama up, BRAVE_API_KEY set.
+The S-3 pair (ollama `qwen3.6:27b` synthesis + `brave` external search)
+in the same sandbox, `--date 2026-07-07`. Acceptance is structural
+validity, not content quality (C4): a local model's day is allowed to
+look different from a frontier model's. Three live-path bugs the pair
+surfaced (all fixed):
 
-## S-10 re-run — pending (T11)
+1. **The external SearchSource adapters existed but nothing called
+   them** — `native` search rode the runtime's own web tool, so a local
+   model (no web tool) had no research. `compose-news-section` now runs
+   the topic fan-out through the configured adapter parent-side (one
+   brave query per news-topics.md topic, rate-limited, results inlined).
+2. **ollama `stream:false` + undici idle timeouts** = "fetch failed" on
+   long 27B generations; the provider streams NDJSON now. Locale
+   fan-outs also serialize on non-claude runtimes (a local server does
+   one request at a time).
+3. **A parent-restricted citation** (the model chose tomshardware.com /
+   Future plc) failed the citation gate three steps downstream;
+   compose-news-section now runs the restriction check on its own
+   composed URLs and re-prompts on a hit (spec-faithful).
+
+## T12 — Python retired, goldens synthetic — DONE 2026-07-06
+
+- `engines/nunc-fluens/app/` (the frozen Python oracle) and
+  `goldens/capture.ts` (its real-corpus staging tool) deleted; the
+  real-content corpus is gone from the repo.
+- `goldens/synthesize.ts` generates the synthetic micro-world and
+  freezes `expected/` from the TS pipeline itself; 121 tests green.
+- CI news job swapped pytest → vitest (pipeline typecheck + test +
+  nunc-ai test) on the 3-OS matrix; no Python on the runners.
+- `NEWS_WORLD` retired in code (build-world resolves `news_repo`);
+  remaining references are retirement documentation. naming.md + the v1
+  plan updated (D3 superseded, D4 executed).
