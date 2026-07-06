@@ -11,7 +11,7 @@ const SELF_ANCHORED: Array<[string, RegExp[]]> = [
   ['Stock prices and corporate activity', [/\bNASDAQ:/, /\bNYSE:/]],
 ];
 
-const ALL_TOPICS = [
+export const ALL_TOPICS = [
   'LLM Workflow',
   'Multi-profiling for Local LLM (e.g. Multica)',
   'Agent Harness (OpenClaw, NemoClaw, Hermes Agents, etc.)',
@@ -30,7 +30,7 @@ const ALL_TOPICS = [
   'Other standing-out topics',
 ];
 
-const MANDATORY = new Set(['Local LLM Optimization, Fine-tuning (Unsloth — every run)']);
+export const MANDATORY = new Set(['Local LLM Optimization, Fine-tuning (Unsloth — every run)']);
 const NEWS_DRIVEN = new Set(['Multi-profiling for Local LLM (e.g. Multica)']);
 
 function validateVerification(verificationPath: string): [number, string[]] {

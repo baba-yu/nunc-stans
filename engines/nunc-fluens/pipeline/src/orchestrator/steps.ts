@@ -35,7 +35,7 @@ import { runScore } from '../ingest/score.ts';
 import { runExport } from '../export/export.ts';
 import { buildEvidenceReverse } from '../export/evidence-reverse.ts';
 import { citationCheck, classifyHost, parsePolicy } from '../gates/citation-check.ts';
-import { checkTopicCoverage } from '../gates/check-topic-coverage.ts';
+import { ALL_TOPICS, checkTopicCoverage } from '../gates/check-topic-coverage.ts';
 import { postUpdateValidation } from '../gates/post-update-validation.ts';
 import { checkReadmeLinks } from './readme-checks.ts';
 import Database from 'better-sqlite3';
@@ -497,17 +497,35 @@ export function dailyUpdateSteps(): StepDef[] {
       run: (ctx) => llmArtifactStep(ctx, {
         id: 'verify-topic-coverage',
         artifact: sdFile(ctx, 'verification.json'),
+        // The downstream check-topic-coverage gate matches topic names
+        // EXACTLY against the hardcoded list and requires the mandatory
+        // Unsloth row — so enforce verbatim enumeration here (a local
+        // model abbreviated the names on exit run (b) and the gate
+        // failed three... one step later). Re-prompt on any miss.
         validate: (raw: any) => {
           if (typeof raw !== 'object' || raw === null || !Array.isArray(raw.verifications))
             throw new Error('verification.json: expected {verifications: []}');
+          if (!ctx.replay) {
+            const seen = new Set(raw.verifications.map((v: any) => v?.topic));
+            const missing = ALL_TOPICS.filter(t => !seen.has(t));
+            if (missing.length)
+              throw new Error('verification.json must enumerate EVERY topic '
+                + `by its exact name; missing: ${missing.map(m => `"${m}"`).join(', ')}`);
+          }
           return raw;
         },
         prompt: () => buildStepPrompt({
           skill: 'verify-topic-coverage', date: ctx.date,
           extra: `Today's news_section.json:\n`
             + readFileSync(sdFile(ctx, 'news_section.json'), 'utf8')
-            + `\n\nTopic rubric: reference/news-topics.md in the news checkout.`,
-          outputNote: 'the verification.json document ({date, verifications[]}).',
+            + '\n\nEnumerate a verification entry for EVERY ONE of these topics, '
+            + 'using the topic string VERBATIM as the `topic` field '
+            + '(semantic_verdict covered|uncovered|ambiguous, '
+            + 'search_log_alignment consistent|search_log_overreports|'
+            + 'search_log_underreports, matching_bullets, reason):\n'
+            + ALL_TOPICS.map(t => `- ${t}`).join('\n'),
+          outputNote: 'the verification.json document ({date, verifications[]}) '
+            + `covering all ${ALL_TOPICS.length} topics verbatim.`,
         }),
       }),
     },
