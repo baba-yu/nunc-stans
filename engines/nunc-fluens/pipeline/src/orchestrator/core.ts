@@ -143,6 +143,38 @@ export function extractJson(text: string): unknown {
   throw new Error('no JSON found in model reply');
 }
 
+/** One validated LLM JSON call: extract, validate, one re-prompt with
+ * the validation error. For steps whose result lands in the DB (or a
+ * markdown file) rather than a sourcedata JSON artifact. */
+export async function llmJson<T>(ctx: RunCtx, args: {
+  id: string;
+  prompt: string;
+  /** validate returns the canonical object or throws. */
+  validate: (raw: unknown) => T;
+  webSearch?: boolean;
+}): Promise<T> {
+  if (ctx.ai === null)
+    throw new StepFailure(args.id, 'no AI runtime configured');
+  let lastErr = '';
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const res = await ctx.ai.chat(ctx.runtime, [{
+      role: 'user',
+      content: attempt === 0 ? args.prompt
+        : `${args.prompt}\n\nYour previous reply failed validation: ${lastErr}\nEmit corrected JSON only.`,
+    }], {
+      caller: args.id,
+      webSearch: args.webSearch ?? false,
+      model: ctx.synthModel ?? undefined,
+    });
+    try {
+      return args.validate(extractJson(res.text));
+    } catch (e) {
+      lastErr = e instanceof Error ? e.message : String(e);
+    }
+  }
+  throw new StepFailure(args.id, `model output failed validation twice: ${lastErr}`);
+}
+
 /** Generic LLM step: replay reads + validates the stored artifact; live
  * calls the runtime, validates, re-prompts once with the error, writes. */
 export async function llmArtifactStep(ctx: RunCtx, args: {

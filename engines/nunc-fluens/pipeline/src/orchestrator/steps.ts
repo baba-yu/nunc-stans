@@ -7,7 +7,8 @@ import { appendFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } fr
 import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import {
-  buildStepPrompt, llmArtifactStep, loadWriterRules, RunCtx, StepDef, StepFailure,
+  buildStepPrompt, llmArtifactStep, llmJson, loadWriterRules, RunCtx, StepDef,
+  StepFailure,
 } from './core.ts';
 import {
   parseBridgesFile, parseChangeLogFile, parseHeadlinesFile, parseNeedsFile,
@@ -19,6 +20,13 @@ import { lintPaths, datePaths } from '../render/lint-markdown-clean.ts';
 import { postWriteIntegrity } from '../render/post-write-integrity.ts';
 import { ingestDay, ingestDayLocales, dateDir, localeDateDir } from '../ingest/ingest-sourcedata.ts';
 import { runGlossaryExtract } from '../ingest/glossary-extract.ts';
+import {
+  commitDefinition, pendingDefinitions, promoteEligible, retireQuiet,
+  retireRefused, type DefinitionFill,
+} from '../ingest/glossary-define.ts';
+import {
+  commitValidation, runValidateGlossary, type Verdict,
+} from '../gates/validate-glossary-terms.ts';
 import { runScore } from '../ingest/score.ts';
 import { runExport } from '../export/export.ts';
 import { buildEvidenceReverse } from '../export/evidence-reverse.ts';
@@ -38,6 +46,59 @@ function sdFile(ctx: RunCtx, name: string): string {
 
 function locFile(ctx: RunCtx, locale: string, name: string): string {
   return join(localeDateDir(ctx.sourcedataRoot, ctx.date, locale), name);
+}
+
+// --- glossary LLM-step output validators -----------------------------------
+
+function validateDefinitionFills(raw: unknown, pendingTerms: string[]): {
+  definitions: DefinitionFill[];
+  refused: Array<{ term: string; reason: string }>;
+} {
+  const o = raw as any;
+  if (!o || typeof o !== 'object') throw new Error('output is not an object');
+  if (!Array.isArray(o.definitions)) throw new Error("missing 'definitions' array");
+  if (!Array.isArray(o.refused)) throw new Error("missing 'refused' array");
+  const seen = new Set<string>();
+  for (const d of o.definitions) {
+    for (const k of ['term', 'quick_def', 'why_it_matters',
+      'quick_def_ja', 'quick_def_es', 'quick_def_fil',
+      'why_it_matters_ja', 'why_it_matters_es', 'why_it_matters_fil'])
+      if (typeof d?.[k] !== 'string' || !d[k].trim())
+        throw new Error(`definition for ${JSON.stringify(d?.term)} missing required key '${k}' `
+          + '(locale siblings are mandatory for every filled term)');
+    seen.add(d.term);
+  }
+  for (const r of o.refused) {
+    if (typeof r?.term !== 'string' || typeof r?.reason !== 'string')
+      throw new Error("each 'refused' entry needs {term, reason}");
+    if (seen.has(r.term)) throw new Error(`term '${r.term}' is both filled and refused`);
+    seen.add(r.term);
+  }
+  const missing = pendingTerms.filter(t => !seen.has(t));
+  if (missing.length)
+    throw new Error(`pending term(s) not covered: ${missing.join(', ')}`);
+  return { definitions: o.definitions, refused: o.refused };
+}
+
+function validateSemanticJudgements(raw: unknown, terms: string[]): Array<{
+  term: string; verdict: 'match' | 'mismatch' | 'uncertain';
+  reason: string; suggested_fix?: string;
+}> {
+  const o = raw as any;
+  if (!o || typeof o !== 'object' || !Array.isArray(o.judgements))
+    throw new Error("output must be {judgements: [...]}");
+  const byTerm = new Map<string, any>();
+  for (const j of o.judgements) {
+    if (typeof j?.term !== 'string'
+      || !['match', 'mismatch', 'uncertain'].includes(j?.verdict)
+      || typeof j?.reason !== 'string')
+      throw new Error("each judgement needs {term, verdict: match|mismatch|uncertain, reason}");
+    byTerm.set(j.term, j);
+  }
+  const missing = terms.filter(t => !byTerm.has(t));
+  if (missing.length)
+    throw new Error(`term(s) not judged: ${missing.join(', ')}`);
+  return terms.map(t => byTerm.get(t));
 }
 
 function gateOrFail(id: string, r: { exit: number; lines: string[] }, ctx: RunCtx): void {
@@ -176,6 +237,98 @@ export function dailyUpdateSteps(): StepDef[] {
           seedYaml: join(ctx.newsRepo, REFERENCE_DIR, 'glossary.yml'),
           todayIso: ctx.todayIso,
         });
+      },
+    },
+    {
+      // 1_daily_update step 6: promotion/retirement flips + the LLM
+      // definition fill. DEVIATION (recorded): upstream these were
+      // conversational-orchestrator calls and the golden capture never
+      // ran them, so the golden DB embodies their absence — replay and
+      // dry-run skip to preserve that state; live runs do the work.
+      id: 'glossary-define', kind: 'llm',
+      run: async (ctx) => {
+        if (ctx.replay || ctx.dryRun) {
+          ctx.log('  skipped (replay/dry-run): not part of the golden capture');
+          return;
+        }
+        const promoted = promoteEligible(ctx.db, ctx.todayIso);
+        const retired = retireQuiet(ctx.db, ctx.todayIso);
+        ctx.log(`  promoted ${promoted.length}, retired ${retired.length} (quiet rule)`);
+        const pending = pendingDefinitions(ctx.db);
+        if (!pending.length) {
+          ctx.log('  no pending definitions');
+          return;
+        }
+        const out = await llmJson(ctx, {
+          id: 'glossary-define',
+          prompt: buildStepPrompt({
+            skill: 'define-glossary-terms', date: ctx.date,
+            extra: 'Pending terms needing definitions (follow the "LLM fill '
+              + 'prompt" section of the spec, including all locale siblings '
+              + 'and the refusal rules):\n'
+              + JSON.stringify(pending, null, 2),
+            outputNote: '{"definitions": [{"term", "quick_def", "why_it_matters", '
+              + '"quick_def_ja", "quick_def_es", "quick_def_fil", '
+              + '"why_it_matters_ja", "why_it_matters_es", "why_it_matters_fil", '
+              + '"canonical_link" (optional)}], "refused": [{"term", "reason"}]} — '
+              + 'every pending term appears in exactly one of the two lists.',
+          }),
+          validate: (raw) => validateDefinitionFills(raw, pending.map(p => p.term)),
+        });
+        for (const d of out.definitions) commitDefinition(ctx.db, ctx.todayIso, d);
+        for (const r of out.refused) retireRefused(ctx.db, ctx.todayIso, r.term);
+        ctx.log(`  filled ${out.definitions.length}, refused ${out.refused.length}`);
+      },
+    },
+    {
+      // 1_daily_update step 6.5: form + dedupe (det, audited) then the
+      // semantic LLM-as-judge pass over the pending queue. Same
+      // replay/dry-run deviation as glossary-define.
+      id: 'glossary-validate', kind: 'llm',
+      run: async (ctx) => {
+        if (ctx.replay || ctx.dryRun) {
+          ctx.log('  skipped (replay/dry-run): not part of the golden capture');
+          return;
+        }
+        const summary = runValidateGlossary(ctx.db, { today: ctx.todayIso });
+        ctx.log(`  form+dedupe: ${summary.checked} checked, `
+          + `${summary.retiredByFormOrDedupe.length} retired, `
+          + `${summary.warned.length} warned`);
+        if (!summary.pendingSemantic.length) {
+          ctx.log('  semantic queue empty');
+          return;
+        }
+        const judged = await llmJson(ctx, {
+          id: 'glossary-validate',
+          prompt: buildStepPrompt({
+            skill: 'validate-glossary-terms', date: ctx.date,
+            extra: 'You are the semantic LLM-as-judge pass. For each term '
+              + 'below, judge whether the definition matches the term\'s '
+              + 'commonly-understood industry meaning.\n'
+              + JSON.stringify(summary.pendingSemantic, null, 2),
+            outputNote: '{"judgements": [{"term", "verdict": '
+              + '"match"|"mismatch"|"uncertain", "reason", '
+              + '"suggested_fix" (optional)}]} — one judgement per term.',
+          }),
+          validate: (raw) => validateSemanticJudgements(
+            raw, summary.pendingSemantic.map(r => r.term)),
+        });
+        for (const j of judged) {
+          const verdict: Verdict = {
+            check_type: 'semantic',
+            // The audit table owns the vocabulary: match→pass,
+            // mismatch→fail (retires), uncertain→warn (stays queued).
+            verdict: j.verdict === 'match' ? 'pass'
+              : j.verdict === 'mismatch' ? 'fail' : 'warn',
+            reason: j.reason,
+            suggested_fix: j.suggested_fix,
+          };
+          commitValidation(ctx.db, {
+            term: j.term, verdicts: [verdict], today: ctx.todayIso,
+          });
+        }
+        const retired = judged.filter(j => j.verdict === 'mismatch').length;
+        ctx.log(`  semantic: ${judged.length} judged, ${retired} retired`);
       },
     },
     {
