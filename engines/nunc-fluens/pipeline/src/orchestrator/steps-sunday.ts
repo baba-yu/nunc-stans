@@ -13,6 +13,7 @@ import {
 } from '../schemas/sourcedata.ts';
 import { readFileSync } from 'node:fs';
 import { dateDir } from '../ingest/ingest-sourcedata.ts';
+import { MEMORY_DIR } from '../world-paths.ts';
 
 function stem(date: string): string {
   return date.replaceAll('-', '');
@@ -32,7 +33,7 @@ export function weeklyMemorySteps(): StepDef[] {
     {
       id: 'dormant-snapshot', kind: 'llm',
       run: (ctx) => {
-        const snapshot = join(ctx.newsRepo, 'memory', 'dormant', `dormant-${stem(ctx.date)}.md`);
+        const snapshot = join(ctx.newsRepo, MEMORY_DIR, 'dormant', `dormant-${stem(ctx.date)}.md`);
         requireReplayArtifact(ctx, 'dormant-snapshot', snapshot);
         const r = postWriteIntegrity('dormant', [snapshot]);
         for (const l of r.lines) ctx.log(`  ${l}`);
@@ -48,7 +49,7 @@ export function themeReviewSteps(): StepDef[] {
       id: 'theme-review-proposal', kind: 'llm',
       run: (ctx) => {
         const proposal = join(
-          ctx.newsRepo, 'memory', 'theme-review', `theme-review-${stem(ctx.date)}.md`);
+          ctx.newsRepo, MEMORY_DIR, 'theme-review', `theme-review-${stem(ctx.date)}.md`);
         requireReplayArtifact(ctx, 'theme-review-proposal', proposal);
         const r = postWriteIntegrity('theme-review', [proposal]);
         for (const l of r.lines) ctx.log(`  ${l}`);

@@ -3,7 +3,7 @@
 // §Naming hygiene + the ADR-002 anti-inertia vocabulary).
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { LOCALES } from './notice.ts';
+import { FP_DIR, LOCALES, REPORT_DIR } from '../world-paths.ts';
 
 // Each entry: [human label, regex]. The 'g' flag is added at scan time;
 // 'i'/'m' mirror the oracle's re.IGNORECASE / re.MULTILINE.
@@ -64,8 +64,8 @@ export function datePaths(publishRoot: string, dateIso: string): string[] {
   const compact = dateIso.replaceAll('-', '');
   const out: string[] = [];
   for (const locale of LOCALES) {
-    out.push(join(publishRoot, 'report', locale, `news-${compact}.md`));
-    out.push(join(publishRoot, 'future-prediction', locale, `future-prediction-${compact}.md`));
+    out.push(join(publishRoot, REPORT_DIR, locale, `news-${compact}.md`));
+    out.push(join(publishRoot, FP_DIR, locale, `future-prediction-${compact}.md`));
   }
   return out.filter(p => existsSync(p));
 }

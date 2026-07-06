@@ -14,6 +14,7 @@ import {
   parsePredictionsFile, predictionsFileToDict,
 } from '../schemas/sourcedata.ts';
 import { aiNotice } from './notice.ts';
+import { REPORT_DIR } from '../world-paths.ts';
 import { buildEnv, emptyListToNull, normalizeRendered } from './env.ts';
 import { postWriteIntegrity } from './post-write-integrity.ts';
 
@@ -82,7 +83,7 @@ export function renderNewsDay(sourcedataRoot: string, dateIso: string, locale = 
 }
 
 export function newsOutputPath(publishRoot: string, dateIso: string, locale: string): string {
-  return join(publishRoot, 'report', locale, `news-${dateIso.replaceAll('-', '')}.md`);
+  return join(publishRoot, REPORT_DIR, locale, `news-${dateIso.replaceAll('-', '')}.md`);
 }
 
 export function writeAtomic(path: string, text: string): void {

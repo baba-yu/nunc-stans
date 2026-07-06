@@ -8,6 +8,7 @@ import { canonicalizeUrl, hashId, nowIso, pyJsonDumps } from './util.ts';
 import { fuzzyMatchWithSize } from './fuzzy.ts';
 import { parseTimeWindow } from './timewindow.ts';
 import { normalizeRelevance } from './analytics.ts';
+import { NON_EN_LOCALES } from '../world-paths.ts';
 
 export type Db = Database.Database;
 
@@ -307,7 +308,7 @@ export function updatePredictionLocaleCols(db: Db, args: {
   plainLanguage?: string | null;
 }): void {
   const { locale } = args;
-  if (locale === 'en' || !['ja', 'es', 'fil'].includes(locale)) return;
+  if (locale === 'en' || !(NON_EN_LOCALES as readonly string[]).includes(locale)) return;
   const sets: Array<[string, unknown]> = [
     [`prediction_summary_${locale}`, args.summary],
     [`prediction_short_label_${locale}`, args.shortLabel],

@@ -5,9 +5,9 @@ import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import Database from 'better-sqlite3';
 import { parseTimeWindow } from '../ingest/timewindow.ts';
-
-const LOCALES = ['ja', 'es', 'fil'] as const;
-const ALL_LOCALES = ['en', 'ja', 'es', 'fil'] as const;
+import {
+  FP_DIR, LOCALES as ALL_LOCALES, NON_EN_LOCALES as LOCALES, REPORT_DIR,
+} from '../world-paths.ts';
 
 const EN_PREDICTION_COLS = [
   'title', 'reasoning_because', 'reasoning_given', 'reasoning_so_that',
@@ -303,7 +303,7 @@ function checkLocaleFilesExist(base: string, kind: string, date: string): string
   const stem = kind === 'news'
     ? `news-${date.replaceAll('-', '')}`
     : `future-prediction-${date.replaceAll('-', '')}`;
-  const sub = kind === 'news' ? 'report' : 'future-prediction';
+  const sub = kind === 'news' ? REPORT_DIR : FP_DIR;
   for (const l of ALL_LOCALES) {
     const p = join(base, sub, l, `${stem}.md`);
     if (!existsSync(p)) errs.push(`missing: ${p}`);

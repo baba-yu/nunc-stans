@@ -17,7 +17,9 @@ import {
   parseNewsSectionFile, parsePredictionsFile, parseReadingsFile,
 } from '../schemas/sourcedata.ts';
 
-export const LOCALES = ['ja', 'es', 'fil'] as const;
+import { NON_EN_LOCALES } from '../world-paths.ts';
+
+export const LOCALES = NON_EN_LOCALES;
 
 export function dateDir(sourcedataRoot: string, dateIso: string): string {
   return join(sourcedataRoot, dateIso);

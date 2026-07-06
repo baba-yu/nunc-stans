@@ -1,8 +1,7 @@
 // The day runner: day-of-week task plan, step iteration with the
 // run.json manifest, DRY_RUN / --only / replay modes.
-import { join } from 'node:path';
 import { connect } from '../db/db.ts';
-import { worldDbFile } from '../config.ts';
+import { sourcedataDir, worldDbFile } from '../config.ts';
 import { RunCtx, RunManifest, StepDef } from './core.ts';
 import { dailyUpdateSteps, futurePredictionSteps, dailyBriefingSteps } from './steps.ts';
 import {
@@ -69,7 +68,7 @@ export async function runDay(opts: RunDayOptions): Promise<RunDayResult> {
     dow,
     dataDir: opts.dataDir,
     newsRepo: opts.newsRepo,
-    sourcedataRoot: join(opts.newsRepo, 'app', 'sourcedata'),
+    sourcedataRoot: sourcedataDir(opts.newsRepo),
     dbFile,
     db,
     ai: opts.ai,

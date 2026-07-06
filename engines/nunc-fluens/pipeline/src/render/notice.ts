@@ -34,5 +34,3 @@ export function aiNoticeFp(locale: string): string {
   const base = aiNotice(locale);
   return locale === 'fil' ? base + '\n' : base;
 }
-
-export const LOCALES = ['en', 'ja', 'es', 'fil'] as const;

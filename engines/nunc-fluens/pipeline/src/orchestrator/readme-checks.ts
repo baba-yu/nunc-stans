@@ -4,17 +4,21 @@
 // /en/ only when the locale file genuinely does not exist.
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { FP_DIR, NON_EN_LOCALES, REPORT_DIR } from '../world-paths.ts';
+
+const LINK_HEAD_RE = new RegExp(`\\((${REPORT_DIR}|${FP_DIR})/`);
+const LINK_RE = new RegExp(`\\((${REPORT_DIR}|${FP_DIR})/([^)]+)\\)`);
 
 export function checkReadmeLinks(publishRoot: string): { exit: number; lines: string[] } {
   const lines: string[] = [];
   let fail = 0;
-  for (const L of ['ja', 'es', 'fil']) {
+  for (const L of NON_EN_LOCALES) {
     const readme = join(publishRoot, `README.${L}.md`);
     if (!existsSync(readme)) continue;
     const text = readFileSync(readme, 'utf8');
     for (const line of text.split('\n')) {
-      if (!/\((report|future-prediction)\//.test(line)) continue;
-      const m = /\((report|future-prediction)\/([^)]+)\)/.exec(line);
+      if (!LINK_HEAD_RE.test(line)) continue;
+      const m = LINK_RE.exec(line);
       if (!m) continue;
       const path = `${m[1]}/${m[2]}`;
       const seg = path.split('/')[1];

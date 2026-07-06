@@ -27,9 +27,10 @@ import { checkTopicCoverage } from '../gates/check-topic-coverage.ts';
 import { postUpdateValidation } from '../gates/post-update-validation.ts';
 import { checkReadmeLinks } from './readme-checks.ts';
 import Database from 'better-sqlite3';
-
-const LOCALES = ['en', 'ja', 'es', 'fil'] as const;
-const NON_EN = ['ja', 'es', 'fil'] as const;
+import {
+  DOCS_DIR, docsDataDir, FP_DIR, LOCALES, MEMORY_DIR,
+  NON_EN_LOCALES as NON_EN, REFERENCE_DIR, REFERENCES_TXT, REPORT_DIR,
+} from '../world-paths.ts';
 
 function sdFile(ctx: RunCtx, name: string): string {
   return join(dateDir(ctx.sourcedataRoot, ctx.date), name);
@@ -172,7 +173,7 @@ export function dailyUpdateSteps(): StepDef[] {
       run: (ctx) => {
         runGlossaryExtract(ctx.db, {
           newsFile: newsOutputPath(ctx.newsRepo, ctx.date, 'en'),
-          seedYaml: join(ctx.newsRepo, 'reference', 'glossary.yml'),
+          seedYaml: join(ctx.newsRepo, REFERENCE_DIR, 'glossary.yml'),
           todayIso: ctx.todayIso,
         });
       },
@@ -185,9 +186,9 @@ export function dailyUpdateSteps(): StepDef[] {
         for (const L of LOCALES) {
           const r = citationCheck({
             draft: newsOutputPath(ctx.newsRepo, ctx.date, L),
-            policyFile: join(ctx.newsRepo, 'reference', 'citation-restrictions.md'),
+            policyFile: join(ctx.newsRepo, REFERENCE_DIR, 'citation-restrictions.md'),
             unclassifiedOut: L === 'en'
-              ? join(ctx.newsRepo, 'reference', 'citation-policy-review.md') : null,
+              ? join(ctx.newsRepo, REFERENCE_DIR, 'citation-policy-review.md') : null,
             todayIso: ctx.todayIso,
           });
           gateOrFail('citation-check-news', r, ctx);
@@ -197,7 +198,7 @@ export function dailyUpdateSteps(): StepDef[] {
     {
       id: 'append-references', kind: 'det',
       run: (ctx) => {
-        const refPath = join(ctx.newsRepo, 'references.txt');
+        const refPath = join(ctx.newsRepo, REFERENCES_TXT);
         const existing = new Set(
           existsSync(refPath)
             ? readFileSync(refPath, 'utf8').split('\n').map(s => s.trim()).filter(Boolean)
@@ -268,7 +269,7 @@ export function dailyUpdateSteps(): StepDef[] {
       id: 'puv-news', kind: 'det',
       run: (ctx) => gateOrFail('puv-news', postUpdateValidation({
         check: 'news', date: ctx.date, db: ctx.dbFile,
-        docsDataDir: join(ctx.newsRepo, 'docs', 'data'), repoRoot: ctx.newsRepo,
+        docsDataDir: docsDataDir(ctx.newsRepo), repoRoot: ctx.newsRepo,
       }), ctx),
     },
   ];
@@ -372,9 +373,9 @@ export function futurePredictionSteps(): StepDef[] {
         for (const L of LOCALES) {
           const r = citationCheck({
             draft: fpOutputPath(ctx.newsRepo, ctx.date, L),
-            policyFile: join(ctx.newsRepo, 'reference', 'citation-restrictions.md'),
+            policyFile: join(ctx.newsRepo, REFERENCE_DIR, 'citation-restrictions.md'),
             unclassifiedOut: L === 'en'
-              ? join(ctx.newsRepo, 'reference', 'citation-policy-review.md') : null,
+              ? join(ctx.newsRepo, REFERENCE_DIR, 'citation-policy-review.md') : null,
             todayIso: ctx.todayIso,
           });
           gateOrFail('citation-check-fp', r, ctx);
@@ -413,7 +414,7 @@ export function futurePredictionSteps(): StepDef[] {
       id: 'puv-fp', kind: 'det',
       run: (ctx) => gateOrFail('puv-fp', postUpdateValidation({
         check: 'future-prediction', date: ctx.date, db: ctx.dbFile,
-        docsDataDir: join(ctx.newsRepo, 'docs', 'data'), repoRoot: ctx.newsRepo,
+        docsDataDir: docsDataDir(ctx.newsRepo), repoRoot: ctx.newsRepo,
       }), ctx),
     },
   ];
@@ -486,7 +487,7 @@ export function dailyBriefingSteps(): StepDef[] {
       id: 'update-pages', kind: 'det',
       run: (ctx) => {
         runScore(ctx.db);
-        const outDir = join(ctx.newsRepo, 'docs', 'data');
+        const outDir = docsDataDir(ctx.newsRepo);
         runExport(ctx.db, { outputDir: outDir, publishRoot: ctx.newsRepo });
         const ber = buildEvidenceReverse(ctx.db, { todayIso: ctx.todayIso });
         writeFileSync(join(outDir, 'evidence-reverse.json'),
@@ -500,12 +501,13 @@ export function dailyBriefingSteps(): StepDef[] {
     {
       id: 'dashboard-integrity', kind: 'det',
       run: (ctx) => {
-        const assets = ['docs/index.html', 'docs/assets/app.js', 'docs/assets/styles.css']
+        const assets = ['index.html', 'assets/app.js', 'assets/styles.css']
+          .map(p => `${DOCS_DIR}/${p}`)
           .map(p => join(ctx.newsRepo, p))
           .filter(p => existsSync(p));
         if (assets.length)
           gateOrFail('dashboard-integrity', postWriteIntegrity('dashboard-asset', assets), ctx);
-        const m = JSON.parse(readFileSync(join(ctx.newsRepo, 'docs/data/manifest.json'), 'utf8'));
+        const m = JSON.parse(readFileSync(join(docsDataDir(ctx.newsRepo), 'manifest.json'), 'utf8'));
         if ((m.locales ?? []).length !== 4 || m.default_locale !== 'en')
           throw new StepFailure('dashboard-integrity', 'manifest shape check failed');
       },
@@ -514,7 +516,7 @@ export function dailyBriefingSteps(): StepDef[] {
       id: 'puv-exports', kind: 'det',
       run: (ctx) => gateOrFail('puv-exports', postUpdateValidation({
         check: 'exports', date: ctx.date, db: ctx.dbFile,
-        docsDataDir: join(ctx.newsRepo, 'docs', 'data'), repoRoot: ctx.newsRepo,
+        docsDataDir: docsDataDir(ctx.newsRepo), repoRoot: ctx.newsRepo,
       }), ctx),
     },
     {
@@ -528,9 +530,9 @@ export function dailyBriefingSteps(): StepDef[] {
         }
         const git = (...args: string[]) =>
           execFileSync('git', ['-C', ctx.newsRepo, ...args], { encoding: 'utf8' });
-        git('add', 'README.md', 'README.ja.md', 'README.es.md', 'README.fil.md',
-          'docs/data', 'report', 'future-prediction', 'memory', 'references.txt',
-          'reference/citation-policy-review.md', 'app/sourcedata');
+        git('add', 'README.md', ...NON_EN.map(l => `README.${l}.md`),
+          `${DOCS_DIR}/data`, REPORT_DIR, FP_DIR, MEMORY_DIR, REFERENCES_TXT,
+          `${REFERENCE_DIR}/citation-policy-review.md`, 'app/sourcedata');
         try {
           git('commit', '-m', `daily-master ${ctx.date}: news + future-prediction + 3-day README + dashboard`);
         } catch (e) {

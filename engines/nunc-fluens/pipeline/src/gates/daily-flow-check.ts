@@ -6,8 +6,7 @@ import { join, relative, resolve } from 'node:path';
 import Database from 'better-sqlite3';
 import { postUpdateValidation } from './post-update-validation.ts';
 import type { GateResult } from './post-update-validation.ts';
-
-const LOCALES = ['en', 'ja', 'es', 'fil'] as const;
+import { docsDataDir, FP_DIR, LOCALES, NON_EN_LOCALES, REPORT_DIR } from '../world-paths.ts';
 
 function isSunday(date: string): boolean {
   return new Date(date + 'T12:00:00Z').getUTCDay() === 0;
@@ -23,7 +22,7 @@ function rel(root: string, p: string): string {
 
 function checkFiles(repoRoot: string, date: string): string[] {
   const errs: string[] = [];
-  for (const [kind, sub] of [['news', 'report'], ['future-prediction', 'future-prediction']] as const) {
+  for (const [kind, sub] of [['news', REPORT_DIR], ['future-prediction', FP_DIR]] as const) {
     const fileStem = `${kind}-${stem(date)}`;
     for (const l of LOCALES) {
       const p = join(repoRoot, sub, l, `${fileStem}.md`);
@@ -38,7 +37,7 @@ function checkDbPopulation(repoRoot: string, date: string): string[] {
   const res = postUpdateValidation({
     check: 'all', date,
     db: join(repoRoot, 'app/data/analytics.sqlite'),
-    docsDataDir: join(repoRoot, 'docs/data'),
+    docsDataDir: docsDataDir(repoRoot),
     repoRoot,
   });
   const errs: string[] = [];
@@ -74,7 +73,7 @@ function checkSundayArtifacts(repoRoot: string, date: string): string[] {
       if (!existsSync(join(preReview, required)))
         errs.push(`missing in pre-review snapshot: ${rel(repoRoot, preReview)}/${required}`);
   }
-  const dashboardSnap = join(repoRoot, 'docs/data/snapshots', s);
+  const dashboardSnap = join(docsDataDir(repoRoot), 'snapshots', s);
   if (!existsSync(dashboardSnap)) {
     errs.push(
       `missing Sunday artifact: ${rel(repoRoot, dashboardSnap)}/ `
@@ -84,7 +83,7 @@ function checkSundayArtifacts(repoRoot: string, date: string): string[] {
       if (!existsSync(join(dashboardSnap, required)))
         errs.push(`missing in dashboard snapshot: ${rel(repoRoot, dashboardSnap)}/${required}`);
   }
-  const index = join(repoRoot, 'docs/data/snapshots/index.json');
+  const index = join(docsDataDir(repoRoot), 'snapshots', 'index.json');
   if (!existsSync(index)) {
     errs.push(`missing: ${rel(repoRoot, index)}`);
   } else {
@@ -112,7 +111,7 @@ function checkReadmes(repoRoot: string, date: string): string[] {
     .map(i => new Date(base - i * 86400000).toISOString().slice(0, 10))
     .sort();
   const pyList = (xs: string[]) => `[${xs.map(x => `'${x}'`).join(', ')}]`;
-  for (const l of ['', '.ja', '.es', '.fil']) {
+  for (const l of ['', ...NON_EN_LOCALES.map(x => `.${x}`)]) {
     const path = join(repoRoot, `README${l}.md`);
     const relPath = rel(repoRoot, path);
     if (!existsSync(path)) {
@@ -134,7 +133,7 @@ function checkReadmes(repoRoot: string, date: string): string[] {
         errs.push(`${relPath}: window is ${pyList(actual)}, expected ${pyList(expectedDates)}`);
     }
     const locSeg = l === '' ? 'en' : l.slice(1);
-    for (const [kind, sub] of [['news', 'report'], ['future-prediction', 'future-prediction']] as const) {
+    for (const [kind, sub] of [['news', REPORT_DIR], ['future-prediction', FP_DIR]] as const) {
       const link = `[${kind}-${stem(date)}.md](${sub}/${locSeg}/${kind}-${stem(date)}.md)`;
       if (!text.includes(link))
         errs.push(`${relPath}: missing today's link \`${link}\` (locale-link routing rule)`);
@@ -145,7 +144,7 @@ function checkReadmes(repoRoot: string, date: string): string[] {
 
 function checkDashboardHygiene(repoRoot: string): string[] {
   const errs: string[] = [];
-  const mPath = join(repoRoot, 'docs/data/manifest.json');
+  const mPath = join(docsDataDir(repoRoot), 'manifest.json');
   if (!existsSync(mPath)) {
     errs.push(`missing: ${rel(repoRoot, mPath)}`);
   } else {

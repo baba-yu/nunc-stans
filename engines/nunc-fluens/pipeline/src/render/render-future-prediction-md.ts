@@ -4,6 +4,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { bridgesFileToDict, parseBridgesFile } from '../schemas/sourcedata.ts';
 import { aiNoticeFp } from './notice.ts';
+import { FP_DIR } from '../world-paths.ts';
 import { buildEnv, normalizeRendered } from './env.ts';
 import { dateDir, writeAtomic } from './render-news-md.ts';
 import { postWriteIntegrity } from './post-write-integrity.ts';
@@ -57,7 +58,7 @@ export function renderFpDay(sourcedataRoot: string, dateIso: string, locale = 'e
 }
 
 export function fpOutputPath(publishRoot: string, dateIso: string, locale: string): string {
-  return join(publishRoot, 'future-prediction', locale,
+  return join(publishRoot, FP_DIR, locale,
     `future-prediction-${dateIso.replaceAll('-', '')}.md`);
 }
 

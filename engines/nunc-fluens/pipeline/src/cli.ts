@@ -14,12 +14,13 @@ import {
 } from './config.ts'
 import { migrateDb } from './migrate.ts'
 import { CANONICAL_FILES } from './schemas/sourcedata.ts'
+import { REPORT_DIR } from './world-paths.ts'
 
 function cmdLink(dir: string | undefined): number {
   if (!dir) { console.error('usage: nunc-fluens link <dir>'); return 2 }
   if (!existsSync(dir)) { console.error(`link: no such directory: ${dir}`); return 1 }
-  if (!existsSync(join(dir, 'report')))
-    console.error(`warning: ${dir} has no report/ — is this really the news checkout?`)
+  if (!existsSync(join(dir, REPORT_DIR)))
+    console.error(`warning: ${dir} has no ${REPORT_DIR}/ — is this really the news checkout?`)
   const file = linkNewsRepo(dir)
   console.log(`news_repo = ${dir}`)
   console.log(`written to ${file}`)
