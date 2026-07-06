@@ -562,27 +562,27 @@ discipline, upstream untouched):**
 - ~~In `~/news`: remove `app/` …~~ / ~~Owner: rename GitHub repo →
   `nunc-fluens` …~~ — **DROPPED per the 2026-07-06 redirection.**
   `~/news` stays intact and independently operated.
-- [ ] Rewrite INTEGRATION.md for the fork — or fold it into the engine
-      README as a short historical note: there is no integration
-      relationship left to document (owner: the news project and
-      nunc-stans become completely unrelated). Content: the pipeline's
-      lineage (ported from the news prototype), the `app/` subtree =
-      frozen oracle deleted at T12, resync retired, and "news-shaped
-      checkout" as a data-format concept rather than a named repo.
+- [x] INTEGRATION.md rewritten as a lineage note DONE 2026-07-06: no
+      integration relationship exists; content = lineage (ported from
+      the news prototype), the `app/` subtree = frozen oracle deleted
+      at T12, resync retired, "news-shaped checkout" as a data-format
+      concept, and the sandbox run rule.
 
 ### Task 9: Scheduling as a product feature + sandbox instance
-- [ ] systemd user units + `just news-schedule`; cron fallback doc.
-      Shipped and documented as product features — **no cutover, no
-      production adoption** (redirection).
-- [ ] Sandbox instance recipe (`just news-sandbox <dir>` or a documented
-      copy procedure): disposable copy of a news checkout + its own data
-      store, so runs never touch the real `~/news`. **Required (not
-      optional): split the view-source config from the run-target
-      config** — `news_repo` stays the read-only view source (the
-      guaranteed news-board display), and `nunc-fluens run` takes its
-      target from a separate key/flag and refuses to run when the
-      target equals the view source. One key serving both was how the
-      plumbing check wrote into production.
+- [x] systemd user units + installer + `just news-schedule <sandbox>
+      [OnCalendar]` DONE 2026-07-06 (`pipeline/systemd/`; cron fallback
+      documented in install.sh). Shipped as product features — no
+      cutover, no production adoption (redirection).
+- [x] Sandbox + view/run split DONE 2026-07-06: `nunc-fluens sandbox
+      <dir>` (= `just news-sandbox`) makes a local clone of the view
+      checkout (origin removed — a sandbox cannot push back) + a store
+      seeded from the checkout's DB (fallback: main store copy),
+      integrity-checked. `run` now REQUIRES `--sandbox <dir>` /
+      `NS_SANDBOX`, refuses without one, and refuses a target that
+      resolves to the view checkout. The publish step handles
+      remote-less instances (commit-only). The settings pair still
+      comes from the main store's news-config.json (user preference,
+      not sandbox state).
 - [ ] Timer-launched run completes end-to-end **against the sandbox**
       (this is exit run (a)).
 
@@ -591,16 +591,21 @@ discipline, upstream untouched):**
       replay diffs enumerated) — DONE 2026-07-06.
 - [ ] Execute S-3: settings drawer native→external+local, next sandbox
       run completes, `run.json` records the pair. Evidence saved.
-- [ ] Execute S-4: network+LLM disabled replay **on a pristine sandbox
-      copy** → identical dashboard modulo metadata. Evidence saved.
+- [x] Execute S-4 DONE 2026-07-06: zero-LLM replay of Sunday 2026-07-05
+      (full weekly chain) in a fresh sandbox — git status shows only
+      run.json + the regenerated docs/data exports (parsed-equal;
+      evidence-reverse proven oracle==replay, the committed file was
+      boundary-stale upstream). Ledger/renders byte-untouched after the
+      replay-doesn't-re-increment fix. Evidence:
+      `design/verification/phase-c.md`. This doubles as exit run (c).
 
 ### Task 11: Exit runs + portability (all sandbox — redirection)
 - [ ] (a) timer-launched claude-code day in the sandbox (done in T9).
 - [ ] (b) ollama qwen3.6:27b + external search — sandbox day; acceptance
       is structural validity (C4), nothing published.
-- [ ] (c) replay of a committed day in a pristine sandbox copy — only
-      run.json changes. All three `run.json`s archived in the
-      verification doc.
+- [x] (c) replay of a committed day in a pristine sandbox copy DONE
+      2026-07-06 (= the S-4 execution above; run.json archived in the
+      verification doc).
 - [ ] S-10 re-run (container; native Windows unaffected but re-checked);
       CI 3-OS green on `newstack`.
 
