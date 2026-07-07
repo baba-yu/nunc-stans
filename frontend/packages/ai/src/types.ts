@@ -26,6 +26,9 @@ export interface ChatOptions {
    * provider via a SearchSource. */
   webSearch?: boolean;
   timeoutMs?: number;
+  /** Provider-side reasoning toggle where one exists (ollama's `think`
+   * for qwen-class models). Providers without the knob ignore it. */
+  think?: boolean;
   /** Step / call-site id stamped into the run log. */
   caller?: string;
   /** Per-call goal-verify override, merged over the Ai-level config

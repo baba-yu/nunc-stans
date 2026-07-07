@@ -36,7 +36,11 @@ export function ollamaProvider(cfg: OllamaConfig = {}): Provider {
     if (opts.system) body.messages = [{ role: 'system', content: opts.system }, ...(body.messages as unknown[])];
     // Ollama structured outputs: `format` takes a JSON schema object.
     if (opts.jsonSchema) body.format = opts.jsonSchema;
-    if (opts.temperature !== undefined) body.options = { temperature: opts.temperature };
+    if (opts.think !== undefined) body.think = opts.think;
+    const options: Record<string, unknown> = {};
+    if (opts.temperature !== undefined) options.temperature = opts.temperature;
+    if (opts.maxTokens !== undefined) options.num_predict = opts.maxTokens;
+    if (Object.keys(options).length) body.options = options;
 
     const res = await fetchImpl(`${host}/api/chat`, {
       method: 'POST',
