@@ -248,6 +248,36 @@ stated by the owner 2026-07-07:
 | R7 | **Goldens = init-born**: `synthesize.ts` builds its fixture instance through the real `init` routine + synthetic data (init is thereby tested); all path literals/tests move to v2 (`data/sourcedata` — hashed rel paths change wholesale; legitimate regen). |
 | R8 | Deletion proposal below is a PROPOSAL — the owner decides and executes. |
 
+### V3 addendum (owner correction 2026-07-07, second pass) — instances are git-less
+
+Owner: 「このシステムはgitとの連携を前提にしてない。完全にローカルで動くので
+sourcedataもローカルだけで蓄積するインスタンスなんだよ。」 Git was a
+news-era publishing mechanism (GitHub Pages); the product neither requires
+nor creates git anywhere in an instance. Data simply accumulates locally;
+versioning/backup is the user's own concern.
+
+| # | Decision |
+|---|---|
+| R9 | **Git-less instance lifecycle**: `init` = mkdir + template copy + `initDb` + an `instance.json` stamp at the instance root (`{"nunc_fluens": 1, "created": <date>, "imports": []}` — the date is an injectable parameter so goldens stay deterministic); `import` = plain copy + an `imports` entry appended to `instance.json` (re-import guard reads it, plus the sourcedata probe); `requireInstance` checks `instance.json` + `data/sourcedata` (store-DB recreation stays). The `git`/synthetic-identity/gpgsign-hermeticity machinery is deleted. |
+| R10 | **No commits in runs**: the `publish` step (pure git add/commit/push) is removed from the DAG; `run.json` is written once at end of run (the ride-the-next-commit choreography dies with it). The Sunday `commitOnly` calls are removed — snapshot/maintenance artifacts are just files (the steps keep writing them). |
+| R11 | Template `.gitignore` removed (an instance is a plain directory); the engine docs carry a one-line note for users who *choose* to version an instance themselves (ignore `store/` + `data/archives/`). CONTRIBUTING amendment reworded: instances are plain local data directories under the gitignored `instances/` home. |
+
+Third-pass corrections (owner 2026-07-07, executed partly by the owner in
+the working tree — engine `design/` corpus deleted wholesale incl. the
+ADRs, `app/sourcedata` residue deleted, residue `memory/` renamed
+`history/` with the reference ledger stored inside):
+
+| # | Decision |
+|---|---|
+| R12 | **`memory` → `history`** in the instance layout: `data/history/{dormant, theme-review, snapshots, maintenance}`; the citation ledger `data/references.txt` → **`data/history/reference-history.log`** (the owner's message said `.md`, the artifact they created on disk is `.log` — disk followed; trivial to rename if wrong). Prompt/gate/export/import/goldens all follow. |
+| R13 | **The data store lives in-repo**: default `<repo>/data/` (gitignored), replacing the external `~/nunc-stans-data` default. `NS_DATA`/config overrides remain; the owner's existing store is MOVED to `~/nunc-stans/data` (vault integrity verified after the move). |
+| R14 | **Validation instance**: the news corpus accumulated in `~/nf-sandbox/news` is imported as instance `instances/data` (literal reading of the owner's 「instances/dataの下」 — rename cheap if another profile name is wanted) and linked as the world-view source, restoring a populated world and enabling real-data validation. `~/nf-sandbox` itself stays untouched (D4 disposal is the owner's). |
+| R15 | **Cold-start check**: a fresh `init` instance must form a world on its FIRST live run (empty history, empty ledger, template seeds only). Verified by an actual first run; cold-start defects found by it are fixed in-phase. |
+
+- [ ] V3 (nf + tool + docs): R9-R15 — includes committing the owner's
+      design-corpus/residue deletions and sweeping the now-dangling
+      `design/` references out of src comments and prompt text.
+
 ### Deletion proposal (owner to approve/execute per item; nothing deleted by the assistant)
 
 | Item | What | Why it can go | Note |
