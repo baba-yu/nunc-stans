@@ -11,6 +11,11 @@ interface NewsConfig {
   searchEngine?: string
   synthModel?: string
   locales?: string[]
+  /** AI profile whose provider/model/verify act as step DEFAULTS (Phase D). */
+  profile?: string
+  /** Per-step verify overrides — hand-edited/advanced; the drawer only
+   * preserves what it finds. */
+  stepVerify?: Record<string, unknown>
 }
 
 const RUNTIMES = ['claude-code', 'anthropic-api', 'ollama']
@@ -22,13 +27,18 @@ const LOCALES = ['ja', 'es', 'fil']
 const open = ref(false)
 const loading = ref(true)
 const status = ref<{ ok: boolean; message: string } | null>(null)
-const cfg = reactive<Required<NewsConfig>>({
+const cfg = reactive({
   runtime: 'claude-code',
-  search: 'native',
+  search: 'native' as 'native' | 'external',
   searchEngine: 'brave',
   synthModel: '',
   locales: [...LOCALES],
+  profile: '',
 })
+// Available AI profiles for the defaults dropdown (Phase D).
+const profileIds = ref<string[]>([])
+// Advanced per-step overrides pass through the drawer untouched.
+let stepVerify: Record<string, unknown> | undefined
 
 const summary = computed(() =>
   `${cfg.runtime} · ${cfg.search === 'native' ? 'native search' : `external: ${cfg.searchEngine}`}`
@@ -51,6 +61,13 @@ async function load() {
     // Absent key = the default full set (all three checked); an empty
     // array is a deliberate EN-only choice and stays empty.
     cfg.locales = got.locales ?? [...LOCALES]
+    cfg.profile = got.profile ?? ''
+    stepVerify = got.stepVerify
+    // Profile choices come from the same store the pipeline reads.
+    try {
+      const pr = await fetch('/api/profiles')
+      if (pr.ok) profileIds.value = ((await pr.json()) as Array<{ id: string }>).map(p => p.id)
+    } catch { /* profile list is optional decoration for the dropdown */ }
   } catch (e) {
     status.value = { ok: false, message: `settings unavailable: ${e}` }
   } finally {
@@ -70,6 +87,8 @@ async function save() {
   }
   if (cfg.search === 'external') body.searchEngine = cfg.searchEngine
   if (cfg.synthModel.trim()) body.synthModel = cfg.synthModel.trim()
+  if (cfg.profile) body.profile = cfg.profile
+  if (stepVerify) body.stepVerify = stepVerify
   const r = await fetch('/api/world/news-config', {
     method: 'PUT',
     headers: { 'content-type': 'application/json' },
@@ -116,6 +135,13 @@ onMounted(load)
       <label>
         model (optional)
         <input v-model="cfg.synthModel" placeholder="e.g. qwen3.6:27b" />
+      </label>
+      <label>
+        profile defaults (optional)
+        <select v-model="cfg.profile">
+          <option value="">—</option>
+          <option v-for="p in profileIds" :key="p" :value="p">{{ p }}</option>
+        </select>
       </label>
       <div class="locales">
         <span>locales (besides EN)</span>
