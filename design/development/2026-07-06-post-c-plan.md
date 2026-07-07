@@ -212,3 +212,62 @@ sandbox, or stop the timer until review. Flagged in the close-out summary.
   references engine paths from tools/, which the boundary check permits).
 - Redirection honored: nothing writes the real `~/news`; old-shape support
   is view-only; migration only ever touches disposable sandboxes.
+
+## REDO 2026-07-07 (owner) — template/instance separation, not news-conformant renames
+
+Owner review of the executed tasks rejected the framing: **what item 1
+actually asked for was a clean separation of the app TEMPLATE from DATA
+INSTANCES** — the executed work renamed paths while still conforming the
+instance shape to the existing news checkout (keeping `app/sourcedata`,
+creating instances only by cloning a news-shaped checkout). Corrections,
+stated by the owner 2026-07-07:
+
+- The product is a **different piece of software** from news. `~/nf-sandbox`
+  was only a dev-time verification artifact — the owner will not update it
+  again; news data comes over **at the owner's own timing via an import**
+  (possibly AI-assisted), not by cloning.
+- Instances live under **`engines/nunc-fluens/instances/<profile>/`**
+  (gitignored; multiple profiles are expected). This amends FD-3.2's
+  "data never inside the repo" for gitignored instance checkouts —
+  CONTRIBUTING note required (owner decision 2026-07-07).
+- Instance-ization was insufficient: `app/sourcedata` (and everything else
+  news-era) belongs to the instance layout proper.
+- Deletions are to be **proposed, not executed** — see the Deletion
+  proposal below.
+
+### V2 decisions (owner-approved in session, 2026-07-07)
+
+| # | Decision |
+|---|---|
+| R1 | **Template**: the engine ships `pipeline/instance-template/` — directory skeleton + synthetic seed editorial files (news-topics.md, citation-restrictions.md, glossary.yml, …) + instance `.gitignore` + README seed. New CLI **`nunc-fluens init <dir>`** creates an instance from it (git init, skeleton, seeds, `initDb` store). |
+| R2 | **Instance layout v2 (no `app/`)**: `data/{sourcedata, daily-news, future-prediction, memory, reference, exports, archives}` + `data/references.txt`; `README*.md` at the root (product face); `run.json` at `data/sourcedata/<date>/run.json`; runtime state in a gitignored `store/` inside the instance (analytics.sqlite, `runs/ai-runs.jsonl`, optional `news-config.json` override). |
+| R3 | **Per-instance config**: the pipeline reads the instance `store/news-config.json` when present, falling back to the main store's (which the gate/drawer edit as defaults). A per-profile gate API is a recorded follow-up. `ai-runs.jsonl` moves into the instance store. |
+| R4 | **`nunc-fluens import <news-shaped-src> <instance>`** replaces the clone+migrate machinery: copies a news-shaped checkout's data into the v2 layout (report→data/daily-news, …, app/sourcedata→data/sourcedata, docs/data→data/exports, docs/archives→data/archives, references.txt→data/references.txt), seeds the store DB from the source DB (integrity-checked), commits in the instance repo. Existing DB rows keep their `app/sourcedata/…` provenance strings (source_file_id = sha1(rel path), FK-referenced — new ingests write `data/sourcedata/…`; mixed provenance documented). |
+| R5 | **Retired**: `sandbox` (clone) and `migrate-layout` commands (mapping absorbed into `import`); `requireSandbox` → `requireInstance` (init/import-born, v2 shape); `NS_SANDBOX` → `NS_INSTANCE`; systemd units/justfile updated (`news-init` / `news-import` / `news-daily <instance>`). |
+| R6 | **Old-shape view support REMOVED** (owner): build-world reads an instance's `data/exports` only; the `docs/data` fallback and `detectShape` general plumbing go away (old-shape knowledge survives only inside `import`). The world view source config points at an instance. |
+| R7 | **Goldens = init-born**: `synthesize.ts` builds its fixture instance through the real `init` routine + synthetic data (init is thereby tested); all path literals/tests move to v2 (`data/sourcedata` — hashed rel paths change wholesale; legitimate regen). |
+| R8 | Deletion proposal below is a PROPOSAL — the owner decides and executes. |
+
+### Deletion proposal (owner to approve/execute per item; nothing deleted by the assistant)
+
+| Item | What | Why it can go | Note |
+|---|---|---|---|
+| D1 | `engines/nunc-fluens/design/archive/` (25 tracked files) | Port-source history; git history retains it | `git rm -r` when desired |
+| D2 | `engines/nunc-fluens/INTEGRATION.md` | Lineage note can fold into the engine README/docs | fold, then delete |
+| D3 | Engine-dir untracked residue: `app/` (~29 days real sourcedata + pycache), `memory/`, `references.txt` | Python-oracle-era working data; not part of the repo | owner `rm -rf` (real data — assistant won't); then the old-shape `.gitignore` entries can be swept |
+| D4 | `~/nf-sandbox` + the 06:30 timer | Dev verification artifact; owner said it won't be updated | delete after v2 verification; re-point or disable the timer (`just news-schedule <instance>` / `systemctl --user disable --now nunc-fluens-daily.timer`) |
+| D5 | `~/nunc-stans-data/world/analytics.sqlite` (+ `.bak-*`) | Phase-C dev-validation copy | KEEP if it will seed the first `import`; otherwise delete |
+
+### V2 tasks
+
+- [ ] V2-1 (nf): world-paths v2 (`data/sourcedata`, `data/references.txt`),
+      instance-template/ + `init`, `import` (absorbs migrate-layout incl.
+      archives carry + ignore translation), retire sandbox/migrate-layout,
+      `requireInstance` + `NS_INSTANCE`, per-instance config/log resolution,
+      flow-check DB probe → store, publish list + run.json path, goldens
+      init-born + regen, tests overhauled.
+- [ ] V2-2 (tool/design ride): build-world instance-only (R6), justfile
+      recipes, systemd, CONTRIBUTING FD-3.2 amendment, naming.md,
+      engine README/docs updates, `.gitignore` gains `/instances/`.
+- [ ] V2-3: adversarial review over the v2 diff; fixes; verification doc
+      update; owner handoff.
