@@ -6,6 +6,7 @@ import {
   configFile, requireConfig, resolveDataDir, resolveNewsRepo,
 } from '../src/config.ts';
 import { linkNewsRepo } from '../src/config.ts';
+import { defaultDataDir } from '../../../../tools/lib/data-dir.ts';
 import { integrityCheck } from '../src/migrate.ts';
 import { initDb } from '../src/db/db.ts';
 
@@ -24,14 +25,18 @@ afterEach(() => {
 });
 
 describe('config resolution', () => {
-  it('env overrides win and requireConfig demands both values', () => {
+  it('env overrides win; the store falls back to the in-repo default (R13)', () => {
     process.env.NS_DATA = join(tmp, 'store');
     process.env.NS_NEWS_REPO = join(tmp, 'news');
     expect(requireConfig()).toEqual({ dataDir: join(tmp, 'store'), newsRepo: join(tmp, 'news') });
     delete process.env.NS_NEWS_REPO;
     expect(() => requireConfig()).toThrow(/just news-link/);
+    // No NS_DATA and no config data_dir: the store resolves to the
+    // in-repo default <repo>/data (R13) instead of refusing — only the
+    // news-repo link stays a hard requirement.
     delete process.env.NS_DATA;
-    expect(() => requireConfig()).toThrow(/just bootstrap/);
+    process.env.NS_NEWS_REPO = join(tmp, 'news');
+    expect(requireConfig()).toEqual({ dataDir: defaultDataDir(), newsRepo: join(tmp, 'news') });
   });
 
   it('linkNewsRepo merges into the config without clobbering other keys', () => {
