@@ -1050,10 +1050,10 @@ export function buildScopeGraph(db: Db, scopeId: string, publishRoot: string): R
     for (const c of ordered) linkedCategories.add(c);
     for (let i = 0; i < ordered.length; i++)
       for (let j = i + 1; j < ordered.length; j++)
-        crossCatPairs.add(`${ordered[i]} ${ordered[j]}`);
+        crossCatPairs.add(`${ordered[i]}\0${ordered[j]}`);
   }
   for (const pair of [...crossCatPairs].sort()) {
-    const [a, b] = pair.split(' ');
+    const [a, b] = pair.split('\0');
     links.push({
       id: `link.shares.${a}__${b}`, source: a, target: b,
       type: 'shares_prediction', weight: 0.6, status: 'active',
@@ -1184,10 +1184,10 @@ function buildMixGraph(tech: any, business: any, buildId: string): Record<string
     for (const c of ordered) linkedCategories.add(c);
     for (let i = 0; i < ordered.length; i++)
       for (let j = i + 1; j < ordered.length; j++)
-        crossCatPairs.add(`${ordered[i]} ${ordered[j]}`);
+        crossCatPairs.add(`${ordered[i]}\0${ordered[j]}`);
   }
   for (const pair of [...crossCatPairs].sort()) {
-    const [a, b] = pair.split(' ');
+    const [a, b] = pair.split('\0');
     const linkId = `link.shares.${a}__${b}`;
     if (seenLinkIds.has(linkId)) continue;
     seenLinkIds.add(linkId);
