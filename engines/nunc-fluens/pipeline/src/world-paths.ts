@@ -5,10 +5,9 @@
 // carrying everything under data/ (sourcedata, the publish quartet,
 // exports, references.txt), README*.md at the root, and runtime state
 // in a gitignored store/ (see config.ts instanceStoreDir). Path
-// *construction* routes through here. The news-era old shape
-// (app/sourcedata, report/, docs/…) is not a pipeline concept anymore —
-// that knowledge lives ONLY inside `nunc-fluens import` (src/import.ts,
-// module-local constants).
+// *construction* routes through here. The news-era old shape is not a
+// pipeline concept anymore — that knowledge lives ONLY inside
+// `nunc-fluens import` (src/import.ts, module-local constants).
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 

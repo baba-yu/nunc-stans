@@ -954,8 +954,9 @@ export function dailyBriefingSteps(): StepDef[] {
           const msg = e instanceof Error ? e.message : String(e);
           if (!msg.includes('nothing to commit')) throw e;
         }
-        // Instances without a remote (sandboxes have origin removed by
-        // design) publish locally only — the commit IS the publish.
+        // Instances without a remote (init-born repos have none until
+        // the owner adds one) publish locally — the commit IS the
+        // publish.
         if (git('remote').trim() === '') {
           ctx.log('  no git remote — committed locally, push skipped');
           return;
