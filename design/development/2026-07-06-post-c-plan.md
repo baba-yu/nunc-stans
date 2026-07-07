@@ -76,77 +76,100 @@ sandbox, or stop the timer until review. Flagged in the close-out summary.
 
 ## Tasks
 
-### Task 1: Plan + branch
+### Task 1: Plan + branch — DONE 2026-07-06
 - [x] Recon map (6 parallel readers + adversarial gap-check) — this session.
-- [ ] This plan committed on `phase/post-c` (design:).
+- [x] This plan committed on `phase/post-c` (design:, 59b7f0a + 8c34ee0).
 
-### Task 2: NUL-byte hygiene (pre-req)
-- [ ] Strip the four NUL bytes from `src/export/export.ts` (byte-identical
-      otherwise); prove suite-neutral (121 tests). Grep now sees the file.
-- [ ] Ridealong: raise the `db-dump.test.ts` schema-objects test timeout —
+### Task 2: NUL-byte hygiene (pre-req) — DONE 2026-07-06 (3413823)
+- [x] Strip the four NUL bytes from `src/export/export.ts` (they were
+      literal NUL separators in template strings — replaced with `\0`
+      escapes, behavior identical); suite-neutral (121 tests). Grep now
+      sees the file. (T6 later found and fixed the same disease in
+      `weekly/maintenance.ts`.)
+- [x] Ridealong: raise the `db-dump.test.ts` schema-objects test timeout —
       it exceeds vitest's 5s default under full-suite parallel load
       (observed 5117 ms flake at baseline, passes in isolation).
 
-### Task 3: Prompts re-home (P4 — item 2)
-- [ ] `git mv` the 16 runtime files → `pipeline/prompts/`; `designDir()` →
-      `promptsDir()`; wire `locale-fanout-calques.md` into the locale-fanout
-      prompt; move the remaining corpus → `design/archive/` + README
-      provenance rewrite; keep ADRs + `sourcedata-layout.md` under `design/`.
-- [ ] New `test/prompts-resolution.test.ts`: all 16 loads resolve non-empty;
-      the memory-policy split marker exists.
-- [ ] Link sweep: INTEGRATION.md, code comments citing `design/skills|scheduled`.
+### Task 3: Prompts re-home (P4 — item 2) — DONE 2026-07-06 (6404b92)
+- [x] `git mv` 17 runtime files (16 + calques) → `pipeline/prompts/` (R100
+      renames); `designDir()` → `promptsDir()`; calques appended to the
+      locale-fanout spec via `skillSpecForPrompt` (covers all 3 call
+      sites); 25 retired files → `design/archive/` + README provenance
+      rewrite; ADRs + `sourcedata-layout.md` stay living.
+- [x] `test/prompts-resolution.test.ts` (18 tests): all loads resolve
+      non-empty; memory-policy split marker; calques-append assertions.
+- [x] Link sweep: INTEGRATION.md, code comments. (schema.sql comment
+      deferred to T5's regen by golden coupling — landed there.)
 
-### Task 4: glossary_audit retention (P7 — item 4b)
-- [ ] `pruneGlossaryAudit(db, todayIso)` in `validate-glossary-terms.ts`,
-      called first in `runValidateGlossary`; count logged by the step.
-- [ ] Unit tests in `glossary-lifecycle.test.ts`: 30d boundary, semantic
-      pass/fail exemption, warn-prune re-scoping. No golden regen expected.
+### Task 4: glossary_audit retention (P7 — item 4b) — DONE 2026-07-06 (8312cc4)
+- [x] `pruneGlossaryAudit(db, todayIso)` in `validate-glossary-terms.ts`,
+      called first in `runValidateGlossary`; count surfaced by the step.
+- [x] 6 unit tests: 30d boundary both timestamp forms, semantic pass/fail
+      exemption, warn pruning, count, anti-join preservation, integration.
+      Zero golden changes (verified).
 
-### Task 5: Subtheme removal (P6 — item 4a)
-- [ ] Schema + code + dashboard removals per P6; goldens `synthesize.ts all`
-      in the same commit; suite green; export diff reviewed (key-removals only).
+### Task 5: Subtheme removal (P6 — item 4a) — DONE 2026-07-06 (e2acf9f + 5d59513)
+- [x] Schema + export + ingest + weekly snapshot + dashboard removals per
+      P6 (28 files, −791 lines); goldens `all` regen in the same commit;
+      export diff = null-key removals only; activity_level kept
+      theme-only (minimal DDL diff, activity ids stable); runtime prompts
+      swept of subtheme instructions (5d59513).
 
-### Task 5b: Prefix-token JSON + LIST all-scopes (P8/P9 — items 4c/4d)
-- [ ] `prefix-tokens.json` single source + short-label import + export emit +
-      dashboard fetch-with-fallback + drift reconciliation; goldens regen
-      (new export file).
-- [ ] `#list-scope` gains `all` (mix-graph alias); manual verification via
-      staged world view recorded in the verification doc.
+### Task 5b: Prefix-token JSON + LIST all-scopes (P8/P9 — items 4c/4d) — DONE 2026-07-06 (08b9b63)
+- [x] `prefix-tokens.json` single source (readFileSync pattern, schema.sql
+      precedent) + export emit + dashboard fetch with reconciled inline
+      fallback; joined the export-parity set; goldens regen.
+- [x] `#list-scope` gains `all` (mix alias; lookupProbeNode + syncFromPrefix
+      wired); manual staged-view check recorded as owner follow-up in the
+      verification doc.
 
-### Task 6: Layout renames (P1/P2/P3/P10 — item 1)
-- [ ] `world-paths.ts`: new rel constants (`data/daily-news` etc.,
-      `data/exports`, `data/archives/snapshots`) + old-shape constants for
-      detection/migration; helper fns.
-- [ ] Fix every bypass literal (daily-flow-check memory/app-db/dashboard
-      literals; theme-review archive + commit paths; export.ts:132 dormant;
-      steps.ts `'app/sourcedata'` stays by design (P1)).
-- [ ] README window prompt + post-write-integrity regexes → `data/daily-news`
-      links; readme-checks stays constant-derived.
-- [ ] Publish add-list, instance `.gitignore` writing, citation-ledger text.
-- [ ] `sandbox` migration + `migrate-layout` CLI + `requireSandbox` old-shape
-      guard (P3); systemd/install.sh untouched (structure-only checks).
-- [ ] Dashboard relocation `engines/nunc-fluens/docs/` → `dashboard/`;
-      engine `docs/` becomes real docs home (README + deploy note).
-- [ ] `tools/build-world.ts`: dashboard from engine, data probe
-      new-then-old (tool: commit).
-- [ ] Engine-root hygiene (P10).
-- [ ] Goldens: synthesize writes the new shape; `all` regen; the 6 test
-      files' literals updated; suite green.
+### Task 6: Layout renames (P1/P2/P3/P10 — item 1) — DONE 2026-07-06 (75a8baf + 9879d82 + aa2d19b)
+- [x] `world-paths.ts` rewritten: `data/…` rel constants + `exportsDir()` +
+      OLD_* detection constants + `detectShape()`.
+- [x] Every bypass literal fixed — incl. two found beyond the recon map:
+      `checkDashboardHygiene`'s literal docs/ asset checks (now
+      exports-hygiene) and a NUL-byte-masked `memory/maintenance` literal
+      in `weekly/maintenance.ts`.
+- [x] README prompt + post-write-integrity regexes → `data/daily-news`;
+      readme-checks followed by construction.
+- [x] Publish add-list, instance `.gitignore` translation, ledger text.
+- [x] `sandbox` migrates old-shape clones; `migrate-layout <dir>` CLI;
+      `requireSandbox` refuses old-shape (and, post-review, mixed) trees;
+      systemd untouched. Unit-tested on synthetic old-shape git repos.
+- [x] Dashboard `git mv` → `engines/nunc-fluens/dashboard/`; engine
+      `docs/` = real docs home (README + instance-deploy note).
+- [x] `tools/build-world.ts` stages the engine dashboard + probes
+      `data/exports` → falls back to `docs/data`; proven against the real
+      `~/news` (243 headlines, fallback) and the synthetic new-shape tree
+      (probe). (tool: 9879d82)
+- [x] Engine-root hygiene (P10): reference/ + README.{ja,es,fil}.md
+      deleted, README rewritten, .gitignore cleaned.
+- [x] Goldens: input tree R100-renamed + `all` regen; a dormant-pool
+      fixture row added so dormant styling is regression-visible; suite
+      green (150). Deliberate extra: prompt corpus path-shape sweep
+      (aa2d19b) so live prompts and gates agree.
 
-### Task 7: Locale model (P5 — item 3)
-- [ ] Pipeline: effective-set threading (RunCtx + run.json snapshot + replay
-      fallback), fan-outs + gates + export bags + README suffixes derived;
-      unit tests for subset/EN-only gate behavior (nf:).
-- [ ] Gate: `locales` key + validation + tests (422 path) (gate:).
-- [ ] Drawer: three checkboxes (fe:).
-- [ ] Goldens: default set preserves bytes — regen only if gate-text changed.
+### Task 7: Locale model (P5 — item 3) — DONE 2026-07-06 (4462527 + d4f39de + 1bd8f0e)
+- [x] Pipeline: `resolveLocaleSet` + `replayLocaleSet` (run.json >
+      locale-dir listing > default), RunCtx threading, every fan-out/gate/
+      export bag/README suffix derived; 16 unit tests incl. EN-only and
+      subset behavior; goldens byte-untouched (default trio preserved).
+- [x] Gate: `locales` key, subset-of-{ja,es,fil} validation (422), tests.
+- [x] Drawer: three checkboxes; explicit empty-array save.
+- [x] Goldens: zero regen needed (verified per-commit).
 
-### Task 8: Close-out
-- [ ] Full suite: pipeline typecheck+test, gate cargo, formans, nunc-ai,
-      engines/nunc-stans cargo, `just check`; commit-scope per commit.
-- [ ] `design/verification/post-c.md` with evidence + explained golden diffs.
-- [ ] naming.md / INTEGRATION.md consistency sweep; owner handoff note
-      (timer/sandbox migration, merge order).
+### Task 8: Close-out — DONE 2026-07-06
+- [x] Full suite green: pipeline 174/17 files, gate 10, ns 11, formans 16
+      + build, nunc-ai 12, fourfive 24, `just check` ok; commit-scope ok
+      on all 18 commits.
+- [x] Adversarial review (6 reviewers + refute-by-default verification):
+      11 findings → 1 refuted, 10 confirmed, 10 fixed
+      (6e380df / 4e0b20d / 645912c / cd15979).
+- [x] `design/verification/post-c.md` written (suite state, golden audit,
+      review record, both-shape proofs, owner handoff).
+- [x] naming.md checked (already current — redirection wording covers the
+      fork); INTEGRATION.md updated in T6; owner handoff note in the
+      verification doc.
 
 ## Risks
 
@@ -163,20 +186,21 @@ sandbox, or stop the timer until review. Flagged in the close-out summary.
 - **Timer vs branch:** see Sequencing note.
 - **grep blindness:** fixed at T2 before any sweeps.
 
-## Exit criteria
+## Exit criteria (all met 2026-07-06 except the CI-push half of 1)
 
-1. Suite green everywhere (pipeline, gate, formans, nunc-ai, ns engine,
-   `just check`), 3-OS CI green on `phase/post-c` after owner push.
-2. Goldens regenerated in the new shape; every diff class traced to a
-   decision (P1/P5/P6/P8) in the verification doc.
-3. Replay E2E (orchestrator-replay incl. Sunday chain) green in the new
-   shape; migration routine proven by unit test on an old-shape fixture tree.
-4. View side proven on both shapes: build-world stages the owner-shape
-   checkout (fallback path) and a new-shape tree (probe path) — test or
-   recorded manual evidence.
-5. `design/verification/post-c.md` written; owner handoff note lists: merge
-   order (newstack → dev, then phase/post-c), `~/nf-sandbox` migration
-   choice, deleted engine-root files for review.
+1. ✅ Suite green everywhere (pipeline 174, gate 10, formans 16, nunc-ai 12,
+   ns engine 11, fourfive 24, `just check`); ⏳ 3-OS CI green on
+   `phase/post-c` after owner push.
+2. ✅ Goldens regenerated in the new shape; every diff class traced to a
+   decision (P1/P6/P8; P5/P7 zero-diff) in the verification doc.
+3. ✅ Replay E2E (orchestrator-replay incl. Sunday chain) green in the new
+   shape; migration routine proven by unit test on old-shape fixture trees.
+4. ✅ View side proven on both shapes: build-world staged the owner-shape
+   checkout (fallback, 243 headlines) and a new-shape tree (probe) —
+   evidence in the verification doc.
+5. ✅ `design/verification/post-c.md` written; owner handoff note lists:
+   merge order (newstack → dev, then phase/post-c), `~/nf-sandbox`
+   migration choice, deleted engine-root files for review.
 
 ## Self-review (done at write time)
 
