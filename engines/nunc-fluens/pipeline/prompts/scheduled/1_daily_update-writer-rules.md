@@ -70,7 +70,7 @@ Output: object matching `change_log.json` schema. Each `items[i]` carries `kind`
 
 Output: object matching `news_section.json` schema. Each `sections[i].category` becomes a `### <Category>` sub-header in the rendered markdown; each `bullets[i].body` becomes a `- <body>` line, with `citations` rendered as a comma-joined link list at the end.
 
-**Anti-inertia rules (per `design/decisions/ADR-002-news-anti-inertia.md` and `design/skills/compose-news-section.md §Anti-inertia rules`):**
+**Anti-inertia rules (per `design/decisions/ADR-002-news-anti-inertia.md` and `prompts/skills/compose-news-section.md §Anti-inertia rules`):**
 
 - **Continuation cap:** at most 2 of the day's bullets may extend a storyline already present in any of the prior 3 days of `data/daily-news/en/news-*.md`. The remaining 3+ bullets must be either fresh topics (covered topics from `data/reference/news-topics.md` not seen in the prior 3 days) or net-new events on a previously-covered topic. The parent supplies a structured prior-storyline digest to identify continuations.
 - **State-change requirement on continuations:** every continuation bullet must center on a fresh state-change event observed on this date — new named entrant, numeric threshold crossing, new actor position, new artifact shipped, or scheduled catalyst date reached. Hold-steady framings ("unchanged through the weekend," "Nth consecutive non-trading day," "doubly/triply weekend-aged hold," "now-N-day-old artifact") must be **dropped**, not written. Under-filling (3 or 4 bullets total) beats inertia-filling.
@@ -81,7 +81,7 @@ Output: object matching `news_section.json` schema. Each `sections[i].category` 
 
 The `extract-glossary-candidates` skill handles mechanical extraction. Writer-side: do **not** re-define a term inside the body prose. Repetition is what the glossary layer removes. If a term is unfamiliar to the reader and not yet in `glossary_terms` with `status='active'`, the writer can either (a) inline a 1-clause gloss, or (b) trust the next daily run to promote and define the term.
 
-When `define-glossary-terms` returns a non-empty `pending_definitions` list, fill `quick_def` + `why_it_matters` per the prompt template in `design/skills/define-glossary-terms.md`. Refused terms get `status='retired', reviewed_by_human=1`.
+When `define-glossary-terms` returns a non-empty `pending_definitions` list, fill `quick_def` + `why_it_matters` per the prompt template in `prompts/skills/define-glossary-terms.md`. Refused terms get `status='retired', reviewed_by_human=1`.
 
 ## Schema validation gate
 

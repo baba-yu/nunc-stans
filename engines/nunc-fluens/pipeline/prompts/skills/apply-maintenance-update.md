@@ -22,7 +22,8 @@ deterministically).
   contradicts / chain edges that triggered the gate.
 - Locale fan-out targets — for streams whose schema includes locale
   siblings (reasoning, bridge_text, needs.actor/job/outcome/motivation,
-  task 5W1H), the sub-agent rewrites all 4 locales (en/ja/es/fil).
+  task 5W1H), the sub-agent rewrites every locale in the run's render
+  set (EN + news-config `locales`, default {ja, es, fil}).
 - Target output path:
   `app/sourcedata/<week_ending>/<filename>.<prediction_id>.json`
   where `<filename>` is one of:
@@ -55,7 +56,7 @@ in the same dir, then `os.replace` onto the final name.
   bridge by short label + date).
 - Preserve the field's editorial style (≤ word counts, no
   markdown asterisks, no scope prefix) per the existing
-  `design/skills/compose-*.md` contracts.
+  `prompts/skills/compose-*.md` contracts.
 - For `needs.task.status` flips (a Need that just landed), set
   `task.status="done"` directly in the JSON; the parent's
   `cli ingest-sourcedata` propagates to the DB.

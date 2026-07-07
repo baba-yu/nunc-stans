@@ -1,6 +1,6 @@
 # Memory & Taxonomy Maintenance Policy
 
-Status: **implementation in progress**. Daily flow (`design/scheduled/2_future_prediction.md`) and weekly flow (`design/scheduled/4_weekly_memory.md`) are the operational specs. This file holds the WHY and the data contracts.
+Status: **implementation in progress**. Daily flow (`design/archive/scheduled/2_future_prediction.md`) and weekly flow (`design/archive/scheduled/4_weekly_memory.md`) are the operational specs. This file holds the WHY and the data contracts.
 
 ## 0. Vocabulary
 
@@ -108,7 +108,7 @@ This is safe because metrics (`attention_score`, `realization_score`, `grass_lev
 
 The theme review's job is therefore **diagnostic + advisory**: surface the current shape of the taxonomy, flag pain, propose edits. It never preserves state across renames because there is no state to preserve.
 
-### 2.1 Weekly theme review (Sunday — `design/scheduled/5_weekly_theme_review.md`)
+### 2.1 Weekly theme review (Sunday — `design/archive/scheduled/5_weekly_theme_review.md`)
 
 Intent:
 
@@ -215,8 +215,8 @@ Maximum input on any Sunday = 1 dormant snapshot + 7 future-prediction files + 7
 ## 4. Acceptance criteria for "implemented"
 
 - `data/memory/dormant/.gitkeep` exists. ✅
-- `design/scheduled/4_weekly_memory.md` exists and has been run end-to-end at least once.
-- `design/scheduled/2_future_prediction.md` consumes the dormant snapshot and applies 2-layer longshot detection.
+- `design/archive/scheduled/4_weekly_memory.md` exists and has been run end-to-end at least once.
+- `design/archive/scheduled/2_future_prediction.md` consumes the dormant snapshot and applies 2-layer longshot detection.
 - One full Sunday cycle has been run end-to-end and the resulting dormant snapshot has been reviewed by a human.
 - No DB schema changes were required.
 
@@ -230,7 +230,7 @@ Maximum input on any Sunday = 1 dormant snapshot + 7 future-prediction files + 7
 | 2 | Longshot keyword scan efficiency at scale | **closed** | 2-layer mechanism (§1.5). Dormant snapshot row holds explicit `Signals`; layer 2 keeps recall from depending on signal completeness. |
 | 3 | Schema rebuild after theme rename/delete | **closed** | No retired status, no alias table. Schema is a current-time view; metrics fully recompute every run (§2.0). Renames / merges / deletes propagate naturally because the predictions/evidence are immutable and the matcher re-attaches them against the current schema each rebuild. |
 | 4 | Confirmed ("big-win") predictions need separate "graduated" status? | open | Probably no — keep them in rotation so reality reversal can be detected. Revisit after 1 month of operation. |
-| 5 | CLAUDE.md additions | **closed** | Daily/weekly prompts now live in `design/scheduled/*.md`. CLAUDE.md just needs a top-level pointer to that folder. |
+| 5 | CLAUDE.md additions | **closed** | The daily/weekly prompt corpus is archived at `design/archive/scheduled/*.md`; the runtime copies live under `prompts/scheduled/`. CLAUDE.md just needs a top-level pointer. |
 | 6 | Identity scheme | **closed** | `{news date}-{1-based index}`, stable because news files are append-only-then-frozen. |
 | 7 | Bootstrap behavior | **closed** | First weekly run with no previous dormant snapshot → produces an empty dormant snapshot (all predictions are within 7 days, none can be dormant yet). Bootstrap completed 2026-04-26; spec switched from bootstrap-aware to steady-state-only on the same day. |
 

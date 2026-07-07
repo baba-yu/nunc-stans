@@ -18,7 +18,7 @@ sub-agent.
 - Last 7 days of `data/daily-news/en/news-*.md` headlines and
   `change_log.json` items for cross-prediction context.
 - Cross-stream correlation guidance (copy verbatim from
-  `design/scheduled/6_weekly_maintenance.md §Cross-stream correlation`):
+  `design/archive/scheduled/6_weekly_maintenance.md §Cross-stream correlation`):
   Bridge→Reasoning, Needs→Reasoning, Readings→Reasoning,
   Bridge→Needs, Readings→Bridge, Needs→Readings.
 - Target output path:

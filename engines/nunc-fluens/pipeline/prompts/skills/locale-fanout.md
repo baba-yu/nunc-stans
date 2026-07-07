@@ -33,7 +33,7 @@ The rendered markdown for each locale is produced by a separate skill (`render-n
 
 ## Translation contract (JSON-side)
 
-> **MANDATORY:** every translate-sourcedata sub-agent MUST also read `design/skills/locale-fanout-calques.md` and apply its JA/ES/FIL naturalness rules. This contract covers STRUCTURE; that file covers NATURALNESS (the EN-calque "重訳" patterns Yuki flagged). `summary.json` + `bridges.json` are the calque hotspot.
+> **MANDATORY:** every translate-sourcedata sub-agent MUST also apply the CALQUE RULES (locale-fanout-calques) appended below this contract — the parent inlines them programmatically — and follow their JA/ES/FIL naturalness rules. This contract covers STRUCTURE; the calque rules cover NATURALNESS (the EN-calque "重訳" patterns Yuki flagged). `summary.json` + `bridges.json` are the calque hotspot.
 
 For each translatable string field in the EN canonical:
 
@@ -79,7 +79,7 @@ The orchestrator MUST dispatch **one sub-agent per non-EN locale** rather than t
 
 ### Glossary term definitions
 
-`glossary_terms.quick_def_<locale>` and `why_it_matters_<locale>` are **not** produced by locale-fanout (they are not part of any sourcedata JSON file). They are produced directly by the `define-glossary-terms` LLM fill step inside `1_daily_update`. The locale contract lives in `design/skills/define-glossary-terms.md §LLM fill prompt`.
+`glossary_terms.quick_def_<locale>` and `why_it_matters_<locale>` are **not** produced by locale-fanout (they are not part of any sourcedata JSON file). They are produced directly by the `define-glossary-terms` LLM fill step inside `1_daily_update`. The locale contract lives in `prompts/skills/define-glossary-terms.md §LLM fill prompt`.
 
 ### Themes
 

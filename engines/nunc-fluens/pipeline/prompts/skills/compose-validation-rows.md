@@ -8,7 +8,7 @@ LLM sub-agent that emits the placeholder `app/sourcedata/<date>/bridges.json` (v
 - The latest `data/memory/dormant/dormant-*.md` (dormant longshot pool).
 - Today's `data/daily-news/en/news-YYYYMMDD.md` (the evidence side; ONLY URLs from this file may be used).
 - The schema for `bridges.json` from `design/sourcedata-layout.md §JSON schemas (canonical)`.
-- The 2-layer dormant longshot detection rules from `design/scheduled/2_future_prediction-writer-rules.md §Dormant pool re-check`.
+- The 2-layer dormant longshot detection rules from `prompts/scheduled/2_future_prediction-writer-rules.md §Dormant pool re-check`.
 - A target output path: `app/sourcedata/<date>/bridges.json`.
 
 ## Required output

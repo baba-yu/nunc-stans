@@ -53,6 +53,23 @@ describe('runtime prompt assets resolve', () => {
   });
 });
 
+describe('no dead self-referential prompt paths', () => {
+  // The prompts were re-homed out of design/skills|scheduled (post-C);
+  // their internal citations must not point at the retired location —
+  // moved files are cited at prompts/..., archived corpus files at
+  // design/archive/... (which this regex deliberately does not match).
+  const DEAD_HOME = /design\/(?:skills|scheduled)\//;
+
+  it('no runtime-loaded prompt cites the retired design/ home', () => {
+    for (const name of RUNTIME_SKILLS)
+      expect(loadSkillSpec(name), name).not.toMatch(DEAD_HOME);
+    expect(loadWriterRules('1_daily_update')).not.toMatch(DEAD_HOME);
+    expect(loadWriterRules('2_future_prediction')).not.toMatch(DEAD_HOME);
+    expect(loadScheduledSpec('3_daily_briefing')).not.toMatch(DEAD_HOME);
+    expect(loadMemoryPolicy()).not.toMatch(DEAD_HOME);
+  });
+});
+
 describe('locale-fanout prompt carries the calque rules', () => {
   // A distinctive string from locale-fanout-calques.md line 1.
   const CALQUES_MARKER = 'calque-avoidance reference';

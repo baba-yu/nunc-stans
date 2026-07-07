@@ -8,7 +8,7 @@ LLM sub-agent that emits **one prediction entry** for `app/sourcedata/<date>/pre
 - The trace of the LLM's reasoning question (which scope: `tech` / `business` / `cross`).
 - The schema for one entry of `predictions.predictions[]` from `design/sourcedata-layout.md §JSON schemas (canonical)`.
 - The full forbidden-token list.
-- The full per-skill writer-rules from `design/scheduled/1_daily_update-writer-rules.md §compose-prediction`.
+- The full per-skill writer-rules from `prompts/scheduled/1_daily_update-writer-rules.md §compose-prediction`.
 - A target output path: `app/sourcedata/<date>/needs.<pid>.json` (where `<pid>` = the sub-agent's chosen prediction id).
 
 ## Required output
@@ -19,7 +19,7 @@ A single JSON object (NOT an array, NOT wrapped) matching `predictions.predictio
 {
   "id": "prediction.<sha16>",
   "scope_hint": "tech | business | cross",
-  "title": "<one-line title; ≤ 80 chars; lead with the predicted subject + verb; no trigger event, observer, or date as the opening phrase; no scope prefix — full rule in design/scheduled/1_daily_update-writer-rules.md §compose-prediction title-format>",
+  "title": "<one-line title; ≤ 80 chars; lead with the predicted subject + verb; no trigger event, observer, or date as the opening phrase; no scope prefix — full rule in prompts/scheduled/1_daily_update-writer-rules.md §compose-prediction title-format>",
   "body": "<long-form prose; multi-sentence>",
   "reasoning": {
     "because": "<≤ 100 chars>",

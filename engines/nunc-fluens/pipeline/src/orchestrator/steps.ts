@@ -839,6 +839,10 @@ export function dailyBriefingSteps(): StepDef[] {
               loadScheduledSpec('3_daily_briefing'),
               '--- END SPEC ---',
               '',
+              // P5 ground truth: the spec speaks in configured-set
+              // terms — pin the concrete set so the model needn't
+              // infer it (and spec wording drift can't mislead it).
+              `This run's locale set: ${['en', ...ctx.locales].join(', ')}.`,
               `Rewrite README${L}.md as the 3-day window ending ${ctx.date} `
               + `for locale '${locSeg}' per Step 2 of the spec.`,
               `Current file:\n${prev}`,
