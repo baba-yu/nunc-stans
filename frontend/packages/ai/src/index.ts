@@ -7,7 +7,7 @@ import { appendRunLog } from './runlog.ts';
 import { normalizeVerify } from './verify.ts';
 import type {
   ChatMessage, ChatOptions, ChatResult, FetchLike, Provider,
-  SearchOptions, SearchResult, VerifyConfig,
+  SearchOptions, SearchResult, StreamHandler, VerifyConfig,
 } from './types.ts';
 
 export * from './types.ts';
@@ -37,6 +37,11 @@ export interface AiConfig {
 export interface Ai {
   provider(name: string): Provider;
   chat(providerName: string, messages: ChatMessage[], opts?: ChatOptions): Promise<ChatResult>;
+  /** Streamed chat. Providers without chatStream (capability-declared,
+   * e.g. claude-code in v0) fall back to chat() and emit the full reply
+   * as one final content delta — honest, not hidden (PD6). Logged to the
+   * run log exactly like chat(). */
+  chatStream(providerName: string, messages: ChatMessage[], opts: ChatOptions | undefined, onEvent: StreamHandler): Promise<ChatResult>;
   search(sourceName: string, query: string, opts?: SearchOptions): Promise<SearchResult[]>;
 }
 
@@ -65,11 +70,22 @@ export function createAi(cfg: AiConfig): Ai {
     return p;
   }
 
-  async function chat(providerName: string, messages: ChatMessage[], opts: ChatOptions = {}): Promise<ChatResult> {
+  /** Effective verify config for one call: per-call override merged over
+   * the Ai-level defaults (§2.6 — per-message toggle / per-step config). */
+  function effectiveVerify(opts: ChatOptions): VerifyConfig {
+    return opts.verify ? normalizeVerify({ ...verify, ...opts.verify }) : verify;
+  }
+
+  async function logged(
+    providerName: string,
+    opts: ChatOptions,
+    call: (p: Provider) => Promise<ChatResult>,
+  ): Promise<ChatResult> {
     const p = provider(providerName);
+    const callVerify = effectiveVerify(opts);
     const started = Date.now();
     try {
-      const result = await p.chat(messages, opts);
+      const result = await call(p);
       appendRunLog(cfg.runLogFile, {
         ts: new Date(started).toISOString(),
         caller: opts.caller ?? 'unknown',
@@ -78,8 +94,9 @@ export function createAi(cfg: AiConfig): Ai {
         inputTokens: result.usage.inputTokens,
         outputTokens: result.usage.outputTokens,
         durationMs: Date.now() - started,
-        verify: verify.verify,
+        verify: callVerify.verify,
         outcome: 'ok',
+        ...(opts.profile ? { profile: opts.profile } : {}),
       });
       return result;
     } catch (err) {
@@ -91,17 +108,36 @@ export function createAi(cfg: AiConfig): Ai {
         inputTokens: 0,
         outputTokens: 0,
         durationMs: Date.now() - started,
-        verify: verify.verify,
+        verify: callVerify.verify,
         outcome: 'error',
         error: err instanceof Error ? err.message.slice(0, 300) : String(err),
+        ...(opts.profile ? { profile: opts.profile } : {}),
       });
       throw err;
     }
+  }
+
+  async function chat(providerName: string, messages: ChatMessage[], opts: ChatOptions = {}): Promise<ChatResult> {
+    return logged(providerName, opts, p => p.chat(messages, opts));
+  }
+
+  async function chatStream(
+    providerName: string, messages: ChatMessage[], opts: ChatOptions = {}, onEvent: StreamHandler,
+  ): Promise<ChatResult> {
+    return logged(providerName, opts, async p => {
+      if (p.chatStream) return p.chatStream(messages, opts, onEvent);
+      // Capability-declared fallback (stream:false providers): one final
+      // content delta — exactly the old FourFive stub behavior, honest.
+      const result = await p.chat(messages, opts);
+      if (result.text) onEvent({ type: 'content', delta: result.text });
+      onEvent({ type: 'done', result });
+      return result;
+    });
   }
 
   async function search(sourceName: string, query: string, opts?: SearchOptions): Promise<SearchResult[]> {
     return getSearchSource(sourceName, cfg.fetchImpl).search(query, opts);
   }
 
-  return { provider, chat, search };
+  return { provider, chat, chatStream, search };
 }

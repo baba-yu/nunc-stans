@@ -28,7 +28,23 @@ export interface ChatOptions {
   timeoutMs?: number;
   /** Step / call-site id stamped into the run log. */
   caller?: string;
+  /** Per-call goal-verify override, merged over the Ai-level config
+   * (§2.6: per-message toggle in chat, per-step config in pipelines). */
+  verify?: Partial<VerifyConfig>;
+  /** Active profile id, stamped into the run log (S-5). Resolution from
+   * the profile store happens at the call site; nunc-ai only records it. */
+  profile?: string;
 }
+
+/** One streamed chunk from a chatStream-capable provider. `thinking`
+ * deltas only occur when the provider/model emits reasoning (capability
+ * `thinking: true`); `done` always carries the final assembled result. */
+export type StreamEvent =
+  | { type: 'thinking'; delta: string }
+  | { type: 'content'; delta: string }
+  | { type: 'done'; result: ChatResult };
+
+export type StreamHandler = (event: StreamEvent) => void;
 
 export interface ChatResult {
   text: string;
@@ -52,6 +68,12 @@ export interface Provider {
   name: string;
   capabilities: Capabilities;
   chat(messages: ChatMessage[], opts?: ChatOptions): Promise<ChatResult>;
+  /** Streamed chat with thinking deltas where the model emits them.
+   * Optional: providers without it declare `stream: false` and callers
+   * fall back to chat + a single final `content` delta (PD6 — honest
+   * capability declaration instead of a hidden stub). Returns the same
+   * final result the `done` event carries. */
+  chatStream?(messages: ChatMessage[], opts: ChatOptions | undefined, onEvent: StreamHandler): Promise<ChatResult>;
 }
 
 export interface SearchResult {
@@ -81,6 +103,15 @@ export interface VerifyConfig {
   tokenBudget?: number;
 }
 
+/** One judge verdict in a goal-verify chain (§2.6): whether the goal was
+ * met, the gaps fed back on retry, and the iteration's token cost. */
+export interface VerdictEntry {
+  met: boolean;
+  gaps: string[];
+  tokensIn: number;
+  tokensOut: number;
+}
+
 export interface RunLogEntry {
   ts: string;
   caller: string;
@@ -93,6 +124,11 @@ export interface RunLogEntry {
   verify: 'on' | 'off';
   outcome: 'ok' | 'error';
   error?: string;
+  /** Active profile id (S-5 stamp). */
+  profile?: string;
+  /** Goal-verify verdict chain, one entry per iteration (populated by the
+   * T3 loop; absent when verify is off). */
+  verdicts?: VerdictEntry[];
 }
 
 export type FetchLike = typeof globalThis.fetch;
