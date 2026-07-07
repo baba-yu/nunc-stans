@@ -1,7 +1,10 @@
 /* ============================================================
  * Future Prediction Intelligence Dashboard
  * Vanilla JS (ES module). D3 v7 loaded globally via <script>.
- * Contract: docs/data/manifest.json + docs/data/graph-<scope>.json
+ * Contract: data/manifest.json + data/graph-<scope>.json staged
+ * beside the dashboard (tools/build-world.ts sources them from the
+ * instance's data/exports/; docs/data survives only as the legacy
+ * news-shaped-checkout fallback there).
  * ============================================================ */
 
 (function () {
@@ -3623,7 +3626,8 @@
 
   /* ---------------- Stream A: glossary hover ---------------- */
 
-  // Loads docs/data/glossary.json once at boot. Active rows with a
+  // Loads data/glossary.json (staged from the instance's
+  // data/exports/) once at boot. Active rows with a
   // filled `quick_def` get registered into state.glossaryMap +
   // state.glossaryPattern. annotateGlossary() then wraps the first
   // occurrence of each term inside any rendered markdown body in
@@ -3901,7 +3905,8 @@
   // PROBE/PREDICTIONS: flat list of predictions for the current scope,
   // built from the same graph JSON as OBSERVATORY plus the on-screen
   // filters. PROBE/NEWS: evidence reverse-view from
-  // docs/data/evidence-reverse.json, click-to-highlight in OBSERVATORY.
+  // data/evidence-reverse.json (staged from the instance's
+  // data/exports/), click-to-highlight in OBSERVATORY.
   //
   // Both alt-view sections overlay the graph canvas — the OBSERVATORY ⇆
   // PROBE switch in #meta-header hides the canvas and shows whichever
@@ -5371,6 +5376,10 @@
         // the selector — mirror it as its data-equivalent "mix".
         let v = src.value;
         if (f === "scope" && v === "all" && dstPrefix === "news") v = "mix";
+        // …and the round trip must be loss-free: "all" and "mix" are
+        // data-equivalent aliases (same graph), so a news-side change
+        // must not downgrade an existing LIST "all" selection to "mix".
+        if (f === "scope" && dstPrefix === "list" && v === "mix" && dst.value === "all") continue;
         if (dst.value !== v) dst.value = v;
       }
       const sChk = document.getElementById(`${srcPrefix}-has-bridge`);
@@ -5454,6 +5463,16 @@
     }
 
     try {
+      // A boot-restored snapshot view must load the snapshot's OWN
+      // manifest, exactly like selectSnapshot: re-point DATA_DIR before
+      // the first loadManifest() so renderLocaleButtons sees the
+      // snapshot-era locale set (not the live one, which may have shrunk
+      // since). Glossary + prefix-tokens stay live-pinned below (they
+      // fetch LIVE_DATA_DIR) — matching selectSnapshot, which never
+      // reloads them either.
+      if (state.snapshotDate) {
+        DATA_DIR = `${LIVE_DATA_DIR}/snapshots/${state.snapshotDate}`;
+      }
       await loadManifest();
       // P8: refresh the scope-prefix strip list from the exported
       // prefix-tokens.json. Deliberately not awaited — titles cleaned
@@ -5469,12 +5488,8 @@
       updateHeatButtons(state.heatMetric);
       updateLocaleButtons(state.locale);
       applyChromeStrings();
-      // Snapshot index loads asynchronously; if a saved snapshot was
-      // active on last visit, re-point DATA_DIR before the fetch.
-      if (state.snapshotDate) {
-        DATA_DIR = `${LIVE_DATA_DIR}/snapshots/${state.snapshotDate}`;
-      }
-
+      // (DATA_DIR was already re-pointed at the persisted snapshot
+      // above, before loadManifest — the graph fetch below inherits it.)
       await loadScopeGraph(state.scopeId);
       rebuildCategoryFilters();
       rebuildSimulation();
