@@ -76,6 +76,18 @@ Running record; completed as the exit items execute. Plan:
   `node` strip-only execution while vitest's esbuild masked it —
   removed, and `erasableSyntaxOnly` added to the agent tsconfig so the
   class of bug fails typecheck from now on.
+- **2026-07-07 — owner tagged manda `v0.2.0`** (== d0b61e2, the exact
+  commit the T0 release build used — no drift). `git ls-remote --tags`
+  verified. PD8's pending-tag machinery flips at T11: doctor hard-pass,
+  setup line unmarked, S-10 extension asserts it.
+- **2026-07-07 — T2 done** (ea913b8). nunc-ai gained `chatStream`
+  (ollama incremental NDJSON + thinking; anthropic SSE; mock scripted;
+  one-delta fallback for streamless providers), `ChatOptions.verify`
+  (per-call merge) / `.profile`, `RunLogEntry.profile`/`verdicts`.
+  **Model-id hygiene (plan derived decision): `claude-sonnet-5` default
+  verified current against the `claude-api` skill 2026-07-07.**
+  Acceptance: nunc-ai 20/20; pipeline 187/187 untouched; ff 24/24;
+  typecheck green.
 
 ## Stories (executed at T10; specs written at T1)
 

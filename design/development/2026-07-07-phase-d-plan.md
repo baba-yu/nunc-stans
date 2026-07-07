@@ -407,14 +407,21 @@ Session-size guide (v1 plan: 3–5 focused sessions):
       typecheck).
 - Acceptance MET: S-11's hardest edge proven first, on the real binary.
 
-### Task 2: nunc-ai contract extensions (fe) — depends: T0
-- [ ] `chatStream` + thinking deltas (ollama, anthropic, mock; capability
-      flags honest everywhere); `ChatOptions.verify` and
-      `ChatOptions.profile`; `RunLogEntry.profile` + `verdicts`.
-- [ ] Anthropic default model id verified against the `claude-api` skill
-      and recorded; nunc-ai becomes the single source of truth for it.
-- Acceptance: nunc-ai tests extended and green; **the pipeline suite green
-  with zero call-site changes**; typecheck green repo-wide.
+### Task 2: nunc-ai contract extensions (fe) — DONE 2026-07-07 (ea913b8)
+- [x] `chatStream` + thinking deltas: ollama (incremental NDJSON incl.
+      `message.thinking`, shared reader with chat()), anthropic (SSE
+      `thinking_delta`/`text_delta`, usage from message_start +
+      message_delta), mock (scripted thinking + chunked content —
+      capabilities now honestly `stream:true, thinking:true`);
+      `Ai.chatStream` with the capability-declared one-delta fallback for
+      streamless providers (claude-code untouched). `ChatOptions.verify`
+      (per-call merge over Ai defaults) + `ChatOptions.profile`;
+      `RunLogEntry.profile` + `verdicts` (typed; populated at T3).
+- [x] Anthropic default model id verified against the `claude-api` skill
+      2026-07-07: `claude-sonnet-5` is a current active alias — kept, one
+      source of truth in `providers/anthropic.ts`.
+- Acceptance MET: nunc-ai 12→20 tests green; **pipeline 187/187 green
+  with zero call-site changes**; fourfive 24/24; typecheck green.
 
 ### Task 3: Goal-verify loop (fe) — depends: T2
 - [ ] Judge/retry middleware in `createAi` per PD5 (`verify.ts` grows the
