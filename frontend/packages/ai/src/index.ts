@@ -21,6 +21,10 @@ export {
 } from './search/adapters.ts';
 export { appendRunLog } from './runlog.ts';
 export { normalizeVerify, runVerified } from './verify.ts';
+export {
+  loadDefaults, loadProfile, profilesDir, resolveProfile, validateProfile,
+} from './profile.ts';
+export type { Profile, ProfileContext, ProfileDefaults } from './profile.ts';
 
 export interface AiConfig {
   /** JSONL run log path (e.g. `<data store>/runs/ai-runs.jsonl`). Every

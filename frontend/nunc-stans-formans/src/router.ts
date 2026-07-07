@@ -9,5 +9,6 @@ export const router = createRouter({
     { path: '/', component: HomeView },
     { path: '/world', component: () => import('./views/WorldView.vue') },
     { path: '/timeline', component: () => import('./views/TimelineView.vue') },
+    { path: '/profiles', component: () => import('./views/ProfilesView.vue') },
   ],
 })
