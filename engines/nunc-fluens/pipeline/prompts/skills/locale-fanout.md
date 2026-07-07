@@ -81,9 +81,9 @@ The orchestrator MUST dispatch **one sub-agent per non-EN locale** rather than t
 
 `glossary_terms.quick_def_<locale>` and `why_it_matters_<locale>` are **not** produced by locale-fanout (they are not part of any sourcedata JSON file). They are produced directly by the `define-glossary-terms` LLM fill step inside `1_daily_update`. The locale contract lives in `design/skills/define-glossary-terms.md §LLM fill prompt`.
 
-### Themes and subthemes
+### Themes
 
-`themes.description_<locale>`, `themes.short_label_<locale>`, `subthemes.description_<locale>`, and `subthemes.short_label_<locale>` are **not** produced by locale-fanout. They originate in `app/src/schema.sql` seed blocks and in `apply-schema-edit` operations triggered by `5_weekly_theme_review`.
+`themes.description_<locale>` and `themes.short_label_<locale>` are **not** produced by locale-fanout. They originate in the bundled `schema.sql` seed blocks and in `apply-schema-edit` operations triggered by `5_weekly_theme_review`.
 
 ### Evidence item titles
 

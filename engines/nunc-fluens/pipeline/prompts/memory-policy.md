@@ -113,7 +113,7 @@ The theme review's job is therefore **diagnostic + advisory**: surface the curre
 Intent:
 
 - **Empty / underused themes** → suggest deprecate, keyword expansion, or merge.
-- **Overpopulated themes** (≥ 6 predictions, multiple sub-topics) → suggest split or subtheme carve-out.
+- **Overpopulated themes** (≥ 6 predictions, multiple sub-topics) → suggest a split.
 - **Candidate themes** (entries in DB's `theme_candidates` table, populated by ingest with no-good-match predictions) → propose new theme after 3+ accumulate around a recognizable cluster.
 
 Output is markdown — `memory/theme-review/theme-review-YYYYMMDD.md` (intent: keep weekly artifacts under `memory/`, leave `design/` for specs). Never edits `schema.sql` directly.
