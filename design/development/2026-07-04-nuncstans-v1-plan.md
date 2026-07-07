@@ -584,15 +584,16 @@ DAG as code (steps = functions, I/O = the existing sourcedata JSON schemas,
 gates = the existing deterministic checks); build `packages/ai` (§2.6);
 port the Python compute to TS against golden-master fixtures (Python stays as
 the oracle until parity); sync the news subtree to the `~/news` tip before
-any code change here (follow the re-sync recipe in `engines/nunc-fluens/INTEGRATION.md`); move `analytics.sqlite` out of the repo to
+any code change here; move `analytics.sqlite` out of the repo to
 `~/nunc-stans-data/world/` (same file, same schema, same data — new location);
-split `~/news` into a data+publishing remnant
-(report/, docs/ Pages) fed by the monorepo pipeline (D3), renaming that repo
-to `nunc-fluens` at this point (GitHub Pages URLs change and do not
-redirect — update links deliberately); schedule via a WSL
-systemd timer (or cron) calling the CLI — the daily run must start and finish
-with **no conversational step**; the current manual "run today's scheduled
-tasks" prompt to Claude Code is retired.
+~~split `~/news` into a data+publishing remnant … renaming that repo to
+`nunc-fluens`~~ **[D3 SUPERSEDED by the 2026-07-06 redirection — recorded
+in the Phase C plan: the dev repo never operates production news;
+`~/news` keeps its name and its own stack (complete fork); runs target
+disposable sandbox instances and publish nothing]**; schedule via a WSL
+systemd timer (or cron) calling the CLI — the daily run must start and
+finish with **no conversational step** (proven in the sandbox at Phase C;
+the production Cowork routine continues unchanged, per the redirection).
 
 Exit: one full daily run each of — (a) `claude-code` provider, (b) a
 non-Anthropic or local provider with an external search adapter, (c) a replay
