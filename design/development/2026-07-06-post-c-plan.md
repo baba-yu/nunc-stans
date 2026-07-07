@@ -274,9 +274,19 @@ ADRs, `app/sourcedata` residue deleted, residue `memory/` renamed
 | R14 | **Validation instance**: the news corpus accumulated in `~/nf-sandbox/news` is imported as instance `instances/data` (literal reading of the owner's 「instances/dataの下」 — rename cheap if another profile name is wanted) and linked as the world-view source, restoring a populated world and enabling real-data validation. `~/nf-sandbox` itself stays untouched (D4 disposal is the owner's). |
 | R15 | **Cold-start check**: a fresh `init` instance must form a world on its FIRST live run (empty history, empty ledger, template seeds only). Verified by an actual first run; cold-start defects found by it are fixed in-phase. |
 
-- [ ] V3 (nf + tool + docs): R9-R15 — includes committing the owner's
-      design-corpus/residue deletions and sweeping the now-dangling
-      `design/` references out of src comments and prompt text.
+- [x] V3 (nf + tool + docs) — DONE 2026-07-07 (900e797, c80f84f, 130ed11,
+      9382de3 + cold-start fixes f6ec2f0, 826ef98): owner deletions
+      committed + dangling-ref sweep; git-less instances (instance.json
+      stamp; publish + Sunday commits removed); memory→history +
+      reference-history.log; store default `<repo>/data` (owner store
+      moved, vault verified); validation instance `instances/data`
+      imported from ~/nf-sandbox/news (80 days, live DB seeded, linked —
+      world view 246 headlines, validate 24 files 0 fail); **cold start
+      EXECUTED for real** — first live run on a fresh init instance
+      completed (`run 2026-07-07: OK`) after two genuine cold-start
+      defects were found and fixed by it: the day-0 lint false positive
+      and readme-window `<L>`-placeholder leakage (no prior README to
+      imitate). Evidence in design/verification/post-c.md.
 
 ### Deletion proposal (owner to approve/execute per item; nothing deleted by the assistant)
 

@@ -189,17 +189,66 @@ d72aa2b/1b70d46/d722df1/c03187e (core), c624aee/f6e752c (periphery),
 - Adversarial review: 4 reviewers + refute-by-default verification; 16
   confirmed findings (3 major), all fixed same day (see plan V2-3).
 
+# V3 — git-less instances, history rename, in-repo store, cold start (2026-07-07)
+
+Owner corrections (plan V3 addendum R9-R15). Commits 900e797 / c80f84f /
+130ed11 / 9382de3 + cold-start fixes f6ec2f0 / 826ef98.
+
+## Shipped
+
+- **Git-less instances (R9/R10/R11):** `instance.json` stamp replaces git
+  everywhere (`{"nunc_fluens":1, created, imports[]}`); init/import/run
+  neither require nor create git; the `publish` step and the Sunday
+  commit calls are gone — steps just write files; `run.json` written once
+  at end of run; template `.gitignore` removed. The owner's wholesale
+  deletion of the engine `design/` corpus (incl. ADRs) and `app/sourcedata`
+  residue was committed as-is and every dangling reference swept.
+- **`data/history` (R12):** was `data/memory`; the citation ledger is
+  `data/history/reference-history.log` (owner's on-disk artifact followed).
+- **Store in-repo (R13):** default `<repo>/data/` (gitignored). The owner's
+  store was moved `~/nunc-stans-data` → `~/nunc-stans/data`: `self/` vault
+  git history intact and clean after the move, `analytics.sqlite`
+  integrity ok, config override removed so the default resolves.
+- **Validation instance (R14):** `instances/data` imported from
+  `~/nf-sandbox/news` (read-only): 80 days of daily-news + sourcedata,
+  full exports, history tree incl. the renamed ledger; the sandbox's live
+  DB seeded into its store (integrity ok); linked as the world source —
+  **246 headlines staged**, `validate 2026-07-06` = 24 files, 0 failures.
+
+## Cold start — EXECUTED (R15), `run 2026-07-07: OK`
+
+A real first live run (claude-code runtime, native search) on a fresh
+`init` instance — template seeds only, zero history, empty ledger, empty
+DB. The full Tuesday chain completed and the world formed: 7 export files,
+graph-mix 33 nodes, manifest en/ja/es/fil; `build-world` staged 3
+headlines from it (then restored to the linked validation instance).
+Two genuine cold-start defects were found BY the run and fixed in-phase;
+resume-from-artifacts made each retry cheap:
+
+1. **day-0 lint false positive (f6ec2f0):** the model legitimately wrote
+   "day-0 support" (vLLM/SGLang vocabulary); the storyline-numbering
+   forbidden-token regex matched it in all four locales. Storyline
+   numbering never starts at zero — `day-0` is now exempt; unit tests
+   added (`test/lint-clean.test.ts`).
+2. **readme-window placeholder leakage (826ef98):** with no prior README
+   to imitate, the model reproduced the spec's `<L>` path placeholders
+   and spec prose literally in README.ja/fil (and used a non-conformant
+   link text in en). The prompt now pins the EXACT per-locale link
+   targets for the run date and forbids quoting spec prose. The
+   structural gates caught every one of these before anything shipped —
+   they earned their keep.
+
 ## Owner actions (current)
 
 1. Merge order unchanged: `newstack` → `dev` first, then push
    `phase/post-c` (CI `phase/**`) and PR into `dev`.
-2. First instance when you want it: `just news-init <name>` →
-   `just news-import ~/news <name>` (source is never modified) →
-   `just news-link <name>`; timer: `just news-schedule <name>` (or
-   `systemctl --user disable --now nunc-fluens-daily.timer`).
-   `~/nf-sandbox` stays refused by the run guard and is disposable (D4).
-3. The world view currently shows the empty state until an instance is
-   linked (the owner's config still points `news_repo` at `~/news`,
-   whose direct viewing was removed by decision R6).
-4. **Deletion proposal D1-D5 in the plan's REDO section awaits your
-   per-item decision — nothing was deleted.**
+2. World view is live again: `news_repo` → `instances/data` (imported
+   from the nf-sandbox corpus). `~/nf-sandbox` itself is now redundant
+   (D4): delete when ready and either re-point the 06:30 timer
+   (`just news-schedule data` — runs the daily chain on the validation
+   instance, LLM cost applies) or disable it
+   (`systemctl --user disable --now nunc-fluens-daily.timer`).
+3. The `coldstart` instance under `instances/` is throwaway evidence —
+   delete freely.
+4. **Deletion proposal D1/D2/D5 still await your call** (D3 executed by
+   you — committed; D4 see above). Nothing else was deleted.
