@@ -359,20 +359,20 @@ Session-size guide (v1 plan: 3–5 focused sessions):
 **S1** = T0+T1+T2 · **S2** = T3+T4 · **S3** = T5+T7 · **S4** = T6+T8+T9 ·
 **S5** = T10+T11+T12.
 
-### Task 0: Preflight + sync point (design) — depends: owner merge train (PD1)
-- [ ] Confirm the post-C V3 close-out commit on `phase/post-c`; owner merges
-      `newstack` → `dev` and `phase/post-c` → `dev` (or approves the
-      fallback branch point). Record the base commit.
-- [ ] Branch `phase/d`; tag `pre-phase-d`.
-- [ ] Open `design/verification/phase-d.md`: **re-measured** suite baselines
-      (post-V3 counts will differ from the post-c doc — never copied),
-      approval dates per the §7 two-step, and the environment probes:
-      `ollama list` shows qwen3.6:27b (risk 5); manda remote/tag state via
-      `git ls-remote` (PD8); **`cargo build --release` in `~/manda`** (only
-      a debug build exists today — this is a build step, not a check;
-      outside the monorepo, no commit) with the built commit hash recorded.
-- [ ] Commit: `design: open the phase-d verification record`.
-- Verify: clean tree, baselines recorded, probes logged.
+### Task 0: Preflight + sync point (design) — DONE 2026-07-07
+- [x] V3 close-out confirmed (90f948b); owner merged via **PR #3**
+      (`phase/post-c` → `dev`, newstack included as ancestor). Base
+      commit recorded: **0224a44**.
+- [x] Branch `phase/d`; tag `pre-phase-d` (= 0224a44).
+- [x] `design/verification/phase-d.md` opened: re-measured baselines
+      (pipeline 187/20, nunc-ai 12, fourfive 24, Formans 16, gate 9,
+      ns 11, check.ts ok — pipeline 188→187 and gate 10→9 moved vs the
+      post-c record, vindicating re-measure-not-copy); probes logged
+      (qwen3.6:27b + 35b fallback on disk; manda d0b61e2, zero tags;
+      **release build built** — only debug existed, as predicted).
+- [x] Commits: a0b889c (plan), 2c95de0 (verification record).
+- Verify: tree carries only the owner's WIP (justfile, tools/down.sh) —
+  untouched.
 
 ### Task 1: Registration, story specs + manda de-risk spike (tool, design, agent) — depends: T0
 - [ ] Register area `agent`: `tools/commit-scope.ts` regex +
