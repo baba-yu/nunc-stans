@@ -93,6 +93,18 @@ Running record; completed as the exit items execute. Plan:
   run-log entry, maxIters/tokenBudget brakes, judge-failure honest-stop,
   streamed iterations with `verify` boundary events + single `done`.
   nunc-ai 28/28; pipeline 187/187 untouched.
+- **2026-07-07 — T4 done** (f838fc0 gate, 1bde665 fe). Profile store
+  live end-to-end: gate CRUD+defaults API with the F3 and no-credential
+  rails enforced server-side (unit + integration tested), TS mirror +
+  loader in nunc-ai, Formans /profiles screen with per-context default
+  pickers. **Constitutional check item 1 evidence (partial): the F3
+  rejection test output exists on both validator sides** (gate unit
+  `f3_rejects_commitment_write_scope`, HTTP-level 422 in
+  `profiles_crud_defaults_and_rails`; TS `validateProfile` F3 spec).
+  **Bug found+fixed:** pre-existing gate test-helper race (shared
+  index.html rewritten per test) made the static-mount test flaky —
+  per-call dirs now, 6 clean runs. Suites: gate 6+10, nunc-ai 35,
+  Formans 20 + build.
 
 ## Stories (executed at T10; specs written at T1)
 

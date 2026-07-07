@@ -442,20 +442,33 @@ Session-size guide (v1 plan: 3–5 focused sessions):
   boundary-event order content→verify→content→verify→done; off-default
   unchanged). nunc-ai 28/28; pipeline 187/187 untouched.
 
-### Task 4: Profile store + gate API + Profiles screen (gate, fe) — depends: T0 (PD2/PD3 ratified)
-- [ ] Shared profile schema + validator (TS in nunc-ai or a small shared
-      module; Rust mirror in `gate/src/profiles.rs`) with the **F3
-      rejection rule** and the no-credential-fields rule unit-tested on
-      both sides.
-- [ ] Gate CRUD + defaults endpoints (atomic write, deny-unknown, 503
-      without a store — the `news_config.rs` discipline) + integration
-      tests.
-- [ ] Formans `/profiles` route + view: create/edit/duplicate/delete,
-      default-per-context (fourfive-chat / news-steps / agents).
-      Screenshots → `design/ui/phase-d/`.
-- Acceptance: profile round-trip through the UI; saving a profile with
-  `memory_scope.write: ["self/commitment/x"]` is rejected with a clear
-  error; suites green.
+### Task 4: Profile store + gate API + Profiles screen (gate, fe) — DONE 2026-07-07 (f838fc0, 1bde665)
+- [x] Validators on both sides, rails unit-tested twice: Rust
+      `gate/src/profiles.rs` (5 unit tests) + TS mirror
+      `nunc-ai/src/profile.ts` (+ loader/resolver for the agent; 7
+      tests). **F3** rejects every write-scope spelling that reaches
+      commitments (`self/commitment{,/x,/*}`, `self`, `self/*`); **BYOL**
+      rejects credential-shaped keys recursively in `ui`; slug ids only
+      ('defaults' reserved).
+- [x] Gate CRUD + defaults: `GET /api/profiles`,
+      `GET|PUT|DELETE /api/profiles/{id}`, `GET|PUT
+      /api/profiles/defaults` (pointers must name existing profiles;
+      DELETE scrubs dangling pointers) — news_config discipline
+      (deny-unknown 400, validation 422, atomic tmp+rename, 503 without
+      a store). Integration test covers the full round trip incl. both
+      rails at the HTTP surface. **Bug found+fixed in-phase:** the gate
+      test helper `make_dists` shared one index.html across concurrently
+      running tests and rewrote it per call (fs::write truncates) — the
+      pre-existing static-mount test was intermittently served an empty
+      file; per-call unique dirs now (6 consecutive clean full runs).
+- [x] Formans `/profiles` route + topbar tab + view (list/create/edit/
+      duplicate/delete + default-per-context pickers; server-side rail
+      errors surfaced verbatim); form↔payload logic extracted to
+      `src/profiles.ts` with tests. Screenshots land with the T10/T11
+      UI pass (the screen needs a running gate + store).
+- Acceptance MET (API level; UI round-trip re-proven at S-5): gate
+  16/16 (6 unit + 10 integration), nunc-ai 35/35, Formans 20/20 +
+  build, check.ts ok.
 
 ### Task 5: FourFive on profiles (ff) — depends: T2, T3, T4
 - [ ] Replace `server/llm/{provider,claude,ollama,mock}.ts` with nunc-ai
