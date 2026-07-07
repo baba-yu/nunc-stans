@@ -311,16 +311,6 @@ export function buildScopeGraph(db: Db, scopeId: string, publishRoot: string): R
     return scored.filter(([s, thId]) => s >= thresh && thId !== primaryThemeId).map(([, thId]) => thId);
   };
 
-  const subthemes = db.prepare(
-    `SELECT st.subtheme_id, st.theme_id, st.canonical_label, st.short_label,
-            st.description, t.category_id,
-            st.label_ja, st.label_es, st.label_fil,
-            st.short_label_ja, st.short_label_es, st.short_label_fil,
-            st.description_ja, st.description_es, st.description_fil
-     FROM subthemes st
-     JOIN themes t ON st.theme_id = t.theme_id
-     WHERE t.scope_id = ? AND st.status IN ('active', 'candidate')`).all(scopeId) as any[];
-
   const predictions = db.prepare(
     `SELECT p.prediction_id, p.prediction_summary, p.prediction_short_label,
             p.prediction_date, p.source_row_index, sf.path AS source_path,
@@ -341,7 +331,7 @@ export function buildScopeGraph(db: Db, scopeId: string, publishRoot: string): R
             p.summary_ja AS pred_summary_ja,
             p.summary_es AS pred_summary_es,
             p.summary_fil AS pred_summary_fil,
-            psa.category_id, psa.theme_id, psa.subtheme_id,
+            psa.category_id, psa.theme_id,
             psa.latest_realization_score, psa.latest_contradiction_score,
             psa.latest_observed_relevance, psa.latest_observation_status
      FROM predictions p
@@ -526,7 +516,7 @@ export function buildScopeGraph(db: Db, scopeId: string, publishRoot: string): R
       label: cat.label, short_label: cat.short_label || cat.label,
       description: cat.description,
       labels: { label: catLabels, short_label: catShortLabels, description: localeField(cat, 'description') },
-      category_id: cat.category_id, theme_id: null, subtheme_id: null, prediction_id: null,
+      category_id: cat.category_id, theme_id: null, prediction_id: null,
       parent_ids: [] as string[], child_ids: [] as string[],
       metrics_by_window: buildMetrics('category', nodeId),
       visibility: { min_zoom: 0.0, max_zoom: null, default_visible: true },
@@ -567,7 +557,7 @@ export function buildScopeGraph(db: Db, scopeId: string, publishRoot: string): R
           description: loc(descEn, th.description_ja, th.description_es, th.description_fil),
         },
         category_id: th.category_id, theme_id: th.theme_id,
-        subtheme_id: null, prediction_id: null,
+        prediction_id: null,
         parent_ids: [th.category_id], child_ids: [] as string[],
         metrics_by_window: buildMetrics('theme', nodeId),
         visibility: { min_zoom: 0.75, max_zoom: null, default_visible: false },
@@ -585,46 +575,10 @@ export function buildScopeGraph(db: Db, scopeId: string, publishRoot: string): R
     });
   }
 
-  for (const st of subthemes) {
-    const themeNode = idIndex.get(st.theme_id);
-    if (themeNode === undefined) continue;
-    const nodeId = st.subtheme_id;
-    const layout = layouts.get(nodeId) ?? {
-      x: themeNode.layout.x + 60.0, y: themeNode.layout.y + 40.0,
-      z: 0.0, radius: 16.0, fixed: false,
-    };
-    const labelEn = st.canonical_label;
-    const shortEn = st.short_label || labelEn;
-    const node = {
-      id: nodeId, type: 'subtheme', scope_id: scopeId,
-      label: st.canonical_label, short_label: st.short_label || st.canonical_label,
-      description: st.description,
-      labels: {
-        label: loc(labelEn, st.label_ja, st.label_es, st.label_fil),
-        short_label: loc(shortEn, st.short_label_ja, st.short_label_es, st.short_label_fil),
-        description: loc(st.description, st.description_ja, st.description_es, st.description_fil),
-      },
-      category_id: st.category_id, theme_id: st.theme_id,
-      subtheme_id: st.subtheme_id, prediction_id: null,
-      parent_ids: [st.theme_id], child_ids: [] as string[],
-      metrics_by_window: Object.fromEntries(WINDOWS.map(([w]) => [w, blankMetricBundle('subtheme')])),
-      visibility: { min_zoom: 1.25, max_zoom: null, default_visible: false },
-      layout,
-      detail: {
-        title: st.canonical_label, subtitle: `Subtheme · ${pyTitle(scopeId)}`,
-        description: st.description, scope_id: scopeId, node_type: 'subtheme',
-        parent_theme_id: st.theme_id, parent_category_id: st.category_id,
-      },
-    };
-    nodes.push(node);
-    idIndex.set(nodeId, node);
-    themeNode.child_ids.push(nodeId);
-  }
-
   // Predictions
   const predByParent = new Map<string, any[]>();
   for (const pr of predictions) {
-    const parentId = pr.subtheme_id || pr.theme_id;
+    const parentId = pr.theme_id;
     if (!parentId) continue;
     if (!predByParent.has(parentId)) predByParent.set(parentId, []);
     predByParent.get(parentId)!.push(pr);
@@ -874,7 +828,7 @@ export function buildScopeGraph(db: Db, scopeId: string, publishRoot: string): R
           summary: summaryLocales,
         },
         category_id: pr.category_id, theme_id: pr.theme_id,
-        subtheme_id: pr.subtheme_id, prediction_id: pr.prediction_id,
+        prediction_id: pr.prediction_id,
         parent_ids: parents, child_ids: [] as string[],
         metrics_by_window: buildMetrics('prediction', nodeId),
         visibility: { min_zoom: 2.0, max_zoom: null, default_visible: false },
@@ -924,7 +878,6 @@ export function buildScopeGraph(db: Db, scopeId: string, publishRoot: string): R
           validation_reports: validationReports,
           parent_category_id: pr.category_id,
           parent_theme_id: pr.theme_id,
-          parent_subtheme_id: pr.subtheme_id,
           latest_observed_relevance: pr.latest_observed_relevance,
           latest_realization_score: pr.latest_realization_score,
           latest_contradiction_score: pr.latest_contradiction_score,
@@ -1042,7 +995,7 @@ export function buildScopeGraph(db: Db, scopeId: string, publishRoot: string): R
     for (const pid of node.parent_ids) {
       const pn = idIndex.get(pid);
       if (pn === undefined) continue;
-      if ((pn.type === 'theme' || pn.type === 'subtheme') && pn.category_id)
+      if (pn.type === 'theme' && pn.category_id)
         cats.add(pn.category_id);
     }
     if (cats.size < 2) continue;
@@ -1176,7 +1129,7 @@ function buildMixGraph(tech: any, business: any, buildId: string): Record<string
     for (const pid of node.parent_ids) {
       const pn = idIndex.get(pid);
       if (pn === undefined) continue;
-      if ((pn.type === 'theme' || pn.type === 'subtheme') && pn.category_id)
+      if (pn.type === 'theme' && pn.category_id)
         cats.add(pn.category_id);
     }
     if (cats.size < 2) continue;

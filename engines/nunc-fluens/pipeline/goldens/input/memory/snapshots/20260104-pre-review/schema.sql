@@ -133,7 +133,7 @@ CREATE INDEX IF NOT EXISTS idx_evidence_memory_status
 ON evidence_items(memory_status, active_until);
 
 -- ============================================================
--- 4. Themes and subthemes
+-- 4. Themes
 -- ============================================================
 
 CREATE TABLE IF NOT EXISTS themes (
@@ -185,38 +185,6 @@ ON themes(scope_id, category_id);
 
 CREATE INDEX IF NOT EXISTS idx_themes_status
 ON themes(status);
-
-CREATE TABLE IF NOT EXISTS subthemes (
-  subtheme_id TEXT PRIMARY KEY,
-  theme_id TEXT NOT NULL,
-  canonical_label TEXT NOT NULL,
-  short_label TEXT,
-  generated_label TEXT,
-  description TEXT,
-  -- Locale columns. NULL = fall back to canonical English.
-  label_ja TEXT,
-  label_es TEXT,
-  label_fil TEXT,
-  short_label_ja TEXT,
-  short_label_es TEXT,
-  short_label_fil TEXT,
-  description_ja TEXT,
-  description_es TEXT,
-  description_fil TEXT,
-  status TEXT NOT NULL DEFAULT 'candidate'
-    CHECK (status IN ('candidate', 'active', 'merged', 'retired')),
-  merged_into_subtheme_id TEXT,
-  centroid_json TEXT,
-  first_seen_date TEXT,
-  last_seen_date TEXT,
-  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at TEXT,
-  FOREIGN KEY (theme_id) REFERENCES themes(theme_id),
-  FOREIGN KEY (merged_into_subtheme_id) REFERENCES subthemes(subtheme_id)
-);
-
-CREATE INDEX IF NOT EXISTS idx_subthemes_theme
-ON subthemes(theme_id);
 
 -- ============================================================
 -- 5. Theme history and mappings
@@ -407,7 +375,6 @@ CREATE TABLE IF NOT EXISTS prediction_scope_assignments (
 
   category_id TEXT,
   theme_id TEXT,
-  subtheme_id TEXT,
 
   assignment_method TEXT DEFAULT 'centroid'
     CHECK (assignment_method IN ('anchor', 'centroid', 'llm', 'manual', 'candidate')),
@@ -441,8 +408,7 @@ CREATE TABLE IF NOT EXISTS prediction_scope_assignments (
   FOREIGN KEY (prediction_id) REFERENCES predictions(prediction_id),
   FOREIGN KEY (scope_id) REFERENCES scopes(scope_id),
   FOREIGN KEY (category_id) REFERENCES categories(category_id),
-  FOREIGN KEY (theme_id) REFERENCES themes(theme_id),
-  FOREIGN KEY (subtheme_id) REFERENCES subthemes(subtheme_id)
+  FOREIGN KEY (theme_id) REFERENCES themes(theme_id)
 );
 
 CREATE INDEX IF NOT EXISTS idx_prediction_scope_theme
@@ -460,7 +426,6 @@ CREATE TABLE IF NOT EXISTS evidence_scope_assignments (
   scope_id TEXT NOT NULL,
   category_id TEXT,
   theme_id TEXT,
-  subtheme_id TEXT,
 
   assignment_score REAL,
   confidence REAL,
@@ -473,8 +438,7 @@ CREATE TABLE IF NOT EXISTS evidence_scope_assignments (
   FOREIGN KEY (evidence_id) REFERENCES evidence_items(evidence_id),
   FOREIGN KEY (scope_id) REFERENCES scopes(scope_id),
   FOREIGN KEY (category_id) REFERENCES categories(category_id),
-  FOREIGN KEY (theme_id) REFERENCES themes(theme_id),
-  FOREIGN KEY (subtheme_id) REFERENCES subthemes(subtheme_id)
+  FOREIGN KEY (theme_id) REFERENCES themes(theme_id)
 );
 
 CREATE INDEX IF NOT EXISTS idx_evidence_scope_theme
@@ -626,7 +590,7 @@ CREATE INDEX IF NOT EXISTS idx_prediction_realization_window
 ON prediction_realization_snapshots(scope_id, validation_date, window_id);
 
 -- ============================================================
--- 9. Daily activity for themes and subthemes
+-- 9. Daily activity for themes
 -- ============================================================
 
 CREATE TABLE IF NOT EXISTS topic_daily_activity (
@@ -638,9 +602,8 @@ CREATE TABLE IF NOT EXISTS topic_daily_activity (
 
   category_id TEXT,
   theme_id TEXT NOT NULL,
-  subtheme_id TEXT,
 
-  activity_level TEXT NOT NULL CHECK (activity_level IN ('theme', 'subtheme')),
+  activity_level TEXT NOT NULL CHECK (activity_level IN ('theme')),
 
   new_signal REAL NOT NULL DEFAULT 0,
   continuing_signal REAL NOT NULL DEFAULT 0,
@@ -669,23 +632,12 @@ CREATE TABLE IF NOT EXISTS topic_daily_activity (
   FOREIGN KEY (window_id) REFERENCES metric_windows(window_id),
   FOREIGN KEY (scope_id) REFERENCES scopes(scope_id),
   FOREIGN KEY (category_id) REFERENCES categories(category_id),
-  FOREIGN KEY (theme_id) REFERENCES themes(theme_id),
-  FOREIGN KEY (subtheme_id) REFERENCES subthemes(subtheme_id),
-
-  CHECK (
-    (activity_level = 'theme' AND subtheme_id IS NULL)
-    OR
-    (activity_level = 'subtheme' AND subtheme_id IS NOT NULL)
-  )
+  FOREIGN KEY (theme_id) REFERENCES themes(theme_id)
 );
 
 CREATE UNIQUE INDEX IF NOT EXISTS idx_topic_daily_theme_activity
 ON topic_daily_activity(activity_date, window_id, scope_id, theme_id)
 WHERE activity_level = 'theme';
-
-CREATE UNIQUE INDEX IF NOT EXISTS idx_topic_daily_subtheme_activity
-ON topic_daily_activity(activity_date, window_id, scope_id, theme_id, subtheme_id)
-WHERE activity_level = 'subtheme';
 
 CREATE INDEX IF NOT EXISTS idx_topic_daily_scope_date_window
 ON topic_daily_activity(scope_id, activity_date, window_id);
@@ -775,7 +727,7 @@ ON theme_candidates(status, scope_id);
 CREATE TABLE IF NOT EXISTS graph_node_layouts (
   scope_id TEXT NOT NULL,
   node_id TEXT NOT NULL,
-  node_type TEXT NOT NULL CHECK (node_type IN ('category', 'theme', 'subtheme', 'prediction')),
+  node_type TEXT NOT NULL CHECK (node_type IN ('category', 'theme', 'prediction')),
 
   x REAL,
   y REAL,
@@ -1015,7 +967,7 @@ CREATE TABLE IF NOT EXISTS prediction_relations (
   --                       stronger than `prediction_chain`; if
   --                       entails(A, B) exists, do NOT also write
   --                       chain(A, B) — see
-  --                       design/skills/extract-chain-effects.md.
+  --                       design/archive/skills/extract-chain-effects.md.
   --   equivalent:         Same prediction in different words.
   --                       Merge candidate. Reserved for true
   --                       paraphrases — if A is the narrower /
@@ -1253,9 +1205,6 @@ SELECT
   psa.theme_id,
   t.canonical_label AS theme_label,
   t.short_label AS theme_short_label,
-  psa.subtheme_id,
-  st.canonical_label AS subtheme_label,
-  st.short_label AS subtheme_short_label,
   psa.assignment_method,
   psa.assignment_score,
   psa.latest_observed_relevance,
@@ -1266,8 +1215,7 @@ FROM predictions p
 JOIN prediction_scope_assignments psa ON p.prediction_id = psa.prediction_id
 LEFT JOIN source_files sf ON p.source_file_id = sf.source_file_id
 LEFT JOIN categories c ON psa.category_id = c.category_id
-LEFT JOIN themes t ON psa.theme_id = t.theme_id
-LEFT JOIN subthemes st ON psa.subtheme_id = st.subtheme_id;
+LEFT JOIN themes t ON psa.theme_id = t.theme_id;
 
 CREATE VIEW IF NOT EXISTS v_latest_topic_activity AS
 SELECT tda.*
@@ -1278,16 +1226,14 @@ JOIN (
     window_id,
     theme_id,
     activity_level,
-    COALESCE(subtheme_id, '') AS subtheme_key,
     MAX(activity_date) AS max_activity_date
   FROM topic_daily_activity
-  GROUP BY scope_id, window_id, theme_id, activity_level, COALESCE(subtheme_id, '')
+  GROUP BY scope_id, window_id, theme_id, activity_level
 ) latest
 ON tda.scope_id = latest.scope_id
 AND tda.window_id = latest.window_id
 AND tda.theme_id = latest.theme_id
 AND tda.activity_level = latest.activity_level
-AND COALESCE(tda.subtheme_id, '') = latest.subtheme_key
 AND tda.activity_date = latest.max_activity_date;
 
 CREATE VIEW IF NOT EXISTS v_latest_category_activity AS

@@ -98,15 +98,15 @@ function upsertTopicActivity(db: Db, args: {
   db.prepare(
     `INSERT OR REPLACE INTO topic_daily_activity (
        activity_id, activity_date, window_id, scope_id,
-       category_id, theme_id, subtheme_id, activity_level,
+       category_id, theme_id, activity_level,
        new_signal, continuing_signal, contradiction_signal,
        attention_score, realization_score, grass_level,
        new_evidence_count, active_prior_evidence_count, prediction_count,
        status, streak_days, last_active_date, updated_at
-     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
+     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
     .run(
       activityId, args.activityDate, args.windowId, args.scopeId,
-      args.categoryId, args.themeId, null, 'theme',
+      args.categoryId, args.themeId, 'theme',
       m.new_signal, m.continuing_signal, m.contradiction_signal,
       m.attention_score, m.realization_score, m.grass_level,
       m.new_evidence_count, m.active_prior_evidence_count, m.prediction_count,

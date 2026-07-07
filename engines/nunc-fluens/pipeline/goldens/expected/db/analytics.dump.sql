@@ -165,7 +165,6 @@ CREATE TABLE evidence_scope_assignments (
   scope_id TEXT NOT NULL,
   category_id TEXT,
   theme_id TEXT,
-  subtheme_id TEXT,
 
   assignment_score REAL,
   confidence REAL,
@@ -178,8 +177,7 @@ CREATE TABLE evidence_scope_assignments (
   FOREIGN KEY (evidence_id) REFERENCES evidence_items(evidence_id),
   FOREIGN KEY (scope_id) REFERENCES scopes(scope_id),
   FOREIGN KEY (category_id) REFERENCES categories(category_id),
-  FOREIGN KEY (theme_id) REFERENCES themes(theme_id),
-  FOREIGN KEY (subtheme_id) REFERENCES subthemes(subtheme_id)
+  FOREIGN KEY (theme_id) REFERENCES themes(theme_id)
 );
 CREATE TABLE glossary_audit (
   audit_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -275,7 +273,7 @@ CREATE TABLE graph_exports (
 CREATE TABLE graph_node_layouts (
   scope_id TEXT NOT NULL,
   node_id TEXT NOT NULL,
-  node_type TEXT NOT NULL CHECK (node_type IN ('category', 'theme', 'subtheme', 'prediction')),
+  node_type TEXT NOT NULL CHECK (node_type IN ('category', 'theme', 'prediction')),
 
   x REAL,
   y REAL,
@@ -531,7 +529,7 @@ CREATE TABLE prediction_relations (
   --                       stronger than `prediction_chain`; if
   --                       entails(A, B) exists, do NOT also write
   --                       chain(A, B) — see
-  --                       design/skills/extract-chain-effects.md.
+  --                       design/archive/skills/extract-chain-effects.md.
   --   equivalent:         Same prediction in different words.
   --                       Merge candidate. Reserved for true
   --                       paraphrases — if A is the narrower /
@@ -568,7 +566,6 @@ CREATE TABLE prediction_scope_assignments (
 
   category_id TEXT,
   theme_id TEXT,
-  subtheme_id TEXT,
 
   assignment_method TEXT DEFAULT 'centroid'
     CHECK (assignment_method IN ('anchor', 'centroid', 'llm', 'manual', 'candidate')),
@@ -602,21 +599,20 @@ CREATE TABLE prediction_scope_assignments (
   FOREIGN KEY (prediction_id) REFERENCES predictions(prediction_id),
   FOREIGN KEY (scope_id) REFERENCES scopes(scope_id),
   FOREIGN KEY (category_id) REFERENCES categories(category_id),
-  FOREIGN KEY (theme_id) REFERENCES themes(theme_id),
-  FOREIGN KEY (subtheme_id) REFERENCES subthemes(subtheme_id)
+  FOREIGN KEY (theme_id) REFERENCES themes(theme_id)
 );
-INSERT INTO "prediction_scope_assignments" VALUES('prediction.ea9dc188119c4848','tech','tech.infrastructure','tech.physical_ai_robotics',NULL,'anchor',1.0,NULL,3,0.6,0.0,'weakly_supported',NULL,NULL,NULL,'1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "prediction_scope_assignments" VALUES('prediction.ea9dc188119c4848','business','business.capital-supply-chain','business.ai_revenue_disclosure',NULL,'anchor',1.0,NULL,3,0.6,0.0,'weakly_supported',NULL,NULL,NULL,'1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "prediction_scope_assignments" VALUES('prediction.653d833667c2e642','tech','tech.infrastructure','tech.physical_ai_robotics',NULL,'anchor',1.0,NULL,3,0.6,0.0,'weakly_supported',NULL,NULL,NULL,'1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "prediction_scope_assignments" VALUES('prediction.653d833667c2e642','business','business.capital-supply-chain','business.ai_revenue_disclosure',NULL,'anchor',1.0,NULL,3,0.6,0.0,'weakly_supported',NULL,NULL,NULL,'1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "prediction_scope_assignments" VALUES('prediction.fffecc9edf856be3','tech','tech.infrastructure','tech.physical_ai_robotics',NULL,'anchor',1.0,NULL,1,0.2,0.0,'no_signal',NULL,NULL,NULL,'1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "prediction_scope_assignments" VALUES('prediction.fffecc9edf856be3','business','business.capital-supply-chain','business.ai_revenue_disclosure',NULL,'anchor',1.0,NULL,1,0.2,0.0,'no_signal',NULL,NULL,NULL,'1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "prediction_scope_assignments" VALUES('prediction.394e027e97187004','business','business.capital-supply-chain','business.ai_revenue_disclosure',NULL,'anchor',1.0,NULL,3,0.6,0.0,'weakly_supported',NULL,NULL,NULL,'1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "prediction_scope_assignments" VALUES('prediction.bcfbfe1298ff4ec1','business','business.capital-supply-chain','business.ai_revenue_disclosure',NULL,'anchor',1.0,NULL,1,0.2,0.0,'no_signal',NULL,NULL,NULL,'1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "prediction_scope_assignments" VALUES('prediction.55acc78b25e9754a','business','business.capital-supply-chain','business.ai_revenue_disclosure',NULL,'anchor',1.0,NULL,2,0.4,0.0,'weakly_supported',NULL,NULL,NULL,'1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "prediction_scope_assignments" VALUES('prediction.9bcf1ecbcbd67a64','business','business.capital-supply-chain','business.ai_revenue_disclosure',NULL,'anchor',1.0,NULL,1,0.2,0.0,'no_signal',NULL,NULL,NULL,'1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "prediction_scope_assignments" VALUES('prediction.a56031469a9a7ed3','business','business.capital-supply-chain','business.ai_revenue_disclosure',NULL,'anchor',1.0,NULL,3,0.6,0.0,'weakly_supported',NULL,NULL,NULL,'1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "prediction_scope_assignments" VALUES('prediction.5ef4de1cc1f71cd0','business','business.capital-supply-chain','business.ai_revenue_disclosure',NULL,'anchor',1.0,NULL,3,0.6,0.0,'weakly_supported',NULL,NULL,NULL,'1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "prediction_scope_assignments" VALUES('prediction.ea9dc188119c4848','tech','tech.infrastructure','tech.physical_ai_robotics','anchor',1.0,NULL,3,0.6,0.0,'weakly_supported',NULL,NULL,NULL,'1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "prediction_scope_assignments" VALUES('prediction.ea9dc188119c4848','business','business.capital-supply-chain','business.ai_revenue_disclosure','anchor',1.0,NULL,3,0.6,0.0,'weakly_supported',NULL,NULL,NULL,'1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "prediction_scope_assignments" VALUES('prediction.653d833667c2e642','tech','tech.infrastructure','tech.physical_ai_robotics','anchor',1.0,NULL,3,0.6,0.0,'weakly_supported',NULL,NULL,NULL,'1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "prediction_scope_assignments" VALUES('prediction.653d833667c2e642','business','business.capital-supply-chain','business.ai_revenue_disclosure','anchor',1.0,NULL,3,0.6,0.0,'weakly_supported',NULL,NULL,NULL,'1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "prediction_scope_assignments" VALUES('prediction.fffecc9edf856be3','tech','tech.infrastructure','tech.physical_ai_robotics','anchor',1.0,NULL,1,0.2,0.0,'no_signal',NULL,NULL,NULL,'1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "prediction_scope_assignments" VALUES('prediction.fffecc9edf856be3','business','business.capital-supply-chain','business.ai_revenue_disclosure','anchor',1.0,NULL,1,0.2,0.0,'no_signal',NULL,NULL,NULL,'1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "prediction_scope_assignments" VALUES('prediction.394e027e97187004','business','business.capital-supply-chain','business.ai_revenue_disclosure','anchor',1.0,NULL,3,0.6,0.0,'weakly_supported',NULL,NULL,NULL,'1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "prediction_scope_assignments" VALUES('prediction.bcfbfe1298ff4ec1','business','business.capital-supply-chain','business.ai_revenue_disclosure','anchor',1.0,NULL,1,0.2,0.0,'no_signal',NULL,NULL,NULL,'1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "prediction_scope_assignments" VALUES('prediction.55acc78b25e9754a','business','business.capital-supply-chain','business.ai_revenue_disclosure','anchor',1.0,NULL,2,0.4,0.0,'weakly_supported',NULL,NULL,NULL,'1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "prediction_scope_assignments" VALUES('prediction.9bcf1ecbcbd67a64','business','business.capital-supply-chain','business.ai_revenue_disclosure','anchor',1.0,NULL,1,0.2,0.0,'no_signal',NULL,NULL,NULL,'1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "prediction_scope_assignments" VALUES('prediction.a56031469a9a7ed3','business','business.capital-supply-chain','business.ai_revenue_disclosure','anchor',1.0,NULL,3,0.6,0.0,'weakly_supported',NULL,NULL,NULL,'1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "prediction_scope_assignments" VALUES('prediction.5ef4de1cc1f71cd0','business','business.capital-supply-chain','business.ai_revenue_disclosure','anchor',1.0,NULL,3,0.6,0.0,'weakly_supported',NULL,NULL,NULL,'1970-01-01 00:00:00','1970-01-01T00:00:00Z');
 CREATE TABLE predictions (
   prediction_id TEXT PRIMARY KEY,
 
@@ -778,34 +774,6 @@ INSERT INTO "source_files" VALUES('source.cd7f0e3fe7f131b7','app/sourcedata/2026
 INSERT INTO "source_files" VALUES('source.704e73ea64aa8500','app/sourcedata/2026-01-04/change_log.json','other','2026-01-04','69145a385b30ecaef904913f32be4fcaeb12c39d','1970-01-01T00:00:00Z','en','1970-01-01 00:00:00');
 INSERT INTO "source_files" VALUES('source.c323648f3613edbe','app/sourcedata/2026-01-04/news_section.json','other','2026-01-04','5f543bdbf22a510de8623389056cd0166d05d780','1970-01-01T00:00:00Z','en','1970-01-01 00:00:00');
 DELETE FROM "sqlite_sequence";
-CREATE TABLE subthemes (
-  subtheme_id TEXT PRIMARY KEY,
-  theme_id TEXT NOT NULL,
-  canonical_label TEXT NOT NULL,
-  short_label TEXT,
-  generated_label TEXT,
-  description TEXT,
-  -- Locale columns. NULL = fall back to canonical English.
-  label_ja TEXT,
-  label_es TEXT,
-  label_fil TEXT,
-  short_label_ja TEXT,
-  short_label_es TEXT,
-  short_label_fil TEXT,
-  description_ja TEXT,
-  description_es TEXT,
-  description_fil TEXT,
-  status TEXT NOT NULL DEFAULT 'candidate'
-    CHECK (status IN ('candidate', 'active', 'merged', 'retired')),
-  merged_into_subtheme_id TEXT,
-  centroid_json TEXT,
-  first_seen_date TEXT,
-  last_seen_date TEXT,
-  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at TEXT,
-  FOREIGN KEY (theme_id) REFERENCES themes(theme_id),
-  FOREIGN KEY (merged_into_subtheme_id) REFERENCES subthemes(subtheme_id)
-);
 CREATE TABLE theme_candidates (
   candidate_id TEXT PRIMARY KEY,
 
@@ -961,9 +929,8 @@ CREATE TABLE topic_daily_activity (
 
   category_id TEXT,
   theme_id TEXT NOT NULL,
-  subtheme_id TEXT,
 
-  activity_level TEXT NOT NULL CHECK (activity_level IN ('theme', 'subtheme')),
+  activity_level TEXT NOT NULL CHECK (activity_level IN ('theme')),
 
   new_signal REAL NOT NULL DEFAULT 0,
   continuing_signal REAL NOT NULL DEFAULT 0,
@@ -992,69 +959,62 @@ CREATE TABLE topic_daily_activity (
   FOREIGN KEY (window_id) REFERENCES metric_windows(window_id),
   FOREIGN KEY (scope_id) REFERENCES scopes(scope_id),
   FOREIGN KEY (category_id) REFERENCES categories(category_id),
-  FOREIGN KEY (theme_id) REFERENCES themes(theme_id),
-  FOREIGN KEY (subtheme_id) REFERENCES subthemes(subtheme_id),
-
-  CHECK (
-    (activity_level = 'theme' AND subtheme_id IS NULL)
-    OR
-    (activity_level = 'subtheme' AND subtheme_id IS NOT NULL)
-  )
+  FOREIGN KEY (theme_id) REFERENCES themes(theme_id)
 );
-INSERT INTO "topic_daily_activity" VALUES('activity.95d4c5cf65da2200','2026-01-04','7d','tech','tech.agents','tech.agent_control_plane',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.d0ff94a7e872de63','2026-01-04','30d','tech','tech.agents','tech.agent_control_plane',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.a1bf5d96a5b26065','2026-01-04','90d','tech','tech.agents','tech.agent_control_plane',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.5e14e7e3808b5b4d','2026-01-04','7d','tech','tech.inference-runtime','tech.local_inference_runtime',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.b6f233c7ffaaad2d','2026-01-04','30d','tech','tech.inference-runtime','tech.local_inference_runtime',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.27ea07ee28846249','2026-01-04','90d','tech','tech.inference-runtime','tech.local_inference_runtime',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.818e19040f277bbb','2026-01-04','7d','tech','tech.infrastructure','tech.ai_chip_architecture',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.240ea1e4bc184249','2026-01-04','30d','tech','tech.infrastructure','tech.ai_chip_architecture',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.0143442f9e58fae2','2026-01-04','90d','tech','tech.infrastructure','tech.ai_chip_architecture',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.7bcb0b51af967960','2026-01-04','7d','tech','tech.infrastructure','tech.physical_ai_robotics',NULL,'theme',1.0,0.0,0.0,1.0,0.29714285714285721,4,7,0,3,NULL,NULL,'continuing',3,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.19d05f67434c146a','2026-01-04','30d','tech','tech.infrastructure','tech.physical_ai_robotics',NULL,'theme',1.0,0.0,0.0,1.0,0.29714285714285721,4,7,0,3,NULL,NULL,'continuing',3,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.ea313ba69391132d','2026-01-04','90d','tech','tech.infrastructure','tech.physical_ai_robotics',NULL,'theme',1.0,0.0,0.0,1.0,0.29714285714285721,4,7,0,3,NULL,NULL,'continuing',3,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.81373f66afb2acbb','2026-01-04','7d','tech','tech.infrastructure','tech.ai_macro_capital_markets',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.9022922cd40fe5f9','2026-01-04','30d','tech','tech.infrastructure','tech.ai_macro_capital_markets',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.9716806b992c59c0','2026-01-04','90d','tech','tech.infrastructure','tech.ai_macro_capital_markets',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.6d8a687a1ad30043','2026-01-04','7d','tech','tech.models','tech.one_bit_edge_llm',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.af200b4f71285089','2026-01-04','30d','tech','tech.models','tech.one_bit_edge_llm',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.e672bdcbe3f12b24','2026-01-04','90d','tech','tech.models','tech.one_bit_edge_llm',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.4f5faae7dd377aff','2026-01-04','7d','tech','tech.security','tech.agent_runtime_security',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.86dda22d2f543fa9','2026-01-04','30d','tech','tech.security','tech.agent_runtime_security',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.490518f2b931f063','2026-01-04','90d','tech','tech.security','tech.agent_runtime_security',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.93bd2af2a9f05442','2026-01-04','7d','tech','tech.security','tech.model_supply_chain',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.9d964431f7e28d1e','2026-01-04','30d','tech','tech.security','tech.model_supply_chain',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.c77a73e70018c3ce','2026-01-04','90d','tech','tech.security','tech.model_supply_chain',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.6a688d2770088ecf','2026-01-04','7d','tech','tech.standards','tech.agent_registry_architecture',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.423d4f2d7b8fc648','2026-01-04','30d','tech','tech.standards','tech.agent_registry_architecture',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.e2489dc2684f9c91','2026-01-04','90d','tech','tech.standards','tech.agent_registry_architecture',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.8aacf8d7ce499656','2026-01-04','7d','tech','tech.standards','tech.frontier_model_regulatory_board',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.13c22078470aa34a','2026-01-04','30d','tech','tech.standards','tech.frontier_model_regulatory_board',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.2b55ff1115c6069d','2026-01-04','90d','tech','tech.standards','tech.frontier_model_regulatory_board',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.961f4639e08adbe2','2026-01-04','7d','business','business.capital-supply-chain','business.compute_capex_strategy',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.ccf9a34f1c502eaa','2026-01-04','30d','business','business.capital-supply-chain','business.compute_capex_strategy',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.fd2880362ce805fb','2026-01-04','90d','business','business.capital-supply-chain','business.compute_capex_strategy',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.f001d0a81764446d','2026-01-04','7d','business','business.capital-supply-chain','business.ai_revenue_disclosure',NULL,'theme',1.0,0.0,0.0,1.0,0.30333333333333334,4,15,0,9,NULL,NULL,'continuing',3,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.a44c2e8a76955c93','2026-01-04','30d','business','business.capital-supply-chain','business.ai_revenue_disclosure',NULL,'theme',1.0,0.0,0.0,1.0,0.30333333333333334,4,15,0,9,NULL,NULL,'continuing',3,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.91af635afb7d415f','2026-01-04','90d','business','business.capital-supply-chain','business.ai_revenue_disclosure',NULL,'theme',1.0,0.0,0.0,1.0,0.30333333333333334,4,15,0,9,NULL,NULL,'continuing',3,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.cbc90d36aab2c9df','2026-01-04','7d','business','business.competition','business.open_weight_vs_proprietary',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.0c8a507501fa6c14','2026-01-04','30d','business','business.competition','business.open_weight_vs_proprietary',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.4dd1aad45dd60ed4','2026-01-04','90d','business','business.competition','business.open_weight_vs_proprietary',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.01b6bfdc5fba112f','2026-01-04','7d','business','business.distribution','business.cloud_vs_local_distribution',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.59a32691af214a69','2026-01-04','30d','business','business.distribution','business.cloud_vs_local_distribution',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.b0528e229afc42ca','2026-01-04','90d','business','business.distribution','business.cloud_vs_local_distribution',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.c159a5d3fc26f59a','2026-01-04','7d','business','business.enterprise-adoption','business.developer_platformization',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.14520c89d5254b52','2026-01-04','30d','business','business.enterprise-adoption','business.developer_platformization',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.04c326d7bec8d979','2026-01-04','90d','business','business.enterprise-adoption','business.developer_platformization',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.3deec313f00cea33','2026-01-04','7d','business','business.market-structure','business.hyperscaler_frontier_lab_alliance',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.ed20e72d630b51c0','2026-01-04','30d','business','business.market-structure','business.hyperscaler_frontier_lab_alliance',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.34ac3a6ffa286390','2026-01-04','90d','business','business.market-structure','business.hyperscaler_frontier_lab_alliance',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.7587ab089644ef66','2026-01-04','7d','business','business.regulation-compliance','business.ai_security_compliance_market',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.0f5a7098cb4ec32a','2026-01-04','30d','business','business.regulation-compliance','business.ai_security_compliance_market',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.1804f1a0ea527380','2026-01-04','90d','business','business.regulation-compliance','business.ai_security_compliance_market',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.77faccc8542c2558','2026-01-04','7d','business','business.regulation-compliance','business.inference_server_supply_chain',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.e4e4a9610284941c','2026-01-04','30d','business','business.regulation-compliance','business.inference_server_supply_chain',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
-INSERT INTO "topic_daily_activity" VALUES('activity.85eb07c672b902d8','2026-01-04','90d','business','business.regulation-compliance','business.inference_server_supply_chain',NULL,'theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.95d4c5cf65da2200','2026-01-04','7d','tech','tech.agents','tech.agent_control_plane','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.d0ff94a7e872de63','2026-01-04','30d','tech','tech.agents','tech.agent_control_plane','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.a1bf5d96a5b26065','2026-01-04','90d','tech','tech.agents','tech.agent_control_plane','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.5e14e7e3808b5b4d','2026-01-04','7d','tech','tech.inference-runtime','tech.local_inference_runtime','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.b6f233c7ffaaad2d','2026-01-04','30d','tech','tech.inference-runtime','tech.local_inference_runtime','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.27ea07ee28846249','2026-01-04','90d','tech','tech.inference-runtime','tech.local_inference_runtime','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.818e19040f277bbb','2026-01-04','7d','tech','tech.infrastructure','tech.ai_chip_architecture','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.240ea1e4bc184249','2026-01-04','30d','tech','tech.infrastructure','tech.ai_chip_architecture','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.0143442f9e58fae2','2026-01-04','90d','tech','tech.infrastructure','tech.ai_chip_architecture','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.7bcb0b51af967960','2026-01-04','7d','tech','tech.infrastructure','tech.physical_ai_robotics','theme',1.0,0.0,0.0,1.0,0.29714285714285721,4,7,0,3,NULL,NULL,'continuing',3,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.19d05f67434c146a','2026-01-04','30d','tech','tech.infrastructure','tech.physical_ai_robotics','theme',1.0,0.0,0.0,1.0,0.29714285714285721,4,7,0,3,NULL,NULL,'continuing',3,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.ea313ba69391132d','2026-01-04','90d','tech','tech.infrastructure','tech.physical_ai_robotics','theme',1.0,0.0,0.0,1.0,0.29714285714285721,4,7,0,3,NULL,NULL,'continuing',3,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.81373f66afb2acbb','2026-01-04','7d','tech','tech.infrastructure','tech.ai_macro_capital_markets','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.9022922cd40fe5f9','2026-01-04','30d','tech','tech.infrastructure','tech.ai_macro_capital_markets','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.9716806b992c59c0','2026-01-04','90d','tech','tech.infrastructure','tech.ai_macro_capital_markets','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.6d8a687a1ad30043','2026-01-04','7d','tech','tech.models','tech.one_bit_edge_llm','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.af200b4f71285089','2026-01-04','30d','tech','tech.models','tech.one_bit_edge_llm','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.e672bdcbe3f12b24','2026-01-04','90d','tech','tech.models','tech.one_bit_edge_llm','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.4f5faae7dd377aff','2026-01-04','7d','tech','tech.security','tech.agent_runtime_security','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.86dda22d2f543fa9','2026-01-04','30d','tech','tech.security','tech.agent_runtime_security','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.490518f2b931f063','2026-01-04','90d','tech','tech.security','tech.agent_runtime_security','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.93bd2af2a9f05442','2026-01-04','7d','tech','tech.security','tech.model_supply_chain','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.9d964431f7e28d1e','2026-01-04','30d','tech','tech.security','tech.model_supply_chain','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.c77a73e70018c3ce','2026-01-04','90d','tech','tech.security','tech.model_supply_chain','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.6a688d2770088ecf','2026-01-04','7d','tech','tech.standards','tech.agent_registry_architecture','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.423d4f2d7b8fc648','2026-01-04','30d','tech','tech.standards','tech.agent_registry_architecture','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.e2489dc2684f9c91','2026-01-04','90d','tech','tech.standards','tech.agent_registry_architecture','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.8aacf8d7ce499656','2026-01-04','7d','tech','tech.standards','tech.frontier_model_regulatory_board','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.13c22078470aa34a','2026-01-04','30d','tech','tech.standards','tech.frontier_model_regulatory_board','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.2b55ff1115c6069d','2026-01-04','90d','tech','tech.standards','tech.frontier_model_regulatory_board','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.961f4639e08adbe2','2026-01-04','7d','business','business.capital-supply-chain','business.compute_capex_strategy','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.ccf9a34f1c502eaa','2026-01-04','30d','business','business.capital-supply-chain','business.compute_capex_strategy','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.fd2880362ce805fb','2026-01-04','90d','business','business.capital-supply-chain','business.compute_capex_strategy','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.f001d0a81764446d','2026-01-04','7d','business','business.capital-supply-chain','business.ai_revenue_disclosure','theme',1.0,0.0,0.0,1.0,0.30333333333333334,4,15,0,9,NULL,NULL,'continuing',3,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.a44c2e8a76955c93','2026-01-04','30d','business','business.capital-supply-chain','business.ai_revenue_disclosure','theme',1.0,0.0,0.0,1.0,0.30333333333333334,4,15,0,9,NULL,NULL,'continuing',3,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.91af635afb7d415f','2026-01-04','90d','business','business.capital-supply-chain','business.ai_revenue_disclosure','theme',1.0,0.0,0.0,1.0,0.30333333333333334,4,15,0,9,NULL,NULL,'continuing',3,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.cbc90d36aab2c9df','2026-01-04','7d','business','business.competition','business.open_weight_vs_proprietary','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.0c8a507501fa6c14','2026-01-04','30d','business','business.competition','business.open_weight_vs_proprietary','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.4dd1aad45dd60ed4','2026-01-04','90d','business','business.competition','business.open_weight_vs_proprietary','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.01b6bfdc5fba112f','2026-01-04','7d','business','business.distribution','business.cloud_vs_local_distribution','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.59a32691af214a69','2026-01-04','30d','business','business.distribution','business.cloud_vs_local_distribution','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.b0528e229afc42ca','2026-01-04','90d','business','business.distribution','business.cloud_vs_local_distribution','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.c159a5d3fc26f59a','2026-01-04','7d','business','business.enterprise-adoption','business.developer_platformization','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.14520c89d5254b52','2026-01-04','30d','business','business.enterprise-adoption','business.developer_platformization','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.04c326d7bec8d979','2026-01-04','90d','business','business.enterprise-adoption','business.developer_platformization','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.3deec313f00cea33','2026-01-04','7d','business','business.market-structure','business.hyperscaler_frontier_lab_alliance','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.ed20e72d630b51c0','2026-01-04','30d','business','business.market-structure','business.hyperscaler_frontier_lab_alliance','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.34ac3a6ffa286390','2026-01-04','90d','business','business.market-structure','business.hyperscaler_frontier_lab_alliance','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.7587ab089644ef66','2026-01-04','7d','business','business.regulation-compliance','business.ai_security_compliance_market','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.0f5a7098cb4ec32a','2026-01-04','30d','business','business.regulation-compliance','business.ai_security_compliance_market','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.1804f1a0ea527380','2026-01-04','90d','business','business.regulation-compliance','business.ai_security_compliance_market','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.77faccc8542c2558','2026-01-04','7d','business','business.regulation-compliance','business.inference_server_supply_chain','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.e4e4a9610284941c','2026-01-04','30d','business','business.regulation-compliance','business.inference_server_supply_chain','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
+INSERT INTO "topic_daily_activity" VALUES('activity.85eb07c672b902d8','2026-01-04','90d','business','business.regulation-compliance','business.inference_server_supply_chain','theme',0.0,0.0,0.0,0.0,0.0,0,0,0,0,NULL,NULL,'dormant',0,'2026-01-04','1970-01-01 00:00:00','1970-01-01T00:00:00Z');
 CREATE TABLE validation_rows (
   validation_row_id TEXT PRIMARY KEY,
 
@@ -1151,8 +1111,6 @@ CREATE INDEX idx_themes_scope_category
 ON themes(scope_id, category_id);
 CREATE INDEX idx_themes_status
 ON themes(status);
-CREATE INDEX idx_subthemes_theme
-ON subthemes(theme_id);
 CREATE INDEX idx_theme_history_theme_date
 ON theme_history(theme_id, effective_date);
 CREATE INDEX idx_theme_mappings_old
@@ -1180,9 +1138,6 @@ ON prediction_realization_snapshots(scope_id, validation_date, window_id);
 CREATE UNIQUE INDEX idx_topic_daily_theme_activity
 ON topic_daily_activity(activity_date, window_id, scope_id, theme_id)
 WHERE activity_level = 'theme';
-CREATE UNIQUE INDEX idx_topic_daily_subtheme_activity
-ON topic_daily_activity(activity_date, window_id, scope_id, theme_id, subtheme_id)
-WHERE activity_level = 'subtheme';
 CREATE INDEX idx_topic_daily_scope_date_window
 ON topic_daily_activity(scope_id, activity_date, window_id);
 CREATE INDEX idx_topic_daily_theme_date_window
@@ -1228,9 +1183,6 @@ SELECT
   psa.theme_id,
   t.canonical_label AS theme_label,
   t.short_label AS theme_short_label,
-  psa.subtheme_id,
-  st.canonical_label AS subtheme_label,
-  st.short_label AS subtheme_short_label,
   psa.assignment_method,
   psa.assignment_score,
   psa.latest_observed_relevance,
@@ -1241,8 +1193,7 @@ FROM predictions p
 JOIN prediction_scope_assignments psa ON p.prediction_id = psa.prediction_id
 LEFT JOIN source_files sf ON p.source_file_id = sf.source_file_id
 LEFT JOIN categories c ON psa.category_id = c.category_id
-LEFT JOIN themes t ON psa.theme_id = t.theme_id
-LEFT JOIN subthemes st ON psa.subtheme_id = st.subtheme_id;
+LEFT JOIN themes t ON psa.theme_id = t.theme_id;
 CREATE VIEW v_latest_topic_activity AS
 SELECT tda.*
 FROM topic_daily_activity tda
@@ -1252,16 +1203,14 @@ JOIN (
     window_id,
     theme_id,
     activity_level,
-    COALESCE(subtheme_id, '') AS subtheme_key,
     MAX(activity_date) AS max_activity_date
   FROM topic_daily_activity
-  GROUP BY scope_id, window_id, theme_id, activity_level, COALESCE(subtheme_id, '')
+  GROUP BY scope_id, window_id, theme_id, activity_level
 ) latest
 ON tda.scope_id = latest.scope_id
 AND tda.window_id = latest.window_id
 AND tda.theme_id = latest.theme_id
 AND tda.activity_level = latest.activity_level
-AND COALESCE(tda.subtheme_id, '') = latest.subtheme_key
 AND tda.activity_date = latest.max_activity_date;
 CREATE VIEW v_latest_category_activity AS
 SELECT cda.*

@@ -180,19 +180,19 @@ export function upsertPrediction(db: Db, args: {
 
 export function upsertAssignment(db: Db, args: {
   predictionId: string; scopeId: string; categoryId: string | null;
-  themeId: string | null; subthemeId: string | null; method: string; score: number | null;
+  themeId: string | null; method: string; score: number | null;
 }): void {
   db.prepare(
     `INSERT INTO prediction_scope_assignments (
-       prediction_id, scope_id, category_id, theme_id, subtheme_id,
+       prediction_id, scope_id, category_id, theme_id,
        assignment_method, assignment_score
-     ) VALUES (?, ?, ?, ?, ?, ?, ?)
+     ) VALUES (?, ?, ?, ?, ?, ?)
      ON CONFLICT(prediction_id, scope_id) DO UPDATE SET
        category_id=excluded.category_id, theme_id=excluded.theme_id,
-       subtheme_id=excluded.subtheme_id, assignment_method=excluded.assignment_method,
+       assignment_method=excluded.assignment_method,
        assignment_score=excluded.assignment_score, updated_at=?`)
     .run(args.predictionId, args.scopeId, args.categoryId, args.themeId,
-      args.subthemeId, args.method, args.score, nowIso());
+      args.method, args.score, nowIso());
 }
 
 export function upsertCandidate(db: Db, args: {
@@ -292,7 +292,7 @@ export function matchOrCreatePrediction(db: Db, args: {
     if (theme !== undefined)
       upsertAssignment(db, {
         predictionId, scopeId, categoryId: theme.category_id, themeId: theme.theme_id,
-        subthemeId: null, method: 'centroid', score: 0.5,
+        method: 'centroid', score: 0.5,
       });
   }
   return predictionId;

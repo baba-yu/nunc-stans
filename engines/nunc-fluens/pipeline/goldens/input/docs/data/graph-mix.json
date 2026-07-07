@@ -2,7 +2,7 @@
   "schema_version": "1.0",
   "scope_id": "mix",
   "scope_label": "Mix",
-  "generated_at": "2026-07-06T16:44:49Z",
+  "generated_at": "2026-07-07T04:14:59Z",
   "date_range": {
     "start": "2026-01-02",
     "end": "2026-01-04"
@@ -51,7 +51,6 @@
       },
       "category_id": "tech.models",
       "theme_id": null,
-      "subtheme_id": null,
       "prediction_id": null,
       "parent_ids": [],
       "child_ids": [
@@ -189,7 +188,6 @@
       },
       "category_id": "tech.agents",
       "theme_id": null,
-      "subtheme_id": null,
       "prediction_id": null,
       "parent_ids": [],
       "child_ids": [
@@ -279,7 +277,6 @@
       },
       "category_id": "tech.security",
       "theme_id": null,
-      "subtheme_id": null,
       "prediction_id": null,
       "parent_ids": [],
       "child_ids": [
@@ -418,7 +415,6 @@
       },
       "category_id": "tech.inference-runtime",
       "theme_id": null,
-      "subtheme_id": null,
       "prediction_id": null,
       "parent_ids": [],
       "child_ids": [
@@ -556,7 +552,6 @@
       },
       "category_id": "tech.infrastructure",
       "theme_id": null,
-      "subtheme_id": null,
       "prediction_id": null,
       "parent_ids": [],
       "child_ids": [
@@ -696,7 +691,6 @@
       },
       "category_id": "tech.standards",
       "theme_id": null,
-      "subtheme_id": null,
       "prediction_id": null,
       "parent_ids": [],
       "child_ids": [
@@ -835,7 +829,6 @@
       },
       "category_id": "tech.agents",
       "theme_id": "tech.agent_control_plane",
-      "subtheme_id": null,
       "prediction_id": null,
       "parent_ids": [
         "tech.agents"
@@ -926,7 +919,6 @@
       },
       "category_id": "tech.inference-runtime",
       "theme_id": "tech.local_inference_runtime",
-      "subtheme_id": null,
       "prediction_id": null,
       "parent_ids": [
         "tech.inference-runtime"
@@ -1067,7 +1059,6 @@
       },
       "category_id": "tech.infrastructure",
       "theme_id": "tech.ai_chip_architecture",
-      "subtheme_id": null,
       "prediction_id": null,
       "parent_ids": [
         "tech.infrastructure"
@@ -1158,7 +1149,6 @@
       },
       "category_id": "tech.infrastructure",
       "theme_id": "tech.physical_ai_robotics",
-      "subtheme_id": null,
       "prediction_id": null,
       "parent_ids": [
         "tech.infrastructure"
@@ -1301,7 +1291,6 @@
       },
       "category_id": "tech.infrastructure",
       "theme_id": "tech.ai_macro_capital_markets",
-      "subtheme_id": null,
       "prediction_id": null,
       "parent_ids": [
         "tech.infrastructure"
@@ -1442,7 +1431,6 @@
       },
       "category_id": "tech.models",
       "theme_id": "tech.one_bit_edge_llm",
-      "subtheme_id": null,
       "prediction_id": null,
       "parent_ids": [
         "tech.models"
@@ -1583,7 +1571,6 @@
       },
       "category_id": "tech.security",
       "theme_id": "tech.agent_runtime_security",
-      "subtheme_id": null,
       "prediction_id": null,
       "parent_ids": [
         "tech.security"
@@ -1724,7 +1711,6 @@
       },
       "category_id": "tech.security",
       "theme_id": "tech.model_supply_chain",
-      "subtheme_id": null,
       "prediction_id": null,
       "parent_ids": [
         "tech.security"
@@ -1867,7 +1853,6 @@
       },
       "category_id": "tech.standards",
       "theme_id": "tech.agent_registry_architecture",
-      "subtheme_id": null,
       "prediction_id": null,
       "parent_ids": [
         "tech.standards"
@@ -1958,7 +1943,6 @@
       },
       "category_id": "tech.standards",
       "theme_id": "tech.frontier_model_regulatory_board",
-      "subtheme_id": null,
       "prediction_id": null,
       "parent_ids": [
         "tech.standards"
@@ -2112,7 +2096,6 @@
       },
       "category_id": "tech.infrastructure",
       "theme_id": "tech.physical_ai_robotics",
-      "subtheme_id": null,
       "prediction_id": "prediction.ea9dc188119c4848",
       "parent_ids": [
         "tech.physical_ai_robotics",
@@ -2541,7 +2524,6 @@
         ],
         "parent_category_id": "tech.infrastructure",
         "parent_theme_id": "tech.physical_ai_robotics",
-        "parent_subtheme_id": null,
         "latest_observed_relevance": 3,
         "latest_realization_score": 0.6,
         "latest_contradiction_score": 0,
@@ -2656,7 +2638,6 @@
       },
       "category_id": "tech.infrastructure",
       "theme_id": "tech.physical_ai_robotics",
-      "subtheme_id": null,
       "prediction_id": "prediction.653d833667c2e642",
       "parent_ids": [
         "tech.physical_ai_robotics",
@@ -2944,7 +2925,6 @@
         ],
         "parent_category_id": "tech.infrastructure",
         "parent_theme_id": "tech.physical_ai_robotics",
-        "parent_subtheme_id": null,
         "latest_observed_relevance": 3,
         "latest_realization_score": 0.6,
         "latest_contradiction_score": 0,
@@ -3011,7 +2991,6 @@
       },
       "category_id": "tech.infrastructure",
       "theme_id": "tech.physical_ai_robotics",
-      "subtheme_id": null,
       "prediction_id": "prediction.fffecc9edf856be3",
       "parent_ids": [
         "tech.physical_ai_robotics",
@@ -3299,7 +3278,6 @@
         ],
         "parent_category_id": "tech.infrastructure",
         "parent_theme_id": "tech.physical_ai_robotics",
-        "parent_subtheme_id": null,
         "latest_observed_relevance": 1,
         "latest_realization_score": 0.2,
         "latest_contradiction_score": 0,
@@ -3353,7 +3331,6 @@
       },
       "category_id": "business.market-structure",
       "theme_id": null,
-      "subtheme_id": null,
       "prediction_id": null,
       "parent_ids": [],
       "child_ids": [
@@ -3443,7 +3420,6 @@
       },
       "category_id": "business.distribution",
       "theme_id": null,
-      "subtheme_id": null,
       "prediction_id": null,
       "parent_ids": [],
       "child_ids": [
@@ -3581,7 +3557,6 @@
       },
       "category_id": "business.competition",
       "theme_id": null,
-      "subtheme_id": null,
       "prediction_id": null,
       "parent_ids": [],
       "child_ids": [
@@ -3719,7 +3694,6 @@
       },
       "category_id": "business.enterprise-adoption",
       "theme_id": null,
-      "subtheme_id": null,
       "prediction_id": null,
       "parent_ids": [],
       "child_ids": [
@@ -3809,7 +3783,6 @@
       },
       "category_id": "business.regulation-compliance",
       "theme_id": null,
-      "subtheme_id": null,
       "prediction_id": null,
       "parent_ids": [],
       "child_ids": [
@@ -3948,7 +3921,6 @@
       },
       "category_id": "business.capital-supply-chain",
       "theme_id": null,
-      "subtheme_id": null,
       "prediction_id": null,
       "parent_ids": [],
       "child_ids": [
@@ -4087,7 +4059,6 @@
       },
       "category_id": "business.capital-supply-chain",
       "theme_id": "business.compute_capex_strategy",
-      "subtheme_id": null,
       "prediction_id": null,
       "parent_ids": [
         "business.capital-supply-chain"
@@ -4228,7 +4199,6 @@
       },
       "category_id": "business.capital-supply-chain",
       "theme_id": "business.ai_revenue_disclosure",
-      "subtheme_id": null,
       "prediction_id": null,
       "parent_ids": [
         "business.capital-supply-chain"
@@ -4377,7 +4347,6 @@
       },
       "category_id": "business.competition",
       "theme_id": "business.open_weight_vs_proprietary",
-      "subtheme_id": null,
       "prediction_id": null,
       "parent_ids": [
         "business.competition"
@@ -4518,7 +4487,6 @@
       },
       "category_id": "business.distribution",
       "theme_id": "business.cloud_vs_local_distribution",
-      "subtheme_id": null,
       "prediction_id": null,
       "parent_ids": [
         "business.distribution"
@@ -4659,7 +4627,6 @@
       },
       "category_id": "business.enterprise-adoption",
       "theme_id": "business.developer_platformization",
-      "subtheme_id": null,
       "prediction_id": null,
       "parent_ids": [
         "business.enterprise-adoption"
@@ -4750,7 +4717,6 @@
       },
       "category_id": "business.market-structure",
       "theme_id": "business.hyperscaler_frontier_lab_alliance",
-      "subtheme_id": null,
       "prediction_id": null,
       "parent_ids": [
         "business.market-structure"
@@ -4841,7 +4807,6 @@
       },
       "category_id": "business.regulation-compliance",
       "theme_id": "business.ai_security_compliance_market",
-      "subtheme_id": null,
       "prediction_id": null,
       "parent_ids": [
         "business.regulation-compliance"
@@ -4932,7 +4897,6 @@
       },
       "category_id": "business.regulation-compliance",
       "theme_id": "business.inference_server_supply_chain",
-      "subtheme_id": null,
       "prediction_id": null,
       "parent_ids": [
         "business.regulation-compliance"
@@ -5086,7 +5050,6 @@
       },
       "category_id": "business.capital-supply-chain",
       "theme_id": "business.ai_revenue_disclosure",
-      "subtheme_id": null,
       "prediction_id": "prediction.394e027e97187004",
       "parent_ids": [
         "business.ai_revenue_disclosure"
@@ -5486,7 +5449,6 @@
         ],
         "parent_category_id": "business.capital-supply-chain",
         "parent_theme_id": "business.ai_revenue_disclosure",
-        "parent_subtheme_id": null,
         "latest_observed_relevance": 3,
         "latest_realization_score": 0.6,
         "latest_contradiction_score": 0,
@@ -5577,7 +5539,6 @@
       },
       "category_id": "business.capital-supply-chain",
       "theme_id": "business.ai_revenue_disclosure",
-      "subtheme_id": null,
       "prediction_id": "prediction.bcfbfe1298ff4ec1",
       "parent_ids": [
         "business.ai_revenue_disclosure"
@@ -5911,7 +5872,6 @@
         ],
         "parent_category_id": "business.capital-supply-chain",
         "parent_theme_id": "business.ai_revenue_disclosure",
-        "parent_subtheme_id": null,
         "latest_observed_relevance": 1,
         "latest_realization_score": 0.2,
         "latest_contradiction_score": 0,
@@ -5978,7 +5938,6 @@
       },
       "category_id": "business.capital-supply-chain",
       "theme_id": "business.ai_revenue_disclosure",
-      "subtheme_id": null,
       "prediction_id": "prediction.55acc78b25e9754a",
       "parent_ids": [
         "business.ai_revenue_disclosure"
@@ -6312,7 +6271,6 @@
         ],
         "parent_category_id": "business.capital-supply-chain",
         "parent_theme_id": "business.ai_revenue_disclosure",
-        "parent_subtheme_id": null,
         "latest_observed_relevance": 2,
         "latest_realization_score": 0.4,
         "latest_contradiction_score": 0,
@@ -6379,7 +6337,6 @@
       },
       "category_id": "business.capital-supply-chain",
       "theme_id": "business.ai_revenue_disclosure",
-      "subtheme_id": null,
       "prediction_id": "prediction.9bcf1ecbcbd67a64",
       "parent_ids": [
         "business.ai_revenue_disclosure"
@@ -6713,7 +6670,6 @@
         ],
         "parent_category_id": "business.capital-supply-chain",
         "parent_theme_id": "business.ai_revenue_disclosure",
-        "parent_subtheme_id": null,
         "latest_observed_relevance": 1,
         "latest_realization_score": 0.2,
         "latest_contradiction_score": 0,
@@ -6780,7 +6736,6 @@
       },
       "category_id": "business.capital-supply-chain",
       "theme_id": "business.ai_revenue_disclosure",
-      "subtheme_id": null,
       "prediction_id": "prediction.a56031469a9a7ed3",
       "parent_ids": [
         "business.ai_revenue_disclosure"
@@ -7114,7 +7069,6 @@
         ],
         "parent_category_id": "business.capital-supply-chain",
         "parent_theme_id": "business.ai_revenue_disclosure",
-        "parent_subtheme_id": null,
         "latest_observed_relevance": 3,
         "latest_realization_score": 0.6,
         "latest_contradiction_score": 0,
@@ -7181,7 +7135,6 @@
       },
       "category_id": "business.capital-supply-chain",
       "theme_id": "business.ai_revenue_disclosure",
-      "subtheme_id": null,
       "prediction_id": "prediction.5ef4de1cc1f71cd0",
       "parent_ids": [
         "business.ai_revenue_disclosure"
@@ -7515,7 +7468,6 @@
         ],
         "parent_category_id": "business.capital-supply-chain",
         "parent_theme_id": "business.ai_revenue_disclosure",
-        "parent_subtheme_id": null,
         "latest_observed_relevance": 3,
         "latest_realization_score": 0.6,
         "latest_contradiction_score": 0,

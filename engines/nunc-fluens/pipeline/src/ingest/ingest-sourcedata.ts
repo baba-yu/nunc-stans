@@ -97,7 +97,7 @@ function ingestPredictionsFile(db: Db, ctx: IngestContext, args: {
       if (theme !== undefined) {
         upsertAssignment(db, {
           predictionId, scopeId, categoryId: theme.category_id,
-          themeId: theme.theme_id, subthemeId: null, method: 'anchor', score: 1.0,
+          themeId: theme.theme_id, method: 'anchor', score: 1.0,
         });
       } else {
         upsertCandidate(db, {

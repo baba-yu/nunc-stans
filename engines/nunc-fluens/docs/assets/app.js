@@ -503,12 +503,11 @@
 
   // Zoom-driven progressive reveal. Inverted from the original UI
   // §7.1 spec: categories are the broad-bucket overview and stay
-  // visible at every zoom level; themes / subthemes / predictions
-  // appear as the user drills in. Reads natural ("supermarket
-  // signage first, product shelves next").
+  // visible at every zoom level; themes / predictions appear as the
+  // user drills in. Reads natural ("supermarket signage first,
+  // product shelves next").
   const ZOOM_THRESHOLDS = {
     showThemes:      0.75,
-    showSubthemes:   1.25,
     showPredictions: 2.0,
   };
 
@@ -519,7 +518,6 @@
   const RADIUS_BY_TYPE = {
     category: 11,
     theme: 8,
-    subtheme: 5,
     prediction: 3,
   };
 
@@ -529,7 +527,6 @@
   const Z_RANGE_BY_TYPE = {
     category: 30,
     theme: 70,
-    subtheme: 100,
     prediction: 140,
   };
 
@@ -696,7 +693,7 @@
   }
 
   function categoryIdOf(node) {
-    // Every node (category/theme/subtheme/prediction) carries category_id
+    // Every node (category/theme/prediction) carries category_id
     // when exported by the backend; a theme's id IS its category’s child,
     // and category nodes have category_id == their own id.
     if (node.type === "category") return node.id;
@@ -911,7 +908,7 @@
     // the view together with their predictions, instead of leaving a
     // stray label hovering with no node behind it.
     if (node.type === "prediction" && !predictionInWindow(node)) return false;
-    if ((node.type === "theme" || node.type === "subtheme" || node.type === "category")
+    if ((node.type === "theme" || node.type === "category")
         && !hasInWindowDescendantPrediction(node)) {
       return false;
     }
@@ -919,14 +916,12 @@
     // Fallback: generic zoom thresholds by type
     if (node.type === "category") return true;
     if (node.type === "theme") return zoom >= ZOOM_THRESHOLDS.showThemes;
-    if (node.type === "subtheme") return zoom >= ZOOM_THRESHOLDS.showSubthemes;
     if (node.type === "prediction") return zoom >= ZOOM_THRESHOLDS.showPredictions;
     return true;
   }
 
   function labelVisibleForNode(node, zoom) {
     if (node.type === "prediction") return zoom >= ZOOM_THRESHOLDS.showPredictions;
-    if (node.type === "subtheme") return zoom >= ZOOM_THRESHOLDS.showSubthemes;
     if (node.type === "theme") return zoom >= ZOOM_THRESHOLDS.showThemes;
     return true;  // categories: always
   }
@@ -1068,7 +1063,6 @@
         const tType = typeOf(l.target, rn);
         if (sType === "category" || tType === "category") return 140;
         if (sType === "theme"    || tType === "theme")    return 100;
-        if (sType === "subtheme" || tType === "subtheme") return 70;
         return 55;
       })
       .strength(0.35 * k);
@@ -1077,7 +1071,6 @@
       const base =
         d.type === "category" ? -420 :
         d.type === "theme"    ? -300 :
-        d.type === "subtheme" ? -160 :
                                 -90;
       return base * k;
     });
@@ -1626,7 +1619,6 @@
   function labelClassFor(t) {
     if (t === "category") return "cat";
     if (t === "theme") return "th";
-    if (t === "subtheme") return "sub";
     return "pred";
   }
   function labelTextFor(n) {
@@ -2214,7 +2206,6 @@
   //
   //   category    — only that category itself
   //   theme       — only that theme's parent category
-  //   subtheme    — the parent theme's parent category
   //   prediction  — every category in the prediction's ancestor chain
   //                 (no link-neighbour cross-pollution)
   //
@@ -2231,20 +2222,6 @@
       for (const pId of (n.parent_ids || [])) {
         const p = nodeById(pId);
         if (p && p.type === "category") cats.add(p.id);
-      }
-      return cats;
-    }
-    if (n.type === "subtheme") {
-      for (const pId of (n.parent_ids || [])) {
-        const p = nodeById(pId);
-        if (!p) continue;
-        if (p.type === "category") { cats.add(p.id); continue; }
-        if (p.type === "theme") {
-          for (const ppId of (p.parent_ids || [])) {
-            const pp = nodeById(ppId);
-            if (pp && pp.type === "category") cats.add(pp.id);
-          }
-        }
       }
       return cats;
     }
@@ -2661,7 +2638,6 @@
     const parts = [];
     if (n.category_id) parts.push(n.category_id.split(".").pop());
     if (n.theme_id && n.theme_id !== n.id) parts.push(n.theme_id.split(".").pop());
-    if (n.subtheme_id && n.subtheme_id !== n.id) parts.push(n.subtheme_id.split(".").pop());
     return parts.join(" / ");
   }
 
@@ -2676,7 +2652,7 @@
     // / FIL sessions read in their language. detail.description is
     // EN-only on the export side; only fall back to it when nodeLabel
     // has nothing for the active locale.
-    // For category / theme / subtheme nodes, `description` is a useful
+    // For category / theme nodes, `description` is a useful
     // standalone block (the theme's editorial description) and is
     // rendered right below the title. For *prediction* nodes,
     // `description` is the full long-form body, which is already
@@ -2729,23 +2705,16 @@
         <ul class="related-list">${preds.map((p) => listItem(p, { bare: true })).join("") || '<li class="muted">none</li>'}</ul>
         ${renderEvidenceSummary(detail)}
       `;
-    } else if (n.type === "subtheme") {
-      const preds = sortPredictionsByDateDesc(collectDescendantPredictions(n));
-      extras = `
-        <h3>Predictions (${preds.length})</h3>
-        <ul class="related-list">${preds.map((p) => listItem(p, { bare: true })).join("") || '<li class="muted">none</li>'}</ul>
-        ${renderEvidenceSummary(detail)}
-      `;
     } else if (n.type === "prediction") {
       const parents = (n.parent_ids || []).map(nodeById).filter(Boolean);
       // For each parent, render a single "{CATEGORY} → {THEME}"
-      // breadcrumb. The current data graph is 3-level
+      // breadcrumb. The data graph is 3-level
       // (category > theme > prediction) so a parent IS a theme — but
-      // the loop also handles the legacy 4-level layout where the
-      // parent is a subtheme by walking one step further.
+      // the loop also tolerates a non-theme parent by walking one
+      // step further up before giving up.
       // Long names truncate via CSS ellipsis (.crumb).
-      // Dedupe: cross-cut categorization can list the same theme via
-      // multiple subtheme parents in legacy graphs.
+      // Dedupe: cross-cut categorization can list the same theme
+      // more than once.
       const seenTheme = new Set();
       const lineageRows = parents.map((p) => {
         const theme = p.type === "theme"
@@ -3535,9 +3504,8 @@
   }
 
   // Walk an aggregate node's descendant tree and return all prediction
-  // nodes underneath it. Handles both the legacy 4-level hierarchy
-  // (category > theme > subtheme > prediction) and the current 3-level
-  // shape (category > theme > prediction) without assuming a fixed
+  // nodes underneath it. Walks the 3-level shape
+  // (category > theme > prediction) without assuming a fixed
   // depth. Predictions reachable from multiple parents (cross-cut
   // categorization) are deduped.
   function collectDescendantPredictions(node) {
