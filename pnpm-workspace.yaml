@@ -3,3 +3,4 @@ packages:
   - frontend/packages/*
   - engines/fourfive
   - engines/nunc-fluens/pipeline
+  - agents/*
