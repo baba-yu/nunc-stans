@@ -18,9 +18,11 @@ _require_data:
     @if [ -z "{{data_dir}}" ]; then echo "no data store configured - run: just bootstrap <dir>  (or set NS_DATA)"; exit 1; fi
 
 # --- News pipeline (nunc-fluens, Phase C) -----------------------------
-# The news data+publish checkout is user-designated like the data store:
+# The news data checkout is user-designated like the data store:
 # `just news-link <dir>` remembers it (config news_repo; NS_NEWS_REPO
-# overrides per invocation).
+# overrides per invocation). Both layouts are accepted: the product's
+# data/ shape and the legacy news shape (report/, docs/data — view-side
+# support is a product guarantee).
 
 news-link dir:
     node engines/nunc-fluens/pipeline/src/cli.ts link "{{dir}}"
@@ -38,7 +40,9 @@ news-validate date:
     node engines/nunc-fluens/pipeline/src/cli.ts validate "{{date}}"
 
 # Disposable run instance: local clone of the linked (read-only) news
-# checkout + its own seeded data store. Runs only ever target sandboxes;
+# checkout + its own seeded data store. Old-shape clones are migrated to
+# the product data/ layout at creation (nunc-fluens migrate-layout does
+# the same for existing instances). Runs only ever target sandboxes;
 # the view checkout is never written (Phase C redirection).
 news-sandbox dir:
     node engines/nunc-fluens/pipeline/src/cli.ts sandbox "{{dir}}"
@@ -82,17 +86,19 @@ _up-gate:
 # Build everything the gate serves. The world adapter runs first so the
 # read-only world view has fresh headlines. It reads the news checkout
 # designated via `just news-link <dir>` (config news_repo, NS_NEWS_REPO
-# override) — strictly read-only; the path lives outside this repo, like
-# the data store. No checkout linked = empty world view.
+# override) — strictly read-only, either layout (data/exports or legacy
+# docs/data); the path lives outside this repo, like the data store.
+# No checkout linked = empty world view.
 build: build-world
     pnpm install --frozen-lockfile || pnpm install
     pnpm -r build
     cargo build --release --manifest-path engines/nunc-stans/Cargo.toml
     cargo build --release --manifest-path gate/Cargo.toml
 
-# Flatten News's world export into the formans public dir AND stage the News
-# dashboard (as-is, d3 vendored — no CDN) for the /world-graph/ wrap
-# (§13-B: conversion on the Nunc Stans side; News is not asked to change).
+# Flatten the checkout's world export into the formans public dir AND stage
+# the ENGINE dashboard (engines/nunc-fluens/dashboard/, d3 vendored — no
+# CDN) with the checkout's data (data/exports, or legacy docs/data) for the
+# /world-graph/ wrap (§13-B: conversion on the Nunc Stans side).
 build-world:
     node tools/build-world.ts
 
