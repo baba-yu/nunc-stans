@@ -83,6 +83,9 @@ sandbox, or stop the timer until review. Flagged in the close-out summary.
 ### Task 2: NUL-byte hygiene (pre-req)
 - [ ] Strip the four NUL bytes from `src/export/export.ts` (byte-identical
       otherwise); prove suite-neutral (121 tests). Grep now sees the file.
+- [ ] Ridealong: raise the `db-dump.test.ts` schema-objects test timeout —
+      it exceeds vitest's 5s default under full-suite parallel load
+      (observed 5117 ms flake at baseline, passes in isolation).
 
 ### Task 3: Prompts re-home (P4 — item 2)
 - [ ] `git mv` the 16 runtime files → `pipeline/prompts/`; `designDir()` →
@@ -102,6 +105,13 @@ sandbox, or stop the timer until review. Flagged in the close-out summary.
 ### Task 5: Subtheme removal (P6 — item 4a)
 - [ ] Schema + code + dashboard removals per P6; goldens `synthesize.ts all`
       in the same commit; suite green; export diff reviewed (key-removals only).
+
+### Task 5b: Prefix-token JSON + LIST all-scopes (P8/P9 — items 4c/4d)
+- [ ] `prefix-tokens.json` single source + short-label import + export emit +
+      dashboard fetch-with-fallback + drift reconciliation; goldens regen
+      (new export file).
+- [ ] `#list-scope` gains `all` (mix-graph alias); manual verification via
+      staged world view recorded in the verification doc.
 
 ### Task 6: Layout renames (P1/P2/P3/P10 — item 1)
 - [ ] `world-paths.ts`: new rel constants (`data/daily-news` etc.,
