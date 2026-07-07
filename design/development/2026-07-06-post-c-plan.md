@@ -260,14 +260,25 @@ stated by the owner 2026-07-07:
 
 ### V2 tasks
 
-- [ ] V2-1 (nf): world-paths v2 (`data/sourcedata`, `data/references.txt`),
-      instance-template/ + `init`, `import` (absorbs migrate-layout incl.
-      archives carry + ignore translation), retire sandbox/migrate-layout,
-      `requireInstance` + `NS_INSTANCE`, per-instance config/log resolution,
-      flow-check DB probe → store, publish list + run.json path, goldens
-      init-born + regen, tests overhauled.
-- [ ] V2-2 (tool/design ride): build-world instance-only (R6), justfile
-      recipes, systemd, CONTRIBUTING FD-3.2 amendment, naming.md,
-      engine README/docs updates, `.gitignore` gains `/instances/`.
-- [ ] V2-3: adversarial review over the v2 diff; fixes; verification doc
-      update; owner handoff.
+- [x] V2-1 (nf) — DONE 2026-07-07 (d72aa2b, 1b70d46, d722df1, c03187e):
+      world-paths v2 (`data/sourcedata`, `data/references.txt`),
+      instance-template/ + `init`, `import` (absorbs migrate-layout; also
+      retired `migrate-db` — import supersedes the last `app/` reader),
+      sandbox/migrate-layout retired, `requireInstance` + `NS_INSTANCE`,
+      per-instance store (DB, ai-runs, news-config override w/ main-store
+      fallback), flow-check DB probe → store, publish list + run.json
+      path, goldens init-born + regen (renders byte-identical; hashed ids
+      legitimately changed with the rel-path move), tests 176/18. Real
+      /tmp smoke: init → import → run guards.
+- [x] V2-2 (tool + nf) — DONE 2026-07-07 (c624aee, f6e752c): build-world
+      instance-only (R6; both modes proven), justfile recipes
+      news-init/news-import/news-daily, CONTRIBUTING FD-3.2 amendment,
+      naming.md rows, engine README/docs/INTEGRATION retold;
+      `/instances/` ignore + systemd landed in V2-1.
+- [x] V2-3 — DONE 2026-07-07: adversarial review (4 reviewers +
+      refute-by-default verify) → 16 confirmed findings (3 major:
+      gpgsign-hostile hosts broke init/import commits; a cloned instance
+      without its ignored store had no recovery path; bare names only
+      worked for init/import), ALL FIXED (9a32ebd, c4efdde, 1eee9f6,
+      7368a03, f38e087) + this closeout. Suite 188/19; full matrix green;
+      verification doc updated.
