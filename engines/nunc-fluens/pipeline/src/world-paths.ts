@@ -15,6 +15,7 @@ import { join } from 'node:path';
 // Forward-slash rel strings: node's join() normalizes them per-OS, and
 // git pathspecs use them verbatim.
 export const DATA_DIR = 'data';
+export const SOURCEDATA_REL = 'data/sourcedata';
 export const DAILY_NEWS_REL = 'data/daily-news';
 export const FP_REL = 'data/future-prediction';
 export const MEMORY_REL = 'data/memory';
@@ -22,6 +23,7 @@ export const REFERENCE_REL = 'data/reference';
 export const EXPORTS_REL = 'data/exports';
 export const ARCHIVE_SNAPSHOTS_REL = 'data/archives/snapshots';
 export const REFERENCES_TXT = 'references.txt';
+export const REFERENCES_TXT_REL = 'data/references.txt';
 
 /** The dashboard's data exports (graph-*.json, manifest, snapshots,
  * prefix-tokens.json). */

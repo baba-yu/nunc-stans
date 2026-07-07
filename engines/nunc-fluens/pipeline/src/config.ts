@@ -42,6 +42,13 @@ export const worldDir = (dataDir: string) => join(dataDir, 'world')
 export const worldDbFile = (dataDir: string) => join(worldDir(dataDir), 'analytics.sqlite')
 export const runLogFile = (dataDir: string) => join(dataDir, 'runs', 'ai-runs.jsonl')
 
+// Instance layout (post-C REDO V2, R2/R3): each data instance carries
+// its own gitignored store/ for runtime state. The store reuses the
+// main-store shapes (world/analytics.sqlite, runs/ai-runs.jsonl), so
+// worldDbFile / runLogFile apply to both; news-config.json sits at the
+// store root as the optional per-instance override.
+export const instanceStoreDir = (instanceRoot: string) => join(instanceRoot, 'store')
+
 // Checkout app/ subtree — DELIBERATELY untouched by the post-C data/
 // layout rename (P1): source_files.path stores `app/sourcedata/…` rel
 // paths that participate in row identity, so moving app/ is a
