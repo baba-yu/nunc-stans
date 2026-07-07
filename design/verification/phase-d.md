@@ -88,6 +88,11 @@ Running record; completed as the exit items execute. Plan:
   verified current against the `claude-api` skill 2026-07-07.**
   Acceptance: nunc-ai 20/20; pipeline 187/187 untouched; ff 24/24;
   typecheck green.
+- **2026-07-07 — T3 done** (c3641b4). Goal-verify judge/retry loop live
+  in `createAi` (PD5): verdict chain + per-iteration tokens in one
+  run-log entry, maxIters/tokenBudget brakes, judge-failure honest-stop,
+  streamed iterations with `verify` boundary events + single `done`.
+  nunc-ai 28/28; pipeline 187/187 untouched.
 
 ## Stories (executed at T10; specs written at T1)
 

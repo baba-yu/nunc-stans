@@ -423,14 +423,24 @@ Session-size guide (v1 plan: 3–5 focused sessions):
 - Acceptance MET: nunc-ai 12→20 tests green; **pipeline 187/187 green
   with zero call-site changes**; fourfive 24/24; typecheck green.
 
-### Task 3: Goal-verify loop (fe) — depends: T2
-- [ ] Judge/retry middleware in `createAi` per PD5 (`verify.ts` grows the
-      loop; `normalizeVerify` stays the config gate). Hard caps: maxIters,
-      tokenBudget. Verdict chain + per-iteration tokens into the run log.
-- [ ] Scripted mock judge (fixture-driven `{met, gaps[]}` sequences) — the
-      S-6 rehearsal path, zero live tokens.
-- Acceptance: unit tests prove loop stops at maxIters on a never-met goal,
-  aborts on budget, logs every verdict; defaults preserve off-by-default.
+### Task 3: Goal-verify loop (fe) — DONE 2026-07-07 (c3641b4)
+- [x] `runVerified` in `verify.ts`, wired inside `createAi.chat`/`chatStream`
+      per PD5: judge verdict `{met, gaps[]}` (schema-prompted, code-fence
+      tolerant), gaps fed back as conversation turns, maxIters (default 2)
+      + tokenBudget hard brakes, judge-failure ends the loop honestly
+      (gap recorded, answer returned, no blind retries). ONE run-log entry
+      per loop: aggregated tokens + the verdict chain; judge rides the
+      caller's provider unless `verify.judge` names another. Streaming:
+      each iteration streams, `verify` boundary events between iterations,
+      exactly one `done` (StreamEvent gained the `verify` variant).
+      Verify-on without a goal is a config error.
+- [x] Scripted judge = any provider via `cfg.providers` (tests ship one);
+      the mock provider's scripted thinking/content covers the S-6
+      zero-token rehearsal.
+- Acceptance MET: 8 loop tests (never-met stops at maxIters + feedback
+  carried; met stops early; budget brake; judge-down; fence parse;
+  boundary-event order content→verify→content→verify→done; off-default
+  unchanged). nunc-ai 28/28; pipeline 187/187 untouched.
 
 ### Task 4: Profile store + gate API + Profiles screen (gate, fe) — depends: T0 (PD2/PD3 ratified)
 - [ ] Shared profile schema + validator (TS in nunc-ai or a small shared
