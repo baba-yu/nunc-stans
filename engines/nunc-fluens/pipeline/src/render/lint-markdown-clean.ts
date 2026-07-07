@@ -1,6 +1,8 @@
 // TS port of app/skills/lint_markdown_clean.py — forbidden internal-
-// pipeline tokens in user-facing markdown (design/sourcedata-layout.md
-// §Naming hygiene + the ADR-002 anti-inertia vocabulary).
+// pipeline tokens in user-facing markdown (naming hygiene + the
+// anti-inertia vocabulary). The FORBIDDEN table below is the canonical
+// list — the frozen specs were retired with the design corpus (git
+// history keeps them).
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { DAILY_NEWS_REL, FP_REL, LOCALES } from '../world-paths.ts';

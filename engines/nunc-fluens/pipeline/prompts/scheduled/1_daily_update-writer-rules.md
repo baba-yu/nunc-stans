@@ -1,6 +1,6 @@
 # 1_daily_update — writer rules (Phase 3 JSON-emitting flow)
 
-Detailed writer regulations for the LLM-driven steps in `1_daily_update`. Phase 3 rewrite: writer prompts now produce **JSON sourcedata** conforming to the schemas in `design/sourcedata-layout.md §JSON schemas (canonical)`. Markdown is NEVER written by the LLM — `render-news-md` (Jinja2) is the single producer of `data/daily-news/<L>/news-YYYYMMDD.md`.
+Detailed writer regulations for the LLM-driven steps in `1_daily_update`. Phase 3 rewrite: writer prompts now produce **JSON sourcedata** conforming to the canonical sourcedata schemas (`pipeline/src/schemas/sourcedata.ts`). Markdown is NEVER written by the LLM — `render-news-md` (Jinja2) is the single producer of `data/daily-news/<L>/news-YYYYMMDD.md`.
 
 The legacy stream-letter vocabulary is **gone**. There is no separate "title-stream" / "reasoning-stream" / "mid-tier-summary-stream" concept — the prediction is one JSON object with `title` (the one-line title), `body` (the long-form prose), `reasoning` (the explicit field bundle `because`/`given`/`so_that`/`landing`/`plain_language`), and `summary` (the mid-tier prose). The renderer assembles them into the markdown shape the reader sees.
 
@@ -8,7 +8,7 @@ The legacy stream-letter vocabulary is **gone**. There is no separate "title-str
 
 ### `compose-prediction` (one sub-agent per prediction)
 
-Output: a single object matching `predictions.predictions[]` per `design/sourcedata-layout.md`:
+Output: a single object matching `predictions.predictions[]` per the canonical schema (`pipeline/src/schemas/sourcedata.ts`):
 
 ```json
 {
@@ -70,11 +70,11 @@ Output: object matching `change_log.json` schema. Each `items[i]` carries `kind`
 
 Output: object matching `news_section.json` schema. Each `sections[i].category` becomes a `### <Category>` sub-header in the rendered markdown; each `bullets[i].body` becomes a `- <body>` line, with `citations` rendered as a comma-joined link list at the end.
 
-**Anti-inertia rules (per `design/decisions/ADR-002-news-anti-inertia.md` and `prompts/skills/compose-news-section.md §Anti-inertia rules`):**
+**Anti-inertia rules (per `prompts/skills/compose-news-section.md §Anti-inertia rules`; the originating ADR was retired with the design corpus — git history keeps it):**
 
 - **Continuation cap:** at most 2 of the day's bullets may extend a storyline already present in any of the prior 3 days of `data/daily-news/en/news-*.md`. The remaining 3+ bullets must be either fresh topics (covered topics from `data/reference/news-topics.md` not seen in the prior 3 days) or net-new events on a previously-covered topic. The parent supplies a structured prior-storyline digest to identify continuations.
 - **State-change requirement on continuations:** every continuation bullet must center on a fresh state-change event observed on this date — new named entrant, numeric threshold crossing, new actor position, new artifact shipped, or scheduled catalyst date reached. Hold-steady framings ("unchanged through the weekend," "Nth consecutive non-trading day," "doubly/triply weekend-aged hold," "now-N-day-old artifact") must be **dropped**, not written. Under-filling (3 or 4 bullets total) beats inertia-filling.
-- **Forbidden lifecycle metadata:** `day-N` storyline numbering, aging vocabulary (`weekend-aged`, `doubly-aged`, `triply-aged`, `N-day-old artifact`, `holiday-equivalent day`), and `Nth consecutive {day,session,non-trading day,weekend day,holiday-equivalent day}` framings as bullet anchors. Full token list lives in `design/sourcedata-layout.md §Naming hygiene → Lifecycle metadata`. `lint-markdown-clean` enforces post-render; the parent schema-validates pre-render and re-prompts the sub-agent on a hit.
+- **Forbidden lifecycle metadata:** `day-N` storyline numbering, aging vocabulary (`weekend-aged`, `doubly-aged`, `triply-aged`, `N-day-old artifact`, `holiday-equivalent day`), and `Nth consecutive {day,session,non-trading day,weekend day,holiday-equivalent day}` framings as bullet anchors. The full token list lives in `lint-markdown-clean` (`pipeline/src/render/lint-markdown-clean.ts`), which enforces post-render; the parent schema-validates pre-render and re-prompts the sub-agent on a hit.
 - **Context shielding (parent-side, restated for the writer):** the writer will never receive the body of prior `news-*.md` files as continuity context. The parent passes only the structured digest. If the writer feels it lacks context, that absence is intentional — continuity is the inertia driver this rule is correcting.
 
 ## Glossary hygiene
@@ -93,4 +93,4 @@ For the LLM driving `compose-news-section`: every run must cover the topic list 
 
 ## Forbidden token reminder
 
-The lint check `lint-markdown-clean` (Step 14 of the orchestrator) is the structural gate that catches Stream-jargon / parser-anchor leaks. Even though the renderer wraps prose into a deterministic shape, the writer prompts can still inject forbidden tokens INTO the prose body itself (e.g. an LLM that quotes "the **Bridge (Pred ID #N):** language" in a prediction's body). The lint catches this. See `design/sourcedata-layout.md §Naming hygiene` for the full forbidden list.
+The lint check `lint-markdown-clean` (Step 14 of the orchestrator) is the structural gate that catches Stream-jargon / parser-anchor leaks. Even though the renderer wraps prose into a deterministic shape, the writer prompts can still inject forbidden tokens INTO the prose body itself (e.g. an LLM that quotes "the **Bridge (Pred ID #N):** language" in a prediction's body). The lint catches this; its FORBIDDEN table (`pipeline/src/render/lint-markdown-clean.ts`) is the full list.

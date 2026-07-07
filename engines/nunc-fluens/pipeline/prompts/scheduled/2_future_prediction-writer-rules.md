@@ -1,6 +1,6 @@
 # 2_future_prediction — writer rules (Phase 3 JSON-emitting flow)
 
-Detailed writer regulations for the LLM-driven steps in `2_future_prediction`. Phase 3 rewrite: writer prompts now produce **JSON sourcedata** conforming to the schemas in `design/sourcedata-layout.md §JSON schemas (canonical)`. Markdown is NEVER written by the LLM — `render-future-prediction-md` (Jinja2) is the single producer of `data/future-prediction/<L>/future-prediction-YYYYMMDD.md`.
+Detailed writer regulations for the LLM-driven steps in `2_future_prediction`. Phase 3 rewrite: writer prompts now produce **JSON sourcedata** conforming to the canonical sourcedata schemas (`pipeline/src/schemas/sourcedata.ts`). Markdown is NEVER written by the LLM — `render-future-prediction-md` (Jinja2) is the single producer of `data/future-prediction/<L>/future-prediction-YYYYMMDD.md`.
 
 ## `compose-summary` — semantic contract for `summary.json` fields
 
@@ -109,7 +109,7 @@ Every sub-agent's JSON output is validated at write time against `app/skills/sou
 
 ## Forbidden token reminder
 
-The lint check `lint-markdown-clean` (Step 8 of the orchestrator) catches Stream-jargon / parser-anchor leaks in the rendered markdown. Even though the renderer wraps prose into a deterministic shape, the writer prompts can still inject forbidden tokens INTO `bridge.narrative` or `summary.findings` (e.g. an LLM that quotes "Coherence 4/5" inside its narrative). The lint catches this. See `design/sourcedata-layout.md §Naming hygiene` for the full forbidden-token list.
+The lint check `lint-markdown-clean` (Step 8 of the orchestrator) catches Stream-jargon / parser-anchor leaks in the rendered markdown. Even though the renderer wraps prose into a deterministic shape, the writer prompts can still inject forbidden tokens INTO `bridge.narrative` or `summary.findings` (e.g. an LLM that quotes "Coherence 4/5" inside its narrative). The lint catches this; its FORBIDDEN table (`pipeline/src/render/lint-markdown-clean.ts`) is the full list.
 
 ## Dormant pool re-check (existing rule, retained verbatim)
 

@@ -40,10 +40,11 @@ constitution's world→self provenance loop, F9).
 - `pipeline/prompts/` — the runtime LLM prompt sources (skill contracts,
   writer rules, `memory-policy.md`), read by the orchestrator on live
   runs; normally-editable behavior files (post-C reorganization).
-- `design/` — living engine design docs (`decisions/` ADRs,
-  `sourcedata-layout.md`); `design/archive/` holds the rest of the frozen
-  spec corpus the port was written against (imported at Phase C T0,
-  provenance in `design/README.md`).
+- The engine's `design/` corpus (ADRs, `sourcedata-layout.md`, the
+  frozen `design/archive/` spec corpus the port was written against)
+  was retired 2026-07-07 — git history keeps it; the living contracts
+  are the schemas (`pipeline/src/schemas/`) and the runtime prompts
+  (`pipeline/prompts/`).
 - `app/` — the frozen Python oracle the port was validated against,
   byte-for-byte via `pipeline/goldens/`. Frozen at upstream `17682e9`
   plus two recorded determinism fixes; **deleted at Phase C T12** (git

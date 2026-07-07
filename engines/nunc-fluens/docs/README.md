@@ -25,9 +25,9 @@ instance's exports strictly read-only.
   deploy/stage time.
 - `instances/` — the default (gitignored) home for data instances:
   one git repo per profile, stamped by `nunc-fluens init`.
-- `design/` — living design docs (`decisions/` ADRs,
-  `sourcedata-layout.md`); `design/archive/` is the frozen spec corpus
-  the port was written against (provenance in `design/README.md`).
+- There is no engine `design/` corpus anymore (retired 2026-07-07; git
+  history keeps it) — the living contracts are the schemas
+  (`pipeline/src/schemas/`) and the runtime prompts (`pipeline/prompts/`).
 - `INTEGRATION.md` — lineage note (what this engine is a port of, and
   why there is no integration relationship to document).
 

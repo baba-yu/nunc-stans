@@ -5,7 +5,7 @@ LLM sub-agent that emits `data/sourcedata/<date>/headlines.json` (5 paired plain
 ## Sub-agent context (parent supplies)
 
 - The just-written `data/sourcedata/<date>/news_section.json` (the headline content draws from the same news cycle).
-- The schema for `headlines.json` from `design/sourcedata-layout.md §JSON schemas (canonical)`.
+- The schema for `headlines.json` from the canonical sourcedata schemas (`pipeline/src/schemas/sourcedata.ts`).
 - The forbidden-token list (no scope prefix; ≤ 60 chars per plain bullet; ≤ 2 proper-noun tokens per plain bullet).
 - A target output path: `data/sourcedata/<date>/headlines.json`.
 

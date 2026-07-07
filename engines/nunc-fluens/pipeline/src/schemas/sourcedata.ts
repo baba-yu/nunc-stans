@@ -1,5 +1,7 @@
 // TS port of app/skills/sourcedata_schemas.py (the oracle validator).
-// Spec: engines/nunc-fluens/design/sourcedata-layout.md §JSON schemas.
+// This module IS the canonical sourcedata schema — the frozen
+// sourcedata-layout spec was retired with the design corpus (git
+// history keeps it).
 //
 // Like the oracle, this deliberately avoids a schema-library dependency
 // (zod/ajv): the Python side chose hand-rolled validators for error

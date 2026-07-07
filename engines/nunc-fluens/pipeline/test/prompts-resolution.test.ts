@@ -54,13 +54,14 @@ describe('runtime prompt assets resolve', () => {
 });
 
 describe('no dead self-referential prompt paths', () => {
-  // The prompts were re-homed out of design/skills|scheduled (post-C);
-  // their internal citations must not point at the retired location —
-  // moved files are cited at prompts/..., archived corpus files at
-  // design/archive/... (which this regex deliberately does not match).
-  const DEAD_HOME = /design\/(?:skills|scheduled)\//;
+  // The prompts were re-homed out of design/ (post-C), and the whole
+  // engine design/ corpus (archive, ADRs, sourcedata-layout) was
+  // retired 2026-07-07 — a design/ path in a runtime prompt is dead by
+  // construction now. Moved files are cited at prompts/..., living
+  // contracts at pipeline/src/....
+  const DEAD_HOME = /\bdesign\//;
 
-  it('no runtime-loaded prompt cites the retired design/ home', () => {
+  it('no runtime-loaded prompt cites the retired design/ corpus', () => {
     for (const name of RUNTIME_SKILLS)
       expect(loadSkillSpec(name), name).not.toMatch(DEAD_HOME);
     expect(loadWriterRules('1_daily_update')).not.toMatch(DEAD_HOME);

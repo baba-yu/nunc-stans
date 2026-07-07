@@ -105,7 +105,7 @@ Because the auditor is the same model class as the writer, the prompt distinctio
 
 Sub-agent reply: a one-line `OK <path>` or `FAIL <reason>`. Do NOT paste the JSON content back to the parent — the parent reads it from the file.
 
-## Dispatch policy (per `0_daily_master.md §Sub-agent dispatch policy`)
+## Dispatch policy
 
 | Step | Dispatch shape |
 |---|---|

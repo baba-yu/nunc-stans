@@ -159,7 +159,7 @@ export function weeklyMemorySteps(): StepDef[] {
               id: 'dormant-signals',
               prompt: [
                 'You are the extract-dormant-signals step of the nunc-fluens weekly',
-                'memory task (design/archive/scheduled/4_weekly_memory.md step 4).',
+                'memory task (4_weekly_memory step 4).',
                 `Today's date: ${ctx.date}.`,
                 '',
                 'For each new dormant-pool entrant below, extract distinctive terms',
@@ -279,7 +279,7 @@ export function themeReviewSteps(): StepDef[] {
           id: 'theme-review-proposal',
           prompt: [
             'You are the compose-theme-proposal step of the nunc-fluens weekly',
-            'theme review (design/archive/scheduled/5_weekly_theme_review.md steps 4-5).',
+            'theme review (5_weekly_theme_review steps 4-5).',
             `Today's date: ${ctx.date}.`,
             '',
             'Write data/memory/theme-review/theme-review-' + stem(ctx.date) + '.md.',

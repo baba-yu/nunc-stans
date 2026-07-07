@@ -6,7 +6,7 @@ LLM sub-agent that emits **one prediction entry** for `data/sourcedata/<date>/pr
 
 - The just-written `data/sourcedata/<date>/news_section.json` (the prediction draws on the same news cycle).
 - The trace of the LLM's reasoning question (which scope: `tech` / `business` / `cross`).
-- The schema for one entry of `predictions.predictions[]` from `design/sourcedata-layout.md §JSON schemas (canonical)`.
+- The schema for one entry of `predictions.predictions[]` from the canonical sourcedata schemas (`pipeline/src/schemas/sourcedata.ts`).
 - The full forbidden-token list.
 - The full per-skill writer-rules from `prompts/scheduled/1_daily_update-writer-rules.md §compose-prediction`.
 - A target output path: `data/sourcedata/<date>/needs.<pid>.json` (where `<pid>` = the sub-agent's chosen prediction id).

@@ -1,7 +1,8 @@
-// TS port of the link-routing check from
-// design/archive/scheduled/3_daily_briefing-checks.md (Step 3): every link in a
-// non-English README must use its own locale segment, or fall back to
-// /en/ only when the locale file genuinely does not exist.
+// TS port of the 3_daily_briefing link-routing check (Step 3; the
+// frozen checks spec was retired with the design corpus — git history
+// keeps it): every link in a non-English README must use its own
+// locale segment, or fall back to /en/ only when the locale file
+// genuinely does not exist.
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { DAILY_NEWS_REL, FP_REL, NON_EN_LOCALES } from '../world-paths.ts';

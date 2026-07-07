@@ -108,4 +108,4 @@ This skill is the **LLM-driven** fill — it produces definitions for newly-prom
 - A new seed term needs hand-translated locale fan-outs from day one (rather than waiting for the candidate→active→LLM-fill cycle).
 - A `mismatch` verdict from `validate-glossary-terms` retired a row, the human-curated correction lives in YAML, and we want the row reinstated with the corrected definition.
 
-The two fill paths are complementary: upsert overwrites YAML-owned fields (definitions, locale fan-out, canonical_link, status, reviewed_by_human) without touching SQLite-owned counters/dates. See `design/archive/skills/extract-glossary-candidates.md` § "Seed modes" for the field split.
+The two fill paths are complementary: upsert overwrites YAML-owned fields (definitions, locale fan-out, canonical_link, status, reviewed_by_human) without touching SQLite-owned counters/dates. The field split is implemented by the seed-mode handling in `pipeline/src/ingest/glossary-extract.ts`.

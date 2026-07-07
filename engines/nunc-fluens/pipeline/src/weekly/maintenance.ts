@@ -230,7 +230,7 @@ const QUEUE_INTRO = [
   '',
   'Predictions / glossary terms trimmed by Step 0 caps. '
   + 'Entries here are force-promoted on a 4-week starvation '
-  + 'guarantee. See design/archive/scheduled/6_weekly_maintenance.md.',
+  + 'guarantee (6_weekly_maintenance).',
   '',
 ];
 
@@ -277,9 +277,8 @@ export function writeHealthLog(
     `Week ending: ${weekEnding}`, '',
     'Step 0 health-check assertion (predictions older than 90 days '
     + 'AND not in dormant snapshot) returned non-zero rows. The '
-    + 'dormant detection has a leak; see design/archive/scheduled/'
-    + '4_weekly_memory.md. Maintenance run continues; this is a '
-    + 'separate ticket.', '',
+    + 'dormant detection has a leak (4_weekly_memory). Maintenance '
+    + 'run continues; this is a separate ticket.', '',
     '## Findings', '',
     ...warnings.map(w => `- ${w}`),
     '',

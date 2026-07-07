@@ -7,8 +7,8 @@ LLM sub-agent that emits `data/sourcedata/<date>/news_section.json` from the day
 - The day's news topics from `data/reference/news-topics.md`.
 - The trusted-source list (`arxiv.org`, `simonwillison.net`, `news.ycombinator.com`, plus topic-specific sources).
 - The full `references.txt` URL list (sub-agent must SKIP URLs already cited).
-- The schema for `news_section.json` from `design/sourcedata-layout.md §JSON schemas (canonical)`.
-- The forbidden-token list from `design/sourcedata-layout.md §Naming hygiene` (no scope prefix in any field; no lifecycle metadata per ADR-002).
+- The schema for `news_section.json` from the canonical sourcedata schemas (`pipeline/src/schemas/sourcedata.ts`).
+- The forbidden-token list from `lint-markdown-clean` (`pipeline/src/render/lint-markdown-clean.ts`) — no scope prefix in any field; no lifecycle metadata per the anti-inertia rules below.
 - A target output path: `data/sourcedata/<date>/news_section.json`.
 - A **structured prior-storyline summary** (per ADR-002 Rule 4): a short JSON list of `{storyline_label, last_seen_date, last_state_change_kind}` covering storylines active in the prior 3 days. The parent does **not** pass the prior days' news prose bodies — only this structured digest — to keep the sub-agent from latching onto prior phrasing.
 
@@ -48,7 +48,7 @@ These rules exist because between 2026-05-08 and 2026-05-25 the news section dri
 
 2. **State-change requirement on continuations.** Each continuation bullet must center on a fresh state-change event observed on this date. Qualifying state changes: new named entrant joins a cohort; numeric threshold crossed in either direction; new actor takes a public position; new artifact ships (arxiv ID, release tag, M&A, IPO); scheduled event reaches its catalyst date. A bullet whose only content is "hold steady" / "unchanged" / "settled into Nth consecutive day" must be **dropped** from the JSON — under-filling (3 or 4 bullets) is preferred to filler.
 
-3. **No lifecycle metadata in any field.** Forbidden in `category`, `body`, and `citations[].label`: `day-N` storyline numbering, `weekend-aged` / `doubly-aged` / `triply-aged` / `N-day-old artifact` / `holiday-equivalent day` aging vocabulary, and `Nth consecutive {day,session,non-trading day,weekend day,holiday-equivalent day}` framings used as the bullet's main anchor. The full token list is in `design/sourcedata-layout.md §Naming hygiene → Lifecycle metadata` and is enforced post-render by `lint-markdown-clean`. The parent schema-validates JSON pre-render and re-prompts the sub-agent on a hit.
+3. **No lifecycle metadata in any field.** Forbidden in `category`, `body`, and `citations[].label`: `day-N` storyline numbering, `weekend-aged` / `doubly-aged` / `triply-aged` / `N-day-old artifact` / `holiday-equivalent day` aging vocabulary, and `Nth consecutive {day,session,non-trading day,weekend day,holiday-equivalent day}` framings used as the bullet's main anchor. The full token list lives in `lint-markdown-clean` (`pipeline/src/render/lint-markdown-clean.ts`), which enforces it post-render. The parent schema-validates JSON pre-render and re-prompts the sub-agent on a hit.
 
 4. **Bullet count is a soft 5, not a hard 5.** If applying Rules 1–2 leaves only 3 or 4 qualifying bullets, ship the shorter section. Empty `bullets[]` is still a schema error — a section must have ≥ 1 bullet — but a 3-bullet `news_section.json` is acceptable.
 
