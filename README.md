@@ -26,15 +26,14 @@ Prerequisites (what `just bootstrap` doctors): git, `just`, Node ≥ 24 with
 corepack, Rust via rustup. On **Windows 11 (native)** additionally:
 Git for Windows supplies the `sh` that `just` uses (`windows-shell`), and
 rustup needs the MSVC Build Tools (Visual Studio Build Tools → "Desktop
-development with C++") for linking. Python 3.10+ is needed only for the
-news pipeline until Phase C retires it.
+development with C++") for linking.
 
 ## Layout
 
 | Path | What |
 |---|---|
 | `engines/nunc-stans` | Rust self-scope engine (append-only ledger + vault guard) |
-| `engines/nunc-fluens` | Nunc Fluens — the news pipeline (world scope). Code canonical here; `~/news` holds the live data + publishing until Phase C. **Code-frozen there since 2026-07 — code changes land here.** |
+| `engines/nunc-fluens` | Nunc Fluens — the news pipeline (world scope). Engine code + instance template; runs target per-profile **data instances** stamped from the template (`just news-init`, seeded from an existing checkout via `just news-import`) |
 | `engines/fourfive` | FourFive design tool (artifact scope) |
 | `frontend/nunc-stans-formans/` | **Nunc Stans Formans** — the integrated UI (ME / world / timeline; Vue 3 + TS) |
 | `frontend/packages/nunc-ui` | the design system: tokens + Vue primitives every screen consumes |

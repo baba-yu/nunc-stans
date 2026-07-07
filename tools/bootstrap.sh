@@ -24,7 +24,6 @@ if command -v node >/dev/null 2>&1; then
   major=$(node -e 'console.log(process.versions.node.split(".")[0])')
   if [ "$major" -lt 24 ]; then say "MISS node >= 24 (found $(node --version))"; missing=1; fi
 fi
-command -v python3 >/dev/null 2>&1 || say "warn python3 missing (needed until Phase C retires the news pipeline)"
 command -v ollama  >/dev/null 2>&1 || say "info ollama not found (optional - local models)"
 
 say "== data store =="

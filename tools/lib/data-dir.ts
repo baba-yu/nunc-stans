@@ -1,9 +1,9 @@
-// Shared resolution for the user-designated data store and the news
-// data+publish checkout. Single source of truth for the config file
-// shape (<config-home>/nunc-stans/config.json) — consumed by
-// tools/data-dir.ts, tools/build-world.ts, and the nunc-fluens pipeline.
-// FD-3.2: no data path convention exists in code or docs; everything
-// here reads the user's designation.
+// Shared resolution for the user-designated data store and the linked
+// nunc-fluens data instance (the world-view source). Single source of
+// truth for the config file shape (<config-home>/nunc-stans/config.json)
+// — consumed by tools/data-dir.ts, tools/build-world.ts, and the
+// nunc-fluens pipeline. FD-3.2: no data path convention exists in code
+// or docs; everything here reads the user's designation.
 import { mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { homedir } from 'node:os'
@@ -54,8 +54,11 @@ export function resolveDataDir(): Resolved {
   return { dir: typeof v === 'string' && v ? v : null }
 }
 
-/** News checkout resolution: NS_NEWS_REPO > config news_repo. Set via
- * `just news-link <dir>` (Phase C replaces the retired NEWS_WORLD env). */
+/** Linked-instance resolution: NS_NEWS_REPO > config news_repo
+ * (unchanged key, instance semantics — points at a v2 nunc-fluens data
+ * instance; see tools/build-world.ts and design/naming.md). Set via
+ * `just news-link <instance>` (Phase C replaces the retired NEWS_WORLD
+ * env). */
 export function resolveNewsRepo(): string | null {
   const env = process.env.NS_NEWS_REPO
   if (env) return env
