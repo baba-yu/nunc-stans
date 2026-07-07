@@ -244,7 +244,7 @@ export function writeInputs(): void {
   rmSync(INPUT, { recursive: true, force: true });
 
   // reference/ + references.txt + topics
-  w(join(INPUT, 'reference', 'news-topics.md'), [
+  w(join(INPUT, 'data', 'reference', 'news-topics.md'), [
     '# Daily-update topic coverage', '',
     '## Topic list', '',
     '- Synthetic fixtures',
@@ -252,7 +252,7 @@ export function writeInputs(): void {
     '## Default reference sites', '',
     '- https://example.com/', '',
   ].join('\n'));
-  w(join(INPUT, 'reference', 'citation-restrictions.md'), [
+  w(join(INPUT, 'data', 'reference', 'citation-restrictions.md'), [
     '# Citation restrictions', '',
     '## denylist', '',
     '| host | reason |',
@@ -262,7 +262,7 @@ export function writeInputs(): void {
     '### ExampleCorp', '',
     '- corpnews.example', '',
   ].join('\n'));
-  w(join(INPUT, 'reference', 'glossary.yml'), [
+  w(join(INPUT, 'data', 'reference', 'glossary.yml'), [
     'terms:',
     '  - term: FixtureTerm',
     '    aliases: [FXT]',
@@ -349,15 +349,21 @@ export function writeInputs(): void {
     '|---|---|---|---|---|---|---|',
     ...rows, '',
   ].join('\n');
-  w(join(INPUT, 'memory', 'dormant', `dormant-${stem(PREV_SUNDAY)}.md`),
+  w(join(INPUT, 'data', 'memory', 'dormant', `dormant-${stem(PREV_SUNDAY)}.md`),
     dormantHeader(PREV_SUNDAY, [
       `| 20251215-1 | Widgetly ships synthetic milestone 20251215-1 by Q3 2026 | widget, fixture, synthetic milestone | 2025-12-15 | 2 (12/20) | ${PREV_SUNDAY} | 8 |`,
     ]));
-  w(join(INPUT, 'memory', 'dormant', `dormant-${stem(SUNDAY)}.md`),
+  w(join(INPUT, 'data', 'memory', 'dormant', `dormant-${stem(SUNDAY)}.md`),
     dormantHeader(SUNDAY, [
       `| 20251215-1 | Widgetly ships synthetic milestone 20251215-1 by Q3 2026 | widget, fixture, synthetic milestone | 2025-12-15 | 2 (12/20) | 2026-02-03 | 15 |`,
+      // An in-corpus entry (2026-01-02 is a fixture day) so the export
+      // layer's dormant styling is actually exercised: loadDormantSet
+      // keys `${date}||${N}` against source_row_index, so one exported
+      // prediction node must carry `dormant: true` in the frozen graphs
+      // (post-C T6 guard for the silently-empty-set failure mode).
+      `| 20260102-1 | Acme Metrics ships synthetic milestone 20260102-1 by Q3 2026 | acme, fixture, metrics | 2026-01-02 | 1 (1/02) | 2026-01-18 | 2 |`,
     ]));
-  w(join(INPUT, 'memory', 'theme-review', `theme-review-${stem(SUNDAY)}.md`), [
+  w(join(INPUT, 'data', 'memory', 'theme-review', `theme-review-${stem(SUNDAY)}.md`), [
     `# Theme review — week ending ${SUNDAY}`, '',
     'Mode: synthetic fixture rotation.', '',
     '## Empty / underused themes', '',
@@ -445,9 +451,9 @@ export async function freeze(): Promise<void> {
   for (const day of DAYS)
     for (const L of ['en', ...LOCALES]) {
       w(join(EXPECTED, 'render', `news-${day}.${L}.md`),
-        readFileSync(join(INPUT, 'report', L, `news-${stem(day)}.md`), 'utf8'));
+        readFileSync(join(INPUT, 'data', 'daily-news', L, `news-${stem(day)}.md`), 'utf8'));
       w(join(EXPECTED, 'render', `future-prediction-${day}.${L}.md`),
-        readFileSync(join(INPUT, 'future-prediction', L,
+        readFileSync(join(INPUT, 'data', 'future-prediction', L,
           `future-prediction-${stem(day)}.md`), 'utf8'));
     }
 
@@ -459,8 +465,9 @@ export async function freeze(): Promise<void> {
   const buildRoot = mkdtemp2(join(tmpdir2(), 'nf-freeze-db-'));
   mkdirSync(join(buildRoot, 'app'), { recursive: true });
   symlink2(sdRoot, join(buildRoot, 'app', 'sourcedata'));
-  for (const part of ['report', 'future-prediction', 'memory', 'reference'])
-    symlink2(join(INPUT, part), join(buildRoot, part));
+  mkdirSync(join(buildRoot, 'data'), { recursive: true });
+  for (const part of ['daily-news', 'future-prediction', 'memory', 'reference'])
+    symlink2(join(INPUT, 'data', part), join(buildRoot, 'data', part));
   const dbFile = join(buildRoot, 'analytics.sqlite');
   initDb(dbFile);
   const db = connect(dbFile);
@@ -474,8 +481,8 @@ export async function freeze(): Promise<void> {
   };
   for (const day of DAYS) {
     runGlossaryExtract(db, {
-      newsFile: join(buildRoot, 'report', 'en', `news-${stem(day)}.md`),
-      seedYaml: join(buildRoot, 'reference', 'glossary.yml'),
+      newsFile: join(buildRoot, 'data', 'daily-news', 'en', `news-${stem(day)}.md`),
+      seedYaml: join(buildRoot, 'data', 'reference', 'glossary.yml'),
       todayIso: SUNDAY,
     });
     const { pidByJsonId } = ingestDay(db, ctx, day);
@@ -484,7 +491,7 @@ export async function freeze(): Promise<void> {
   runScore(db);
   w(join(EXPECTED, 'db', 'analytics.dump.sql'), normalize(dumpSql(db)));
 
-  // 3. exports (+ evidence-reverse), frozen AND staged into input/docs/data
+  // 3. exports (+ evidence-reverse), frozen AND staged into input/data/exports
   //    — later-day gates and the Sunday flow-check read them as inputs.
   const { buildEvidenceReverse } = await import('../src/export/evidence-reverse.ts');
   const outDir = join(EXPECTED, 'export');
@@ -495,7 +502,7 @@ export async function freeze(): Promise<void> {
   db.close();
   rmSync(buildRoot, { recursive: true, force: true });
 
-  const dd = join(INPUT, 'docs', 'data');
+  const dd = join(INPUT, 'data', 'exports');
   const EXPORTS = ['graph-tech.json', 'graph-business.json', 'graph-mix.json',
     'glossary.json', 'manifest.json', 'evidence-reverse.json',
     'prefix-tokens.json'];
@@ -505,12 +512,12 @@ export async function freeze(): Promise<void> {
   const snapStem = stem(SUNDAY);
   for (const f of ['graph-tech.json', 'graph-business.json', 'graph-mix.json', 'manifest.json']) {
     w(join(dd, 'snapshots', snapStem, f), readFileSync(join(outDir, f), 'utf8'));
-    w(join(INPUT, 'memory', 'snapshots', `${snapStem}-pre-review`, f),
+    w(join(INPUT, 'data', 'memory', 'snapshots', `${snapStem}-pre-review`, f),
       readFileSync(join(outDir, f), 'utf8'));
   }
   wj(join(dd, 'snapshots', 'index.json'), { snapshots: [snapStem], default: 'live' });
   const { schemaPath } = await import('../src/db/db.ts');
-  w(join(INPUT, 'memory', 'snapshots', `${snapStem}-pre-review`, 'schema.sql'),
+  w(join(INPUT, 'data', 'memory', 'snapshots', `${snapStem}-pre-review`, 'schema.sql'),
     readFileSync(schemaPath(), 'utf8'));
 
   // README 3-day windows (the briefing chain's inputs).
@@ -519,8 +526,8 @@ export async function freeze(): Promise<void> {
     const blocks = [...DAYS].reverse().map(d => [
       `## ${d}`, '',
       `Fixture window entry for ${d}.`, '',
-      `- [news-${stem(d)}.md](report/${seg}/news-${stem(d)}.md)`,
-      `- [future-prediction-${stem(d)}.md](future-prediction/${seg}/future-prediction-${stem(d)}.md)`,
+      `- [news-${stem(d)}.md](data/daily-news/${seg}/news-${stem(d)}.md)`,
+      `- [future-prediction-${stem(d)}.md](data/future-prediction/${seg}/future-prediction-${stem(d)}.md)`,
       '',
     ].join('\n'));
     w(join(INPUT, `README${L}.md`),
@@ -545,8 +552,9 @@ export async function freeze(): Promise<void> {
     try {
       mkdirSync(join(workRoot, 'app'), { recursive: true });
       symlinkSync(sdRoot, join(workRoot, 'app', 'sourcedata'));
-      for (const part of ['report', 'future-prediction', 'memory', 'reference'])
-        symlinkSync(join(INPUT, part), join(workRoot, part));
+      mkdirSync(join(workRoot, 'data'), { recursive: true });
+      for (const part of ['daily-news', 'future-prediction', 'memory', 'reference'])
+        symlinkSync(join(INPUT, 'data', part), join(workRoot, 'data', part));
       const flow = dailyFlowCheck({ repoRoot: workRoot, date: day, mode: 'report-missing' });
       flowExit = flow.exit;
       w(join(EXPECTED, 'gates', `${day}.flow.txt`),
@@ -572,8 +580,9 @@ export async function freeze(): Promise<void> {
     try {
       mkdirSync(join(workRoot, 'app'), { recursive: true });
       symlinkSync(sdRoot, join(workRoot, 'app', 'sourcedata'));
-      for (const part of ['report', 'future-prediction', 'memory', 'reference'])
-        symlinkSync(join(INPUT, part), join(workRoot, part));
+      mkdirSync(join(workRoot, 'data'), { recursive: true });
+      for (const part of ['daily-news', 'future-prediction', 'memory', 'reference'])
+        symlinkSync(join(INPUT, 'data', part), join(workRoot, 'data', part));
       const dbf = join(workRoot, 'analytics.sqlite');
       initDb(dbf);
       const db2 = connect(dbf);
@@ -583,18 +592,18 @@ export async function freeze(): Promise<void> {
       };
       for (const day of DAYS) {
         runGlossaryExtract(db2, {
-          newsFile: join(workRoot, 'report', 'en', `news-${stem(day)}.md`),
-          seedYaml: join(workRoot, 'reference', 'glossary.yml'),
+          newsFile: join(workRoot, 'data', 'daily-news', 'en', `news-${stem(day)}.md`),
+          seedYaml: join(workRoot, 'data', 'reference', 'glossary.yml'),
           todayIso: SUNDAY,
         });
         const { pidByJsonId } = ingestDay(db2, ctx2, day);
         ingestDayLocales(db2, ctx2, day, pidByJsonId);
       }
       runScore(db2);
-      const puvOut = join(workRoot, 'docs', 'data');
+      const puvOut = join(workRoot, 'data', 'exports');
       runExport(db2, { outputDir: puvOut, publishRoot: workRoot });
       db2.close();
-      const common = { date: SUNDAY, db: dbf, docsDataDir: puvOut, repoRoot: workRoot };
+      const common = { date: SUNDAY, db: dbf, exportsDir: puvOut, repoRoot: workRoot };
       wj(join(EXPECTED, 'gates', 'post-update-validation.json'), {
         [`news-${SUNDAY}`]: postUpdateValidation({ ...common, check: 'news' }).exit,
         [`fp-${SUNDAY}`]: postUpdateValidation({ ...common, check: 'future-prediction' }).exit,

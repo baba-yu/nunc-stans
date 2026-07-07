@@ -9,11 +9,8 @@ FAIL READMEs (3-day window including 2026-01-02): 4 issue(s)
   - missing: README.ja.md
   - missing: README.es.md
   - missing: README.fil.md
-FAIL dashboard hygiene (manifest + assets + sqlite): 5 issue(s)
-  - missing: docs/data/manifest.json
-  - missing: docs/index.html
-  - missing: docs/assets/app.js
-  - missing: docs/assets/styles.css
+FAIL exports hygiene (manifest + sqlite): 2 issue(s)
+  - missing: data/exports/manifest.json
   - missing: app/data/analytics.sqlite
 
 NOT DONE — see FAIL lines above

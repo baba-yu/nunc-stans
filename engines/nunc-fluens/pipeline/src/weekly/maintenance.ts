@@ -18,6 +18,7 @@ import {
 } from '../schemas/sourcedata.ts';
 import type { MaintenanceJudgement } from '../schemas/sourcedata.ts';
 import { writeAtomic } from '../render/render-news-md.ts';
+import { MEMORY_REL } from '../world-paths.ts';
 import { addDays, originIsoOf, originPredictions } from './dormant.ts';
 
 export const PREDICTIONS_CAP = 30;
@@ -229,7 +230,7 @@ const QUEUE_INTRO = [
   '',
   'Predictions / glossary terms trimmed by Step 0 caps. '
   + 'Entries here are force-promoted on a 4-week starvation '
-  + 'guarantee. See design/scheduled/6_weekly_maintenance.md.',
+  + 'guarantee. See design/archive/scheduled/6_weekly_maintenance.md.',
   '',
 ];
 
@@ -276,7 +277,7 @@ export function writeHealthLog(
     `Week ending: ${weekEnding}`, '',
     'Step 0 health-check assertion (predictions older than 90 days '
     + 'AND not in dormant snapshot) returned non-zero rows. The '
-    + 'dormant detection has a leak; see design/scheduled/'
+    + 'dormant detection has a leak; see design/archive/scheduled/'
     + '4_weekly_memory.md. Maintenance run continues; this is a '
     + 'separate ticket.', '',
     '## Findings', '',
@@ -314,7 +315,7 @@ export function mergeJudgementsFiles(dateDir: string): string {
       throw new Error(`${src}: judgements must be a list`);
     judgementsRaw.forEach((j, i) => {
       const rec = parseMaintenanceJudgement(j, `${src}.judgements[${i}]`);
-      const key = `${rec.prediction_id} ${rec.stream} ${rec.entry_id}`;
+      const key = `${rec.prediction_id}\x00${rec.stream}\x00${rec.entry_id}`;
       if (seen.has(key)) return;
       seen.add(key);
       merged.push(rec);
@@ -378,7 +379,7 @@ export function validateRun(args: {
     return errors;
   }
   const brokenPath = join(
-    args.newsRepo, 'memory', 'maintenance', args.weekEnding, 'broken.md');
+    args.newsRepo, MEMORY_REL, 'maintenance', args.weekEnding, 'broken.md');
   const brokenText = existsSync(brokenPath) ? readFileSync(brokenPath, 'utf8') : '';
 
   for (const j of bundle.judgements) {

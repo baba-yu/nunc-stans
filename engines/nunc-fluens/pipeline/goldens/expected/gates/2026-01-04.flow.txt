@@ -5,18 +5,15 @@ OK news+FP markdown files (2026-01-04)
 FAIL DB population via post_update_validation (2026-01-04): 1 issue(s)
   - post_update_validation exited 2 but produced no FAIL lines; stderr='FAIL: DB not found: <WORK>/app/data/analytics.sqlite\n'
 FAIL Sunday artifacts (dormant + theme-review + snapshots) (2026-01-04): 2 issue(s)
-  - missing Sunday artifact: docs/data/snapshots/20260104/ (5_weekly_theme_review Step 2 did not snapshot reader-facing dashboard)
-  - missing: docs/data/snapshots/index.json
+  - missing Sunday artifact: data/exports/snapshots/20260104/ (5_weekly_theme_review Step 2 did not snapshot reader-facing dashboard)
+  - missing: data/exports/snapshots/index.json
 FAIL READMEs (3-day window including 2026-01-04): 4 issue(s)
   - missing: README.md
   - missing: README.ja.md
   - missing: README.es.md
   - missing: README.fil.md
-FAIL dashboard hygiene (manifest + assets + sqlite): 5 issue(s)
-  - missing: docs/data/manifest.json
-  - missing: docs/index.html
-  - missing: docs/assets/app.js
-  - missing: docs/assets/styles.css
+FAIL exports hygiene (manifest + sqlite): 2 issue(s)
+  - missing: data/exports/manifest.json
   - missing: app/data/analytics.sqlite
 
 NOT DONE — see FAIL lines above

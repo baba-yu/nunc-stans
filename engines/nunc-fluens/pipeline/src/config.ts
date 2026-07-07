@@ -42,6 +42,10 @@ export const worldDir = (dataDir: string) => join(dataDir, 'world')
 export const worldDbFile = (dataDir: string) => join(worldDir(dataDir), 'analytics.sqlite')
 export const runLogFile = (dataDir: string) => join(dataDir, 'runs', 'ai-runs.jsonl')
 
-// News-checkout layout (upstream repo shape).
+// Checkout app/ subtree — DELIBERATELY untouched by the post-C data/
+// layout rename (P1): source_files.path stores `app/sourcedata/…` rel
+// paths that participate in row identity, so moving app/ is a
+// DB-content migration with its own risks. Recorded follow-up; both
+// layouts share these two paths.
 export const newsDbFile = (newsRepo: string) => join(newsRepo, 'app', 'data', 'analytics.sqlite')
 export const sourcedataDir = (newsRepo: string) => join(newsRepo, 'app', 'sourcedata')

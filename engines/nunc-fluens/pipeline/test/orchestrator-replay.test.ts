@@ -28,8 +28,8 @@ function stageWritableRepo(): string {
   const repo = mkdtempSync(join(tmpdir(), 'nf-replay-'));
   mkdirSync(join(repo, 'app'), { recursive: true });
   cpSync(join(INPUT, 'sourcedata'), join(repo, 'app', 'sourcedata'), { recursive: true });
-  for (const part of ['report', 'future-prediction', 'memory', 'reference'])
-    cpSync(join(INPUT, part), join(repo, part), { recursive: true });
+  for (const part of ['daily-news', 'future-prediction', 'memory', 'reference'])
+    cpSync(join(INPUT, 'data', part), join(repo, 'data', part), { recursive: true });
   cpSync(join(INPUT, 'references.txt'), join(repo, 'references.txt'));
   return repo;
 }
@@ -41,8 +41,8 @@ function directDay(db: Database.Database, repo: string, d: string): void {
     todayIso: TODAY,
   };
   runGlossaryExtract(db, {
-    newsFile: join(repo, 'report', 'en', `news-${d.replaceAll('-', '')}.md`),
-    seedYaml: join(repo, 'reference', 'glossary.yml'),
+    newsFile: join(repo, 'data', 'daily-news', 'en', `news-${d.replaceAll('-', '')}.md`),
+    seedYaml: join(repo, 'data', 'reference', 'glossary.yml'),
     todayIso: TODAY,
   });
   const { pidByJsonId } = ingestDay(db, ctxBase, d);
@@ -99,7 +99,7 @@ function expectGoldenEndState(db: Database.Database): void {
 
 function expectRendersMatch(repo: string, day: string): void {
   for (const kind of ['news', 'future-prediction'] as const) {
-    const sub = kind === 'news' ? 'report' : 'future-prediction';
+    const sub = kind === 'news' ? join('data', 'daily-news') : join('data', 'future-prediction');
     for (const L of ['en', 'ja', 'es', 'fil']) {
       const rel = join(sub, L, `${kind}-${day.replaceAll('-', '')}.md`);
       expect(readFileSync(join(repo, rel), 'utf8'), rel)

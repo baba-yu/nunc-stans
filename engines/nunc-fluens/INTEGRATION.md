@@ -6,9 +6,13 @@ owner decision 2026-07-06). This engine is a self-contained product; what
 it consumes is a *news-shaped data checkout* — a directory the user
 designates with `just news-link <dir>` (config `news_repo`, env override
 `NS_NEWS_REPO`), read strictly read-only for the Formans world view. The
-stable contract is the data **shape** (`docs/` dashboard +
-`docs/data/graph-*.json` + `app/sourcedata/` day files), held by the
-schemas in `pipeline/src/schemas/` and exercised by the test fixtures.
+stable contract is the data **shape**, held by the schemas in
+`pipeline/src/schemas/` and exercised by the test fixtures. Post-C the
+dashboard is product code (`dashboard/` in this engine — instances carry
+data only), and the view side reads the exported graphs from either
+layout: the product's `data/exports/graph-*.json` or the legacy
+`docs/data/graph-*.json` of old news-shaped checkouts (supported
+forever), plus `app/sourcedata/` day files in both.
 
 ## Lineage
 

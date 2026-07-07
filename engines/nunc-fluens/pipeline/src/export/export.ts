@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// TS port of app/src/export.py — the analytics DB → docs/data/*.json
+// TS port of app/src/export.py — the analytics DB → data/exports/*.json
 // export layer (scope graphs, mix merge, glossary, manifest).
 //
 // Serialization note (accepted divergence, recorded in the goldens
@@ -13,6 +13,7 @@ import { hashId, nowIso, pyRound, sha1Hex } from '../ingest/util.ts';
 import { WINDOWS, windowRange } from '../ingest/analytics.ts';
 import { parseWeekBucket } from '../ingest/timewindow.ts';
 import { boldHint, deriveShortLabel, prefixTokensPath } from './short-label.ts';
+import { MEMORY_REL } from '../world-paths.ts';
 
 const SCHEMA_VERSION = '1.0';
 const LOCALES = ['en', 'ja', 'es', 'fil'] as const;
@@ -129,7 +130,7 @@ function earliestReportDate(db: Db): string | null {
 }
 
 function loadDormantSet(publishRoot: string): Set<string> {
-  const dir = join(publishRoot, 'memory', 'dormant');
+  const dir = join(publishRoot, MEMORY_REL, 'dormant');
   if (!existsSync(dir)) return new Set();
   const snapshots = readdirSync(dir).filter(f => /^dormant-.*\.md$/.test(f)).sort();
   if (snapshots.length === 0) return new Set();

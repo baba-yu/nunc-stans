@@ -89,6 +89,13 @@ export function promptsDir(): string {
   return join(import.meta.dirname, '..', '..', 'prompts');
 }
 
+/** The dashboard shipped as engine code (post-C P2: instances carry
+ * data only; the dashboard left the checkout). Resolved relative to
+ * this package like promptsDir(). */
+export function engineDashboardDir(): string {
+  return join(import.meta.dirname, '..', '..', '..', 'dashboard');
+}
+
 export function loadSkillSpec(name: string): string {
   return readFileSync(join(promptsDir(), 'skills', `${name}.md`), 'utf8');
 }

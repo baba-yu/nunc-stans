@@ -287,7 +287,7 @@ CREATE TABLE IF NOT EXISTS predictions (
 
   -- Phase 4a: locale fan-out for title field title + reasoning fields + plain_language.
   -- NULL = fall back to canonical EN. Filled by ingest from sibling locale
-  -- markdown files (news-YYYYMMDD.md in report/{ja,es,fil}/).
+  -- markdown files (news-YYYYMMDD.md in data/daily-news/{ja,es,fil}/).
   title_ja TEXT,
   title_es TEXT,
   title_fil TEXT,
@@ -510,7 +510,7 @@ CREATE TABLE IF NOT EXISTS validation_rows (
   bridge_text TEXT,
   -- Phase 4a: locale fan-out for the bridge paragraph. NULL = fall back to EN.
   -- Filled by ingest from sibling locale FP files (future-prediction-*.md in
-  -- future-prediction/{ja,es,fil}/).
+  -- data/future-prediction/{ja,es,fil}/).
   bridge_text_ja TEXT,
   bridge_text_es TEXT,
   bridge_text_fil TEXT,

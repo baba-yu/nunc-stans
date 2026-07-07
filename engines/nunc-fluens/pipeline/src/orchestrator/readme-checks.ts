@@ -4,10 +4,10 @@
 // /en/ only when the locale file genuinely does not exist.
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { FP_DIR, NON_EN_LOCALES, REPORT_DIR } from '../world-paths.ts';
+import { DAILY_NEWS_REL, FP_REL, NON_EN_LOCALES } from '../world-paths.ts';
 
-const LINK_HEAD_RE = new RegExp(`\\((${REPORT_DIR}|${FP_DIR})/`);
-const LINK_RE = new RegExp(`\\((${REPORT_DIR}|${FP_DIR})/([^)]+)\\)`);
+const LINK_HEAD_RE = new RegExp(`\\((${DAILY_NEWS_REL}|${FP_REL})/`);
+const LINK_RE = new RegExp(`\\((${DAILY_NEWS_REL}|${FP_REL})/([^)]+)\\)`);
 
 export function checkReadmeLinks(publishRoot: string): { exit: number; lines: string[] } {
   const lines: string[] = [];
@@ -21,7 +21,9 @@ export function checkReadmeLinks(publishRoot: string): { exit: number; lines: st
       const m = LINK_RE.exec(line);
       if (!m) continue;
       const path = `${m[1]}/${m[2]}`;
-      const seg = path.split('/')[1];
+      // The locale segment is the first component AFTER the (possibly
+      // multi-segment) dir constant — m[2] starts with it.
+      const seg = m[2].split('/')[0];
       if (seg === L) continue;
       if (seg === 'en') {
         const locPath = path.replace('/en/', `/${L}/`);

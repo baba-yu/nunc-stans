@@ -6,7 +6,8 @@ import { join } from 'node:path';
 import Database from 'better-sqlite3';
 import { parseTimeWindow } from '../ingest/timewindow.ts';
 import {
-  FP_DIR, LOCALES as ALL_LOCALES, NON_EN_LOCALES as LOCALES, REPORT_DIR,
+  DAILY_NEWS_REL, EXPORTS_REL, FP_REL, LOCALES as ALL_LOCALES,
+  NON_EN_LOCALES as LOCALES,
 } from '../world-paths.ts';
 
 const EN_PREDICTION_COLS = [
@@ -185,13 +186,13 @@ function checkValidationRowsForDate(db: Database.Database, date: string): string
   return errs;
 }
 
-function loadPredictionNodes(docsDataDir: string): Map<string, [string, any]> {
+function loadPredictionNodes(exportsDir: string): Map<string, [string, any]> {
   const out = new Map<string, [string, any]>();
-  if (!existsSync(docsDataDir)) return out;
-  for (const name of readdirSync(docsDataDir).filter(f => /^graph-.*\.json$/.test(f)).sort()) {
+  if (!existsSync(exportsDir)) return out;
+  for (const name of readdirSync(exportsDir).filter(f => /^graph-.*\.json$/.test(f)).sort()) {
     let d: any;
     try {
-      d = JSON.parse(readFileSync(join(docsDataDir, name), 'utf8'));
+      d = JSON.parse(readFileSync(join(exportsDir, name), 'utf8'));
     } catch { continue; }
     for (const node of d.nodes ?? []) {
       const nid = node.id ?? '';
@@ -202,7 +203,7 @@ function loadPredictionNodes(docsDataDir: string): Map<string, [string, any]> {
 }
 
 function checkJsonExportsForDate(
-  docsDataDir: string, db: Database.Database, date: string,
+  exportsDir: string, db: Database.Database, date: string,
 ): string[] {
   const errs: string[] = [];
   const predIds = (db.prepare(
@@ -212,21 +213,21 @@ function checkJsonExportsForDate(
     errs.push(`no predictions for ${date}, can't check exports`);
     return errs;
   }
-  if (!existsSync(docsDataDir)) {
-    errs.push(`docs/data dir missing: ${docsDataDir}`);
+  if (!existsSync(exportsDir)) {
+    errs.push(`exports dir missing: ${exportsDir}`);
     return errs;
   }
-  const index = loadPredictionNodes(docsDataDir);
+  const index = loadPredictionNodes(exportsDir);
   if (index.size === 0) {
     errs.push(
-      `no prediction nodes found across docs/data/graph-*.json — `
-      + 'run `python -m app.src.cli export` first');
+      `no prediction nodes found across ${EXPORTS_REL}/graph-*.json — `
+      + 'run the update-pages export first');
     return errs;
   }
   for (const pid of predIds) {
     const hit = index.get(pid);
     if (hit === undefined) {
-      errs.push(`export missing: prediction ${pid} not in any docs/data/graph-*.json`);
+      errs.push(`export missing: prediction ${pid} not in any ${EXPORTS_REL}/graph-*.json`);
       continue;
     }
     const [srcName, node] = hit;
@@ -303,7 +304,7 @@ function checkLocaleFilesExist(base: string, kind: string, date: string): string
   const stem = kind === 'news'
     ? `news-${date.replaceAll('-', '')}`
     : `future-prediction-${date.replaceAll('-', '')}`;
-  const sub = kind === 'news' ? REPORT_DIR : FP_DIR;
+  const sub = kind === 'news' ? DAILY_NEWS_REL : FP_REL;
   for (const l of ALL_LOCALES) {
     const p = join(base, sub, l, `${stem}.md`);
     if (!existsSync(p)) errs.push(`missing: ${p}`);
@@ -317,7 +318,7 @@ export interface GateResult { exit: number; lines: string[]; stderr?: string }
 export type PuvCheck = 'news' | 'future-prediction' | 'exports' | 'all';
 
 export function postUpdateValidation(args: {
-  check: PuvCheck; date: string; db: string; docsDataDir: string; repoRoot: string;
+  check: PuvCheck; date: string; db: string; exportsDir: string; repoRoot: string;
 }): GateResult {
   if (!existsSync(args.db))
     return { exit: 2, lines: [], stderr: `FAIL: DB not found: ${args.db}\n` };
@@ -350,7 +351,7 @@ export function postUpdateValidation(args: {
     }
     if (args.check === 'exports' || args.check === 'all') {
       allPass = runCheck(`JSON exports (${args.date})`,
-        checkJsonExportsForDate(args.docsDataDir, db, args.date)) && allPass;
+        checkJsonExportsForDate(args.exportsDir, db, args.date)) && allPass;
     }
   } finally {
     db.close();

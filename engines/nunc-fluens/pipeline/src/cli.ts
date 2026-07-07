@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 // nunc-fluens — the news pipeline CLI (Phase C).
-//   link <dir>      designate the read-only news-shaped checkout (news_repo)
-//   status          show resolved config and world-cache state
-//   migrate-db      copy analytics.sqlite into <data store>/world/ (verified)
-//   validate <date> schema-validate a day's sourcedata (incl. locales)
-//   sandbox <dir>   create a disposable run instance (clone + seeded store)
-//   run             the daily DAG — always against a sandbox, never the
-//                   view checkout (Phase C redirection)
+//   link <dir>           designate the read-only news-shaped checkout (news_repo)
+//   status               show resolved config and world-cache state
+//   migrate-db           copy analytics.sqlite into <data store>/world/ (verified)
+//   validate <date>      schema-validate a day's sourcedata (incl. locales)
+//   sandbox <dir>        create a disposable run instance (clone + seeded store)
+//   migrate-layout <dir> convert an old-shape instance to the data/ layout
+//   run                  the daily DAG — always against a sandbox, never
+//                        the view checkout (Phase C redirection)
 import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, realpathSync, statSync } from 'node:fs'
 import { join } from 'node:path'
 import { execFileSync } from 'node:child_process'
@@ -17,13 +18,17 @@ import {
 } from './config.ts'
 import { integrityCheck, migrateDb } from './migrate.ts'
 import { CANONICAL_FILES } from './schemas/sourcedata.ts'
-import { REPORT_DIR } from './world-paths.ts'
+import { DAILY_NEWS_REL, detectShape, OLD_REPORT_DIR } from './world-paths.ts'
+import { migrateLayout } from './migrate-layout.ts'
 
 function cmdLink(dir: string | undefined): number {
   if (!dir) { console.error('usage: nunc-fluens link <dir>'); return 2 }
   if (!existsSync(dir)) { console.error(`link: no such directory: ${dir}`); return 1 }
-  if (!existsSync(join(dir, REPORT_DIR)))
-    console.error(`warning: ${dir} has no ${REPORT_DIR}/ — is this really the news checkout?`)
+  // Both layouts are legitimate view sources: the owner's checkout keeps
+  // the old news shape forever; product checkouts carry the data/ shape.
+  if (detectShape(dir) === 'empty')
+    console.error(`warning: ${dir} has neither ${OLD_REPORT_DIR}/ nor `
+      + `${DAILY_NEWS_REL}/ — is this really a news data checkout?`)
   const file = linkNewsRepo(dir)
   console.log(`news_repo = ${dir}`)
   console.log(`written to ${file}`)
@@ -107,6 +112,12 @@ function cmdSandbox(dir: string | undefined): number {
   execFileSync('git', ['clone', '--local', src, news], { stdio: 'inherit' })
   // A sandbox must not be able to push back into the source checkout.
   execFileSync('git', ['-C', news, 'remote', 'remove', 'origin'])
+  // Run side is single-shape (P3): old-shape clones are converted to the
+  // product data/ layout right here, before anything reads them. The
+  // store seed below reads the clone's app/data DB — unaffected (P1:
+  // app/ did not move).
+  const migration = migrateLayout(news)
+  for (const l of migration.log) console.log(`  migrate-layout: ${l}`)
   // Seed the sandbox DB. The checkout's own DB is gitignored upstream
   // (a rebuildable cache), so the clone won't carry one — fall back to
   // the source checkout's working tree, then to the main store's copy.
@@ -157,7 +168,40 @@ function requireSandbox(dirArg: string | null): SandboxPaths {
     throw new Error(
       `refusing to run: the sandbox news dir resolves to the view checkout (${view}). `
       + 'The view source is read-only; runs target disposable copies only.')
+  // Run side is single-shape (P3): refuse pre-refactor instances instead
+  // of half-reading them.
+  if (detectShape(newsRepo) === 'old')
+    throw new Error(
+      `sandbox at ${dir} still carries the old news layout (report/, docs/data) — `
+      + `convert it first with: nunc-fluens migrate-layout ${dir} `
+      + '(or recreate it: just news-sandbox <fresh-dir>)')
   return { newsRepo, dataDir }
+}
+
+/** Convert an existing instance to the data/ layout. Accepts either the
+ * sandbox dir (operates on its news/ clone) or a checkout dir directly.
+ * The linked view checkout is refused — it is never written. */
+function cmdMigrateLayout(dir: string | undefined): number {
+  if (!dir) { console.error('usage: nunc-fluens migrate-layout <sandbox-or-checkout-dir>'); return 2 }
+  if (!existsSync(dir)) { console.error(`migrate-layout: no such directory: ${dir}`); return 1 }
+  const target = existsSync(join(dir, 'news', '.git')) ? join(dir, 'news') : dir
+  const view = resolveNewsRepo()
+  if (view && existsSync(view) && realpathSync(view) === realpathSync(target)) {
+    console.error(`migrate-layout: ${target} is the linked view checkout — read-only, `
+      + 'never migrated (the view side supports the old shape as-is)')
+    return 1
+  }
+  try {
+    const r = migrateLayout(target)
+    for (const l of r.log) console.log(`  ${l}`)
+    console.log(r.migrated
+      ? `migrated ${target} to the data/ layout`
+      : `${target}: nothing to migrate`)
+    return 0
+  } catch (e) {
+    console.error(`migrate-layout: ${e instanceof Error ? e.message : e}`)
+    return 1
+  }
 }
 
 async function cmdRun(argv: string[]): Promise<number> {
@@ -225,9 +269,10 @@ switch (cmd) {
   case 'migrate-db': code = cmdMigrateDb(); break
   case 'validate': code = cmdValidate(arg); break
   case 'sandbox': code = cmdSandbox(arg); break
+  case 'migrate-layout': code = cmdMigrateLayout(arg); break
   case 'run': code = await cmdRun(argvRest); break
   default:
-    console.error('usage: nunc-fluens link <dir> | status | migrate-db | validate <date> | sandbox <dir> | run --sandbox <dir> [--date D] [--replay] [--dry-run] [--only step]')
+    console.error('usage: nunc-fluens link <dir> | status | migrate-db | validate <date> | sandbox <dir> | migrate-layout <dir> | run --sandbox <dir> [--date D] [--replay] [--dry-run] [--only step]')
     code = 2
 }
 process.exit(code)

@@ -38,7 +38,7 @@ describe('export parity vs the oracle golden JSONs', () => {
     { timeout: 180_000 }, () => {
       const { db, workRoot } = buildGoldenDb();
       try {
-        const outDir = join(workRoot, 'docs', 'data');
+        const outDir = join(workRoot, 'data', 'exports');
         runExport(db, { outputDir: outDir, publishRoot: workRoot });
         for (const f of FILES) {
           const got = JSON.parse(normalizeVolatile(readFileSync(join(outDir, f), 'utf8')));

@@ -29,7 +29,7 @@ import {
 } from '../schemas/sourcedata.ts';
 import type { MaintenanceJudgement } from '../schemas/sourcedata.ts';
 import { dateDir } from '../ingest/ingest-sourcedata.ts';
-import { MEMORY_DIR } from '../world-paths.ts';
+import { EXPORTS_REL, MEMORY_REL } from '../world-paths.ts';
 import { writeAtomic } from '../render/render-news-md.ts';
 import {
   addDays, computeTransitions, dormantDir, formatDormantSnapshot, hitsFor,
@@ -159,14 +159,14 @@ export function weeklyMemorySteps(): StepDef[] {
               id: 'dormant-signals',
               prompt: [
                 'You are the extract-dormant-signals step of the nunc-fluens weekly',
-                'memory task (design/scheduled/4_weekly_memory.md step 4).',
+                'memory task (design/archive/scheduled/4_weekly_memory.md step 4).',
                 `Today's date: ${ctx.date}.`,
                 '',
                 'For each new dormant-pool entrant below, extract distinctive terms',
                 'from the prediction: proper nouns, product names, technical terms,',
                 'and plausible synonyms. 5-12 signals is typical. Aim wide rather',
                 'than narrow — these drive next cycles\' longshot-revival keyword',
-                'scan (design/memory-policy.md §1.5 layer 1). No commas inside a',
+                'scan (prompts/memory-policy.md §1.5 layer 1). No commas inside a',
                 'single signal (the snapshot table is comma-separated).',
                 '',
                 JSON.stringify(items, null, 2),
@@ -187,7 +187,7 @@ export function weeklyMemorySteps(): StepDef[] {
           `Mode: routine Sunday rotation (4_weekly_memory, nunc-fluens pipeline). `
           + `Previous snapshot dormant-${stem(prev.date)}.md (${prevRows.length} entries); `
           + `validation window ${winStart} → ${ctx.date}; aged-out origin slice `
-          + `${sliceStart} → ${sliceEnd}. Transitions per design/memory-policy.md §1.3 `
+          + `${sliceStart} → ${sliceEnd}. Transitions per prompts/memory-policy.md §1.3 `
           + `(max_rel ≥ 4 → exit; matched < 4 → re-anchor; due → advance 14→30→60; `
           + `aged-out with max_rel < 4 → force-dormant at 14d).`,
           '',
@@ -210,7 +210,7 @@ export function weeklyMemorySteps(): StepDef[] {
         if (r.exit !== 0)
           throw new StepFailure('dormant-snapshot', 'integrity failed on the fresh snapshot');
         commitOnly(ctx, 'dormant-snapshot',
-          [join(MEMORY_DIR, 'dormant', `dormant-${stem(ctx.date)}.md`)],
+          [`${MEMORY_REL}/dormant/dormant-${stem(ctx.date)}.md`],
           `Memory rolling ${stem(ctx.date)}`);
       },
     },
@@ -218,7 +218,7 @@ export function weeklyMemorySteps(): StepDef[] {
 }
 
 function proposalPath(ctx: RunCtx): string {
-  return join(ctx.newsRepo, MEMORY_DIR, 'theme-review', `theme-review-${stem(ctx.date)}.md`);
+  return join(ctx.newsRepo, MEMORY_REL, 'theme-review', `theme-review-${stem(ctx.date)}.md`);
 }
 
 function validateProposal(text: string): void {
@@ -249,7 +249,7 @@ export function themeReviewSteps(): StepDef[] {
           return;
         }
         const paths = snapshotThreeTimeState(ctx.db, ctx.newsRepo, ctx.date);
-        ctx.log(`  wrote ${paths[0]} + docs/data/snapshots/${stem(ctx.date)} (retention 5)`);
+        ctx.log(`  wrote ${paths[0]} + ${EXPORTS_REL}/snapshots/${stem(ctx.date)} (retention 5)`);
         commitOnly(ctx, 'theme-snapshots', paths,
           `Snapshot pre-review state ${stem(ctx.date)}`);
       },
@@ -279,10 +279,10 @@ export function themeReviewSteps(): StepDef[] {
           id: 'theme-review-proposal',
           prompt: [
             'You are the compose-theme-proposal step of the nunc-fluens weekly',
-            'theme review (design/scheduled/5_weekly_theme_review.md steps 4-5).',
+            'theme review (design/archive/scheduled/5_weekly_theme_review.md steps 4-5).',
             `Today's date: ${ctx.date}.`,
             '',
-            'Write memory/theme-review/theme-review-' + stem(ctx.date) + '.md.',
+            'Write data/memory/theme-review/theme-review-' + stem(ctx.date) + '.md.',
             'Required structure: H1 `# Theme review — week ending ' + ctx.date + '`,',
             'then H2 sections `## Empty / underused themes`,',
             '`## Overpopulated themes`, `## Theme candidates`, and',
@@ -294,7 +294,7 @@ export function themeReviewSteps(): StepDef[] {
             'promote-candidate, log-only. Do NOT propose rename/merge/split —',
             'flag such needs as log-only observations instead.',
             '',
-            '--- POLICY (design/memory-policy.md §2) ---',
+            '--- POLICY (prompts/memory-policy.md §2) ---',
             loadMemoryPolicy().split('## 2. Taxonomy maintenance')[1] ?? loadMemoryPolicy(),
             '--- END POLICY ---',
             '',
@@ -326,7 +326,7 @@ export function themeReviewSteps(): StepDef[] {
         for (const l of r.lines) ctx.log(`  ${l}`);
         if (r.exit !== 0) throw new StepFailure('theme-review-proposal', 'integrity failed');
         commitOnly(ctx, 'theme-review-proposal',
-          [join(MEMORY_DIR, 'theme-review', `theme-review-${stem(ctx.date)}.md`)],
+          [`${MEMORY_REL}/theme-review/theme-review-${stem(ctx.date)}.md`],
           `Theme review ${stem(ctx.date)} (proposal)`);
       },
     },
@@ -403,7 +403,7 @@ function validateJudgeFragment(expectedPid: string) {
 }
 
 function maintenanceDir(ctx: RunCtx): string {
-  return join(ctx.newsRepo, MEMORY_DIR, 'maintenance');
+  return join(ctx.newsRepo, MEMORY_REL, 'maintenance');
 }
 
 export function weeklyMaintenanceSteps(): StepDef[] {
@@ -568,7 +568,7 @@ export function weeklyMaintenanceSteps(): StepDef[] {
           throw new StepFailure('maintenance-apply',
             `Step 3 validate failed: ${errs.join('; ')}`);
         commitOnly(ctx, 'maintenance-apply',
-          [join(MEMORY_DIR, 'maintenance')],
+          [`${MEMORY_REL}/maintenance`],
           `Weekly maintenance ${stem(ctx.date)}`);
       },
     },

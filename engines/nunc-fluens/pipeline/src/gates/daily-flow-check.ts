@@ -6,7 +6,11 @@ import { join, relative, resolve } from 'node:path';
 import Database from 'better-sqlite3';
 import { postUpdateValidation } from './post-update-validation.ts';
 import type { GateResult } from './post-update-validation.ts';
-import { docsDataDir, FP_DIR, LOCALES, NON_EN_LOCALES, REPORT_DIR } from '../world-paths.ts';
+import {
+  DAILY_NEWS_REL, exportsDir, EXPORTS_REL, FP_REL, LOCALES, MEMORY_REL,
+  NON_EN_LOCALES,
+} from '../world-paths.ts';
+import { newsDbFile } from '../config.ts';
 
 function isSunday(date: string): boolean {
   return new Date(date + 'T12:00:00Z').getUTCDay() === 0;
@@ -22,7 +26,7 @@ function rel(root: string, p: string): string {
 
 function checkFiles(repoRoot: string, date: string): string[] {
   const errs: string[] = [];
-  for (const [kind, sub] of [['news', REPORT_DIR], ['future-prediction', FP_DIR]] as const) {
+  for (const [kind, sub] of [['news', DAILY_NEWS_REL], ['future-prediction', FP_REL]] as const) {
     const fileStem = `${kind}-${stem(date)}`;
     for (const l of LOCALES) {
       const p = join(repoRoot, sub, l, `${fileStem}.md`);
@@ -36,8 +40,8 @@ function checkFiles(repoRoot: string, date: string): string[] {
 function checkDbPopulation(repoRoot: string, date: string): string[] {
   const res = postUpdateValidation({
     check: 'all', date,
-    db: join(repoRoot, 'app/data/analytics.sqlite'),
-    docsDataDir: docsDataDir(repoRoot),
+    db: newsDbFile(repoRoot),
+    exportsDir: exportsDir(repoRoot),
     repoRoot,
   });
   const errs: string[] = [];
@@ -56,13 +60,13 @@ function checkSundayArtifacts(repoRoot: string, date: string): string[] {
   if (!isSunday(date)) return [];
   const errs: string[] = [];
   const s = stem(date);
-  const dormant = join(repoRoot, 'memory/dormant', `dormant-${s}.md`);
+  const dormant = join(repoRoot, MEMORY_REL, 'dormant', `dormant-${s}.md`);
   if (!existsSync(dormant))
     errs.push(`missing Sunday artifact: ${rel(repoRoot, dormant)} (4_weekly_memory Step 5 did not run)`);
-  const review = join(repoRoot, 'memory/theme-review', `theme-review-${s}.md`);
+  const review = join(repoRoot, MEMORY_REL, 'theme-review', `theme-review-${s}.md`);
   if (!existsSync(review))
     errs.push(`missing Sunday artifact: ${rel(repoRoot, review)} (5_weekly_theme_review Step 5 did not run)`);
-  const preReview = join(repoRoot, 'memory/snapshots', `${s}-pre-review`);
+  const preReview = join(repoRoot, MEMORY_REL, 'snapshots', `${s}-pre-review`);
   if (!existsSync(preReview)) {
     errs.push(
       `missing Sunday artifact: ${rel(repoRoot, preReview)}/ `
@@ -73,7 +77,7 @@ function checkSundayArtifacts(repoRoot: string, date: string): string[] {
       if (!existsSync(join(preReview, required)))
         errs.push(`missing in pre-review snapshot: ${rel(repoRoot, preReview)}/${required}`);
   }
-  const dashboardSnap = join(docsDataDir(repoRoot), 'snapshots', s);
+  const dashboardSnap = join(exportsDir(repoRoot), 'snapshots', s);
   if (!existsSync(dashboardSnap)) {
     errs.push(
       `missing Sunday artifact: ${rel(repoRoot, dashboardSnap)}/ `
@@ -83,7 +87,7 @@ function checkSundayArtifacts(repoRoot: string, date: string): string[] {
       if (!existsSync(join(dashboardSnap, required)))
         errs.push(`missing in dashboard snapshot: ${rel(repoRoot, dashboardSnap)}/${required}`);
   }
-  const index = join(docsDataDir(repoRoot), 'snapshots', 'index.json');
+  const index = join(exportsDir(repoRoot), 'snapshots', 'index.json');
   if (!existsSync(index)) {
     errs.push(`missing: ${rel(repoRoot, index)}`);
   } else {
@@ -91,10 +95,10 @@ function checkSundayArtifacts(repoRoot: string, date: string): string[] {
       const idx = JSON.parse(readFileSync(index, 'utf8'));
       if (!(idx.snapshots ?? []).includes(s))
         errs.push(
-          `docs/data/snapshots/index.json does not list '${s}' `
+          `${EXPORTS_REL}/snapshots/index.json does not list '${s}' `
           + `(SNAP dropdown will not surface today's snapshot)`);
     } catch (e) {
-      errs.push(`docs/data/snapshots/index.json invalid: ${e instanceof Error ? e.message : e}`);
+      errs.push(`${EXPORTS_REL}/snapshots/index.json invalid: ${e instanceof Error ? e.message : e}`);
     }
   }
   return errs;
@@ -133,7 +137,7 @@ function checkReadmes(repoRoot: string, date: string): string[] {
         errs.push(`${relPath}: window is ${pyList(actual)}, expected ${pyList(expectedDates)}`);
     }
     const locSeg = l === '' ? 'en' : l.slice(1);
-    for (const [kind, sub] of [['news', REPORT_DIR], ['future-prediction', FP_DIR]] as const) {
+    for (const [kind, sub] of [['news', DAILY_NEWS_REL], ['future-prediction', FP_REL]] as const) {
       const link = `[${kind}-${stem(date)}.md](${sub}/${locSeg}/${kind}-${stem(date)}.md)`;
       if (!text.includes(link))
         errs.push(`${relPath}: missing today's link \`${link}\` (locale-link routing rule)`);
@@ -142,9 +146,13 @@ function checkReadmes(repoRoot: string, date: string): string[] {
   return errs;
 }
 
-function checkDashboardHygiene(repoRoot: string): string[] {
+/** P2: instances carry no dashboard — the exports (manifest shape) and
+ * the working DB are the instance-side hygiene surface. The dashboard
+ * files themselves are engine code, checked by the orchestrator's
+ * dashboard-integrity step. */
+function checkExportsHygiene(repoRoot: string): string[] {
   const errs: string[] = [];
-  const mPath = join(docsDataDir(repoRoot), 'manifest.json');
+  const mPath = join(exportsDir(repoRoot), 'manifest.json');
   if (!existsSync(mPath)) {
     errs.push(`missing: ${rel(repoRoot, mPath)}`);
   } else {
@@ -152,29 +160,16 @@ function checkDashboardHygiene(repoRoot: string): string[] {
       const m = JSON.parse(readFileSync(mPath, 'utf8'));
       const locales = m.locales ?? [];
       if (locales.length !== 4)
-        errs.push(`docs/data/manifest.json has ${locales.length} locales, expected 4`);
+        errs.push(`${EXPORTS_REL}/manifest.json has ${locales.length} locales, expected 4`);
       if (m.default_locale !== 'en')
         errs.push(
-          `docs/data/manifest.json default_locale=`
+          `${EXPORTS_REL}/manifest.json default_locale=`
           + `${m.default_locale === undefined || m.default_locale === null ? 'None' : `'${m.default_locale}'`}, expected 'en'`);
     } catch (e) {
-      errs.push(`docs/data/manifest.json invalid: ${e instanceof Error ? e.message : e}`);
+      errs.push(`${EXPORTS_REL}/manifest.json invalid: ${e instanceof Error ? e.message : e}`);
     }
   }
-  for (const [relPath, tailRe] of [
-    ['docs/index.html', /<\/html>\s*$/],
-    ['docs/assets/app.js', /\}\)\(\);?\s*$/],
-    ['docs/assets/styles.css', /\}\s*$/],
-  ] as const) {
-    const p = join(repoRoot, relPath);
-    if (!existsSync(p)) {
-      errs.push(`missing: ${relPath}`);
-      continue;
-    }
-    const txt = readFileSync(p, 'utf8');
-    if (!tailRe.test(txt)) errs.push(`${relPath}: tail does not match /${tailRe.source}/`);
-  }
-  const dbPath = join(repoRoot, 'app/data/analytics.sqlite');
+  const dbPath = newsDbFile(repoRoot);
   if (!existsSync(dbPath)) {
     errs.push(`missing: ${rel(repoRoot, dbPath)}`);
   } else {
@@ -217,8 +212,8 @@ export function dailyFlowCheck(args: {
       checkSundayArtifacts(root, args.date)) && allPass;
   allPass = run(`READMEs (3-day window including ${args.date})`,
     checkReadmes(root, args.date)) && allPass;
-  allPass = run('dashboard hygiene (manifest + assets + sqlite)',
-    checkDashboardHygiene(root)) && allPass;
+  allPass = run('exports hygiene (manifest + sqlite)',
+    checkExportsHygiene(root)) && allPass;
   lines.push('');
   lines.push(allPass ? 'ALL GREEN — today is done' : 'NOT DONE — see FAIL lines above');
   const exit = args.mode === 'report-missing' ? 0 : (allPass ? 0 : 1);

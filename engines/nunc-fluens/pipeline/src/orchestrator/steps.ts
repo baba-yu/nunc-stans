@@ -7,8 +7,8 @@ import { appendFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } fr
 import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import {
-  buildStepPrompt, llmArtifactStep, llmJson, loadScheduledSpec,
-  loadWriterRules, StepFailure,
+  buildStepPrompt, engineDashboardDir, llmArtifactStep, llmJson,
+  loadScheduledSpec, loadWriterRules, StepFailure,
 } from './core.ts';
 import type { RunCtx, StepDef } from './core.ts';
 import {
@@ -40,8 +40,8 @@ import { postUpdateValidation } from '../gates/post-update-validation.ts';
 import { checkReadmeLinks } from './readme-checks.ts';
 import Database from 'better-sqlite3';
 import {
-  DOCS_DIR, docsDataDir, FP_DIR, LOCALES, MEMORY_DIR,
-  NON_EN_LOCALES as NON_EN, REFERENCE_DIR, REFERENCES_TXT, REPORT_DIR,
+  DAILY_NEWS_REL, exportsDir, EXPORTS_REL, FP_REL, LOCALES, MEMORY_REL,
+  NON_EN_LOCALES as NON_EN, REFERENCE_REL, REFERENCES_TXT,
 } from '../world-paths.ts';
 
 function sdFile(ctx: RunCtx, name: string): string {
@@ -105,6 +105,16 @@ function validateSemanticJudgements(raw: unknown, terms: string[]): Array<{
   return terms.map(t => byTerm.get(t));
 }
 
+/** The publish step's git-add candidates (repo-relative, existsSync- and
+ * check-ignore-filtered at publish time). Exported so the layout tests
+ * can assert the list tracks the data/ constants — a missed rename here
+ * silently stops an artifact class from being committed. */
+export function publishAddable(): string[] {
+  return ['README.md', ...NON_EN.map(l => `README.${l}.md`),
+    EXPORTS_REL, DAILY_NEWS_REL, FP_REL, MEMORY_REL, REFERENCES_TXT,
+    `${REFERENCE_REL}/citation-policy-review.md`, 'app/sourcedata'];
+}
+
 function gateOrFail(id: string, r: { exit: number; lines: string[] }, ctx: RunCtx): void {
   for (const l of r.lines) ctx.log(`  ${l}`);
   if (r.exit !== 0) throw new StepFailure(id, `gate exited ${r.exit}`);
@@ -117,7 +127,7 @@ function gateOrFail(id: string, r: { exit: number; lines: string[] }, ctx: RunCt
  * replay must accept the committed artifact verbatim. */
 function assertCitationsAllowed(ctx: RunCtx, urls: string[]): void {
   if (ctx.replay) return;
-  const policy = parsePolicy(join(ctx.newsRepo, REFERENCE_DIR, 'citation-restrictions.md'));
+  const policy = parsePolicy(join(ctx.newsRepo, REFERENCE_REL, 'citation-restrictions.md'));
   const restricted = new Set<string>();
   for (const url of urls) {
     let host = '';
@@ -149,7 +159,7 @@ export function dailyUpdateSteps(): StepDef[] {
         if (ctx.search !== 'native' && !ctx.replay && ctx.ai
           && !existsSync(sdFile(ctx, 'news_section.json'))) {
           const topicsMd = readFileSync(
-            join(ctx.newsRepo, REFERENCE_DIR, 'news-topics.md'), 'utf8');
+            join(ctx.newsRepo, REFERENCE_REL, 'news-topics.md'), 'utf8');
           const listSection = /## Topic list\n([\s\S]*?)\n## /.exec(topicsMd)?.[1] ?? '';
           const topics = listSection.split('\n')
             .filter(l => l.startsWith('- ') && !/For each of the above/i.test(l))
@@ -194,7 +204,7 @@ export function dailyUpdateSteps(): StepDef[] {
           // NAMES its input files gets an honest empty answer back).
           prompt: () => {
             const topics = readFileSync(
-              join(ctx.newsRepo, REFERENCE_DIR, 'news-topics.md'), 'utf8');
+              join(ctx.newsRepo, REFERENCE_REL, 'news-topics.md'), 'utf8');
             const refPath = join(ctx.newsRepo, REFERENCES_TXT);
             const recentRefs = existsSync(refPath)
               ? readFileSync(refPath, 'utf8').trim().split('\n').slice(-300).join('\n')
@@ -203,7 +213,7 @@ export function dailyUpdateSteps(): StepDef[] {
               skill: 'compose-news-section', date: ctx.date,
               writerRules: loadWriterRules('1_daily_update'),
               extra: [
-                'Reference topic list (reference/news-topics.md — search the '
+                'Reference topic list (data/reference/news-topics.md — search the '
                 + 'trusted sources for the last 3 days; always include Unsloth):',
                 topics,
                 'Recently cited URLs to SKIP (tail of references.txt):',
@@ -329,7 +339,7 @@ export function dailyUpdateSteps(): StepDef[] {
       run: (ctx) => {
         runGlossaryExtract(ctx.db, {
           newsFile: newsOutputPath(ctx.newsRepo, ctx.date, 'en'),
-          seedYaml: join(ctx.newsRepo, REFERENCE_DIR, 'glossary.yml'),
+          seedYaml: join(ctx.newsRepo, REFERENCE_REL, 'glossary.yml'),
           todayIso: ctx.todayIso,
         });
       },
@@ -439,9 +449,9 @@ export function dailyUpdateSteps(): StepDef[] {
         for (const L of LOCALES) {
           const r = citationCheck({
             draft: newsOutputPath(ctx.newsRepo, ctx.date, L),
-            policyFile: join(ctx.newsRepo, REFERENCE_DIR, 'citation-restrictions.md'),
+            policyFile: join(ctx.newsRepo, REFERENCE_REL, 'citation-restrictions.md'),
             unclassifiedOut: L === 'en' && !ctx.replay
-              ? join(ctx.newsRepo, REFERENCE_DIR, 'citation-policy-review.md') : null,
+              ? join(ctx.newsRepo, REFERENCE_REL, 'citation-policy-review.md') : null,
             todayIso: ctx.todayIso,
           });
           gateOrFail('citation-check-news', r, ctx);
@@ -540,7 +550,7 @@ export function dailyUpdateSteps(): StepDef[] {
       id: 'puv-news', kind: 'det',
       run: (ctx) => gateOrFail('puv-news', postUpdateValidation({
         check: 'news', date: ctx.date, db: ctx.dbFile,
-        docsDataDir: docsDataDir(ctx.newsRepo), repoRoot: ctx.newsRepo,
+        exportsDir: exportsDir(ctx.newsRepo), repoRoot: ctx.newsRepo,
       }), ctx),
     },
   ];
@@ -719,9 +729,9 @@ export function futurePredictionSteps(): StepDef[] {
         for (const L of LOCALES) {
           const r = citationCheck({
             draft: fpOutputPath(ctx.newsRepo, ctx.date, L),
-            policyFile: join(ctx.newsRepo, REFERENCE_DIR, 'citation-restrictions.md'),
+            policyFile: join(ctx.newsRepo, REFERENCE_REL, 'citation-restrictions.md'),
             unclassifiedOut: L === 'en' && !ctx.replay
-              ? join(ctx.newsRepo, REFERENCE_DIR, 'citation-policy-review.md') : null,
+              ? join(ctx.newsRepo, REFERENCE_REL, 'citation-policy-review.md') : null,
             todayIso: ctx.todayIso,
           });
           gateOrFail('citation-check-fp', r, ctx);
@@ -760,7 +770,7 @@ export function futurePredictionSteps(): StepDef[] {
       id: 'puv-fp', kind: 'det',
       run: (ctx) => gateOrFail('puv-fp', postUpdateValidation({
         check: 'future-prediction', date: ctx.date, db: ctx.dbFile,
-        docsDataDir: docsDataDir(ctx.newsRepo), repoRoot: ctx.newsRepo,
+        exportsDir: exportsDir(ctx.newsRepo), repoRoot: ctx.newsRepo,
       }), ctx),
     },
   ];
@@ -808,15 +818,15 @@ export function dailyBriefingSteps(): StepDef[] {
               + 'run headlessly.',
               `Today's date: ${ctx.date}.`,
               '',
-              '--- SPEC (design/scheduled/3_daily_briefing.md) ---',
+              '--- SPEC (prompts/scheduled/3_daily_briefing.md) ---',
               loadScheduledSpec('3_daily_briefing'),
               '--- END SPEC ---',
               '',
               `Rewrite README${L}.md as the 3-day window ending ${ctx.date} `
               + `for locale '${locSeg}' per Step 2 of the spec.`,
               `Current file:\n${prev}`,
-              `Today's news file (report/${locSeg}/news-${ctx.date.replaceAll('-', '')}.md):\n${todayNews}`,
-              `Today's FP file (future-prediction/${locSeg}/future-prediction-${ctx.date.replaceAll('-', '')}.md):\n${todayFp}`,
+              `Today's news file (${DAILY_NEWS_REL}/${locSeg}/news-${ctx.date.replaceAll('-', '')}.md):\n${todayNews}`,
+              `Today's FP file (${FP_REL}/${locSeg}/future-prediction-${ctx.date.replaceAll('-', '')}.md):\n${todayFp}`,
               'Reply with the FULL new README content, nothing else — no fences, no prose around it.',
             ].join('\n\n'),
           }], { caller: `readme-window:${locSeg}` });
@@ -843,7 +853,7 @@ export function dailyBriefingSteps(): StepDef[] {
       id: 'update-pages', kind: 'det',
       run: (ctx) => {
         runScore(ctx.db);
-        const outDir = docsDataDir(ctx.newsRepo);
+        const outDir = exportsDir(ctx.newsRepo);
         runExport(ctx.db, { outputDir: outDir, publishRoot: ctx.newsRepo });
         const ber = buildEvidenceReverse(ctx.db, { todayIso: ctx.todayIso });
         writeFileSync(join(outDir, 'evidence-reverse.json'),
@@ -855,15 +865,20 @@ export function dailyBriefingSteps(): StepDef[] {
       },
     },
     {
+      // P2: the dashboard is product code (engines/nunc-fluens/dashboard/),
+      // not instance data — check the ENGINE copy is present and
+      // structurally whole, then the instance's exported manifest shape.
       id: 'dashboard-integrity', kind: 'det',
       run: (ctx) => {
+        const dash = engineDashboardDir();
         const assets = ['index.html', 'assets/app.js', 'assets/styles.css']
-          .map(p => `${DOCS_DIR}/${p}`)
-          .map(p => join(ctx.newsRepo, p))
-          .filter(p => existsSync(p));
-        if (assets.length)
-          gateOrFail('dashboard-integrity', postWriteIntegrity('dashboard-asset', assets), ctx);
-        const m = JSON.parse(readFileSync(join(docsDataDir(ctx.newsRepo), 'manifest.json'), 'utf8'));
+          .map(p => join(dash, p));
+        const missing = assets.filter(p => !existsSync(p));
+        if (missing.length)
+          throw new StepFailure('dashboard-integrity',
+            `engine dashboard file(s) missing: ${missing.join(', ')}`);
+        gateOrFail('dashboard-integrity', postWriteIntegrity('dashboard-asset', assets), ctx);
+        const m = JSON.parse(readFileSync(join(exportsDir(ctx.newsRepo), 'manifest.json'), 'utf8'));
         if ((m.locales ?? []).length !== 4 || m.default_locale !== 'en')
           throw new StepFailure('dashboard-integrity', 'manifest shape check failed');
       },
@@ -872,7 +887,7 @@ export function dailyBriefingSteps(): StepDef[] {
       id: 'puv-exports', kind: 'det',
       run: (ctx) => gateOrFail('puv-exports', postUpdateValidation({
         check: 'exports', date: ctx.date, db: ctx.dbFile,
-        docsDataDir: docsDataDir(ctx.newsRepo), repoRoot: ctx.newsRepo,
+        exportsDir: exportsDir(ctx.newsRepo), repoRoot: ctx.newsRepo,
       }), ctx),
     },
     {
@@ -888,9 +903,7 @@ export function dailyBriefingSteps(): StepDef[] {
           execFileSync('git', ['-C', ctx.newsRepo, ...args], { encoding: 'utf8' });
         // Add what exists and is not gitignored — instances legitimately
         // ignore some of these (upstream keeps references.txt untracked).
-        const addable = ['README.md', ...NON_EN.map(l => `README.${l}.md`),
-          `${DOCS_DIR}/data`, REPORT_DIR, FP_DIR, MEMORY_DIR, REFERENCES_TXT,
-          `${REFERENCE_DIR}/citation-policy-review.md`, 'app/sourcedata']
+        const addable = publishAddable()
           .filter(p => existsSync(join(ctx.newsRepo, p)))
           .filter(p => {
             try {
