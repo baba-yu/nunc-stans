@@ -920,6 +920,14 @@ export function dailyBriefingSteps(): StepDef[] {
           ctx.log('  publish skipped (dry-run/replay)');
           return;
         }
+        // Day D's run.json must ride D's OWN publish commit: replay
+        // derives the day's locale set from the committed file, and a
+        // snapshot that only lands with D+1's publish strands a fresh
+        // clone of the newest day. Write it before the add list is
+        // built; the post-run write (dag.ts) finalizes steps/
+        // finished_at in the working tree with an identical `locales`
+        // field and rides the next publish as before.
+        ctx.manifest.write(ctx.sourcedataRoot, ctx.date);
         const git = (...args: string[]) =>
           execFileSync('git', ['-C', ctx.newsRepo, ...args], { encoding: 'utf8' });
         // Add what exists and is not gitignored — instances legitimately

@@ -49,7 +49,11 @@ export class RunManifest {
   constructor(args: {
     date: string; mode: string; runtime: string; search: string; synthModel: string | null;
     /** The FULL effective render set, 'en' first (e.g. ['en','ja']).
-     * Committed with the day so replay can reproduce the exact set. */
+     * The publish step writes run.json before staging so the snapshot
+     * (whose `locales` is what replay needs) is committed with its own
+     * day; the post-run write only finalizes steps/finished_at in the
+     * working tree and rides the next publish. Non-full runs
+     * (--dry-run/--only) never write the file at all. */
     locales: readonly string[];
   }) {
     this.data = {

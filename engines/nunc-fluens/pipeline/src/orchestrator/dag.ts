@@ -1,5 +1,6 @@
 // The day runner: day-of-week task plan, step iteration with the
 // run.json manifest, DRY_RUN / --only / replay modes.
+import { join } from 'node:path';
 import { connect } from '../db/db.ts';
 import { sourcedataDir, worldDbFile } from '../config.ts';
 import { RunManifest } from './core.ts';
@@ -133,6 +134,17 @@ export async function runDay(opts: RunDayOptions): Promise<RunDayResult> {
     db.close();
     manifest.finish();
   }
-  const manifestPath = manifest.write(ctx.sourcedataRoot, opts.date);
+  // run.json is the day's committed snapshot — replay derives its locale
+  // set from it (world-paths replayLocaleSet) — so only FULL runs write
+  // it: live, and full replay (whose derived set equals the original by
+  // construction, preserving the snapshot). --dry-run and --only must
+  // NEVER create or overwrite it: they resolve locales from TODAY'S
+  // config, and re-recording that over a live day's snapshot silently
+  // changes what a later replay reproduces.
+  let manifestPath = join(sourcedataRoot, opts.date, 'run.json');
+  if (!opts.dryRun && !opts.only)
+    manifestPath = manifest.write(ctx.sourcedataRoot, opts.date);
+  else
+    log(`run.json left untouched (${opts.dryRun ? 'dry-run' : '--only'} records no snapshot)`);
   return { ok: failedStep === undefined, manifestPath, failedStep };
 }
