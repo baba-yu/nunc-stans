@@ -3,9 +3,9 @@
 // Byte-parity with the oracle is asserted against the golden corpus.
 //
 // API takes explicit roots instead of the oracle's __file__-anchored
-// repo_root: `sourcedataRoot` is <newsRepo>/app/sourcedata in production
-// and goldens/input/sourcedata in tests; `publishRoot` is the checkout
-// the data/daily-news/ tree lives in.
+// repo_root: `sourcedataRoot` is <instance>/data/sourcedata in
+// production and goldens/input/data/sourcedata in tests; `publishRoot`
+// is the checkout the data/daily-news/ tree lives in.
 import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import {

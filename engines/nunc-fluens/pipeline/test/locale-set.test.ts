@@ -241,7 +241,7 @@ describe('EN-only run behavior (set = [])', () => {
       dow: 3,
       dataDir: '/nonexistent',
       newsRepo: '/nonexistent',
-      sourcedataRoot: '/nonexistent/app/sourcedata',
+      sourcedataRoot: '/nonexistent/data/sourcedata',
       dbFile: '/nonexistent/analytics.sqlite',
       db: null as never,
       ai: null,
@@ -292,7 +292,8 @@ describe('EN-only run behavior (set = [])', () => {
       mkdirSync(join(root, 'data', 'exports'), { recursive: true });
       writeFileSync(join(root, 'data', 'exports', 'manifest.json'),
         JSON.stringify({ locales: ['en'], default_locale: 'en' }));
-      initDb(join(root, 'app', 'data', 'analytics.sqlite'));
+      // The flow gate's default DB probe: the in-instance store.
+      initDb(join(root, 'store', 'world', 'analytics.sqlite'));
 
       const enOnly = dailyFlowCheck({ repoRoot: root, date: d, mode: 'report-missing', locales: [] });
       const text = enOnly.lines.join('\n');

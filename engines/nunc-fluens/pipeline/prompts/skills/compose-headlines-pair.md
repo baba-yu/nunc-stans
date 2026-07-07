@@ -1,13 +1,13 @@
 # Skill: compose-headlines-pair
 
-LLM sub-agent that emits `app/sourcedata/<date>/headlines.json` (5 paired plain + technical headlines). Called from `1_daily_update` Step 3.
+LLM sub-agent that emits `data/sourcedata/<date>/headlines.json` (5 paired plain + technical headlines). Called from `1_daily_update` Step 3.
 
 ## Sub-agent context (parent supplies)
 
-- The just-written `app/sourcedata/<date>/news_section.json` (the headline content draws from the same news cycle).
+- The just-written `data/sourcedata/<date>/news_section.json` (the headline content draws from the same news cycle).
 - The schema for `headlines.json` from `design/sourcedata-layout.md §JSON schemas (canonical)`.
 - The forbidden-token list (no scope prefix; ≤ 60 chars per plain bullet; ≤ 2 proper-noun tokens per plain bullet).
-- A target output path: `app/sourcedata/<date>/headlines.json`.
+- A target output path: `data/sourcedata/<date>/headlines.json`.
 
 ## Required output
 

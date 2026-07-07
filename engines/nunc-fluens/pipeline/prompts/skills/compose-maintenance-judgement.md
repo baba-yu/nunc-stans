@@ -22,7 +22,7 @@ sub-agent.
   Bridge→Reasoning, Needs→Reasoning, Readings→Reasoning,
   Bridge→Needs, Readings→Bridge, Needs→Readings.
 - Target output path:
-  `app/sourcedata/<week_ending>/maintenance-judgements.<prediction_id>.json`.
+  `data/sourcedata/<week_ending>/maintenance-judgements.<prediction_id>.json`.
 
 ## Required output
 
@@ -63,7 +63,7 @@ batches emit `stream="glossary"` rows where `prediction_id=""` and
 - `confidence` ∈ [0, 1]. If a single prediction returns 4 `stale`
   verdicts all with `confidence < 0.7`, the parent downgrades the bundle
   to `broken` (over-eager Judge guard).
-- Never write to `app/sourcedata/` or the DB directly; only the JSON
+- Never write to `data/sourcedata/` or the DB directly; only the JSON
   payload at the supplied path.
 
 ## Parent post-processing

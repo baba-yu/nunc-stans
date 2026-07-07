@@ -1,14 +1,14 @@
 # Skill: compose-change-log
 
-LLM sub-agent that emits `app/sourcedata/<date>/change_log.json` (diff against the previous day). Called from `1_daily_update` Step 4.
+LLM sub-agent that emits `data/sourcedata/<date>/change_log.json` (diff against the previous day). Called from `1_daily_update` Step 4.
 
 ## Sub-agent context (parent supplies)
 
-- The just-written `app/sourcedata/<date>/news_section.json` (today's content).
-- The previous day's `data/daily-news/en/news-<prev-date>.md` (or, post-Phase-4, `app/sourcedata/<prev-date>/news_section.json`) for diffing.
+- The just-written `data/sourcedata/<date>/news_section.json` (today's content).
+- The previous day's `data/daily-news/en/news-<prev-date>.md` (or, post-Phase-4, `data/sourcedata/<prev-date>/news_section.json`) for diffing.
 - The schema for `change_log.json`.
 - The forbidden-token list.
-- A target output path: `app/sourcedata/<date>/change_log.json`.
+- A target output path: `data/sourcedata/<date>/change_log.json`.
 
 ## Required output
 

@@ -1,6 +1,6 @@
 # Skill: compose-news-section
 
-LLM sub-agent that emits `app/sourcedata/<date>/news_section.json` from the day's research. Called from `1_daily_update` Step 1.
+LLM sub-agent that emits `data/sourcedata/<date>/news_section.json` from the day's research. Called from `1_daily_update` Step 1.
 
 ## Sub-agent context (parent supplies)
 
@@ -9,7 +9,7 @@ LLM sub-agent that emits `app/sourcedata/<date>/news_section.json` from the day'
 - The full `references.txt` URL list (sub-agent must SKIP URLs already cited).
 - The schema for `news_section.json` from `design/sourcedata-layout.md §JSON schemas (canonical)`.
 - The forbidden-token list from `design/sourcedata-layout.md §Naming hygiene` (no scope prefix in any field; no lifecycle metadata per ADR-002).
-- A target output path: `app/sourcedata/<date>/news_section.json`.
+- A target output path: `data/sourcedata/<date>/news_section.json`.
 - A **structured prior-storyline summary** (per ADR-002 Rule 4): a short JSON list of `{storyline_label, last_seen_date, last_state_change_kind}` covering storylines active in the prior 3 days. The parent does **not** pass the prior days' news prose bodies — only this structured digest — to keep the sub-agent from latching onto prior phrasing.
 
 ## Required output
@@ -53,7 +53,7 @@ These rules exist because between 2026-05-08 and 2026-05-25 the news section dri
 4. **Bullet count is a soft 5, not a hard 5.** If applying Rules 1–2 leaves only 3 or 4 qualifying bullets, ship the shorter section. Empty `bullets[]` is still a schema error — a section must have ≥ 1 bullet — but a 3-bullet `news_section.json` is acceptable.
 
 5. **Events-topic carry-forward exception (Rules 1 + 2 waived for `Bay Area / SV AI meet-up events` ONLY).** The events bullet is allowed and expected to repeat still-upcoming events from yesterday's events bullet, even when there is no fresh state-change today. The user wants a stable, accumulating reference of upcoming events to plan attendance against. Process:
-   1. Read yesterday's events bullet from `app/sourcedata/<yesterday>/news_section.json` (find the section matching the `Bay Area / SV AI meet-up events` topic).
+   1. Read yesterday's events bullet from `data/sourcedata/<yesterday>/news_section.json` (find the section matching the `Bay Area / SV AI meet-up events` topic).
    2. For each event mentioned, parse its date(s). If today's date ≥ the event's end date (or for single-day events, today > event date), DROP that event from the carry-forward set.
    3. Carry forward every remaining still-upcoming event verbatim or with minor consolidation (e.g. merge two AI Tinkerers SF dates into one bullet phrase).
    4. ADD any newly-discovered upcoming events found in today's research on top.

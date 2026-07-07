@@ -1,6 +1,6 @@
 # Skill: compose-validation-rows
 
-LLM sub-agent that emits the placeholder `app/sourcedata/<date>/bridges.json` (validation rows + evidence summaries; bridge narratives left blank for `compose-bridge` to fill). Called from `2_future_prediction` Step 1.
+LLM sub-agent that emits the placeholder `data/sourcedata/<date>/bridges.json` (validation rows + evidence summaries; bridge narratives left blank for `compose-bridge` to fill). Called from `2_future_prediction` Step 1.
 
 ## Sub-agent context (parent supplies)
 
@@ -9,7 +9,7 @@ LLM sub-agent that emits the placeholder `app/sourcedata/<date>/bridges.json` (v
 - Today's `data/daily-news/en/news-YYYYMMDD.md` (the evidence side; ONLY URLs from this file may be used).
 - The schema for `bridges.json` from `design/sourcedata-layout.md §JSON schemas (canonical)`.
 - The 2-layer dormant longshot detection rules from `prompts/scheduled/2_future_prediction-writer-rules.md §Dormant pool re-check`.
-- A target output path: `app/sourcedata/<date>/bridges.json`.
+- A target output path: `data/sourcedata/<date>/bridges.json`.
 
 ## Required output
 

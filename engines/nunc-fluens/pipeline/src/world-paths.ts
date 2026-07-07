@@ -1,20 +1,20 @@
-// Single home for the data-checkout (instance) directory names and the
-// locale set. Post-C: the product's own layout puts the publish quartet
-// and the exports under data/ (report/ became data/daily-news/) and the
-// dashboard left the checkout entirely (it is product code under
-// engines/nunc-fluens/dashboard/). Path *construction* routes through
-// here; the OLD_* constants exist only for shape detection, sandbox
-// migration, and the view-side fallback (the owner's news-shaped
-// checkout keeps the old layout forever — view support is a product
-// guarantee). app/sourcedata and app/data deliberately did NOT move
-// (source_files.path rel-path identity; see config.ts).
+// Single home for the INSTANCE layout's directory names and the locale
+// set. Post-C REDO V2: the engine is a TEMPLATE (pipeline code +
+// pipeline/instance-template/) and every run target is a DATA INSTANCE
+// stamped from it by `nunc-fluens init` — one git repo per profile
+// carrying everything under data/ (sourcedata, the publish quartet,
+// exports, references.txt), README*.md at the root, and runtime state
+// in a gitignored store/ (see config.ts instanceStoreDir). Path
+// *construction* routes through here. The news-era old shape
+// (app/sourcedata, report/, docs/…) is not a pipeline concept anymore —
+// that knowledge lives ONLY inside `nunc-fluens import` (src/import.ts,
+// module-local constants).
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-// --- new shape (what the pipeline reads/writes) -----------------------------
+// --- instance layout (what the pipeline reads/writes) -----------------------
 // Forward-slash rel strings: node's join() normalizes them per-OS, and
 // git pathspecs use them verbatim.
-export const DATA_DIR = 'data';
 export const SOURCEDATA_REL = 'data/sourcedata';
 export const DAILY_NEWS_REL = 'data/daily-news';
 export const FP_REL = 'data/future-prediction';
@@ -22,36 +22,11 @@ export const MEMORY_REL = 'data/memory';
 export const REFERENCE_REL = 'data/reference';
 export const EXPORTS_REL = 'data/exports';
 export const ARCHIVE_SNAPSHOTS_REL = 'data/archives/snapshots';
-export const REFERENCES_TXT = 'references.txt';
 export const REFERENCES_TXT_REL = 'data/references.txt';
 
 /** The dashboard's data exports (graph-*.json, manifest, snapshots,
  * prefix-tokens.json). */
 export const exportsDir = (repoRoot: string) => join(repoRoot, EXPORTS_REL);
-
-// --- old shape (detection / migration / view fallback only) -----------------
-export const OLD_REPORT_DIR = 'report';
-export const OLD_FP_DIR = 'future-prediction';
-export const OLD_MEMORY_DIR = 'memory';
-export const OLD_REFERENCE_DIR = 'reference';
-export const OLD_DOCS_DIR = 'docs';
-export const OLD_DOCS_DATA_REL = 'docs/data';
-// (docs/archives → data/archives is handled by migrate-layout's
-// DIR_MOVES / IGNORE_PREFIX_MAP literals; no constant is exported for
-// the old location so nothing can read it by accident.)
-
-export type CheckoutShape = 'new' | 'old' | 'empty';
-
-/** Which layout a checkout carries. 'new' wins when both somehow
- * coexist (a half-migrated tree should be treated as migrated, not
- * re-migrated). */
-export function detectShape(root: string): CheckoutShape {
-  if (existsSync(join(root, DAILY_NEWS_REL)) || existsSync(join(root, EXPORTS_REL)))
-    return 'new';
-  if (existsSync(join(root, OLD_REPORT_DIR)) || existsSync(join(root, OLD_DOCS_DATA_REL)))
-    return 'old';
-  return 'empty';
-}
 
 // --- locale model (post-C P5) ------------------------------------------------
 // These constants are the supported UNIVERSE, not the per-run render

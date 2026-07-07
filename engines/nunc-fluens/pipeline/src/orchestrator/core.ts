@@ -13,7 +13,7 @@ export interface RunCtx {
   /** 0 = Sunday (the DOW table branches on this). */
   dow: number;
   dataDir: string;
-  /** The news data+publish checkout — inputs and published outputs. */
+  /** The data instance checkout — inputs and published outputs. */
   newsRepo: string;
   sourcedataRoot: string;
   dbFile: string;

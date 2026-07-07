@@ -20,7 +20,7 @@ function freshBox(): { newsRepo: string; dataDir: string; dayDir: string; root: 
   const root = mkdtempSync(join(tmpdir(), 'nf-runjson-'));
   const newsRepo = join(root, 'news');
   const dataDir = join(root, 'store');
-  const dayDir = join(newsRepo, 'app', 'sourcedata', DATE);
+  const dayDir = join(newsRepo, 'data', 'sourcedata', DATE);
   mkdirSync(dayDir, { recursive: true });
   return { newsRepo, dataDir, dayDir, root };
 }
@@ -93,7 +93,7 @@ describe('publish commits the day\'s own run.json', () => {
   function stubCtx(repo: string, over: Partial<RunCtx> = {}): RunCtx {
     return {
       date: DATE, dow: 3, dataDir: '/nonexistent', newsRepo: repo,
-      sourcedataRoot: join(repo, 'app', 'sourcedata'),
+      sourcedataRoot: join(repo, 'data', 'sourcedata'),
       dbFile: '/nonexistent/analytics.sqlite', db: null as never, ai: null,
       runtime: 'claude-code', search: 'native', synthModel: null,
       locales: ['ja'], replay: false, dryRun: false, todayIso: DATE,
@@ -118,9 +118,9 @@ describe('publish commits the day\'s own run.json', () => {
       await publish.run(stubCtx(repo));
       const committed = git(repo, 'show', '--name-only', '--format=', 'HEAD')
         .trim().split('\n');
-      expect(committed).toContain(`app/sourcedata/${DATE}/run.json`);
+      expect(committed).toContain(`data/sourcedata/${DATE}/run.json`);
       const inCommit = JSON.parse(
-        git(repo, 'show', `HEAD:app/sourcedata/${DATE}/run.json`));
+        git(repo, 'show', `HEAD:data/sourcedata/${DATE}/run.json`));
       expect(inCommit.locales).toEqual(['en', 'ja']);
     } finally {
       rmSync(repo, { recursive: true, force: true });
@@ -135,7 +135,7 @@ describe('publish commits the day\'s own run.json', () => {
       const publish = dailyBriefingSteps().find(s => s.id === 'publish')!;
       await publish.run(stubCtx(repo, { replay: true, manifest: spy }));
       expect(writes).toBe(0);
-      expect(existsSync(join(repo, 'app'))).toBe(false); // nothing written at all
+      expect(existsSync(join(repo, 'data'))).toBe(false); // nothing written at all
     } finally {
       rmSync(repo, { recursive: true, force: true });
     }

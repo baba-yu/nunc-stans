@@ -41,7 +41,8 @@ import { checkReadmeLinks } from './readme-checks.ts';
 import Database from 'better-sqlite3';
 import {
   DAILY_NEWS_REL, exportsDir, EXPORTS_REL, FP_REL, MEMORY_REL,
-  NON_EN_LOCALES as NON_EN, readmeSuffixes, REFERENCE_REL, REFERENCES_TXT,
+  NON_EN_LOCALES as NON_EN, readmeSuffixes, REFERENCE_REL, REFERENCES_TXT_REL,
+  SOURCEDATA_REL,
 } from '../world-paths.ts';
 
 /** The full render set for a run: EN plus the effective non-EN set. */
@@ -120,8 +121,8 @@ function validateSemanticJudgements(raw: unknown, terms: string[]): Array<{
  * derive from the effective locale set (default: the full trio). */
 export function publishAddable(nonEn: readonly string[] = NON_EN): string[] {
   return ['README.md', ...nonEn.map(l => `README.${l}.md`),
-    EXPORTS_REL, DAILY_NEWS_REL, FP_REL, MEMORY_REL, REFERENCES_TXT,
-    `${REFERENCE_REL}/citation-policy-review.md`, 'app/sourcedata'];
+    EXPORTS_REL, DAILY_NEWS_REL, FP_REL, MEMORY_REL, REFERENCES_TXT_REL,
+    `${REFERENCE_REL}/citation-policy-review.md`, SOURCEDATA_REL];
 }
 
 function gateOrFail(id: string, r: { exit: number; lines: string[] }, ctx: RunCtx): void {
@@ -214,7 +215,7 @@ export function dailyUpdateSteps(): StepDef[] {
           prompt: () => {
             const topics = readFileSync(
               join(ctx.newsRepo, REFERENCE_REL, 'news-topics.md'), 'utf8');
-            const refPath = join(ctx.newsRepo, REFERENCES_TXT);
+            const refPath = join(ctx.newsRepo, REFERENCES_TXT_REL);
             const recentRefs = existsSync(refPath)
               ? readFileSync(refPath, 'utf8').trim().split('\n').slice(-300).join('\n')
               : '';
@@ -472,7 +473,7 @@ export function dailyUpdateSteps(): StepDef[] {
     {
       id: 'append-references', kind: 'det',
       run: (ctx) => {
-        const refPath = join(ctx.newsRepo, REFERENCES_TXT);
+        const refPath = join(ctx.newsRepo, REFERENCES_TXT_REL);
         const existing = new Set(
           existsSync(refPath)
             ? readFileSync(refPath, 'utf8').split('\n').map(s => s.trim()).filter(Boolean)

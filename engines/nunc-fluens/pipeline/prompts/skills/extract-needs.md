@@ -12,13 +12,13 @@ A **Need** captures *what the prediction needs from its driver coalition* — th
 
 Pre-Phase-3 output path was `.jtbd-tmp/today-needs-pred-prediction.<pid>.json`. Phase 3 moves this to:
 
-  `app/sourcedata/<date>/needs.<pid>.json`  (per-prediction temp file)
+  `data/sourcedata/<date>/needs.<pid>.json`  (per-prediction temp file)
 
 The orchestrator (`1_daily_update`) dispatches one sub-agent per fresh prediction, each writing its own per-prediction file. After all 3 sub-agents return, the parent runs:
 
-  `python -m app.skills.extract_needs merge --date-dir app/sourcedata/<date>/`
+  `python -m app.skills.extract_needs merge --date-dir data/sourcedata/<date>/`
 
-which deterministically merges the per-prediction files into the canonical `app/sourcedata/<date>/needs.json` matching the `NeedsFile` schema. The merge step is order-stable (per-prediction keys sorted by id; per-need rows preserved in source order).
+which deterministically merges the per-prediction files into the canonical `data/sourcedata/<date>/needs.json` matching the `NeedsFile` schema. The merge step is order-stable (per-prediction keys sorted by id; per-need rows preserved in source order).
 
 The legacy `.jtbd-tmp/today-needs-pred-*.json` files are **not deleted** in Phase 3 — Phase 4's backfill migrates them. Phase 3 only stops writing new ones to that path.
 
@@ -30,10 +30,10 @@ Needs extraction is **LLM-only** work and depends on the writer's full context (
 
 | Name | Source | Required |
 |---|---|---|
-| `db` | `app/data/analytics.sqlite` | yes |
+| `db` | `store/world/analytics.sqlite` | yes |
 | `prediction-id` | the just-ingested prediction's ID | yes |
 | `prediction-body` | the prose body (not the title) — drives the LLM extraction | yes |
-| `needs-json-file` | path to write the per-prediction temp file (e.g. `app/sourcedata/<date>/needs.<pid>.json`) | yes |
+| `needs-json-file` | path to write the per-prediction temp file (e.g. `data/sourcedata/<date>/needs.<pid>.json`) | yes |
 
 ## Outputs
 
@@ -83,22 +83,22 @@ JSON summary on stdout: `{"prediction_id": "...", "need_count": N, "tasks_count"
 
 ### Per-prediction-file naming + locale ingest pairing
 
-The on-disk per-prediction temp file is `app/sourcedata/<date>/needs.prediction.<sha>.json` (i.e. the **full** prediction id WITH the `prediction.` prefix is in the filename). `merge_needs_files` derives the by-prediction key from the filename stem after stripping `needs.`, so the merged `by_prediction[<pid>]` keys are always `prediction.<sha>`.
+The on-disk per-prediction temp file is `data/sourcedata/<date>/needs.prediction.<sha>.json` (i.e. the **full** prediction id WITH the `prediction.` prefix is in the filename). `merge_needs_files` derives the by-prediction key from the filename stem after stripping `needs.`, so the merged `by_prediction[<pid>]` keys are always `prediction.<sha>`.
 
-For locale needs files (`app/sourcedata/locales/<date>/<L>/needs.json`), `_ingest_locale_needs` pairs each locale need to the EN need by **position within the per-prediction list** (rowid order in DB = source order in EN file = expected source order in the locale file). The locale file's translated `actor` is NOT a join key — historically that pairing was actor-based and broke as soon as the locale-fanout contract started translating `actor`. Sub-agents producing a locale needs file MUST preserve the EN canonical's per-prediction list order; reordering or adding/removing entries silently breaks the pairing.
+For locale needs files (`data/sourcedata/locales/<date>/<L>/needs.json`), `_ingest_locale_needs` pairs each locale need to the EN need by **position within the per-prediction list** (rowid order in DB = source order in EN file = expected source order in the locale file). The locale file's translated `actor` is NOT a join key — historically that pairing was actor-based and broke as soon as the locale-fanout contract started translating `actor`. Sub-agents producing a locale needs file MUST preserve the EN canonical's per-prediction list order; reordering or adding/removing entries silently breaks the pairing.
 
 ## Reference invocation
 
 ```bash
 # Per-prediction sub-agent writes its temp file:
 python -m app.skills.extract_needs \
-  --db app/data/analytics.sqlite \
+  --db store/world/analytics.sqlite \
   --prediction-id <pid> \
-  --needs-json-file app/sourcedata/$(date +%Y-%m-%d)/needs.<pid>.json
+  --needs-json-file data/sourcedata/$(date +%Y-%m-%d)/needs.<pid>.json
 
 # Parent merges per-prediction files into the canonical needs.json:
 python -m app.skills.extract_needs merge \
-  --date-dir app/sourcedata/$(date +%Y-%m-%d)/
+  --date-dir data/sourcedata/$(date +%Y-%m-%d)/
 ```
 
 Implementation: `app/skills/extract_needs.py` (`commit_need` + `merge_needs_files`).

@@ -2,7 +2,7 @@
 
 Translate the EN canonical sourcedata JSON into JA / ES / FIL siblings. Phase 3 rewrite: what gets translated is now the **JSON sourcedata fields**; the rendered markdown is auto-fanned by re-running the deterministic Jinja2 renderer per locale. Translation only touches JSON field values; markdown is byte-deterministic from the locale-specific JSON.
 
-Shared by `1_daily_update` (after `app/sourcedata/<date>/{predictions,headlines,change_log,news_section,needs}.json` are saved) and `2_future_prediction` (after `app/sourcedata/<date>/{bridges,summary}.json` are saved).
+Shared by `1_daily_update` (after `data/sourcedata/<date>/{predictions,headlines,change_log,news_section,needs}.json` are saved) and `2_future_prediction` (after `data/sourcedata/<date>/{bridges,summary}.json` are saved).
 
 ## Why this is its own skill
 
@@ -19,15 +19,15 @@ Both daily flows fan out the same EN canonical JSON into the same 3 sibling loca
 ## Outputs
 
 For `kind=news`:
-- `app/sourcedata/locales/<date>/<locale>/predictions.json`
-- `app/sourcedata/locales/<date>/<locale>/headlines.json`
-- `app/sourcedata/locales/<date>/<locale>/change_log.json`
-- `app/sourcedata/locales/<date>/<locale>/news_section.json`
-- `app/sourcedata/locales/<date>/<locale>/needs.json`
+- `data/sourcedata/locales/<date>/<locale>/predictions.json`
+- `data/sourcedata/locales/<date>/<locale>/headlines.json`
+- `data/sourcedata/locales/<date>/<locale>/change_log.json`
+- `data/sourcedata/locales/<date>/<locale>/news_section.json`
+- `data/sourcedata/locales/<date>/<locale>/needs.json`
 
 For `kind=future-prediction`:
-- `app/sourcedata/locales/<date>/<locale>/bridges.json`
-- `app/sourcedata/locales/<date>/<locale>/summary.json`
+- `data/sourcedata/locales/<date>/<locale>/bridges.json`
+- `data/sourcedata/locales/<date>/<locale>/summary.json`
 
 The rendered markdown for each locale is produced by a separate skill (`render-news-md` / `render-future-prediction-md`) — locale-fanout does not write markdown directly.
 
@@ -97,7 +97,7 @@ for locale in ja es fil; do
   python -m app.skills.translate_sourcedata \
     --date $(date +%Y-%m-%d) \
     --kind news \
-    --locale $locale  # writes app/sourcedata/locales/<date>/<locale>/*.json
+    --locale $locale  # writes data/sourcedata/locales/<date>/<locale>/*.json
 done
 
 # Then renderer fan-out (per-locale):

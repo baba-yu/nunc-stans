@@ -12,8 +12,8 @@ This skill replaces regex semantic detection with LLM-as-judge: an independent a
 
 ## Sub-agent context (parent supplies)
 
-- `app/sourcedata/<date>/news_section.json` (today's bullets — what the user sees)
-- `app/sourcedata/<date>/search_log.json` (writer's self-report — what the writer claims they searched / found / promoted)
+- `data/sourcedata/<date>/news_section.json` (today's bullets — what the user sees)
+- `data/sourcedata/<date>/search_log.json` (writer's self-report — what the writer claims they searched / found / promoted)
 - `data/reference/news-topics.md` (topic list + §Topic scope clarifications table — the **rubric**)
 - The date string `<date>`
 
@@ -48,11 +48,11 @@ Different prompts → no self-confirmation. Same model is fine; the prompt disti
 >    - `search_log_overreports` — writer claims `promoted_to_bullet=true` but no bullet actually fits this topic semantically (the writer was over-eager in self-categorization)
 >    - `search_log_underreports` — writer claims `hits=0` or didn't surface anything, but one of the bullets actually does fit this topic semantically (the writer missed a coverage)
 >
-> Write the verdict to `app/sourcedata/<date>/verification.json`.
+> Write the verdict to `data/sourcedata/<date>/verification.json`.
 
 ## Required output
 
-`app/sourcedata/<date>/verification.json`:
+`data/sourcedata/<date>/verification.json`:
 
 ```json
 {

@@ -1,13 +1,13 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import Database from 'better-sqlite3';
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import {
   configFile, requireConfig, resolveDataDir, resolveNewsRepo,
 } from '../src/config.ts';
 import { linkNewsRepo } from '../src/config.ts';
-import { migrateDb } from '../src/migrate.ts';
+import { integrityCheck } from '../src/migrate.ts';
+import { initDb } from '../src/db/db.ts';
 
 const ENV = ['NS_DATA', 'FED_DATA', 'NS_NEWS_REPO', 'XDG_CONFIG_HOME'] as const;
 const saved: Record<string, string | undefined> = {};
@@ -45,38 +45,18 @@ describe('config resolution', () => {
   });
 });
 
-describe('migrate-db', () => {
-  function makeNewsRepo(): string {
-    const repo = join(tmp, 'news');
-    mkdirSync(join(repo, 'app', 'data'), { recursive: true });
-    const db = new Database(join(repo, 'app', 'data', 'analytics.sqlite'));
-    db.exec('CREATE TABLE t (id INTEGER PRIMARY KEY, v TEXT); INSERT INTO t (v) VALUES (\'x\');');
-    db.close();
-    // junk siblings that must NOT be migrated
-    for (const junk of ['analytics.sqlite.dud', 'analytics.sqlite.partial2', 'analytics.sqlite-journal.bak'])
-      writeFileSync(join(repo, 'app', 'data', junk), 'junk');
-    return repo;
-  }
-
-  it('copies, verifies, excludes junk, and backs up on re-run', () => {
-    const newsRepo = makeNewsRepo();
-    const dataDir = join(tmp, 'store');
-    const r1 = migrateDb({ dataDir, newsRepo }, '2026-07-06');
-    expect(existsSync(r1.target)).toBe(true);
-    expect(r1.backedUp).toBeNull();
-    const copied = new Database(r1.target, { readonly: true });
-    expect(copied.prepare('SELECT count(*) AS n FROM t').get()).toEqual({ n: 1 });
-    copied.close();
-    // junk stayed behind
-    expect(existsSync(join(dataDir, 'world', 'analytics.sqlite.dud'))).toBe(false);
-    // idempotent re-run backs the previous target up
-    const r2 = migrateDb({ dataDir, newsRepo }, '2026-07-07');
-    expect(r2.backedUp).toBe(`${r2.target}.bak-2026-07-07`);
-    expect(existsSync(r2.backedUp!)).toBe(true);
-  });
-
-  it('refuses a missing source', () => {
-    expect(() => migrateDb({ dataDir: join(tmp, 'store'), newsRepo: join(tmp, 'nope') }, '2026-07-06'))
-      .toThrow(/source DB not found/);
+describe('integrityCheck', () => {
+  // The Phase-C migrate-db command was retired with the V2
+  // template/instance split (`import` seeds each instance store
+  // directly); the shared integrity probe it left behind is what
+  // import's DB seed leans on.
+  it('accepts a healthy DB and refuses a corrupt/missing one', () => {
+    const good = join(tmp, 'good.sqlite');
+    initDb(good);
+    expect(() => integrityCheck(good)).not.toThrow();
+    const junk = join(tmp, 'junk.sqlite');
+    writeFileSync(junk, 'not a sqlite file at all');
+    expect(() => integrityCheck(junk)).toThrow();
+    expect(() => integrityCheck(join(tmp, 'nope.sqlite'))).toThrow();
   });
 });

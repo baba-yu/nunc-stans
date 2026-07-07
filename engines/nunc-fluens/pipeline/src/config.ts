@@ -1,11 +1,12 @@
-// Pipeline configuration: the data store (workspace model) and the news
-// data+publish checkout (`newsRepo`, replacing the retired NEWS_WORLD
-// env). Resolution logic is shared with the repo tooling via
+// Pipeline configuration: the data store (workspace model) and the
+// designated view source (`newsRepo` — a data instance checkout).
+// Resolution logic is shared with the repo tooling via
 // tools/lib/data-dir.ts.
 import { join } from 'node:path'
 import {
   configFile, resolveDataDir, resolveNewsRepo, writeConfigKey,
 } from '../../../../tools/lib/data-dir.ts'
+import { SOURCEDATA_REL } from './world-paths.ts'
 
 export { configFile, resolveDataDir, resolveNewsRepo }
 
@@ -48,11 +49,4 @@ export const runLogFile = (dataDir: string) => join(dataDir, 'runs', 'ai-runs.js
 // worldDbFile / runLogFile apply to both; news-config.json sits at the
 // store root as the optional per-instance override.
 export const instanceStoreDir = (instanceRoot: string) => join(instanceRoot, 'store')
-
-// Checkout app/ subtree — DELIBERATELY untouched by the post-C data/
-// layout rename (P1): source_files.path stores `app/sourcedata/…` rel
-// paths that participate in row identity, so moving app/ is a
-// DB-content migration with its own risks. Recorded follow-up; both
-// layouts share these two paths.
-export const newsDbFile = (newsRepo: string) => join(newsRepo, 'app', 'data', 'analytics.sqlite')
-export const sourcedataDir = (newsRepo: string) => join(newsRepo, 'app', 'sourcedata')
+export const sourcedataDir = (instanceRoot: string) => join(instanceRoot, SOURCEDATA_REL)

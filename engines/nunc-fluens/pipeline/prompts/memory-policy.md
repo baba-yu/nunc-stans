@@ -262,7 +262,7 @@ Phase 2-forward (brought into Phase 1 timeline at 2026-05-02): `glossary_terms` 
 ```bash
 python3 -m app.skills.extract_glossary_candidates \
   --news-file data/daily-news/en/news-$(date +%Y%m%d).md \
-  --db        app/data/analytics.sqlite \
+  --db        store/world/analytics.sqlite \
   --seed-yaml data/reference/glossary.yml \
   --seed-mode upsert
 ```

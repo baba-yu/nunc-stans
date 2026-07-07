@@ -25,7 +25,7 @@ deterministically).
   task 5W1H), the sub-agent rewrites every locale in the run's render
   set (EN + news-config `locales`, default {ja, es, fil}).
 - Target output path:
-  `app/sourcedata/<week_ending>/<filename>.<prediction_id>.json`
+  `data/sourcedata/<week_ending>/<filename>.<prediction_id>.json`
   where `<filename>` is one of:
     * `predictions` (reasoning + readings, since chain edges are stored
       with the prediction)

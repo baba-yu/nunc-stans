@@ -13,7 +13,7 @@ Promotion + retirement is **state-only** logic against the SQLite table. Definit
 
 | Name | Source | Required |
 |---|---|---|
-| `db` | `app/data/analytics.sqlite` (writeable) | yes |
+| `db` | `store/world/analytics.sqlite` (writeable) | yes |
 | `mode` | `auto` (flip status flags) \| `report-only` (dry-run on a copy) | default `auto` |
 
 JSON output on stdout:
@@ -94,10 +94,10 @@ commit_definition(conn, term, quick_def, why_it_matters,
 
 ```bash
 # Daily flow (in 1_daily_update orchestrator, after extract-glossary-candidates):
-python3 -m app.skills.define_glossary_terms --db app/data/analytics.sqlite --mode auto
+python3 -m app.skills.define_glossary_terms --db store/world/analytics.sqlite --mode auto
 
 # Sanity-check pass (no DB writes — operates on a tempfile copy):
-python3 -m app.skills.define_glossary_terms --db app/data/analytics.sqlite --mode report-only
+python3 -m app.skills.define_glossary_terms --db store/world/analytics.sqlite --mode report-only
 ```
 
 ## Alternate fill path: YAML upsert

@@ -17,6 +17,7 @@ import Database from 'better-sqlite3';
 import { IMPORT_COMMIT_PREFIX, importNewsCheckout, looksNewsShaped } from '../src/import.ts';
 import { initInstance } from '../src/instance.ts';
 import { initDb } from '../src/db/db.ts';
+import { publishAddable } from '../src/orchestrator/steps.ts';
 
 function git(repo: string, ...args: string[]): string {
   return execFileSync('git', ['-C', repo, ...args], { encoding: 'utf8' });
@@ -182,6 +183,23 @@ describe('importNewsCheckout', () => {
       rmSync(src, { recursive: true, force: true });
       rmSync(root, { recursive: true, force: true });
     }
+  });
+});
+
+describe('publish add-list tracks the v2 constants', () => {
+  // A missed rename here silently stops an artifact class from being
+  // committed (the add list existsSync-filters).
+  it('names every artifact class by its instance-layout path', () => {
+    const list = publishAddable();
+    for (const p of ['README.md', 'README.ja.md', 'README.es.md', 'README.fil.md',
+      'data/exports', 'data/daily-news', 'data/future-prediction', 'data/memory',
+      'data/references.txt', 'data/reference/citation-policy-review.md',
+      'data/sourcedata'])
+      expect(list, p).toContain(p);
+    for (const stale of ['report', 'future-prediction', 'memory', 'docs/data',
+      'references.txt', 'app/sourcedata',
+      'reference/citation-policy-review.md'])
+      expect(list, `stale: ${stale}`).not.toContain(stale);
   });
 });
 

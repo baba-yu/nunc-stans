@@ -10,7 +10,7 @@ import {
   DAILY_NEWS_REL, exportsDir, EXPORTS_REL, FP_REL, MEMORY_REL,
   NON_EN_LOCALES, readmeSuffixes,
 } from '../world-paths.ts';
-import { newsDbFile } from '../config.ts';
+import { instanceStoreDir, worldDbFile } from '../config.ts';
 
 function isSunday(date: string): boolean {
   return new Date(date + 'T12:00:00Z').getUTCDay() === 0;
@@ -37,10 +37,11 @@ function checkFiles(repoRoot: string, date: string, nonEn: readonly string[]): s
   return errs;
 }
 
-function checkDbPopulation(repoRoot: string, date: string, nonEn: readonly string[]): string[] {
+function checkDbPopulation(repoRoot: string, date: string, nonEn: readonly string[],
+  dbFile: string): string[] {
   const res = postUpdateValidation({
     check: 'all', date,
-    db: newsDbFile(repoRoot),
+    db: dbFile,
     exportsDir: exportsDir(repoRoot),
     repoRoot,
     locales: nonEn,
@@ -151,7 +152,8 @@ function checkReadmes(repoRoot: string, date: string, nonEn: readonly string[]):
  * the working DB are the instance-side hygiene surface. The dashboard
  * files themselves are engine code, checked by the orchestrator's
  * dashboard-integrity step. */
-function checkExportsHygiene(repoRoot: string, nonEn: readonly string[]): string[] {
+function checkExportsHygiene(repoRoot: string, nonEn: readonly string[],
+  dbFile: string): string[] {
   const errs: string[] = [];
   const expectedCount = nonEn.length + 1; // en + the effective set
   const mPath = join(exportsDir(repoRoot), 'manifest.json');
@@ -171,7 +173,7 @@ function checkExportsHygiene(repoRoot: string, nonEn: readonly string[]): string
       errs.push(`${EXPORTS_REL}/manifest.json invalid: ${e instanceof Error ? e.message : e}`);
     }
   }
-  const dbPath = newsDbFile(repoRoot);
+  const dbPath = dbFile;
   if (!existsSync(dbPath)) {
     errs.push(`missing: ${rel(repoRoot, dbPath)}`);
   } else {
@@ -192,9 +194,14 @@ export function dailyFlowCheck(args: {
   /** Effective non-EN set; explicit parameter (not ambient config)
    * because the gate also runs from tests/freeze without a RunCtx. */
   locales?: readonly string[];
+  /** The analytics DB to probe — explicit like the locale set (the DB
+   * left the checkout for the instance store). Defaults to the
+   * in-instance location, <repoRoot>/store/world/analytics.sqlite. */
+  dbFile?: string;
 }): GateResult {
   const root = resolve(args.repoRoot);
   const nonEn = args.locales ?? NON_EN_LOCALES;
+  const dbFile = args.dbFile ?? worldDbFile(instanceStoreDir(root));
   const sun = isSunday(args.date);
   const lines: string[] = [];
   lines.push(`daily-flow-check :: date=${args.date} (${sun ? 'Sun' : 'Mon-Sat'})`);
@@ -212,14 +219,14 @@ export function dailyFlowCheck(args: {
   };
   allPass = run(`news+FP markdown files (${args.date})`, checkFiles(root, args.date, nonEn)) && allPass;
   allPass = run(`DB population via post_update_validation (${args.date})`,
-    checkDbPopulation(root, args.date, nonEn)) && allPass;
+    checkDbPopulation(root, args.date, nonEn, dbFile)) && allPass;
   if (sun)
     allPass = run(`Sunday artifacts (dormant + theme-review + snapshots) (${args.date})`,
       checkSundayArtifacts(root, args.date)) && allPass;
   allPass = run(`READMEs (3-day window including ${args.date})`,
     checkReadmes(root, args.date, nonEn)) && allPass;
   allPass = run('exports hygiene (manifest + sqlite)',
-    checkExportsHygiene(root, nonEn)) && allPass;
+    checkExportsHygiene(root, nonEn, dbFile)) && allPass;
   lines.push('');
   lines.push(allPass ? 'ALL GREEN — today is done' : 'NOT DONE — see FAIL lines above');
   const exit = args.mode === 'report-missing' ? 0 : (allPass ? 0 : 1);
