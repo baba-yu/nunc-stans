@@ -33,6 +33,12 @@ pub struct NewsConfig {
     /// Synthesis model override for the runtime/provider.
     #[serde(rename = "synthModel", skip_serializing_if = "Option::is_none")]
     pub synth_model: Option<String>,
+    /// Non-EN render locales (post-C P5): a subset of {ja, es, fil} —
+    /// the DB schema is column-per-locale, so the universe is fixed.
+    /// Absent = the full trio (behavior-preserving default); an empty
+    /// array is a legitimate EN-only configuration.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub locales: Option<Vec<String>>,
 }
 
 impl NewsConfig {
@@ -42,6 +48,7 @@ impl NewsConfig {
             search: Some("native".into()),
             search_engine: None,
             synth_model: None,
+            locales: Some(vec!["ja".into(), "es".into(), "fil".into()]),
         }
     }
 
@@ -57,6 +64,20 @@ impl NewsConfig {
         if let Some(r) = &self.runtime {
             if r.trim().is_empty() {
                 return Err("runtime must not be empty".into());
+            }
+        }
+        if let Some(ls) = &self.locales {
+            let mut seen = std::collections::HashSet::new();
+            for l in ls {
+                if !matches!(l.as_str(), "ja" | "es" | "fil") {
+                    return Err(format!(
+                        "locales entries must be a subset of {{ja, es, fil}}, got {l:?} \
+                         (arbitrary locales are a schema migration, not a setting)"
+                    ));
+                }
+                if !seen.insert(l.as_str()) {
+                    return Err(format!("locales contains duplicate entry {l:?}"));
+                }
             }
         }
         Ok(())
