@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // nunc-fluens — the news pipeline CLI (Phase C; instance model V2).
-//   link <dir>              designate the read-only view source (an instance)
+//   link <dir|name>         designate the read-only view source (an instance)
 //   status                  show resolved config and world-cache state
 //   validate <date>         schema-validate a day's sourcedata (incl. locales)
 //   init <dir|name>         create a data instance from the engine template
@@ -22,8 +22,11 @@ import {
 } from './instance.ts'
 import { importNewsCheckout } from './import.ts'
 
-function cmdLink(dir: string | undefined): number {
-  if (!dir) { console.error('usage: nunc-fluens link <dir>'); return 2 }
+function cmdLink(arg: string | undefined): number {
+  if (!arg) { console.error('usage: nunc-fluens link <dir|name>'); return 2 }
+  // Bare names are CLI-level sugar for the engine's instances/ home —
+  // the same resolution init/import/run use (resolveInstanceDir).
+  const dir = resolveInstanceDir(arg)
   if (!existsSync(dir)) { console.error(`link: no such directory: ${dir}`); return 1 }
   // The view source is an instance checkout (R6: old-shape view support
   // removed — news-shaped checkouts are brought over via `import`).
@@ -228,7 +231,7 @@ switch (cmd) {
   case 'import': code = cmdImport(arg, arg2); break
   case 'run': code = await cmdRun(argvRest); break
   default:
-    console.error('usage: nunc-fluens link <dir> | status | validate <date> | init <dir|name> | import <src> <instance> | run --instance <dir> [--date D] [--replay] [--dry-run] [--only step]')
+    console.error('usage: nunc-fluens link <dir|name> | status | validate <date> | init <dir|name> | import <src> <instance> | run --instance <dir|name> [--date D] [--replay] [--dry-run] [--only step]')
     code = 2
 }
 process.exit(code)

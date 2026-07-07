@@ -1,18 +1,24 @@
 #!/bin/sh
 # Install the nunc-fluens daily user units (Linux/WSL with systemd).
-#   install.sh <instance-dir> [OnCalendar]
+#   install.sh <instance-dir|name> [OnCalendar]
 # Substitutes the unit placeholders, reloads the user daemon, and
 # enables the timer. Cron fallback (no systemd): add to crontab -e:
 #   30 6 * * * cd <repo> && NS_INSTANCE=<instance> node engines/nunc-fluens/pipeline/src/cli.ts run
 set -eu
 
-INSTANCE="${1:?usage: install.sh <instance-dir> [OnCalendar]}"
+INSTANCE="${1:?usage: install.sh <instance-dir|name> [OnCalendar]}"
 ONCALENDAR="${2:-*-*-* 06:30:00}"
 HERE="$(cd "$(dirname "$0")" && pwd)"
 REPO="$(cd "$HERE/../../../.." && pwd)"
 NODE="$(command -v node)"
 UNIT_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/systemd/user"
 
+# Bare names (no slash) are CLI-level sugar for the engine's instances/
+# home — mirror resolveInstanceDir (pipeline/src/instance.ts) here.
+case "$INSTANCE" in
+  */*) ;;
+  *) INSTANCE="$REPO/engines/nunc-fluens/instances/$INSTANCE" ;;
+esac
 INSTANCE="$(cd "$INSTANCE" && pwd)"
 [ -d "$INSTANCE/data/sourcedata" ] && [ -e "$INSTANCE/.git" ] \
   || { echo "not a v2 instance (need data/sourcedata/ and .git — nunc-fluens init): $INSTANCE" >&2; exit 1; }

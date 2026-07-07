@@ -3,7 +3,7 @@
 // commit, an initDb'd (ignored) store — plus bare-name resolution and
 // the non-empty-dir refusal.
 import { describe, expect, it } from 'vitest';
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 import {
   chmodSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync,
 } from 'node:fs';
@@ -235,5 +235,53 @@ describe('resolveInstanceDir', () => {
     expect(resolveInstanceDir(join(tmpdir(), 'somewhere')))
       .toBe(join(tmpdir(), 'somewhere'));
     expect(resolveInstanceDir('./rel/dir')).toBe('./rel/dir');
+  });
+});
+
+// Bare names are accepted EVERYWHERE an instance is named, not just by
+// init/import — the quickstart's init <name> -> link/daily/schedule
+// <name> flow must hold without switching to the path form midway.
+describe('bare instance names (link + run guard)', () => {
+  const CLI = join(import.meta.dirname, '..', 'src', 'cli.ts');
+
+  it('requireInstance resolves a bare name to the instances/ home', () => {
+    const name = `nf-test-bare-${process.pid}-${Math.random().toString(36).slice(2, 8)}`;
+    const dir = resolveInstanceDir(name);
+    try {
+      initInstance(dir);
+      const box = requireInstance(name);
+      expect(box.root).toBe(dir);
+      // And a missing bare name reports the RESOLVED path, not the raw
+      // name (the old message misdirected users back to init).
+      let msg = '';
+      try {
+        requireInstance(`${name}-missing`);
+      } catch (e) {
+        msg = e instanceof Error ? e.message : String(e);
+      }
+      expect(msg).toContain(join(instancesRoot(), `${name}-missing`));
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it('link resolves a bare name (CLI-level sugar, same as init/import)', () => {
+    const name = `nf-test-link-${process.pid}-${Math.random().toString(36).slice(2, 8)}`;
+    const dir = resolveInstanceDir(name);
+    const fakeCfgHome = mkdtempSync(join(tmpdir(), 'nf-xdg-'));
+    try {
+      initInstance(dir);
+      const env = { ...process.env, XDG_CONFIG_HOME: fakeCfgHome };
+      delete (env as Record<string, string | undefined>).NS_NEWS_REPO;
+      const r = spawnSync(process.execPath, [CLI, 'link', name], { encoding: 'utf8', env });
+      expect(r.status).toBe(0);
+      expect(r.stdout).toContain(`news_repo = ${dir}`);
+      // The config landed in the sandboxed home, holding the resolved path.
+      const cfg = readFileSync(join(fakeCfgHome, 'nunc-stans', 'config.json'), 'utf8');
+      expect(JSON.parse(cfg).news_repo).toBe(dir);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+      rmSync(fakeCfgHome, { recursive: true, force: true });
+    }
   });
 });

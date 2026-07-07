@@ -129,16 +129,19 @@ export function initInstance(dir: string): InitResult {
 export interface InstancePaths { root: string; storeDir: string }
 
 /** Resolve and validate a run target: an init/import-born v2 instance
- * (its own repo + data/sourcedata + a store DB). Running on the
- * instance you also view is normal product mode now — `import` never
- * touches a source checkout, so the old view-source refusal (a ~/news
+ * (its own repo + data/sourcedata + a store DB). Bare names are
+ * CLI-level sugar and resolve under the engine's instances/ home, the
+ * same as init/import (resolveInstanceDir). Running on the instance
+ * you also view is normal product mode now — `import` never touches a
+ * source checkout, so the old view-source refusal (a ~/news
  * protection) is gone with the clone machinery. */
 export function requireInstance(dirArg: string | null): InstancePaths {
-  const dir = dirArg ?? process.env.NS_INSTANCE ?? null;
-  if (!dir)
+  const raw = dirArg ?? process.env.NS_INSTANCE ?? null;
+  if (!raw)
     throw new Error(
-      'run refuses to start without an instance: pass --instance <dir> (or set NS_INSTANCE).\n'
+      'run refuses to start without an instance: pass --instance <dir|name> (or set NS_INSTANCE).\n'
       + 'Create one with: nunc-fluens init <dir|name>');
+  const dir = resolveInstanceDir(raw);
   if (looksNewsShaped(dir))
     throw new Error(
       `${dir} is a news-shaped checkout, not a v2 instance — create an instance `

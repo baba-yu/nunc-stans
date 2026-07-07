@@ -27,7 +27,8 @@ _require_data:
 # `just news-link <instance>` (config news_repo; NS_NEWS_REPO overrides
 # per invocation) — strictly read-only, data/exports/ only.
 
-# Point the world view at an instance (read-only view source).
+# Point the world view at an instance (read-only view source; path or
+# bare name — bare names resolve under engines/nunc-fluens/instances/).
 news-link dir:
     node engines/nunc-fluens/pipeline/src/cli.ts link "{{dir}}"
 
@@ -51,11 +52,13 @@ news-init name_or_dir:
 news-import src instance:
     node engines/nunc-fluens/pipeline/src/cli.ts import "{{src}}" "{{instance}}"
 
-# One pipeline run against an instance (see news-init / news-import).
+# One pipeline run against an instance — path or bare name, resolved
+# by the cli (see news-init / news-import).
 news-daily instance:
     NS_INSTANCE="{{instance}}" node engines/nunc-fluens/pipeline/src/cli.ts run
 
-# Install the daily systemd user units for an instance (Linux/WSL).
+# Install the daily systemd user units for an instance (Linux/WSL;
+# path or bare name — install.sh resolves names like the cli does).
 # Optional second arg = OnCalendar (default "*-*-* 06:30:00"); cron
 # fallback is documented inside install.sh.
 news-schedule instance oncalendar='*-*-* 06:30:00':
