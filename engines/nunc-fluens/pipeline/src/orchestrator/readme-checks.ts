@@ -1,5 +1,5 @@
 // TS port of the link-routing check from
-// design/scheduled/3_daily_briefing-checks.md (Step 3): every link in a
+// design/archive/scheduled/3_daily_briefing-checks.md (Step 3): every link in a
 // non-English README must use its own locale segment, or fall back to
 // /en/ only when the locale file genuinely does not exist.
 import { existsSync, readFileSync } from 'node:fs';

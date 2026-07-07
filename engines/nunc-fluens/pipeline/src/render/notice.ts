@@ -1,5 +1,5 @@
 // AI-notice strings per locale — spec
-// design/scheduled/2_future_prediction-writer-rules.md §AI-notice header.
+// pipeline/prompts/scheduled/2_future_prediction-writer-rules.md §AI-notice header.
 // News and future-prediction reports share the same block (only the H1
 // above differs). Ported from render_news_md.py / render_future_prediction_md.py.
 

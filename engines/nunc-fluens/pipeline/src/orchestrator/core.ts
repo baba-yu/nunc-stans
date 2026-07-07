@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // Orchestrator core: run context, the run.json manifest (S-3's "which
 // pair produced this day"), and the generic LLM-step machinery
-// (prompt from the frozen skill specs + schema validation + one
-// re-prompt + replay-from-stored-artifact).
+// (prompt from the skill specs under pipeline/prompts/ + schema
+// validation + one re-prompt + replay-from-stored-artifact).
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import type Database from 'better-sqlite3';
@@ -83,25 +83,39 @@ export class StepFailure extends Error {
 
 // --- prompt assets ---------------------------------------------------------
 
-/** The frozen spec corpus imported at T0 — the prompts' source of truth. */
-export function designDir(): string {
-  return join(import.meta.dirname, '..', '..', '..', 'design');
+/** The runtime prompt assets bundled with this package (moved out of the
+ * frozen T0 spec corpus post-C; normally-editable behavior files). */
+export function promptsDir(): string {
+  return join(import.meta.dirname, '..', '..', 'prompts');
 }
 
 export function loadSkillSpec(name: string): string {
-  return readFileSync(join(designDir(), 'skills', `${name}.md`), 'utf8');
+  return readFileSync(join(promptsDir(), 'skills', `${name}.md`), 'utf8');
 }
 
 export function loadWriterRules(task: '1_daily_update' | '2_future_prediction'): string {
-  return readFileSync(join(designDir(), 'scheduled', `${task}-writer-rules.md`), 'utf8');
+  return readFileSync(join(promptsDir(), 'scheduled', `${task}-writer-rules.md`), 'utf8');
 }
 
 export function loadScheduledSpec(name: string): string {
-  return readFileSync(join(designDir(), 'scheduled', `${name}.md`), 'utf8');
+  return readFileSync(join(promptsDir(), 'scheduled', `${name}.md`), 'utf8');
 }
 
 export function loadMemoryPolicy(): string {
-  return readFileSync(join(designDir(), 'memory-policy.md'), 'utf8');
+  return readFileSync(join(promptsDir(), 'memory-policy.md'), 'utf8');
+}
+
+/** Skill spec text as embedded into a step prompt. locale-fanout's
+ * contract (prompts/skills/locale-fanout.md §Translation contract)
+ * MANDATES that every translate sub-agent also read
+ * locale-fanout-calques.md; headless prompts inline every input, so the
+ * calque rules are appended here. */
+export function skillSpecForPrompt(skill: string): string {
+  const spec = loadSkillSpec(skill);
+  if (skill !== 'locale-fanout') return spec;
+  return spec
+    + '\n--- CALQUE RULES (locale-fanout-calques) — apply with the contract above ---\n'
+    + loadSkillSpec('locale-fanout-calques');
 }
 
 /** Compose a single headless prompt for an LLM step: the skill spec is
@@ -119,7 +133,7 @@ export function buildStepPrompt(args: {
     ``,
     `Follow this skill contract exactly:`,
     `--- SKILL SPEC (${args.skill}) ---`,
-    loadSkillSpec(args.skill),
+    skillSpecForPrompt(args.skill),
     `--- END SKILL SPEC ---`,
   ];
   if (args.writerRules) {

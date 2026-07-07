@@ -26,8 +26,13 @@ constitution's world→self provenance loop, F9).
   deterministic steps, LLM step contracts, schemas, goldens, systemd
   units. See the Phase C plan
   (`design/development/2026-07-05-phase-c-plan.md`).
-- `design/` — the frozen spec corpus the port was written against
-  (imported at Phase C T0, provenance in `design/README.md`).
+- `pipeline/prompts/` — the runtime LLM prompt sources (skill contracts,
+  writer rules, `memory-policy.md`), read by the orchestrator on live
+  runs; normally-editable behavior files (post-C reorganization).
+- `design/` — living engine design docs (`decisions/` ADRs,
+  `sourcedata-layout.md`); `design/archive/` holds the rest of the frozen
+  spec corpus the port was written against (imported at Phase C T0,
+  provenance in `design/README.md`).
 - `app/` — the frozen Python oracle the port was validated against,
   byte-for-byte via `pipeline/goldens/`. Frozen at upstream `17682e9`
   plus two recorded determinism fixes; **deleted at Phase C T12** (git

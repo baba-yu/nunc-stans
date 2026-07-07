@@ -1,5 +1,5 @@
 // 4_weekly_memory live path — dormant pool tier transitions per
-// design/memory-policy.md §1 and the operational algorithm the oracle
+// pipeline/prompts/memory-policy.md §1 and the operational algorithm the oracle
 // documented in the dormant-20260705.md preamble:
 //   - exits:        pool row with max_rel ≥ 4 over the validation window
 //   - re-anchor:    matched < 4, not due → Last relevance/Days quiet only

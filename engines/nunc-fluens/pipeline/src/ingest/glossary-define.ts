@@ -3,7 +3,7 @@
 // the LLM fill step consumes. State-only against glossary_terms; the
 // definition text itself comes from the orchestrator's LLM step and is
 // persisted via commitDefinition (locale fan-out included per
-// design/skills/define-glossary-terms.md §Locale contract).
+// pipeline/prompts/skills/define-glossary-terms.md §Locale contract).
 import type { Db } from './ingest-core.ts';
 
 export const PROMOTE_THRESHOLD_DAYS_14D = 3;
