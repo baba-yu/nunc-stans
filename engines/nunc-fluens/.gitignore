@@ -1,19 +1,19 @@
 # In the nunc-stans monorepo, engines/nunc-fluens holds the news pipeline CODE
-# only; instance data lives in per-instance checkouts (see INTEGRATION.md).
-# Data instances (own git repos, stamped by `nunc-fluens init`) default to
-# instances/<profile>/ here — gitignored by owner decision 2026-07-07
-# (FD-3.2 amendment; CONTRIBUTING note lands in V2-2).
+# only; instance data lives in per-instance directories (see INTEGRATION.md).
+# Data instances (plain local data dirs, stamped by `nunc-fluens init`)
+# default to instances/<profile>/ here — gitignored by owner decision
+# 2026-07-07 (FD-3.2 amendment; see CONTRIBUTING).
 /instances/
 # The anchored old-shape entries below cover untracked on-disk leftovers of
-# the retired Python oracle era (app/sourcedata, report/, memory/, pycache) —
-# real data the owner will remove; nothing runs in the engine dir anymore.
+# the retired Python oracle era (app/sourcedata, history/ — the renamed
+# memory/ residue with the reference ledger inside, pycache) — real data
+# the owner will remove; nothing runs in the engine dir anymore.
 /app/data/
 /app/sourcedata/
 **/__pycache__/
 .pytest_cache/
 /app/.pytest_cache/
 /docs/data/
-/memory/
+/history/
 /future-prediction/
 /report/
-/references.txt

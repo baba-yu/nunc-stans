@@ -13,7 +13,7 @@ export interface RunCtx {
   /** 0 = Sunday (the DOW table branches on this). */
   dow: number;
   dataDir: string;
-  /** The data instance checkout — inputs and published outputs. */
+  /** The data instance — inputs and rendered outputs. */
   newsRepo: string;
   sourcedataRoot: string;
   dbFile: string;
@@ -49,11 +49,9 @@ export class RunManifest {
   constructor(args: {
     date: string; mode: string; runtime: string; search: string; synthModel: string | null;
     /** The FULL effective render set, 'en' first (e.g. ['en','ja']).
-     * The publish step writes run.json before staging so the snapshot
-     * (whose `locales` is what replay needs) is committed with its own
-     * day; the post-run write only finalizes steps/finished_at in the
-     * working tree and rides the next publish. Non-full runs
-     * (--dry-run/--only) never write the file at all. */
+     * run.json (whose `locales` is what replay needs) is written once,
+     * by the dag at end of run. Non-full runs (--dry-run/--only) never
+     * write the file at all. */
     locales: readonly string[];
   }) {
     this.data = {

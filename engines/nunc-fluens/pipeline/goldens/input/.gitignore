@@ -1,7 +1,0 @@
-# nunc-fluens instance ignores (from pipeline/instance-template/).
-# Runtime state — analytics.sqlite, runs/ai-runs.jsonl, and the optional
-# news-config.json override live here; never committed.
-/store/
-# Snapshot retention archives (aged-out weeks are MOVED here, never
-# deleted; disposable, so never committed either).
-/data/archives/

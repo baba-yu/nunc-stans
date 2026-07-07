@@ -1,10 +1,11 @@
 // Single home for the INSTANCE layout's directory names and the locale
-// set. Post-C REDO V2: the engine is a TEMPLATE (pipeline code +
+// set. Post-C REDO V2/V3: the engine is a TEMPLATE (pipeline code +
 // pipeline/instance-template/) and every run target is a DATA INSTANCE
-// stamped from it by `nunc-fluens init` — one git repo per profile
-// carrying everything under data/ (sourcedata, the publish quartet,
-// exports, references.txt), README*.md at the root, and runtime state
-// in a gitignored store/ (see config.ts instanceStoreDir). Path
+// stamped from it by `nunc-fluens init` — a plain local data directory
+// per profile (git-less, R9) carrying everything under data/
+// (sourcedata, the daily quartet, exports, the history ledger),
+// README*.md at the root, an instance.json stamp, and runtime state in
+// a disposable store/ (see config.ts instanceStoreDir). Path
 // *construction* routes through here. The news-era old shape is not a
 // pipeline concept anymore — that knowledge lives ONLY inside
 // `nunc-fluens import` (src/import.ts, module-local constants).
@@ -12,16 +13,15 @@ import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 // --- instance layout (what the pipeline reads/writes) -----------------------
-// Forward-slash rel strings: node's join() normalizes them per-OS, and
-// git pathspecs use them verbatim.
+// Forward-slash rel strings: node's join() normalizes them per-OS.
 export const SOURCEDATA_REL = 'data/sourcedata';
 export const DAILY_NEWS_REL = 'data/daily-news';
 export const FP_REL = 'data/future-prediction';
-export const MEMORY_REL = 'data/memory';
+export const HISTORY_REL = 'data/history';
 export const REFERENCE_REL = 'data/reference';
 export const EXPORTS_REL = 'data/exports';
 export const ARCHIVE_SNAPSHOTS_REL = 'data/archives/snapshots';
-export const REFERENCES_TXT_REL = 'data/references.txt';
+export const REFERENCE_HISTORY_REL = 'data/history/reference-history.log';
 
 /** The dashboard's data exports (graph-*.json, manifest, snapshots,
  * prefix-tokens.json). */
@@ -35,7 +35,7 @@ export const exportsDir = (repoRoot: string) => join(repoRoot, EXPORTS_REL);
 // an owner-configured subset of NON_EN_LOCALES (news-config `locales`
 // key, default = the full trio), resolved by resolveLocaleSet() below
 // and threaded through RunCtx; replay derives it per day via
-// replayLocaleSet() so committed days reproduce exactly.
+// replayLocaleSet() so recorded days reproduce exactly.
 export const LOCALES = ['en', 'ja', 'es', 'fil'] as const;
 export const NON_EN_LOCALES = ['ja', 'es', 'fil'] as const;
 export type Locale = (typeof LOCALES)[number];
@@ -64,7 +64,7 @@ export function resolveLocaleSet(configured?: unknown): NonEnLocale[] {
 
 /** The per-day effective set for REPLAY (a replayed day must reproduce
  * exactly the locales it originally ran with, not today's preference).
- * Precedence: (a) the day's committed run.json `locales` field (the
+ * Precedence: (a) the day's recorded run.json `locales` field (the
  * full render set incl. 'en'; recorded since the locale model landed),
  * else (b) the staged sourcedata/locales/<date>/ subdirs (pre-model
  * days: the siblings that exist ARE the set), else (c) the default. */

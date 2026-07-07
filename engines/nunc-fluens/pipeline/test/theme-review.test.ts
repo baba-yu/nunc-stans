@@ -251,7 +251,7 @@ describe('snapshots + pain points', () => {
     writeFileSync(join(repo, 'data', 'exports', 'snapshots', 'index.json'),
       JSON.stringify({ snapshots: [], default: '20260628' }), 'utf8');
     snapshotThreeTimeState(db, repo, '2026-07-05');
-    const pre = join(repo, 'data', 'memory', 'snapshots', '20260705-pre-review');
+    const pre = join(repo, 'data', 'history', 'snapshots', '20260705-pre-review');
     for (const f of ['graph-tech.json', 'graph-business.json', 'graph-mix.json',
       'manifest.json', 'schema.sql', 'taxonomy.json'])
       expect(existsSync(join(pre, f)), f).toBe(true);

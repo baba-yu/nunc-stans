@@ -5,7 +5,7 @@ LLM sub-agent that emits the placeholder `data/sourcedata/<date>/bridges.json` (
 ## Sub-agent context (parent supplies)
 
 - Last 7 days of `data/daily-news/en/news-*.md` (the source predictions).
-- The latest `data/memory/dormant/dormant-*.md` (dormant longshot pool).
+- The latest `data/history/dormant/dormant-*.md` (dormant longshot pool).
 - Today's `data/daily-news/en/news-YYYYMMDD.md` (the evidence side; ONLY URLs from this file may be used).
 - The schema for `bridges.json` from the canonical sourcedata schemas (`pipeline/src/schemas/sourcedata.ts`).
 - The 2-layer dormant longshot detection rules from `prompts/scheduled/2_future_prediction-writer-rules.md §Dormant pool re-check`.

@@ -11,7 +11,7 @@ import {
 } from '../src/world-paths.ts';
 import { datePaths } from '../src/render/lint-markdown-clean.ts';
 import {
-  dailyUpdateSteps, futurePredictionSteps, publishAddable,
+  dailyUpdateSteps, futurePredictionSteps,
 } from '../src/orchestrator/steps.ts';
 import { RunManifest, type RunCtx } from '../src/orchestrator/core.ts';
 import { dailyFlowCheck } from '../src/gates/daily-flow-check.ts';
@@ -124,16 +124,6 @@ describe('set-derived fan-outs (set = [ja])', () => {
     expect(readmeSuffixes(['ja'])).toEqual(['', '.ja']);
     expect(readmeSuffixes([])).toEqual(['']);
     expect(readmeSuffixes(NON_EN_LOCALES)).toEqual(['', '.ja', '.es', '.fil']);
-  });
-
-  it('publishAddable READMEs derive from the set', () => {
-    const forJa = publishAddable(['ja']);
-    expect(forJa).toContain('README.md');
-    expect(forJa).toContain('README.ja.md');
-    expect(forJa).not.toContain('README.es.md');
-    expect(forJa).not.toContain('README.fil.md');
-    // Default stays the full trio (behavior-preserving).
-    expect(publishAddable()).toContain('README.fil.md');
   });
 
   it('datePaths lints only the render set even when other locale files exist', () => {

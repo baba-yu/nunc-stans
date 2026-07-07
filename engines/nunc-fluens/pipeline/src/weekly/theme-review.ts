@@ -12,7 +12,7 @@ import { join } from 'node:path';
 import type { Db } from '../ingest/ingest-core.ts';
 import { schemaPath } from '../db/db.ts';
 import {
-  ARCHIVE_SNAPSHOTS_REL, exportsDir, EXPORTS_REL, MEMORY_REL,
+  ARCHIVE_SNAPSHOTS_REL, exportsDir, EXPORTS_REL, HISTORY_REL,
 } from '../world-paths.ts';
 import { dumpTaxonomy } from './apply-schema-edit.ts';
 
@@ -20,18 +20,18 @@ const GRAPHS = ['graph-tech.json', 'graph-business.json', 'graph-mix.json'];
 const SNAP_RETENTION = 5;
 
 export function preReviewDir(newsRepo: string, stem: string): string {
-  return join(newsRepo, MEMORY_REL, 'snapshots', `${stem}-pre-review`);
+  return join(newsRepo, HISTORY_REL, 'snapshots', `${stem}-pre-review`);
 }
 
-/** Step 2: write data/memory/snapshots/<stem>-pre-review/ (rollback
+/** Step 2: write data/history/snapshots/<stem>-pre-review/ (rollback
  * target: graphs + manifest + seed schema.sql + taxonomy.json) and
  * data/exports/snapshots/<stem>/ (reader-facing: graphs + manifest).
  * Retention mirrors upstream archive_snapshots.py: keep the 5 most
  * recent under data/exports/snapshots (a deployed dashboard artifact at
- * ~70MB per week broke past ~100MB); older ones MOVE to the gitignored
+ * ~70MB per week broke past ~100MB); older ones MOVE to
  * data/archives/snapshots/, never deleted. index.json is regenerated
  * with its `default` field preserved.
- * Returns the repo-relative paths to commit. */
+ * Returns the instance-relative paths written. */
 export function snapshotThreeTimeState(db: Db, newsRepo: string, date: string): string[] {
   const stem = date.replaceAll('-', '');
   const dataDir = exportsDir(newsRepo);
@@ -72,7 +72,7 @@ export function snapshotThreeTimeState(db: Db, newsRepo: string, date: string): 
     JSON.stringify({ snapshots: keep, default: indexDefault }, null, 2) + '\n', 'utf8');
 
   return [
-    `${MEMORY_REL}/snapshots/${stem}-pre-review`,
+    `${HISTORY_REL}/snapshots/${stem}-pre-review`,
     `${EXPORTS_REL}/snapshots`,
   ];
 }

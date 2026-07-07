@@ -18,7 +18,7 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import type { Db } from '../ingest/ingest-core.ts';
 import { fuzzyMatchWithSize } from '../ingest/fuzzy.ts';
-import { MEMORY_REL } from '../world-paths.ts';
+import { HISTORY_REL } from '../world-paths.ts';
 
 export interface DormantRow {
   id: string;
@@ -127,7 +127,7 @@ export function formatDormantSnapshot(args: {
 }
 
 export function dormantDir(newsRepo: string): string {
-  return join(newsRepo, MEMORY_REL, 'dormant');
+  return join(newsRepo, HISTORY_REL, 'dormant');
 }
 
 /** Latest dormant-YYYYMMDD.md strictly before `today` (steady-state:

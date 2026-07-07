@@ -18,7 +18,7 @@ import {
 } from '../schemas/sourcedata.ts';
 import type { MaintenanceJudgement } from '../schemas/sourcedata.ts';
 import { writeAtomic } from '../render/render-news-md.ts';
-import { MEMORY_REL } from '../world-paths.ts';
+import { HISTORY_REL } from '../world-paths.ts';
 import { addDays, originIsoOf, originPredictions } from './dormant.ts';
 
 export const PREDICTIONS_CAP = 30;
@@ -378,7 +378,7 @@ export function validateRun(args: {
     return errors;
   }
   const brokenPath = join(
-    args.newsRepo, MEMORY_REL, 'maintenance', args.weekEnding, 'broken.md');
+    args.newsRepo, HISTORY_REL, 'maintenance', args.weekEnding, 'broken.md');
   const brokenText = existsSync(brokenPath) ? readFileSync(brokenPath, 'utf8') : '';
 
   for (const j of bundle.judgements) {

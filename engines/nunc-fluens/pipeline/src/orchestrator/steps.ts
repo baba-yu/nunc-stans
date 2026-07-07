@@ -5,7 +5,6 @@
 // DEVIATION and recorded in the phase plan.
 import { appendFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { execFileSync } from 'node:child_process';
 import {
   buildStepPrompt, engineDashboardDir, llmArtifactStep, llmJson,
   loadScheduledSpec, loadWriterRules, StepFailure,
@@ -40,9 +39,8 @@ import { postUpdateValidation } from '../gates/post-update-validation.ts';
 import { checkReadmeLinks } from './readme-checks.ts';
 import Database from 'better-sqlite3';
 import {
-  DAILY_NEWS_REL, exportsDir, EXPORTS_REL, FP_REL, MEMORY_REL,
-  NON_EN_LOCALES as NON_EN, readmeSuffixes, REFERENCE_REL, REFERENCES_TXT_REL,
-  SOURCEDATA_REL,
+  DAILY_NEWS_REL, exportsDir, FP_REL, readmeSuffixes, REFERENCE_REL,
+  REFERENCE_HISTORY_REL,
 } from '../world-paths.ts';
 
 /** The full render set for a run: EN plus the effective non-EN set. */
@@ -112,17 +110,6 @@ function validateSemanticJudgements(raw: unknown, terms: string[]): Array<{
   if (missing.length)
     throw new Error(`term(s) not judged: ${missing.join(', ')}`);
   return terms.map(t => byTerm.get(t));
-}
-
-/** The publish step's git-add candidates (repo-relative, existsSync- and
- * check-ignore-filtered at publish time). Exported so the layout tests
- * can assert the list tracks the data/ constants — a missed rename here
- * silently stops an artifact class from being committed. README entries
- * derive from the effective locale set (default: the full trio). */
-export function publishAddable(nonEn: readonly string[] = NON_EN): string[] {
-  return ['README.md', ...nonEn.map(l => `README.${l}.md`),
-    EXPORTS_REL, DAILY_NEWS_REL, FP_REL, MEMORY_REL, REFERENCES_TXT_REL,
-    `${REFERENCE_REL}/citation-policy-review.md`, SOURCEDATA_REL];
 }
 
 function gateOrFail(id: string, r: { exit: number; lines: string[] }, ctx: RunCtx): void {
@@ -215,7 +202,7 @@ export function dailyUpdateSteps(): StepDef[] {
           prompt: () => {
             const topics = readFileSync(
               join(ctx.newsRepo, REFERENCE_REL, 'news-topics.md'), 'utf8');
-            const refPath = join(ctx.newsRepo, REFERENCES_TXT_REL);
+            const refPath = join(ctx.newsRepo, REFERENCE_HISTORY_REL);
             const recentRefs = existsSync(refPath)
               ? readFileSync(refPath, 'utf8').trim().split('\n').slice(-300).join('\n')
               : '';
@@ -226,7 +213,8 @@ export function dailyUpdateSteps(): StepDef[] {
                 'Reference topic list (data/reference/news-topics.md — search the '
                 + 'trusted sources for the last 3 days; always include Unsloth):',
                 topics,
-                'Recently cited URLs to SKIP (tail of references.txt):',
+                'Recently cited URLs to SKIP (tail of the citation ledger '
+                + 'data/history/reference-history.log):',
                 recentRefs,
               ].join('\n\n') + searchBlock,
               outputNote: 'the news_section.json document ({date, sections[]}).',
@@ -473,7 +461,7 @@ export function dailyUpdateSteps(): StepDef[] {
     {
       id: 'append-references', kind: 'det',
       run: (ctx) => {
-        const refPath = join(ctx.newsRepo, REFERENCES_TXT_REL);
+        const refPath = join(ctx.newsRepo, REFERENCE_HISTORY_REL);
         const existing = new Set(
           existsSync(refPath)
             ? readFileSync(refPath, 'utf8').split('\n').map(s => s.trim()).filter(Boolean)
@@ -494,7 +482,7 @@ export function dailyUpdateSteps(): StepDef[] {
         const deduped = [...new Set(fresh)];
         if (deduped.length && !ctx.dryRun)
           appendFileSync(refPath, deduped.join('\n') + '\n');
-        ctx.log(`  references.txt: +${deduped.length} new URL(s)`);
+        ctx.log(`  reference-history.log: +${deduped.length} new URL(s)`);
       },
     },
     {
@@ -916,53 +904,8 @@ export function dailyBriefingSteps(): StepDef[] {
         locales: ctx.locales,
       }), ctx),
     },
-    {
-      // DEVIATION: plain git — the bindfs /tmp-mirror workaround in
-      // bindfs-safe-commit-push.sh was host-specific to the old setup.
-      id: 'publish', kind: 'det',
-      run: (ctx) => {
-        if (ctx.dryRun || ctx.replay) {
-          ctx.log('  publish skipped (dry-run/replay)');
-          return;
-        }
-        // Day D's run.json must ride D's OWN publish commit: replay
-        // derives the day's locale set from the committed file, and a
-        // snapshot that only lands with D+1's publish strands a fresh
-        // clone of the newest day. Write it before the add list is
-        // built; the post-run write (dag.ts) finalizes steps/
-        // finished_at in the working tree with an identical `locales`
-        // field and rides the next publish as before.
-        ctx.manifest.write(ctx.sourcedataRoot, ctx.date);
-        const git = (...args: string[]) =>
-          execFileSync('git', ['-C', ctx.newsRepo, ...args], { encoding: 'utf8' });
-        // Add what exists and is not gitignored — instances legitimately
-        // ignore some of these (upstream keeps references.txt untracked).
-        const addable = publishAddable(ctx.locales)
-          .filter(p => existsSync(join(ctx.newsRepo, p)))
-          .filter(p => {
-            try {
-              execFileSync('git', ['-C', ctx.newsRepo, 'check-ignore', '-q', p]);
-              return false; // exit 0 = ignored
-            } catch {
-              return true;
-            }
-          });
-        git('add', ...addable);
-        try {
-          git('commit', '-m', `daily-master ${ctx.date}: news + future-prediction + 3-day README + dashboard`);
-        } catch (e) {
-          const msg = e instanceof Error ? e.message : String(e);
-          if (!msg.includes('nothing to commit')) throw e;
-        }
-        // Instances without a remote (init-born repos have none until
-        // the owner adds one) publish locally — the commit IS the
-        // publish.
-        if (git('remote').trim() === '') {
-          ctx.log('  no git remote — committed locally, push skipped');
-          return;
-        }
-        git('push');
-      },
-    },
+    // The news-era `publish` step (git add/commit/push) is retired
+    // (R10): instances are git-less — the written files ARE the
+    // product; run.json is written once by the dag at end of run.
   ];
 }

@@ -62,7 +62,7 @@ export function buildGoldenDb(): BuiltDb {
   const workRoot = mkdtempSync(join(tmpdir(), 'nf-build-'));
   mkdirSync(join(workRoot, 'data'), { recursive: true });
   symlinkSync(join(INPUT, 'data', 'sourcedata'), join(workRoot, 'data', 'sourcedata'));
-  for (const part of ['daily-news', 'future-prediction', 'memory', 'reference'])
+  for (const part of ['daily-news', 'future-prediction', 'history', 'reference'])
     symlinkSync(join(INPUT, 'data', part), join(workRoot, 'data', part));
   const ctx = {
     sourcedataRoot: join(workRoot, 'data', 'sourcedata'),

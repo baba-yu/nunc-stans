@@ -4,11 +4,13 @@ There is no integration relationship to document here: **nunc-stans has
 no relationship to any particular news project** (Phase C redirection,
 owner decision 2026-07-06). This engine is a self-contained product with
 its own data model: the engine is a TEMPLATE, and all data lives in
-**instances** — per-profile git repos stamped by `nunc-fluens init`
-(post-C REDO V2, 2026-07-07). The one remaining news-shaped contact
-surface is **`nunc-fluens import <src> <instance>`**, a one-time,
-read-only copy of a news-shaped checkout's data into an instance; the
-mapping of the old layout lives only inside that command. The Formans
+**instances** — per-profile plain local data directories stamped by
+`nunc-fluens init` (post-C REDO V2/V3, 2026-07-07; git-less — the
+news-era git publishing mechanism is gone). The one remaining
+news-shaped contact surface is **`nunc-fluens import <src>
+<instance>`**, a one-time, read-only copy of a news-shaped checkout's
+data into an instance (recorded in `instance.json`); the mapping of
+the old layout lives only inside that command. The Formans
 world view reads a designated instance (`just news-link <instance>`,
 config `news_repo`, env override `NS_NEWS_REPO`) strictly read-only,
 `data/exports/` only — the old-shape view fallback was removed with the
@@ -58,10 +60,11 @@ a news checkout with `just news-import <src> <instance>`); see the
 `justfile` recipes `news-daily` / `news-schedule` (both take the
 instance; the CLI honors `--instance` / `NS_INSTANCE`). The
 `analytics.sqlite` working cache and the AI run log live in the
-instance's gitignored `store/`, never in this repo. Instance model
-summary: one git repo per profile (default home the gitignored
-`instances/<profile>/` in this engine), `data/{sourcedata, daily-news,
-future-prediction, memory, reference, exports, archives}` +
-`data/references.txt`, `README*.md` at the root, runtime state in
-`store/` (`world/analytics.sqlite`, `runs/ai-runs.jsonl`, optional
-`news-config.json` override).
+instance's disposable `store/`, never in this repo. Instance model
+summary: one plain data directory per profile (default home the
+gitignored `instances/<profile>/` in this engine), an `instance.json`
+birth stamp, `data/{sourcedata, daily-news, future-prediction,
+history, reference, exports, archives}` with the citation ledger at
+`data/history/reference-history.log`, `README*.md` at the root,
+runtime state in `store/` (`world/analytics.sqlite`,
+`runs/ai-runs.jsonl`, optional `news-config.json` override).

@@ -28,9 +28,9 @@ function stageWritableRepo(): string {
   const repo = mkdtempSync(join(tmpdir(), 'nf-replay-'));
   cpSync(join(INPUT, 'data', 'sourcedata'), join(repo, 'data', 'sourcedata'),
     { recursive: true });
-  for (const part of ['daily-news', 'future-prediction', 'memory', 'reference'])
+  // history/ carries the citation ledger (reference-history.log) along.
+  for (const part of ['daily-news', 'future-prediction', 'history', 'reference'])
     cpSync(join(INPUT, 'data', part), join(repo, 'data', part), { recursive: true });
-  cpSync(join(INPUT, 'data', 'references.txt'), join(repo, 'data', 'references.txt'));
   return repo;
 }
 
@@ -130,8 +130,10 @@ describe('orchestrator replay of golden days', () => {
         expect(manifest.steps.length).toBeGreaterThan(15);
 
         expectRendersMatch(repo, REPLAY_DAY);
-        expect(readFileSync(join(repo, 'data', 'references.txt'), 'utf8'))
-          .toBe(readFileSync(join(INPUT, 'data', 'references.txt'), 'utf8'));
+        expect(readFileSync(
+          join(repo, 'data', 'history', 'reference-history.log'), 'utf8'))
+          .toBe(readFileSync(
+            join(INPUT, 'data', 'history', 'reference-history.log'), 'utf8'));
 
         for (const d of ALL_DAYS.filter(d => d > REPLAY_DAY)) directDay(db, repo, d);
         expectGoldenEndState(db);

@@ -42,7 +42,7 @@ describe('daily-flow-check parity', () => {
       try {
         mkdirSync(join(workRoot, 'data'), { recursive: true });
         symlinkSync(join(INPUT, 'data', 'sourcedata'), join(workRoot, 'data', 'sourcedata'));
-        for (const part of ['daily-news', 'future-prediction', 'memory', 'reference'])
+        for (const part of ['daily-news', 'future-prediction', 'history', 'reference'])
           symlinkSync(join(INPUT, 'data', part), join(workRoot, 'data', part));
         const gates = JSON.parse(readFileSync(join(EXPECTED, 'gates', `${d}.json`), 'utf8'));
         const r = dailyFlowCheck({ repoRoot: workRoot, date: d, mode: 'report-missing' });

@@ -16,13 +16,13 @@ Pre-condition: `data/future-prediction/<L>/future-prediction-YYYYMMDD.md` exists
 7. **manifest shape check** *(deterministic, inline)* — `data/exports/manifest.json` lists exactly the run's locales (EN + the configured set) and `default_locale='en'`.
 8. **SQLite integrity** *(deterministic)* — `sqlite3 store/world/analytics.sqlite 'PRAGMA integrity_check;'` returns `ok`. On failure, delete the DB + re-run the export once.
 8.5. **`post-update-validation`** *(shared, runtime export gate)* — `--check exports --date $(date +%Y-%m-%d)`. Confirms each prediction node in `data/exports/graph-*.json` for today carries `labels.title`, `detail.title_locales`, `detail.reasoning_locales`, every `bridges[*].text_locales`, and every `needs[*]` + `needs[*].task` locale bag with every locale in the run's set non-empty. Exits 1 on any silent dropped column — abort the run (a regressed export is what any deployed dashboard will serve).
-9. **publish** *(shared)* — plain git. Stages `README*.md` + `data/exports/` + `data/daily-news/` + `data/future-prediction/` + `data/memory/` (covers the safety-net catches for tasks 4 & 5) + `data/sourcedata/`.
+
+There is no publish step: the instance is a plain local data directory — the written files ARE the result, and the run manifest (`data/sourcedata/<date>/run.json`) is recorded by the orchestrator at end of run.
 
 ## Inputs / outputs
 
 - Reads: `data/future-prediction/<L>/future-prediction-YYYYMMDD.md`, `data/daily-news/<L>/news-YYYYMMDD.md`, previous `README<.L>.md` files.
 - Writes: one `README<.L>.md` per locale in the render set, refreshed `data/exports/*.json`, refreshed `store/world/analytics.sqlite`.
-- Pushes to `dev` (never to `main` per user's hygiene rule); instances without a remote commit locally.
 
 ## Failure modes (skill-localized)
 
@@ -34,7 +34,7 @@ Pre-condition: `data/future-prediction/<L>/future-prediction-YYYYMMDD.md` exists
 
 ## DRY_RUN
 
-`DRY_RUN=1`: skip Step 9 (the commit + push). All earlier checks run; the local working tree carries the README + export updates without flushing to remote.
+`DRY_RUN=1`: every check runs; file writes are skipped where the steps honor DRY_RUN.
 
 ## Acceptance — this run is "done" when
 
@@ -43,6 +43,5 @@ Pre-condition: `data/future-prediction/<L>/future-prediction-YYYYMMDD.md` exists
 3. The engine dashboard is whole: `index.html` ends with `</html>`, `assets/app.js` ends with `})();`, `assets/styles.css` ends with `}`.
 4. `sqlite3 store/world/analytics.sqlite 'PRAGMA integrity_check'` returns `ok`.
 5. `post-update-validation --check exports` exits 0: every prediction node in today's `data/exports/graph-*.json` carries `labels.title` + `detail.title_locales` + `detail.reasoning_locales` + `bridges[*].text_locales` (where present) + `needs[*].*_locales` + `needs[*].task.*_locales` populated for every locale in the run's set.
-6. The publish commit landed (push where a remote exists).
 
 The link-routing + structural completeness checks are implemented in `pipeline/src/orchestrator/readme-checks.ts` and `pipeline/src/render/post-write-integrity.ts`.

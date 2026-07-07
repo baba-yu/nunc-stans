@@ -208,7 +208,7 @@ describe('Step 3 — validate applied-or-escalated', () => {
     const { root, args } = scaffold([J({ verdict: 'broken' })]);
     try {
       expect(validateRun(args).length).toBe(1);
-      const bdir = join(root, 'data', 'memory', 'maintenance', SUNDAY);
+      const bdir = join(root, 'data', 'history', 'maintenance', SUNDAY);
       mkdirSync(bdir, { recursive: true });
       writeFileSync(join(bdir, 'broken.md'),
         '# broken\n| prediction.aaa | reasoning |\n', 'utf8');

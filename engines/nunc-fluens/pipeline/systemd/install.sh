@@ -20,8 +20,8 @@ case "$INSTANCE" in
   *) INSTANCE="$REPO/engines/nunc-fluens/instances/$INSTANCE" ;;
 esac
 INSTANCE="$(cd "$INSTANCE" && pwd)"
-[ -d "$INSTANCE/data/sourcedata" ] && [ -e "$INSTANCE/.git" ] \
-  || { echo "not a v2 instance (need data/sourcedata/ and .git — nunc-fluens init): $INSTANCE" >&2; exit 1; }
+[ -d "$INSTANCE/data/sourcedata" ] && [ -f "$INSTANCE/instance.json" ] \
+  || { echo "not a v2 instance (need data/sourcedata/ and instance.json — nunc-fluens init): $INSTANCE" >&2; exit 1; }
 
 mkdir -p "$UNIT_DIR"
 sed -e "s|@REPO@|$REPO|g" -e "s|@INSTANCE@|$INSTANCE|g" -e "s|@NODE@|$NODE|g" \

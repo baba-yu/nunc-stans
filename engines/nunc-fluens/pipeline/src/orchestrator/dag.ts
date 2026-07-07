@@ -23,8 +23,8 @@ export function taskPlanFor(dow: number): DayPlanTask[] {
     { task: '2_future_prediction', steps: futurePredictionSteps() },
   ];
   if (dow === 0) {
-    // Sunday ordering per 0_daily_master: 1 → 2 → 4 → 5 → 6 → 3.
-    // Replay verifies the committed weekly artifacts; live computes
+    // Sunday ordering per the daily-master spec: 1 → 2 → 4 → 5 → 6 → 3.
+    // Replay verifies the stored weekly artifacts; live computes
     // the week's transitions (dormant rotation, theme review +
     // apply-schema-edit on DB rows, maintenance judge/apply).
     daily.push({ task: '4_weekly_memory', steps: weeklyMemorySteps() });
@@ -63,7 +63,7 @@ export async function runDay(opts: RunDayOptions): Promise<RunDayResult> {
   const log = opts.log ?? ((s: string) => console.log(s));
   const dow = new Date(opts.date + 'T12:00:00Z').getUTCDay();
   const sourcedataRoot = sourcedataDir(opts.newsRepo);
-  // Replay determinism: the day's committed set (run.json > staged
+  // Replay determinism: the day's recorded set (run.json > staged
   // locale dirs > default) wins over today's preference.
   const locales = opts.replay
     ? replayLocaleSet(sourcedataRoot, opts.date)
@@ -134,13 +134,14 @@ export async function runDay(opts: RunDayOptions): Promise<RunDayResult> {
     db.close();
     manifest.finish();
   }
-  // run.json is the day's committed snapshot — replay derives its locale
-  // set from it (world-paths replayLocaleSet) — so only FULL runs write
-  // it: live, and full replay (whose derived set equals the original by
-  // construction, preserving the snapshot). --dry-run and --only must
-  // NEVER create or overwrite it: they resolve locales from TODAY'S
-  // config, and re-recording that over a live day's snapshot silently
-  // changes what a later replay reproduces.
+  // run.json is the day's recorded snapshot, written ONCE here at end
+  // of run — replay derives its locale set from it (world-paths
+  // replayLocaleSet) — so only FULL runs write it: live, and full
+  // replay (whose derived set equals the original by construction,
+  // preserving the snapshot). --dry-run and --only must NEVER create
+  // or overwrite it: they resolve locales from TODAY'S config, and
+  // re-recording that over a live day's snapshot silently changes what
+  // a later replay reproduces.
   let manifestPath = join(sourcedataRoot, opts.date, 'run.json');
   if (!opts.dryRun && !opts.only)
     manifestPath = manifest.write(ctx.sourcedataRoot, opts.date);

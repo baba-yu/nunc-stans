@@ -1,11 +1,11 @@
-// Post-C REDO V2 (R4): `nunc-fluens import` copies a news-shaped
+// Post-C REDO V2/V3 (R4/R9): `nunc-fluens import` copies a news-shaped
 // checkout's data into a fresh init-born instance — full old→v2
-// mapping (incl. the docs/archives carry and references.txt), DB seed
-// with backup, source left byte-untouched, exactly one commit — plus
-// the non-virgin refusal. Old-shape knowledge lives only in
-// src/import.ts.
+// mapping (incl. the docs/archives carry and references.txt → the
+// history ledger), DB seed with backup, source left byte-untouched,
+// one import record in instance.json — plus the non-virgin refusal.
+// Old-shape knowledge lives only in src/import.ts. No git on either
+// side.
 import { describe, expect, it } from 'vitest';
-import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import {
   existsSync, lstatSync, mkdirSync, mkdtempSync, readdirSync, readFileSync,
@@ -14,14 +14,9 @@ import {
 import { tmpdir } from 'node:os';
 import { basename, join, relative } from 'node:path';
 import Database from 'better-sqlite3';
-import { IMPORT_COMMIT_PREFIX, importNewsCheckout, looksNewsShaped } from '../src/import.ts';
-import { initInstance } from '../src/instance.ts';
+import { importNewsCheckout, looksNewsShaped } from '../src/import.ts';
+import { initInstance, readInstanceStamp } from '../src/instance.ts';
 import { initDb } from '../src/db/db.ts';
-import { publishAddable } from '../src/orchestrator/steps.ts';
-
-function git(repo: string, ...args: string[]): string {
-  return execFileSync('git', ['-C', repo, ...args], { encoding: 'utf8' });
-}
 
 function w(path: string, content: string): void {
   mkdirSync(join(path, '..'), { recursive: true });
@@ -80,23 +75,37 @@ function snapshotTree(root: string): Map<string, string> {
   return out;
 }
 
+/** Every non-directory entry under root, as relative paths. */
+function walkEntries(root: string): string[] {
+  const out: string[] = [];
+  const walk = (d: string): void => {
+    for (const e of readdirSync(d, { withFileTypes: true })) {
+      const p = join(d, e.name);
+      if (e.isDirectory()) { walk(p); continue; }
+      out.push(relative(root, p));
+    }
+  };
+  walk(root);
+  return out;
+}
+
 describe('importNewsCheckout', () => {
-  it('maps the whole old shape into a fresh instance, one commit, source untouched', () => {
+  it('maps the whole old shape into a fresh instance, records it, source untouched', () => {
     const src = makeNewsShapedSrc();
     const root = mkdtempSync(join(tmpdir(), 'nf-import-'));
     const inst = join(root, 'inst');
     try {
       const before = snapshotTree(src);
-      initInstance(inst);
-      importNewsCheckout(src, inst);
+      initInstance(inst, '2026-07-01');
+      importNewsCheckout(src, inst, '2026-07-07');
 
       // Mapping: quartet + exports + sourcedata (incl. locales +
-      // run.json) + references.txt + READMEs.
+      // run.json) + the history ledger + READMEs.
       for (const f of [
         'data/daily-news/en/news-20260101.md',
         'data/daily-news/ja/news-20260101.md',
         'data/future-prediction/en/future-prediction-20260101.md',
-        'data/memory/dormant/dormant-20260101.md',
+        'data/history/dormant/dormant-20260101.md',
         'data/reference/glossary.yml',
         'data/reference/editorial-notes.md',
         'data/exports/manifest.json',
@@ -104,18 +113,28 @@ describe('importNewsCheckout', () => {
         'data/sourcedata/2026-01-01/news_section.json',
         'data/sourcedata/2026-01-01/run.json',
         'data/sourcedata/locales/2026-01-01/ja/news_section.json',
-        'data/references.txt',
+        'data/history/reference-history.log',
         'README.md', 'README.ja.md'])
         expect(existsSync(join(inst, ...f.split('/'))), f).toBe(true);
       // Real editorial files OVERWRITE the seeds; untouched seeds survive.
       expect(readFileSync(join(inst, 'data', 'reference', 'glossary.yml'), 'utf8'))
         .toBe('terms: []\n');
       expect(existsSync(join(inst, 'data', 'reference', 'news-topics.md'))).toBe(true);
-      expect(readFileSync(join(inst, 'data', 'references.txt'), 'utf8'))
+      // Old references.txt lands at the history ledger path.
+      expect(readFileSync(
+        join(inst, 'data', 'history', 'reference-history.log'), 'utf8'))
         .toBe('https://example.com/1\n');
       expect(readFileSync(join(inst, 'README.md'), 'utf8')).toBe('# board\n');
       // The instance-side dashboard copy era is over: docs/ never comes.
       expect(existsSync(join(inst, 'docs'))).toBe(false);
+      // Still git-less after the import.
+      expect(existsSync(join(inst, '.git'))).toBe(false);
+
+      // The import is recorded in instance.json (the re-import guard).
+      expect(readInstanceStamp(inst)).toEqual({
+        nunc_fluens: 1, created: '2026-07-01',
+        imports: [{ source: basename(src), date: '2026-07-07' }],
+      });
 
       // DB seeded (marker table travels), the init-born DB backed up.
       const storeDb = join(inst, 'store', 'world', 'analytics.sqlite');
@@ -127,18 +146,6 @@ describe('importNewsCheckout', () => {
       expect(readdirSync(join(inst, 'store', 'world'))
         .some(f => /^analytics\.sqlite\.bak-\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}Z$/.test(f)))
         .toBe(true);
-
-      // Exactly two commits (init + import), synthetic identity, clean
-      // tree; archives and store stay untracked (template .gitignore).
-      const log = git(inst, 'log', '--format=%s|%an').trim().split('\n');
-      expect(log).toHaveLength(2);
-      expect(log[0]).toBe(`${IMPORT_COMMIT_PREFIX}${basename(src)}|nunc-fluens`);
-      expect(git(inst, 'status', '--porcelain').trim()).toBe('');
-      expect(git(inst, 'ls-files', '--', 'data/archives').trim()).toBe('');
-      expect(git(inst, 'ls-files', '--', 'store').trim()).toBe('');
-      // The tracked payload includes the mapped data.
-      expect(git(inst, 'ls-files', '--', 'data/sourcedata').trim())
-        .toContain('data/sourcedata/2026-01-01/news_section.json');
 
       // READ-ONLY source: byte- and mtime-identical after the import.
       expect(snapshotTree(src)).toEqual(before);
@@ -176,9 +183,9 @@ describe('importNewsCheckout', () => {
     try {
       initInstance(inst);
       importNewsCheckout(src, inst);
-      // Second import: the import commit marker refuses before anything
-      // else (data/sourcedata is populated here too).
-      expect(() => importNewsCheckout(src, inst)).toThrow(/already carries an import commit/);
+      // Second import: the instance.json import record refuses before
+      // anything else (data/sourcedata is populated here too).
+      expect(() => importNewsCheckout(src, inst)).toThrow(/already carries an import record/);
       // A plain directory is not an initialized instance.
       const plain = join(root, 'plain');
       mkdirSync(plain);
@@ -193,7 +200,7 @@ describe('importNewsCheckout', () => {
     }
   });
 
-  it('refuses a re-import of a report-only source via the commit marker', () => {
+  it('refuses a re-import of a report-only source via the import record', () => {
     // A report-only source never populates data/sourcedata, so the
     // sourcedata probe alone would let it import repeatedly (bypassing
     // the no --force policy and re-running the DB seed).
@@ -204,7 +211,8 @@ describe('importNewsCheckout', () => {
       initInstance(inst);
       importNewsCheckout(src, inst);
       expect(readdirSync(join(inst, 'data', 'sourcedata'))).toEqual(['.gitkeep']);
-      expect(() => importNewsCheckout(src, inst)).toThrow(/already carries an import commit/);
+      expect(readInstanceStamp(inst)!.imports).toHaveLength(1);
+      expect(() => importNewsCheckout(src, inst)).toThrow(/already carries an import record/);
     } finally {
       rmSync(src, { recursive: true, force: true });
       rmSync(root, { recursive: true, force: true });
@@ -250,6 +258,8 @@ describe('importNewsCheckout', () => {
       expect(msg).toContain('delete data/sourcedata/<date>/');
       expect(msg).toContain('remove the instance dir');
       expect(msg).toContain('the source is never modified');
+      // Nothing was recorded — the refused import leaves the stamp virgin.
+      expect(readInstanceStamp(inst)!.imports).toEqual([]);
     } finally {
       rmSync(src, { recursive: true, force: true });
       rmSync(root, { recursive: true, force: true });
@@ -272,8 +282,10 @@ describe('importNewsCheckout', () => {
       const copied = join(inst, 'data', 'sourcedata', '2026-01-01', 'linked.txt');
       expect(lstatSync(copied).isSymbolicLink()).toBe(false);
       expect(readFileSync(copied, 'utf8')).toBe('content behind the link\n');
-      // No committed blob may be a symlink (mode 120000).
-      expect(git(inst, 'ls-files', '--stage').includes('120000')).toBe(false);
+      // No entry anywhere in the instance may be a symlink.
+      expect(walkEntries(inst)
+        .filter(rel => lstatSync(join(inst, rel)).isSymbolicLink()))
+        .toEqual([]);
 
       // A dangling symlink cannot be resolved to content: clean refusal
       // naming the offending source path.
@@ -298,23 +310,6 @@ describe('importNewsCheckout', () => {
       rmSync(src, { recursive: true, force: true });
       rmSync(root, { recursive: true, force: true });
     }
-  });
-});
-
-describe('publish add-list tracks the v2 constants', () => {
-  // A missed rename here silently stops an artifact class from being
-  // committed (the add list existsSync-filters).
-  it('names every artifact class by its instance-layout path', () => {
-    const list = publishAddable();
-    for (const p of ['README.md', 'README.ja.md', 'README.es.md', 'README.fil.md',
-      'data/exports', 'data/daily-news', 'data/future-prediction', 'data/memory',
-      'data/references.txt', 'data/reference/citation-policy-review.md',
-      'data/sourcedata'])
-      expect(list, p).toContain(p);
-    for (const stale of ['report', 'future-prediction', 'memory', 'docs/data',
-      'references.txt', 'app/sourcedata',
-      'reference/citation-policy-review.md'])
-      expect(list, `stale: ${stale}`).not.toContain(stale);
   });
 });
 

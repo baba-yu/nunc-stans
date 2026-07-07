@@ -113,6 +113,6 @@ The lint check `lint-markdown-clean` (Step 8 of the orchestrator) catches Stream
 
 ## Dormant pool re-check (existing rule, retained verbatim)
 
-The dormant snapshot at `data/memory/dormant/dormant-*.md` (latest) drives the 2-layer longshot detection in `compose-validation-rows`. Layer 1 (keyword) scans today's news against each row's `Signals` column; Layer 2 (semantic) reads today's `## Headlines` + sub-headings against the snapshot's `Prediction (short)` lines and identifies plausible relations. **Union dedupe by ID**; honest relevance score; `[REVIVED]` prefix on the `evidence_summary` field with the matching signal or heading. **No mutation of the dormant snapshot in this flow** — that's `4_weekly_memory`'s job.
+The dormant snapshot at `data/history/dormant/dormant-*.md` (latest) drives the 2-layer longshot detection in `compose-validation-rows`. Layer 1 (keyword) scans today's news against each row's `Signals` column; Layer 2 (semantic) reads today's `## Headlines` + sub-headings against the snapshot's `Prediction (short)` lines and identifies plausible relations. **Union dedupe by ID**; honest relevance score; `[REVIVED]` prefix on the `evidence_summary` field with the matching signal or heading. **No mutation of the dormant snapshot in this flow** — that's `4_weekly_memory`'s job.
 
 `[REVIVED]` triggers `predictions.huge_longshot_hit_at = <validation_date>` in the DB; the dashboard renders a star + pulsing gold halo for ~14 days.

@@ -1,51 +1,67 @@
-// Instance lifecycle (post-C REDO V2, R1/R2): the engine ships a
+// Instance lifecycle (post-C REDO V2/V3, R1/R2/R9): the engine ships a
 // TEMPLATE (pipeline/instance-template/ — skeleton, synthetic editorial
-// seeds, instance .gitignore, README seed) and `nunc-fluens init`
-// stamps DATA INSTANCES from it: one git repo per profile, default
-// home engines/nunc-fluens/instances/<name>/ (gitignored). An instance
-// carries the data/ tree (sourcedata, publish quartet, exports,
-// references.txt) plus a gitignored store/ for runtime state
-// (world/analytics.sqlite, runs/ai-runs.jsonl, optional
+// seeds, README seed) and `nunc-fluens init` stamps DATA INSTANCES from
+// it: one plain local data directory per profile (git-less — the
+// product runs entirely locally; versioning/backup is the user's own
+// concern), default home engines/nunc-fluens/instances/<name>/
+// (gitignored in the monorepo). An instance carries the data/ tree
+// (sourcedata, daily quartet, exports, the history ledger), an
+// instance.json stamp at the root, plus a disposable store/ for
+// runtime state (world/analytics.sqlite, runs/ai-runs.jsonl, optional
 // news-config.json override).
-import { cpSync, existsSync, mkdirSync, readdirSync, rmSync } from 'node:fs';
+import {
+  cpSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync,
+} from 'node:fs';
 import { join } from 'node:path';
-import { execFileSync } from 'node:child_process';
 import { initDb } from './db/db.ts';
 import { instanceStoreDir, worldDbFile } from './config.ts';
 import { SOURCEDATA_REL } from './world-paths.ts';
 import { looksNewsShaped } from './import.ts';
 
-export const INIT_COMMIT_MESSAGE = 'init: nunc-fluens instance';
+// --- instance.json (the birth stamp) -----------------------------------------
+// `nunc_fluens` is the stamp-format version; `created` is the init
+// date; `imports` records every `nunc-fluens import` run against the
+// instance (the re-import guard reads it). The date is injectable so
+// goldens/tests stay deterministic.
 
-export function git(repo: string, ...args: string[]): string {
-  return execFileSync('git', ['-C', repo, ...args], { encoding: 'utf8' });
+export interface ImportRecord {
+  source: string;
+  date: string;
 }
 
-/** Machine-generated commits inside instances must not depend on host
- * git config (a fresh machine or CI runner may have no identity at
- * all; a developer host may force commit signing or global hooks) —
- * every instance commit carries the synthetic identity, signing off,
- * and no hooks path (the empty `core.hooksPath=` value disables hook
- * lookup entirely). */
-export function gitSynthetic(repo: string, ...args: string[]): string {
-  return execFileSync('git', [
-    '-C', repo,
-    '-c', 'user.name=nunc-fluens', '-c', 'user.email=nunc-fluens@localhost',
-    '-c', 'commit.gpgsign=false', '-c', 'tag.gpgsign=false',
-    '-c', 'core.hooksPath=',
-    ...args,
-  ], { encoding: 'utf8' });
+export interface InstanceStamp {
+  nunc_fluens: number;
+  created: string;
+  imports: ImportRecord[];
 }
 
-/** Seed the synthetic identity into the instance repo's LOCAL config at
- * birth, so RUN-SIDE plain-git commits (publish in steps.ts, the Sunday
- * commitOnly) inherit it on identity-less or gpgsign-forcing hosts —
- * the invariant above covers every instance commit, not only the ones
- * init/import make themselves. Idempotent. */
-export function seedInstanceGitConfig(repo: string): void {
-  git(repo, 'config', 'user.name', 'nunc-fluens');
-  git(repo, 'config', 'user.email', 'nunc-fluens@localhost');
-  git(repo, 'config', 'commit.gpgsign', 'false');
+export function instanceStampFile(dir: string): string {
+  return join(dir, 'instance.json');
+}
+
+/** Parse the instance stamp, or null when absent/invalid/foreign. */
+export function readInstanceStamp(dir: string): InstanceStamp | null {
+  try {
+    const raw = JSON.parse(readFileSync(instanceStampFile(dir), 'utf8')) as
+      Record<string, unknown>;
+    if (!raw || typeof raw !== 'object' || typeof raw.nunc_fluens !== 'number')
+      return null;
+    return {
+      nunc_fluens: raw.nunc_fluens,
+      created: typeof raw.created === 'string' ? raw.created : '',
+      imports: Array.isArray(raw.imports) ? raw.imports as ImportRecord[] : [],
+    };
+  } catch {
+    return null;
+  }
+}
+
+export function writeInstanceStamp(dir: string, stamp: InstanceStamp): void {
+  writeFileSync(instanceStampFile(dir), JSON.stringify(stamp, null, 2) + '\n', 'utf8');
+}
+
+function todayIso(): string {
+  return new Date().toISOString().slice(0, 10);
 }
 
 /** The template bundled with this package, resolved relative to this
@@ -54,8 +70,8 @@ export function instanceTemplateDir(): string {
   return join(import.meta.dirname, '..', 'instance-template');
 }
 
-/** Default instance home: engines/nunc-fluens/instances/ (gitignored;
- * multiple profiles are expected). */
+/** Default instance home: engines/nunc-fluens/instances/ (gitignored
+ * in the monorepo; multiple profiles are expected). */
 export function instancesRoot(): string {
   return join(import.meta.dirname, '..', '..', 'instances');
 }
@@ -69,9 +85,8 @@ export function resolveInstanceDir(nameOrPath: string): string {
 // Seeds the template must carry — init refuses to stamp from a broken
 // checkout rather than producing a hollow instance.
 const TEMPLATE_REQUIRED = [
-  '.gitignore',
   'README.md',
-  'data/references.txt',
+  'data/history/reference-history.log',
   'data/reference/news-topics.md',
   'data/reference/citation-restrictions.md',
   'data/reference/glossary.yml',
@@ -84,10 +99,11 @@ export interface InitResult {
 }
 
 /** Create a v2 instance at `dir` (already resolved — see
- * resolveInstanceDir): copy the template, git init + one initial commit
- * with the synthetic identity, and initDb the (ignored, uncommitted)
- * store. Refuses an existing non-empty directory. */
-export function initInstance(dir: string): InitResult {
+ * resolveInstanceDir): copy the template, write the instance.json
+ * stamp, and initDb the (disposable) store. No git anywhere (R9): an
+ * instance is a plain directory. Refuses an existing non-empty
+ * directory. `createdDate` is injectable so goldens/tests pin it. */
+export function initInstance(dir: string, createdDate?: string): InitResult {
   const log: string[] = [];
   if (existsSync(dir) && readdirSync(dir).length > 0)
     throw new Error(`init: ${dir} already exists and is not empty — `
@@ -101,15 +117,20 @@ export function initInstance(dir: string): InitResult {
   const created = !existsSync(dir);
   try {
     mkdirSync(dir, { recursive: true });
-    cpSync(template, dir, { recursive: true });
+    // The no-op filter forces node's JS cp path: the native fast path
+    // ABORTS the process (uncaught std::filesystem_error) on e.g. a
+    // read-only destination instead of throwing a catchable error —
+    // the rollback below must be reachable (same trick as import.ts).
+    cpSync(template, dir, { recursive: true, filter: () => true });
     log.push(`template copied from ${template}`);
-    execFileSync('git', ['init', '-q', dir]);
-    seedInstanceGitConfig(dir);
-    git(dir, 'add', '-A');
-    gitSynthetic(dir, 'commit', '--quiet', '-m', INIT_COMMIT_MESSAGE);
-    log.push(`committed: ${INIT_COMMIT_MESSAGE}`);
-    // Runtime state: store/ is ignored by the template .gitignore — the
-    // DB is born schema-initialized but never committed.
+    writeInstanceStamp(dir, {
+      nunc_fluens: 1,
+      created: createdDate ?? todayIso(),
+      imports: [],
+    });
+    log.push('instance.json stamped');
+    // Runtime state: store/ is disposable and never part of the data
+    // tree — the DB is born schema-initialized.
     const dbFile = worldDbFile(instanceStoreDir(dir));
     initDb(dbFile);
     log.push(`store db initialized at ${dbFile}`);
@@ -129,12 +150,10 @@ export function initInstance(dir: string): InitResult {
 export interface InstancePaths { root: string; storeDir: string }
 
 /** Resolve and validate a run target: an init/import-born v2 instance
- * (its own repo + data/sourcedata + a store DB). Bare names are
+ * (instance.json stamp + data/sourcedata + a store DB). Bare names are
  * CLI-level sugar and resolve under the engine's instances/ home, the
  * same as init/import (resolveInstanceDir). Running on the instance
- * you also view is normal product mode now — `import` never touches a
- * source checkout, so the old view-source refusal (a ~/news
- * protection) is gone with the clone machinery. */
+ * you also view is normal product mode. */
 export function requireInstance(dirArg: string | null): InstancePaths {
   const raw = dirArg ?? process.env.NS_INSTANCE ?? null;
   if (!raw)
@@ -147,18 +166,19 @@ export function requireInstance(dirArg: string | null): InstancePaths {
       `${dir} is a news-shaped checkout, not a v2 instance — create an instance `
       + 'with nunc-fluens init and bring data over with nunc-fluens import');
   const storeDir = instanceStoreDir(dir);
-  if (!existsSync(join(dir, '.git')) || !existsSync(join(dir, ...SOURCEDATA_REL.split('/'))))
+  if (readInstanceStamp(dir) === null
+    || !existsSync(join(dir, ...SOURCEDATA_REL.split('/'))))
     throw new Error(
-      `instance at ${dir} is missing .git or ${SOURCEDATA_REL}/ — `
+      `instance at ${dir} is missing instance.json or ${SOURCEDATA_REL}/ — `
       + 'create it with: nunc-fluens init <dir|name>');
   const dbFile = worldDbFile(storeDir);
   if (!existsSync(dbFile)) {
-    // store/ is disposable runtime state and gitignored: a fresh clone
-    // of a legitimate instance repo (or a git clean -xdf) lacks it.
-    // Recreate the schema instead of refusing — historical DB content
-    // replays back in per day via `run --replay`.
+    // store/ is disposable runtime state: a copied/restored instance
+    // (or a cleaned one) may lack it. Recreate the schema instead of
+    // refusing — historical DB content replays back in per day via
+    // `run --replay`.
     initDb(dbFile);
-    console.error('store db initialized (fresh clone?)');
+    console.error('store db initialized (copied instance?)');
   }
   return { root: dir, storeDir };
 }

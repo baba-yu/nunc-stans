@@ -15,8 +15,8 @@ import type { DormantRow } from '../src/weekly/dormant.ts';
 import { postWriteIntegrity } from '../src/render/post-write-integrity.ts';
 
 const stem = (d: string) => d.replaceAll('-', '');
-const SNAP_SUNDAY = join(INPUT, 'data', 'memory', 'dormant', `dormant-${stem(MANIFEST.sundayDay)}.md`);
-const SNAP_PREV = join(INPUT, 'data', 'memory', 'dormant', `dormant-${stem(MANIFEST.prevSunday)}.md`);
+const SNAP_SUNDAY = join(INPUT, 'data', 'history', 'dormant', `dormant-${stem(MANIFEST.sundayDay)}.md`);
+const SNAP_PREV = join(INPUT, 'data', 'history', 'dormant', `dormant-${stem(MANIFEST.prevSunday)}.md`);
 
 function row(over: Partial<DormantRow> & { id: string }): DormantRow {
   return {

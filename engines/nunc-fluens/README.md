@@ -2,19 +2,21 @@
 
 The news pipeline engine of the nunc-stans monorepo: a TypeScript DAG
 orchestrator (`nunc-fluens`) that researches, writes, translates (en +
-a configured subset of ja/es/fil), renders, gates, and publishes a
-daily news board — future predictions plus their day-by-day validation
-— into a git **data instance** it owns. Formerly the port of a
-personal news-research prototype; the two diverged permanently at
-Phase C (see [INTEGRATION.md](INTEGRATION.md) for the lineage note).
+a configured subset of ja/es/fil), renders, gates, and writes a daily
+news board — future predictions plus their day-by-day validation —
+into a **data instance** it owns: a plain local data directory (the
+product is fully local and git-less; versioning/backup is the user's
+own concern). Formerly the port of a personal news-research prototype;
+the two diverged permanently at Phase C (see
+[INTEGRATION.md](INTEGRATION.md) for the lineage note).
 
 ## Template and instances
 
 The engine is a TEMPLATE; your data lives in INSTANCES. The engine
 ships `pipeline/instance-template/` (directory skeleton, synthetic
-editorial seeds, instance `.gitignore`, README seed) and
-`nunc-fluens init` stamps instances from it — one git repo per
-profile. A bare name lands under the gitignored
+editorial seeds, README seed) and `nunc-fluens init` stamps instances
+from it — one plain data directory per profile, marked by an
+`instance.json` birth stamp. A bare name lands under the gitignored
 `engines/nunc-fluens/instances/<name>/`; multiple profiles are
 expected. Existing news-shaped data comes over once via
 `nunc-fluens import` (the only news-shaped contact surface).
@@ -39,18 +41,19 @@ just news-schedule <instance>      # install the daily systemd user timer
 ## Instance layout (v2)
 
 ```
-<instance>/                    one git repo per profile
-  README*.md                   the product face (en + published locales)
+<instance>/                    one plain data directory per profile
+  instance.json                birth stamp (created date + import record)
+  README*.md                   the product face (en + rendered locales)
   data/
     sourcedata/                per-day research inputs (+ locales/)
-    daily-news/                the publish quartet …
+    daily-news/                the daily quartet …
     future-prediction/
-    memory/
+    history/                   dormant pool, theme reviews, snapshots,
+                               and the citation ledger reference-history.log
     reference/                 editorial policy (topics, glossary, restrictions)
     exports/                   graphs + manifest + snapshots + prefix-tokens
-    archives/                  aged-out snapshots (gitignored)
-    references.txt
-  store/                       runtime state (gitignored, never committed):
+    archives/                  aged-out snapshots (disposable)
+  store/                       disposable runtime state:
     world/analytics.sqlite     the SQLite working cache
     runs/ai-runs.jsonl         the AI call log
     news-config.json           optional per-instance config override
@@ -58,6 +61,8 @@ just news-schedule <instance>      # install the daily systemd user timer
 
 The run side accepts only this shape (`init`/`import`-born); the view
 side (`tools/build-world.ts`) reads only an instance's `data/exports/`.
+The pipeline never creates or requires git inside an instance; if you
+choose to version one yourself, ignore `store/` and `data/archives/`.
 
 ## More
 

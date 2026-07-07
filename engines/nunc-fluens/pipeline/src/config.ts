@@ -44,7 +44,7 @@ export const worldDbFile = (dataDir: string) => join(worldDir(dataDir), 'analyti
 export const runLogFile = (dataDir: string) => join(dataDir, 'runs', 'ai-runs.jsonl')
 
 // Instance layout (post-C REDO V2, R2/R3): each data instance carries
-// its own gitignored store/ for runtime state. The store reuses the
+// its own disposable store/ for runtime state. The store reuses the
 // main-store shapes (world/analytics.sqlite, runs/ai-runs.jsonl), so
 // worldDbFile / runLogFile apply to both; news-config.json sits at the
 // store root as the optional per-instance override.

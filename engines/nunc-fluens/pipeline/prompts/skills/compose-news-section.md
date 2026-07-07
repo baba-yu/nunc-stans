@@ -6,7 +6,7 @@ LLM sub-agent that emits `data/sourcedata/<date>/news_section.json` from the day
 
 - The day's news topics from `data/reference/news-topics.md`.
 - The trusted-source list (`arxiv.org`, `simonwillison.net`, `news.ycombinator.com`, plus topic-specific sources).
-- The full `references.txt` URL list (sub-agent must SKIP URLs already cited).
+- The full citation-ledger URL list (`data/history/reference-history.log`; sub-agent must SKIP URLs already cited).
 - The schema for `news_section.json` from the canonical sourcedata schemas (`pipeline/src/schemas/sourcedata.ts`).
 - The forbidden-token list from `lint-markdown-clean` (`pipeline/src/render/lint-markdown-clean.ts`) — no scope prefix in any field; no lifecycle metadata per the anti-inertia rules below.
 - A target output path: `data/sourcedata/<date>/news_section.json`.

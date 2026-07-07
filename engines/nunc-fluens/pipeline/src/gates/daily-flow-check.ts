@@ -7,7 +7,7 @@ import Database from 'better-sqlite3';
 import { postUpdateValidation } from './post-update-validation.ts';
 import type { GateResult } from './post-update-validation.ts';
 import {
-  DAILY_NEWS_REL, exportsDir, EXPORTS_REL, FP_REL, MEMORY_REL,
+  DAILY_NEWS_REL, exportsDir, EXPORTS_REL, FP_REL, HISTORY_REL,
   NON_EN_LOCALES, readmeSuffixes,
 } from '../world-paths.ts';
 import { instanceStoreDir, worldDbFile } from '../config.ts';
@@ -62,13 +62,13 @@ function checkSundayArtifacts(repoRoot: string, date: string): string[] {
   if (!isSunday(date)) return [];
   const errs: string[] = [];
   const s = stem(date);
-  const dormant = join(repoRoot, MEMORY_REL, 'dormant', `dormant-${s}.md`);
+  const dormant = join(repoRoot, HISTORY_REL, 'dormant', `dormant-${s}.md`);
   if (!existsSync(dormant))
     errs.push(`missing Sunday artifact: ${rel(repoRoot, dormant)} (4_weekly_memory Step 5 did not run)`);
-  const review = join(repoRoot, MEMORY_REL, 'theme-review', `theme-review-${s}.md`);
+  const review = join(repoRoot, HISTORY_REL, 'theme-review', `theme-review-${s}.md`);
   if (!existsSync(review))
     errs.push(`missing Sunday artifact: ${rel(repoRoot, review)} (5_weekly_theme_review Step 5 did not run)`);
-  const preReview = join(repoRoot, MEMORY_REL, 'snapshots', `${s}-pre-review`);
+  const preReview = join(repoRoot, HISTORY_REL, 'snapshots', `${s}-pre-review`);
   if (!existsSync(preReview)) {
     errs.push(
       `missing Sunday artifact: ${rel(repoRoot, preReview)}/ `

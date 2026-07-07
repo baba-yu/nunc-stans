@@ -966,8 +966,8 @@ CREATE TABLE IF NOT EXISTS prediction_relations (
   --                       narrower entails the broader. Strictly
   --                       stronger than `prediction_chain`; if
   --                       entails(A, B) exists, do NOT also write
-  --                       chain(A, B) — see
-  --                       design/archive/skills/extract-chain-effects.md.
+  --                       chain(A, B) — per the extract-chain-effects
+  --                       contract (retired spec; git history).
   --   equivalent:         Same prediction in different words.
   --                       Merge candidate. Reserved for true
   --                       paraphrases — if A is the narrower /

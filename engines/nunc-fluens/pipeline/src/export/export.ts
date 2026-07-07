@@ -13,7 +13,7 @@ import { hashId, nowIso, pyRound, sha1Hex } from '../ingest/util.ts';
 import { WINDOWS, windowRange } from '../ingest/analytics.ts';
 import { parseWeekBucket } from '../ingest/timewindow.ts';
 import { boldHint, deriveShortLabel, prefixTokensPath } from './short-label.ts';
-import { MEMORY_REL, NON_EN_LOCALES } from '../world-paths.ts';
+import { HISTORY_REL, NON_EN_LOCALES } from '../world-paths.ts';
 
 const SCHEMA_VERSION = '1.0';
 const DEFAULT_LOCALE = 'en';
@@ -140,7 +140,7 @@ function earliestReportDate(db: Db): string | null {
 }
 
 function loadDormantSet(publishRoot: string): Set<string> {
-  const dir = join(publishRoot, MEMORY_REL, 'dormant');
+  const dir = join(publishRoot, HISTORY_REL, 'dormant');
   if (!existsSync(dir)) return new Set();
   const snapshots = readdirSync(dir).filter(f => /^dormant-.*\.md$/.test(f)).sort();
   if (snapshots.length === 0) return new Set();

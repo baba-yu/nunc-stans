@@ -17,8 +17,10 @@
 // R7 (post-C REDO): input/ is INSTANCE-SHAPED — the fixture instance is
 // born through the REAL `nunc-fluens init` routine (init is thereby
 // exercised on every regen) in a temp dir, the synthetic data is laid
-// on top, and the tree minus .git and store/ is copied here. The
-// editorial reference seeds come FROM pipeline/instance-template/.
+// on top, and the tree minus store/ is copied here (instances are
+// git-less, R9; the init date is pinned to the fixture Sunday so
+// instance.json stays byte-stable). The editorial reference seeds come
+// FROM pipeline/instance-template/.
 import {
   cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync,
 } from 'node:fs';
@@ -299,19 +301,20 @@ export function writeInputs(): void {
       throw new Error(`instance template missing data/reference/${f} — `
         + 'the goldens inherit the template seeds');
 
-  // Born through the REAL init routine, in a TEMP dir: the committed
-  // goldens tree must never contain a nested .git, and store/ is
-  // runtime state — both are filtered out of the final copy.
+  // Born through the REAL init routine, in a TEMP dir: store/ is
+  // runtime state and is filtered out of the final copy. The created
+  // date is pinned to the fixture Sunday (= the corpus todayIso) so
+  // instance.json is deterministic.
   const tmpRoot = mkdtempSync(join(tmpdir(), 'nf-goldens-init-'));
   const inst = join(tmpRoot, 'instance');
   try {
-    initInstance(inst);
+    initInstance(inst, SUNDAY);
 
-    // Pre-seed references.txt with EVERY citation URL the corpus uses
-    // (news_section 0/1/9, headlines 0-4, bridges 0/1) so the daily
-    // append-references step is a no-op on replay.
+    // Pre-seed the citation ledger with EVERY citation URL the corpus
+    // uses (news_section 0/1/9, headlines 0-4, bridges 0/1) so the
+    // daily append-references step is a no-op on replay.
     const citeIdx = [0, 1, 2, 3, 4, 9];
-    w(join(inst, 'data', 'references.txt'),
+    w(join(inst, 'data', 'history', 'reference-history.log'),
       DAYS.flatMap(d => citeIdx.map(i => `https://example.com/${stem(d)}/${i}`))
         .join('\n') + '\n');
 
@@ -369,7 +372,7 @@ export function writeInputs(): void {
       }
     });
 
-    // memory/: dormant lineage + theme review + maintenance (Sunday)
+    // history/: dormant lineage + theme review + maintenance (Sunday)
     const dormantHeader = (d: string, rows: string[]) => [
       `# Dormant pool — week ending ${d}`, '',
       'Mode: synthetic fixture rotation.', '',
@@ -378,11 +381,11 @@ export function writeInputs(): void {
       '|---|---|---|---|---|---|---|',
       ...rows, '',
     ].join('\n');
-    w(join(inst, 'data', 'memory', 'dormant', `dormant-${stem(PREV_SUNDAY)}.md`),
+    w(join(inst, 'data', 'history', 'dormant', `dormant-${stem(PREV_SUNDAY)}.md`),
       dormantHeader(PREV_SUNDAY, [
         `| 20251215-1 | Widgetly ships synthetic milestone 20251215-1 by Q3 2026 | widget, fixture, synthetic milestone | 2025-12-15 | 2 (12/20) | ${PREV_SUNDAY} | 8 |`,
       ]));
-    w(join(inst, 'data', 'memory', 'dormant', `dormant-${stem(SUNDAY)}.md`),
+    w(join(inst, 'data', 'history', 'dormant', `dormant-${stem(SUNDAY)}.md`),
       dormantHeader(SUNDAY, [
         `| 20251215-1 | Widgetly ships synthetic milestone 20251215-1 by Q3 2026 | widget, fixture, synthetic milestone | 2025-12-15 | 2 (12/20) | 2026-02-03 | 15 |`,
         // An in-corpus entry (2026-01-02 is a fixture day) so the export
@@ -392,7 +395,7 @@ export function writeInputs(): void {
         // (post-C T6 guard for the silently-empty-set failure mode).
         `| 20260102-1 | Acme Metrics ships synthetic milestone 20260102-1 by Q3 2026 | acme, fixture, metrics | 2026-01-02 | 1 (1/02) | 2026-01-18 | 2 |`,
       ]));
-    w(join(inst, 'data', 'memory', 'theme-review', `theme-review-${stem(SUNDAY)}.md`), [
+    w(join(inst, 'data', 'history', 'theme-review', `theme-review-${stem(SUNDAY)}.md`), [
       `# Theme review — week ending ${SUNDAY}`, '',
       'Mode: synthetic fixture rotation.', '',
       '## Empty / underused themes', '',
@@ -445,13 +448,13 @@ export function writeInputs(): void {
       }],
     });
 
-    // The committed corpus is the instance tree minus .git and store/.
+    // The frozen corpus is the instance tree minus store/ (runtime
+    // state; instances are git-less so there is nothing else to skip).
     cpSync(inst, INPUT, {
       recursive: true,
       filter: (src) => {
         const rel = relative(inst, src);
-        return rel !== '.git' && !rel.startsWith(`.git${sep}`)
-          && rel !== 'store' && !rel.startsWith(`store${sep}`);
+        return rel !== 'store' && !rel.startsWith(`store${sep}`);
       },
     });
   } finally {
@@ -509,7 +512,7 @@ export async function freeze(): Promise<void> {
   const buildRoot = mkdtemp2(join(tmpdir2(), 'nf-freeze-db-'));
   mkdirSync(join(buildRoot, 'data'), { recursive: true });
   symlink2(sdRoot, join(buildRoot, 'data', 'sourcedata'));
-  for (const part of ['daily-news', 'future-prediction', 'memory', 'reference'])
+  for (const part of ['daily-news', 'future-prediction', 'history', 'reference'])
     symlink2(join(INPUT, 'data', part), join(buildRoot, 'data', part));
   const dbFile = join(buildRoot, 'analytics.sqlite');
   initDb(dbFile);
@@ -555,12 +558,12 @@ export async function freeze(): Promise<void> {
   const snapStem = stem(SUNDAY);
   for (const f of ['graph-tech.json', 'graph-business.json', 'graph-mix.json', 'manifest.json']) {
     w(join(dd, 'snapshots', snapStem, f), readFileSync(join(outDir, f), 'utf8'));
-    w(join(INPUT, 'data', 'memory', 'snapshots', `${snapStem}-pre-review`, f),
+    w(join(INPUT, 'data', 'history', 'snapshots', `${snapStem}-pre-review`, f),
       readFileSync(join(outDir, f), 'utf8'));
   }
   wj(join(dd, 'snapshots', 'index.json'), { snapshots: [snapStem], default: 'live' });
   const { schemaPath } = await import('../src/db/db.ts');
-  w(join(INPUT, 'data', 'memory', 'snapshots', `${snapStem}-pre-review`, 'schema.sql'),
+  w(join(INPUT, 'data', 'history', 'snapshots', `${snapStem}-pre-review`, 'schema.sql'),
     readFileSync(schemaPath(), 'utf8'));
 
   // README 3-day windows (the briefing chain's inputs).
@@ -595,7 +598,7 @@ export async function freeze(): Promise<void> {
     try {
       mkdirSync(join(workRoot, 'data'), { recursive: true });
       symlinkSync(sdRoot, join(workRoot, 'data', 'sourcedata'));
-      for (const part of ['daily-news', 'future-prediction', 'memory', 'reference'])
+      for (const part of ['daily-news', 'future-prediction', 'history', 'reference'])
         symlinkSync(join(INPUT, 'data', part), join(workRoot, 'data', part));
       const flow = dailyFlowCheck({ repoRoot: workRoot, date: day, mode: 'report-missing' });
       flowExit = flow.exit;
@@ -622,7 +625,7 @@ export async function freeze(): Promise<void> {
     try {
       mkdirSync(join(workRoot, 'data'), { recursive: true });
       symlinkSync(sdRoot, join(workRoot, 'data', 'sourcedata'));
-      for (const part of ['daily-news', 'future-prediction', 'memory', 'reference'])
+      for (const part of ['daily-news', 'future-prediction', 'history', 'reference'])
         symlinkSync(join(INPUT, 'data', part), join(workRoot, 'data', part));
       const dbf = join(workRoot, 'analytics.sqlite');
       initDb(dbf);

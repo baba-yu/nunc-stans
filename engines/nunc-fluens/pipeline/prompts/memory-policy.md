@@ -31,7 +31,7 @@ The interval **only grows under quiet** and **resets to 1 day** the moment relev
 
 - A prediction's identity is its **`{news date}-{index}`** ID. The news file is immutable once written, so the ID is stable.
 - Hot/Warm/Lukewarm tier is **stateless** — recomputable from the last 7 `future-prediction-*.md` files alone. No persisted state needed.
-- Dormant tier **is** the persistent state — kept in `data/memory/dormant/dormant-YYYYMMDD.md` (latest snapshot wins). This is what makes weekly maintenance bounded; without it, every Sunday would have to rescan every news file ever written.
+- Dormant tier **is** the persistent state — kept in `data/history/dormant/dormant-YYYYMMDD.md` (latest snapshot wins). This is what makes weekly maintenance bounded; without it, every Sunday would have to rescan every news file ever written.
 
 ### 1.3 Daily generation rules (`2_future_prediction.md`)
 
@@ -116,7 +116,7 @@ Intent:
 - **Overpopulated themes** (≥ 6 predictions, multiple sub-topics) → suggest a split.
 - **Candidate themes** (entries in DB's `theme_candidates` table, populated by ingest with no-good-match predictions) → propose new theme after 3+ accumulate around a recognizable cluster.
 
-Output is markdown — `data/memory/theme-review/theme-review-YYYYMMDD.md` (intent: weekly artifacts live under the instance's own data tree). Never edits `schema.sql` directly.
+Output is markdown — `data/history/theme-review/theme-review-YYYYMMDD.md` (intent: weekly artifacts live under the instance's own data tree). Never edits `schema.sql` directly.
 
 #### Recommendation format (required for auto-apply)
 
@@ -172,16 +172,17 @@ Constraints the proposal author must respect:
 ### 2.2 Approval flow
 
 ```
-[data/memory/theme-review/theme-review-YYYYMMDD.md]
+[data/history/theme-review/theme-review-YYYYMMDD.md]
   ↓  human reviews & approves
 [themes-additions-YYYYMMDD.md]   ← optional staging file
-  ↓  human edits app/src/schema.sql
-[git commit + push]
-  ↓  next run of update_pages.bat
-[DB rebuild + dashboard updates]
+  ↓  apply-schema-edit applies the fenced action ops to the DB taxonomy
+     (manual by default; NF_SCHEMA_EDIT_MODE=auto opts the run in;
+     rollback target = the pre-review taxonomy.json snapshot)
+  ↓  next export refresh
+[DB taxonomy updated + dashboard updates]
 ```
 
-The app stays a passive consumer of `schema.sql`. Schema edits are PR-reviewable diffs.
+The proposal file stays the human-reviewable record; the edits land on DB rows.
 
 ### 2.3 Categories
 
@@ -195,11 +196,11 @@ Bounded inputs — the whole point of the dormant snapshot is that the weekly jo
 
 ```
 1. Memory rolling (4_weekly_memory.md)
-   - Read previous data/memory/dormant/dormant-{prev sunday}.md (1 file; if absent → bootstrap mode)
+   - Read previous data/history/dormant/dormant-{prev sunday}.md (1 file; if absent → bootstrap mode)
    - Read data/future-prediction/future-prediction-*.md for last 7 days (≤7 files)
    - Read ## Future sections of data/daily-news/news-*.md for last 7 days (≤7 files)
    - Compute tier transitions: dormant entries advanced or removed; lukewarm entries pushed to dormant
-   - Output: data/memory/dormant/dormant-YYYYMMDD.md
+   - Output: data/history/dormant/dormant-YYYYMMDD.md
 
 2. Theme review (deferred to 5_weekly_theme_review.md)
 
@@ -214,7 +215,7 @@ Maximum input on any Sunday = 1 dormant snapshot + 7 future-prediction files + 7
 
 ## 4. Acceptance criteria for "implemented"
 
-- `data/memory/dormant/.gitkeep` exists. ✅
+- `data/history/dormant/` exists (created on the first weekly run). ✅
 - The weekly memory flow (`4_weekly_memory`) has been run end-to-end at least once.
 - The daily flow (`2_future_prediction`) consumes the dormant snapshot and applies 2-layer longshot detection.
 - One full Sunday cycle has been run end-to-end and the resulting dormant snapshot has been reviewed by a human.
