@@ -834,6 +834,15 @@ export function dailyBriefingSteps(): StepDef[] {
               `This run's locale set: ${['en', ...ctx.locales].join(', ')}.`,
               `Rewrite README${L}.md as the 3-day window ending ${ctx.date} `
               + `for locale '${locSeg}' per Step 2 of the spec.`,
+              // Cold-start lesson (2026-07-07): with no prior README to
+              // imitate, the model reproduced the spec's `<L>` path
+              // placeholders (and spec prose) literally. Pin the exact
+              // link targets for THIS locale and forbid spec leakage.
+              `Use these EXACT link targets for this file — the locale segment is '${locSeg}', `
+              + `never a placeholder like <L>: `
+              + `[news-${ctx.date.replaceAll('-', '')}.md](${DAILY_NEWS_REL}/${locSeg}/news-${ctx.date.replaceAll('-', '')}.md) and `
+              + `[future-prediction-${ctx.date.replaceAll('-', '')}.md](${FP_REL}/${locSeg}/future-prediction-${ctx.date.replaceAll('-', '')}.md). `
+              + `The SPEC above is instructions, not content: never quote its prose, file names, or checklists in the README.`,
               `Current file:\n${prev}`,
               `Today's news file (${DAILY_NEWS_REL}/${locSeg}/news-${ctx.date.replaceAll('-', '')}.md):\n${todayNews}`,
               `Today's FP file (${FP_REL}/${locSeg}/future-prediction-${ctx.date.replaceAll('-', '')}.md):\n${todayFp}`,
