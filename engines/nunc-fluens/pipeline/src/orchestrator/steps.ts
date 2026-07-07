@@ -386,6 +386,8 @@ export function dailyUpdateSteps(): StepDef[] {
           return;
         }
         const summary = runValidateGlossary(ctx.db, { today: ctx.todayIso });
+        ctx.log(`  audit retention: pruned ${summary.prunedAudit} rows `
+          + `older than 30d (semantic pass/fail exempt)`);
         ctx.log(`  form+dedupe: ${summary.checked} checked, `
           + `${summary.retiredByFormOrDedupe.length} retired, `
           + `${summary.warned.length} warned`);

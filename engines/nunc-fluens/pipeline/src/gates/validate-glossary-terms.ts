@@ -162,8 +162,38 @@ export function commitValidation(db: Db, args: {
   }
 }
 
+/** 30-day retention for glossary_audit (post-C decision P7).
+ *
+ * Semantic pass/fail rows are deliberately EXEMPT: listPendingSemantic's
+ * anti-join exists to avoid re-judging terms with the LLM — pruning those
+ * rows would re-queue every term for the judge each month. Form/dedupe
+ * rows and semantic 'warn's are size hygiene and prune freely.
+ *
+ * Determinism: keyed on the caller's todayIso (goldens pin todayIso), so
+ * never CURRENT_TIMESTAMP / julianday('now') here. The `<` compare is
+ * lexicographic, which is correct for both checked_at forms in the table:
+ * pipeline writes are date-only 'YYYY-MM-DD', and any legacy
+ * DEFAULT-CURRENT_TIMESTAMP 'YYYY-MM-DD HH:MM:SS' rows order the same way
+ * ('YYYY-MM-DD HH:MM:SS' sorts after its own 'YYYY-MM-DD' prefix, so a
+ * boundary-day timestamp is kept just like a boundary-day date).
+ *
+ * Accepted downstream behavior shifts (recorded in P7):
+ * - theme-review's glossaryRepeatWarnings COUNT becomes a rolling ~30d
+ *   window instead of all-time (aligned with its "recent pain" intent);
+ * - maintenance's ttlStaleGlossary may fall back to first_seen_date once
+ *   a term's audit rows are all pruned. */
+export function pruneGlossaryAudit(db: Db, todayIso: string): number {
+  return db.prepare(
+    `DELETE FROM glossary_audit
+      WHERE checked_at < date(?, '-30 days')
+        AND NOT (check_type = 'semantic' AND verdict IN ('pass', 'fail'))`,
+  ).run(todayIso).changes;
+}
+
 export interface ValidateGlossarySummary {
   checked: number;
+  /** Audit rows removed by the 30d retention pass (pruneGlossaryAudit). */
+  prunedAudit: number;
   retiredByFormOrDedupe: string[];
   warned: string[];
   pendingSemantic: GlossaryRow[];
@@ -175,6 +205,10 @@ export interface ValidateGlossarySummary {
 export function runValidateGlossary(db: Db, args: {
   today: string; limit?: number;
 }): ValidateGlossarySummary {
+  // Retention runs first so today's own writes are never in scope. This
+  // rides the daily glossary-validate step, which is replay/dry-run
+  // skipped — the prune never executes against golden state.
+  const prunedAudit = pruneGlossaryAudit(db, args.today);
   const limit = args.limit ?? 200;
   const rows = db.prepare(
     `SELECT term, aliases_json, quick_def, why_it_matters, canonical_link
@@ -193,6 +227,7 @@ export function runValidateGlossary(db: Db, args: {
   }
   return {
     checked: rows.length,
+    prunedAudit,
     retiredByFormOrDedupe: retired,
     warned,
     pendingSemantic: listPendingSemantic(db, limit),

@@ -148,6 +148,10 @@ export function collectPainPoints(db: Db, newsRepo: string): PainPoints {
        FROM theme_candidates WHERE status = 'pending'
       ORDER BY created_at`,
   ).all() as PainPoints['pendingCandidates'];
+  // Post-C P7: glossary_audit warn rows older than 30d are pruned by
+  // pruneGlossaryAudit (daily glossary-validate step), so this count is
+  // effectively a rolling ~30d window, not all-time — accepted in P7 as
+  // aligned with the "recent pain" intent of this input.
   const glossaryRepeatWarnings = db.prepare(
     `SELECT a.term, COUNT(*) AS warns
        FROM glossary_audit a

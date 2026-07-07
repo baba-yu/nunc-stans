@@ -126,6 +126,10 @@ function activePredictions(db: Db, today: string, dormantSha: Set<string>): Set<
   return new Set(rows.map(r => r.prediction_id).filter(p => !dormantSha.has(p)));
 }
 
+// Post-C P7: glossary_audit rows older than 30d (except semantic
+// pass/fail) are pruned by pruneGlossaryAudit, so a term's MAX(checked_at)
+// can disappear and the first_seen_date fallback below re-engages —
+// ttl_expired_days may jump for such terms. Accepted in P7.
 function ttlStaleGlossary(db: Db, today: string): Array<[string, number]> {
   const rows = db.prepare(
     `SELECT g.term, g.first_seen_date,
