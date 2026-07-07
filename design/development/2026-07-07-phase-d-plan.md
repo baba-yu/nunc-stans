@@ -374,39 +374,38 @@ Session-size guide (v1 plan: 3–5 focused sessions):
 - Verify: tree carries only the owner's WIP (justfile, tools/down.sh) —
   untouched.
 
-### Task 1: Registration, story specs + manda de-risk spike (tool, design, agent) — depends: T0
-- [ ] Register area `agent`: `tools/commit-scope.ts` regex +
-      `CONTRIBUTING.md` line (`tool:` + `design:` commits, Phase B `gate`
-      precedent). Add `agents/*` to `pnpm-workspace.yaml`; add agent
-      typecheck/test steps to `.github/workflows/ci.yml`; extend
-      `tools/check.ts` FD-7.4 to cover `agents/`.
-- [ ] **Write `design/stories/S-5.md`, `S-6.md`, `S-11.md` as executable
-      specs now** — title `# S-N — Name (Phase D)`, `Setup:` with
-      scratch-store isolation (`NS_DATA`, scratch `MANDA_DATA_DIR`),
-      `Pass (mechanical):` command blocks (S-3/S-4 style), ending
-      `First executed: Phase D close (see design/verification/phase-d.md).`
-      Acceptance text verbatim from the v1 plan §4; S-5 pins the
-      **main-store** log (PD13); S-6 pins the scripted-mock-judge path +
-      one live confirmation; S-11 pins the local manda binary path (PD8)
-      and the refusal transcript. Commands may target not-yet-built
-      surfaces; the specs are refined only if a PD decision changes
-      (refinements are `design:` commits, recorded).
-- [ ] Scaffold `agents/nunc-stans-agent/` (package, tsconfig, vitest,
-      empty CLI) — the workspace/CI wiring is proven before real code.
-- [ ] **Spike** `src/memory.ts`: stdio MCP client against the local manda
-      binary (`MANDA_BIN`), scratch `MANDA_DATA_DIR`; drive the full lane:
-      `memory_append` → `memory_propose` → owner-style mandate line
-      appended to `mandates.jsonl` → `memory_commit` (elicitation
-      round-trip — risk 8 probe) → `memory_read` (≤3 surfaced) →
-      out-of-mandate: propose **succeeds** (the candidate lane carries no
-      authority, by manda design) and the follow-up `memory_commit` is
-      **refused**. Modeled on `manda/scripts/smoke.sh`.
-- [ ] Test harness: the **fake-manda stdio stub** for 3-OS CI (refusal/
-      lapse/decline fixtures) + the live-binary integration suite that
-      self-skips when no binary is present (CI-safe pre-tag).
-- Acceptance: the spike test passes locally against `~/manda` end-to-end,
-  including the refusal path and elicitation verdict (or the recorded
-  attest fallback per risk 8). This is S-11's hardest edge, proven first.
+### Task 1: Registration, story specs + manda de-risk spike (tool, design, agent) — DONE 2026-07-07
+- [x] Area `agent` registered: commit-scope regex, CONTRIBUTING line,
+      `agents/*` workspace glob, CI typecheck/test steps, FD-7.4 widened
+      to `agents/` (a6373e8 tool, dc4b5b7 design — the Phase B two-commit
+      precedent).
+- [x] S-5 / S-6 / S-11 written as executable specs (8a1047a). One
+      refinement vs this task's original text, recorded: the
+      `First executed:` line is ADDED at T10 when it becomes true
+      (matching how S-0/1/2/9/10 got theirs); the specs close with the
+      evidence pointer meanwhile. S-11 pins the commit-is-the-refusal-
+      point semantics.
+- [x] `agents/nunc-stans-agent/` scaffolded (package, strict tsconfig
+      incl. `verbatimModuleSyntax` + `erasableSyntaxOnly`, cli stubs:
+      working `doctor` + print-only `mandate-template`, `chat` pointing
+      at T9) — e56ccfe.
+- [x] **Spike PASSED against the live release binary** (e56ccfe,
+      `src/memory.ts` + `test/manda-live.test.ts`): full lane green —
+      append → propose → agent-origin commit refused ("no commit
+      authority") → user-origin commit without mandate refused → hand
+      grant → **elicitation round-trip works** (rmcp asked, the TS SDK
+      client answered, committed record carries
+      `"origin_verified":true` + the approval note) → read ≤3 →
+      out-of-mandate commit refused → **explicit decline denies**
+      (nothing committed). Risk 8 CLOSED on the elicit path — no attest
+      fallback needed. F3 guard rejects `self/commitment/*` before manda
+      is asked.
+- [x] fake-manda stdio stub + 3-OS-safe suite (10 tests: refusal, lapse,
+      ≤3 cap, F3) + live suite self-skips without a binary. 12/12 green;
+      node-strip trap found+fixed (TS parameter property — vitest's
+      esbuild masked it; `erasableSyntaxOnly` now catches it at
+      typecheck).
+- Acceptance MET: S-11's hardest edge proven first, on the real binary.
 
 ### Task 2: nunc-ai contract extensions (fe) — depends: T0
 - [ ] `chatStream` + thinking deltas (ollama, anthropic, mock; capability

@@ -61,6 +61,21 @@ Running record; completed as the exit items execute. Plan:
   baselines re-measured (above), probes logged (above). Owner WIP
   observed in the working tree and left untouched: modified `justfile`
   + untracked `tools/down.sh`.
+- **2026-07-07 — T1 done** (a6373e8, dc4b5b7, e56ccfe, 8a1047a).
+  `agent` area registered (commit-scope, CONTRIBUTING, workspace, CI,
+  FD-7.4 → agents/); S-5/S-6/S-11 written as executable specs;
+  `agents/nunc-stans-agent/` scaffolded (doctor + print-only
+  mandate-template working under raw node). **manda spike PASSED on the
+  live release binary (d0b61e2)** — full lane, and the risk-8
+  elicitation probe is CLOSED on the elicit path: rmcp elicited through
+  the TS `@modelcontextprotocol/sdk` client, the approval yielded
+  `"origin_verified":true` (probe log in `test/manda-live.test.ts`
+  output), an explicit decline denied with nothing committed. Suite
+  12/12 (fake-manda stub 3-OS-safe + self-skipping live suite).
+  **Bug found+fixed in-phase:** TS parameter property broke raw
+  `node` strip-only execution while vitest's esbuild masked it —
+  removed, and `erasableSyntaxOnly` added to the agent tsconfig so the
+  class of bug fails typecheck from now on.
 
 ## Stories (executed at T10; specs written at T1)
 
