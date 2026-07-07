@@ -1,11 +1,10 @@
 // Sunday chain (4_weekly_memory / 5_weekly_theme_review /
-// 6_weekly_maintenance). Replay verifies the committed artifacts; the
+// 6_weekly_maintenance). Replay verifies the existing artifacts; the
 // live paths compute the week's transitions for real. Deviations from
 // the conversational upstream are marked DEVIATION and recorded in the
 // phase plan.
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { execFileSync } from 'node:child_process';
 import {
   buildStepPrompt, llmArtifactStep, llmJson, llmMarkdown, loadMemoryPolicy,
   StepFailure,
@@ -29,7 +28,7 @@ import {
 } from '../schemas/sourcedata.ts';
 import type { MaintenanceJudgement } from '../schemas/sourcedata.ts';
 import { dateDir } from '../ingest/ingest-sourcedata.ts';
-import { MEMORY_DIR } from '../world-paths.ts';
+import { EXPORTS_REL, HISTORY_REL } from '../world-paths.ts';
 import { writeAtomic } from '../render/render-news-md.ts';
 import {
   addDays, computeTransitions, dormantDir, formatDormantSnapshot, hitsFor,
@@ -42,22 +41,8 @@ function stem(date: string): string {
   return date.replaceAll('-', '');
 }
 
-function gitInNewsRepo(ctx: RunCtx, ...args: string[]): string {
-  return execFileSync('git', ['-C', ctx.newsRepo, ...args], { encoding: 'utf8' });
-}
-
-/** Commit (no push — 5_weekly_theme_review's final push flushes the
- * Sunday commits, per the spec's Sunday ordering). */
-export function commitOnly(ctx: RunCtx, stepId: string, paths: string[], message: string): void {
-  gitInNewsRepo(ctx, 'add', ...paths);
-  try {
-    gitInNewsRepo(ctx, 'commit', '-m', message);
-  } catch (e) {
-    const msg = e instanceof Error ? e.message : String(e);
-    if (!msg.includes('nothing to commit')) throw new StepFailure(stepId, msg);
-    ctx.log('  nothing to commit (unchanged)');
-  }
-}
+// The Sunday commitOnly machinery is retired (R10): instances are
+// git-less — the steps write their artifacts and that IS the result.
 
 function requireReplayArtifact(ctx: RunCtx, id: string, path: string): void {
   if (existsSync(path)) return;
@@ -92,7 +77,7 @@ export function weeklyMemorySteps(): StepDef[] {
       run: async (ctx) => {
         const snapshot = join(dormantDir(ctx.newsRepo), `dormant-${stem(ctx.date)}.md`);
         if (existsSync(snapshot) || ctx.replay) {
-          // Replay / resume: the committed snapshot is the artifact.
+          // Replay / resume: the stored snapshot is the artifact.
           requireReplayArtifact(ctx, 'dormant-snapshot', snapshot);
           const r = postWriteIntegrity('dormant', [snapshot]);
           for (const l of r.lines) ctx.log(`  ${l}`);
@@ -159,14 +144,14 @@ export function weeklyMemorySteps(): StepDef[] {
               id: 'dormant-signals',
               prompt: [
                 'You are the extract-dormant-signals step of the nunc-fluens weekly',
-                'memory task (design/scheduled/4_weekly_memory.md step 4).',
+                'memory task (4_weekly_memory step 4).',
                 `Today's date: ${ctx.date}.`,
                 '',
                 'For each new dormant-pool entrant below, extract distinctive terms',
                 'from the prediction: proper nouns, product names, technical terms,',
                 'and plausible synonyms. 5-12 signals is typical. Aim wide rather',
                 'than narrow — these drive next cycles\' longshot-revival keyword',
-                'scan (design/memory-policy.md §1.5 layer 1). No commas inside a',
+                'scan (prompts/memory-policy.md §1.5 layer 1). No commas inside a',
                 'single signal (the snapshot table is comma-separated).',
                 '',
                 JSON.stringify(items, null, 2),
@@ -187,7 +172,7 @@ export function weeklyMemorySteps(): StepDef[] {
           `Mode: routine Sunday rotation (4_weekly_memory, nunc-fluens pipeline). `
           + `Previous snapshot dormant-${stem(prev.date)}.md (${prevRows.length} entries); `
           + `validation window ${winStart} → ${ctx.date}; aged-out origin slice `
-          + `${sliceStart} → ${sliceEnd}. Transitions per design/memory-policy.md §1.3 `
+          + `${sliceStart} → ${sliceEnd}. Transitions per prompts/memory-policy.md §1.3 `
           + `(max_rel ≥ 4 → exit; matched < 4 → re-anchor; due → advance 14→30→60; `
           + `aged-out with max_rel < 4 → force-dormant at 14d).`,
           '',
@@ -209,16 +194,13 @@ export function weeklyMemorySteps(): StepDef[] {
         for (const l of r.lines) ctx.log(`  ${l}`);
         if (r.exit !== 0)
           throw new StepFailure('dormant-snapshot', 'integrity failed on the fresh snapshot');
-        commitOnly(ctx, 'dormant-snapshot',
-          [join(MEMORY_DIR, 'dormant', `dormant-${stem(ctx.date)}.md`)],
-          `Memory rolling ${stem(ctx.date)}`);
       },
     },
   ];
 }
 
 function proposalPath(ctx: RunCtx): string {
-  return join(ctx.newsRepo, MEMORY_DIR, 'theme-review', `theme-review-${stem(ctx.date)}.md`);
+  return join(ctx.newsRepo, HISTORY_REL, 'theme-review', `theme-review-${stem(ctx.date)}.md`);
 }
 
 function validateProposal(text: string): void {
@@ -241,7 +223,7 @@ export function themeReviewSteps(): StepDef[] {
     {
       // Step 2 of the spec: rollback target + reader-facing time series.
       // Replay skips (the fixture corpus does not stage snapshot dirs;
-      // the committed day already embodies them).
+      // the stored day already embodies them).
       id: 'theme-snapshots', kind: 'det',
       run: (ctx) => {
         if (ctx.replay || ctx.dryRun) {
@@ -249,9 +231,7 @@ export function themeReviewSteps(): StepDef[] {
           return;
         }
         const paths = snapshotThreeTimeState(ctx.db, ctx.newsRepo, ctx.date);
-        ctx.log(`  wrote ${paths[0]} + docs/data/snapshots/${stem(ctx.date)} (retention 5)`);
-        commitOnly(ctx, 'theme-snapshots', paths,
-          `Snapshot pre-review state ${stem(ctx.date)}`);
+        ctx.log(`  wrote ${paths[0]} + ${EXPORTS_REL}/snapshots/${stem(ctx.date)} (retention 5)`);
       },
     },
     {
@@ -279,10 +259,10 @@ export function themeReviewSteps(): StepDef[] {
           id: 'theme-review-proposal',
           prompt: [
             'You are the compose-theme-proposal step of the nunc-fluens weekly',
-            'theme review (design/scheduled/5_weekly_theme_review.md steps 4-5).',
+            'theme review (5_weekly_theme_review steps 4-5).',
             `Today's date: ${ctx.date}.`,
             '',
-            'Write memory/theme-review/theme-review-' + stem(ctx.date) + '.md.',
+            'Write data/history/theme-review/theme-review-' + stem(ctx.date) + '.md.',
             'Required structure: H1 `# Theme review — week ending ' + ctx.date + '`,',
             'then H2 sections `## Empty / underused themes`,',
             '`## Overpopulated themes`, `## Theme candidates`, and',
@@ -294,7 +274,7 @@ export function themeReviewSteps(): StepDef[] {
             'promote-candidate, log-only. Do NOT propose rename/merge/split —',
             'flag such needs as log-only observations instead.',
             '',
-            '--- POLICY (design/memory-policy.md §2) ---',
+            '--- POLICY (prompts/memory-policy.md §2) ---',
             loadMemoryPolicy().split('## 2. Taxonomy maintenance')[1] ?? loadMemoryPolicy(),
             '--- END POLICY ---',
             '',
@@ -325,9 +305,6 @@ export function themeReviewSteps(): StepDef[] {
         const r = postWriteIntegrity('theme-review', [proposal]);
         for (const l of r.lines) ctx.log(`  ${l}`);
         if (r.exit !== 0) throw new StepFailure('theme-review-proposal', 'integrity failed');
-        commitOnly(ctx, 'theme-review-proposal',
-          [join(MEMORY_DIR, 'theme-review', `theme-review-${stem(ctx.date)}.md`)],
-          `Theme review ${stem(ctx.date)} (proposal)`);
       },
     },
     {
@@ -338,9 +315,9 @@ export function themeReviewSteps(): StepDef[] {
       id: 'apply-schema-edit', kind: 'det',
       run: (ctx) => {
         if (ctx.replay) {
-          // The committed corpus already reflects any applied edit —
+          // The stored corpus already reflects any applied edit —
           // the DB parity gate proves the taxonomy state matches.
-          ctx.log('  replay: schema state is the committed one — nothing to apply');
+          ctx.log('  replay: schema state is the stored one — nothing to apply');
           return;
         }
         const proposal = proposalPath(ctx);
@@ -403,7 +380,7 @@ function validateJudgeFragment(expectedPid: string) {
 }
 
 function maintenanceDir(ctx: RunCtx): string {
-  return join(ctx.newsRepo, MEMORY_DIR, 'maintenance');
+  return join(ctx.newsRepo, HISTORY_REL, 'maintenance');
 }
 
 export function weeklyMaintenanceSteps(): StepDef[] {
@@ -417,7 +394,7 @@ export function weeklyMaintenanceSteps(): StepDef[] {
           return;
         }
         if (ctx.replay) {
-          // Selection is skippable when the committed week produced no
+          // Selection is skippable when the stored week produced no
           // candidates file.
           ctx.log('  maintenance-candidates.json absent — no candidates this week');
           return;
@@ -544,9 +521,9 @@ export function weeklyMaintenanceSteps(): StepDef[] {
       id: 'maintenance-apply', kind: 'llm',
       run: async (ctx) => {
         if (ctx.replay) {
-          // Applied deltas live in the committed sourcedata; the day's
+          // Applied deltas live in the stored sourcedata; the day's
           // ingest already folded them in.
-          ctx.log('  replay: judgement deltas are the committed sourcedata');
+          ctx.log('  replay: judgement deltas are the stored sourcedata');
           return;
         }
         const dir = dateDir(ctx.sourcedataRoot, ctx.date);
@@ -567,9 +544,6 @@ export function weeklyMaintenanceSteps(): StepDef[] {
         if (errs.length)
           throw new StepFailure('maintenance-apply',
             `Step 3 validate failed: ${errs.join('; ')}`);
-        commitOnly(ctx, 'maintenance-apply',
-          [join(MEMORY_DIR, 'maintenance')],
-          `Weekly maintenance ${stem(ctx.date)}`);
       },
     },
   ];

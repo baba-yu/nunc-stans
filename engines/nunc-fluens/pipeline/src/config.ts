@@ -1,11 +1,12 @@
-// Pipeline configuration: the data store (workspace model) and the news
-// data+publish checkout (`newsRepo`, replacing the retired NEWS_WORLD
-// env). Resolution logic is shared with the repo tooling via
+// Pipeline configuration: the data store (workspace model) and the
+// designated view source (`newsRepo` — a data instance checkout).
+// Resolution logic is shared with the repo tooling via
 // tools/lib/data-dir.ts.
 import { join } from 'node:path'
 import {
   configFile, resolveDataDir, resolveNewsRepo, writeConfigKey,
 } from '../../../../tools/lib/data-dir.ts'
+import { SOURCEDATA_REL } from './world-paths.ts'
 
 export { configFile, resolveDataDir, resolveNewsRepo }
 
@@ -42,6 +43,10 @@ export const worldDir = (dataDir: string) => join(dataDir, 'world')
 export const worldDbFile = (dataDir: string) => join(worldDir(dataDir), 'analytics.sqlite')
 export const runLogFile = (dataDir: string) => join(dataDir, 'runs', 'ai-runs.jsonl')
 
-// News-checkout layout (upstream repo shape).
-export const newsDbFile = (newsRepo: string) => join(newsRepo, 'app', 'data', 'analytics.sqlite')
-export const sourcedataDir = (newsRepo: string) => join(newsRepo, 'app', 'sourcedata')
+// Instance layout (post-C REDO V2, R2/R3): each data instance carries
+// its own disposable store/ for runtime state. The store reuses the
+// main-store shapes (world/analytics.sqlite, runs/ai-runs.jsonl), so
+// worldDbFile / runLogFile apply to both; news-config.json sits at the
+// store root as the optional per-instance override.
+export const instanceStoreDir = (instanceRoot: string) => join(instanceRoot, 'store')
+export const sourcedataDir = (instanceRoot: string) => join(instanceRoot, SOURCEDATA_REL)

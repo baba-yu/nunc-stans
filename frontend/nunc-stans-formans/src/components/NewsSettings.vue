@@ -10,10 +10,14 @@ interface NewsConfig {
   search?: 'native' | 'external'
   searchEngine?: string
   synthModel?: string
+  locales?: string[]
 }
 
 const RUNTIMES = ['claude-code', 'anthropic-api', 'ollama']
 const ENGINES = ['brave', 'searxng', 'tavily', 'perplexity']
+// The supported non-EN universe (post-C P5): the pipeline's DB schema
+// is column-per-locale, so this list is fixed. EN always renders.
+const LOCALES = ['ja', 'es', 'fil']
 
 const open = ref(false)
 const loading = ref(true)
@@ -23,6 +27,7 @@ const cfg = reactive<Required<NewsConfig>>({
   search: 'native',
   searchEngine: 'brave',
   synthModel: '',
+  locales: [...LOCALES],
 })
 
 const summary = computed(() =>
@@ -43,6 +48,9 @@ async function load() {
     cfg.search = got.search ?? 'native'
     cfg.searchEngine = got.searchEngine ?? 'brave'
     cfg.synthModel = got.synthModel ?? ''
+    // Absent key = the default full set (all three checked); an empty
+    // array is a deliberate EN-only choice and stays empty.
+    cfg.locales = got.locales ?? [...LOCALES]
   } catch (e) {
     status.value = { ok: false, message: `settings unavailable: ${e}` }
   } finally {
@@ -55,6 +63,10 @@ async function save() {
   const body: NewsConfig = {
     runtime: cfg.runtime,
     search: cfg.search,
+    // Always sent explicitly — an empty array means EN-only; omitting
+    // the key would mean "the default trio" to the pipeline. Universe
+    // order regardless of click order.
+    locales: LOCALES.filter(l => cfg.locales.includes(l)),
   }
   if (cfg.search === 'external') body.searchEngine = cfg.searchEngine
   if (cfg.synthModel.trim()) body.synthModel = cfg.synthModel.trim()
@@ -105,6 +117,15 @@ onMounted(load)
         model (optional)
         <input v-model="cfg.synthModel" placeholder="e.g. qwen3.6:27b" />
       </label>
+      <div class="locales">
+        <span>locales (besides EN)</span>
+        <span class="boxes">
+          <label v-for="l in LOCALES" :key="l">
+            <input type="checkbox" :value="l" v-model="cfg.locales" />
+            {{ l }}
+          </label>
+        </span>
+      </div>
       <div>
         <button type="submit">Save</button>
       </div>
@@ -126,6 +147,21 @@ onMounted(load)
   flex-direction: column;
   gap: 0.2rem;
   font-size: 0.85rem;
+}
+.locales {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-size: 0.85rem;
+}
+.locales .boxes {
+  display: flex;
+  gap: 0.6rem;
+}
+.locales .boxes label {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.25rem;
 }
 .toggle {
   margin-left: 0.6rem;

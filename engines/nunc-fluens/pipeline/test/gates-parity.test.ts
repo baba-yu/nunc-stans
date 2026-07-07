@@ -24,7 +24,7 @@ describe('check-topic-coverage parity', () => {
   for (const d of days) {
     it.skipIf(skipReason)(`matches the golden topic gate for ${d}`, () => {
       const gates = JSON.parse(readFileSync(join(EXPECTED, 'gates', `${d}.json`), 'utf8'));
-      const r = checkTopicCoverage({ sourcedataDir: join(INPUT, 'sourcedata'), date: d });
+      const r = checkTopicCoverage({ sourcedataDir: join(INPUT, 'data', 'sourcedata'), date: d });
       expect(r.exit).toBe(gates.topic);
       const golden = readFileSync(join(EXPECTED, 'gates', `${d}.topic.txt`), 'utf8');
       expect(normalizeVolatile(r.lines.join('\n') + '\n'))
@@ -36,14 +36,14 @@ describe('check-topic-coverage parity', () => {
 describe('daily-flow-check parity', () => {
   for (const d of days) {
     it.skipIf(skipReason)(`matches the golden flow report for ${d}`, () => {
-      // Recreate the capture-time work state: report/FP/memory staged,
-      // no DB, no READMEs, no docs assets.
+      // Recreate the capture-time work state (v2 instance shape):
+      // sourcedata + the quartet staged, no store DB, no READMEs.
       const workRoot = mkdtempSync(join(tmpdir(), 'nf-flow-'));
       try {
-        mkdirSync(join(workRoot, 'app'), { recursive: true });
-        symlinkSync(join(INPUT, 'sourcedata'), join(workRoot, 'app', 'sourcedata'));
-        for (const part of ['report', 'future-prediction', 'memory', 'reference'])
-          symlinkSync(join(INPUT, part), join(workRoot, part));
+        mkdirSync(join(workRoot, 'data'), { recursive: true });
+        symlinkSync(join(INPUT, 'data', 'sourcedata'), join(workRoot, 'data', 'sourcedata'));
+        for (const part of ['daily-news', 'future-prediction', 'history', 'reference'])
+          symlinkSync(join(INPUT, 'data', part), join(workRoot, 'data', part));
         const gates = JSON.parse(readFileSync(join(EXPECTED, 'gates', `${d}.json`), 'utf8'));
         const r = dailyFlowCheck({ repoRoot: workRoot, date: d, mode: 'report-missing' });
         expect(r.exit).toBe(gates.flow);
@@ -61,7 +61,7 @@ describe('post-update-validation parity on the built DB', () => {
   it.skipIf(skipReason)('reproduces the golden puv exits for the Sunday', { timeout: 180_000 }, () => {
     const { db, workRoot } = buildGoldenDb();
     try {
-      const outDir = join(workRoot, 'docs', 'data');
+      const outDir = join(workRoot, 'data', 'exports');
       runExport(db, { outputDir: outDir, publishRoot: workRoot });
       db.close();
       const goldenPuv = JSON.parse(
@@ -70,7 +70,7 @@ describe('post-update-validation parity on the built DB', () => {
       const common = {
         date: sun,
         db: join(workRoot, 'analytics.sqlite'),
-        docsDataDir: outDir,
+        exportsDir: outDir,
         repoRoot: workRoot,
       };
       expect(postUpdateValidation({ ...common, check: 'news' }).exit)
@@ -86,7 +86,7 @@ describe('post-update-validation parity on the built DB', () => {
 });
 
 describe('citation-restriction-check', () => {
-  const policyFile = join(INPUT, 'reference', 'citation-restrictions.md');
+  const policyFile = join(INPUT, 'data', 'reference', 'citation-restrictions.md');
 
   it('parses the real policy and classifies hosts', () => {
     const policy = parsePolicy(policyFile);
@@ -103,7 +103,7 @@ describe('citation-restriction-check', () => {
 
   it('passes the committed EN news drafts (no-op on clean data)', () => {
     for (const d of days) {
-      const draft = join(INPUT, 'report', 'en', `news-${d.replaceAll('-', '')}.md`);
+      const draft = join(INPUT, 'data', 'daily-news', 'en', `news-${d.replaceAll('-', '')}.md`);
       const r = citationCheck({ draft, policyFile, todayIso: TODAY });
       expect(r.exit, `${d}: ${r.lines.join('\n')}`).toBe(0);
     }

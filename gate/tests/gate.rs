@@ -157,10 +157,11 @@ async fn news_config_roundtrip_and_validation() {
     let client = reqwest::Client::new();
     let url = format!("{gate}/api/world/news-config");
 
-    // Unconfigured store file -> defaults.
+    // Unconfigured store file -> defaults (incl. the full locale trio).
     let got: serde_json::Value = client.get(&url).send().await.unwrap().json().await.unwrap();
     assert_eq!(got["runtime"], "claude-code");
     assert_eq!(got["search"], "native");
+    assert_eq!(got["locales"], json!(["ja", "es", "fil"]));
 
     // PUT external pair -> stored atomically, GET round-trips.
     let put = client
@@ -181,6 +182,45 @@ async fn news_config_roundtrip_and_validation() {
     let bad = client.put(&url).json(&json!({"search": "external"})).send().await.unwrap();
     assert_eq!(bad.status(), 422);
     let unknown = client.put(&url).json(&json!({"serch": "native"})).send().await.unwrap();
+    assert_eq!(unknown.status(), 400);
+}
+
+#[tokio::test]
+async fn news_config_locales_subset_and_validation() {
+    let (formans_dist, fourfive_dist) = make_dists();
+    // Own store dir — the roundtrip test above shares the same base and
+    // writes its own news-config.json concurrently.
+    let data_dir = formans_dist.parent().unwrap().join("data-store-locales");
+    let cfg = GateCfg::new(
+        "http://127.0.0.1:1".into(),
+        "http://127.0.0.1:1".into(),
+        formans_dist.clone(),
+    )
+    .with_data_dir(Some(data_dir.clone()));
+    let gate = spawn(build_router(cfg, &fourfive_dist)).await;
+    let client = reqwest::Client::new();
+    let url = format!("{gate}/api/world/news-config");
+
+    // PUT a subset -> stored, GET round-trips it.
+    let put = client.put(&url).json(&json!({"locales": ["ja"]})).send().await.unwrap();
+    assert_eq!(put.status(), 200);
+    let got: serde_json::Value = client.get(&url).send().await.unwrap().json().await.unwrap();
+    assert_eq!(got["locales"], json!(["ja"]));
+
+    // The empty set is a legitimate EN-only configuration.
+    let put = client.put(&url).json(&json!({"locales": []})).send().await.unwrap();
+    assert_eq!(put.status(), 200);
+    let got: serde_json::Value = client.get(&url).send().await.unwrap().json().await.unwrap();
+    assert_eq!(got["locales"], json!([]));
+
+    // Outside the {ja, es, fil} universe -> 422 (value validation).
+    let bad = client.put(&url).json(&json!({"locales": ["de"]})).send().await.unwrap();
+    assert_eq!(bad.status(), 422);
+    // Duplicate entry -> 422.
+    let dup = client.put(&url).json(&json!({"locales": ["ja", "ja"]})).send().await.unwrap();
+    assert_eq!(dup.status(), 422);
+    // Unknown top-level key stays a body-shape 400 (deny_unknown_fields).
+    let unknown = client.put(&url).json(&json!({"locale": ["ja"]})).send().await.unwrap();
     assert_eq!(unknown.status(), 400);
 }
 

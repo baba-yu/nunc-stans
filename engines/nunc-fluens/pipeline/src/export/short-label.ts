@@ -1,31 +1,22 @@
 // Ports of the news_parser helpers the export layer uses: BOLD_RE
 // bold-hint extraction, scope-prefix stripping, and the clause-split
 // short-label derivation.
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
 export const BOLD_RE = /\*\*([^*]+)\*\*/;
 
-const PREFIX_TOKENS = [
-  // English
-  'tech', 'non-tech', 'non tech', 'nontech',
-  'non-technical', 'non technical', 'nontechnical',
-  'technical', 'technology',
-  'business', 'biz', 'mix',
-  // Japanese
-  '技術', '非技術', '非-技術', '非 技術',
-  'テクノロジー', '非テクノロジー',
-  'ビジネス', '非ビジネス', 'ビジ', 'ミックス',
-  // Spanish
-  'tecnología', 'tecnologia',
-  'no-tecnología', 'no-tecnologia',
-  'no tecnología', 'no tecnologia',
-  'tec', 'no-tec', 'no tec',
-  'técnico', 'tecnico',
-  'no-técnico', 'no-tecnico', 'no técnico', 'no tecnico',
-  'negocio', 'no-negocio',
-  // Filipino
-  'teknikal', 'hindi-teknikal', 'hindi teknikal',
-  'negosyo', 'halo', 'halong',
-];
+/** Single source of the scope-prefix strip list (P8). The dashboard's
+ * cleanPredictionTitle builds its regexes from the copy runExport
+ * drops into the export dir, so both surfaces strip the same tokens.
+ * Loaded via readFileSync + JSON.parse (the db.ts/schema.sql pattern)
+ * rather than a JSON import attribute, which node/vitest/esbuild do
+ * not all agree on yet. */
+export function prefixTokensPath(): string {
+  return join(import.meta.dirname, 'prefix-tokens.json');
+}
+
+const PREFIX_TOKENS: string[] = JSON.parse(readFileSync(prefixTokensPath(), 'utf8'));
 
 function escapeRe(s: string): string {
   return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');

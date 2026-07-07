@@ -33,14 +33,18 @@ function readJson(path: string): unknown {
   return JSON.parse(readFileSync(path, 'utf8'));
 }
 
-/** Options threaded through one day's ingest. `repoRootForRel` mirrors
- * the oracle's repo_root-relative source_files.path (the golden DB was
- * built with paths like `app/sourcedata/<d>/x.json`); `todayIso` feeds
- * commit_need's date stamps. */
+/** Options threaded through one day's ingest. `repoRootForRel` anchors
+ * the repo-relative source_files.path (v2 rel paths look like
+ * `data/sourcedata/<d>/x.json`; rows imported from a news-era DB keep
+ * their original provenance strings — see src/import.ts); `todayIso`
+ * feeds commit_need's date stamps. */
 export interface IngestContext {
   sourcedataRoot: string;
   repoRootForRel: string;
   todayIso: string;
+  /** The effective non-EN set for the locale fan-in (ingestDayLocales).
+   * Absent = the full universe (ja/es/fil). */
+  locales?: readonly string[];
 }
 
 function registerSourceFile(db: Db, ctx: IngestContext, args: {
@@ -97,7 +101,7 @@ function ingestPredictionsFile(db: Db, ctx: IngestContext, args: {
       if (theme !== undefined) {
         upsertAssignment(db, {
           predictionId, scopeId, categoryId: theme.category_id,
-          themeId: theme.theme_id, subthemeId: null, method: 'anchor', score: 1.0,
+          themeId: theme.theme_id, method: 'anchor', score: 1.0,
         });
       } else {
         upsertCandidate(db, {
@@ -335,7 +339,7 @@ export function ingestDayLocales(
   db: Db, ctx: IngestContext, dateIso: string, pidByJsonId: Map<string, string>,
 ): Record<string, Record<string, number>> {
   const summary: Record<string, Record<string, number>> = {};
-  for (const loc of LOCALES) {
+  for (const loc of ctx.locales ?? LOCALES) {
     const locSummary = { predictions: 0, needs: 0, bridges: 0 };
     summary[loc] = locSummary;
     const base = localeDateDir(ctx.sourcedataRoot, dateIso, loc);

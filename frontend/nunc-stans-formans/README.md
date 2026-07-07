@@ -16,8 +16,10 @@ just web              # Vite dev server on :5173
 ```
 
 `just build-world` refreshes `public/world-headlines.json` from the linked
-news checkout (`just news-link <dir>`, strictly read-only; none linked
-gives an empty world view).
+nunc-fluens data instance (`just news-init <name>` creates one,
+`just news-import <src> <instance>` seeds it from a news-shaped checkout,
+`just news-link <instance>` designates it; strictly read-only,
+`data/exports/` only; none linked gives an empty world view).
 
 ## Test / build
 

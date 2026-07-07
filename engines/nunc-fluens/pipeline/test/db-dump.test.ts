@@ -29,7 +29,10 @@ describe('CPython-compatible dump format', () => {
     }
   });
 
-  it('initDb produces the same schema objects as the golden', () => {
+  // initDb executes the full schema seed; under full-suite parallel load it
+  // has been seen to exceed vitest's 5s default (5117ms flake at post-C
+  // baseline), so give it the same generous budget as the db-parity test.
+  it('initDb produces the same schema objects as the golden', { timeout: 30_000 }, () => {
     const golden = readFileSync(GOLDEN, 'utf8');
     const dir = mkdtempSync(join(tmpdir(), 'nf-db-'));
     try {

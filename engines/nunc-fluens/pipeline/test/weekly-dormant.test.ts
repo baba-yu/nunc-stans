@@ -15,8 +15,8 @@ import type { DormantRow } from '../src/weekly/dormant.ts';
 import { postWriteIntegrity } from '../src/render/post-write-integrity.ts';
 
 const stem = (d: string) => d.replaceAll('-', '');
-const SNAP_SUNDAY = join(INPUT, 'memory', 'dormant', `dormant-${stem(MANIFEST.sundayDay)}.md`);
-const SNAP_PREV = join(INPUT, 'memory', 'dormant', `dormant-${stem(MANIFEST.prevSunday)}.md`);
+const SNAP_SUNDAY = join(INPUT, 'data', 'history', 'dormant', `dormant-${stem(MANIFEST.sundayDay)}.md`);
+const SNAP_PREV = join(INPUT, 'data', 'history', 'dormant', `dormant-${stem(MANIFEST.prevSunday)}.md`);
 
 function row(over: Partial<DormantRow> & { id: string }): DormantRow {
   return {
@@ -29,7 +29,7 @@ function row(over: Partial<DormantRow> & { id: string }): DormantRow {
 describe('snapshot parse / format', () => {
   it('parses the synthetic dormant snapshot', () => {
     const rows = parseDormantSnapshot(readFileSync(SNAP_SUNDAY, 'utf8'));
-    expect(rows.length).toBe(1);
+    expect(rows.length).toBe(2); // 20251215-1 + the in-corpus 20260102-1
     const r = rows.find(x => x.id === '20251215-1')!;
     expect(r.firstSeen).toBe('2025-12-15');
     expect(r.lastRelevance).toBe('2 (12/20)');

@@ -11,28 +11,30 @@ import {
 import { join } from 'node:path';
 import type { Db } from '../ingest/ingest-core.ts';
 import { schemaPath } from '../db/db.ts';
-import { docsDataDir, MEMORY_DIR } from '../world-paths.ts';
+import {
+  ARCHIVE_SNAPSHOTS_REL, exportsDir, EXPORTS_REL, HISTORY_REL,
+} from '../world-paths.ts';
 import { dumpTaxonomy } from './apply-schema-edit.ts';
 
 const GRAPHS = ['graph-tech.json', 'graph-business.json', 'graph-mix.json'];
 const SNAP_RETENTION = 5;
 
 export function preReviewDir(newsRepo: string, stem: string): string {
-  return join(newsRepo, MEMORY_DIR, 'snapshots', `${stem}-pre-review`);
+  return join(newsRepo, HISTORY_REL, 'snapshots', `${stem}-pre-review`);
 }
 
-/** Step 2: write memory/snapshots/<stem>-pre-review/ (rollback target:
- * graphs + manifest + seed schema.sql + taxonomy.json) and
- * docs/data/snapshots/<stem>/ (reader-facing: graphs + manifest).
+/** Step 2: write data/history/snapshots/<stem>-pre-review/ (rollback
+ * target: graphs + manifest + seed schema.sql + taxonomy.json) and
+ * data/exports/snapshots/<stem>/ (reader-facing: graphs + manifest).
  * Retention mirrors upstream archive_snapshots.py: keep the 5 most
- * recent under docs/data/snapshots (the Pages artifact tars ./docs and
- * ~70MB per week broke the deploy past ~100MB); older ones MOVE to the
- * gitignored docs/archives/snapshots/, never deleted. index.json is
- * regenerated with its `default` field preserved.
- * Returns the repo-relative paths to commit. */
+ * recent under data/exports/snapshots (a deployed dashboard artifact at
+ * ~70MB per week broke past ~100MB); older ones MOVE to
+ * data/archives/snapshots/, never deleted. index.json is regenerated
+ * with its `default` field preserved.
+ * Returns the instance-relative paths written. */
 export function snapshotThreeTimeState(db: Db, newsRepo: string, date: string): string[] {
   const stem = date.replaceAll('-', '');
-  const dataDir = docsDataDir(newsRepo);
+  const dataDir = exportsDir(newsRepo);
   const pre = preReviewDir(newsRepo, stem);
   const reader = join(dataDir, 'snapshots', stem);
   mkdirSync(pre, { recursive: true });
@@ -53,7 +55,7 @@ export function snapshotThreeTimeState(db: Db, newsRepo: string, date: string): 
     .filter(f => /^\d{8}$/.test(f))
     .sort();
   const keep = stems.slice(-SNAP_RETENTION);
-  const archiveRoot = join(newsRepo, 'docs', 'archives', 'snapshots');
+  const archiveRoot = join(newsRepo, ARCHIVE_SNAPSHOTS_REL);
   for (const s of stems) {
     if (keep.includes(s)) continue;
     mkdirSync(archiveRoot, { recursive: true });
@@ -70,8 +72,8 @@ export function snapshotThreeTimeState(db: Db, newsRepo: string, date: string): 
     JSON.stringify({ snapshots: keep, default: indexDefault }, null, 2) + '\n', 'utf8');
 
   return [
-    join(MEMORY_DIR, 'snapshots', `${stem}-pre-review`),
-    'docs/data/snapshots',
+    `${HISTORY_REL}/snapshots/${stem}-pre-review`,
+    `${EXPORTS_REL}/snapshots`,
   ];
 }
 
@@ -137,7 +139,7 @@ export interface PainPoints {
 }
 
 export function collectPainPoints(db: Db, newsRepo: string): PainPoints {
-  const dataDir = docsDataDir(newsRepo);
+  const dataDir = exportsDir(newsRepo);
   const scopes = GRAPHS
     .map(f => join(dataDir, f))
     .filter(p => existsSync(p))
@@ -148,6 +150,10 @@ export function collectPainPoints(db: Db, newsRepo: string): PainPoints {
        FROM theme_candidates WHERE status = 'pending'
       ORDER BY created_at`,
   ).all() as PainPoints['pendingCandidates'];
+  // Post-C P7: glossary_audit warn rows older than 30d are pruned by
+  // pruneGlossaryAudit (daily glossary-validate step), so this count is
+  // effectively a rolling ~30d window, not all-time — accepted in P7 as
+  // aligned with the "recent pain" intent of this input.
   const glossaryRepeatWarnings = db.prepare(
     `SELECT a.term, COUNT(*) AS warns
        FROM glossary_audit a

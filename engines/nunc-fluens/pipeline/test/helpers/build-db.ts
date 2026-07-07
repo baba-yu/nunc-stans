@@ -50,7 +50,8 @@ export function daysBetween(startIso: string, endIso: string): string[] {
 
 export interface BuiltDb {
   db: Database.Database;
-  /** Oracle-work-root-shaped temp dir (app/sourcedata + report + memory symlinks). */
+  /** Work-root-shaped temp dir (v2 instance shape: data/sourcedata +
+   * the data/* quartet, all symlinked into the golden input). */
   workRoot: string;
 }
 
@@ -59,12 +60,12 @@ export interface BuiltDb {
  * removes workRoot. */
 export function buildGoldenDb(): BuiltDb {
   const workRoot = mkdtempSync(join(tmpdir(), 'nf-build-'));
-  mkdirSync(join(workRoot, 'app'), { recursive: true });
-  symlinkSync(join(INPUT, 'sourcedata'), join(workRoot, 'app', 'sourcedata'));
-  for (const part of ['report', 'future-prediction', 'memory', 'reference'])
-    symlinkSync(join(INPUT, part), join(workRoot, part));
+  mkdirSync(join(workRoot, 'data'), { recursive: true });
+  symlinkSync(join(INPUT, 'data', 'sourcedata'), join(workRoot, 'data', 'sourcedata'));
+  for (const part of ['daily-news', 'future-prediction', 'history', 'reference'])
+    symlinkSync(join(INPUT, 'data', part), join(workRoot, 'data', part));
   const ctx = {
-    sourcedataRoot: join(workRoot, 'app', 'sourcedata'),
+    sourcedataRoot: join(workRoot, 'data', 'sourcedata'),
     repoRootForRel: workRoot,
     todayIso: TODAY,
   };
@@ -73,8 +74,8 @@ export function buildGoldenDb(): BuiltDb {
   const db = connect(dbFile);
   for (const d of daysBetween(MANIFEST.dbRange.start, MANIFEST.dbRange.end)) {
     runGlossaryExtract(db, {
-      newsFile: join(workRoot, 'report', 'en', `news-${d.replaceAll('-', '')}.md`),
-      seedYaml: join(workRoot, 'reference', 'glossary.yml'),
+      newsFile: join(workRoot, 'data', 'daily-news', 'en', `news-${d.replaceAll('-', '')}.md`),
+      seedYaml: join(workRoot, 'data', 'reference', 'glossary.yml'),
       todayIso: TODAY,
     });
     const { pidByJsonId } = ingestDay(db, ctx, d);

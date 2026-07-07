@@ -18,6 +18,7 @@ import {
 } from '../schemas/sourcedata.ts';
 import type { MaintenanceJudgement } from '../schemas/sourcedata.ts';
 import { writeAtomic } from '../render/render-news-md.ts';
+import { HISTORY_REL } from '../world-paths.ts';
 import { addDays, originIsoOf, originPredictions } from './dormant.ts';
 
 export const PREDICTIONS_CAP = 30;
@@ -126,6 +127,10 @@ function activePredictions(db: Db, today: string, dormantSha: Set<string>): Set<
   return new Set(rows.map(r => r.prediction_id).filter(p => !dormantSha.has(p)));
 }
 
+// Post-C P7: glossary_audit rows older than 30d (except semantic
+// pass/fail) are pruned by pruneGlossaryAudit, so a term's MAX(checked_at)
+// can disappear and the first_seen_date fallback below re-engages —
+// ttl_expired_days may jump for such terms. Accepted in P7.
 function ttlStaleGlossary(db: Db, today: string): Array<[string, number]> {
   const rows = db.prepare(
     `SELECT g.term, g.first_seen_date,
@@ -225,7 +230,7 @@ const QUEUE_INTRO = [
   '',
   'Predictions / glossary terms trimmed by Step 0 caps. '
   + 'Entries here are force-promoted on a 4-week starvation '
-  + 'guarantee. See design/scheduled/6_weekly_maintenance.md.',
+  + 'guarantee (6_weekly_maintenance).',
   '',
 ];
 
@@ -272,9 +277,8 @@ export function writeHealthLog(
     `Week ending: ${weekEnding}`, '',
     'Step 0 health-check assertion (predictions older than 90 days '
     + 'AND not in dormant snapshot) returned non-zero rows. The '
-    + 'dormant detection has a leak; see design/scheduled/'
-    + '4_weekly_memory.md. Maintenance run continues; this is a '
-    + 'separate ticket.', '',
+    + 'dormant detection has a leak (4_weekly_memory). Maintenance '
+    + 'run continues; this is a separate ticket.', '',
     '## Findings', '',
     ...warnings.map(w => `- ${w}`),
     '',
@@ -310,7 +314,7 @@ export function mergeJudgementsFiles(dateDir: string): string {
       throw new Error(`${src}: judgements must be a list`);
     judgementsRaw.forEach((j, i) => {
       const rec = parseMaintenanceJudgement(j, `${src}.judgements[${i}]`);
-      const key = `${rec.prediction_id} ${rec.stream} ${rec.entry_id}`;
+      const key = `${rec.prediction_id}\x00${rec.stream}\x00${rec.entry_id}`;
       if (seen.has(key)) return;
       seen.add(key);
       merged.push(rec);
@@ -374,7 +378,7 @@ export function validateRun(args: {
     return errors;
   }
   const brokenPath = join(
-    args.newsRepo, 'memory', 'maintenance', args.weekEnding, 'broken.md');
+    args.newsRepo, HISTORY_REL, 'maintenance', args.weekEnding, 'broken.md');
   const brokenText = existsSync(brokenPath) ? readFileSync(brokenPath, 'utf8') : '';
 
   for (const j of bundle.judgements) {

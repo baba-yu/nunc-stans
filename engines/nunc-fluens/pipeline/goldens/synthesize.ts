@@ -13,10 +13,20 @@
 //   node synthesize.ts freeze   — render/build/export via the TS
 //                                 pipeline and write expected/
 //   node synthesize.ts all      — both
+//
+// R7 (post-C REDO): input/ is INSTANCE-SHAPED — the fixture instance is
+// born through the REAL `nunc-fluens init` routine (init is thereby
+// exercised on every regen) in a temp dir, the synthetic data is laid
+// on top, and the tree minus store/ is copied here (instances are
+// git-less, R9; the init date is pinned to the fixture Sunday so
+// instance.json stays byte-stable). The editorial reference seeds come
+// FROM pipeline/instance-template/.
 import {
-  existsSync, mkdirSync, readFileSync, rmSync, writeFileSync,
+  cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync,
 } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { tmpdir } from 'node:os';
+import { dirname, join, relative, sep } from 'node:path';
+import { initInstance, instanceTemplateDir } from '../src/instance.ts';
 
 const HERE = dirname(new URL(import.meta.url).pathname);
 const INPUT = join(HERE, 'input');
@@ -28,6 +38,46 @@ export const DAYS = ['2026-01-02', '2026-01-03', '2026-01-04'];
 export const SUNDAY = '2026-01-04';
 export const PREV_SUNDAY = '2025-12-28';
 const LOCALES = ['ja', 'es', 'fil'];
+
+// fixture-manifest.json is the TEST-side contract (build-db.ts drives
+// TODAY/dbRange from it, render-parity its day list): `inputs` emits it
+// from the SAME constants that drive the corpus, so a regen that moves
+// the calendar can never desync the two. The prose fields are fixed
+// strings — the emitted file is byte-stable while the constants hold.
+const MANIFEST_WHY = 'T12: the real-content golden corpus validated the TS port '
+  + 'against the Python oracle and was dropped with it — the redistributable '
+  + 'repo carries no personal editorial data. From here the suite is TS '
+  + "self-regression: expected/ is frozen from the pipeline's own output over "
+  + 'this schema-shaped micro-world. The oracle-parity record lives in git '
+  + 'history and design/verification/phase-c.md.';
+const MANIFEST_NORM_ISO = 'every timestamp in the DB dump is rewritten to the '
+  + 'epoch before comparing (CURRENT_TIMESTAMP metadata); with todayIso pinned '
+  + 'to the fixture Sunday there is no capture-day token — the corpus is fully '
+  + 'deterministic';
+const MANIFEST_NORM_NUM = 'export JSON comparisons stay parsed-value based '
+  + '(formatting-neutral)';
+
+function writeManifest(): void {
+  const j = (s: string) => JSON.stringify(s);
+  const jarr = (xs: readonly string[]) => `[${xs.map(j).join(', ')}]`;
+  w(join(HERE, 'fixture-manifest.json'), [
+    '{',
+    '  "synthetic": true,',
+    '  "generator": "goldens/synthesize.ts (node synthesize.ts all)",',
+    `  "why": ${j(MANIFEST_WHY)},`,
+    `  "renderDays": ${jarr(DAYS)},`,
+    `  "sundayDay": ${j(SUNDAY)},`,
+    `  "prevSunday": ${j(PREV_SUNDAY)},`,
+    `  "dbRange": { "start": ${j(DAYS[0])}, "end": ${j(DAYS[DAYS.length - 1])} },`,
+    `  "todayIso": ${j(SUNDAY)},`,
+    `  "locales": ${jarr(['en', ...LOCALES])},`,
+    '  "normalization": {',
+    `    "isoTimestamps": ${j(MANIFEST_NORM_ISO)},`,
+    `    "jsonNumberFormatting": ${j(MANIFEST_NORM_NUM)}`,
+    '  }',
+    '}',
+  ].join('\n') + '\n');
+}
 
 function stem(d: string): string { return d.replaceAll('-', ''); }
 
@@ -243,174 +293,176 @@ function verification(day: string) {
 export function writeInputs(): void {
   rmSync(INPUT, { recursive: true, force: true });
 
-  // reference/ + references.txt + topics
-  w(join(INPUT, 'reference', 'news-topics.md'), [
-    '# Daily-update topic coverage', '',
-    '## Topic list', '',
-    '- Synthetic fixtures',
-    '- Bay Area / SV AI meet-up events', '',
-    '## Default reference sites', '',
-    '- https://example.com/', '',
-  ].join('\n'));
-  w(join(INPUT, 'reference', 'citation-restrictions.md'), [
-    '# Citation restrictions', '',
-    '## denylist', '',
-    '| host | reason |',
-    '|---|---|',
-    '| restricted.example.net | fixture denylist entry |', '',
-    '## parent_groups', '',
-    '### ExampleCorp', '',
-    '- corpnews.example', '',
-  ].join('\n'));
-  w(join(INPUT, 'reference', 'glossary.yml'), [
-    'terms:',
-    '  - term: FixtureTerm',
-    '    aliases: [FXT]',
-    '    quick_def: A term that exists only in the test fixtures.',
-    '    why_it_matters: It proves the glossary seed path without real content.',
-    '    quick_def_ja: フィクスチャ専用の用語。',
-    '    quick_def_es: Un término solo de fixtures.',
-    '    quick_def_fil: Terminong pang-fixture lamang.',
-    '    why_it_matters_ja: 実データなしで検証するため。',
-    '    why_it_matters_es: Prueba la ruta sin datos reales.',
-    '    why_it_matters_fil: Sinusubok ang daloy nang walang totoong datos.',
-    '    status: active',
-    '    reviewed_by_human: true',
-    '',
-  ].join('\n'));
-  // Pre-seed references.txt with EVERY citation URL the corpus uses
-  // (news_section 0/1/9, headlines 0-4, bridges 0/1) so the daily
-  // append-references step is a no-op on replay.
-  const citeIdx = [0, 1, 2, 3, 4, 9];
-  w(join(INPUT, 'references.txt'),
-    DAYS.flatMap(d => citeIdx.map(i => `https://example.com/${stem(d)}/${i}`))
-      .join('\n') + '\n');
+  // The editorial reference seeds come FROM the template (they double
+  // as the fixture's policy files) — assert presence, never generate.
+  const template = instanceTemplateDir();
+  for (const f of ['news-topics.md', 'citation-restrictions.md', 'glossary.yml'])
+    if (!existsSync(join(template, 'data', 'reference', f)))
+      throw new Error(`instance template missing data/reference/${f} — `
+        + 'the goldens inherit the template seeds');
 
-  // sourcedata per day (+ locales)
-  DAYS.forEach((day, di) => {
-    const dir = join(INPUT, 'sourcedata', day);
-    const prev = di > 0 ? DAYS[di - 1] : null;
-    const priorDays = DAYS.slice(0, di + 1); // last-7d window inside the micro-world
-    wj(join(dir, 'news_section.json'), newsSection(day));
-    wj(join(dir, 'predictions.json'),
-      { date: day, predictions: [0, 1, 2].map(i => prediction(day, i)) });
-    wj(join(dir, 'headlines.json'), headlines(day));
-    wj(join(dir, 'change_log.json'), changeLog(day, prev));
-    wj(join(dir, 'needs.json'), needs(day));
-    wj(join(dir, 'bridges.json'), bridges(day, priorDays));
-    wj(join(dir, 'readings.json'), readings(day));
-    wj(join(dir, 'summary.json'), summary(day));
-    wj(join(dir, 'verification.json'), verification(day));
-    for (const L of LOCALES) {
-      const ldir = join(INPUT, 'sourcedata', 'locales', day, L);
-      wj(join(ldir, 'news_section.json'), {
-        ...newsSection(day),
-        sections: newsSection(day).sections.map(s => ({
-          ...s,
-          bullets: s.bullets.map(b => ({ ...b, body: loc(b.body, L) })),
-        })),
-      });
-      wj(join(ldir, 'predictions.json'), {
-        date: day,
-        predictions: [0, 1, 2].map(i => localizePrediction(prediction(day, i), L)),
-      });
-      wj(join(ldir, 'headlines.json'), {
-        ...headlines(day),
-        technical: headlines(day).technical.map(t => ({ ...t, body: loc(t.body, L) })),
-        plain: headlines(day).plain.map(p => loc(p, L)),
-      });
-      wj(join(ldir, 'change_log.json'), {
-        ...changeLog(day, prev),
-        items: changeLog(day, prev).items.map(it => ({
-          ...it, diff_narrative: loc(it.diff_narrative, L),
-        })),
-      });
-      wj(join(ldir, 'needs.json'), needs(day));
-      wj(join(ldir, 'bridges.json'), {
-        ...bridges(day, priorDays),
-        validation_rows: bridges(day, priorDays).validation_rows.map(r => ({
-          ...r,
-          evidence_summary: loc(r.evidence_summary, L),
-          bridge: { ...r.bridge, narrative: loc(r.bridge.narrative, L) },
-        })),
-      });
-      wj(join(ldir, 'summary.json'), {
-        ...summary(day), plain_language: loc(summary(day).plain_language, L),
-      });
-    }
-  });
+  // Born through the REAL init routine, in a TEMP dir: store/ is
+  // runtime state and is filtered out of the final copy. The created
+  // date is pinned to the fixture Sunday (= the corpus todayIso) so
+  // instance.json is deterministic.
+  const tmpRoot = mkdtempSync(join(tmpdir(), 'nf-goldens-init-'));
+  const inst = join(tmpRoot, 'instance');
+  try {
+    initInstance(inst, SUNDAY);
 
-  // memory/: dormant lineage + theme review + maintenance (Sunday)
-  const dormantHeader = (d: string, rows: string[]) => [
-    `# Dormant pool — week ending ${d}`, '',
-    'Mode: synthetic fixture rotation.', '',
-    '## Tier: Dormant — interval ≥ 14 days', '',
-    '| ID | Prediction (short) | Signals | First seen | Last relevance | Next ping | Days quiet |',
-    '|---|---|---|---|---|---|---|',
-    ...rows, '',
-  ].join('\n');
-  w(join(INPUT, 'memory', 'dormant', `dormant-${stem(PREV_SUNDAY)}.md`),
-    dormantHeader(PREV_SUNDAY, [
-      `| 20251215-1 | Widgetly ships synthetic milestone 20251215-1 by Q3 2026 | widget, fixture, synthetic milestone | 2025-12-15 | 2 (12/20) | ${PREV_SUNDAY} | 8 |`,
-    ]));
-  w(join(INPUT, 'memory', 'dormant', `dormant-${stem(SUNDAY)}.md`),
-    dormantHeader(SUNDAY, [
-      `| 20251215-1 | Widgetly ships synthetic milestone 20251215-1 by Q3 2026 | widget, fixture, synthetic milestone | 2025-12-15 | 2 (12/20) | 2026-02-03 | 15 |`,
-    ]));
-  w(join(INPUT, 'memory', 'theme-review', `theme-review-${stem(SUNDAY)}.md`), [
-    `# Theme review — week ending ${SUNDAY}`, '',
-    'Mode: synthetic fixture rotation.', '',
-    '## Empty / underused themes', '',
-    'None — the fixture taxonomy is tiny by design.', '',
-    '## Overpopulated themes', '',
-    'None.', '',
-    '## Theme candidates', '',
-    'No candidate reaches the promotion bar in the fixture corpus.', '',
-    '## Recommended actions', '',
-    '### Action 1: Observation (no schema edit)', '',
-    'Log-only fixture action; out of scope for this proposal.', '',
-    '```action',
-    '{"kind": "log-only"}',
-    '```', '',
-  ].join('\n'));
-  const sd = join(INPUT, 'sourcedata', SUNDAY);
-  wj(join(sd, 'maintenance-candidates.json'), {
-    week_ending: SUNDAY,
-    predictions: [{
-      prediction_id: predId(DAYS[0], 0),
-      change_signals: ['relevance_drift'],
-      confidence_drift_score: 1,
-    }],
-    glossary_terms: [],
-  });
-  wj(join(sd, `maintenance-judgements.${predId(DAYS[0], 0)}.json`), {
-    prediction_id: predId(DAYS[0], 0),
-    judgements: [{
-      prediction_id: predId(DAYS[0], 0),
-      stream: 'reasoning',
-      entry_id: predId(DAYS[0], 0),
-      verdict: 'fresh',
-      reason: 'the fixture storyline is unchanged',
-      cross_stream_evidence: [],
-      proposed_action: 'noop',
-      confidence: 0.9,
-    }],
-  });
-  wj(join(sd, 'maintenance-judgements.json'), {
-    week_ending: SUNDAY,
-    judgements: [{
-      prediction_id: predId(DAYS[0], 0),
-      stream: 'reasoning',
-      entry_id: predId(DAYS[0], 0),
-      verdict: 'fresh',
-      reason: 'the fixture storyline is unchanged',
-      cross_stream_evidence: [],
-      proposed_action: 'noop',
-      confidence: 0.9,
-    }],
-  });
+    // Pre-seed the citation ledger with EVERY citation URL the corpus
+    // uses (news_section 0/1/9, headlines 0-4, bridges 0/1) so the
+    // daily append-references step is a no-op on replay.
+    const citeIdx = [0, 1, 2, 3, 4, 9];
+    w(join(inst, 'data', 'history', 'reference-history.log'),
+      DAYS.flatMap(d => citeIdx.map(i => `https://example.com/${stem(d)}/${i}`))
+        .join('\n') + '\n');
 
-  console.log(`inputs written under ${INPUT}`);
+    // sourcedata per day (+ locales)
+    DAYS.forEach((day, di) => {
+      const dir = join(inst, 'data', 'sourcedata', day);
+      const prev = di > 0 ? DAYS[di - 1] : null;
+      const priorDays = DAYS.slice(0, di + 1); // last-7d window inside the micro-world
+      wj(join(dir, 'news_section.json'), newsSection(day));
+      wj(join(dir, 'predictions.json'),
+        { date: day, predictions: [0, 1, 2].map(i => prediction(day, i)) });
+      wj(join(dir, 'headlines.json'), headlines(day));
+      wj(join(dir, 'change_log.json'), changeLog(day, prev));
+      wj(join(dir, 'needs.json'), needs(day));
+      wj(join(dir, 'bridges.json'), bridges(day, priorDays));
+      wj(join(dir, 'readings.json'), readings(day));
+      wj(join(dir, 'summary.json'), summary(day));
+      wj(join(dir, 'verification.json'), verification(day));
+      for (const L of LOCALES) {
+        const ldir = join(inst, 'data', 'sourcedata', 'locales', day, L);
+        wj(join(ldir, 'news_section.json'), {
+          ...newsSection(day),
+          sections: newsSection(day).sections.map(s => ({
+            ...s,
+            bullets: s.bullets.map(b => ({ ...b, body: loc(b.body, L) })),
+          })),
+        });
+        wj(join(ldir, 'predictions.json'), {
+          date: day,
+          predictions: [0, 1, 2].map(i => localizePrediction(prediction(day, i), L)),
+        });
+        wj(join(ldir, 'headlines.json'), {
+          ...headlines(day),
+          technical: headlines(day).technical.map(t => ({ ...t, body: loc(t.body, L) })),
+          plain: headlines(day).plain.map(p => loc(p, L)),
+        });
+        wj(join(ldir, 'change_log.json'), {
+          ...changeLog(day, prev),
+          items: changeLog(day, prev).items.map(it => ({
+            ...it, diff_narrative: loc(it.diff_narrative, L),
+          })),
+        });
+        wj(join(ldir, 'needs.json'), needs(day));
+        wj(join(ldir, 'bridges.json'), {
+          ...bridges(day, priorDays),
+          validation_rows: bridges(day, priorDays).validation_rows.map(r => ({
+            ...r,
+            evidence_summary: loc(r.evidence_summary, L),
+            bridge: { ...r.bridge, narrative: loc(r.bridge.narrative, L) },
+          })),
+        });
+        wj(join(ldir, 'summary.json'), {
+          ...summary(day), plain_language: loc(summary(day).plain_language, L),
+        });
+      }
+    });
+
+    // history/: dormant lineage + theme review + maintenance (Sunday)
+    const dormantHeader = (d: string, rows: string[]) => [
+      `# Dormant pool — week ending ${d}`, '',
+      'Mode: synthetic fixture rotation.', '',
+      '## Tier: Dormant — interval ≥ 14 days', '',
+      '| ID | Prediction (short) | Signals | First seen | Last relevance | Next ping | Days quiet |',
+      '|---|---|---|---|---|---|---|',
+      ...rows, '',
+    ].join('\n');
+    w(join(inst, 'data', 'history', 'dormant', `dormant-${stem(PREV_SUNDAY)}.md`),
+      dormantHeader(PREV_SUNDAY, [
+        `| 20251215-1 | Widgetly ships synthetic milestone 20251215-1 by Q3 2026 | widget, fixture, synthetic milestone | 2025-12-15 | 2 (12/20) | ${PREV_SUNDAY} | 8 |`,
+      ]));
+    w(join(inst, 'data', 'history', 'dormant', `dormant-${stem(SUNDAY)}.md`),
+      dormantHeader(SUNDAY, [
+        `| 20251215-1 | Widgetly ships synthetic milestone 20251215-1 by Q3 2026 | widget, fixture, synthetic milestone | 2025-12-15 | 2 (12/20) | 2026-02-03 | 15 |`,
+        // An in-corpus entry (2026-01-02 is a fixture day) so the export
+        // layer's dormant styling is actually exercised: loadDormantSet
+        // keys `${date}||${N}` against source_row_index, so one exported
+        // prediction node must carry `dormant: true` in the frozen graphs
+        // (post-C T6 guard for the silently-empty-set failure mode).
+        `| 20260102-1 | Acme Metrics ships synthetic milestone 20260102-1 by Q3 2026 | acme, fixture, metrics | 2026-01-02 | 1 (1/02) | 2026-01-18 | 2 |`,
+      ]));
+    w(join(inst, 'data', 'history', 'theme-review', `theme-review-${stem(SUNDAY)}.md`), [
+      `# Theme review — week ending ${SUNDAY}`, '',
+      'Mode: synthetic fixture rotation.', '',
+      '## Empty / underused themes', '',
+      'None — the fixture taxonomy is tiny by design.', '',
+      '## Overpopulated themes', '',
+      'None.', '',
+      '## Theme candidates', '',
+      'No candidate reaches the promotion bar in the fixture corpus.', '',
+      '## Recommended actions', '',
+      '### Action 1: Observation (no schema edit)', '',
+      'Log-only fixture action; out of scope for this proposal.', '',
+      '```action',
+      '{"kind": "log-only"}',
+      '```', '',
+    ].join('\n'));
+    const sd = join(inst, 'data', 'sourcedata', SUNDAY);
+    wj(join(sd, 'maintenance-candidates.json'), {
+      week_ending: SUNDAY,
+      predictions: [{
+        prediction_id: predId(DAYS[0], 0),
+        change_signals: ['relevance_drift'],
+        confidence_drift_score: 1,
+      }],
+      glossary_terms: [],
+    });
+    wj(join(sd, `maintenance-judgements.${predId(DAYS[0], 0)}.json`), {
+      prediction_id: predId(DAYS[0], 0),
+      judgements: [{
+        prediction_id: predId(DAYS[0], 0),
+        stream: 'reasoning',
+        entry_id: predId(DAYS[0], 0),
+        verdict: 'fresh',
+        reason: 'the fixture storyline is unchanged',
+        cross_stream_evidence: [],
+        proposed_action: 'noop',
+        confidence: 0.9,
+      }],
+    });
+    wj(join(sd, 'maintenance-judgements.json'), {
+      week_ending: SUNDAY,
+      judgements: [{
+        prediction_id: predId(DAYS[0], 0),
+        stream: 'reasoning',
+        entry_id: predId(DAYS[0], 0),
+        verdict: 'fresh',
+        reason: 'the fixture storyline is unchanged',
+        cross_stream_evidence: [],
+        proposed_action: 'noop',
+        confidence: 0.9,
+      }],
+    });
+
+    // The frozen corpus is the instance tree minus store/ (runtime
+    // state; instances are git-less so there is nothing else to skip).
+    cpSync(inst, INPUT, {
+      recursive: true,
+      filter: (src) => {
+        const rel = relative(inst, src);
+        return rel !== 'store' && !rel.startsWith(`store${sep}`);
+      },
+    });
+  } finally {
+    rmSync(tmpRoot, { recursive: true, force: true });
+  }
+
+  writeManifest();
+  console.log(`inputs written under ${INPUT} (+ fixture-manifest.json)`);
 }
 
 // --- freeze -----------------------------------------------------------------
@@ -432,7 +484,7 @@ export async function freeze(): Promise<void> {
   const { runScore } = await import('../src/ingest/score.ts');
   const { runExport } = await import('../src/export/export.ts');
 
-  const sdRoot = join(INPUT, 'sourcedata');
+  const sdRoot = join(INPUT, 'data', 'sourcedata');
   // 1. renders — into input/ (they are inputs to gates/readmes on later
   //    days) and expected/render (the regression baseline).
   for (const day of DAYS) {
@@ -445,37 +497,38 @@ export async function freeze(): Promise<void> {
   for (const day of DAYS)
     for (const L of ['en', ...LOCALES]) {
       w(join(EXPECTED, 'render', `news-${day}.${L}.md`),
-        readFileSync(join(INPUT, 'report', L, `news-${stem(day)}.md`), 'utf8'));
+        readFileSync(join(INPUT, 'data', 'daily-news', L, `news-${stem(day)}.md`), 'utf8'));
       w(join(EXPECTED, 'render', `future-prediction-${day}.${L}.md`),
-        readFileSync(join(INPUT, 'future-prediction', L,
+        readFileSync(join(INPUT, 'data', 'future-prediction', L,
           `future-prediction-${stem(day)}.md`), 'utf8'));
     }
 
-  // 2. DB build in a work-shaped root — EXACTLY the recipe
-  //    test/helpers/build-db.ts uses, so source_files rel paths and
-  //    every derived hash match the test rebuild.
+  // 2. DB build in a work-shaped root (v2 instance shape: everything
+  //    under data/) — EXACTLY the recipe test/helpers/build-db.ts uses,
+  //    so source_files rel paths and every derived hash match the test
+  //    rebuild.
   const { mkdtempSync: mkdtemp2, symlinkSync: symlink2 } = await import('node:fs');
   const { tmpdir: tmpdir2 } = await import('node:os');
   const buildRoot = mkdtemp2(join(tmpdir2(), 'nf-freeze-db-'));
-  mkdirSync(join(buildRoot, 'app'), { recursive: true });
-  symlink2(sdRoot, join(buildRoot, 'app', 'sourcedata'));
-  for (const part of ['report', 'future-prediction', 'memory', 'reference'])
-    symlink2(join(INPUT, part), join(buildRoot, part));
+  mkdirSync(join(buildRoot, 'data'), { recursive: true });
+  symlink2(sdRoot, join(buildRoot, 'data', 'sourcedata'));
+  for (const part of ['daily-news', 'future-prediction', 'history', 'reference'])
+    symlink2(join(INPUT, 'data', part), join(buildRoot, 'data', part));
   const dbFile = join(buildRoot, 'analytics.sqlite');
   initDb(dbFile);
   const db = connect(dbFile);
   // Read sourcedata THROUGH the symlink under buildRoot so source_files
-  // stores the relative `app/sourcedata/...` path (exactly what the
+  // stores the relative `data/sourcedata/...` path (exactly what the
   // buildGoldenDb test helper does — otherwise absolute vs relative
   // paths desync every derived hash).
   const ctx = {
-    sourcedataRoot: join(buildRoot, 'app', 'sourcedata'),
+    sourcedataRoot: join(buildRoot, 'data', 'sourcedata'),
     repoRootForRel: buildRoot, todayIso: SUNDAY,
   };
   for (const day of DAYS) {
     runGlossaryExtract(db, {
-      newsFile: join(buildRoot, 'report', 'en', `news-${stem(day)}.md`),
-      seedYaml: join(buildRoot, 'reference', 'glossary.yml'),
+      newsFile: join(buildRoot, 'data', 'daily-news', 'en', `news-${stem(day)}.md`),
+      seedYaml: join(buildRoot, 'data', 'reference', 'glossary.yml'),
       todayIso: SUNDAY,
     });
     const { pidByJsonId } = ingestDay(db, ctx, day);
@@ -484,7 +537,7 @@ export async function freeze(): Promise<void> {
   runScore(db);
   w(join(EXPECTED, 'db', 'analytics.dump.sql'), normalize(dumpSql(db)));
 
-  // 3. exports (+ evidence-reverse), frozen AND staged into input/docs/data
+  // 3. exports (+ evidence-reverse), frozen AND staged into input/data/exports
   //    — later-day gates and the Sunday flow-check read them as inputs.
   const { buildEvidenceReverse } = await import('../src/export/evidence-reverse.ts');
   const outDir = join(EXPECTED, 'export');
@@ -495,21 +548,22 @@ export async function freeze(): Promise<void> {
   db.close();
   rmSync(buildRoot, { recursive: true, force: true });
 
-  const dd = join(INPUT, 'docs', 'data');
+  const dd = join(INPUT, 'data', 'exports');
   const EXPORTS = ['graph-tech.json', 'graph-business.json', 'graph-mix.json',
-    'glossary.json', 'manifest.json', 'evidence-reverse.json'];
+    'glossary.json', 'manifest.json', 'evidence-reverse.json',
+    'prefix-tokens.json'];
   for (const f of EXPORTS)
     w(join(dd, f), readFileSync(join(outDir, f), 'utf8'));
   // Sunday 3-time-state: reader-facing snapshot + pre-review rollback.
   const snapStem = stem(SUNDAY);
   for (const f of ['graph-tech.json', 'graph-business.json', 'graph-mix.json', 'manifest.json']) {
     w(join(dd, 'snapshots', snapStem, f), readFileSync(join(outDir, f), 'utf8'));
-    w(join(INPUT, 'memory', 'snapshots', `${snapStem}-pre-review`, f),
+    w(join(INPUT, 'data', 'history', 'snapshots', `${snapStem}-pre-review`, f),
       readFileSync(join(outDir, f), 'utf8'));
   }
   wj(join(dd, 'snapshots', 'index.json'), { snapshots: [snapStem], default: 'live' });
   const { schemaPath } = await import('../src/db/db.ts');
-  w(join(INPUT, 'memory', 'snapshots', `${snapStem}-pre-review`, 'schema.sql'),
+  w(join(INPUT, 'data', 'history', 'snapshots', `${snapStem}-pre-review`, 'schema.sql'),
     readFileSync(schemaPath(), 'utf8'));
 
   // README 3-day windows (the briefing chain's inputs).
@@ -518,8 +572,8 @@ export async function freeze(): Promise<void> {
     const blocks = [...DAYS].reverse().map(d => [
       `## ${d}`, '',
       `Fixture window entry for ${d}.`, '',
-      `- [news-${stem(d)}.md](report/${seg}/news-${stem(d)}.md)`,
-      `- [future-prediction-${stem(d)}.md](future-prediction/${seg}/future-prediction-${stem(d)}.md)`,
+      `- [news-${stem(d)}.md](data/daily-news/${seg}/news-${stem(d)}.md)`,
+      `- [future-prediction-${stem(d)}.md](data/future-prediction/${seg}/future-prediction-${stem(d)}.md)`,
       '',
     ].join('\n'));
     w(join(INPUT, `README${L}.md`),
@@ -542,10 +596,10 @@ export async function freeze(): Promise<void> {
     const workRoot = mkdtempSync(join(tmpdir(), 'nf-freeze-'));
     let flowExit: number;
     try {
-      mkdirSync(join(workRoot, 'app'), { recursive: true });
-      symlinkSync(sdRoot, join(workRoot, 'app', 'sourcedata'));
-      for (const part of ['report', 'future-prediction', 'memory', 'reference'])
-        symlinkSync(join(INPUT, part), join(workRoot, part));
+      mkdirSync(join(workRoot, 'data'), { recursive: true });
+      symlinkSync(sdRoot, join(workRoot, 'data', 'sourcedata'));
+      for (const part of ['daily-news', 'future-prediction', 'history', 'reference'])
+        symlinkSync(join(INPUT, 'data', part), join(workRoot, 'data', part));
       const flow = dailyFlowCheck({ repoRoot: workRoot, date: day, mode: 'report-missing' });
       flowExit = flow.exit;
       w(join(EXPECTED, 'gates', `${day}.flow.txt`),
@@ -569,31 +623,31 @@ export async function freeze(): Promise<void> {
     // same recipe the parity test uses).
     const workRoot = mkdtempSync(join(tmpdir(), 'nf-freeze-puv-'));
     try {
-      mkdirSync(join(workRoot, 'app'), { recursive: true });
-      symlinkSync(sdRoot, join(workRoot, 'app', 'sourcedata'));
-      for (const part of ['report', 'future-prediction', 'memory', 'reference'])
-        symlinkSync(join(INPUT, part), join(workRoot, part));
+      mkdirSync(join(workRoot, 'data'), { recursive: true });
+      symlinkSync(sdRoot, join(workRoot, 'data', 'sourcedata'));
+      for (const part of ['daily-news', 'future-prediction', 'history', 'reference'])
+        symlinkSync(join(INPUT, 'data', part), join(workRoot, 'data', part));
       const dbf = join(workRoot, 'analytics.sqlite');
       initDb(dbf);
       const db2 = connect(dbf);
       const ctx2 = {
-        sourcedataRoot: join(workRoot, 'app', 'sourcedata'),
+        sourcedataRoot: join(workRoot, 'data', 'sourcedata'),
         repoRootForRel: workRoot, todayIso: SUNDAY,
       };
       for (const day of DAYS) {
         runGlossaryExtract(db2, {
-          newsFile: join(workRoot, 'report', 'en', `news-${stem(day)}.md`),
-          seedYaml: join(workRoot, 'reference', 'glossary.yml'),
+          newsFile: join(workRoot, 'data', 'daily-news', 'en', `news-${stem(day)}.md`),
+          seedYaml: join(workRoot, 'data', 'reference', 'glossary.yml'),
           todayIso: SUNDAY,
         });
         const { pidByJsonId } = ingestDay(db2, ctx2, day);
         ingestDayLocales(db2, ctx2, day, pidByJsonId);
       }
       runScore(db2);
-      const puvOut = join(workRoot, 'docs', 'data');
+      const puvOut = join(workRoot, 'data', 'exports');
       runExport(db2, { outputDir: puvOut, publishRoot: workRoot });
       db2.close();
-      const common = { date: SUNDAY, db: dbf, docsDataDir: puvOut, repoRoot: workRoot };
+      const common = { date: SUNDAY, db: dbf, exportsDir: puvOut, repoRoot: workRoot };
       wj(join(EXPECTED, 'gates', 'post-update-validation.json'), {
         [`news-${SUNDAY}`]: postUpdateValidation({ ...common, check: 'news' }).exit,
         [`fp-${SUNDAY}`]: postUpdateValidation({ ...common, check: 'future-prediction' }).exit,

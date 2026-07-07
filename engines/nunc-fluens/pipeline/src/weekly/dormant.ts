@@ -1,5 +1,5 @@
 // 4_weekly_memory live path — dormant pool tier transitions per
-// design/memory-policy.md §1 and the operational algorithm the oracle
+// pipeline/prompts/memory-policy.md §1 and the operational algorithm the oracle
 // documented in the dormant-20260705.md preamble:
 //   - exits:        pool row with max_rel ≥ 4 over the validation window
 //   - re-anchor:    matched < 4, not due → Last relevance/Days quiet only
@@ -18,7 +18,7 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import type { Db } from '../ingest/ingest-core.ts';
 import { fuzzyMatchWithSize } from '../ingest/fuzzy.ts';
-import { MEMORY_DIR } from '../world-paths.ts';
+import { HISTORY_REL } from '../world-paths.ts';
 
 export interface DormantRow {
   id: string;
@@ -127,7 +127,7 @@ export function formatDormantSnapshot(args: {
 }
 
 export function dormantDir(newsRepo: string): string {
-  return join(newsRepo, MEMORY_DIR, 'dormant');
+  return join(newsRepo, HISTORY_REL, 'dormant');
 }
 
 /** Latest dormant-YYYYMMDD.md strictly before `today` (steady-state:

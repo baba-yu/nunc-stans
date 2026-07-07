@@ -3,7 +3,7 @@
 // (news+fp+weekly chain) — byte-matching the committed renders and
 // landing on the exact golden DB state.
 import { describe, expect, it } from 'vitest';
-import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { cpSync, existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import type Database from 'better-sqlite3';
@@ -26,23 +26,23 @@ const ALL_DAYS: string[] = daysBetween(MANIFEST.dbRange.start, MANIFEST.dbRange.
 
 function stageWritableRepo(): string {
   const repo = mkdtempSync(join(tmpdir(), 'nf-replay-'));
-  mkdirSync(join(repo, 'app'), { recursive: true });
-  cpSync(join(INPUT, 'sourcedata'), join(repo, 'app', 'sourcedata'), { recursive: true });
-  for (const part of ['report', 'future-prediction', 'memory', 'reference'])
-    cpSync(join(INPUT, part), join(repo, part), { recursive: true });
-  cpSync(join(INPUT, 'references.txt'), join(repo, 'references.txt'));
+  cpSync(join(INPUT, 'data', 'sourcedata'), join(repo, 'data', 'sourcedata'),
+    { recursive: true });
+  // history/ carries the citation ledger (reference-history.log) along.
+  for (const part of ['daily-news', 'future-prediction', 'history', 'reference'])
+    cpSync(join(INPUT, 'data', part), join(repo, 'data', part), { recursive: true });
   return repo;
 }
 
 function directDay(db: Database.Database, repo: string, d: string): void {
   const ctxBase = {
-    sourcedataRoot: join(repo, 'app', 'sourcedata'),
+    sourcedataRoot: join(repo, 'data', 'sourcedata'),
     repoRootForRel: repo,
     todayIso: TODAY,
   };
   runGlossaryExtract(db, {
-    newsFile: join(repo, 'report', 'en', `news-${d.replaceAll('-', '')}.md`),
-    seedYaml: join(repo, 'reference', 'glossary.yml'),
+    newsFile: join(repo, 'data', 'daily-news', 'en', `news-${d.replaceAll('-', '')}.md`),
+    seedYaml: join(repo, 'data', 'reference', 'glossary.yml'),
     todayIso: TODAY,
   });
   const { pidByJsonId } = ingestDay(db, ctxBase, d);
@@ -52,21 +52,26 @@ function directDay(db: Database.Database, repo: string, d: string): void {
 async function orchestrateReplay(
   db: Database.Database, repo: string, dataDir: string, day: string,
 ): Promise<Record<string, any>> {
+  // The golden corpus carries the full trio (pre-locale-model days:
+  // derived from the staged locale dirs, as replayLocaleSet would).
+  const locales = ['ja', 'es', 'fil'];
   const manifest = new RunManifest({
     date: day, mode: 'replay', runtime: 'claude-code', search: 'native', synthModel: null,
+    locales: ['en', ...locales],
   });
   const ctx: RunCtx = {
     date: day,
     dow: new Date(day + 'T12:00:00Z').getUTCDay(),
     dataDir,
     newsRepo: repo,
-    sourcedataRoot: join(repo, 'app', 'sourcedata'),
+    sourcedataRoot: join(repo, 'data', 'sourcedata'),
     dbFile: join(dataDir, 'world', 'analytics.sqlite'),
     db,
     ai: null,
     runtime: 'claude-code',
     search: 'native',
     synthModel: null,
+    locales,
     replay: true,
     dryRun: false,
     todayIso: TODAY,
@@ -99,7 +104,7 @@ function expectGoldenEndState(db: Database.Database): void {
 
 function expectRendersMatch(repo: string, day: string): void {
   for (const kind of ['news', 'future-prediction'] as const) {
-    const sub = kind === 'news' ? 'report' : 'future-prediction';
+    const sub = kind === 'news' ? join('data', 'daily-news') : join('data', 'future-prediction');
     for (const L of ['en', 'ja', 'es', 'fil']) {
       const rel = join(sub, L, `${kind}-${day.replaceAll('-', '')}.md`);
       expect(readFileSync(join(repo, rel), 'utf8'), rel)
@@ -125,8 +130,10 @@ describe('orchestrator replay of golden days', () => {
         expect(manifest.steps.length).toBeGreaterThan(15);
 
         expectRendersMatch(repo, REPLAY_DAY);
-        expect(readFileSync(join(repo, 'references.txt'), 'utf8'))
-          .toBe(readFileSync(join(INPUT, 'references.txt'), 'utf8'));
+        expect(readFileSync(
+          join(repo, 'data', 'history', 'reference-history.log'), 'utf8'))
+          .toBe(readFileSync(
+            join(INPUT, 'data', 'history', 'reference-history.log'), 'utf8'));
 
         for (const d of ALL_DAYS.filter(d => d > REPLAY_DAY)) directDay(db, repo, d);
         expectGoldenEndState(db);
@@ -157,7 +164,7 @@ describe('orchestrator replay of golden days', () => {
         expectRendersMatch(repo, SUNDAY);
         expectGoldenEndState(db);
         db.close();
-        expect(existsSync(join(repo, 'app', 'sourcedata', SUNDAY, 'run.json'))).toBe(true);
+        expect(existsSync(join(repo, 'data', 'sourcedata', SUNDAY, 'run.json'))).toBe(true);
       } finally {
         rmSync(repo, { recursive: true, force: true });
         rmSync(dataDir, { recursive: true, force: true });

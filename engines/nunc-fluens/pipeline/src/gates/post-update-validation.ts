@@ -6,21 +6,21 @@ import { join } from 'node:path';
 import Database from 'better-sqlite3';
 import { parseTimeWindow } from '../ingest/timewindow.ts';
 import {
-  FP_DIR, LOCALES as ALL_LOCALES, NON_EN_LOCALES as LOCALES, REPORT_DIR,
+  DAILY_NEWS_REL, EXPORTS_REL, FP_REL, NON_EN_LOCALES,
 } from '../world-paths.ts';
 
 const EN_PREDICTION_COLS = [
   'title', 'reasoning_because', 'reasoning_given', 'reasoning_so_that',
   'reasoning_landing', 'plain_language', 'summary',
 ];
-const LOCALE_PREDICTION_COLS = EN_PREDICTION_COLS
-  .flatMap(c => LOCALES.map(l => `${c}_${l}`));
+/** `<base>_<locale>` DB column names for the effective non-EN set —
+ * unconfigured locales' columns stay NULL and are not demanded. */
+const localeCols = (base: readonly string[], nonEn: readonly string[]): string[] =>
+  base.flatMap(c => nonEn.map(l => `${c}_${l}`));
 const TARGET_PREDICTION_COLS = ['target_start_date', 'target_end_date'];
 
 const NEED_COLS = ['actor', 'job', 'outcome', 'motivation'];
-const NEED_LOCALE_COLS = NEED_COLS.flatMap(c => LOCALES.map(l => `${c}_${l}`));
 const TASK_REQUIRED_5W1H = ['who_text', 'what_text', 'where_text', 'when_text', 'why_text'];
-const TASK_LOCALE_REQUIRED = TASK_REQUIRED_5W1H.flatMap(c => LOCALES.map(l => `${c}_${l}`));
 
 const VR_DIM_VALID = ['because', 'given', 'so_that', 'landing', 'none'];
 
@@ -36,7 +36,10 @@ function pyReprClip(s: unknown, width: number): string {
   return rep.slice(0, width);
 }
 
-function checkPredictionsForDate(db: Database.Database, date: string): string[] {
+function checkPredictionsForDate(
+  db: Database.Database, date: string, nonEn: readonly string[],
+): string[] {
+  const LOCALE_PREDICTION_COLS = localeCols(EN_PREDICTION_COLS, nonEn);
   const cols = ['prediction_id', 'source_row_index',
     ...EN_PREDICTION_COLS, ...LOCALE_PREDICTION_COLS, ...TARGET_PREDICTION_COLS];
   const rows = db.prepare(
@@ -74,7 +77,11 @@ function checkPredictionsForDate(db: Database.Database, date: string): string[] 
   return errs;
 }
 
-function checkNeedsForDate(db: Database.Database, date: string): string[] {
+function checkNeedsForDate(
+  db: Database.Database, date: string, nonEn: readonly string[],
+): string[] {
+  const NEED_LOCALE_COLS = localeCols(NEED_COLS, nonEn);
+  const TASK_LOCALE_REQUIRED = localeCols(TASK_REQUIRED_5W1H, nonEn);
   const predIds = (db.prepare(
     'SELECT prediction_id FROM predictions WHERE prediction_date = ?')
     .all(date) as any[]).map(r => r.prediction_id);
@@ -84,19 +91,24 @@ function checkNeedsForDate(db: Database.Database, date: string): string[] {
     return errs;
   }
   const placeholders = predIds.map(() => '?').join(',');
+  // Column list assembled as an array so an empty locale set (EN-only)
+  // never leaves a dangling comma in the SQL.
+  const selectCols = [
+    'n.prediction_id', 'n.need_id',
+    'n.actor', 'n.job', 'n.outcome', 'n.motivation',
+    'n.target_start_date AS need_target_start',
+    'n.target_end_date AS need_target_end',
+    ...NEED_LOCALE_COLS.map(c => `n.${c}`),
+    't.task_id',
+    ...TASK_REQUIRED_5W1H.map(c => `t.${c}`),
+    't.how_text',
+    ...TASK_LOCALE_REQUIRED.map(c => `t.${c}`),
+    't.target_start_date AS task_target_start',
+    't.target_end_date AS task_target_end',
+    't.status',
+  ].join(', ');
   const rows = db.prepare(
-    `SELECT n.prediction_id, n.need_id,
-            n.actor, n.job, n.outcome, n.motivation,
-            n.target_start_date AS need_target_start,
-            n.target_end_date AS need_target_end,
-            ${NEED_LOCALE_COLS.map(c => `n.${c}`).join(', ')},
-            t.task_id,
-            ${TASK_REQUIRED_5W1H.map(c => `t.${c}`).join(', ')},
-            t.how_text,
-            ${TASK_LOCALE_REQUIRED.map(c => `t.${c}`).join(', ')},
-            t.target_start_date AS task_target_start,
-            t.target_end_date AS task_target_end,
-            t.status
+    `SELECT ${selectCols}
      FROM prediction_needs n
      LEFT JOIN needs_tasks t ON t.need_id = n.need_id
      WHERE n.prediction_id IN (${placeholders})
@@ -154,10 +166,15 @@ function checkNeedsForDate(db: Database.Database, date: string): string[] {
   return errs;
 }
 
-function checkValidationRowsForDate(db: Database.Database, date: string): string[] {
+function checkValidationRowsForDate(
+  db: Database.Database, date: string, nonEn: readonly string[],
+): string[] {
+  const selectCols = [
+    'validation_row_id', 'prediction_id', 'support_dimension',
+    'bridge_text', ...nonEn.map(l => `bridge_text_${l}`),
+  ].join(', ');
   const rows = db.prepare(
-    `SELECT validation_row_id, prediction_id, support_dimension,
-            bridge_text, ${LOCALES.map(l => `bridge_text_${l}`).join(', ')}
+    `SELECT ${selectCols}
      FROM validation_rows WHERE validation_date = ? ORDER BY validation_row_id`)
     .all(date) as any[];
   const errs: string[] = [];
@@ -171,7 +188,7 @@ function checkValidationRowsForDate(db: Database.Database, date: string): string
     const vrid = rec.validation_row_id;
     if (empty(rec.bridge_text))
       errs.push(`validation_row ${vrid}: bridge_text is NULL/empty — writer's ## Bridge paragraph not parsed`);
-    for (const l of LOCALES)
+    for (const l of nonEn)
       if (empty(rec[`bridge_text_${l}`]))
         errs.push(
           `validation_row ${vrid}: bridge_text_${l} is NULL/empty — `
@@ -185,13 +202,13 @@ function checkValidationRowsForDate(db: Database.Database, date: string): string
   return errs;
 }
 
-function loadPredictionNodes(docsDataDir: string): Map<string, [string, any]> {
+function loadPredictionNodes(exportsDir: string): Map<string, [string, any]> {
   const out = new Map<string, [string, any]>();
-  if (!existsSync(docsDataDir)) return out;
-  for (const name of readdirSync(docsDataDir).filter(f => /^graph-.*\.json$/.test(f)).sort()) {
+  if (!existsSync(exportsDir)) return out;
+  for (const name of readdirSync(exportsDir).filter(f => /^graph-.*\.json$/.test(f)).sort()) {
     let d: any;
     try {
-      d = JSON.parse(readFileSync(join(docsDataDir, name), 'utf8'));
+      d = JSON.parse(readFileSync(join(exportsDir, name), 'utf8'));
     } catch { continue; }
     for (const node of d.nodes ?? []) {
       const nid = node.id ?? '';
@@ -202,7 +219,8 @@ function loadPredictionNodes(docsDataDir: string): Map<string, [string, any]> {
 }
 
 function checkJsonExportsForDate(
-  docsDataDir: string, db: Database.Database, date: string,
+  exportsDir: string, db: Database.Database, date: string,
+  allLocales: readonly string[],
 ): string[] {
   const errs: string[] = [];
   const predIds = (db.prepare(
@@ -212,21 +230,21 @@ function checkJsonExportsForDate(
     errs.push(`no predictions for ${date}, can't check exports`);
     return errs;
   }
-  if (!existsSync(docsDataDir)) {
-    errs.push(`docs/data dir missing: ${docsDataDir}`);
+  if (!existsSync(exportsDir)) {
+    errs.push(`exports dir missing: ${exportsDir}`);
     return errs;
   }
-  const index = loadPredictionNodes(docsDataDir);
+  const index = loadPredictionNodes(exportsDir);
   if (index.size === 0) {
     errs.push(
-      `no prediction nodes found across docs/data/graph-*.json — `
-      + 'run `python -m app.src.cli export` first');
+      `no prediction nodes found across ${EXPORTS_REL}/graph-*.json — `
+      + 'run the update-pages export first');
     return errs;
   }
   for (const pid of predIds) {
     const hit = index.get(pid);
     if (hit === undefined) {
-      errs.push(`export missing: prediction ${pid} not in any docs/data/graph-*.json`);
+      errs.push(`export missing: prediction ${pid} not in any ${EXPORTS_REL}/graph-*.json`);
       continue;
     }
     const [srcName, node] = hit;
@@ -235,7 +253,7 @@ function checkJsonExportsForDate(
     if (typeof titleBag !== 'object' || titleBag === null || Array.isArray(titleBag)) {
       errs.push(`${tag}: labels.title is not a dict`);
     } else {
-      for (const l of ALL_LOCALES)
+      for (const l of allLocales)
         if (!titleBag[l]) errs.push(`${tag}: labels.title.${l} is missing/empty`);
     }
     const det = node.detail ?? {};
@@ -243,7 +261,7 @@ function checkJsonExportsForDate(
     if (typeof tl !== 'object' || tl === null || Array.isArray(tl)) {
       errs.push(`${tag}: detail.title_locales missing or not dict`);
     } else {
-      for (const l of ALL_LOCALES)
+      for (const l of allLocales)
         if (!tl[l]) errs.push(`${tag}: detail.title_locales.${l} empty`);
     }
     const rl = det.reasoning_locales;
@@ -256,7 +274,7 @@ function checkJsonExportsForDate(
           errs.push(`${tag}: detail.reasoning_locales.${key} missing/not dict`);
           continue;
         }
-        for (const l of ALL_LOCALES)
+        for (const l of allLocales)
           if (!bag[l]) errs.push(`${tag}: detail.reasoning_locales.${key}.${l} empty`);
       }
     }
@@ -266,7 +284,7 @@ function checkJsonExportsForDate(
         errs.push(`${tag}: detail.bridges[${i}].text_locales missing`);
         return;
       }
-      for (const l of ALL_LOCALES)
+      for (const l of allLocales)
         if (!bl[l]) errs.push(`${tag}: detail.bridges[${i}].text_locales.${l} empty`);
     });
     (det.needs ?? []).forEach((n: any, i: number) => {
@@ -276,7 +294,7 @@ function checkJsonExportsForDate(
           errs.push(`${tag}: detail.needs[${i}].${key} missing`);
           continue;
         }
-        for (const l of ALL_LOCALES)
+        for (const l of allLocales)
           if (!bag[l]) errs.push(`${tag}: detail.needs[${i}].${key}.${l} empty`);
       }
       const t = n.task;
@@ -290,7 +308,7 @@ function checkJsonExportsForDate(
           errs.push(`${tag}: detail.needs[${i}].task.${cell}_locales missing`);
           continue;
         }
-        for (const l of ALL_LOCALES)
+        for (const l of allLocales)
           if (!bag[l]) errs.push(`${tag}: detail.needs[${i}].task.${cell}_locales.${l} empty`);
       }
     });
@@ -298,13 +316,15 @@ function checkJsonExportsForDate(
   return errs;
 }
 
-function checkLocaleFilesExist(base: string, kind: string, date: string): string[] {
+function checkLocaleFilesExist(
+  base: string, kind: string, date: string, allLocales: readonly string[],
+): string[] {
   const errs: string[] = [];
   const stem = kind === 'news'
     ? `news-${date.replaceAll('-', '')}`
     : `future-prediction-${date.replaceAll('-', '')}`;
-  const sub = kind === 'news' ? REPORT_DIR : FP_DIR;
-  for (const l of ALL_LOCALES) {
+  const sub = kind === 'news' ? DAILY_NEWS_REL : FP_REL;
+  for (const l of allLocales) {
     const p = join(base, sub, l, `${stem}.md`);
     if (!existsSync(p)) errs.push(`missing: ${p}`);
     else if (statSync(p).size === 0) errs.push(`empty: ${p}`);
@@ -317,10 +337,15 @@ export interface GateResult { exit: number; lines: string[]; stderr?: string }
 export type PuvCheck = 'news' | 'future-prediction' | 'exports' | 'all';
 
 export function postUpdateValidation(args: {
-  check: PuvCheck; date: string; db: string; docsDataDir: string; repoRoot: string;
+  check: PuvCheck; date: string; db: string; exportsDir: string; repoRoot: string;
+  /** Effective non-EN set; explicit parameter (not ambient config)
+   * because the gate also runs from tests/freeze without a RunCtx. */
+  locales?: readonly string[];
 }): GateResult {
   if (!existsSync(args.db))
     return { exit: 2, lines: [], stderr: `FAIL: DB not found: ${args.db}\n` };
+  const nonEn = args.locales ?? NON_EN_LOCALES;
+  const allLocales = ['en', ...nonEn];
   const lines: string[] = [];
   const runCheck = (name: string, errs: string[]): boolean => {
     if (errs.length) {
@@ -336,21 +361,21 @@ export function postUpdateValidation(args: {
   try {
     if (args.check === 'news' || args.check === 'all') {
       allPass = runCheck(`locale files (news, ${args.date})`,
-        checkLocaleFilesExist(args.repoRoot, 'news', args.date)) && allPass;
+        checkLocaleFilesExist(args.repoRoot, 'news', args.date, allLocales)) && allPass;
       allPass = runCheck(`predictions schema (${args.date})`,
-        checkPredictionsForDate(db, args.date)) && allPass;
+        checkPredictionsForDate(db, args.date, nonEn)) && allPass;
       allPass = runCheck(`needs + 5W1H (${args.date})`,
-        checkNeedsForDate(db, args.date)) && allPass;
+        checkNeedsForDate(db, args.date, nonEn)) && allPass;
     }
     if (args.check === 'future-prediction' || args.check === 'all') {
       allPass = runCheck(`locale files (future-prediction, ${args.date})`,
-        checkLocaleFilesExist(args.repoRoot, 'future-prediction', args.date)) && allPass;
+        checkLocaleFilesExist(args.repoRoot, 'future-prediction', args.date, allLocales)) && allPass;
       allPass = runCheck(`validation_rows schema (${args.date})`,
-        checkValidationRowsForDate(db, args.date)) && allPass;
+        checkValidationRowsForDate(db, args.date, nonEn)) && allPass;
     }
     if (args.check === 'exports' || args.check === 'all') {
       allPass = runCheck(`JSON exports (${args.date})`,
-        checkJsonExportsForDate(args.docsDataDir, db, args.date)) && allPass;
+        checkJsonExportsForDate(args.exportsDir, db, args.date, allLocales)) && allPass;
     }
   } finally {
     db.close();

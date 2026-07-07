@@ -18,7 +18,7 @@ import {
 import { parseMaintenanceJudgementsFile } from '../src/schemas/sourcedata.ts';
 
 const SUNDAY: string = MANIFEST.sundayDay;
-const SUNDAY_DIR = join(INPUT, 'sourcedata', SUNDAY);
+const SUNDAY_DIR = join(INPUT, 'data', 'sourcedata', SUNDAY);
 const WEEKDAY: string = MANIFEST.renderDays.filter((d: string) => d !== SUNDAY)[0];
 
 let built: { db: Database.Database; workRoot: string } | null = null;
@@ -120,10 +120,10 @@ describe('dormant-id parsing/resolution', () => {
 
   it('resolves short ids through predictions.json ordering', () => {
     const stem = WEEKDAY.replaceAll('-', '');
-    const sha = resolveDormantSha(join(INPUT, 'sourcedata'), `| ${stem}-1 | x |`);
+    const sha = resolveDormantSha(join(INPUT, 'data', 'sourcedata'), `| ${stem}-1 | x |`);
     // {weekday}'s first prediction (1-based index 1).
     const first = JSON.parse(readFileSync(
-      join(INPUT, 'sourcedata', WEEKDAY, 'predictions.json'), 'utf8')).predictions[0].id;
+      join(INPUT, 'data', 'sourcedata', WEEKDAY, 'predictions.json'), 'utf8')).predictions[0].id;
     expect(sha.has(first)).toBe(true);
   });
 });
@@ -168,14 +168,14 @@ describe('spillover queue', () => {
 describe('Step 3 — validate applied-or-escalated', () => {
   function scaffold(judgements: unknown[]): { root: string; args: any } {
     const root = mkdtempSync(join(tmpdir(), 'nf-val-'));
-    const sd = join(root, 'app', 'sourcedata', SUNDAY);
+    const sd = join(root, 'data', 'sourcedata', SUNDAY);
     mkdirSync(sd, { recursive: true });
     writeFileSync(join(sd, 'maintenance-judgements.json'),
       JSON.stringify({ week_ending: SUNDAY, judgements }), 'utf8');
     return {
       root,
       args: {
-        db: built?.db, sourcedataRoot: join(root, 'app', 'sourcedata'),
+        db: built?.db, sourcedataRoot: join(root, 'data', 'sourcedata'),
         newsRepo: root, weekEnding: SUNDAY,
       },
     };
@@ -198,7 +198,7 @@ describe('Step 3 — validate applied-or-escalated', () => {
     const { root, args } = scaffold([J({ verdict: 'stale', proposed_action: 'rewrite' })]);
     try {
       expect(validateRun(args).length).toBe(1);
-      writeFileSync(join(root, 'app', 'sourcedata', SUNDAY,
+      writeFileSync(join(root, 'data', 'sourcedata', SUNDAY,
         'maintenance-update.reasoning.prediction.aaa.json'), '{}', 'utf8');
       expect(validateRun(args)).toEqual([]);
     } finally { rmSync(root, { recursive: true, force: true }); }
@@ -208,7 +208,7 @@ describe('Step 3 — validate applied-or-escalated', () => {
     const { root, args } = scaffold([J({ verdict: 'broken' })]);
     try {
       expect(validateRun(args).length).toBe(1);
-      const bdir = join(root, 'memory', 'maintenance', SUNDAY);
+      const bdir = join(root, 'data', 'history', 'maintenance', SUNDAY);
       mkdirSync(bdir, { recursive: true });
       writeFileSync(join(bdir, 'broken.md'),
         '# broken\n| prediction.aaa | reasoning |\n', 'utf8');

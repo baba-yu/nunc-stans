@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // Orchestrator core: run context, the run.json manifest (S-3's "which
 // pair produced this day"), and the generic LLM-step machinery
-// (prompt from the frozen skill specs + schema validation + one
-// re-prompt + replay-from-stored-artifact).
+// (prompt from the skill specs under pipeline/prompts/ + schema
+// validation + one re-prompt + replay-from-stored-artifact).
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import type Database from 'better-sqlite3';
@@ -13,7 +13,7 @@ export interface RunCtx {
   /** 0 = Sunday (the DOW table branches on this). */
   dow: number;
   dataDir: string;
-  /** The news data+publish checkout — inputs and published outputs. */
+  /** The data instance — inputs and rendered outputs. */
   newsRepo: string;
   sourcedataRoot: string;
   dbFile: string;
@@ -23,6 +23,11 @@ export interface RunCtx {
   runtime: string;
   search: string;
   synthModel: string | null;
+  /** The effective non-EN render set (⊆ ja/es/fil, universe order);
+   * 'en' is implicit. Live runs resolve it from news-config, replay
+   * derives it per day (world-paths replayLocaleSet). Every locale
+   * fan-out iterates this, never the LOCALES universe. */
+  locales: readonly string[];
   replay: boolean;
   dryRun: boolean;
   todayIso: string;
@@ -43,6 +48,11 @@ export class RunManifest {
   readonly data: Record<string, any>;
   constructor(args: {
     date: string; mode: string; runtime: string; search: string; synthModel: string | null;
+    /** The FULL effective render set, 'en' first (e.g. ['en','ja']).
+     * run.json (whose `locales` is what replay needs) is written once,
+     * by the dag at end of run. Non-full runs (--dry-run/--only) never
+     * write the file at all. */
+    locales: readonly string[];
   }) {
     this.data = {
       date: args.date,
@@ -50,6 +60,7 @@ export class RunManifest {
       runtime: args.runtime,
       search: args.search,
       synth_model: args.synthModel,
+      locales: [...args.locales],
       started_at: new Date().toISOString(),
       finished_at: null,
       steps: [] as StepRecord[],
@@ -83,25 +94,46 @@ export class StepFailure extends Error {
 
 // --- prompt assets ---------------------------------------------------------
 
-/** The frozen spec corpus imported at T0 — the prompts' source of truth. */
-export function designDir(): string {
-  return join(import.meta.dirname, '..', '..', '..', 'design');
+/** The runtime prompt assets bundled with this package (moved out of the
+ * frozen T0 spec corpus post-C; normally-editable behavior files). */
+export function promptsDir(): string {
+  return join(import.meta.dirname, '..', '..', 'prompts');
+}
+
+/** The dashboard shipped as engine code (post-C P2: instances carry
+ * data only; the dashboard left the checkout). Resolved relative to
+ * this package like promptsDir(). */
+export function engineDashboardDir(): string {
+  return join(import.meta.dirname, '..', '..', '..', 'dashboard');
 }
 
 export function loadSkillSpec(name: string): string {
-  return readFileSync(join(designDir(), 'skills', `${name}.md`), 'utf8');
+  return readFileSync(join(promptsDir(), 'skills', `${name}.md`), 'utf8');
 }
 
 export function loadWriterRules(task: '1_daily_update' | '2_future_prediction'): string {
-  return readFileSync(join(designDir(), 'scheduled', `${task}-writer-rules.md`), 'utf8');
+  return readFileSync(join(promptsDir(), 'scheduled', `${task}-writer-rules.md`), 'utf8');
 }
 
 export function loadScheduledSpec(name: string): string {
-  return readFileSync(join(designDir(), 'scheduled', `${name}.md`), 'utf8');
+  return readFileSync(join(promptsDir(), 'scheduled', `${name}.md`), 'utf8');
 }
 
 export function loadMemoryPolicy(): string {
-  return readFileSync(join(designDir(), 'memory-policy.md'), 'utf8');
+  return readFileSync(join(promptsDir(), 'memory-policy.md'), 'utf8');
+}
+
+/** Skill spec text as embedded into a step prompt. locale-fanout's
+ * contract (prompts/skills/locale-fanout.md §Translation contract)
+ * MANDATES that every translate sub-agent also read
+ * locale-fanout-calques.md; headless prompts inline every input, so the
+ * calque rules are appended here. */
+export function skillSpecForPrompt(skill: string): string {
+  const spec = loadSkillSpec(skill);
+  if (skill !== 'locale-fanout') return spec;
+  return spec
+    + '\n--- CALQUE RULES (locale-fanout-calques) — apply with the contract above ---\n'
+    + loadSkillSpec('locale-fanout-calques');
 }
 
 /** Compose a single headless prompt for an LLM step: the skill spec is
@@ -119,7 +151,7 @@ export function buildStepPrompt(args: {
     ``,
     `Follow this skill contract exactly:`,
     `--- SKILL SPEC (${args.skill}) ---`,
-    loadSkillSpec(args.skill),
+    skillSpecForPrompt(args.skill),
     `--- END SKILL SPEC ---`,
   ];
   if (args.writerRules) {

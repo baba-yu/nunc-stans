@@ -1,9 +1,11 @@
 // TS port of app/skills/lint_markdown_clean.py — forbidden internal-
-// pipeline tokens in user-facing markdown (design/sourcedata-layout.md
-// §Naming hygiene + the ADR-002 anti-inertia vocabulary).
+// pipeline tokens in user-facing markdown (naming hygiene + the
+// anti-inertia vocabulary). The FORBIDDEN table below is the canonical
+// list — the frozen specs were retired with the design corpus (git
+// history keeps them).
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { FP_DIR, LOCALES, REPORT_DIR } from '../world-paths.ts';
+import { DAILY_NEWS_REL, FP_REL, LOCALES } from '../world-paths.ts';
 
 // Each entry: [human label, regex]. The 'g' flag is added at scan time;
 // 'i'/'m' mirror the oracle's re.IGNORECASE / re.MULTILINE.
@@ -26,12 +28,18 @@ const FORBIDDEN: Array<[string, RegExp]> = [
   ['- so_that: bullet key', /^\s*-\s+so_that\s*:/m],
   ['- landing: bullet key', /^\s*-\s+landing\s*:/m],
   ['- plain_language: bullet key', /^\s*-\s+plain_language\s*:/m],
+  // Detector, not stripper: the canonical strip list lives in
+  // src/export/prefix-tokens.json (P8); these stay an independent subset.
   ['(Tech)/(Business)/(Mix) scope prefix',
     /\((?:Tech|Non-Tech|Non-tech|Business|Biz|Mix|Technical|Non-Technical|Technology|Tecnolog[íi]a|Tec|No-Tec|T[ée]cnico|Negocio|Teknikal|Hindi-Teknikal|Negosyo|Halong)\)/],
   ['（技術）/（ビジネス）scope prefix',
     /（(?:技術|非技術|テクノロジー|非テクノロジー|ビジネス|非ビジネス|ビジ|ミックス)）/],
+  // day-0 is exempt: storyline numbering never starts at zero, while
+  // "day-0 support" is legitimate industry vocabulary (day-0 model
+  // support in vLLM/SGLang etc.) — the cold-start first run 2026-07-07
+  // hit exactly that false positive in all four locales.
   ['day-N storyline numbering',
-    /\bday-(?:\d+|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen)(?:-(?:one|two|three|four|five|six|seven|eight|nine))?\b/],
+    /\bday-(?:[1-9]\d*|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen)(?:-(?:one|two|three|four|five|six|seven|eight|nine))?\b/],
   ['aging vocabulary',
     /\b(?:weekend|doubly|triply|quadruply|quintuply|sextuply)[\s-](?:weekend[\s-])?aged\b/i],
   ['N-day-old artifact filler',
@@ -60,12 +68,16 @@ export function scanText(text: string): LintHit[] {
   return hits;
 }
 
-export function datePaths(publishRoot: string, dateIso: string): string[] {
+/** The day's user-facing markdown files, over the FULL render set
+ * ('en' + the effective non-EN set; default = the universe). */
+export function datePaths(
+  publishRoot: string, dateIso: string, locales: readonly string[] = LOCALES,
+): string[] {
   const compact = dateIso.replaceAll('-', '');
   const out: string[] = [];
-  for (const locale of LOCALES) {
-    out.push(join(publishRoot, REPORT_DIR, locale, `news-${compact}.md`));
-    out.push(join(publishRoot, FP_DIR, locale, `future-prediction-${compact}.md`));
+  for (const locale of locales) {
+    out.push(join(publishRoot, DAILY_NEWS_REL, locale, `news-${compact}.md`));
+    out.push(join(publishRoot, FP_REL, locale, `future-prediction-${compact}.md`));
   }
   return out.filter(p => existsSync(p));
 }

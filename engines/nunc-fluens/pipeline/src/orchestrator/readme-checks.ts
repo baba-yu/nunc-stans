@@ -1,18 +1,21 @@
-// TS port of the link-routing check from
-// design/scheduled/3_daily_briefing-checks.md (Step 3): every link in a
-// non-English README must use its own locale segment, or fall back to
-// /en/ only when the locale file genuinely does not exist.
+// TS port of the 3_daily_briefing link-routing check (Step 3; the
+// frozen checks spec was retired with the design corpus — git history
+// keeps it): every link in a non-English README must use its own
+// locale segment, or fall back to /en/ only when the locale file
+// genuinely does not exist.
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { FP_DIR, NON_EN_LOCALES, REPORT_DIR } from '../world-paths.ts';
+import { DAILY_NEWS_REL, FP_REL, NON_EN_LOCALES } from '../world-paths.ts';
 
-const LINK_HEAD_RE = new RegExp(`\\((${REPORT_DIR}|${FP_DIR})/`);
-const LINK_RE = new RegExp(`\\((${REPORT_DIR}|${FP_DIR})/([^)]+)\\)`);
+const LINK_HEAD_RE = new RegExp(`\\((${DAILY_NEWS_REL}|${FP_REL})/`);
+const LINK_RE = new RegExp(`\\((${DAILY_NEWS_REL}|${FP_REL})/([^)]+)\\)`);
 
-export function checkReadmeLinks(publishRoot: string): { exit: number; lines: string[] } {
+export function checkReadmeLinks(
+  publishRoot: string, locales: readonly string[] = NON_EN_LOCALES,
+): { exit: number; lines: string[] } {
   const lines: string[] = [];
   let fail = 0;
-  for (const L of NON_EN_LOCALES) {
+  for (const L of locales) {
     const readme = join(publishRoot, `README.${L}.md`);
     if (!existsSync(readme)) continue;
     const text = readFileSync(readme, 'utf8');
@@ -21,7 +24,9 @@ export function checkReadmeLinks(publishRoot: string): { exit: number; lines: st
       const m = LINK_RE.exec(line);
       if (!m) continue;
       const path = `${m[1]}/${m[2]}`;
-      const seg = path.split('/')[1];
+      // The locale segment is the first component AFTER the (possibly
+      // multi-segment) dir constant — m[2] starts with it.
+      const seg = m[2].split('/')[0];
       if (seg === L) continue;
       if (seg === 'en') {
         const locPath = path.replace('/en/', `/${L}/`);

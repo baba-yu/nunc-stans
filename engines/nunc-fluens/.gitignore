@@ -1,18 +1,19 @@
-# In the nunc-stans monorepo, engines/nunc-fluens holds the news pipeline CODE only. The
-# world source of truth (data) lives in the external ~/news repo, which runs
-# the live daily pipeline (see INTEGRATION.md). Everything below is either
-# runtime byproduct or world-SoR data and must never be committed here — a
-# single pipeline run would otherwise add ~900 MB of graph snapshots back.
-# Patterns are anchored (leading /) so the committed golden fixtures under
-# pipeline/goldens/input/ — which reuse these directory names — stay tracked
-# (Phase C T1; CI stages them back into these ignored paths via stage-ci).
+# In the nunc-stans monorepo, engines/nunc-fluens holds the news pipeline CODE
+# only; instance data lives in per-instance directories (see INTEGRATION.md).
+# Data instances (plain local data dirs, stamped by `nunc-fluens init`)
+# default to instances/<profile>/ here — gitignored by owner decision
+# 2026-07-07 (FD-3.2 amendment; see CONTRIBUTING).
+/instances/
+# The anchored old-shape entries below cover untracked on-disk leftovers of
+# the retired Python oracle era (app/sourcedata, history/ — the renamed
+# memory/ residue with the reference ledger inside, pycache) — real data
+# the owner will remove; nothing runs in the engine dir anymore.
 /app/data/
 /app/sourcedata/
 **/__pycache__/
 .pytest_cache/
 /app/.pytest_cache/
 /docs/data/
-/memory/
+/history/
 /future-prediction/
 /report/
-/references.txt

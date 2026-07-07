@@ -225,7 +225,7 @@ describe('snapshots + pain points', () => {
   let repo: string;
   beforeEach(() => {
     repo = mkdtempSync(join(tmpdir(), 'nf-theme-'));
-    const dataDir = join(repo, 'docs', 'data');
+    const dataDir = join(repo, 'data', 'exports');
     mkdirSync(join(dataDir, 'snapshots'), { recursive: true });
     for (const [f, scope] of [['graph-tech.json', 'tech'],
       ['graph-business.json', 'business'], ['graph-mix.json', 'mix']] as const)
@@ -239,7 +239,7 @@ describe('snapshots + pain points', () => {
   afterEach(() => rmSync(repo, { recursive: true, force: true }));
 
   it('analyzeScope flags underused / overpopulated / dominance', () => {
-    const a = analyzeScope(join(repo, 'docs', 'data', 'graph-tech.json'));
+    const a = analyzeScope(join(repo, 'data', 'exports', 'graph-tech.json'));
     expect(a.overpopulated.map(t => t.theme_id)).toEqual(['tech.big']);
     expect(a.underused.map(t => t.theme_id)).toEqual(['tech.thin']);
     expect(a.dominant).toEqual(['tech.cat_a']); // 2/3 ≈ 66.7 %
@@ -248,23 +248,23 @@ describe('snapshots + pain points', () => {
   it('snapshotThreeTimeState writes both dirs, archives past 5, regenerates index', () => {
     // Pre-existing index: its `default` must survive the regeneration
     // (upstream archive_snapshots.py semantics).
-    writeFileSync(join(repo, 'docs', 'data', 'snapshots', 'index.json'),
+    writeFileSync(join(repo, 'data', 'exports', 'snapshots', 'index.json'),
       JSON.stringify({ snapshots: [], default: '20260628' }), 'utf8');
     snapshotThreeTimeState(db, repo, '2026-07-05');
-    const pre = join(repo, 'memory', 'snapshots', '20260705-pre-review');
+    const pre = join(repo, 'data', 'history', 'snapshots', '20260705-pre-review');
     for (const f of ['graph-tech.json', 'graph-business.json', 'graph-mix.json',
       'manifest.json', 'schema.sql', 'taxonomy.json'])
       expect(existsSync(join(pre, f)), f).toBe(true);
     const idx = JSON.parse(readFileSync(
-      join(repo, 'docs', 'data', 'snapshots', 'index.json'), 'utf8'));
+      join(repo, 'data', 'exports', 'snapshots', 'index.json'), 'utf8'));
     expect(idx).toEqual({
       snapshots: ['20260607', '20260614', '20260621', '20260628', '20260705'],
       default: '20260628',
     });
     // Aged-out weeks are MOVED to the gitignored archive, not deleted.
     for (const s of ['20260524', '20260531']) {
-      expect(existsSync(join(repo, 'docs', 'data', 'snapshots', s))).toBe(false);
-      expect(existsSync(join(repo, 'docs', 'archives', 'snapshots', s))).toBe(true);
+      expect(existsSync(join(repo, 'data', 'exports', 'snapshots', s))).toBe(false);
+      expect(existsSync(join(repo, 'data', 'archives', 'snapshots', s))).toBe(true);
     }
   });
 

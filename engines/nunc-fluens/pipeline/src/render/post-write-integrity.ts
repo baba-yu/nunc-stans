@@ -187,11 +187,11 @@ function checkReadme(text: string): string[] {
     if (!/^### Predictions check\s*$/m.test(body))
       errors.push(`## ${date}: missing \`### Predictions check\``);
     const newsBody = /^### News\s*$(.*?)(?=^###\s|(?![\s\S]))/ms.exec(body);
-    if (newsBody && !/\[news-\d{8}\.md\]\(report\//.test(newsBody[1]))
-      errors.push(`## ${date} ### News: missing terminating [news-…](report/<L>/…) link`);
+    if (newsBody && !/\[news-\d{8}\.md\]\(data\/daily-news\//.test(newsBody[1]))
+      errors.push(`## ${date} ### News: missing terminating [news-…](data/daily-news/<L>/…) link`);
     const predBody =
       /^### Predictions check\s*$(.*?)(?=^###\s|^## \d{4}-\d{2}-\d{2}\s*$|(?![\s\S]))/ms.exec(body);
-    if (predBody && !/\[future-prediction-\d{8}\.md\]\(future-prediction\//.test(predBody[1]))
+    if (predBody && !/\[future-prediction-\d{8}\.md\]\(data\/future-prediction\//.test(predBody[1]))
       errors.push(`## ${date} ### Predictions check: missing terminating [future-prediction-…] link`);
   }
   const tail = text.replace(/\s+$/, '').slice(-300);

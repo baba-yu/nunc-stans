@@ -84,10 +84,10 @@ export function classifyHost(host: string, policy: Policy): string {
 const LEDGER_HEADER = `# Citation policy review queue
 
 Auto-maintained by \`app/skills/citation_restriction_check.py --unclassified-out\`.
-Each daily run upserts every UNCLASSIFIED host (no ToS-based classification yet) sighted in \`report/<L>/news-*.md\` and \`future-prediction/<L>/future-prediction-*.md\`. Counts include all sightings since the host first showed up; first_seen + last_seen are ISO dates (the dated draft file's date).
+Each daily run upserts every UNCLASSIFIED host (no ToS-based classification yet) sighted in \`data/daily-news/<L>/news-*.md\` and \`data/future-prediction/<L>/future-prediction-*.md\`. Counts include all sightings since the host first showed up; first_seen + last_seen are ISO dates (the dated draft file's date).
 
 A human reviewer reads each entry's ToS, then either:
-- promotes the host into \`reference/citation-restrictions.md\` (denylist / parent_groups / unconfirmed_denylist / paywall_short_quote_only / requires_attribution), or
+- promotes the host into \`data/reference/citation-restrictions.md\` (denylist / parent_groups / unconfirmed_denylist / paywall_short_quote_only / requires_attribution), or
 - leaves it here under default-allow.
 
 When a host is promoted, **delete its row from the table below** so this ledger stays a queue (not a denormalized cache).

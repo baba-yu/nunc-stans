@@ -1,29 +1,38 @@
 #!/usr/bin/env node
-// nunc-fluens — the news pipeline CLI (Phase C).
-//   link <dir>      designate the read-only news-shaped checkout (news_repo)
-//   status          show resolved config and world-cache state
-//   migrate-db      copy analytics.sqlite into <data store>/world/ (verified)
-//   validate <date> schema-validate a day's sourcedata (incl. locales)
-//   sandbox <dir>   create a disposable run instance (clone + seeded store)
-//   run             the daily DAG — always against a sandbox, never the
-//                   view checkout (Phase C redirection)
-import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, realpathSync, statSync } from 'node:fs'
+// nunc-fluens — the news pipeline CLI (Phase C; instance model V2).
+//   link <dir|name>         designate the read-only view source (an instance)
+//   status                  show resolved config and world-cache state
+//   validate <date>         schema-validate a day's sourcedata (incl. locales)
+//   init <dir|name>         create a data instance from the engine template
+//   import <src> <instance> copy a news-shaped checkout's data into an instance
+//   run                     the daily DAG — always against a data instance
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { join } from 'node:path'
-import { execFileSync } from 'node:child_process'
 import {
-  configFile, linkNewsRepo, newsDbFile, requireConfig, requireNewsRepo,
+  configFile, linkNewsRepo, requireNewsRepo,
   resolveDataDir, resolveNewsRepo, runLogFile, sourcedataDir,
   worldDbFile, worldDir,
 } from './config.ts'
-import { integrityCheck, migrateDb } from './migrate.ts'
 import { CANONICAL_FILES } from './schemas/sourcedata.ts'
-import { REPORT_DIR } from './world-paths.ts'
+import {
+  DAILY_NEWS_REL, EXPORTS_REL, resolveLocaleSet,
+} from './world-paths.ts'
+import {
+  initInstance, requireInstance, resolveInstanceDir, type InstancePaths,
+} from './instance.ts'
+import { importNewsCheckout } from './import.ts'
 
-function cmdLink(dir: string | undefined): number {
-  if (!dir) { console.error('usage: nunc-fluens link <dir>'); return 2 }
+function cmdLink(arg: string | undefined): number {
+  if (!arg) { console.error('usage: nunc-fluens link <dir|name>'); return 2 }
+  // Bare names are CLI-level sugar for the engine's instances/ home —
+  // the same resolution init/import/run use (resolveInstanceDir).
+  const dir = resolveInstanceDir(arg)
   if (!existsSync(dir)) { console.error(`link: no such directory: ${dir}`); return 1 }
-  if (!existsSync(join(dir, REPORT_DIR)))
-    console.error(`warning: ${dir} has no ${REPORT_DIR}/ — is this really the news checkout?`)
+  // The view source is an instance checkout (R6: old-shape view support
+  // removed — news-shaped checkouts are brought over via `import`).
+  if (!existsSync(join(dir, DAILY_NEWS_REL)) && !existsSync(join(dir, EXPORTS_REL)))
+    console.error(`warning: ${dir} has neither ${DAILY_NEWS_REL}/ nor `
+      + `${EXPORTS_REL}/ — is this really a nunc-fluens instance?`)
   const file = linkNewsRepo(dir)
   console.log(`news_repo = ${dir}`)
   console.log(`written to ${file}`)
@@ -38,18 +47,8 @@ function cmdStatus(): number {
   console.log(`news repo   : ${repo ?? '(not configured - just news-link <dir>)'}`)
   if (dir) {
     const db = worldDbFile(dir)
-    console.log(`world db    : ${existsSync(db) ? `${db} (${statSync(db).size} bytes)` : '(not migrated - just news-migrate-db)'}`)
+    console.log(`world db    : ${existsSync(db) ? `${db} (${statSync(db).size} bytes)` : '(absent)'}`)
   }
-  return 0
-}
-
-function cmdMigrateDb(): number {
-  const cfg = requireConfig()
-  const r = migrateDb(cfg, new Date().toISOString().slice(0, 10))
-  console.log(`migrated ${r.source}`)
-  console.log(`      -> ${r.target} (${r.bytes} bytes, integrity ok)`)
-  if (r.backedUp) console.log(`previous target backed up to ${r.backedUp}`)
-  console.log('note: the upstream copy stays in place until the T9 cutover')
   return 0
 }
 
@@ -87,83 +86,62 @@ function cmdValidate(date: string | undefined): number {
   return failed === 0 ? 0 : 1
 }
 
-const [cmd, arg] = process.argv.slice(2)
-
-/** Create a disposable run instance: a local clone of the (read-only)
- * view checkout plus its own data store seeded with the checkout's
- * analytics.sqlite. Runs only ever target such an instance — the
- * Phase C redirection forbids writing the real checkout. */
-function cmdSandbox(dir: string | undefined): number {
-  if (!dir) { console.error('usage: nunc-fluens sandbox <dir>'); return 2 }
-  const src = requireNewsRepo()
-  const news = join(dir, 'news')
-  const store = join(dir, 'store')
-  if (existsSync(news)) {
-    console.error(`sandbox: ${news} already exists — pick a fresh dir (sandboxes are disposable)`)
+/** Create a v2 data instance from pipeline/instance-template/ (R1). A
+ * bare name resolves under engines/nunc-fluens/instances/. */
+function cmdInit(arg: string | undefined): number {
+  if (!arg) { console.error('usage: nunc-fluens init <dir|name>'); return 2 }
+  const dir = resolveInstanceDir(arg)
+  try {
+    const r = initInstance(dir)
+    for (const l of r.log) console.log(`  ${l}`)
+    console.log(`instance ready at ${dir}`)
+    console.log('')
+    console.log('run with:')
+    console.log(`  NS_INSTANCE="${dir}" nunc-fluens run [--date D] [--replay] …`)
+    console.log(`bring existing news data over with: nunc-fluens import <src> "${dir}"`)
+    return 0
+  } catch (e) {
+    console.error(`init: ${e instanceof Error ? e.message : e}`)
     return 1
   }
-  mkdirSync(dir, { recursive: true })
-  console.log(`cloning ${src} -> ${news} (local clone; objects are shared read-only)`)
-  execFileSync('git', ['clone', '--local', src, news], { stdio: 'inherit' })
-  // A sandbox must not be able to push back into the source checkout.
-  execFileSync('git', ['-C', news, 'remote', 'remove', 'origin'])
-  // Seed the sandbox DB. The checkout's own DB is gitignored upstream
-  // (a rebuildable cache), so the clone won't carry one — fall back to
-  // the source checkout's working tree, then to the main store's copy.
-  const mainStore = resolveDataDir().dir
-  const seedCandidates = [
-    newsDbFile(news),                                    // clone carried one
-    newsDbFile(src),                                     // source working tree
-    mainStore ? worldDbFile(mainStore) : null,           // migrated main copy
-  ].filter((p): p is string => p !== null && existsSync(p))
-  if (!seedCandidates.length) {
-    console.error('sandbox: no analytics.sqlite to seed from (checkout carries none, '
-      + 'main store has none) — run `just news-migrate-db` first or provide a DB')
-    return 1
-  }
-  const seed = seedCandidates[0]
-  integrityCheck(seed)
-  const target = worldDbFile(store)
-  mkdirSync(join(store, 'world'), { recursive: true })
-  copyFileSync(seed, target)
-  integrityCheck(target)
-  console.log(`seeded ${target} from ${seed} (${statSync(target).size} bytes, integrity ok)`)
-  console.log('')
-  console.log('sandbox ready. Run with either:')
-  console.log(`  just news-daily "${dir}"`)
-  console.log(`  NS_SANDBOX="${dir}" nunc-fluens run [--date D] [--replay] …`)
-  return 0
 }
 
-interface SandboxPaths { newsRepo: string; dataDir: string }
+/** Copy a news-shaped checkout's data into an init-born instance (R4).
+ * The source is read-only; the instance gets one import commit. */
+function cmdImport(src: string | undefined, instArg: string | undefined): number {
+  if (!src || !instArg) {
+    console.error('usage: nunc-fluens import <news-shaped-src> <instance-dir|name>')
+    return 2
+  }
+  const instance = resolveInstanceDir(instArg)
+  try {
+    const r = importNewsCheckout(src, instance)
+    for (const l of r.log) console.log(`  ${l}`)
+    console.log(`imported ${src} into ${instance} (source untouched)`)
+    return 0
+  } catch (e) {
+    console.error(`import: ${e instanceof Error ? e.message : e}`)
+    return 1
+  }
+}
 
-/** Resolve and validate the run target. Never the view checkout. */
-function requireSandbox(dirArg: string | null): SandboxPaths {
-  const dir = dirArg ?? process.env.NS_SANDBOX ?? null
-  if (!dir)
-    throw new Error(
-      'run refuses to start without a sandbox: pass --sandbox <dir> (or set NS_SANDBOX).\n'
-      + 'The pipeline never runs against the view checkout (Phase C redirection) — '
-      + 'create an instance with: just news-sandbox <dir>')
-  const newsRepo = join(dir, 'news')
-  const dataDir = join(dir, 'store')
-  if (!existsSync(newsRepo) || !existsSync(worldDbFile(dataDir)))
-    throw new Error(
-      `sandbox at ${dir} is missing news/ or store/world/analytics.sqlite — `
-      + 'create it with: just news-sandbox <dir>')
-  const view = resolveNewsRepo()
-  if (view && existsSync(view)
-    && realpathSync(view) === realpathSync(newsRepo))
-    throw new Error(
-      `refusing to run: the sandbox news dir resolves to the view checkout (${view}). `
-      + 'The view source is read-only; runs target disposable copies only.')
-  return { newsRepo, dataDir }
+/** Refusal-style JSON read for the hand-placed news-config files:
+ * invalid content is a refusal naming the offending file, not a raw
+ * JSON.parse stack (mirrors the locales refusal in cmdRun). */
+function readNewsConfig(path: string): Record<string, unknown> | null {
+  try {
+    return JSON.parse(readFileSync(path, 'utf8')) as Record<string, unknown>
+  } catch (e) {
+    console.error(`run: refusing to start — ${path} is not valid JSON: `
+      + `${e instanceof Error ? e.message : e}`)
+    return null
+  }
 }
 
 async function cmdRun(argv: string[]): Promise<number> {
   const opts = {
     date: new Date().toISOString().slice(0, 10), replay: false, dryRun: false,
-    only: null as string | null, sandbox: null as string | null,
+    only: null as string | null, instance: null as string | null,
   }
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i]
@@ -171,31 +149,55 @@ async function cmdRun(argv: string[]): Promise<number> {
     else if (a === '--replay') opts.replay = true
     else if (a === '--dry-run') opts.dryRun = true
     else if (a === '--only') opts.only = argv[++i]
-    else if (a === '--sandbox') opts.sandbox = argv[++i]
+    else if (a === '--instance') opts.instance = argv[++i]
     else { console.error(`run: unknown flag ${a}`); return 2 }
   }
-  let box: SandboxPaths
+  let box: InstancePaths
   try {
-    box = requireSandbox(opts.sandbox)
+    box = requireInstance(opts.instance)
   } catch (e) {
     console.error(`run: ${e instanceof Error ? e.message : e}`)
     return 1
   }
-  // Runtime/search pair from the settings file in the MAIN data store
-  // (S-3; the gate API and Formans drawer read/write that file) — the
-  // pair is user preference, not sandbox state. Defaults apply when no
-  // main store is configured.
-  const mainStore = resolveDataDir().dir
+  // Runtime/search/locale settings (S-3): the instance's own
+  // store/news-config.json wins when present (R3); otherwise the MAIN
+  // store's copy — the defaults the gate API and Formans drawer edit.
+  // A per-profile gate API is a recorded follow-up; until then the
+  // override file is hand-placed. Defaults apply when neither exists.
   let newsCfg: Record<string, unknown> = {}
-  if (mainStore) {
-    const newsConfigFile = join(worldDir(mainStore), 'news-config.json')
-    if (existsSync(newsConfigFile)) newsCfg = JSON.parse(readFileSync(newsConfigFile, 'utf8'))
+  const instanceCfg = join(box.storeDir, 'news-config.json')
+  if (existsSync(instanceCfg)) {
+    const parsed = readNewsConfig(instanceCfg)
+    if (parsed === null) return 1
+    newsCfg = parsed
+  } else {
+    const mainStore = resolveDataDir().dir
+    if (mainStore) {
+      const mainCfg = join(worldDir(mainStore), 'news-config.json')
+      if (existsSync(mainCfg)) {
+        const parsed = readNewsConfig(mainCfg)
+        if (parsed === null) return 1
+        newsCfg = parsed
+      }
+    }
   }
   const runtime = (newsCfg.runtime as string) ?? 'claude-code'
   const search = (newsCfg.search as string) === 'external'
     ? (newsCfg.searchEngine as string) ?? 'brave'
     : 'native'
   const synthModel = (newsCfg.synthModel as string) ?? null
+  // Locale model (post-C P5): EN + the configured subset of ja/es/fil.
+  // Absent key = the full trio (today's behavior). Invalid content is a
+  // refusal, not a guess — the drawer/gate validate writes, but the
+  // file is hand-editable.
+  let locales: readonly string[]
+  try {
+    locales = resolveLocaleSet(newsCfg.locales)
+  } catch (e) {
+    console.error(`run: refusing to start — news-config.json 'locales' is invalid: `
+      + `${e instanceof Error ? e.message : e}`)
+    return 1
+  }
 
   // Relative source import: node refuses to type-strip files under
   // node_modules, so the workspace-linked 'nunc-ai' specifier only
@@ -203,12 +205,13 @@ async function cmdRun(argv: string[]): Promise<number> {
   const { createAi } = await import('../../../../frontend/packages/ai/src/index.ts') as
     typeof import('nunc-ai')
   const { runDay } = await import('./orchestrator/dag.ts')
-  const ai = opts.replay ? null : createAi({ runLogFile: runLogFile(box.dataDir) })
+  // The AI call log rides the INSTANCE store (R3): store/runs/ai-runs.jsonl.
+  const ai = opts.replay ? null : createAi({ runLogFile: runLogFile(box.storeDir) })
   const r = await runDay({
     date: opts.date,
-    dataDir: box.dataDir,
-    newsRepo: box.newsRepo,
-    ai, runtime, search, synthModel,
+    dataDir: box.storeDir,
+    newsRepo: box.root,
+    ai, runtime, search, synthModel, locales,
     replay: opts.replay,
     dryRun: opts.dryRun,
     only: opts.only,
@@ -217,17 +220,18 @@ async function cmdRun(argv: string[]): Promise<number> {
   return r.ok ? 0 : 1
 }
 
+const [cmd, arg, arg2] = process.argv.slice(2)
 const argvRest = process.argv.slice(3)
 let code: number
 switch (cmd) {
   case 'link': code = cmdLink(arg); break
   case 'status': code = cmdStatus(); break
-  case 'migrate-db': code = cmdMigrateDb(); break
   case 'validate': code = cmdValidate(arg); break
-  case 'sandbox': code = cmdSandbox(arg); break
+  case 'init': code = cmdInit(arg); break
+  case 'import': code = cmdImport(arg, arg2); break
   case 'run': code = await cmdRun(argvRest); break
   default:
-    console.error('usage: nunc-fluens link <dir> | status | migrate-db | validate <date> | sandbox <dir> | run --sandbox <dir> [--date D] [--replay] [--dry-run] [--only step]')
+    console.error('usage: nunc-fluens link <dir|name> | status | validate <date> | init <dir|name> | import <src> <instance> | run --instance <dir|name> [--date D] [--replay] [--dry-run] [--only step]')
     code = 2
 }
 process.exit(code)

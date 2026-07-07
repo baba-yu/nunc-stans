@@ -1,23 +1,31 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// TS port of app/src/export.py — the analytics DB → docs/data/*.json
+// TS port of app/src/export.py — the analytics DB → data/exports/*.json
 // export layer (scope graphs, mix merge, glossary, manifest).
 //
 // Serialization note (accepted divergence, recorded in the goldens
 // manifest): the oracle writes python-repr floats (`1.0`); JS writes
 // `1`. JSON numbers are typeless, every consumer parses the file, so
 // export parity is asserted on parsed values, not bytes.
-import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import type { Db } from '../ingest/ingest-core.ts';
 import { hashId, nowIso, pyRound, sha1Hex } from '../ingest/util.ts';
 import { WINDOWS, windowRange } from '../ingest/analytics.ts';
 import { parseWeekBucket } from '../ingest/timewindow.ts';
-import { boldHint, deriveShortLabel } from './short-label.ts';
+import { boldHint, deriveShortLabel, prefixTokensPath } from './short-label.ts';
+import { HISTORY_REL, NON_EN_LOCALES } from '../world-paths.ts';
 
 const SCHEMA_VERSION = '1.0';
-const LOCALES = ['en', 'ja', 'es', 'fil'] as const;
 const DEFAULT_LOCALE = 'en';
 const SECONDARY_THEME_THRESHOLD = 0.55;
+
+// The effective non-EN set for the CURRENT export (post-C P5): locale
+// bags emit exactly en + this set (EN-fallback semantics unchanged).
+// Module state rather than a threaded parameter because loc()/
+// localeField() are called positionally from deep inside the node
+// builders; runExport/buildScopeGraph are synchronous, and both public
+// entry points assign it before any bag is built.
+let activeNonEn: readonly string[] = NON_EN_LOCALES;
 
 const TOKEN_RE = /[A-Za-z0-9]+|[぀-ヿ一-鿿]+/g;
 
@@ -29,13 +37,16 @@ function tok(s: string | null | undefined): Set<string> {
 }
 
 function loc(en: any, ja: any, es: any, fil: any): Record<string, any> {
-  return { en, ja: ja || en, es: es || en, fil: fil || en };
+  const byLocale: Record<string, any> = { ja, es, fil };
+  const out: Record<string, any> = { en };
+  for (const l of activeNonEn) out[l] = byLocale[l] || en;
+  return out;
 }
 
 function localeField(row: any, baseField: string): Record<string, any> {
   const en = row[baseField] ?? null;
   const out: Record<string, any> = { en };
-  for (const l of ['ja', 'es', 'fil']) {
+  for (const l of activeNonEn) {
     const v = row[`${baseField}_${l}`] ?? null;
     out[l] = v || en;
   }
@@ -129,7 +140,7 @@ function earliestReportDate(db: Db): string | null {
 }
 
 function loadDormantSet(publishRoot: string): Set<string> {
-  const dir = join(publishRoot, 'memory', 'dormant');
+  const dir = join(publishRoot, HISTORY_REL, 'dormant');
   if (!existsSync(dir)) return new Set();
   const snapshots = readdirSync(dir).filter(f => /^dormant-.*\.md$/.test(f)).sort();
   if (snapshots.length === 0) return new Set();
@@ -267,7 +278,11 @@ function predictionGrassDaily(
   return out;
 }
 
-export function buildScopeGraph(db: Db, scopeId: string, publishRoot: string): Record<string, any> {
+export function buildScopeGraph(
+  db: Db, scopeId: string, publishRoot: string,
+  locales: readonly string[] = NON_EN_LOCALES,
+): Record<string, any> {
+  activeNonEn = locales;
   const latest = latestReportDate(db);
   const earliest = earliestReportDate(db) ?? latest;
 
@@ -311,16 +326,6 @@ export function buildScopeGraph(db: Db, scopeId: string, publishRoot: string): R
     return scored.filter(([s, thId]) => s >= thresh && thId !== primaryThemeId).map(([, thId]) => thId);
   };
 
-  const subthemes = db.prepare(
-    `SELECT st.subtheme_id, st.theme_id, st.canonical_label, st.short_label,
-            st.description, t.category_id,
-            st.label_ja, st.label_es, st.label_fil,
-            st.short_label_ja, st.short_label_es, st.short_label_fil,
-            st.description_ja, st.description_es, st.description_fil
-     FROM subthemes st
-     JOIN themes t ON st.theme_id = t.theme_id
-     WHERE t.scope_id = ? AND st.status IN ('active', 'candidate')`).all(scopeId) as any[];
-
   const predictions = db.prepare(
     `SELECT p.prediction_id, p.prediction_summary, p.prediction_short_label,
             p.prediction_date, p.source_row_index, sf.path AS source_path,
@@ -341,7 +346,7 @@ export function buildScopeGraph(db: Db, scopeId: string, publishRoot: string): R
             p.summary_ja AS pred_summary_ja,
             p.summary_es AS pred_summary_es,
             p.summary_fil AS pred_summary_fil,
-            psa.category_id, psa.theme_id, psa.subtheme_id,
+            psa.category_id, psa.theme_id,
             psa.latest_realization_score, psa.latest_contradiction_score,
             psa.latest_observed_relevance, psa.latest_observation_status
      FROM predictions p
@@ -519,14 +524,14 @@ export function buildScopeGraph(db: Db, scopeId: string, publishRoot: string): R
     const catLabels = localeField(cat, 'label');
     const catShortLabels = localeField(cat, 'short_label');
     if (!catShortLabels.en)
-      for (const kk of ['en', 'ja', 'es', 'fil'])
+      for (const kk of ['en', ...activeNonEn])
         if (!catShortLabels[kk]) catShortLabels[kk] = catLabels[kk];
     const node = {
       id: nodeId, type: 'category', scope_id: scopeId,
       label: cat.label, short_label: cat.short_label || cat.label,
       description: cat.description,
       labels: { label: catLabels, short_label: catShortLabels, description: localeField(cat, 'description') },
-      category_id: cat.category_id, theme_id: null, subtheme_id: null, prediction_id: null,
+      category_id: cat.category_id, theme_id: null, prediction_id: null,
       parent_ids: [] as string[], child_ids: [] as string[],
       metrics_by_window: buildMetrics('category', nodeId),
       visibility: { min_zoom: 0.0, max_zoom: null, default_visible: true },
@@ -567,7 +572,7 @@ export function buildScopeGraph(db: Db, scopeId: string, publishRoot: string): R
           description: loc(descEn, th.description_ja, th.description_es, th.description_fil),
         },
         category_id: th.category_id, theme_id: th.theme_id,
-        subtheme_id: null, prediction_id: null,
+        prediction_id: null,
         parent_ids: [th.category_id], child_ids: [] as string[],
         metrics_by_window: buildMetrics('theme', nodeId),
         visibility: { min_zoom: 0.75, max_zoom: null, default_visible: false },
@@ -585,46 +590,10 @@ export function buildScopeGraph(db: Db, scopeId: string, publishRoot: string): R
     });
   }
 
-  for (const st of subthemes) {
-    const themeNode = idIndex.get(st.theme_id);
-    if (themeNode === undefined) continue;
-    const nodeId = st.subtheme_id;
-    const layout = layouts.get(nodeId) ?? {
-      x: themeNode.layout.x + 60.0, y: themeNode.layout.y + 40.0,
-      z: 0.0, radius: 16.0, fixed: false,
-    };
-    const labelEn = st.canonical_label;
-    const shortEn = st.short_label || labelEn;
-    const node = {
-      id: nodeId, type: 'subtheme', scope_id: scopeId,
-      label: st.canonical_label, short_label: st.short_label || st.canonical_label,
-      description: st.description,
-      labels: {
-        label: loc(labelEn, st.label_ja, st.label_es, st.label_fil),
-        short_label: loc(shortEn, st.short_label_ja, st.short_label_es, st.short_label_fil),
-        description: loc(st.description, st.description_ja, st.description_es, st.description_fil),
-      },
-      category_id: st.category_id, theme_id: st.theme_id,
-      subtheme_id: st.subtheme_id, prediction_id: null,
-      parent_ids: [st.theme_id], child_ids: [] as string[],
-      metrics_by_window: Object.fromEntries(WINDOWS.map(([w]) => [w, blankMetricBundle('subtheme')])),
-      visibility: { min_zoom: 1.25, max_zoom: null, default_visible: false },
-      layout,
-      detail: {
-        title: st.canonical_label, subtitle: `Subtheme · ${pyTitle(scopeId)}`,
-        description: st.description, scope_id: scopeId, node_type: 'subtheme',
-        parent_theme_id: st.theme_id, parent_category_id: st.category_id,
-      },
-    };
-    nodes.push(node);
-    idIndex.set(nodeId, node);
-    themeNode.child_ids.push(nodeId);
-  }
-
   // Predictions
   const predByParent = new Map<string, any[]>();
   for (const pr of predictions) {
-    const parentId = pr.subtheme_id || pr.theme_id;
+    const parentId = pr.theme_id;
     if (!parentId) continue;
     if (!predByParent.has(parentId)) predByParent.set(parentId, []);
     predByParent.get(parentId)!.push(pr);
@@ -874,7 +843,7 @@ export function buildScopeGraph(db: Db, scopeId: string, publishRoot: string): R
           summary: summaryLocales,
         },
         category_id: pr.category_id, theme_id: pr.theme_id,
-        subtheme_id: pr.subtheme_id, prediction_id: pr.prediction_id,
+        prediction_id: pr.prediction_id,
         parent_ids: parents, child_ids: [] as string[],
         metrics_by_window: buildMetrics('prediction', nodeId),
         visibility: { min_zoom: 2.0, max_zoom: null, default_visible: false },
@@ -924,7 +893,6 @@ export function buildScopeGraph(db: Db, scopeId: string, publishRoot: string): R
           validation_reports: validationReports,
           parent_category_id: pr.category_id,
           parent_theme_id: pr.theme_id,
-          parent_subtheme_id: pr.subtheme_id,
           latest_observed_relevance: pr.latest_observed_relevance,
           latest_realization_score: pr.latest_realization_score,
           latest_contradiction_score: pr.latest_contradiction_score,
@@ -1042,7 +1010,7 @@ export function buildScopeGraph(db: Db, scopeId: string, publishRoot: string): R
     for (const pid of node.parent_ids) {
       const pn = idIndex.get(pid);
       if (pn === undefined) continue;
-      if ((pn.type === 'theme' || pn.type === 'subtheme') && pn.category_id)
+      if (pn.type === 'theme' && pn.category_id)
         cats.add(pn.category_id);
     }
     if (cats.size < 2) continue;
@@ -1050,10 +1018,10 @@ export function buildScopeGraph(db: Db, scopeId: string, publishRoot: string): R
     for (const c of ordered) linkedCategories.add(c);
     for (let i = 0; i < ordered.length; i++)
       for (let j = i + 1; j < ordered.length; j++)
-        crossCatPairs.add(`${ordered[i]} ${ordered[j]}`);
+        crossCatPairs.add(`${ordered[i]}\0${ordered[j]}`);
   }
   for (const pair of [...crossCatPairs].sort()) {
-    const [a, b] = pair.split(' ');
+    const [a, b] = pair.split('\0');
     links.push({
       id: `link.shares.${a}__${b}`, source: a, target: b,
       type: 'shares_prediction', weight: 0.6, status: 'active',
@@ -1096,7 +1064,7 @@ export function buildScopeGraph(db: Db, scopeId: string, publishRoot: string): R
   };
 }
 
-function buildManifest(db: Db, buildId: string): Record<string, any> {
+function buildManifest(db: Db, buildId: string, nonEn: readonly string[]): Record<string, any> {
   const latest = latestReportDate(db) ?? '';
   const windows = (db.prepare(
     'SELECT window_id, label, days, is_default FROM metric_windows ORDER BY sort_order')
@@ -1110,7 +1078,7 @@ function buildManifest(db: Db, buildId: string): Record<string, any> {
     default_scope: 'mix',
     default_window: dw?.window_id ?? '30d',
     default_locale: DEFAULT_LOCALE,
-    locales: [...LOCALES],
+    locales: ['en', ...nonEn],
     windows,
     scopes: [
       { scope_id: 'mix', label: 'Mix', graph_file: 'graph-mix.json' },
@@ -1176,7 +1144,7 @@ function buildMixGraph(tech: any, business: any, buildId: string): Record<string
     for (const pid of node.parent_ids) {
       const pn = idIndex.get(pid);
       if (pn === undefined) continue;
-      if ((pn.type === 'theme' || pn.type === 'subtheme') && pn.category_id)
+      if (pn.type === 'theme' && pn.category_id)
         cats.add(pn.category_id);
     }
     if (cats.size < 2) continue;
@@ -1184,10 +1152,10 @@ function buildMixGraph(tech: any, business: any, buildId: string): Record<string
     for (const c of ordered) linkedCategories.add(c);
     for (let i = 0; i < ordered.length; i++)
       for (let j = i + 1; j < ordered.length; j++)
-        crossCatPairs.add(`${ordered[i]} ${ordered[j]}`);
+        crossCatPairs.add(`${ordered[i]}\0${ordered[j]}`);
   }
   for (const pair of [...crossCatPairs].sort()) {
-    const [a, b] = pair.split(' ');
+    const [a, b] = pair.split('\0');
     const linkId = `link.shares.${a}__${b}`;
     if (seenLinkIds.has(linkId)) continue;
     seenLinkIds.add(linkId);
@@ -1217,7 +1185,15 @@ function buildMixGraph(tech: any, business: any, buildId: string): Record<string
   };
 }
 
-export function runExport(db: Db, args: { outputDir: string; publishRoot: string }): Record<string, any> {
+export function runExport(db: Db, args: {
+  outputDir: string; publishRoot: string;
+  /** Effective non-EN set (param with default: also called from
+   * tests/freeze without a RunCtx). Locale bags + manifest.locales
+   * emit en + this set. */
+  locales?: readonly string[];
+}): Record<string, any> {
+  const nonEn = args.locales ?? NON_EN_LOCALES;
+  activeNonEn = nonEn;
   const outDir = args.outputDir;
   mkdirSync(outDir, { recursive: true });
   const buildId = nowIso();
@@ -1225,7 +1201,7 @@ export function runExport(db: Db, args: { outputDir: string; publishRoot: string
   const scopeGraphs: Record<string, any> = {};
 
   for (const scopeId of ['tech', 'business']) {
-    const graph = buildScopeGraph(db, scopeId, args.publishRoot);
+    const graph = buildScopeGraph(db, scopeId, args.publishRoot, nonEn);
     scopeGraphs[scopeId] = graph;
     const errs = validateGraph(graph);
     if (errs.length) graph._validation_errors = errs;
@@ -1294,10 +1270,17 @@ export function runExport(db: Db, args: { outputDir: string; publishRoot: string
     JSON.stringify({ generated_at: buildId, terms: glossaryTerms }, null, 2), 'utf8');
   written.push(glossaryPath);
 
-  const manifest = buildManifest(db, buildId);
+  const manifest = buildManifest(db, buildId, nonEn);
   const manifestPath = join(outDir, 'manifest.json');
   writeFileSync(manifestPath, JSON.stringify(manifest, null, 2), 'utf8');
   written.push(manifestPath);
+
+  // Scope-prefix strip list (P8): the same JSON short-label.ts builds
+  // its regexes from, exported alongside the graphs so the no-build
+  // dashboard's cleanPredictionTitle can fetch it at init.
+  const prefixTokensTarget = join(outDir, 'prefix-tokens.json');
+  copyFileSync(prefixTokensPath(), prefixTokensTarget);
+  written.push(prefixTokensTarget);
 
   return { files: written, build_id: buildId };
 }

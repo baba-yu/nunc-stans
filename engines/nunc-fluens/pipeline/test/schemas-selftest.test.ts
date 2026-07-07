@@ -6,7 +6,7 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { CANONICAL_FILES } from '../src/schemas/sourcedata.ts';
 
-const SD = join(import.meta.dirname, '..', 'goldens', 'input', 'sourcedata');
+const SD = join(import.meta.dirname, '..', 'goldens', 'input', 'data', 'sourcedata');
 
 function canonicalIn(dir: string): string[] {
   return Object.keys(CANONICAL_FILES).filter(n => existsSync(join(dir, n)));

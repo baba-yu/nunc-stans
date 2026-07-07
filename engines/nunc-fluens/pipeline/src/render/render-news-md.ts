@@ -1,11 +1,11 @@
 // TS port of app/skills/render_news_md.py — deterministic renderer for
-// report/<locale>/news-YYYYMMDD.md from sourcedata JSON. Byte-parity
-// with the oracle is asserted against the golden corpus.
+// data/daily-news/<locale>/news-YYYYMMDD.md from sourcedata JSON.
+// Byte-parity with the oracle is asserted against the golden corpus.
 //
 // API takes explicit roots instead of the oracle's __file__-anchored
-// repo_root: `sourcedataRoot` is <newsRepo>/app/sourcedata in production
-// and goldens/input/sourcedata in tests; `publishRoot` is the checkout
-// the report/ tree lives in.
+// repo_root: `sourcedataRoot` is <instance>/data/sourcedata in
+// production and goldens/input/data/sourcedata in tests; `publishRoot`
+// is the checkout the data/daily-news/ tree lives in.
 import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import {
@@ -14,7 +14,7 @@ import {
   parsePredictionsFile, predictionsFileToDict,
 } from '../schemas/sourcedata.ts';
 import { aiNotice } from './notice.ts';
-import { REPORT_DIR } from '../world-paths.ts';
+import { DAILY_NEWS_REL } from '../world-paths.ts';
 import { buildEnv, emptyListToNull, normalizeRendered } from './env.ts';
 import { postWriteIntegrity } from './post-write-integrity.ts';
 
@@ -83,7 +83,7 @@ export function renderNewsDay(sourcedataRoot: string, dateIso: string, locale = 
 }
 
 export function newsOutputPath(publishRoot: string, dateIso: string, locale: string): string {
-  return join(publishRoot, REPORT_DIR, locale, `news-${dateIso.replaceAll('-', '')}.md`);
+  return join(publishRoot, DAILY_NEWS_REL, locale, `news-${dateIso.replaceAll('-', '')}.md`);
 }
 
 export function writeAtomic(path: string, text: string): void {

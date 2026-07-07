@@ -13,7 +13,7 @@ import {
 } from '../src/ingest/glossary-define.ts';
 import {
   commitValidation, dedupeCheck, formCheck, listPendingSemantic,
-  runValidateGlossary,
+  pruneGlossaryAudit, runValidateGlossary,
 } from '../src/gates/validate-glossary-terms.ts';
 
 const TODAY = '2026-07-06';
@@ -184,5 +184,90 @@ describe('validate-glossary-terms (dedupe + audit)', () => {
     expect(n).toBe(4);
     // 'Clean' passed and is queued for the semantic judge.
     expect(s.pendingSemantic.map(r => r.term)).toEqual(['Clean']);
+  });
+});
+
+describe('glossary_audit 30d retention (pruneGlossaryAudit)', () => {
+  // TODAY = '2026-07-06', so date(TODAY,'-30 days') = '2026-06-06'.
+  const BOUNDARY = '2026-06-06';
+
+  function addAudit(term: string, checkType: string, verdict: string,
+    checkedAt: string): void {
+    db.prepare(
+      `INSERT INTO glossary_audit (term, check_type, verdict, reason, checked_at)
+       VALUES (?, ?, ?, '', ?)`,
+    ).run(term, checkType, verdict, checkedAt);
+  }
+
+  function auditCount(): number {
+    return (db.prepare('SELECT COUNT(*) AS n FROM glossary_audit').get() as any).n;
+  }
+
+  it('keeps rows at exactly the 30d boundary and prunes one day older', () => {
+    addTerm({ term: 'T', status: 'active', quick_def: 'd' });
+    addAudit('T', 'form', 'pass', BOUNDARY);            // exactly 30d: KEPT (< not <=)
+    addAudit('T', 'form', 'pass', '2026-06-05');        // 31d: pruned
+    // Legacy DEFAULT-CURRENT_TIMESTAMP form orders lexicographically too:
+    addAudit('T', 'dedupe', 'pass', '2026-06-06 00:00:00'); // boundary day: KEPT
+    addAudit('T', 'dedupe', 'pass', '2026-06-05 23:59:59'); // 31d: pruned
+    expect(pruneGlossaryAudit(db, TODAY)).toBe(2);
+    const left = (db.prepare(
+      'SELECT checked_at FROM glossary_audit ORDER BY checked_at').all() as any[])
+      .map(r => r.checked_at);
+    expect(left).toEqual([BOUNDARY, '2026-06-06 00:00:00']);
+  });
+
+  it('exempts semantic pass and fail rows older than 30d', () => {
+    addTerm({ term: 'P', status: 'active', quick_def: 'd' });
+    addTerm({ term: 'F', status: 'active', quick_def: 'd' });
+    addAudit('P', 'semantic', 'pass', '2026-01-01');
+    addAudit('F', 'semantic', 'fail', '2026-01-01');
+    expect(pruneGlossaryAudit(db, TODAY)).toBe(0);
+    expect(auditCount()).toBe(2);
+  });
+
+  it('prunes old form/dedupe rows (any verdict) and semantic warns', () => {
+    addTerm({ term: 'T', status: 'active', quick_def: 'd' });
+    addAudit('T', 'form', 'pass', '2026-01-01');
+    addAudit('T', 'form', 'warn', '2026-01-01');
+    addAudit('T', 'form', 'fail', '2026-01-01');
+    addAudit('T', 'dedupe', 'pass', '2026-01-01');
+    addAudit('T', 'semantic', 'warn', '2026-01-01');
+    expect(pruneGlossaryAudit(db, TODAY)).toBe(5);
+    expect(auditCount()).toBe(0);
+  });
+
+  it('returns the deleted row count over a mixed set', () => {
+    addTerm({ term: 'T', status: 'active', quick_def: 'd' });
+    addAudit('T', 'form', 'pass', '2026-01-01');       // pruned
+    addAudit('T', 'semantic', 'warn', '2026-01-01');   // pruned
+    addAudit('T', 'semantic', 'pass', '2026-01-01');   // exempt
+    addAudit('T', 'form', 'pass', TODAY);              // fresh: kept
+    expect(pruneGlossaryAudit(db, TODAY)).toBe(2);
+    expect(auditCount()).toBe(2);
+  });
+
+  it('pruning an old semantic warn leaves the anti-join guard intact', () => {
+    // The exemption exists exactly for this: the term was judged (pass)
+    // long ago; pruning must not re-queue it for the LLM judge.
+    addTerm({ term: 'A', status: 'active', quick_def: 'd' });
+    addAudit('A', 'semantic', 'warn', '2026-01-01'); // old warn: pruned
+    addAudit('A', 'semantic', 'pass', '2026-01-02'); // old pass: exempt
+    expect(listPendingSemantic(db).map(r => r.term)).toEqual([]);
+    expect(pruneGlossaryAudit(db, TODAY)).toBe(1);
+    // Unchanged: the surviving pass row still satisfies the anti-join.
+    expect(listPendingSemantic(db).map(r => r.term)).toEqual([]);
+  });
+
+  it('runValidateGlossary prunes first and surfaces the count', () => {
+    addTerm({ term: 'Clean', status: 'active', quick_def: 'A fine def.',
+      why_it_matters: 'ok' });
+    addAudit('Clean', 'form', 'pass', '2026-01-01');   // stale: pruned
+    const s = runValidateGlossary(db, { today: TODAY });
+    expect(s.prunedAudit).toBe(1);
+    // Today's fresh form+dedupe rows are untouched by the prune.
+    expect((db.prepare(
+      `SELECT COUNT(*) AS n FROM glossary_audit WHERE checked_at = ?`,
+    ).get(TODAY) as any).n).toBe(2);
   });
 });

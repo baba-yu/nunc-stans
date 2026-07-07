@@ -1,9 +1,11 @@
-// Shared resolution for the user-designated data store and the news
-// data+publish checkout. Single source of truth for the config file
-// shape (<config-home>/nunc-stans/config.json) — consumed by
-// tools/data-dir.ts, tools/build-world.ts, and the nunc-fluens pipeline.
-// FD-3.2: no data path convention exists in code or docs; everything
-// here reads the user's designation.
+// Shared resolution for the data store and the linked nunc-fluens data
+// instance (the world-view source). Single source of truth for the
+// config file shape (<config-home>/nunc-stans/config.json) — consumed
+// by tools/data-dir.ts, tools/build-world.ts, and the nunc-fluens
+// pipeline. The store DEFAULTS to <repo>/data/ (gitignored — R13,
+// owner decision 2026-07-07; FD-3.2's no-data-in-git intent is
+// preserved by the ignore); NS_DATA and the config `data_dir` override
+// it for stores kept elsewhere.
 import { mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { homedir } from 'node:os'
@@ -44,18 +46,29 @@ export interface Resolved {
   warning?: string
 }
 
-/** Data store resolution: NS_DATA > FED_DATA (deprecated, warns) > config. */
+/** The in-repo default store: <repo>/data/ (gitignored). Resolved
+ * relative to THIS module (tools/lib/ → repo root), never the cwd —
+ * every caller sees the same folder regardless of where it runs. */
+export function defaultDataDir(): string {
+  return join(import.meta.dirname, '..', '..', 'data')
+}
+
+/** Data store resolution: NS_DATA > FED_DATA (deprecated, warns) >
+ * config `data_dir` > the in-repo default <repo>/data/. */
 export function resolveDataDir(): Resolved {
   const ns = process.env.NS_DATA
   if (ns) return { dir: ns }
   const fed = process.env.FED_DATA
   if (fed) return { dir: fed, warning: 'warning: FED_DATA is deprecated; use NS_DATA or just bootstrap' }
   const v = readConfig().data_dir
-  return { dir: typeof v === 'string' && v ? v : null }
+  return { dir: typeof v === 'string' && v ? v : defaultDataDir() }
 }
 
-/** News checkout resolution: NS_NEWS_REPO > config news_repo. Set via
- * `just news-link <dir>` (Phase C replaces the retired NEWS_WORLD env). */
+/** Linked-instance resolution: NS_NEWS_REPO > config news_repo
+ * (unchanged key, instance semantics — points at a v2 nunc-fluens data
+ * instance; see tools/build-world.ts and design/naming.md). Set via
+ * `just news-link <instance>` (Phase C replaces the retired NEWS_WORLD
+ * env). */
 export function resolveNewsRepo(): string | null {
   const env = process.env.NS_NEWS_REPO
   if (env) return env

@@ -1,0 +1,2587 @@
+/* ============================================================
+   Future Prediction Intelligence Dashboard
+   Cold low-temperature palette per UI (1).md §8.1
+   ============================================================ */
+
+:root {
+  /* Background (UI §8.1) */
+  --bg-0: #07111f;
+  --bg-1: #0b1728;
+  --bg-2: #10233a;
+  --grid-line: rgba(130, 170, 210, 0.08);
+  --text-main: #d8e7f7;
+  --text-muted: #8fa8c2;
+
+  /* Heat (UI §8.2) */
+  --heat-0: #203047;
+  --heat-1: #2464a8;
+  --heat-2: #18c7d8;
+  --heat-3: #ffb84d;
+  --heat-4: #ff4d2e;
+  --heat-core: #fff3c4;
+
+  /* UI chrome */
+  --panel-bg: rgba(10, 22, 38, 0.92);
+  --panel-border: rgba(130, 170, 210, 0.18);
+  --panel-accent: #18c7d8;
+  --warn: #ff4d2e;
+  --contradict: #c74bd8;
+
+  --menu-bg: rgba(9, 19, 33, 0.88);
+  --menu-active: #18c7d8;
+  --menu-active-text: #07111f;
+  --menu-text: #d8e7f7;
+
+  --shadow-deep: 0 14px 40px rgba(0, 0, 0, 0.55);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  color: var(--text-main);
+  font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+               "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+  background:
+    radial-gradient(circle at 40% 35%, rgba(40, 80, 120, 0.22), transparent 42%),
+    linear-gradient(180deg, #07111f 0%, #0b1728 55%, #08111d 100%);
+}
+
+body::before {
+  /* Subtle grid overlay */
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: 56px 56px;
+  z-index: 0;
+  opacity: 0.7;
+}
+
+#graph-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  cursor: grab;
+  touch-action: none;
+}
+
+/* Tool-driven cursor: rotate = open hand, pan = move arrows */
+body[data-tool="rotate"] #graph-canvas { cursor: grab; }
+body[data-tool="pan"]    #graph-canvas { cursor: move; }
+#graph-canvas.over-node { cursor: pointer; }
+#graph-canvas.dragging  { cursor: grabbing; }
+#graph-canvas.panning   { cursor: move; }
+
+/* ------------------------------------------------------------
+   Label overlay (HTML labels on top of canvas)
+   ------------------------------------------------------------ */
+#label-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.node-label {
+  position: absolute;
+  transform: translate(-50%, 0);
+  color: var(--text-main);
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: rgba(7, 17, 31, 0.72);
+  white-space: nowrap;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+  user-select: none;
+}
+
+.node-label.cat  { color: #b7d6ff; font-weight: 600; font-size: 12px; }
+.node-label.th   { color: var(--text-main); font-weight: 500; }
+.node-label.pred { color: var(--text-muted); font-size: 10px; font-style: italic; }
+
+/* ------------------------------------------------------------
+   Top-right fixed square menu (UI §4)
+   ------------------------------------------------------------ */
+/* Right-side menu stack: top-menu + category-menu stacked via flex.
+   Stack owns fixed positioning + slide-on-panel-open; inner menus
+   are plain flex items so category-menu always sits under top-menu
+   no matter how tall top-menu grows. */
+#top-menu-stack {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: calc(100vh - 32px);
+  max-width: calc(100vw - 32px);
+  transition: transform 260ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  will-change: transform;
+}
+
+#top-menu,
+#category-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px;
+  background: var(--menu-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 6px;
+  box-shadow: var(--shadow-deep);
+  backdrop-filter: blur(6px);
+}
+#top-menu      { flex: 0 0 auto; }
+#category-menu {
+  flex: 1 1 auto;
+  min-height: 0;               /* allow shrink so inner list scrolls */
+  max-width: 220px;
+  min-width: 180px;
+  overflow: hidden;
+}
+
+/* When the detail panel is open, slide the whole stack from top-right
+   to top-left so it stays visible alongside the 420px panel. */
+body.panel-open #top-menu-stack {
+  transform: translateX(calc(-100vw + 100% + 32px));
+}
+/* Slide the title row to the right of the relocated menu instead of
+   fading it out — keeps OBSERVATORY ⇆ PROBE reachable while a node's
+   detail is open. The 260px shift covers the widest the menu stack
+   typically renders (~220-240px) plus a small gap. */
+body.panel-open #meta-header {
+  transform: translateX(260px);
+}
+/* Mobile-only utility: hidden by default, surfaced under media query. */
+.mobile-only { display: none; }
+
+/* Floating PAN ↔ ROTATE toggle (mobile only). Fixed bottom-left
+   above the hint strip. Active icon (matching state.tool) shows;
+   the other is hidden via [data-when]. */
+.tool-toggle {
+  position: fixed;
+  left: 12px;
+  bottom: 12px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--panel-border);
+  background: var(--menu-bg);
+  color: var(--text-main);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: var(--shadow-deep);
+  backdrop-filter: blur(6px);
+  display: none;                 /* shown via .mobile-only @media */
+  align-items: center;
+  justify-content: center;
+  z-index: 11;
+  font-size: 18px;
+  line-height: 1;
+}
+.tool-toggle:hover { background: rgba(24, 199, 216, 0.12); }
+.tool-toggle .ic { display: none; line-height: 1; }
+.tool-toggle[data-tool="rotate"] .ic[data-when="rotate"],
+.tool-toggle[data-tool="pan"]    .ic[data-when="pan"] {
+  display: inline-block;
+}
+
+/* Hamburger toggle that floats just left of the top-menu stack on
+   narrow viewports. Stays visible even while the menu is collapsed
+   so the user can re-open it. */
+.menu-toggle {
+  align-self: flex-end;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid var(--panel-border);
+  background: var(--menu-bg);
+  color: var(--text-main);
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: var(--shadow-deep);
+  backdrop-filter: blur(6px);
+  display: none;                 /* shown via .mobile-only @media */
+  align-items: center;
+  justify-content: center;
+}
+.menu-toggle .bars {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 18px;
+}
+.menu-toggle .bars span {
+  display: block;
+  height: 2px;
+  background: currentColor;
+  border-radius: 1px;
+  transition: transform 160ms ease, opacity 160ms ease;
+}
+/* X shape when the menu is open ("click to close"); plain hamburger
+   when closed ("click to open"). */
+.menu-toggle[aria-expanded="true"] .bars span:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+.menu-toggle[aria-expanded="true"] .bars span:nth-child(2) {
+  opacity: 0;
+}
+.menu-toggle[aria-expanded="true"] .bars span:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+@media (max-width: 640px) {
+  /* On narrow screens the panel covers the full width, so don't bother. */
+  body.panel-open #top-menu-stack {
+    transform: none;
+  }
+  /* Detail panel covers the whole viewport on narrow screens, so the
+     slide has nowhere to go — fall back to fading the meta-header. */
+  body.panel-open #meta-header {
+    transform: none;
+    opacity: 0;
+    pointer-events: none;
+  }
+  #top-menu-stack {
+    /* Give more room on narrow screens — scrollbar lives inside. */
+    max-width: calc(100vw - 16px);
+    right: 8px;
+    top: 8px;
+  }
+  #category-menu { max-width: none; }
+
+  /* Surface the mobile-only chrome and let the top-menu collapse. */
+  .mobile-only { display: inline-flex; }
+  .menu-toggle { display: inline-flex; }
+  .tool-toggle { display: inline-flex; }
+
+  #top-menu[data-collapsed="true"] {
+    display: none;
+  }
+  /* When the top-menu is collapsed, also hide the category-menu so
+     the canvas is unobstructed. The toggle remains accessible. */
+  body.top-menu-collapsed #category-menu {
+    display: none;
+  }
+  /* Hint strip is desktop-oriented copy; the floating tool-toggle
+     replaces its purpose on small screens. */
+  #hint-strip { display: none; }
+}
+
+.menu-head {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 4px;
+  padding: 0 2px 2px;
+  border-bottom: 1px solid var(--panel-border);
+  min-width: 0;
+}
+.menu-head-title {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  flex: 1 1 auto;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.menu-head .menu-mini-btn {
+  flex: 0 0 auto;
+}
+.menu-mini-btn {
+  border: 1px solid var(--panel-border);
+  background: transparent;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 9.5px;
+  letter-spacing: 0.08em;
+  padding: 2px 6px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.menu-mini-btn:hover:not([disabled]) {
+  color: var(--text-main);
+  background: rgba(24, 199, 216, 0.1);
+}
+.menu-mini-btn[disabled] {
+  opacity: 0.32;
+  cursor: default;
+}
+
+/* Category filter list — stacked vertical toggle buttons. */
+.category-filters {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px;
+  flex: 1 1 auto;
+  min-height: 0;          /* allow flex child to shrink so overflow kicks in */
+  overflow-y: auto;
+  border: 1px solid var(--panel-border);
+  border-radius: 4px;
+  padding: 4px;
+}
+/* Thin cold-palette scrollbar shared across every scrollable surface
+   in the app: the category filter list in the side menu, the PROBE
+   body, the EVIDENCE body, and the right-side detail panel. The
+   default OS scrollbar fights with the dark cold-temperature theme,
+   so we override both the WebKit pseudo-elements and Firefox's
+   scrollbar-* shorthand. */
+.category-filters,
+.list-body,
+.evidence-body,
+.panel-body,
+.timeline-canvas-wrap,
+.timeline-detail {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(130, 170, 210, 0.25) transparent;
+}
+.category-filters::-webkit-scrollbar,
+.list-body::-webkit-scrollbar,
+.evidence-body::-webkit-scrollbar,
+.panel-body::-webkit-scrollbar,
+.timeline-canvas-wrap::-webkit-scrollbar,
+.timeline-detail::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.category-filters::-webkit-scrollbar-track,
+.list-body::-webkit-scrollbar-track,
+.evidence-body::-webkit-scrollbar-track,
+.panel-body::-webkit-scrollbar-track,
+.timeline-canvas-wrap::-webkit-scrollbar-track,
+.timeline-detail::-webkit-scrollbar-track {
+  background: transparent;
+}
+.category-filters::-webkit-scrollbar-thumb,
+.list-body::-webkit-scrollbar-thumb,
+.evidence-body::-webkit-scrollbar-thumb,
+.panel-body::-webkit-scrollbar-thumb,
+.timeline-canvas-wrap::-webkit-scrollbar-thumb,
+.timeline-detail::-webkit-scrollbar-thumb {
+  background: rgba(130, 170, 210, 0.25);
+  border-radius: 3px;
+}
+.category-filters::-webkit-scrollbar-thumb:hover,
+.list-body::-webkit-scrollbar-thumb:hover,
+.evidence-body::-webkit-scrollbar-thumb:hover,
+.panel-body::-webkit-scrollbar-thumb:hover,
+.timeline-canvas-wrap::-webkit-scrollbar-thumb:hover,
+.timeline-detail::-webkit-scrollbar-thumb:hover {
+  background: rgba(24, 199, 216, 0.45);
+}
+.category-filters::-webkit-scrollbar-corner,
+.list-body::-webkit-scrollbar-corner,
+.evidence-body::-webkit-scrollbar-corner,
+.panel-body::-webkit-scrollbar-corner,
+.timeline-canvas-wrap::-webkit-scrollbar-corner,
+.timeline-detail::-webkit-scrollbar-corner {
+  background: transparent;
+}
+.menu-btn.cat-filter {
+  padding: 5px 8px;
+  min-width: 0;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 3px;
+}
+.menu-btn.cat-filter::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: var(--menu-active);
+  flex: 0 0 auto;
+  transition: background 120ms ease, opacity 120ms ease;
+}
+.menu-btn.cat-filter[aria-pressed="false"] {
+  color: var(--text-muted);
+  opacity: 0.55;
+}
+.menu-btn.cat-filter[aria-pressed="false"]::before {
+  background: transparent;
+  border: 1px solid var(--text-muted);
+}
+
+.menu-group {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 2px;
+  border: 1px solid var(--panel-border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.menu-btn {
+  border: 0;
+  padding: 5px 12px;
+  min-width: 52px;
+  color: var(--menu-text);
+  background: transparent;
+  font: inherit;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  font-size: 11px;
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.menu-btn:hover { background: rgba(24, 199, 216, 0.12); }
+
+.menu-btn[aria-selected="true"],
+.menu-btn[aria-checked="true"] {
+  background: var(--menu-active);
+  color: var(--menu-active-text);
+}
+
+/* Tool icon buttons */
+.menu-btn.tool {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 10px;
+  min-width: 64px;
+}
+.menu-btn.tool .tool-ic {
+  font-size: 14px;
+  line-height: 1;
+}
+.menu-btn.tool .tool-lbl {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+}
+
+/* ------------------------------------------------------------
+   Header (top-left)
+   ------------------------------------------------------------ */
+#meta-header {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 9;
+  pointer-events: none;
+  color: var(--text-main);
+  /* Mirror the menu-stack transition so the title row slides in sync
+     with the menu when the detail panel opens. */
+  transition: transform 260ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  will-change: transform;
+}
+#meta-header .meta-title-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+#meta-header .title {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+}
+
+/* OBSERVATORY ⇆ PROBE segmented switch — sits next to the page title.
+   Container is interactive; meta-header itself is pointer-events:none so the
+   ambient label / notice text stays click-through over the canvas. */
+.view-toggle {
+  display: inline-flex;
+  align-items: stretch;
+  pointer-events: auto;
+  background: rgba(10, 22, 38, 0.78);
+  border: 1px solid var(--panel-border);
+  border-radius: 999px;
+  padding: 2px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+}
+.view-toggle-btn {
+  border: 0;
+  background: transparent;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  padding: 4px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 140ms ease, color 140ms ease;
+}
+.view-toggle-btn:hover {
+  color: var(--text-main);
+}
+.view-toggle-btn.is-active {
+  background: var(--menu-active);
+  color: var(--menu-active-text);
+}
+#meta-header .meta-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+#meta-header .meta-ai-notice {
+  font-size: 10.5px;
+  color: var(--text-muted);
+  opacity: 0.85;
+  margin-top: 4px;
+  max-width: 520px;
+  font-style: italic;
+}
+
+/* ------------------------------------------------------------
+   Hint strip (bottom-left)
+   ------------------------------------------------------------ */
+#hint-strip {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  z-index: 9;
+  display: flex;
+  gap: 14px;
+  font-size: 10.5px;
+  color: var(--text-muted);
+  letter-spacing: 0.03em;
+  pointer-events: none;
+}
+#hint-strip span::before {
+  content: "• ";
+  color: var(--panel-accent);
+}
+
+/* ------------------------------------------------------------
+   Detail panel (slide-in from right)
+   ------------------------------------------------------------ */
+#detail-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(420px, 100vw);
+  background: var(--panel-bg);
+  border-left: 1px solid var(--panel-border);
+  box-shadow: -12px 0 40px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  transform: translateX(105%);
+  transition: transform 260ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+}
+
+#detail-panel.open { transform: translateX(0); }
+
+.panel-head {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--panel-border);
+}
+/* Top row of the panel head: action buttons. Lives above the title
+   so a multi-line prediction title never crashes into the close /
+   back / probe controls. Right-aligned so it visually anchors to
+   the same edge as the panel itself. */
+.panel-head-actions {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+  align-items: center;
+}
+.panel-head-meta {
+  min-width: 0;
+}
+.panel-type {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--panel-accent);
+  margin-bottom: 6px;
+}
+#panel-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--text-main);
+  word-break: break-word;
+}
+.panel-subtitle {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.panel-head-btn {
+  border: 0;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 20px;
+  line-height: 1;
+  padding: 4px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+.panel-head-btn:hover:not([disabled]) {
+  color: var(--text-main);
+  background: rgba(255,255,255,0.06);
+}
+.panel-head-btn[disabled] {
+  opacity: 0.28;
+  cursor: default;
+}
+#panel-close { font-size: 24px; }
+/* Open-in-PROBE pill button. Sits between Back and Close in the
+   actions row. Hidden until a Prediction node is selected, hidden
+   on responsive breakpoints alongside the OBSERVATORY/PROBE switch. */
+.panel-head-probe {
+  border: 1px solid var(--panel-border);
+  background: rgba(10, 22, 38, 0.78);
+  color: var(--menu-active);
+  font: inherit;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  padding: 5px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 140ms ease, border-color 140ms ease, color 140ms ease;
+}
+.panel-head-probe:hover {
+  color: var(--text-main);
+  border-color: var(--menu-active);
+  background: rgba(24, 199, 216, 0.12);
+}
+.panel-head-probe[hidden] { display: none; }
+
+.panel-body {
+  overflow-y: auto;
+  padding: 16px 20px 40px;
+  flex: 1;
+}
+
+.panel-body h3 {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  margin: 18px 0 6px;
+  font-weight: 600;
+}
+
+.panel-body p { margin: 4px 0; color: var(--text-main); }
+.panel-body .muted { color: var(--text-muted); }
+
+/* Inline markdown rendering inside the panel body. */
+.md-body strong { color: var(--text-main); font-weight: 700; }
+.md-body em { color: var(--text-main); font-style: italic; }
+.md-body code {
+  font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+  font-size: 12px;
+  padding: 1px 4px;
+  background: rgba(130, 170, 210, 0.12);
+  border-radius: 3px;
+}
+.md-body a { color: var(--panel-accent); }
+.md-body a:hover { text-decoration: underline; }
+.md-body ul {
+  margin: 4px 0 4px 0;
+  padding-left: 18px;
+}
+.md-body li { margin: 2px 0; }
+.md-body p { margin: 6px 0; }
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-top: 8px;
+}
+.metric {
+  background: rgba(16, 35, 58, 0.6);
+  border: 1px solid var(--panel-border);
+  border-radius: 4px;
+  padding: 8px 10px;
+}
+.metric .k {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+.metric .v {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-main);
+  font-variant-numeric: tabular-nums;
+  margin-top: 2px;
+}
+.metric .bar {
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(130, 170, 210, 0.15);
+  margin-top: 8px;
+  overflow: hidden;
+}
+.metric .bar > span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--heat-1), var(--heat-2), var(--heat-3));
+}
+
+.pill {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  background: rgba(24, 199, 216, 0.12);
+  color: var(--panel-accent);
+  border: 1px solid rgba(24, 199, 216, 0.25);
+  text-transform: lowercase;
+  margin-right: 4px;
+}
+
+.pill.warn       { background: rgba(255, 77, 46, 0.14); color: #ffb1a0; border-color: rgba(255, 77, 46, 0.35); }
+.pill.contradict { background: rgba(199, 75, 216, 0.14); color: #e5b3ff; border-color: rgba(199, 75, 216, 0.35); }
+.pill.new        { background: rgba(24, 199, 216, 0.16); color: #9be8f1; border-color: rgba(24, 199, 216, 0.42); }
+.pill.good       { background: rgba(42, 15, 3, 0.75); color: #ffd8a0; border-color: rgba(224, 122, 26, 0.7); }
+
+.related-list {
+  list-style: none;
+  padding: 0;
+  margin: 4px 0 0 0;
+}
+.related-list li {
+  padding: 6px 8px;
+  border: 1px solid var(--panel-border);
+  border-radius: 4px;
+  margin-bottom: 4px;
+  cursor: pointer;
+  background: rgba(16, 35, 58, 0.4);
+  font-size: 12.5px;
+  transition: background 120ms ease;
+}
+.related-list li:hover { background: rgba(24, 199, 216, 0.12); }
+.related-list li .rtype {
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin-right: 6px;
+}
+
+/* Lineage breadcrumb: '{CATEGORY} → {THEME}' on a single row, with
+   each crumb truncated independently so neither half steals all the
+   space when the other is short. */
+.lineage-list .lineage-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.lineage-list .crumb {
+  flex: 1 1 0;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lineage-list .crumb-cat {
+  color: var(--text-muted);
+}
+.lineage-list .crumb-theme {
+  color: var(--text-main);
+  font-weight: 600;
+}
+.lineage-list .crumb-sep {
+  flex: 0 0 auto;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.evidence-list a,
+.repo-link {
+  color: var(--panel-accent);
+  text-decoration: none;
+  word-break: break-all;
+}
+.evidence-list a:hover,
+.repo-link:hover { text-decoration: underline; }
+.repo-link::before {
+  content: "\2197  ";          /* ↗ arrow to signal external link */
+  color: var(--text-muted);
+  margin-right: 2px;
+}
+
+/* Daily activity inline chart in the right panel. */
+.activity-chart {
+  position: relative;
+  margin-top: 6px;
+  padding: 4px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--panel-border);
+  background:
+    linear-gradient(0deg, rgba(7, 17, 31, 0.85), rgba(7, 17, 31, 0.85)),
+    var(--bg, #203047);
+  background-blend-mode: normal;
+}
+.activity-chart svg { display: block; width: 100%; height: 78px; overflow: visible; }
+.activity-empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+/* Daily activity strip — one cell per day of the current window. */
+.grass-strip {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 2px;
+  margin-top: 6px;
+}
+.grass-strip[data-days="7"]  { grid-template-columns: repeat(7, 1fr); }
+.grass-strip[data-days="30"] { grid-template-columns: repeat(30, 1fr); }
+.grass-strip[data-days="90"] { grid-template-columns: repeat(90, 1fr); gap: 1px; }
+.grass-strip > span {
+  height: 12px;
+  border-radius: 1px;
+  background: var(--heat-0);
+  opacity: 0.55;     /* empty-day baseline */
+}
+.grass-strip > span[data-lvl="1"] { background: var(--heat-1); opacity: 1; }
+.grass-strip > span[data-lvl="2"] { background: var(--heat-2); opacity: 1; }
+.grass-strip > span[data-lvl="3"] { background: var(--heat-3); opacity: 1; }
+.grass-strip > span[data-lvl="4"] { background: var(--heat-4); opacity: 1; }
+
+/* ------------------------------------------------------------
+   Loading / status pill
+   ------------------------------------------------------------ */
+.status-pill {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  padding: 8px 14px;
+  background: rgba(7, 17, 31, 0.92);
+  border: 1px solid var(--panel-border);
+  color: var(--text-main);
+  border-radius: 999px;
+  font-size: 12px;
+  z-index: 30;
+}
+.status-pill.err { color: #ffb1a0; border-color: rgba(255, 77, 46, 0.4); }
+
+/* ------------------------------------------------------------
+   Responsive: hide hint strip on narrow screens
+   ------------------------------------------------------------ */
+@media (max-width: 640px) {
+  #hint-strip { display: none; }
+  #meta-header { max-width: 55vw; }
+  #detail-panel { width: 100vw; }
+  /* On phones the OBSERVATORY ⇆ PROBE switch and the scope/window/build
+     subtitle compete with the canvas for room. Drop both. The AI-notice
+     line stays — generative-AI disclosure is not negotiable on any
+     viewport. */
+  #meta-header .view-toggle { display: none; }
+  #meta-header .meta-sub    { display: none; }
+  /* PROBE itself isn't reachable from mobile, so the Open-in-PROBE
+     shortcut in the right detail panel hides too. */
+  #panel-probe              { display: none !important; }
+}
+
+/* ------------------------------------------------------------
+   Locale switcher + snapshot navigator (feature/locale)
+   ------------------------------------------------------------ */
+.menu-btn.lang {
+  /* Keep tight so the 4 codes fit on one row alongside scope/window
+     buttons. Mirror the base .menu-btn rule for spacing. */
+  min-width: 38px;
+  padding: 8px 8px;
+  font-size: 10.5px;
+  letter-spacing: 0.10em;
+}
+
+/* Snapshot navigator group — label + dropdown.
+   The role="group" wrapper carries .snap-group; it overrides the
+   default 1fr-grid layout of .menu-group so the label and select
+   sit side-by-side rather than each filling its own column. */
+.menu-group.snap-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  grid-auto-flow: initial;
+  grid-auto-columns: initial;
+}
+.menu-lbl {
+  font-size: 9.5px;
+  letter-spacing: 0.10em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.menu-select {
+  flex: 1 1 auto;
+  border: 1px solid var(--panel-border);
+  background: rgba(7, 17, 31, 0.7);
+  color: var(--menu-text);
+  font: inherit;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  padding: 4px 6px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.menu-select:hover {
+  border-color: rgba(24, 199, 216, 0.4);
+}
+.menu-select:focus {
+  outline: none;
+  border-color: var(--menu-active);
+}
+
+/* Hidden until the boot sequence confirms snapshots/index.json exists. */
+.snap-group[hidden] { display: none; }
+
+/* Muted-color treatment for the meta header subtitle when the
+   dashboard is rendering a past snapshot rather than live data. */
+#meta-sub.snap-mode {
+  color: rgba(143, 168, 194, 0.65);
+  font-style: italic;
+}
+
+/* Stream A (Phase 1): glossary hover. annotateGlossary() in app.js
+   wraps the first occurrence of each active term in any rendered
+   markdown body with `<abbr title="…">`. The default UA underline
+   for [title] is too subtle on the dark canvas — bump it. */
+.md-body abbr[title],
+.panel-body abbr[title],
+.alt-view abbr[title] {
+  text-decoration: underline dotted rgba(24, 199, 216, 0.55);
+  text-underline-offset: 2px;
+  cursor: help;
+  border-bottom: none;
+  transition: background 120ms ease, color 120ms ease;
+}
+.md-body abbr[title]:hover,
+.panel-body abbr[title]:hover,
+.alt-view abbr[title]:hover {
+  background: rgba(24, 199, 216, 0.14);
+  color: var(--menu-active);
+}
+
+/* Stream I (Phase 2): prediction-detail tabs.
+   Tabs sit just under the metrics tiles in the prediction node panel.
+   Tab buttons use the existing menu-active palette so they read as
+   chrome rather than content. Empty bodies render a `.muted` paragraph
+   so the user always knows the slot exists, even before data lands. */
+.prediction-tabs {
+  display: flex;
+  gap: 6px;
+  margin: 14px 0 8px;
+  border-bottom: 1px solid var(--panel-border);
+  padding-bottom: 4px;
+  flex-wrap: wrap;
+}
+.prediction-tabs .ptab {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-muted);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 6px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: color 120ms ease, border-color 120ms ease, background 120ms ease;
+}
+.prediction-tabs .ptab:hover {
+  color: var(--text-main);
+}
+.prediction-tabs .ptab.is-active {
+  color: var(--menu-active-text);
+  background: var(--menu-active);
+  border-color: var(--menu-active);
+}
+.prediction-tabs .ptab-count {
+  font-size: 11px;
+  opacity: 0.85;
+  margin-left: 4px;
+}
+.prediction-tab-bodies .ptab-body {
+  margin: 8px 0 6px;
+}
+.prediction-tab-bodies .ptab-body[hidden] {
+  display: none;
+}
+
+/* Stream C reasoning trace — labelled rows under the Reasoning tab.
+   Each row is its own grid (key on the left, value on the right) so
+   the four reasoning fields (because / given / so_that / landing)
+   stack vertically rather than collapsing into a 2-up grid where the
+   long bodies steal each other's column width. */
+.reasoning-trace {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.reasoning-row {
+  display: grid;
+  grid-template-columns: minmax(72px, max-content) 1fr;
+  gap: 12px;
+  align-items: baseline;
+}
+.reasoning-trace .reasoning-key {
+  color: var(--text-muted);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.reasoning-trace .reasoning-val {
+  color: var(--text-main);
+}
+
+/* Stream D bridges — list of validation-time bridge paragraphs. */
+.bridges-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.bridges-list .bridge-item + .bridge-item {
+  border-top: 1px dashed var(--panel-border);
+  margin-top: 10px;
+  padding-top: 10px;
+}
+.bridges-list .bridge-meta {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  margin-bottom: 4px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.bridges-list .bridge-date {
+  font-variant-numeric: tabular-nums;
+}
+.bridges-list .bridge-dim code {
+  background: rgba(24, 199, 216, 0.12);
+  color: var(--menu-active);
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 11px;
+}
+.bridges-list .bridge-coh {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--panel-border);
+  color: var(--text-main);
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+.bridges-list .bridge-fields {
+  display: grid;
+  grid-template-columns: minmax(96px, max-content) 1fr;
+  gap: 6px 12px;
+  align-items: baseline;
+  margin-top: 6px;
+}
+.bridges-list .bridge-row {
+  display: contents;
+}
+.bridges-list .bridge-key {
+  color: var(--text-muted);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.bridges-list .bridge-val {
+  color: var(--text-main);
+  min-width: 0;
+}
+
+/* Full prediction text now lives in a collapsed disclosure under the
+   tabs (was a top-level h3 before). */
+details.full-prediction > summary {
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+details.full-prediction[open] > summary {
+  color: var(--text-main);
+  margin-bottom: 6px;
+}
+
+/* Stream K (Phase B): mid-tier summary in the prediction detail panel.
+   Sits between the title (above the metrics tiles) and the prediction
+   tabs. Default-visible. The full prediction text below collapses
+   into <details> when this mid-tier is present. */
+/* Tier 1 of the 3-tier prediction pane: plain language — the writer's
+   plain-language one-sentence summary. Default-visible, prominent.
+   The voice should read like "what would you tell a smart 14-year-old
+   about this prediction in one breath". */
+.prediction-plain-language {
+  margin: 14px 0 6px;
+  padding: 12px 14px;
+  background: rgba(24, 199, 216, 0.07);
+  border-left: 3px solid var(--menu-active);
+  border-radius: 0 4px 4px 0;
+  color: var(--text-main);
+  font-size: 15px;
+  line-height: 1.55;
+  font-weight: 400;
+}
+
+/* Tier 2 (optional, secondary): Stream K technical summary, ≤ 300
+   chars. Collapsible <details> — closed by default when plain language is
+   already shown above; open by default when plain language is missing
+   (legacy items where Stream K is the only mid-tier content). */
+.prediction-summary-mid {
+  margin: 6px 0 4px;
+  padding: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-main);
+}
+.prediction-summary-mid > .prediction-summary-mid-toggle {
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 4px 8px;
+  list-style: none;
+  user-select: none;
+}
+.prediction-summary-mid > .prediction-summary-mid-toggle::-webkit-details-marker {
+  display: none;
+}
+.prediction-summary-mid > .prediction-summary-mid-toggle::before {
+  content: "▸ ";
+  display: inline-block;
+  transition: transform 120ms ease;
+}
+.prediction-summary-mid[open] > .prediction-summary-mid-toggle::before {
+  transform: rotate(90deg);
+}
+.prediction-summary-mid-body {
+  padding: 8px 12px;
+  background: rgba(24, 199, 216, 0.03);
+  border-left: 1px dashed var(--menu-active);
+  border-radius: 0 3px 3px 0;
+  margin-top: 4px;
+}
+.prediction-summary-mid-body p {
+  margin: 0 0 6px;
+}
+.prediction-summary-mid-body p:last-child {
+  margin-bottom: 0;
+}
+
+/* PROBE alternate views (predictions / news) overlay the graph canvas when
+   the OBSERVATORY ⇆ PROBE switch in the meta-header flips to PROBE. */
+
+/* In PROBE mode, hide GRAPH-only chrome (top menu, category menu, hint strip,
+   mobile tool toggle, right detail panel). Keep #meta-header so the
+   OBSERVATORY ⇆ PROBE switch and the page title stay visible — but trim its
+   ambient subtitle / AI notice so the alt-view body has room. */
+body.alt-view-mode #top-menu-stack,
+body.alt-view-mode #hint-strip,
+body.alt-view-mode #tool-toggle,
+body.alt-view-mode #detail-panel,
+body.alt-view-mode #app-status {
+  display: none !important;
+}
+body.alt-view-mode #meta-header .meta-sub,
+body.alt-view-mode #meta-header .meta-ai-notice {
+  display: none !important;
+}
+body.alt-view-mode {
+  /* Cancel the body shift the open detail panel adds. */
+  margin-right: 0 !important;
+}
+
+.alt-view {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-0);
+  /* Top padding clears the now-always-visible #meta-header (title row).
+     Slightly extra room so the toggle doesn't crowd content when the
+     title row wraps on narrow viewports. */
+  padding: 72px 22px 24px;
+  /* Body owns its own scroll so the head + table column header stay
+     anchored at the top while only the rows scroll past. */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  z-index: 5;
+  color: var(--text-main);
+}
+.alt-view[hidden] { display: none; }
+.alt-view-head {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+  margin-bottom: 12px;
+  flex-shrink: 0;
+  /* Reserve room on the right edge for the global #probe-menu-toggle
+     hamburger (pinned at top:14px right:14px) so wrapping filter rows
+     never crash into the icon. 56px ≈ 36px button + 16px viewport gutter
+     + a 4px breathing margin. */
+  padding-right: 56px;
+}
+/* The body region scrolls independently of .alt-view-head so the
+   PREDICTIONS / NEWS toggle and filter row stay pinned. The
+   inner .list-table thead (already position:sticky; top:0) sticks
+   to the top of this scroll container. min-height:0 is the flexbox
+   incantation that lets a flex child actually shrink below content
+   size and get a scrollbar. */
+.list-body,
+.evidence-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+}
+
+/* PREDICTIONS ⇆ NEWS sub-toggle inside PROBE. Mirrors .view-toggle styling
+   but lives in the alt-view header rather than the meta-header. */
+.probe-tab-toggle {
+  display: inline-flex;
+  background: rgba(10, 22, 38, 0.78);
+  border: 1px solid var(--panel-border);
+  border-radius: 999px;
+  padding: 2px;
+  flex-shrink: 0;
+}
+.probe-tab-btn {
+  border: 0;
+  background: transparent;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  padding: 5px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 140ms ease, color 140ms ease;
+}
+.probe-tab-btn:hover {
+  color: var(--text-main);
+}
+.probe-tab-btn.is-active {
+  background: var(--menu-active);
+  color: var(--menu-active-text);
+}
+
+/* PROBE settings hamburger. The shared button styles below are used
+   by the global fixed-position #probe-menu-toggle (pinned at the
+   top-right of the viewport, on the same row as the page title). The
+   button is hidden by default and surfaced only in PROBE mode. */
+.probe-menu-btn {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid var(--panel-border);
+  background: var(--menu-bg);
+  color: var(--text-main);
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 140ms ease, border-color 140ms ease;
+}
+.probe-menu-btn:hover {
+  background: rgba(24, 199, 216, 0.12);
+  border-color: rgba(24, 199, 216, 0.4);
+}
+.probe-menu-btn .bars {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 16px;
+}
+.probe-menu-btn .bars span {
+  display: block;
+  height: 2px;
+  background: currentColor;
+  border-radius: 1px;
+}
+
+/* Body-level hamburger that pins to the global top-right corner.
+   Hidden by default; revealed only in PROBE mode so it sits on the
+   same row as the page title without colliding with #top-menu-stack
+   (which itself hides under body.alt-view-mode). */
+#probe-menu-toggle {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  z-index: 10;
+  display: none;
+  box-shadow: var(--shadow-deep);
+  backdrop-filter: blur(6px);
+}
+body.alt-view-mode #probe-menu-toggle {
+  display: inline-flex;
+}
+
+/* Slide-in panel from the right. Mirrors #detail-panel motion so the
+   transition feels native to the rest of the app, but lives at z=25
+   to sit above the alt-view (z=5). Hidden by default; opened by
+   adding .open after un-hiding so the transform animation runs. */
+#probe-menu-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(280px, 100vw);
+  background: var(--panel-bg);
+  border-left: 1px solid var(--panel-border);
+  box-shadow: -12px 0 40px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  transform: translateX(105%);
+  transition: transform 220ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  z-index: 25;
+  display: flex;
+  flex-direction: column;
+  color: var(--text-main);
+}
+#probe-menu-panel[hidden] { display: none; }
+#probe-menu-panel.open { transform: translateX(0); }
+
+.probe-menu-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--panel-border);
+}
+.probe-menu-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+.probe-menu-close {
+  border: 1px solid var(--panel-border);
+  background: var(--menu-bg);
+  color: var(--text-main);
+  border-radius: 4px;
+  width: 28px;
+  height: 28px;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.probe-menu-close:hover {
+  border-color: rgba(24, 199, 216, 0.4);
+  background: rgba(24, 199, 216, 0.12);
+}
+.probe-menu-body {
+  flex: 1 1 auto;
+  overflow: auto;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+.probe-menu-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.probe-menu-section .menu-lbl {
+  font-size: 10px;
+  letter-spacing: 0.16em;
+}
+.probe-menu-langs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  border: 1px solid var(--panel-border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.probe-menu-langs .menu-btn.lang {
+  border-radius: 0;
+  min-width: 0;
+}
+.probe-menu-windows {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  border: 1px solid var(--panel-border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.probe-menu-windows .menu-btn.win {
+  border-radius: 0;
+  min-width: 0;
+}
+.probe-menu-section.probe-snap-section .menu-select {
+  width: 100%;
+}
+.probe-menu-section.probe-snap-section[hidden] {
+  display: none;
+}
+
+.alt-view-head > p.muted {
+  margin: 0;
+}
+/* Compact filter row. Sized so the PREDICTIONS / NEWS toggle and the
+   six filter widgets stay on a single line at typical desktop widths
+   instead of wrapping into a second row. The flex-wrap: wrap fallback
+   still kicks in below ~720px viewport so genuinely narrow screens
+   don't get clipped. */
+.list-filters {
+  display: flex;
+  gap: 6px 10px;
+  align-items: center;
+  margin: 0;
+  font-size: 11px;
+  color: var(--text-muted);
+  flex-wrap: wrap;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.list-filters label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  flex-shrink: 1;
+}
+.list-filters select {
+  background: rgba(10, 22, 38, 0.7);
+  color: var(--text-main);
+  border: 1px solid var(--panel-border);
+  border-radius: 3px;
+  padding: 2px 4px;
+  font-family: inherit;
+  font-size: 11px;
+  max-width: 140px;
+  min-width: 0;
+  flex-shrink: 1;
+}
+.list-filters input[type="checkbox"] {
+  accent-color: var(--menu-active);
+}
+.list-filters .cb {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.list-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.list-table th,
+.list-table td {
+  text-align: left;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--panel-border);
+  vertical-align: top;
+}
+.list-table thead th {
+  position: sticky;
+  top: 0;
+  background: rgba(10, 22, 38, 0.96);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.list-table thead th.sortable {
+  cursor: pointer;
+  user-select: none;
+}
+.list-table thead th.sortable:hover {
+  color: var(--menu-active);
+}
+.list-table thead th[title] {
+  text-decoration: underline dotted rgba(143, 168, 194, 0.45);
+  text-underline-offset: 3px;
+}
+.list-table tbody tr {
+  cursor: pointer;
+}
+.list-table tbody tr:hover {
+  background: rgba(24, 199, 216, 0.06);
+}
+.list-table .cell-scope,
+.list-table .cell-category,
+.list-table .cell-theme {
+  white-space: nowrap;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+/* PREDICTION column. Shows the locale-aware plain language explanation when a
+   prediction has one, otherwise the title — both rendered identically
+   so the reader sees a uniform body text per row regardless of source. */
+.list-table .cell-prediction {
+  max-width: 480px;
+  min-width: 220px;
+  font-weight: 500;
+  color: var(--text-main);
+}
+/* Line-clamp lives on this child wrapper rather than the <td>
+   itself. Setting display:-webkit-box directly on a table cell
+   removes its table-cell layout role in some browsers, collapsing
+   adjacent columns to zero width. */
+.list-table .clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.list-table .cell-status {
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.list-table .cell-status.status-supported        { color: #52c798; }
+.list-table .cell-status.status-weakly_supported { color: #ffb84d; }
+.list-table .cell-status.status-no_signal        { color: var(--text-muted); }
+.list-table .cell-status.status-contradicted     { color: var(--contradict); }
+.list-table .cell-status.status-mixed            { color: #c8b6ff; }
+.list-table .cell-real,
+.list-table .cell-predicted-at,
+.list-table .cell-last-ev {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- PROBE / Prediction timeline ----
+   When #list-view.is-timeline is set the toggle + filter row hide and
+   #list-body owns the entire PROBE area: [head bar] + [SVG canvas]. */
+#list-view.is-timeline > .alt-view-head { display: none; }
+#list-view.is-timeline > .list-body {
+  display: flex;
+  flex-direction: column;
+}
+/* Timeline page = scrollable column. Head sticks to the top of the
+   scroller so the title + back/observatory buttons stay reachable
+   while the user is deep in the inline detail body. */
+#list-view.is-timeline > .list-body {
+  overflow: auto;
+}
+.timeline-head {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--bg-0);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+  padding: 8px 0 12px;
+  border-bottom: 1px solid var(--panel-border);
+  margin-bottom: 14px;
+}
+.timeline-back,
+.timeline-graph {
+  background: rgba(10, 22, 38, 0.78);
+  color: var(--text-muted);
+  border: 1px solid var(--panel-border);
+  border-radius: 999px;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  padding: 5px 14px;
+  cursor: pointer;
+  transition: background 140ms ease, color 140ms ease, border-color 140ms ease;
+  flex-shrink: 0;
+}
+.timeline-back:hover,
+.timeline-graph:hover {
+  color: var(--text-main);
+  border-color: var(--menu-active);
+  background: rgba(24, 199, 216, 0.12);
+}
+.timeline-title-block {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.timeline-title {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.timeline-dates {
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Timeline canvas takes its natural height (SVG height set per
+   render). The whole .list-body is the single scroll container, so
+   the canvas just lives inline above the inline panel body. */
+.timeline-canvas-wrap {
+  flex: 0 0 auto;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* Claim — the prediction in plain language, sits right under the
+   header. Larger than body copy so the reader's eye lands here first. */
+.tl-claim {
+  margin: 4px 0 22px;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--text-main);
+  letter-spacing: 0.01em;
+}
+
+/* Bespoke section block used by every detail-section in the timeline
+   view (Timeline / Metrics / Technical summary / Reasoning / Needs /
+   Bridge / Readings / meta). */
+.tl-section {
+  margin-bottom: 28px;
+}
+.tl-meta-section {
+  margin-top: 12px;
+  padding-top: 14px;
+  border-top: 1px solid var(--panel-border);
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+/* "Metrics and Timeline" block: vertical metric stack on the left
+   (Hit Rate / Attention / Daily precision), big timeline canvas on
+   the right. The timeline column is given the larger fr so the
+   prediction-time visualisation always dominates. Collapses to a
+   single stacked column on narrow viewports. */
+.mt-block {
+  display: grid;
+  grid-template-columns: minmax(220px, 320px) minmax(0, 2fr);
+  gap: 18px;
+  /* Default grid behaviour (align-items: stretch) is what we want —
+     the timeline cell stretches to match the metrics stack on the
+     left, and drawTimelineSVG then scales trackHeight so the SVG
+     fills that stretched cell instead of leaving empty space below. */
+}
+.mt-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.mt-metrics .metric {
+  margin: 0;
+}
+/* Daily precision tile: chart wrapped with its own labelled head so
+   the user sees what the chart represents (was an unlabeled SVG
+   block before). */
+.mt-precision {
+  background: rgba(16, 35, 58, 0.6);
+  border: 1px solid var(--panel-border);
+  border-radius: 4px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.mt-precision-head {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+.mt-precision .activity-chart {
+  margin: 0;
+}
+.mt-timeline {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.mt-timeline .timeline-canvas-wrap {
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 200px;
+}
+.mt-timeline .timeline-svg {
+  width: 100%;
+  height: 100%;
+}
+@media (max-width: 720px) {
+  .mt-block {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* FULL PREDICTION block — collapsed by default. <summary> reuses the
+   .tl-section-h type styling so the heading reads consistently with
+   every other section header; a small ▸ caret hints expandability. */
+.tl-fullpred {
+  margin: 0;
+}
+.tl-fullpred-summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  user-select: none;
+}
+.tl-fullpred-summary::-webkit-details-marker { display: none; }
+.tl-fullpred-summary::before {
+  content: "▸";
+  font-size: 10px;
+  color: var(--text-muted);
+  transition: transform 140ms ease;
+  display: inline-block;
+}
+.tl-fullpred[open] .tl-fullpred-summary::before {
+  transform: rotate(90deg);
+}
+.tl-fullpred-summary:hover {
+  color: var(--menu-active);
+}
+.tl-fullpred-body {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--panel-border);
+}
+
+/* CATEGORY → THEME breadcrumb list shown in the meta section. */
+.tl-lineage-list {
+  list-style: none;
+  margin: 0 0 8px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.tl-lineage-row {
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.tl-lineage-row:hover {
+  color: var(--menu-active);
+}
+.tl-lineage-cat,
+.tl-lineage-theme {
+  white-space: nowrap;
+}
+.tl-lineage-sep {
+  opacity: 0.6;
+}
+.tl-section-h {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin: 0 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--panel-border);
+}
+
+/* Anchor flash: brief highlight when a timeline event scrolls a panel
+   item into view, so the user sees where they landed. */
+.tl-anchor-flash {
+  animation: tl-anchor-pulse 1100ms ease-out;
+}
+@keyframes tl-anchor-pulse {
+  0%   { background: rgba(24, 199, 216, 0.30); box-shadow: 0 0 0 4px rgba(24, 199, 216, 0.20); }
+  100% { background: transparent; box-shadow: 0 0 0 0 transparent; }
+}
+
+/* In PROBE / alt-view mode the OBSERVATORY detail-panel-open transform
+   on #meta-header / #top-menu-stack is irrelevant — the meta-header
+   should stay anchored top-left and the menu stack is hidden anyway.
+   Force these to neutral so opening the PROBE settings hamburger
+   doesn't trigger the OBSERVATORY's title-slide animation. */
+body.alt-view-mode #meta-header {
+  transform: none !important;
+  transition: none;
+}
+body.alt-view-mode #top-menu-stack {
+  transform: none !important;
+  transition: none;
+}
+.timeline-svg {
+  display: block;
+  font: inherit;
+}
+.timeline-svg .tl-track-line {
+  stroke: rgba(130, 170, 210, 0.12);
+  stroke-width: 1;
+}
+.timeline-svg .tl-track-label {
+  fill: var(--text-muted);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.timeline-svg .tl-x-axis path,
+.timeline-svg .tl-x-axis line {
+  stroke: rgba(130, 170, 210, 0.25);
+}
+.timeline-svg .tl-x-axis text {
+  fill: var(--text-muted);
+  font-size: 10.5px;
+}
+.timeline-svg .tl-today {
+  stroke: var(--menu-active);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+  opacity: 0.55;
+}
+/* Target window highlight: tinted band across the timeline tracks
+   marking when the prediction is supposed to land. */
+.timeline-svg .tl-target-band {
+  fill: rgba(255, 184, 77, 0.10);
+  stroke: rgba(255, 184, 77, 0.45);
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
+}
+.timeline-svg .tl-target-label-bg {
+  fill: rgba(255, 184, 77, 0.85);
+  stroke: var(--heat-3);
+  stroke-width: 1;
+}
+.timeline-svg .tl-target-label-text {
+  fill: rgba(7, 17, 31, 0.95);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+}
+.timeline-svg .tl-pt {
+  fill: var(--heat-2);
+  stroke: rgba(7, 17, 31, 0.9);
+  stroke-width: 1.5;
+  cursor: default;
+}
+.timeline-svg .tl-pt-bridge    { fill: var(--heat-3); }
+.timeline-svg .tl-pt-need      { fill: var(--heat-2); }
+.timeline-svg .tl-pt-downstream{ fill: #6ec1ff; }
+.timeline-svg .tl-pt-upstream  { fill: #c8b6ff; }
+.timeline-svg .tl-pt.is-primary { stroke: var(--heat-core); stroke-width: 2; }
+.timeline-svg .tl-bar {
+  fill: rgba(24, 199, 216, 0.30);
+  stroke: rgba(24, 199, 216, 0.6);
+  stroke-width: 1;
+}
+.timeline-svg .tl-bar-bridge    { fill: rgba(255, 184, 77, 0.30); stroke: var(--heat-3); }
+.timeline-svg .tl-bar-need      { fill: rgba(110, 193, 255, 0.25); stroke: #6ec1ff; }
+.timeline-svg .tl-bar-downstream{ fill: rgba(110, 193, 255, 0.20); stroke: #6ec1ff; }
+.timeline-svg .tl-bar-upstream  { fill: rgba(200, 182, 255, 0.20); stroke: #c8b6ff; }
+.timeline-svg .tl-bar.is-primary { stroke-width: 1.5; }
+
+/* +N overflow badges. One per cluster of >3 overlapping events on a
+   given track. Pill styling so they read as "click to expand" rather
+   than as a regular event glyph. Track-tinted to keep the cluster's
+   identity. */
+.timeline-svg .tl-overflow rect {
+  fill: rgba(10, 22, 38, 0.92);
+  stroke: rgba(130, 170, 210, 0.55);
+  stroke-width: 1;
+}
+.timeline-svg .tl-overflow:hover rect {
+  fill: rgba(24, 199, 216, 0.18);
+  stroke: var(--menu-active);
+}
+.timeline-svg .tl-overflow-text {
+  fill: var(--text-main);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  pointer-events: none;
+}
+.timeline-svg .tl-overflow-bridge     rect { stroke: var(--heat-3); }
+.timeline-svg .tl-overflow-need       rect { stroke: #6ec1ff; }
+.timeline-svg .tl-overflow-downstream rect { stroke: #6ec1ff; }
+.timeline-svg .tl-overflow-upstream   rect { stroke: #c8b6ff; }
+
+/* Selected glyph: stronger outline + halo so it's obvious which event
+   the detail strip below corresponds to. */
+.timeline-svg .tl-pt.is-selected {
+  stroke: var(--heat-core);
+  stroke-width: 3;
+  filter: drop-shadow(0 0 4px rgba(255, 243, 196, 0.55));
+}
+.timeline-svg .tl-bar.is-selected {
+  stroke: var(--heat-core);
+  stroke-width: 2;
+  filter: drop-shadow(0 0 4px rgba(255, 243, 196, 0.55));
+}
+
+/* Detail strip below the timeline canvas. Empty state is muted text;
+   when an event is selected it shows: track chip + dates + (optional)
+   "Open this prediction" button on row 1, then label + sub on rows 2-3. */
+.timeline-detail {
+  flex-shrink: 0;
+  border-top: 1px solid var(--panel-border);
+  margin-top: 12px;
+  padding: 12px 4px 4px;
+  font-size: 12.5px;
+  color: var(--text-main);
+  max-height: 220px;
+  overflow: auto;
+}
+.timeline-detail[data-empty="true"] {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+.timeline-detail p.muted {
+  margin: 0;
+}
+.timeline-detail-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+.timeline-detail-track {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  background: rgba(24, 199, 216, 0.14);
+  color: var(--menu-active);
+  border: 1px solid rgba(24, 199, 216, 0.35);
+}
+.timeline-detail-track.tl-track-bridge     { background: rgba(255, 184, 77, 0.12); color: var(--heat-3); border-color: rgba(255, 184, 77, 0.35); }
+.timeline-detail-track.tl-track-need       { background: rgba(110, 193, 255, 0.10); color: #6ec1ff; border-color: rgba(110, 193, 255, 0.35); }
+.timeline-detail-track.tl-track-downstream { background: rgba(110, 193, 255, 0.10); color: #6ec1ff; border-color: rgba(110, 193, 255, 0.35); }
+.timeline-detail-track.tl-track-upstream   { background: rgba(200, 182, 255, 0.10); color: #c8b6ff; border-color: rgba(200, 182, 255, 0.35); }
+.timeline-detail-date {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+.timeline-detail-open {
+  margin-left: auto;
+  background: transparent;
+  border: 1px solid var(--panel-border);
+  color: var(--menu-active);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 4px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 140ms ease, border-color 140ms ease;
+}
+.timeline-detail-open:hover {
+  background: rgba(24, 199, 216, 0.12);
+  border-color: var(--menu-active);
+}
+.timeline-detail-label {
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--text-main);
+}
+.timeline-detail-sub {
+  color: var(--text-muted);
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+/* Description / reasoning area below the detail strip. Takes whatever
+   vertical space the canvas + detail haven't claimed; scrolls
+   internally when the content is taller. Currently a placeholder —
+   wire up locale-aware reasoning blocks here. */
+.timeline-description {
+  flex: 1 1 auto;
+  min-height: 0;
+  margin-top: 14px;
+  padding: 14px 4px 6px;
+  border-top: 1px solid var(--panel-border);
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--text-main);
+  overflow: auto;
+}
+.timeline-description p.muted {
+  margin: 0;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* +N overflow modal. Centered overlay listing every event a cluster's
+   3-lane budget couldn't display. Click an entry → it becomes the
+   selected timeline event (same handler as a glyph click). */
+.tl-overflow-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(7, 17, 31, 0.55);
+  backdrop-filter: blur(2px);
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: tl-overflow-fade 140ms ease-out;
+}
+@keyframes tl-overflow-fade { from { opacity: 0; } to { opacity: 1; } }
+.tl-overflow-modal {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  box-shadow: var(--shadow-deep);
+  width: min(520px, 92vw);
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.tl-overflow-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--panel-border);
+}
+.tl-overflow-track {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  background: rgba(24, 199, 216, 0.14);
+  color: var(--menu-active);
+  border: 1px solid rgba(24, 199, 216, 0.35);
+}
+.tl-overflow-track.tl-track-bridge     { background: rgba(255, 184, 77, 0.12); color: var(--heat-3); border-color: rgba(255, 184, 77, 0.35); }
+.tl-overflow-track.tl-track-need       { background: rgba(110, 193, 255, 0.10); color: #6ec1ff; border-color: rgba(110, 193, 255, 0.35); }
+.tl-overflow-track.tl-track-downstream { background: rgba(110, 193, 255, 0.10); color: #6ec1ff; border-color: rgba(110, 193, 255, 0.35); }
+.tl-overflow-track.tl-track-upstream   { background: rgba(200, 182, 255, 0.10); color: #c8b6ff; border-color: rgba(200, 182, 255, 0.35); }
+.tl-overflow-count {
+  flex: 1 1 auto;
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+.tl-overflow-close {
+  border: 1px solid var(--panel-border);
+  background: var(--menu-bg);
+  color: var(--text-main);
+  border-radius: 4px;
+  width: 28px;
+  height: 28px;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+}
+.tl-overflow-close:hover {
+  border-color: rgba(24, 199, 216, 0.4);
+  background: rgba(24, 199, 216, 0.12);
+}
+.tl-overflow-list {
+  overflow: auto;
+  padding: 6px 0;
+}
+.tl-overflow-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--panel-border);
+  padding: 10px 16px;
+  cursor: pointer;
+  font: inherit;
+  color: var(--text-main);
+  transition: background 120ms ease;
+}
+.tl-overflow-item:last-child { border-bottom: 0; }
+.tl-overflow-item:hover {
+  background: rgba(24, 199, 216, 0.08);
+}
+.tl-overflow-item-date {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.tl-overflow-item-label {
+  font-size: 12.5px;
+  color: var(--text-main);
+}
+
+/* Evidence reverse view */
+/* Lock column widths so a long expanded detail row (colspan=4) can't
+   stretch the parent table — auto layout otherwise rebalances columns
+   when any row expands and the header visibly jumps. */
+#evidence-body .list-table { table-layout: fixed; }
+#evidence-body .list-table th:nth-child(2),
+#evidence-body .list-table tbody tr:not(.ev-detail) td:nth-child(2) { width: 130px; }
+#evidence-body .list-table th:nth-child(3),
+#evidence-body .list-table tbody tr:not(.ev-detail) td:nth-child(3) { width: 160px; }
+#evidence-body .list-table th:nth-child(4),
+#evidence-body .list-table tbody tr:not(.ev-detail) td:nth-child(4) { width: 110px; }
+#evidence-body .list-table tbody tr:not(.ev-detail) td:nth-child(1) {
+  overflow-wrap: anywhere;
+}
+.ev-row { background: rgba(24, 199, 216, 0.02); }
+.ev-detail .ev-pred-list {
+  list-style: none;
+  margin: 4px 0 8px;
+  padding: 0 0 0 12px;
+}
+.ev-detail .ev-pred-list li {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  padding: 3px 0;
+  font-size: 12.5px;
+}
+.ev-pred-date {
+  flex: 0 0 auto;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+.ev-pred-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+  text-decoration: underline dotted rgba(143, 168, 194, 0.5);
+}
+.ev-pred-title:hover { color: var(--menu-active); }
+.ev-score {
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Stream E Needs tab — one entry per role-abstract actor whose
+   work drives the prediction toward landing. Header carries
+   actor / job / outcome / motivation; below sits the 5W1H task
+   grid. */
+.needs-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.needs-list .needs-item + .needs-item {
+  border-top: 1px dashed var(--panel-border);
+  margin-top: 12px;
+  padding-top: 12px;
+}
+.needs-header {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  margin-bottom: 6px;
+}
+.needs-actor {
+  font-weight: 600;
+  color: var(--text-main);
+}
+.needs-status-badge {
+  font-size: 10px;
+  background: rgba(220, 90, 60, 0.18);
+  color: #d97759;
+  padding: 1px 6px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.needs-job, .needs-outcome, .needs-motivation {
+  font-size: 12px;
+  margin: 2px 0;
+  color: var(--text-main);
+}
+.needs-job strong, .needs-outcome strong, .needs-motivation strong {
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-right: 4px;
+}
+.needs-task-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px 12px;
+  margin-top: 8px;
+  padding: 6px 8px;
+  background: rgba(255, 255, 255, 0.02);
+  border-left: 2px solid var(--menu-active);
+  border-radius: 3px;
+  font-size: 12px;
+}
+.needs-cell {
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+  min-width: 0;
+}
+.needs-cell-key {
+  flex: 0 0 auto;
+  width: 44px;
+  color: var(--text-muted);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.needs-cell-val {
+  color: var(--text-main);
+  word-break: break-word;
+}
+.needs-blocked .needs-task-grid {
+  border-left-color: #d97759;
+  background: rgba(220, 90, 60, 0.06);
+}
+
+/* Stream F (Step 1) Readings tab — cluster density + frequency.
+   Narrative-first: the one-line summary leads, then the table
+   shows the underlying numbers for readers who want to drill in. */
+.readings-narrative {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-main);
+  margin: 4px 0 12px;
+  padding: 8px 10px;
+  background: rgba(24, 199, 216, 0.06);
+  border-left: 2px solid var(--menu-active);
+  border-radius: 3px;
+}
+.readings-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+.readings-table th {
+  text-align: left;
+  font-weight: 500;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--panel-border);
+  padding: 4px 6px;
+}
+.readings-table td {
+  padding: 6px;
+  border-bottom: 1px dashed var(--panel-border);
+}
+.readings-theme {
+  color: var(--text-main);
+  word-break: break-word;
+}
+.readings-week {
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+.readings-density {
+  font-variant-numeric: tabular-nums;
+}
+.readings-pool {
+  color: var(--text-main);
+  font-weight: 500;
+}
+.readings-slash {
+  color: var(--text-muted);
+  margin: 0 2px;
+}
+.readings-total {
+  color: var(--text-muted);
+}
+.readings-trend {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 500;
+}
+.readings-trend-up {
+  background: rgba(110, 200, 130, 0.15);
+  color: #6ec882;
+}
+.readings-trend-down {
+  background: rgba(220, 90, 60, 0.12);
+  color: #d97759;
+}
+.readings-trend-flat {
+  background: rgba(120, 120, 120, 0.12);
+  color: var(--text-muted);
+}
+
+/* Stream F (Step 2) chain blocks — downstream + upstream
+   predictions linked via prediction_chain. */
+.readings-chain-narrative {
+  margin-top: 14px;
+}
+.readings-chain-block {
+  margin-top: 10px;
+}
+.readings-chain-h {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin: 8px 0 4px;
+  letter-spacing: 0.02em;
+}
+.readings-chain-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.readings-chain-item {
+  padding: 6px 8px;
+  border-left: 2px solid var(--menu-active);
+  background: rgba(24, 199, 216, 0.04);
+  border-radius: 3px;
+  margin-bottom: 4px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px;
+  font-size: 12px;
+}
+.readings-chain-list-up .readings-chain-item {
+  border-left-color: #b48a3f;
+  background: rgba(180, 138, 63, 0.06);
+}
+.readings-chain-strength {
+  flex: 0 0 auto;
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  color: var(--text-main);
+  font-size: 11px;
+  padding: 1px 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 3px;
+}
+.readings-chain-arrow {
+  flex: 0 0 auto;
+  color: var(--text-muted);
+}
+.readings-chain-target {
+  flex: 1 1 auto;
+  color: var(--text-main);
+  word-break: break-word;
+}
+/* Clickable variant — prediction title links to the target's own
+   PROBE timeline (or OBSERVATORY panel from the right slide-in). */
+.readings-chain-target.is-link {
+  cursor: pointer;
+  color: var(--menu-active);
+  border-bottom: 1px dashed transparent;
+  transition: color 120ms ease, border-color 120ms ease;
+}
+.readings-chain-target.is-link:hover {
+  border-bottom-color: var(--menu-active);
+}
+.readings-chain-notes {
+  flex: 1 1 100%;
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-left: 28px;
+  margin-top: 2px;
+  font-style: italic;
+}
+
+/* Stream F (Step 4) P↔P relations — structural relationships
+   between predictions (parallel / exclusive_variant / negation /
+   entails / equivalent). Each type is color-coded so the reader
+   can scan the kinds of relations at a glance. */
+.readings-relation-narrative {
+  margin-top: 16px;
+  background: rgba(180, 138, 63, 0.08);
+  border-left-color: #b48a3f;
+}
+.readings-relations-list {
+  list-style: none;
+  padding: 0;
+  margin: 6px 0 0 0;
+}
+.readings-relation-item {
+  padding: 6px 8px;
+  border-left: 2px solid var(--text-muted);
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 3px;
+  margin-bottom: 4px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 12px;
+}
+.readings-relation-negation {
+  border-left-color: #d97759;
+  background: rgba(220, 90, 60, 0.05);
+}
+.readings-relation-exclusive_variant {
+  border-left-color: #b48a3f;
+  background: rgba(180, 138, 63, 0.06);
+}
+.readings-relation-equivalent {
+  border-left-color: #6eb8c8;
+  background: rgba(110, 184, 200, 0.06);
+}
+.readings-relation-entails {
+  border-left-color: var(--menu-active);
+  background: rgba(24, 199, 216, 0.05);
+}
+.readings-relation-parallel {
+  border-left-color: #888;
+  background: rgba(120, 120, 120, 0.06);
+}
+.readings-relation-type {
+  flex: 0 0 auto;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  padding: 1px 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+}
+.readings-relation-arrow {
+  flex: 0 0 auto;
+  color: var(--text-muted);
+}
+.readings-relation-other {
+  flex: 1 1 auto;
+  color: var(--text-main);
+  word-break: break-word;
+}
+.readings-relation-family {
+  flex: 0 0 auto;
+  font-size: 11px;
+  font-style: italic;
+  color: var(--text-muted);
+}
+.readings-relation-mass {
+  flex: 0 0 auto;
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  color: var(--text-main);
+  font-size: 11px;
+  padding: 1px 6px;
+  background: rgba(180, 138, 63, 0.18);
+  border-radius: 3px;
+}
+.readings-relation-notes {
+  flex: 1 1 100%;
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+  font-style: italic;
+}
+
+/* Phase 3 — target-window badges. Compact tabular-nums display
+   consistent across Reasoning, Bridge, Needs, and Readings tabs. */
+.prediction-target-window {
+  margin: 6px 0 4px;
+  font-size: 12px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+.prediction-target-label {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 10px;
+  color: var(--menu-active);
+  margin-right: 4px;
+  font-weight: 500;
+}
+.reasoning-target-row {
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px dashed var(--panel-border);
+}
+.reasoning-target-row .reasoning-val {
+  font-variant-numeric: tabular-nums;
+  color: var(--menu-active);
+}
+.bridge-target {
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  color: var(--menu-active);
+  margin-left: 4px;
+}
+.needs-window {
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  color: var(--menu-active);
+  margin-left: auto;
+  padding: 1px 6px;
+  background: rgba(24, 199, 216, 0.10);
+  border-radius: 3px;
+}
+.needs-task-window {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  margin-top: 4px;
+  padding: 2px 6px;
+  border-left: 2px solid rgba(24, 199, 216, 0.3);
+  background: rgba(255, 255, 255, 0.02);
+}
+.readings-chain-window,
+.readings-relation-window {
+  flex: 0 0 auto;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+  padding: 1px 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 3px;
+}
+

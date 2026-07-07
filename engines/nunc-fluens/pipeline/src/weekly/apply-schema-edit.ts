@@ -130,10 +130,13 @@ export function planLines(ops: Operation[]): string[] {
 
 // --- taxonomy snapshot / restore --------------------------------------------
 
-const TAXONOMY_TABLES = ['categories', 'themes', 'subthemes', 'theme_candidates'] as const;
+// 'subthemes' was removed with the subtheme layer; restoreTaxonomy iterates
+// TAXONOMY_TABLES, so old snapshots still carrying a 'subthemes' key are
+// silently ignored (acceptable: the table was empty everywhere).
+const TAXONOMY_TABLES = ['categories', 'themes', 'theme_candidates'] as const;
 const TABLE_PK: Record<string, string> = {
   categories: 'category_id', themes: 'theme_id',
-  subthemes: 'subtheme_id', theme_candidates: 'candidate_id',
+  theme_candidates: 'candidate_id',
 };
 
 export interface TaxonomySnapshot {
