@@ -8,6 +8,7 @@ import { dailyUpdateSteps, futurePredictionSteps, dailyBriefingSteps } from './s
 import {
   themeReviewSteps, weeklyMaintenanceSteps, weeklyMemorySteps,
 } from './steps-sunday.ts';
+import { replayLocaleSet, resolveLocaleSet } from '../world-paths.ts';
 import type { Ai } from 'nunc-ai';
 
 export interface DayPlanTask {
@@ -41,6 +42,10 @@ export interface RunDayOptions {
   runtime: string;
   search: string;
   synthModel: string | null;
+  /** The configured non-EN render set (already validated by the
+   * caller). Absent = the default trio. Ignored in replay, where the
+   * effective set is derived from the day's committed state. */
+  locales?: readonly string[];
   replay: boolean;
   dryRun: boolean;
   only?: string | null;
@@ -56,12 +61,19 @@ export interface RunDayResult {
 export async function runDay(opts: RunDayOptions): Promise<RunDayResult> {
   const log = opts.log ?? ((s: string) => console.log(s));
   const dow = new Date(opts.date + 'T12:00:00Z').getUTCDay();
+  const sourcedataRoot = sourcedataDir(opts.newsRepo);
+  // Replay determinism: the day's committed set (run.json > staged
+  // locale dirs > default) wins over today's preference.
+  const locales = opts.replay
+    ? replayLocaleSet(sourcedataRoot, opts.date)
+    : resolveLocaleSet(opts.locales);
   const manifest = new RunManifest({
     date: opts.date,
     mode: opts.replay ? 'replay' : opts.dryRun ? 'dry-run' : 'live',
     runtime: opts.runtime,
     search: opts.search,
     synthModel: opts.synthModel,
+    locales: ['en', ...locales],
   });
   const dbFile = worldDbFile(opts.dataDir);
   const db = connect(dbFile);
@@ -70,13 +82,14 @@ export async function runDay(opts: RunDayOptions): Promise<RunDayResult> {
     dow,
     dataDir: opts.dataDir,
     newsRepo: opts.newsRepo,
-    sourcedataRoot: sourcedataDir(opts.newsRepo),
+    sourcedataRoot,
     dbFile,
     db,
     ai: opts.ai,
     runtime: opts.runtime,
     search: opts.search,
     synthModel: opts.synthModel,
+    locales,
     replay: opts.replay,
     dryRun: opts.dryRun,
     todayIso: new Date().toISOString().slice(0, 10),

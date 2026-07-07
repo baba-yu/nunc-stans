@@ -943,7 +943,31 @@
       state.scopeId = state.manifest.default_scope || "tech";
       state.windowId = state.manifest.default_window || "30d";
     }
+    renderLocaleButtons();
     updateMetaHeader();
+  }
+
+  // Locale model (post-C P5): the exported manifest.locales is the
+  // authoritative render set (en + the owner-configured subset). The
+  // static HTML carries all four buttons as the no-manifest fallback;
+  // here we hide the ones outside the set. Chrome-string dictionaries
+  // keep all four locales — extra entries are harmless.
+  function renderLocaleButtons() {
+    const fallback = ["en", "ja", "es", "fil"];
+    const m = state.manifest;
+    const locales = (m && Array.isArray(m.locales) && m.locales.length)
+      ? m.locales
+      : fallback;
+    document.querySelectorAll(".menu-btn.lang[data-locale]").forEach((btn) => {
+      btn.hidden = !locales.includes(btn.dataset.locale);
+    });
+    // A persisted locale outside the set would render labels the
+    // export no longer carries — snap back to the manifest default.
+    if (!locales.includes(state.locale)) {
+      state.locale = (m && m.default_locale) || "en";
+      updateLocaleButtons(state.locale);
+      applyChromeStrings();
+    }
   }
 
   async function loadScopeGraph(scopeId) {

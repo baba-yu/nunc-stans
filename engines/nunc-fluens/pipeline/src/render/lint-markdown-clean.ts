@@ -62,10 +62,14 @@ export function scanText(text: string): LintHit[] {
   return hits;
 }
 
-export function datePaths(publishRoot: string, dateIso: string): string[] {
+/** The day's user-facing markdown files, over the FULL render set
+ * ('en' + the effective non-EN set; default = the universe). */
+export function datePaths(
+  publishRoot: string, dateIso: string, locales: readonly string[] = LOCALES,
+): string[] {
   const compact = dateIso.replaceAll('-', '');
   const out: string[] = [];
-  for (const locale of LOCALES) {
+  for (const locale of locales) {
     out.push(join(publishRoot, DAILY_NEWS_REL, locale, `news-${compact}.md`));
     out.push(join(publishRoot, FP_REL, locale, `future-prediction-${compact}.md`));
   }

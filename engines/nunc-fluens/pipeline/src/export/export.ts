@@ -13,12 +13,19 @@ import { hashId, nowIso, pyRound, sha1Hex } from '../ingest/util.ts';
 import { WINDOWS, windowRange } from '../ingest/analytics.ts';
 import { parseWeekBucket } from '../ingest/timewindow.ts';
 import { boldHint, deriveShortLabel, prefixTokensPath } from './short-label.ts';
-import { MEMORY_REL } from '../world-paths.ts';
+import { MEMORY_REL, NON_EN_LOCALES } from '../world-paths.ts';
 
 const SCHEMA_VERSION = '1.0';
-const LOCALES = ['en', 'ja', 'es', 'fil'] as const;
 const DEFAULT_LOCALE = 'en';
 const SECONDARY_THEME_THRESHOLD = 0.55;
+
+// The effective non-EN set for the CURRENT export (post-C P5): locale
+// bags emit exactly en + this set (EN-fallback semantics unchanged).
+// Module state rather than a threaded parameter because loc()/
+// localeField() are called positionally from deep inside the node
+// builders; runExport/buildScopeGraph are synchronous, and both public
+// entry points assign it before any bag is built.
+let activeNonEn: readonly string[] = NON_EN_LOCALES;
 
 const TOKEN_RE = /[A-Za-z0-9]+|[぀-ヿ一-鿿]+/g;
 
@@ -30,13 +37,16 @@ function tok(s: string | null | undefined): Set<string> {
 }
 
 function loc(en: any, ja: any, es: any, fil: any): Record<string, any> {
-  return { en, ja: ja || en, es: es || en, fil: fil || en };
+  const byLocale: Record<string, any> = { ja, es, fil };
+  const out: Record<string, any> = { en };
+  for (const l of activeNonEn) out[l] = byLocale[l] || en;
+  return out;
 }
 
 function localeField(row: any, baseField: string): Record<string, any> {
   const en = row[baseField] ?? null;
   const out: Record<string, any> = { en };
-  for (const l of ['ja', 'es', 'fil']) {
+  for (const l of activeNonEn) {
     const v = row[`${baseField}_${l}`] ?? null;
     out[l] = v || en;
   }
@@ -268,7 +278,11 @@ function predictionGrassDaily(
   return out;
 }
 
-export function buildScopeGraph(db: Db, scopeId: string, publishRoot: string): Record<string, any> {
+export function buildScopeGraph(
+  db: Db, scopeId: string, publishRoot: string,
+  locales: readonly string[] = NON_EN_LOCALES,
+): Record<string, any> {
+  activeNonEn = locales;
   const latest = latestReportDate(db);
   const earliest = earliestReportDate(db) ?? latest;
 
@@ -510,7 +524,7 @@ export function buildScopeGraph(db: Db, scopeId: string, publishRoot: string): R
     const catLabels = localeField(cat, 'label');
     const catShortLabels = localeField(cat, 'short_label');
     if (!catShortLabels.en)
-      for (const kk of ['en', 'ja', 'es', 'fil'])
+      for (const kk of ['en', ...activeNonEn])
         if (!catShortLabels[kk]) catShortLabels[kk] = catLabels[kk];
     const node = {
       id: nodeId, type: 'category', scope_id: scopeId,
@@ -1050,7 +1064,7 @@ export function buildScopeGraph(db: Db, scopeId: string, publishRoot: string): R
   };
 }
 
-function buildManifest(db: Db, buildId: string): Record<string, any> {
+function buildManifest(db: Db, buildId: string, nonEn: readonly string[]): Record<string, any> {
   const latest = latestReportDate(db) ?? '';
   const windows = (db.prepare(
     'SELECT window_id, label, days, is_default FROM metric_windows ORDER BY sort_order')
@@ -1064,7 +1078,7 @@ function buildManifest(db: Db, buildId: string): Record<string, any> {
     default_scope: 'mix',
     default_window: dw?.window_id ?? '30d',
     default_locale: DEFAULT_LOCALE,
-    locales: [...LOCALES],
+    locales: ['en', ...nonEn],
     windows,
     scopes: [
       { scope_id: 'mix', label: 'Mix', graph_file: 'graph-mix.json' },
@@ -1171,7 +1185,15 @@ function buildMixGraph(tech: any, business: any, buildId: string): Record<string
   };
 }
 
-export function runExport(db: Db, args: { outputDir: string; publishRoot: string }): Record<string, any> {
+export function runExport(db: Db, args: {
+  outputDir: string; publishRoot: string;
+  /** Effective non-EN set (param with default: also called from
+   * tests/freeze without a RunCtx). Locale bags + manifest.locales
+   * emit en + this set. */
+  locales?: readonly string[];
+}): Record<string, any> {
+  const nonEn = args.locales ?? NON_EN_LOCALES;
+  activeNonEn = nonEn;
   const outDir = args.outputDir;
   mkdirSync(outDir, { recursive: true });
   const buildId = nowIso();
@@ -1179,7 +1201,7 @@ export function runExport(db: Db, args: { outputDir: string; publishRoot: string
   const scopeGraphs: Record<string, any> = {};
 
   for (const scopeId of ['tech', 'business']) {
-    const graph = buildScopeGraph(db, scopeId, args.publishRoot);
+    const graph = buildScopeGraph(db, scopeId, args.publishRoot, nonEn);
     scopeGraphs[scopeId] = graph;
     const errs = validateGraph(graph);
     if (errs.length) graph._validation_errors = errs;
@@ -1248,7 +1270,7 @@ export function runExport(db: Db, args: { outputDir: string; publishRoot: string
     JSON.stringify({ generated_at: buildId, terms: glossaryTerms }, null, 2), 'utf8');
   written.push(glossaryPath);
 
-  const manifest = buildManifest(db, buildId);
+  const manifest = buildManifest(db, buildId, nonEn);
   const manifestPath = join(outDir, 'manifest.json');
   writeFileSync(manifestPath, JSON.stringify(manifest, null, 2), 'utf8');
   written.push(manifestPath);

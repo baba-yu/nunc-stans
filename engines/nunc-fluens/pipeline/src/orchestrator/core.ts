@@ -23,6 +23,11 @@ export interface RunCtx {
   runtime: string;
   search: string;
   synthModel: string | null;
+  /** The effective non-EN render set (⊆ ja/es/fil, universe order);
+   * 'en' is implicit. Live runs resolve it from news-config, replay
+   * derives it per day (world-paths replayLocaleSet). Every locale
+   * fan-out iterates this, never the LOCALES universe. */
+  locales: readonly string[];
   replay: boolean;
   dryRun: boolean;
   todayIso: string;
@@ -43,6 +48,9 @@ export class RunManifest {
   readonly data: Record<string, any>;
   constructor(args: {
     date: string; mode: string; runtime: string; search: string; synthModel: string | null;
+    /** The FULL effective render set, 'en' first (e.g. ['en','ja']).
+     * Committed with the day so replay can reproduce the exact set. */
+    locales: readonly string[];
   }) {
     this.data = {
       date: args.date,
@@ -50,6 +58,7 @@ export class RunManifest {
       runtime: args.runtime,
       search: args.search,
       synth_model: args.synthModel,
+      locales: [...args.locales],
       started_at: new Date().toISOString(),
       finished_at: null,
       steps: [] as StepRecord[],

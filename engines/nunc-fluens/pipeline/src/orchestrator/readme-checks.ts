@@ -9,10 +9,12 @@ import { DAILY_NEWS_REL, FP_REL, NON_EN_LOCALES } from '../world-paths.ts';
 const LINK_HEAD_RE = new RegExp(`\\((${DAILY_NEWS_REL}|${FP_REL})/`);
 const LINK_RE = new RegExp(`\\((${DAILY_NEWS_REL}|${FP_REL})/([^)]+)\\)`);
 
-export function checkReadmeLinks(publishRoot: string): { exit: number; lines: string[] } {
+export function checkReadmeLinks(
+  publishRoot: string, locales: readonly string[] = NON_EN_LOCALES,
+): { exit: number; lines: string[] } {
   const lines: string[] = [];
   let fail = 0;
-  for (const L of NON_EN_LOCALES) {
+  for (const L of locales) {
     const readme = join(publishRoot, `README.${L}.md`);
     if (!existsSync(readme)) continue;
     const text = readFileSync(readme, 'utf8');

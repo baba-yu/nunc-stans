@@ -18,7 +18,7 @@ import {
 } from './config.ts'
 import { integrityCheck, migrateDb } from './migrate.ts'
 import { CANONICAL_FILES } from './schemas/sourcedata.ts'
-import { DAILY_NEWS_REL, detectShape, OLD_REPORT_DIR } from './world-paths.ts'
+import { DAILY_NEWS_REL, detectShape, OLD_REPORT_DIR, resolveLocaleSet } from './world-paths.ts'
 import { migrateLayout } from './migrate-layout.ts'
 
 function cmdLink(dir: string | undefined): number {
@@ -240,6 +240,18 @@ async function cmdRun(argv: string[]): Promise<number> {
     ? (newsCfg.searchEngine as string) ?? 'brave'
     : 'native'
   const synthModel = (newsCfg.synthModel as string) ?? null
+  // Locale model (post-C P5): EN + the configured subset of ja/es/fil.
+  // Absent key = the full trio (today's behavior). Invalid content is a
+  // refusal, not a guess — the drawer/gate validate writes, but the
+  // file is hand-editable.
+  let locales: readonly string[]
+  try {
+    locales = resolveLocaleSet(newsCfg.locales)
+  } catch (e) {
+    console.error(`run: refusing to start — news-config.json 'locales' is invalid: `
+      + `${e instanceof Error ? e.message : e}`)
+    return 1
+  }
 
   // Relative source import: node refuses to type-strip files under
   // node_modules, so the workspace-linked 'nunc-ai' specifier only
@@ -252,7 +264,7 @@ async function cmdRun(argv: string[]): Promise<number> {
     date: opts.date,
     dataDir: box.dataDir,
     newsRepo: box.newsRepo,
-    ai, runtime, search, synthModel,
+    ai, runtime, search, synthModel, locales,
     replay: opts.replay,
     dryRun: opts.dryRun,
     only: opts.only,

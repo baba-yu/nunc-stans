@@ -52,8 +52,12 @@ function directDay(db: Database.Database, repo: string, d: string): void {
 async function orchestrateReplay(
   db: Database.Database, repo: string, dataDir: string, day: string,
 ): Promise<Record<string, any>> {
+  // The golden corpus carries the full trio (pre-locale-model days:
+  // derived from the staged locale dirs, as replayLocaleSet would).
+  const locales = ['ja', 'es', 'fil'];
   const manifest = new RunManifest({
     date: day, mode: 'replay', runtime: 'claude-code', search: 'native', synthModel: null,
+    locales: ['en', ...locales],
   });
   const ctx: RunCtx = {
     date: day,
@@ -67,6 +71,7 @@ async function orchestrateReplay(
     runtime: 'claude-code',
     search: 'native',
     synthModel: null,
+    locales,
     replay: true,
     dryRun: false,
     todayIso: TODAY,

@@ -7,8 +7,8 @@ import Database from 'better-sqlite3';
 import { postUpdateValidation } from './post-update-validation.ts';
 import type { GateResult } from './post-update-validation.ts';
 import {
-  DAILY_NEWS_REL, exportsDir, EXPORTS_REL, FP_REL, LOCALES, MEMORY_REL,
-  NON_EN_LOCALES,
+  DAILY_NEWS_REL, exportsDir, EXPORTS_REL, FP_REL, MEMORY_REL,
+  NON_EN_LOCALES, readmeSuffixes,
 } from '../world-paths.ts';
 import { newsDbFile } from '../config.ts';
 
@@ -24,11 +24,11 @@ function rel(root: string, p: string): string {
   return relative(root, p).replaceAll('\\', '/');
 }
 
-function checkFiles(repoRoot: string, date: string): string[] {
+function checkFiles(repoRoot: string, date: string, nonEn: readonly string[]): string[] {
   const errs: string[] = [];
   for (const [kind, sub] of [['news', DAILY_NEWS_REL], ['future-prediction', FP_REL]] as const) {
     const fileStem = `${kind}-${stem(date)}`;
-    for (const l of LOCALES) {
+    for (const l of ['en', ...nonEn]) {
       const p = join(repoRoot, sub, l, `${fileStem}.md`);
       if (!existsSync(p)) errs.push(`missing: ${rel(repoRoot, p)}`);
       else if (statSync(p).size === 0) errs.push(`empty: ${rel(repoRoot, p)}`);
@@ -37,12 +37,13 @@ function checkFiles(repoRoot: string, date: string): string[] {
   return errs;
 }
 
-function checkDbPopulation(repoRoot: string, date: string): string[] {
+function checkDbPopulation(repoRoot: string, date: string, nonEn: readonly string[]): string[] {
   const res = postUpdateValidation({
     check: 'all', date,
     db: newsDbFile(repoRoot),
     exportsDir: exportsDir(repoRoot),
     repoRoot,
+    locales: nonEn,
   });
   const errs: string[] = [];
   if (res.exit !== 0) {
@@ -108,14 +109,14 @@ function escapeRe(s: string): string {
   return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-function checkReadmes(repoRoot: string, date: string): string[] {
+function checkReadmes(repoRoot: string, date: string, nonEn: readonly string[]): string[] {
   const errs: string[] = [];
   const base = Date.parse(date + 'T12:00:00Z');
   const expectedDates = [0, 1, 2]
     .map(i => new Date(base - i * 86400000).toISOString().slice(0, 10))
     .sort();
   const pyList = (xs: string[]) => `[${xs.map(x => `'${x}'`).join(', ')}]`;
-  for (const l of ['', ...NON_EN_LOCALES.map(x => `.${x}`)]) {
+  for (const l of readmeSuffixes(nonEn)) {
     const path = join(repoRoot, `README${l}.md`);
     const relPath = rel(repoRoot, path);
     if (!existsSync(path)) {
@@ -150,8 +151,9 @@ function checkReadmes(repoRoot: string, date: string): string[] {
  * the working DB are the instance-side hygiene surface. The dashboard
  * files themselves are engine code, checked by the orchestrator's
  * dashboard-integrity step. */
-function checkExportsHygiene(repoRoot: string): string[] {
+function checkExportsHygiene(repoRoot: string, nonEn: readonly string[]): string[] {
   const errs: string[] = [];
+  const expectedCount = nonEn.length + 1; // en + the effective set
   const mPath = join(exportsDir(repoRoot), 'manifest.json');
   if (!existsSync(mPath)) {
     errs.push(`missing: ${rel(repoRoot, mPath)}`);
@@ -159,8 +161,8 @@ function checkExportsHygiene(repoRoot: string): string[] {
     try {
       const m = JSON.parse(readFileSync(mPath, 'utf8'));
       const locales = m.locales ?? [];
-      if (locales.length !== 4)
-        errs.push(`${EXPORTS_REL}/manifest.json has ${locales.length} locales, expected 4`);
+      if (locales.length !== expectedCount)
+        errs.push(`${EXPORTS_REL}/manifest.json has ${locales.length} locales, expected ${expectedCount}`);
       if (m.default_locale !== 'en')
         errs.push(
           `${EXPORTS_REL}/manifest.json default_locale=`
@@ -187,8 +189,12 @@ function checkExportsHygiene(repoRoot: string): string[] {
 
 export function dailyFlowCheck(args: {
   repoRoot: string; date: string; mode: 'strict' | 'report-missing';
+  /** Effective non-EN set; explicit parameter (not ambient config)
+   * because the gate also runs from tests/freeze without a RunCtx. */
+  locales?: readonly string[];
 }): GateResult {
   const root = resolve(args.repoRoot);
+  const nonEn = args.locales ?? NON_EN_LOCALES;
   const sun = isSunday(args.date);
   const lines: string[] = [];
   lines.push(`daily-flow-check :: date=${args.date} (${sun ? 'Sun' : 'Mon-Sat'})`);
@@ -204,16 +210,16 @@ export function dailyFlowCheck(args: {
     lines.push(`OK ${name}`);
     return true;
   };
-  allPass = run(`news+FP markdown files (${args.date})`, checkFiles(root, args.date)) && allPass;
+  allPass = run(`news+FP markdown files (${args.date})`, checkFiles(root, args.date, nonEn)) && allPass;
   allPass = run(`DB population via post_update_validation (${args.date})`,
-    checkDbPopulation(root, args.date)) && allPass;
+    checkDbPopulation(root, args.date, nonEn)) && allPass;
   if (sun)
     allPass = run(`Sunday artifacts (dormant + theme-review + snapshots) (${args.date})`,
       checkSundayArtifacts(root, args.date)) && allPass;
   allPass = run(`READMEs (3-day window including ${args.date})`,
-    checkReadmes(root, args.date)) && allPass;
+    checkReadmes(root, args.date, nonEn)) && allPass;
   allPass = run('exports hygiene (manifest + sqlite)',
-    checkExportsHygiene(root)) && allPass;
+    checkExportsHygiene(root, nonEn)) && allPass;
   lines.push('');
   lines.push(allPass ? 'ALL GREEN — today is done' : 'NOT DONE — see FAIL lines above');
   const exit = args.mode === 'report-missing' ? 0 : (allPass ? 0 : 1);

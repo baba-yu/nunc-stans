@@ -41,6 +41,9 @@ export interface IngestContext {
   sourcedataRoot: string;
   repoRootForRel: string;
   todayIso: string;
+  /** The effective non-EN set for the locale fan-in (ingestDayLocales).
+   * Absent = the full universe (ja/es/fil). */
+  locales?: readonly string[];
 }
 
 function registerSourceFile(db: Db, ctx: IngestContext, args: {
@@ -335,7 +338,7 @@ export function ingestDayLocales(
   db: Db, ctx: IngestContext, dateIso: string, pidByJsonId: Map<string, string>,
 ): Record<string, Record<string, number>> {
   const summary: Record<string, Record<string, number>> = {};
-  for (const loc of LOCALES) {
+  for (const loc of ctx.locales ?? LOCALES) {
     const locSummary = { predictions: 0, needs: 0, bridges: 0 };
     summary[loc] = locSummary;
     const base = localeDateDir(ctx.sourcedataRoot, dateIso, loc);

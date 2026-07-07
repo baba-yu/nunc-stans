@@ -40,9 +40,14 @@ import { postUpdateValidation } from '../gates/post-update-validation.ts';
 import { checkReadmeLinks } from './readme-checks.ts';
 import Database from 'better-sqlite3';
 import {
-  DAILY_NEWS_REL, exportsDir, EXPORTS_REL, FP_REL, LOCALES, MEMORY_REL,
-  NON_EN_LOCALES as NON_EN, REFERENCE_REL, REFERENCES_TXT,
+  DAILY_NEWS_REL, exportsDir, EXPORTS_REL, FP_REL, MEMORY_REL,
+  NON_EN_LOCALES as NON_EN, readmeSuffixes, REFERENCE_REL, REFERENCES_TXT,
 } from '../world-paths.ts';
+
+/** The full render set for a run: EN plus the effective non-EN set. */
+function renderLocales(ctx: RunCtx): string[] {
+  return ['en', ...ctx.locales];
+}
 
 function sdFile(ctx: RunCtx, name: string): string {
   return join(dateDir(ctx.sourcedataRoot, ctx.date), name);
@@ -54,7 +59,8 @@ function locFile(ctx: RunCtx, locale: string, name: string): string {
 
 // --- glossary LLM-step output validators -----------------------------------
 
-function validateDefinitionFills(raw: unknown, pendingTerms: string[]): {
+function validateDefinitionFills(raw: unknown, pendingTerms: string[],
+  nonEn: readonly string[]): {
   definitions: DefinitionFill[];
   refused: Array<{ term: string; reason: string }>;
 } {
@@ -64,9 +70,11 @@ function validateDefinitionFills(raw: unknown, pendingTerms: string[]): {
   if (!Array.isArray(o.refused)) throw new Error("missing 'refused' array");
   const seen = new Set<string>();
   for (const d of o.definitions) {
+    // Locale siblings only for the configured set — DB columns for
+    // unconfigured locales just stay NULL (EN fallback at export).
     for (const k of ['term', 'quick_def', 'why_it_matters',
-      'quick_def_ja', 'quick_def_es', 'quick_def_fil',
-      'why_it_matters_ja', 'why_it_matters_es', 'why_it_matters_fil'])
+      ...nonEn.map(l => `quick_def_${l}`),
+      ...nonEn.map(l => `why_it_matters_${l}`)])
       if (typeof d?.[k] !== 'string' || !d[k].trim())
         throw new Error(`definition for ${JSON.stringify(d?.term)} missing required key '${k}' `
           + '(locale siblings are mandatory for every filled term)');
@@ -108,9 +116,10 @@ function validateSemanticJudgements(raw: unknown, terms: string[]): Array<{
 /** The publish step's git-add candidates (repo-relative, existsSync- and
  * check-ignore-filtered at publish time). Exported so the layout tests
  * can assert the list tracks the data/ constants — a missed rename here
- * silently stops an artifact class from being committed. */
-export function publishAddable(): string[] {
-  return ['README.md', ...NON_EN.map(l => `README.${l}.md`),
+ * silently stops an artifact class from being committed. README entries
+ * derive from the effective locale set (default: the full trio). */
+export function publishAddable(nonEn: readonly string[] = NON_EN): string[] {
+  return ['README.md', ...nonEn.map(l => `README.${l}.md`),
     EXPORTS_REL, DAILY_NEWS_REL, FP_REL, MEMORY_REL, REFERENCES_TXT,
     `${REFERENCE_REL}/citation-policy-review.md`, 'app/sourcedata'];
 }
@@ -307,7 +316,7 @@ export function dailyUpdateSteps(): StepDef[] {
         const fanout = ctx.runtime === 'claude-code'
           ? <T>(xs: readonly T[], f: (x: T) => Promise<void>) => Promise.all(xs.map(f)).then(() => undefined)
           : async <T>(xs: readonly T[], f: (x: T) => Promise<void>) => { for (const x of xs) await f(x); };
-        await fanout(NON_EN, async (L) => {
+        await fanout(ctx.locales, async (L) => {
           for (const [name, validate] of kinds) {
             await llmArtifactStep(ctx, {
               id: `translate-news:${L}:${name}`,
@@ -327,7 +336,7 @@ export function dailyUpdateSteps(): StepDef[] {
     {
       id: 'render-news', kind: 'det',
       run: (ctx) => {
-        for (const L of LOCALES)
+        for (const L of renderLocales(ctx))
           renderAndWriteNews(ctx.sourcedataRoot, ctx.newsRepo, ctx.date, L);
       },
     },
@@ -372,13 +381,15 @@ export function dailyUpdateSteps(): StepDef[] {
               + 'prompt" section of the spec, including all locale siblings '
               + 'and the refusal rules):\n'
               + JSON.stringify(pending, null, 2),
+            // Locale-sibling keys derive from the configured set (the
+            // spec's ja/es/fil enumeration is the full-trio case).
             outputNote: '{"definitions": [{"term", "quick_def", "why_it_matters", '
-              + '"quick_def_ja", "quick_def_es", "quick_def_fil", '
-              + '"why_it_matters_ja", "why_it_matters_es", "why_it_matters_fil", '
+              + [...ctx.locales.map(l => `"quick_def_${l}", `),
+                ...ctx.locales.map(l => `"why_it_matters_${l}", `)].join('')
               + '"canonical_link" (optional)}], "refused": [{"term", "reason"}]} — '
               + 'every pending term appears in exactly one of the two lists.',
           }),
-          validate: (raw) => validateDefinitionFills(raw, pending.map(p => p.term)),
+          validate: (raw) => validateDefinitionFills(raw, pending.map(p => p.term), ctx.locales),
         });
         for (const d of out.definitions) commitDefinition(ctx.db, ctx.todayIso, d);
         for (const r of out.refused) retireRefused(ctx.db, ctx.todayIso, r.term);
@@ -446,7 +457,7 @@ export function dailyUpdateSteps(): StepDef[] {
       // replay must not re-increment it (S-4: the day was already
       // counted when it ran live) — gates still run.
       run: (ctx) => {
-        for (const L of LOCALES) {
+        for (const L of renderLocales(ctx)) {
           const r = citationCheck({
             draft: newsOutputPath(ctx.newsRepo, ctx.date, L),
             policyFile: join(ctx.newsRepo, REFERENCE_REL, 'citation-restrictions.md'),
@@ -497,12 +508,14 @@ export function dailyUpdateSteps(): StepDef[] {
           sourcedataRoot: ctx.sourcedataRoot,
           repoRootForRel: ctx.newsRepo,
           todayIso: ctx.todayIso,
+          locales: ctx.locales,
         }, ctx.date, pidByJsonId);
       },
     },
     {
       id: 'lint-news', kind: 'det',
-      run: (ctx) => gateOrFail('lint-news', lintPaths(datePaths(ctx.newsRepo, ctx.date)), ctx),
+      run: (ctx) => gateOrFail('lint-news',
+        lintPaths(datePaths(ctx.newsRepo, ctx.date, renderLocales(ctx))), ctx),
     },
     {
       id: 'verify-topic-coverage', kind: 'llm',
@@ -551,6 +564,7 @@ export function dailyUpdateSteps(): StepDef[] {
       run: (ctx) => gateOrFail('puv-news', postUpdateValidation({
         check: 'news', date: ctx.date, db: ctx.dbFile,
         exportsDir: exportsDir(ctx.newsRepo), repoRoot: ctx.newsRepo,
+        locales: ctx.locales,
       }), ctx),
     },
   ];
@@ -681,7 +695,7 @@ export function futurePredictionSteps(): StepDef[] {
         const fanout = ctx.runtime === 'claude-code'
           ? <T>(xs: readonly T[], f: (x: T) => Promise<void>) => Promise.all(xs.map(f)).then(() => undefined)
           : async <T>(xs: readonly T[], f: (x: T) => Promise<void>) => { for (const x of xs) await f(x); };
-        await fanout(NON_EN, async (L) => {
+        await fanout(ctx.locales, async (L) => {
           await llmArtifactStep(ctx, {
             id: `translate-fp:${L}:bridges.json`,
             artifact: locFile(ctx, L, 'bridges.json'),
@@ -719,14 +733,14 @@ export function futurePredictionSteps(): StepDef[] {
     {
       id: 'render-fp', kind: 'det',
       run: (ctx) => {
-        for (const L of LOCALES)
+        for (const L of renderLocales(ctx))
           renderAndWriteFp(ctx.sourcedataRoot, ctx.newsRepo, ctx.date, L);
       },
     },
     {
       id: 'citation-check-fp', kind: 'det',
       run: (ctx) => {
-        for (const L of LOCALES) {
+        for (const L of renderLocales(ctx)) {
           const r = citationCheck({
             draft: fpOutputPath(ctx.newsRepo, ctx.date, L),
             policyFile: join(ctx.newsRepo, REFERENCE_REL, 'citation-restrictions.md'),
@@ -759,18 +773,21 @@ export function futurePredictionSteps(): StepDef[] {
           sourcedataRoot: ctx.sourcedataRoot,
           repoRootForRel: ctx.newsRepo,
           todayIso: ctx.todayIso,
+          locales: ctx.locales,
         }, ctx.date, pidByJsonId);
       },
     },
     {
       id: 'lint-fp', kind: 'det',
-      run: (ctx) => gateOrFail('lint-fp', lintPaths(datePaths(ctx.newsRepo, ctx.date)), ctx),
+      run: (ctx) => gateOrFail('lint-fp',
+        lintPaths(datePaths(ctx.newsRepo, ctx.date, renderLocales(ctx))), ctx),
     },
     {
       id: 'puv-fp', kind: 'det',
       run: (ctx) => gateOrFail('puv-fp', postUpdateValidation({
         check: 'future-prediction', date: ctx.date, db: ctx.dbFile,
         exportsDir: exportsDir(ctx.newsRepo), repoRoot: ctx.newsRepo,
+        locales: ctx.locales,
       }), ctx),
     },
   ];
@@ -794,7 +811,7 @@ export function dailyBriefingSteps(): StepDef[] {
       id: 'readme-window', kind: 'llm',
       run: async (ctx) => {
         // Replay/resume: accept READMEs that already carry today's block.
-        for (const L of ['', '.ja', '.es', '.fil']) {
+        for (const L of readmeSuffixes(ctx.locales)) {
           const path = join(ctx.newsRepo, `README${L}.md`);
           const hasToday = existsSync(path)
             && new RegExp(`^## ${ctx.date}\\s*$`, 'm').test(readFileSync(path, 'utf8'));
@@ -837,11 +854,11 @@ export function dailyBriefingSteps(): StepDef[] {
     {
       id: 'readme-checks', kind: 'det',
       run: (ctx) => {
-        const link = checkReadmeLinks(ctx.newsRepo);
+        const link = checkReadmeLinks(ctx.newsRepo, ctx.locales);
         for (const l of link.lines) ctx.log(`  ${l}`);
         if (link.exit !== 0) throw new StepFailure('readme-checks', 'link routing failed');
         const pwi = postWriteIntegrity('readme',
-          ['', '.ja', '.es', '.fil'].map(L => join(ctx.newsRepo, `README${L}.md`)));
+          readmeSuffixes(ctx.locales).map(L => join(ctx.newsRepo, `README${L}.md`)));
         gateOrFail('readme-checks', pwi, ctx);
       },
     },
@@ -854,7 +871,9 @@ export function dailyBriefingSteps(): StepDef[] {
       run: (ctx) => {
         runScore(ctx.db);
         const outDir = exportsDir(ctx.newsRepo);
-        runExport(ctx.db, { outputDir: outDir, publishRoot: ctx.newsRepo });
+        runExport(ctx.db, {
+          outputDir: outDir, publishRoot: ctx.newsRepo, locales: ctx.locales,
+        });
         const ber = buildEvidenceReverse(ctx.db, { todayIso: ctx.todayIso });
         writeFileSync(join(outDir, 'evidence-reverse.json'),
           JSON.stringify(ber, null, 2), 'utf8');
@@ -879,7 +898,8 @@ export function dailyBriefingSteps(): StepDef[] {
             `engine dashboard file(s) missing: ${missing.join(', ')}`);
         gateOrFail('dashboard-integrity', postWriteIntegrity('dashboard-asset', assets), ctx);
         const m = JSON.parse(readFileSync(join(exportsDir(ctx.newsRepo), 'manifest.json'), 'utf8'));
-        if ((m.locales ?? []).length !== 4 || m.default_locale !== 'en')
+        // en + the effective set (default trio ⇒ the historical 4).
+        if ((m.locales ?? []).length !== ctx.locales.length + 1 || m.default_locale !== 'en')
           throw new StepFailure('dashboard-integrity', 'manifest shape check failed');
       },
     },
@@ -888,6 +908,7 @@ export function dailyBriefingSteps(): StepDef[] {
       run: (ctx) => gateOrFail('puv-exports', postUpdateValidation({
         check: 'exports', date: ctx.date, db: ctx.dbFile,
         exportsDir: exportsDir(ctx.newsRepo), repoRoot: ctx.newsRepo,
+        locales: ctx.locales,
       }), ctx),
     },
     {
@@ -903,7 +924,7 @@ export function dailyBriefingSteps(): StepDef[] {
           execFileSync('git', ['-C', ctx.newsRepo, ...args], { encoding: 'utf8' });
         // Add what exists and is not gitignored — instances legitimately
         // ignore some of these (upstream keeps references.txt untracked).
-        const addable = publishAddable()
+        const addable = publishAddable(ctx.locales)
           .filter(p => existsSync(join(ctx.newsRepo, p)))
           .filter(p => {
             try {
