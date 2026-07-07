@@ -2,17 +2,24 @@
 
 There is no integration relationship to document here: **nunc-stans has
 no relationship to any particular news project** (Phase C redirection,
-owner decision 2026-07-06). This engine is a self-contained product; what
-it consumes is a *news-shaped data checkout* — a directory the user
-designates with `just news-link <dir>` (config `news_repo`, env override
-`NS_NEWS_REPO`), read strictly read-only for the Formans world view. The
-stable contract is the data **shape**, held by the schemas in
-`pipeline/src/schemas/` and exercised by the test fixtures. Post-C the
-dashboard is product code (`dashboard/` in this engine — instances carry
-data only), and the view side reads the exported graphs from either
-layout: the product's `data/exports/graph-*.json` or the legacy
-`docs/data/graph-*.json` of old news-shaped checkouts (supported
-forever), plus `app/sourcedata/` day files in both.
+owner decision 2026-07-06). This engine is a self-contained product with
+its own data model: the engine is a TEMPLATE, and all data lives in
+**instances** — per-profile git repos stamped by `nunc-fluens init`
+(post-C REDO V2, 2026-07-07). The one remaining news-shaped contact
+surface is **`nunc-fluens import <src> <instance>`**, a one-time,
+read-only copy of a news-shaped checkout's data into an instance; the
+mapping of the old layout lives only inside that command. The Formans
+world view reads a designated instance (`just news-link <instance>`,
+config `news_repo`, env override `NS_NEWS_REPO`) strictly read-only,
+`data/exports/` only — the old-shape view fallback was removed with the
+V2 split. The stable contract is the data **shape**, held by the schemas
+in `pipeline/src/schemas/` and exercised by the test fixtures. Post-C
+the dashboard is product code (`dashboard/` in this engine — instances
+carry data only).
+
+(Deletion proposal D2 in
+`design/development/2026-07-06-post-c-plan.md` suggests folding this
+file into the engine README/docs and deleting it — the owner's call.)
 
 ## Lineage
 
@@ -44,9 +51,16 @@ constitution's world→self provenance loop, F9).
 
 ## Running it
 
-The pipeline never writes the view checkout. Runs target a disposable
-**sandbox instance** (`just news-sandbox <dir>` — a local clone of the
-view checkout plus its own seeded data store); see the `justfile`
-recipes `news-daily` / `news-schedule`. The `analytics.sqlite` working
-cache lives in the run target's data store
-(`<store>/world/analytics.sqlite`), never in this repo.
+The pipeline never writes any news-shaped checkout. Runs target a
+**data instance** (`just news-init <name|dir>`, optionally seeded from
+a news checkout with `just news-import <src> <instance>`); see the
+`justfile` recipes `news-daily` / `news-schedule` (both take the
+instance; the CLI honors `--instance` / `NS_INSTANCE`). The
+`analytics.sqlite` working cache and the AI run log live in the
+instance's gitignored `store/`, never in this repo. Instance model
+summary: one git repo per profile (default home the gitignored
+`instances/<profile>/` in this engine), `data/{sourcedata, daily-news,
+future-prediction, memory, reference, exports, archives}` +
+`data/references.txt`, `README*.md` at the root, runtime state in
+`store/` (`world/analytics.sqlite`, `runs/ai-runs.jsonl`, optional
+`news-config.json` override).

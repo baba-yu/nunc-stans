@@ -3,20 +3,28 @@
 Nunc Fluens is the news pipeline engine of the nunc-stans monorepo: a
 TypeScript DAG orchestrator that researches, writes, translates,
 renders, gates, and publishes a daily news board into a **data
-checkout** it owns (a git repo of markdown + JSON + a SQLite working
-cache). It is a self-contained product; the monorepo's Formans world
-view reads its exports strictly read-only.
+instance** it owns (a git repo of markdown + JSON, with a gitignored
+`store/` for the SQLite working cache and run logs). It is a
+self-contained product; the monorepo's Formans world view reads one
+instance's exports strictly read-only.
 
 ## Where things live
 
 - `pipeline/` — the product: CLI (`nunc-fluens`), orchestrator steps,
   deterministic renderers, gates, schemas, goldens, systemd units.
+- `pipeline/instance-template/` — the instance TEMPLATE: directory
+  skeleton (`data/…` + `.gitkeep`s), synthetic editorial seeds
+  (`news-topics.md`, `citation-restrictions.md`, `glossary.yml`),
+  the instance `.gitignore` (`store/`, `data/archives/`), and the
+  README seed. `nunc-fluens init` stamps data instances from it.
 - `pipeline/prompts/` — runtime LLM prompt sources (skill contracts,
   writer rules, `memory-policy.md`); normally-editable behavior files.
 - `dashboard/` — the reader-facing dashboard (static `index.html` +
   `assets/`), shipped as **engine code**. Instances carry data only
   (post-C P2); the dashboard is combined with an instance's exports at
   deploy/stage time.
+- `instances/` — the default (gitignored) home for data instances:
+  one git repo per profile, stamped by `nunc-fluens init`.
 - `design/` — living design docs (`decisions/` ADRs,
   `sourcedata-layout.md`); `design/archive/` is the frozen spec corpus
   the port was written against (provenance in `design/README.md`).
@@ -26,34 +34,39 @@ view reads its exports strictly read-only.
 ## Running it
 
 ```
-just news-link <dir>        # designate the read-only view checkout
-just news-sandbox <dir>     # disposable run instance (clone + seeded store)
-just news-daily <sandbox>   # one pipeline run against the sandbox
-nunc-fluens migrate-layout <dir>   # convert an old-shape instance to data/
-just news-schedule <sandbox> [oncalendar]  # systemd user timer
+just news-init <name|dir>          # stamp an instance from the template
+just news-import <src> <instance>  # optional: copy news-shaped data in (once)
+just news-link <instance>          # point the world view at an instance
+just news-daily <instance>         # one pipeline run (NS_INSTANCE)
+just news-schedule <instance> [oncalendar]  # systemd user timer
 ```
 
-Runs never write the view checkout (redirection): they target sandbox
-instances, which are migrated to the product data layout at creation.
+`nunc-fluens run` refuses to start without an instance (`--instance`
+flag or `NS_INSTANCE`) and accepts only init/import-born v2 shapes.
+News-shaped checkouts are never run directly: `nunc-fluens import`
+copies their data into an instance (source read-only, one import
+commit) — that command is the only place old-shape knowledge survives.
 
-## The data-checkout layout
+## The instance layout (v2)
 
-New instances use the product layout: `data/daily-news/`,
-`data/future-prediction/`, `data/memory/`, `data/reference/`,
-`data/exports/` (graphs + manifest + snapshots + prefix-tokens),
-`data/archives/snapshots/` (gitignored), with `README*.md` and
-`references.txt` at the root and `app/sourcedata/` + `app/data/`
-deliberately unmoved (DB rel-path identity). The **view side supports
-both shapes forever**: `tools/build-world.ts` probes `data/exports/`
-first and falls back to the legacy `docs/data/` of old news-shaped
-checkouts.
+An instance carries `data/sourcedata/` (per-day research inputs, incl.
+locale fan-outs and each day's `run.json`), the publish quartet
+`data/daily-news/`, `data/future-prediction/`, `data/memory/`,
+`data/reference/`, plus `data/exports/` (graphs + manifest + snapshots
++ prefix-tokens), `data/archives/` (aged-out snapshots, gitignored),
+`data/references.txt`, and `README*.md` at the root. Runtime state
+lives in a gitignored `store/`: `world/analytics.sqlite`,
+`runs/ai-runs.jsonl`, and an optional `news-config.json` override
+(when present it wins over the main store's copy that the gate/drawer
+edit). The view side reads `data/exports/` only.
 
 ## Deploying an instance dashboard
 
-An instance is data-only. To publish a reader-facing dashboard,
-combine this engine's `dashboard/` (as the site root) with the
-instance's `data/exports/` mounted at `data/` — that is exactly the
-layout `tools/build-world.ts` stages locally under
-`frontend/nunc-stans-formans/public/world-graph/`. Hosting it (e.g.
-GitHub Pages via an Actions artifact deploy of those two pieces) is
-the deployer's concern post-fork; this repo ships no Pages workflow.
+An instance is data-only; the publish root is a combination of the two
+pieces. To publish a reader-facing dashboard, take this engine's
+`dashboard/` as the site root and mount the instance's `data/exports/`
+at `data/` — that is exactly the layout `tools/build-world.ts` stages
+locally under `frontend/nunc-stans-formans/public/world-graph/`.
+Hosting it (e.g. GitHub Pages via an Actions artifact deploy of those
+two pieces) is the deployer's concern post-fork; this repo ships no
+Pages workflow.
