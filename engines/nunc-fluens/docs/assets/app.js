@@ -828,7 +828,8 @@
   // renderers can share it.
   function lookupProbeNode(id) {
     const sel = document.getElementById("list-scope");
-    const sc = (sel && sel.value) || state.scopeId;
+    let sc = (sel && sel.value) || state.scopeId;
+    if (sc === "all") sc = "mix"; // LIST "all scopes" is a mix-graph alias (P9)
     if (sc) {
       const g = state.graphsByScope.get(sc);
       if (g && g._index) {
@@ -3704,6 +3705,67 @@
     return tmp.innerHTML;
   }
 
+  // Multi-locale scope-prefix strip list. The single source is the
+  // pipeline's src/export/prefix-tokens.json (P8) — the same tokens
+  // short-label.ts builds its regexes from — which runExport copies
+  // into the data dir as prefix-tokens.json. loadPrefixTokens() (boot)
+  // fetches that copy and rebuilds the regexes; this inline array is
+  // the synchronous fallback (no-build static app: file:// or a
+  // pre-P8 data dir has no fetchable copy) and mirrors the JSON
+  // verbatim. Titles cleaned before the fetch resolves use the
+  // fallback — identical as long as the two lists stay in sync.
+  const PREFIX_TOKEN_FALLBACK = [
+    // English
+    "tech", "non-tech", "non tech", "nontech",
+    "non-technical", "non technical", "nontechnical",
+    "technical", "technology",
+    "business", "biz", "mix",
+    // Japanese
+    "技術", "非技術", "非-技術", "非 技術",
+    "テクノロジー", "非テクノロジー",
+    "ビジネス", "非ビジネス", "ビジ", "ミックス",
+    // Spanish
+    "tecnología", "tecnologia",
+    "no-tecnología", "no-tecnologia",
+    "no tecnología", "no tecnologia",
+    "tec", "no-tec", "no tec",
+    "técnico", "tecnico",
+    "no-técnico", "no-tecnico", "no técnico", "no tecnico",
+    "negocio", "no-negocio",
+    // Filipino
+    "teknikal", "hindi-teknikal", "hindi teknikal",
+    "negosyo", "halo", "halong",
+  ];
+
+  // Longest-first alternation, same construction as short-label.ts.
+  // fullParen catches `(Tech) …`, halfParen the `Tech) …` leftover of
+  // the legacy strip-set parser.
+  function buildPrefixRegexes(tokens) {
+    const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const alt = tokens.slice().sort((a, b) => b.length - a.length).map(esc).join("|");
+    return {
+      fullParen: new RegExp("^\\s*\\(\\s*(?:" + alt + ")\\s*\\)\\s*", "i"),
+      halfParen: new RegExp("^\\s*(?:" + alt + ")\\s*\\)\\s*", "i"),
+    };
+  }
+
+  let prefixRegexes = buildPrefixRegexes(PREFIX_TOKEN_FALLBACK);
+
+  // Fetch the exported strip list and rebuild the regexes from it, so
+  // a pipeline-side token addition reaches the dashboard without a JS
+  // edit. Optional: any failure keeps the fallback regexes.
+  async function loadPrefixTokens() {
+    try {
+      const r = await fetch(`${LIVE_DATA_DIR}/prefix-tokens.json`, { cache: "no-store" });
+      if (!r.ok) return;
+      const tokens = await r.json();
+      if (Array.isArray(tokens) && tokens.length
+          && tokens.every((t) => typeof t === "string" && t)) {
+        prefixRegexes = buildPrefixRegexes(tokens);
+      }
+    } catch (_) { /* strip list is optional; never block boot */ }
+  }
+
   // Stream J quick fix (Phase 0): the prediction title slot historically
   // received the full prediction summary verbatim — so the panel showed
   // raw markdown (`**…**`), a redundant scope prefix `(Tech)` already
@@ -3721,31 +3783,8 @@
     // below anchors at `^\(`, so the asterisks would otherwise hide
     // the prefix. Order matters here.
     s = s.replace(/\*+/g, "").trim();
-    // Multi-locale scope prefix to strip. Matches the same set the
-    // backend parser's _PREFIX_TOKENS recognises so DB-resident
-    // legacy data and freshly-rendered text both end up clean.
-    //   EN:   Tech / Non-Tech / Non-tech / Business / Biz / Mix /
-    //         Technical / Non-Technical / Technology
-    //   JA:   技術 / 非技術 / 非-技術 / テクノロジー / 非テクノロジー /
-    //         ビジネス / 非ビジネス / ビジ / ミックス
-    //   ES:   Tecnología / Tecnologia / Tec / No-Tec /
-    //         Técnico / Tecnico / Negocio
-    //   FIL:  Teknikal / Hindi-Teknikal / Negosyo / Halong
-    // Loops to clear accidental double-tags `(Mix) (Tech) …` and
-    // catches both the full-paren shape `(Tech)` and the half-paren
-    // shape `Tech)` left over by the legacy strip-set parser.
-    const PREFIX = (
-      "tech|non[-\\s]?tech|nontech|non[-\\s]?technical|nontechnical|" +
-      "technical|technology|business|biz|mix|" +
-      "技術|非技術|非[-\\s]?技術|テクノロジー|非テクノロジー|" +
-      "ビジネス|非ビジネス|ビジ|ミックス|" +
-      "tecnología|tecnologia|tec|no[-\\s]?tec|" +
-      "técnico|tecnico|no[-\\s]?técnico|no[-\\s]?tecnico|" +
-      "negocio|" +
-      "teknikal|hindi[-\\s]?teknikal|negosyo|halo|halong"
-    );
-    const fullParen = new RegExp("^\\s*\\(\\s*(?:" + PREFIX + ")\\s*\\)\\s*", "i");
-    const halfParen = new RegExp("^\\s*(?:" + PREFIX + ")\\s*\\)\\s*", "i");
+    // Loops to clear accidental double-tags `(Mix) (Tech) …`.
+    const { fullParen, halfParen } = prefixRegexes;
     let prev = null;
     while (prev !== s) {
       prev = s;
@@ -3989,7 +4028,11 @@
     // First open: align the scope selector with the active GRAPH scope.
     if (!scopeSel.value) scopeSel.value = state.scopeId || "mix";
 
-    const targetScope = scopeSel.value;
+    // "all scopes" (P9) is an alias of the mix graph: graph-mix.json is
+    // already the deduped union of tech+business with each node's true
+    // scope_id preserved, so "all" = mix data with the per-row scope
+    // column showing the node's own scope. No double-counting.
+    const targetScope = scopeSel.value === "all" ? "mix" : scopeSel.value;
     if (!state.graphsByScope.has(targetScope)) {
       body.innerHTML = `<p class="muted">Loading ${escapeHTML(targetScope)}…</p>`;
       try {
@@ -5298,7 +5341,13 @@
       for (const f of FIELDS) {
         const src = document.getElementById(`${srcPrefix}-${f}`);
         const dst = document.getElementById(`${dstPrefix}-${f}`);
-        if (src && dst && dst.value !== src.value) dst.value = src.value;
+        if (!src || !dst) continue;
+        // LIST-only "all scopes" (P9): #news-scope has no "all" option
+        // and assigning a value without a matching <option> would blank
+        // the selector — mirror it as its data-equivalent "mix".
+        let v = src.value;
+        if (f === "scope" && v === "all" && dstPrefix === "news") v = "mix";
+        if (dst.value !== v) dst.value = v;
       }
       const sChk = document.getElementById(`${srcPrefix}-has-bridge`);
       const dChk = document.getElementById(`${dstPrefix}-has-bridge`);
@@ -5382,6 +5431,10 @@
 
     try {
       await loadManifest();
+      // P8: refresh the scope-prefix strip list from the exported
+      // prefix-tokens.json. Deliberately not awaited — titles cleaned
+      // before it resolves use the identical inline fallback.
+      loadPrefixTokens();
       // Stream A: pull the active glossary so the first markdown
       // render already has hover tooltips wired in. Optional — fetch
       // failures are silently ignored, hover just won't fire.

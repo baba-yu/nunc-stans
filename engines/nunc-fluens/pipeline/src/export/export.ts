@@ -6,13 +6,13 @@
 // manifest): the oracle writes python-repr floats (`1.0`); JS writes
 // `1`. JSON numbers are typeless, every consumer parses the file, so
 // export parity is asserted on parsed values, not bytes.
-import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import type { Db } from '../ingest/ingest-core.ts';
 import { hashId, nowIso, pyRound, sha1Hex } from '../ingest/util.ts';
 import { WINDOWS, windowRange } from '../ingest/analytics.ts';
 import { parseWeekBucket } from '../ingest/timewindow.ts';
-import { boldHint, deriveShortLabel } from './short-label.ts';
+import { boldHint, deriveShortLabel, prefixTokensPath } from './short-label.ts';
 
 const SCHEMA_VERSION = '1.0';
 const LOCALES = ['en', 'ja', 'es', 'fil'] as const;
@@ -1251,6 +1251,13 @@ export function runExport(db: Db, args: { outputDir: string; publishRoot: string
   const manifestPath = join(outDir, 'manifest.json');
   writeFileSync(manifestPath, JSON.stringify(manifest, null, 2), 'utf8');
   written.push(manifestPath);
+
+  // Scope-prefix strip list (P8): the same JSON short-label.ts builds
+  // its regexes from, exported alongside the graphs so the no-build
+  // dashboard's cleanPredictionTitle can fetch it at init.
+  const prefixTokensTarget = join(outDir, 'prefix-tokens.json');
+  copyFileSync(prefixTokensPath(), prefixTokensTarget);
+  written.push(prefixTokensTarget);
 
   return { files: written, build_id: buildId };
 }

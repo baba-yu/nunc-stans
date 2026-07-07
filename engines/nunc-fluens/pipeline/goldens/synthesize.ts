@@ -497,7 +497,8 @@ export async function freeze(): Promise<void> {
 
   const dd = join(INPUT, 'docs', 'data');
   const EXPORTS = ['graph-tech.json', 'graph-business.json', 'graph-mix.json',
-    'glossary.json', 'manifest.json', 'evidence-reverse.json'];
+    'glossary.json', 'manifest.json', 'evidence-reverse.json',
+    'prefix-tokens.json'];
   for (const f of EXPORTS)
     w(join(dd, f), readFileSync(join(outDir, f), 'utf8'));
   // Sunday 3-time-state: reader-facing snapshot + pre-review rollback.

@@ -26,6 +26,8 @@ const FORBIDDEN: Array<[string, RegExp]> = [
   ['- so_that: bullet key', /^\s*-\s+so_that\s*:/m],
   ['- landing: bullet key', /^\s*-\s+landing\s*:/m],
   ['- plain_language: bullet key', /^\s*-\s+plain_language\s*:/m],
+  // Detector, not stripper: the canonical strip list lives in
+  // src/export/prefix-tokens.json (P8); these stay an independent subset.
   ['(Tech)/(Business)/(Mix) scope prefix',
     /\((?:Tech|Non-Tech|Non-tech|Business|Biz|Mix|Technical|Non-Technical|Technology|Tecnolog[íi]a|Tec|No-Tec|T[ée]cnico|Negocio|Teknikal|Hindi-Teknikal|Negosyo|Halong)\)/],
   ['（技術）/（ビジネス）scope prefix',
