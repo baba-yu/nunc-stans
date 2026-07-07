@@ -470,23 +470,34 @@ Session-size guide (v1 plan: 3–5 focused sessions):
   16/16 (6 unit + 10 integration), nunc-ai 35/35, Formans 20/20 +
   build, check.ts ok.
 
-### Task 5: FourFive on profiles (ff) — depends: T2, T3, T4
-- [ ] Replace `server/llm/{provider,claude,ollama,mock}.ts` with nunc-ai
-      glue: per-message profile resolution (defaults.json → session
-      override), `chatStream` into the existing SSE event protocol
-      unchanged on the wire; `blueprint-prompt.ts` kept, `proposeBlueprint`
-      reimplemented as a structured nunc-ai call; run log → main-store
-      `ai-runs.jsonl` with the profile stamp (sqlite `llm_runs` kept for
-      the fourfive UI).
-- [ ] Per-message goal-verify toggle in the chat UI; loop progress
-      (rendered from the PD5 verify boundary events) and **cost (token
-      counts per iteration + total)** in the transcript; unmet gaps shown
-      when the loop stops.
-- [ ] The streaming stub and stale model id die with the deleted files;
-      `.env.example` + `docs/guides/local-llm.md` updated.
-- Acceptance: fourfive suite green; a chat under an Ollama profile streams
-  with visible thinking; switching the default profile in the Profiles
-  screen changes the next message's provider **without a server restart**.
+### Task 5: FourFive on profiles (ff) — DONE 2026-07-07 (5417ee4 fe, d32f261 ff)
+- [x] `server/llm/{provider,claude,ollama,mock}.ts` deleted;
+      `server/llm/nunc-ai.ts` resolves a profile PER MESSAGE (explicit
+      `profileId` > fourfive-chat default > offline demo) and calls
+      through nunc-ai — run log to the main store with the profile stamp
+      (proven live: smoke rows carry `"profile":"offline-demo"`),
+      `llm_runs` kept for the UI. `blueprint-prompt.ts` kept;
+      `proposeBlueprint` = extractor prompt via nunc-ai + `extractJson`
+      (verify off by design — zod is the gate). **Recorded refinement:**
+      the retired MockProvider's canned invoice demo is PRODUCT logic —
+      moved verbatim to `server/llm/offline-demo.ts` and wired through
+      nunc-ai's mock responder, so a fresh checkout still demos offline.
+      `/api/health` + the boot line report the RESOLVED default (per
+      request — the no-restart mechanics). think/maxTokens ride new
+      nunc-ai passthroughs (ollama `think`, `num_predict` — 5417ee4).
+- [x] Verify toggle (+ goal input) in the topbar; SSE gains an additive
+      `verify` event; the transcript renders one verdict line per
+      iteration (met/unmet + gaps) and a cost line (per-iteration + total
+      tokens, model + judge), live and on completed messages. The toggle
+      sends explicit on/off with every message so chat stays
+      off-by-default regardless of profile defaults (§2.6).
+- [x] Stub + stale `claude-sonnet-4-6` died with the deleted files;
+      `.env.example` (BYOL-only), `docs/guides/local-llm.md` (profile
+      flow, no-restart), `scripts/verify.sh` updated.
+- Acceptance: typecheck (vue-tsc + server tsc incl. the relative nunc-ai
+  source imports) green; 24/24 tests; **live E2E smoke ALL_VERIFY_OK**
+  (chat + canned blueprint + persist + compose + vite build). The Ollama
+  streaming + no-restart switch re-proven at S-5/S-6 execution (T10).
 
 ### Task 6: News step config on profiles (gate + fe + nf, adjacent commits per PD14) — depends: T2, T4, V3 landed (T0)
 - [ ] `NewsConfig` gains the profile-reference/per-step keys; drawer

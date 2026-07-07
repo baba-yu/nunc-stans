@@ -105,6 +105,18 @@ Running record; completed as the exit items execute. Plan:
   index.html rewritten per test) made the static-mount test flaky —
   per-call dirs now, 6 clean runs. Suites: gate 6+10, nunc-ai 35,
   Formans 20 + build.
+- **2026-07-07 — T5 done** (5417ee4 fe, d32f261 ff). FourFive migrated
+  onto nunc-ai profiles: per-message resolution (no boot singleton — the
+  no-restart mechanics), streaming stub + stale `claude-sonnet-4-6` died
+  with the deleted provider files, verify toggle + verdict/cost surfaces
+  in the chat UI, offline invoice demo preserved via
+  `server/llm/offline-demo.ts` (recorded refinement — product logic, not
+  provider glue). **Live E2E smoke ALL_VERIFY_OK** and the main-store
+  run log carries fourfive-chat rows with `"profile":"offline-demo"` —
+  the S-5 substrate proven. Suites: ff typecheck + 24/24 + build.
+  In passing: a mid-work `git rm` had pre-staged the four deletions and
+  leaked them into the fe commit — caught by `tools/commit-scope.ts`
+  exactly as designed; commits rebuilt per-area.
 
 ## Stories (executed at T10; specs written at T1)
 
