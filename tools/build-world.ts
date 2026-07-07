@@ -1,25 +1,24 @@
 #!/usr/bin/env node
 // World adapter (constitution §13-B: conversion is written on the Nunc Stans
-// side; News is never asked to change its output format). Two jobs:
+// side; the engine is never asked to change its output format). Two jobs:
 //
-// 1. Flatten News's exported prediction graph into the minimal headline list
-//    the world view reads (world-headlines.json).
+// 1. Flatten the instance's exported prediction graph into the minimal
+//    headline list the world view reads (world-headlines.json).
 // 2. Stage the dashboard (ENGINE code at engines/nunc-fluens/dashboard/ —
-//    post-C P2: instances carry data only) plus the checkout's exported
+//    post-C P2: instances carry data only) plus the instance's exported
 //    data directory into the formans public dir so the world view can
 //    wrap it as-is at /world-graph/ — with d3 vendored locally, because the
 //    product allows no CDN dependency (§10-B: one origin, local).
 //
-// The data source is a user-designated news-shaped data checkout
-// (`just news-link <dir>`, config key news_repo, env override
-// NS_NEWS_REPO) — a READ-ONLY path this repo never writes (Phase C
-// redirection). Which checkout that is is ordinary user configuration:
-// nunc-stans has no relationship to any particular news project; the
-// stable contract is the data *shape*, and BOTH layouts are served
-// forever: the product's data/exports/graph-*.json is probed first,
-// the legacy docs/data/graph-*.json of old news-shaped checkouts is
-// the fallback (the view-side old-shape support is a product
-// guarantee, not a transition aid).
+// The data source is a nunc-fluens data INSTANCE (post-C REDO V2, R6):
+// a v2 checkout stamped by `nunc-fluens init` (optionally seeded by
+// `nunc-fluens import`), designated via `just news-link <instance>`
+// (config key news_repo — unchanged key, instance semantics; env
+// override NS_NEWS_REPO). It is read strictly read-only here: only
+// data/exports/graph-mix.json is consumed. The old-shape docs/data
+// fallback is REMOVED (owner decision 2026-07-07) — news-shaped
+// checkouts are brought over via `nunc-fluens import`, the product's
+// only remaining news-shaped contact surface.
 // NEWS_WORLD is retired. Unset or missing ⇒ empty headline list and the
 // stage is removed, so `just up` still works and the view degrades
 // honestly.
@@ -50,15 +49,12 @@ const dashboardSrc = join(root, 'engines', 'nunc-fluens', 'dashboard')
 
 function resolveInput(): string | null {
   if (process.env.NEWS_WORLD)
-    console.warn('[build-world] NEWS_WORLD is retired and ignored — the news '
-      + 'checkout comes from `just news-link <dir>` (or NS_NEWS_REPO).')
+    console.warn('[build-world] NEWS_WORLD is retired and ignored — the view '
+      + 'source comes from `just news-link <instance>` (or NS_NEWS_REPO).')
   if (!newsRepo) return null
-  // New product shape first, then the legacy news shape (supported forever).
-  for (const rel of [['data', 'exports'], ['docs', 'data']] as const) {
-    const p = join(newsRepo, ...rel, 'graph-mix.json')
-    if (existsSync(p)) return p
-  }
-  return null
+  // v2 instances only (R6): data/exports/graph-mix.json or nothing.
+  const p = join(newsRepo, 'data', 'exports', 'graph-mix.json')
+  return existsSync(p) ? p : null
 }
 
 function write(list: unknown[]) {
@@ -96,9 +92,12 @@ function copyTreeFresh(srcDir: string, destDir: string): [number, number] {
 const input = resolveInput()
 if (!input || !existsSync(input)) {
   console.warn(
-    '[build-world] no news checkout configured (or no exported graph in it); '
-    + 'writing an empty world list and removing the stage.\n'
-    + '             Run: just news-link <dir>  (or set NS_NEWS_REPO).',
+    '[build-world] no nunc-fluens instance configured (or no exported graph '
+    + 'under its data/exports/); writing an empty world list and removing '
+    + 'the stage.\n'
+    + '             Create one: just news-init <name>   (then run the pipeline)\n'
+    + '             Bring news data over: just news-import <src> <instance>\n'
+    + '             Point the view at it: just news-link <instance>  (or set NS_NEWS_REPO).',
   )
   write([])
   rmSync(stageDir, { recursive: true, force: true })
@@ -171,5 +170,5 @@ else rmSync(join(stageDir, 'favicon.svg'), { force: true })
 const [dataCopied, dataTotal] = copyTreeFresh(dirname(input), join(stageDir, 'data'))
 copied += dataCopied
 console.log(
-  `[build-world] staged engine dashboard + checkout data at public/world-graph/: ${copied} file(s) copied, ${dataTotal} data file(s) checked${copied === 0 ? ' (all fresh)' : ''}`,
+  `[build-world] staged engine dashboard + instance data at public/world-graph/: ${copied} file(s) copied, ${dataTotal} data file(s) checked${copied === 0 ? ' (all fresh)' : ''}`,
 )

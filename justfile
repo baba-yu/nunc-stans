@@ -17,45 +17,49 @@ bootstrap dir='':
 _require_data:
     @if [ -z "{{data_dir}}" ]; then echo "no data store configured - run: just bootstrap <dir>  (or set NS_DATA)"; exit 1; fi
 
-# --- News pipeline (nunc-fluens, Phase C) -----------------------------
-# The news data checkout is user-designated like the data store:
-# `just news-link <dir>` remembers it (config news_repo; NS_NEWS_REPO
-# overrides per invocation). Both layouts are accepted: the product's
-# data/ shape and the legacy news shape (report/, docs/data — view-side
-# support is a product guarantee).
+# --- News pipeline (nunc-fluens, Phase C; instance model V2) ----------
+# The engine ships a TEMPLATE (pipeline/instance-template/); runs target
+# DATA INSTANCES stamped from it by `just news-init` — one git repo per
+# profile, defaulting to gitignored engines/nunc-fluens/instances/<name>/.
+# News-shaped checkouts are never run or viewed directly: their data
+# comes over once via `just news-import` (the product's only news-shaped
+# contact surface). The world view reads one instance, designated with
+# `just news-link <instance>` (config news_repo; NS_NEWS_REPO overrides
+# per invocation) — strictly read-only, data/exports/ only.
 
+# Point the world view at an instance (read-only view source).
 news-link dir:
     node engines/nunc-fluens/pipeline/src/cli.ts link "{{dir}}"
 
+# Show resolved config (data store, linked instance, world-cache state).
 news-status:
     node engines/nunc-fluens/pipeline/src/cli.ts status
 
-# Copy analytics.sqlite into <data store>/world/ (verified, idempotent;
-# junk siblings are not migrated; upstream copy stays until cutover).
-news-migrate-db: _require_data
-    node engines/nunc-fluens/pipeline/src/cli.ts migrate-db
-
-# Schema-validate one day's sourcedata (incl. locale fan-out).
+# Schema-validate one day's sourcedata in the linked instance
+# (incl. locale fan-out).
 news-validate date:
     node engines/nunc-fluens/pipeline/src/cli.ts validate "{{date}}"
 
-# Disposable run instance: local clone of the linked (read-only) news
-# checkout + its own seeded data store. Old-shape clones are migrated to
-# the product data/ layout at creation (nunc-fluens migrate-layout does
-# the same for existing instances). Runs only ever target sandboxes;
-# the view checkout is never written (Phase C redirection).
-news-sandbox dir:
-    node engines/nunc-fluens/pipeline/src/cli.ts sandbox "{{dir}}"
+# Create a data instance from the engine template (git init + skeleton
+# + synthetic editorial seeds + schema-initialized store). A bare name
+# lands under engines/nunc-fluens/instances/<name>/ (gitignored).
+news-init name_or_dir:
+    node engines/nunc-fluens/pipeline/src/cli.ts init "{{name_or_dir}}"
 
-# One pipeline run against a sandbox (see news-sandbox).
-news-daily sandbox:
-    NS_SANDBOX="{{sandbox}}" node engines/nunc-fluens/pipeline/src/cli.ts run
+# Copy a news-shaped checkout's data into a fresh init-born instance
+# (one import commit there; the source is read-only, never touched).
+news-import src instance:
+    node engines/nunc-fluens/pipeline/src/cli.ts import "{{src}}" "{{instance}}"
 
-# Install the daily systemd user units for a sandbox (Linux/WSL).
+# One pipeline run against an instance (see news-init / news-import).
+news-daily instance:
+    NS_INSTANCE="{{instance}}" node engines/nunc-fluens/pipeline/src/cli.ts run
+
+# Install the daily systemd user units for an instance (Linux/WSL).
 # Optional second arg = OnCalendar (default "*-*-* 06:30:00"); cron
 # fallback is documented inside install.sh.
-news-schedule sandbox oncalendar='*-*-* 06:30:00':
-    sh engines/nunc-fluens/pipeline/systemd/install.sh "{{sandbox}}" "{{oncalendar}}"
+news-schedule instance oncalendar='*-*-* 06:30:00':
+    sh engines/nunc-fluens/pipeline/systemd/install.sh "{{instance}}" "{{oncalendar}}"
 
 # One origin (the gate, :8720) fronts everything; the ledger engine (:8721)
 # and the fourfive server (:8787) stay loopback-internal behind it.
@@ -84,21 +88,20 @@ _up-gate:
       --data-dir "{{data_dir}}"
 
 # Build everything the gate serves. The world adapter runs first so the
-# read-only world view has fresh headlines. It reads the news checkout
-# designated via `just news-link <dir>` (config news_repo, NS_NEWS_REPO
-# override) — strictly read-only, either layout (data/exports or legacy
-# docs/data); the path lives outside this repo, like the data store.
-# No checkout linked = empty world view.
+# read-only world view has fresh headlines. It reads the nunc-fluens
+# instance designated via `just news-link <instance>` (config news_repo,
+# NS_NEWS_REPO override) — strictly read-only, data/exports/ only (R6:
+# no old-shape fallback). No instance linked = empty world view.
 build: build-world
     pnpm install --frozen-lockfile || pnpm install
     pnpm -r build
     cargo build --release --manifest-path engines/nunc-stans/Cargo.toml
     cargo build --release --manifest-path gate/Cargo.toml
 
-# Flatten the checkout's world export into the formans public dir AND stage
+# Flatten the instance's world export into the formans public dir AND stage
 # the ENGINE dashboard (engines/nunc-fluens/dashboard/, d3 vendored — no
-# CDN) with the checkout's data (data/exports, or legacy docs/data) for the
-# /world-graph/ wrap (§13-B: conversion on the Nunc Stans side).
+# CDN) with the instance's data/exports/ for the /world-graph/ wrap
+# (§13-B: conversion on the Nunc Stans side).
 build-world:
     node tools/build-world.ts
 

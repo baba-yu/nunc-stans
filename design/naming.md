@@ -23,8 +23,12 @@ stans*, the standing now. manda and fourfive keep their names. The name
 | nuncstans / NuncStans | nunc-stans / Nunc Stans (hyphenation) |
 | engines/nuncstans, crate nuncstans-engine | engines/nunc-stans, crate nunc-stans-engine |
 | News (the stack), engines/news | Nunc Fluens, engines/nunc-fluens (commit area `nf`) |
-| ~/news (external repo) | **keeps its name and leaves the picture** — the Phase C rename was superseded by the 2026-07-06 redirection: the news project and nunc-stans are unrelated; `~/news` runs on independently as the owner's news board. The product only knows "a news-shaped data checkout" (`just news-link <dir>`, read-only) — that the owner points it at ~/news today is user config, not architecture. "nunc-fluens" names the engine only. |
-| NEWS_WORLD (env) | retired 2026-07-06 — `tools/build-world.ts` resolves the checkout via `news_repo` config / `NS_NEWS_REPO` |
+| ~/news (external repo) | **keeps its name and leaves the picture** — the Phase C rename was superseded by the 2026-07-06 redirection: the news project and nunc-stans are unrelated; `~/news` runs on independently as the owner's news board. Since the 2026-07-07 template/instance split the product's only news-shaped contact surface is `nunc-fluens import` (a one-time, read-only copy into a data instance). "nunc-fluens" names the engine only. |
+| NEWS_WORLD (env) | retired 2026-07-06 — `tools/build-world.ts` resolves the view source via `news_repo` config / `NS_NEWS_REPO` |
+| `news_repo` (config key) = "the news checkout (read-only view source)" | **same key, new semantics 2026-07-07**: the nunc-fluens data instance shown in the world view — build-world reads its `data/exports/` only; the old-shape `docs/data` view fallback is removed (import is the only news-shaped contact surface) |
+| NS_SANDBOX (env) | NS_INSTANCE — the run target is a data instance (post-C REDO V2, 2026-07-07) |
+| `nunc-fluens sandbox` / `migrate-layout` / `migrate-db` (commands) | retired 2026-07-07 — `nunc-fluens init` stamps an instance from the engine template (`pipeline/instance-template/`); `nunc-fluens import <src> <instance>` absorbs the old-shape mapping and the DB seed |
+| `just news-sandbox` / `just news-migrate-db` (recipes) | `just news-init` / `just news-import`; `news-daily` and `news-schedule` now take an instance |
 | nuncstans-agent | nunc-stans-agent (`agents/nunc-stans-agent`, Phase D) |
 | integrated UI ("shell") | Nunc Stans Formans — `frontend/nunc-stans-formans` (Phase B) |
 | GitHub remote (new, monorepo) | baba-yu/nunc-stans |
