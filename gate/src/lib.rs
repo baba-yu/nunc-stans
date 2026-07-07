@@ -1,5 +1,6 @@
 pub mod guard;
 pub mod news_config;
+pub mod profiles;
 pub mod proxy;
 
 use std::path::{Path, PathBuf};
@@ -68,6 +69,17 @@ pub fn build_router(cfg: GateCfg, fourfive_dist: &Path) -> Router {
         .route(
             "/api/world/news-config",
             get(news_config::get_news_config).put(news_config::put_news_config),
+        )
+        .route("/api/profiles", get(profiles::list_profiles))
+        .route(
+            "/api/profiles/defaults",
+            get(profiles::get_defaults).put(profiles::put_defaults),
+        )
+        .route(
+            "/api/profiles/{id}",
+            get(profiles::get_profile)
+                .put(profiles::put_profile)
+                .delete(profiles::delete_profile),
         )
         .route("/health", any(proxy_engine))
         .route("/self/{*path}", any(proxy_engine))
