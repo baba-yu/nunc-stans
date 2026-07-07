@@ -186,13 +186,17 @@ function checkReadme(text: string): string[] {
     if (!/^### News\s*$/m.test(body)) errors.push(`## ${date}: missing \`### News\``);
     if (!/^### Predictions check\s*$/m.test(body))
       errors.push(`## ${date}: missing \`### Predictions check\``);
+    // The contract is the link TARGET (today's file under the right
+    // tree), not the anchor text — live run 2026-07-07 (instance `news`)
+    // produced a human label ("News report — …") for the correct target
+    // and the old text-anchored regex failed the day.
     const newsBody = /^### News\s*$(.*?)(?=^###\s|(?![\s\S]))/ms.exec(body);
-    if (newsBody && !/\[news-\d{8}\.md\]\(data\/daily-news\//.test(newsBody[1]))
-      errors.push(`## ${date} ### News: missing terminating [news-…](data/daily-news/<L>/…) link`);
+    if (newsBody && !/\[[^\]\n]+\]\(data\/daily-news\/[^)\s]+\/news-\d{8}\.md\)/.test(newsBody[1]))
+      errors.push(`## ${date} ### News: missing terminating link to data/daily-news/<L>/news-….md`);
     const predBody =
       /^### Predictions check\s*$(.*?)(?=^###\s|^## \d{4}-\d{2}-\d{2}\s*$|(?![\s\S]))/ms.exec(body);
-    if (predBody && !/\[future-prediction-\d{8}\.md\]\(data\/future-prediction\//.test(predBody[1]))
-      errors.push(`## ${date} ### Predictions check: missing terminating [future-prediction-…] link`);
+    if (predBody && !/\[[^\]\n]+\]\(data\/future-prediction\/[^)\s]+\/future-prediction-\d{8}\.md\)/.test(predBody[1]))
+      errors.push(`## ${date} ### Predictions check: missing terminating link to data/future-prediction/<L>/future-prediction-….md`);
   }
   const tail = text.replace(/\s+$/, '').slice(-300);
   if (/\[[^\]\n]*$/.test(tail) || /\([^)\n]*$/.test(tail))
