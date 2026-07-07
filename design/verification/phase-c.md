@@ -73,8 +73,9 @@ drawer UI itself was integration-tested at T7):
     GET  → the switched pair; <data store>/world/news-config.json
     matches byte-for-byte (atomic write).
 
-The next run picked the pair up with no flags (exit run (b)). Switch-back
-to claude-code/native recorded below after the run.
+The next run picked the pair up with no flags (exit run (b), below). The
+switch-back PUT (→ claude-code/native) after the run was confirmed via
+GET — the drawer round-trips both ways.
 
 Executing the pair surfaced one integration gap, fixed in the pipeline:
 the external-search adapters existed in `nunc-ai` but nothing CALLED
@@ -136,8 +137,17 @@ now failing at the step instead of a later gate):
 The S-3 pair (ollama `qwen3.6:27b` synthesis + `brave` external search)
 in the same sandbox, `--date 2026-07-07`. Acceptance is structural
 validity, not content quality (C4): a local model's day is allowed to
-look different from a frontier model's. Three live-path bugs the pair
-surfaced (all fixed):
+look different from a frontier model's.
+
+    run 2026-07-07: OK — 32 steps ok (run.json mode=live,
+    runtime=ollama, search=brave, synth_model=qwen3.6:27b)
+    sandbox git log: 0560a33 "daily-master 2026-07-07: …" (local commit)
+    ai-runs.jsonl: 40 ollama calls
+    S-3 switch-back: PUT news-config → claude-code/native (confirmed)
+
+The local-model path surfaced five live-path bugs the frontier runtime
+never hit — exactly what exit run (b) is for — all fixed at the
+producing step (fail there, not at a later gate):
 
 1. **The external SearchSource adapters existed but nothing called
    them** — `native` search rode the runtime's own web tool, so a local
@@ -149,9 +159,15 @@ surfaced (all fixed):
    fan-outs also serialize on non-claude runtimes (a local server does
    one request at a time).
 3. **A parent-restricted citation** (the model chose tomshardware.com /
-   Future plc) failed the citation gate three steps downstream;
-   compose-news-section now runs the restriction check on its own
-   composed URLs and re-prompts on a hit (spec-faithful).
+   Future plc) failed the citation gate downstream; the restriction
+   check now runs on the composed URLs at **both** compose-news-section
+   and compose-headlines (shared `assertCitationsAllowed` helper),
+   re-prompting on a hit (spec-faithful).
+4. **Abbreviated topic names** — the model enumerated 7 of 16 audit
+   topics with shortened names, failing the exact-match
+   check-topic-coverage gate (mandatory Unsloth row missing). The
+   verify-topic-coverage step now inlines the exact topic list and
+   re-prompts unless every topic appears verbatim.
 
 ## T12 — Python retired, goldens synthetic — DONE 2026-07-06
 

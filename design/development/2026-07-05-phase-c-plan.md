@@ -594,8 +594,11 @@ discipline, upstream untouched):**
 ### Task 10: Stories S-3 / S-4 — write and execute
 - [x] Write `design/stories/S-3.md`, `S-4.md` (concrete steps, allowed
       replay diffs enumerated) — DONE 2026-07-06.
-- [ ] Execute S-3: settings drawer native→external+local, next sandbox
-      run completes, `run.json` records the pair. Evidence saved.
+- [x] Execute S-3 DONE 2026-07-06: gate PUT native→external+local
+      (ollama qwen3.6:27b + brave), deny-unknown proven, atomic file
+      matches; next sandbox run recorded the pair in run.json; switch-back
+      to claude-code/native confirmed via GET. Evidence in the
+      verification doc.
 - [x] Execute S-4 DONE 2026-07-06: zero-LLM replay of Sunday 2026-07-05
       (full weekly chain) in a fresh sandbox — git status shows only
       run.json + the regenerated docs/data exports (parsed-equal;
@@ -607,13 +610,16 @@ discipline, upstream untouched):**
 ### Task 11: Exit runs + portability (all sandbox — redirection)
 - [x] (a) timer-launched claude-code day in the sandbox DONE 2026-07-06
       (see T9; evidence in the verification doc).
-- [ ] (b) ollama qwen3.6:27b + external search — sandbox day; acceptance
-      is structural validity (C4), nothing published.
+- [x] (b) ollama qwen3.6:27b + external search DONE 2026-07-06: full
+      2026-07-07 chain OK in the sandbox (32 steps, mode=live
+      runtime=ollama search=brave, 40 ollama calls, local commit
+      0560a33). Structural acceptance (C4); five local-path bugs found
+      and fixed — details in the verification doc.
 - [x] (c) replay of a committed day in a pristine sandbox copy DONE
       2026-07-06 (= the S-4 execution above; run.json archived in the
       verification doc).
-- [ ] S-10 re-run (container; native Windows unaffected but re-checked);
-      CI 3-OS green on `newstack`.
+- [x] S-10 re-run DONE 2026-07-06 (ubuntu:24.04 container, S-10-PASS).
+      CI 3-OS green on `newstack`: owner push confirms.
 
 ### Task 12: Retire Python + close — DONE 2026-07-06 (merge/push pending owner)
 - [x] Deleted `engines/nunc-fluens/app/` + `goldens/capture.ts`; CI news
