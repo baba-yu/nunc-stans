@@ -349,3 +349,51 @@ async fn profiles_crud_defaults_and_rails() {
     let missing = client.get(format!("{base}/local-chat")).send().await.unwrap();
     assert_eq!(missing.status(), 404);
 }
+
+#[tokio::test]
+async fn news_config_profile_and_step_verify_keys() {
+    let (formans_dist, fourfive_dist) = make_dists();
+    let data_dir = formans_dist.parent().unwrap().join("data-store");
+    let cfg = GateCfg::new(
+        "http://127.0.0.1:1".into(),
+        "http://127.0.0.1:1".into(),
+        formans_dist.clone(),
+    )
+    .with_data_dir(Some(data_dir.clone()));
+    let gate = spawn(build_router(cfg, &fourfive_dist)).await;
+    let client = reqwest::Client::new();
+    let url = format!("{gate}/api/world/news-config");
+
+    // Profile reference + a per-step verify override round-trip.
+    let put = client
+        .put(&url)
+        .json(&json!({
+            "profile": "news-default",
+            "stepVerify": {"compose-news-section": {"verify": "on", "goal": "cite every source", "maxIters": 2}}
+        }))
+        .send()
+        .await
+        .unwrap();
+    assert_eq!(put.status(), 200);
+    let got: serde_json::Value = client.get(&url).send().await.unwrap().json().await.unwrap();
+    assert_eq!(got["profile"], "news-default");
+    assert_eq!(got["stepVerify"]["compose-news-section"]["goal"], "cite every source");
+
+    // Value validation: bad slug, bad verify value, zero iterations.
+    for bad in [
+        json!({"profile": "Not A Slug"}),
+        json!({"stepVerify": {"s": {"verify": "sometimes"}}}),
+        json!({"stepVerify": {"s": {"verify": "on", "maxIters": 0}}}),
+    ] {
+        let resp = client.put(&url).json(&bad).send().await.unwrap();
+        assert_eq!(resp.status(), 422, "{bad}");
+    }
+    // Unknown nested key stays a body-shape 400 (deny_unknown_fields).
+    let unknown = client
+        .put(&url)
+        .json(&json!({"stepVerify": {"s": {"verify": "on", "judge": "x"}}}))
+        .send()
+        .await
+        .unwrap();
+    assert_eq!(unknown.status(), 400);
+}

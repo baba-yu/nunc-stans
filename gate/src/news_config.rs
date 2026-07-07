@@ -39,6 +39,29 @@ pub struct NewsConfig {
     /// array is a legitimate EN-only configuration.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub locales: Option<Vec<String>>,
+    /// AI profile id (Phase D PD14): its provider/model/goal-verify act
+    /// as DEFAULTS for the pipeline's LLM steps — explicit runtime/
+    /// synthModel keys above still win. NB: an AI profile, not a data
+    /// instance (the word collision is deliberate history, PD4).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub profile: Option<String>,
+    /// Per-step goal-verify overrides keyed by step id (Phase D): each
+    /// beats the profile's default for that one step.
+    #[serde(rename = "stepVerify", skip_serializing_if = "Option::is_none")]
+    pub step_verify: Option<std::collections::BTreeMap<String, StepVerify>>,
+}
+
+/// One step's goal-verify override — mirrors nunc-ai's VerifyConfig.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct StepVerify {
+    pub verify: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub goal: Option<String>,
+    #[serde(rename = "maxIters", skip_serializing_if = "Option::is_none")]
+    pub max_iters: Option<u32>,
+    #[serde(rename = "tokenBudget", skip_serializing_if = "Option::is_none")]
+    pub token_budget: Option<u64>,
 }
 
 impl NewsConfig {
@@ -49,6 +72,8 @@ impl NewsConfig {
             search_engine: None,
             synth_model: None,
             locales: Some(vec!["ja".into(), "es".into(), "fil".into()]),
+            profile: None,
+            step_verify: None,
         }
     }
 
@@ -77,6 +102,33 @@ impl NewsConfig {
                 }
                 if !seen.insert(l.as_str()) {
                     return Err(format!("locales contains duplicate entry {l:?}"));
+                }
+            }
+        }
+        if let Some(p) = &self.profile {
+            if p.is_empty()
+                || !p
+                    .chars()
+                    .all(|c| c.is_ascii_lowercase() || c.is_ascii_digit() || c == '-')
+            {
+                return Err(format!(
+                    "profile must be a lowercase profile-id slug ([a-z0-9-]), got {p:?}"
+                ));
+            }
+        }
+        if let Some(sv) = &self.step_verify {
+            for (step, v) in sv {
+                if step.trim().is_empty() {
+                    return Err("stepVerify keys must be step ids".into());
+                }
+                if v.verify != "on" && v.verify != "off" {
+                    return Err(format!(
+                        "stepVerify.{step}.verify must be 'on' or 'off', got {:?}",
+                        v.verify
+                    ));
+                }
+                if v.max_iters == Some(0) {
+                    return Err(format!("stepVerify.{step}.maxIters must be at least 1"));
                 }
             }
         }
