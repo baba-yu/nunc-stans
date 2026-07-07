@@ -4,8 +4,8 @@ Status: **implementation in progress**. Daily flow (`design/scheduled/2_future_p
 
 ## 0. Vocabulary
 
-- **Prediction**: a numbered item in a `report/news-YYYYMMDD.md` `## Future` section. Identity is `{news date}-{1-based index}` — e.g. `20260419-1`.
-- **Validation**: a row in `future-prediction/future-prediction-YYYYMMDD.md` that re-cites a prediction with a relevance score (1-5) and reference URLs.
+- **Prediction**: a numbered item in a `data/daily-news/news-YYYYMMDD.md` `## Future` section. Identity is `{news date}-{1-based index}` — e.g. `20260419-1`.
+- **Validation**: a row in `data/future-prediction/future-prediction-YYYYMMDD.md` that re-cites a prediction with a relevance score (1-5) and reference URLs.
 - **Active prediction**: a prediction that has appeared in at least one validation row in the last 7 days.
 - **Dormant prediction**: a prediction whose ping interval has grown to ≥ 14 days; not retired, just sleeping. Lives in the persistent dormant snapshot.
 - **Theme / Category**: hardcoded taxonomy in `app/src/schema.sql`. Spec-driven; never auto-generated.
@@ -31,7 +31,7 @@ The interval **only grows under quiet** and **resets to 1 day** the moment relev
 
 - A prediction's identity is its **`{news date}-{index}`** ID. The news file is immutable once written, so the ID is stable.
 - Hot/Warm/Lukewarm tier is **stateless** — recomputable from the last 7 `future-prediction-*.md` files alone. No persisted state needed.
-- Dormant tier **is** the persistent state — kept in `memory/dormant/dormant-YYYYMMDD.md` (latest snapshot wins). This is what makes weekly maintenance bounded; without it, every Sunday would have to rescan every news file ever written.
+- Dormant tier **is** the persistent state — kept in `data/memory/dormant/dormant-YYYYMMDD.md` (latest snapshot wins). This is what makes weekly maintenance bounded; without it, every Sunday would have to rescan every news file ever written.
 
 ### 1.3 Daily generation rules (`2_future_prediction.md`)
 
@@ -59,7 +59,7 @@ Daily flow does not mutate the dormant snapshot. Daily produces validation table
 
 - **ID**: `{news date}-{index in ## Future}`. Stable across re-runs.
 - **Prediction (short)**: 30-60 chars, the same wording the prediction was first cited with in `future-prediction-*.md` (so layer-2 semantic match has consistent text).
-- **Signals**: comma-separated keywords / proper nouns / synonyms / category words extracted from the original prediction body in `report/news-*.md`. Lock at the moment a prediction enters the dormant pool. Aim wide rather than narrow — cheaper to false-positive into layer-2 than to miss.
+- **Signals**: comma-separated keywords / proper nouns / synonyms / category words extracted from the original prediction body in `data/daily-news/news-*.md`. Lock at the moment a prediction enters the dormant pool. Aim wide rather than narrow — cheaper to false-positive into layer-2 than to miss.
 - **First seen**: `news date` of the prediction (= prefix of ID).
 - **Last relevance**: `score (date)` of the most recent validation row that referenced this ID.
 - **Next ping**: ISO date when this prediction is due for forced re-check, regardless of news content.
@@ -72,7 +72,7 @@ The snapshot covers **only** predictions whose interval is ≥ 14 days. Hot/Warm
 **Why two layers**: keyword-only matching (layer 1 alone) misses semantic drift — e.g. a "Headless Everything" prediction confirmed by news using "screen-less agent UX" without the word "headless". Semantic-only matching (layer 2 alone) is non-deterministic and easy to under-investigate. Together they bound both miss rate and noise.
 
 **Layer 1 — mechanical (high precision)**:
-- Tokenize today's `report/news-YYYYMMDD.md` body.
+- Tokenize today's `data/daily-news/news-YYYYMMDD.md` body.
 - For each row in latest dormant snapshot, check if any term in `Signals` appears as a substring or token in today's news.
 - Output: candidate hit list with the matching signal as evidence.
 - Cost: O(news_tokens × dormant_rows). Trivial even at hundreds of dormant rows.
@@ -116,7 +116,7 @@ Intent:
 - **Overpopulated themes** (≥ 6 predictions, multiple sub-topics) → suggest a split.
 - **Candidate themes** (entries in DB's `theme_candidates` table, populated by ingest with no-good-match predictions) → propose new theme after 3+ accumulate around a recognizable cluster.
 
-Output is markdown — `memory/theme-review/theme-review-YYYYMMDD.md` (intent: keep weekly artifacts under `memory/`, leave `design/` for specs). Never edits `schema.sql` directly.
+Output is markdown — `data/memory/theme-review/theme-review-YYYYMMDD.md` (intent: keep weekly artifacts under `data/memory/`, leave `design/` for specs). Never edits `schema.sql` directly.
 
 #### Recommendation format (required for auto-apply)
 
@@ -172,7 +172,7 @@ Constraints the proposal author must respect:
 ### 2.2 Approval flow
 
 ```
-[memory/theme-review/theme-review-YYYYMMDD.md]
+[data/memory/theme-review/theme-review-YYYYMMDD.md]
   ↓  human reviews & approves
 [design/themes-additions-YYYYMMDD.md]   ← optional staging file
   ↓  human edits app/src/schema.sql
@@ -195,11 +195,11 @@ Bounded inputs — the whole point of the dormant snapshot is that the weekly jo
 
 ```
 1. Memory rolling (4_weekly_memory.md)
-   - Read previous memory/dormant/dormant-{prev sunday}.md (1 file; if absent → bootstrap mode)
-   - Read future-prediction/future-prediction-*.md for last 7 days (≤7 files)
-   - Read ## Future sections of report/news-*.md for last 7 days (≤7 files)
+   - Read previous data/memory/dormant/dormant-{prev sunday}.md (1 file; if absent → bootstrap mode)
+   - Read data/future-prediction/future-prediction-*.md for last 7 days (≤7 files)
+   - Read ## Future sections of data/daily-news/news-*.md for last 7 days (≤7 files)
    - Compute tier transitions: dormant entries advanced or removed; lukewarm entries pushed to dormant
-   - Output: memory/dormant/dormant-YYYYMMDD.md
+   - Output: data/memory/dormant/dormant-YYYYMMDD.md
 
 2. Theme review (deferred to 5_weekly_theme_review.md)
 
@@ -214,7 +214,7 @@ Maximum input on any Sunday = 1 dormant snapshot + 7 future-prediction files + 7
 
 ## 4. Acceptance criteria for "implemented"
 
-- `memory/dormant/.gitkeep` exists. ✅
+- `data/memory/dormant/.gitkeep` exists. ✅
 - `design/scheduled/4_weekly_memory.md` exists and has been run end-to-end at least once.
 - `design/scheduled/2_future_prediction.md` consumes the dormant snapshot and applies 2-layer longshot detection.
 - One full Sunday cycle has been run end-to-end and the resulting dormant snapshot has been reviewed by a human.
@@ -244,7 +244,7 @@ The 2026-05-02 push landed three skills that interact with this memory model. Th
 
 `glossary_terms` accumulates jargon outside the dormant pool. Daily flow runs:
 
-1. **`extract-glossary-candidates`** — mechanical regex pass over today's `report/en/news-YYYYMMDD.md` produces shape-matching candidates (`MCP`, `KV-cache`, `MITRE-CNA`, etc.). Idempotent. Bumps `glossary_occurrences` per (term, date).
+1. **`extract-glossary-candidates`** — mechanical regex pass over today's `data/daily-news/en/news-YYYYMMDD.md` produces shape-matching candidates (`MCP`, `KV-cache`, `MITRE-CNA`, etc.). Idempotent. Bumps `glossary_occurrences` per (term, date).
 2. **`define-glossary-terms`** — promotion rule `distinct_days_14d ≥ 3` flips `candidate → active`; quiet-30d rule flips `active → retired` (only when `reviewed_by_human = 0`). Newly-promoted rows surface as `pending_definitions` for the writer LLM to fill `quick_def` + `why_it_matters` + (since 2026-05-02 forward) the `_ja / _es / _fil` locale fan-outs.
 3. **`validate-glossary-terms`** (Phase C) — runs after define. Three checks:
    - **form** (Python): empty / > 25 words / > 2 sentences / forbidden quick_def jargon (`leverage`, `synergy`, `paradigm`, `utilize`, `stochastic`) / generic-English term name (`Today`, `Future`, `News`).
@@ -255,15 +255,15 @@ The 2026-05-02 push landed three skills that interact with this memory model. Th
 
 ### 6.2 Locale fan-out for glossary
 
-Phase 2-forward (brought into Phase 1 timeline at 2026-05-02): `glossary_terms` now carries `quick_def_{ja,es,fil}` + `why_it_matters_{ja,es,fil}`. Day-0 seed (`reference/glossary.yml`) ships hand-translated for all 11 terms. Auto-promoted candidates' locale fields stay NULL until the writer LLM fills them — frontend coalesces NULLs to EN at export time so hover never shows blank.
+Phase 2-forward (brought into Phase 1 timeline at 2026-05-02): `glossary_terms` now carries `quick_def_{ja,es,fil}` + `why_it_matters_{ja,es,fil}`. Day-0 seed (`data/reference/glossary.yml`) ships hand-translated for all 11 terms. Auto-promoted candidates' locale fields stay NULL until the writer LLM fills them — frontend coalesces NULLs to EN at export time so hover never shows blank.
 
-**Editing the seed after Day 0.** `reference/glossary.yml` is read on every daily run by `extract-glossary-candidates`, but the default mode is `insert`-only: new YAML rows land, existing rows are never touched. So adding a new term to the YAML auto-flows on the next daily run, but **fixing a translation or definition on an existing term does not** — the SQLite row already exists and gets skipped. To propagate edits, run the skill once manually with `--seed-mode upsert`:
+**Editing the seed after Day 0.** `data/reference/glossary.yml` is read on every daily run by `extract-glossary-candidates`, but the default mode is `insert`-only: new YAML rows land, existing rows are never touched. So adding a new term to the YAML auto-flows on the next daily run, but **fixing a translation or definition on an existing term does not** — the SQLite row already exists and gets skipped. To propagate edits, run the skill once manually with `--seed-mode upsert`:
 
 ```bash
 python3 -m app.skills.extract_glossary_candidates \
-  --news-file report/en/news-$(date +%Y%m%d).md \
+  --news-file data/daily-news/en/news-$(date +%Y%m%d).md \
   --db        app/data/analytics.sqlite \
-  --seed-yaml reference/glossary.yml \
+  --seed-yaml data/reference/glossary.yml \
   --seed-mode upsert
 ```
 

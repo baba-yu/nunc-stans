@@ -5,7 +5,7 @@ LLM sub-agent that emits `app/sourcedata/<date>/change_log.json` (diff against t
 ## Sub-agent context (parent supplies)
 
 - The just-written `app/sourcedata/<date>/news_section.json` (today's content).
-- The previous day's `report/en/news-<prev-date>.md` (or, post-Phase-4, `app/sourcedata/<prev-date>/news_section.json`) for diffing.
+- The previous day's `data/daily-news/en/news-<prev-date>.md` (or, post-Phase-4, `app/sourcedata/<prev-date>/news_section.json`) for diffing.
 - The schema for `change_log.json`.
 - The forbidden-token list.
 - A target output path: `app/sourcedata/<date>/change_log.json`.

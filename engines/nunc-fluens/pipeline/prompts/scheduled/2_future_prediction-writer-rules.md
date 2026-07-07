@@ -1,6 +1,6 @@
 # 2_future_prediction — writer rules (Phase 3 JSON-emitting flow)
 
-Detailed writer regulations for the LLM-driven steps in `2_future_prediction`. Phase 3 rewrite: writer prompts now produce **JSON sourcedata** conforming to the schemas in `design/sourcedata-layout.md §JSON schemas (canonical)`. Markdown is NEVER written by the LLM — `render-future-prediction-md` (Jinja2) is the single producer of `future-prediction/<L>/future-prediction-YYYYMMDD.md`.
+Detailed writer regulations for the LLM-driven steps in `2_future_prediction`. Phase 3 rewrite: writer prompts now produce **JSON sourcedata** conforming to the schemas in `design/sourcedata-layout.md §JSON schemas (canonical)`. Markdown is NEVER written by the LLM — `render-future-prediction-md` (Jinja2) is the single producer of `data/future-prediction/<L>/future-prediction-YYYYMMDD.md`.
 
 ## `compose-summary` — semantic contract for `summary.json` fields
 
@@ -16,18 +16,18 @@ Daily synthesis. Cross-cuts across the day's news + bridges. Surfaces high-coher
 
 ### `relation_to_my_preds` (multi-paragraph dense prose) — **READ THIS BEFORE WRITING**
 
-**EXACTLY 3 paragraphs**, one per **user standing thesis prediction** as defined in `reference/standing-predictions.md`. Format per paragraph:
+**EXACTLY 3 paragraphs**, one per **user standing thesis prediction** as defined in `data/reference/standing-predictions.md`. Format per paragraph:
 
 ```
-The user's [first|second|third] standing prediction (<short label from reference/standing-predictions.md>) gains [substrate|governance|real-world] [reinforcement|densification|...] ...
+The user's [first|second|third] standing prediction (<short label from data/reference/standing-predictions.md>) gains [substrate|governance|real-world] [reinforcement|densification|...] ...
 ```
 
 **Critical:** this section is NOT about today's 3 fresh predictions. Those are already exhaustively covered by `news.md ## Future`, by `## Bridge` validation rows, and by the `validation_rows` schema in `bridges.json`. Repeating today's fresh preds here is the regression caught on 2026-05-11 against the 5/10 + 5/11 outputs. Sub-agents that confuse this MUST be re-prompted with this contract before re-emitting.
 
-The 3 standing predictions are **persistent across all daily runs**. They evolve only when the user explicitly edits `reference/standing-predictions.md`. Sub-agents must:
+The 3 standing predictions are **persistent across all daily runs**. They evolve only when the user explicitly edits `data/reference/standing-predictions.md`. Sub-agents must:
 
-1. Read `reference/standing-predictions.md` for the canonical 3-pred list + each thesis's evidence-class hints.
-2. Read 2–3 prior days' FP markdown `## Relation to My Own Predictions` sections (e.g. `future-prediction/en/future-prediction-2026-05-{07,08,09}.md`) for prose-style examples.
+1. Read `data/reference/standing-predictions.md` for the canonical 3-pred list + each thesis's evidence-class hints.
+2. Read 2–3 prior days' FP markdown `## Relation to My Own Predictions` sections (e.g. `data/future-prediction/en/future-prediction-2026-05-{07,08,09}.md`) for prose-style examples.
 3. Synthesize today's evidence from `news_section.json` + `headlines.json` + `bridges.json` against each standing thesis.
 4. Emit 3 ordered paragraphs (1st → 2nd → 3rd), dense prose, no scope prefixes / no hash IDs / no parser anchors.
 
@@ -58,7 +58,7 @@ Output: object matching `bridges.json` schema with `validation_rows[].bridge` le
 - `prediction_ref.prediction_date` — ISO date the prediction was authored.
 - `today_relevance` — integer 1–5.
 - `evidence_summary` — multi-line prose synthesizing today's signals; cite by lead phrase (e.g., "AMD May 5 Q1 print preview …"), not by `Pred ID`.
-- `reference_links` — list of `{label, url}`; every URL must already appear in today's `report/en/news-YYYYMMDD.md`. No external research.
+- `reference_links` — list of `{label, url}`; every URL must already appear in today's `data/daily-news/en/news-YYYYMMDD.md`. No external research.
 
 Includes the **2-layer dormant longshot detection**: Layer 1 (keyword) scans today's news against each row's `Signals` column; Layer 2 (semantic) reads today's `## Headlines` + sub-headings against the snapshot's `Prediction (short)` lines. Union dedupe by ID; honest relevance score; mark revived rows with `[REVIVED]` prefix on `evidence_summary`. **No mutation of the dormant snapshot in this flow** — that's `4_weekly_memory`'s job.
 
@@ -113,6 +113,6 @@ The lint check `lint-markdown-clean` (Step 8 of the orchestrator) catches Stream
 
 ## Dormant pool re-check (existing rule, retained verbatim)
 
-The dormant snapshot at `memory/dormant/dormant-*.md` (latest) drives the 2-layer longshot detection in `compose-validation-rows`. Layer 1 (keyword) scans today's news against each row's `Signals` column; Layer 2 (semantic) reads today's `## Headlines` + sub-headings against the snapshot's `Prediction (short)` lines and identifies plausible relations. **Union dedupe by ID**; honest relevance score; `[REVIVED]` prefix on the `evidence_summary` field with the matching signal or heading. **No mutation of the dormant snapshot in this flow** — that's `4_weekly_memory`'s job.
+The dormant snapshot at `data/memory/dormant/dormant-*.md` (latest) drives the 2-layer longshot detection in `compose-validation-rows`. Layer 1 (keyword) scans today's news against each row's `Signals` column; Layer 2 (semantic) reads today's `## Headlines` + sub-headings against the snapshot's `Prediction (short)` lines and identifies plausible relations. **Union dedupe by ID**; honest relevance score; `[REVIVED]` prefix on the `evidence_summary` field with the matching signal or heading. **No mutation of the dormant snapshot in this flow** — that's `4_weekly_memory`'s job.
 
 `[REVIVED]` triggers `predictions.huge_longshot_hit_at = <validation_date>` in the DB; the dashboard renders a star + pulsing gold halo for ~14 days.

@@ -102,7 +102,7 @@ python3 -m app.skills.define_glossary_terms --db app/data/analytics.sqlite --mod
 
 ## Alternate fill path: YAML upsert
 
-This skill is the **LLM-driven** fill — it produces definitions for newly-promoted candidates that don't have a hand-authored counterpart yet. There's a second, **human-driven** fill path: editing `reference/glossary.yml` directly and running `extract-glossary-candidates --seed-mode upsert` to propagate those edits into `glossary_terms`. Use it when:
+This skill is the **LLM-driven** fill — it produces definitions for newly-promoted candidates that don't have a hand-authored counterpart yet. There's a second, **human-driven** fill path: editing `data/reference/glossary.yml` directly and running `extract-glossary-candidates --seed-mode upsert` to propagate those edits into `glossary_terms`. Use it when:
 
 - A weekly review identifies a translation that's wrong or a `quick_def` that drifted from the term's real meaning — fix it once in the YAML and upsert.
 - A new seed term needs hand-translated locale fan-outs from day one (rather than waiting for the candidate→active→LLM-fill cycle).

@@ -64,7 +64,7 @@ in the same dir, then `os.replace` onto the final name.
 
 Parent validates the JSON delta. On schema failure, the parent
 reverts that single (prediction, stream) pair's JSON, logs to
-`memory/maintenance/<week_ending>/broken.md`, and continues. After all
+`data/memory/maintenance/<week_ending>/broken.md`, and continues. After all
 sub-agents finish, parent runs `cli ingest-sourcedata` + `cli score` +
 `cli export` to fold changes into the DB and refresh the dashboard.
 

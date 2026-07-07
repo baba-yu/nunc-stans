@@ -15,7 +15,7 @@ sub-agent.
 - The change-signal evidence that triggered the gate: explicit list of
   new bridges (last 7 days), new contradict links, related-prediction
   landings, new chain/relation edges, week-over-week relevance drift.
-- Last 7 days of `report/en/news-*.md` headlines and
+- Last 7 days of `data/daily-news/en/news-*.md` headlines and
   `change_log.json` items for cross-prediction context.
 - Cross-stream correlation guidance (copy verbatim from
   `design/scheduled/6_weekly_maintenance.md §Cross-stream correlation`):
@@ -56,7 +56,7 @@ batches emit `stream="glossary"` rows where `prediction_id=""` and
 - `verdict="stale"` → `proposed_action` MUST be `rewrite`; `reason` MUST
   cite the cross-stream evidence by id.
 - `verdict="broken"` → reserved for unrecoverable inconsistencies; the
-  parent escalates to `memory/maintenance/<date>/broken.md` rather than
+  parent escalates to `data/memory/maintenance/<date>/broken.md` rather than
   re-prompting.
 - `verdict="retire"` → `proposed_action="retire"`; only the parent's
   Step 2 deterministically applies the DB flip.

@@ -4,7 +4,7 @@ LLM sub-agent that emits `app/sourcedata/<date>/news_section.json` from the day'
 
 ## Sub-agent context (parent supplies)
 
-- The day's news topics from `reference/news-topics.md`.
+- The day's news topics from `data/reference/news-topics.md`.
 - The trusted-source list (`arxiv.org`, `simonwillison.net`, `news.ycombinator.com`, plus topic-specific sources).
 - The full `references.txt` URL list (sub-agent must SKIP URLs already cited).
 - The schema for `news_section.json` from `design/sourcedata-layout.md §JSON schemas (canonical)`.
@@ -35,7 +35,7 @@ A JSON object matching `news_section.json` schema:
 
 ## Per-section coverage requirement
 
-Sections must collectively cover the topic list in `reference/news-topics.md`. Specifically:
+Sections must collectively cover the topic list in `data/reference/news-topics.md`. Specifically:
 
 - **Unsloth must be searched every run** (not just when news-driven).
 - **Multica only when news-driven** (it is not a constant-coverage topic).
@@ -44,7 +44,7 @@ Sections must collectively cover the topic list in `reference/news-topics.md`. S
 
 These rules exist because between 2026-05-08 and 2026-05-25 the news section drifted from concrete-event-driven prose into a fixed 5-storyline template extended by lifecycle metadata (`day-N`, `triply-aged`, `Nth consecutive non-trading day`). The drift is corrected at three layers; this file carries the writer-facing instruction.
 
-1. **Continuation cap.** At most 2 of the 5 bullets may extend a storyline that already appeared in `report/en/news-*.md` for any of the prior 3 calendar days. The remaining 3+ bullets must come from `reference/news-topics.md` topics not covered in any of the prior 3 days, or be net-new events on a covered topic. Use the parent-supplied prior-storyline digest to identify what counts as a continuation.
+1. **Continuation cap.** At most 2 of the 5 bullets may extend a storyline that already appeared in `data/daily-news/en/news-*.md` for any of the prior 3 calendar days. The remaining 3+ bullets must come from `data/reference/news-topics.md` topics not covered in any of the prior 3 days, or be net-new events on a covered topic. Use the parent-supplied prior-storyline digest to identify what counts as a continuation.
 
 2. **State-change requirement on continuations.** Each continuation bullet must center on a fresh state-change event observed on this date. Qualifying state changes: new named entrant joins a cohort; numeric threshold crossed in either direction; new actor takes a public position; new artifact ships (arxiv ID, release tag, M&A, IPO); scheduled event reaches its catalyst date. A bullet whose only content is "hold steady" / "unchanged" / "settled into Nth consecutive day" must be **dropped** from the JSON — under-filling (3 or 4 bullets) is preferred to filler.
 

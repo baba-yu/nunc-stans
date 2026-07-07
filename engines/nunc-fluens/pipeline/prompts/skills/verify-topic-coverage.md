@@ -14,7 +14,7 @@ This skill replaces regex semantic detection with LLM-as-judge: an independent a
 
 - `app/sourcedata/<date>/news_section.json` (today's bullets — what the user sees)
 - `app/sourcedata/<date>/search_log.json` (writer's self-report — what the writer claims they searched / found / promoted)
-- `reference/news-topics.md` (topic list + §Topic scope clarifications table — the **rubric**)
+- `data/reference/news-topics.md` (topic list + §Topic scope clarifications table — the **rubric**)
 - The date string `<date>`
 
 ## Sub-agent task

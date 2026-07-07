@@ -4,9 +4,9 @@ LLM sub-agent that emits the placeholder `app/sourcedata/<date>/bridges.json` (v
 
 ## Sub-agent context (parent supplies)
 
-- Last 7 days of `report/en/news-*.md` (the source predictions).
-- The latest `memory/dormant/dormant-*.md` (dormant longshot pool).
-- Today's `report/en/news-YYYYMMDD.md` (the evidence side; ONLY URLs from this file may be used).
+- Last 7 days of `data/daily-news/en/news-*.md` (the source predictions).
+- The latest `data/memory/dormant/dormant-*.md` (dormant longshot pool).
+- Today's `data/daily-news/en/news-YYYYMMDD.md` (the evidence side; ONLY URLs from this file may be used).
 - The schema for `bridges.json` from `design/sourcedata-layout.md §JSON schemas (canonical)`.
 - The 2-layer dormant longshot detection rules from `design/scheduled/2_future_prediction-writer-rules.md §Dormant pool re-check`.
 - A target output path: `app/sourcedata/<date>/bridges.json`.
@@ -45,7 +45,7 @@ The `bridge` object is intentionally a placeholder; `compose-bridge` (next step)
 
 - One row per standing prediction matched by today's news (Layer 1 keyword + Layer 2 semantic).
 - `[REVIVED]` prefix on `evidence_summary` for dormant-pool revivals.
-- Every `reference_links[].url` MUST already appear in today's `report/en/news-YYYYMMDD.md`. No external research.
+- Every `reference_links[].url` MUST already appear in today's `data/daily-news/en/news-YYYYMMDD.md`. No external research.
 - `prediction_ref.short_label` is the EN identity key; never translate, never modify.
 
 ## Parent post-processing
