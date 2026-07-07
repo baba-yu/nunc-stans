@@ -38,10 +38,15 @@ export interface ChatOptions {
 
 /** One streamed chunk from a chatStream-capable provider. `thinking`
  * deltas only occur when the provider/model emits reasoning (capability
- * `thinking: true`); `done` always carries the final assembled result. */
+ * `thinking: true`); `done` always carries the final assembled result.
+ * Under goal-verify (PD5), each iteration streams its content and the
+ * middleware emits one `verify` boundary event per judge verdict — the
+ * chat UI renders those as the visible loop (S-6); exactly one `done`
+ * fires, after the loop settles. */
 export type StreamEvent =
   | { type: 'thinking'; delta: string }
   | { type: 'content'; delta: string }
+  | { type: 'verify'; iteration: number; verdict: { met: boolean; gaps: string[] }; tokensIn: number; tokensOut: number }
   | { type: 'done'; result: ChatResult };
 
 export type StreamHandler = (event: StreamEvent) => void;

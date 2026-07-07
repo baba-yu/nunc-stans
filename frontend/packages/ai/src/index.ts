@@ -4,7 +4,7 @@ import { forbidProvider, mockProvider, type MockConfig } from './providers/mock.
 import { claudeCodeRuntime, type ClaudeCodeConfig } from './runtimes/claude-code.ts';
 import { getSearchSource } from './search/adapters.ts';
 import { appendRunLog } from './runlog.ts';
-import { normalizeVerify } from './verify.ts';
+import { normalizeVerify, runVerified } from './verify.ts';
 import type {
   ChatMessage, ChatOptions, ChatResult, FetchLike, Provider,
   SearchOptions, SearchResult, StreamHandler, VerifyConfig,
@@ -20,7 +20,7 @@ export {
   tavilySearch, perplexitySearch,
 } from './search/adapters.ts';
 export { appendRunLog } from './runlog.ts';
-export { normalizeVerify } from './verify.ts';
+export { normalizeVerify, runVerified } from './verify.ts';
 
 export interface AiConfig {
   /** JSONL run log path (e.g. `<data store>/runs/ai-runs.jsonl`). Every
@@ -117,13 +117,62 @@ export function createAi(cfg: AiConfig): Ai {
     }
   }
 
+  /** The §2.6 judge/retry loop (PD5), one run-log entry for the whole
+   * loop: aggregated tokens + the verdict chain. Judge calls go through
+   * the provider directly, so they don't double-log. */
+  async function verified(
+    providerName: string, messages: ChatMessage[], opts: ChatOptions,
+    callVerify: VerifyConfig, onEvent?: StreamHandler,
+  ): Promise<ChatResult> {
+    const p = provider(providerName);
+    const judgeP = provider(callVerify.judge?.provider ?? providerName);
+    const started = Date.now();
+    try {
+      const out = await runVerified(p, judgeP, messages, opts, callVerify, onEvent);
+      onEvent?.({ type: 'done', result: out.result });
+      appendRunLog(cfg.runLogFile, {
+        ts: new Date(started).toISOString(),
+        caller: opts.caller ?? 'unknown',
+        provider: p.name,
+        model: out.result.model,
+        inputTokens: out.totalIn,
+        outputTokens: out.totalOut,
+        durationMs: Date.now() - started,
+        verify: 'on',
+        outcome: 'ok',
+        verdicts: out.verdicts,
+        ...(opts.profile ? { profile: opts.profile } : {}),
+      });
+      return out.result;
+    } catch (err) {
+      appendRunLog(cfg.runLogFile, {
+        ts: new Date(started).toISOString(),
+        caller: opts.caller ?? 'unknown',
+        provider: providerName,
+        model: opts.model ?? '',
+        inputTokens: 0,
+        outputTokens: 0,
+        durationMs: Date.now() - started,
+        verify: 'on',
+        outcome: 'error',
+        error: err instanceof Error ? err.message.slice(0, 300) : String(err),
+        ...(opts.profile ? { profile: opts.profile } : {}),
+      });
+      throw err;
+    }
+  }
+
   async function chat(providerName: string, messages: ChatMessage[], opts: ChatOptions = {}): Promise<ChatResult> {
+    const callVerify = effectiveVerify(opts);
+    if (callVerify.verify === 'on') return verified(providerName, messages, opts, callVerify);
     return logged(providerName, opts, p => p.chat(messages, opts));
   }
 
   async function chatStream(
     providerName: string, messages: ChatMessage[], opts: ChatOptions = {}, onEvent: StreamHandler,
   ): Promise<ChatResult> {
+    const callVerify = effectiveVerify(opts);
+    if (callVerify.verify === 'on') return verified(providerName, messages, opts, callVerify, onEvent);
     return logged(providerName, opts, async p => {
       if (p.chatStream) return p.chatStream(messages, opts, onEvent);
       // Capability-declared fallback (stream:false providers): one final
