@@ -17,10 +17,12 @@
 // arriving with the imported DB keep their news-era `app/sourcedata/…`
 // strings; new ingests write `data/sourcedata/…`. Mixed provenance is
 // accepted — nothing joins on the path prefix.
-import { copyFileSync, cpSync, existsSync, readdirSync, renameSync } from 'node:fs';
+import {
+  copyFileSync, cpSync, existsSync, readdirSync, renameSync, statSync,
+} from 'node:fs';
 import { basename, join, resolve } from 'node:path';
 import { integrityCheck } from './migrate.ts';
-import { git, gitSynthetic } from './instance.ts';
+import { git, gitSynthetic, seedInstanceGitConfig } from './instance.ts';
 import { instanceStoreDir, worldDbFile } from './config.ts';
 import {
   DAILY_NEWS_REL, EXPORTS_REL, FP_REL, MEMORY_REL, REFERENCE_REL,
@@ -77,19 +79,62 @@ export function importNewsCheckout(src: string, instance: string): ImportResult 
       + 'create one first with: nunc-fluens init <dir|name>');
   if (resolve(src) === resolve(instance))
     throw new Error('source and instance are the same directory');
-  const staged = readdirSync(p(instance, SOURCEDATA_REL)).filter(f => f !== '.gitkeep');
-  if (staged.length)
-    throw new Error(`${instance} already carries sourcedata (${staged.length} entr`
-      + `${staged.length === 1 ? 'y' : 'ies'}) — import targets a fresh init-born `
-      + 'instance only (no --force in v1)');
+  // A prior import is refused via its exact commit marker — the
+  // sourcedata probe below alone would let a report-only source (no
+  // app/sourcedata) re-import repeatedly.
+  let subjects: string[] = [];
+  try {
+    subjects = git(instance, 'log', '--format=%s').split('\n');
+  } catch { /* unborn HEAD: an init-born instance always has a commit */ }
+  const priorImport = subjects.find(s2 => s2.startsWith(IMPORT_COMMIT_PREFIX));
+  if (priorImport)
+    throw new Error(`${instance} already carries an import commit (${priorImport}) — `
+      + 'import targets a fresh init-born instance only (no --force in v1)');
+  // Failed-run debris is not data: a full run writes run.json even when
+  // a step failed (deliberate — the snapshot manifest), so a day dir
+  // whose ONLY content is run.json must not brick the import.
+  const sd = p(instance, SOURCEDATA_REL);
+  const offenders = readdirSync(sd).filter(f => {
+    if (f === '.gitkeep') return false;
+    const fp = join(sd, f);
+    if (statSync(fp).isDirectory()) {
+      const inner = readdirSync(fp);
+      if (inner.length === 1 && inner[0] === 'run.json') {
+        log.push(`ignoring failed-run debris: ${f}/run.json (no sourcedata files)`);
+        return false;
+      }
+    }
+    return true;
+  });
+  if (offenders.length)
+    throw new Error(`${instance} already carries sourcedata (${offenders.join(', ')}) — `
+      + 'import targets a fresh init-born instance only (no --force in v1).\n'
+      + 'If these are leftovers of a failed run: delete data/sourcedata/<date>/ '
+      + 'and re-run import.\n'
+      + 'If a previous import was interrupted: remove the instance dir, then '
+      + 'nunc-fluens init + import — the source is never modified.');
 
   // Copy + map. The dashboard copies news-era checkouts carried under
   // docs/ (index.html, assets/) are deliberately NOT imported — the
-  // dashboard is engine code now.
+  // dashboard is engine code now. dereference:true keeps the instance
+  // self-contained (a symlink in the source arrives as file content,
+  // never as a live pointer back into the checkout); the no-op filter
+  // forces node's JS cp path, where dereference actually applies to
+  // nested entries (the native fast path ignores it — verified on
+  // node 24).
   for (const [from, to] of DIR_MAP) {
     const s = p(src, from);
     if (!existsSync(s)) continue;
-    cpSync(s, p(instance, to), { recursive: true });
+    try {
+      cpSync(s, p(instance, to), { recursive: true, dereference: true, filter: () => true });
+    } catch (e) {
+      const err = e as NodeJS.ErrnoException;
+      if (err.code === 'ENOENT')
+        throw new Error(`dangling symlink under ${from}: ${err.path ?? s} does `
+          + 'not resolve — import copies content only (self-contained instance); '
+          + 'fix or remove the link in the source');
+      throw e;
+    }
     log.push(`copied ${from} -> ${to}`);
   }
   if (existsSync(join(src, 'references.txt'))) {
@@ -110,7 +155,10 @@ export function importNewsCheckout(src: string, instance: string): ImportResult 
   if (existsSync(srcDb)) {
     integrityCheck(srcDb);
     if (existsSync(storeDb)) {
-      const bak = `${storeDb}.bak-${new Date().toISOString().slice(0, 10)}`;
+      // Full-timestamp suffix: collision-proof (a date-only name lets a
+      // same-day rename clobber the previous backup — POSIX rename
+      // overwrites silently).
+      const bak = `${storeDb}.bak-${new Date().toISOString().replace(/[:.]/g, '-')}`;
       renameSync(storeDb, bak);
       log.push(`instance db backed up to ${bak}`);
     }
@@ -123,6 +171,10 @@ export function importNewsCheckout(src: string, instance: string): ImportResult 
 
   // One import commit in the instance repo. data/archives/ and store/
   // are ignored by the template .gitignore and stay out of it.
+  // Re-seed the local synthetic identity first (idempotent): instances
+  // born before the birth-time seeding existed pick it up here, so
+  // run-side plain-git commits work on identity-less hosts too.
+  seedInstanceGitConfig(instance);
   git(instance, 'add', '-A');
   let stagedAny = true;
   try {

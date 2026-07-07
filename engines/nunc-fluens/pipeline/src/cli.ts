@@ -9,16 +9,18 @@
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { join } from 'node:path'
 import {
-  configFile, instanceStoreDir, linkNewsRepo, requireNewsRepo,
+  configFile, linkNewsRepo, requireNewsRepo,
   resolveDataDir, resolveNewsRepo, runLogFile, sourcedataDir,
   worldDbFile, worldDir,
 } from './config.ts'
 import { CANONICAL_FILES } from './schemas/sourcedata.ts'
 import {
-  DAILY_NEWS_REL, EXPORTS_REL, resolveLocaleSet, SOURCEDATA_REL,
+  DAILY_NEWS_REL, EXPORTS_REL, resolveLocaleSet,
 } from './world-paths.ts'
-import { initInstance, resolveInstanceDir } from './instance.ts'
-import { importNewsCheckout, looksNewsShaped } from './import.ts'
+import {
+  initInstance, requireInstance, resolveInstanceDir, type InstancePaths,
+} from './instance.ts'
+import { importNewsCheckout } from './import.ts'
 
 function cmdLink(dir: string | undefined): number {
   if (!dir) { console.error('usage: nunc-fluens link <dir>'); return 2 }
@@ -120,31 +122,17 @@ function cmdImport(src: string | undefined, instArg: string | undefined): number
   }
 }
 
-interface InstancePaths { root: string; storeDir: string }
-
-/** Resolve and validate the run target: an init/import-born v2
- * instance (its own repo + data/sourcedata + a store DB). Running on
- * the instance you also view is normal product mode now — `import`
- * never touches a source checkout, so the old view-source refusal (a
- * ~/news protection) is gone with the clone machinery. */
-function requireInstance(dirArg: string | null): InstancePaths {
-  const dir = dirArg ?? process.env.NS_INSTANCE ?? null
-  if (!dir)
-    throw new Error(
-      'run refuses to start without an instance: pass --instance <dir> (or set NS_INSTANCE).\n'
-      + 'Create one with: nunc-fluens init <dir|name>')
-  if (looksNewsShaped(dir))
-    throw new Error(
-      `${dir} is a news-shaped checkout, not a v2 instance — create an instance `
-      + 'with nunc-fluens init and bring data over with nunc-fluens import')
-  const storeDir = instanceStoreDir(dir)
-  if (!existsSync(join(dir, '.git'))
-    || !existsSync(join(dir, SOURCEDATA_REL))
-    || !existsSync(worldDbFile(storeDir)))
-    throw new Error(
-      `instance at ${dir} is missing .git, ${SOURCEDATA_REL}/, or `
-      + 'store/world/analytics.sqlite — create it with: nunc-fluens init <dir|name>')
-  return { root: dir, storeDir }
+/** Refusal-style JSON read for the hand-placed news-config files:
+ * invalid content is a refusal naming the offending file, not a raw
+ * JSON.parse stack (mirrors the locales refusal in cmdRun). */
+function readNewsConfig(path: string): Record<string, unknown> | null {
+  try {
+    return JSON.parse(readFileSync(path, 'utf8')) as Record<string, unknown>
+  } catch (e) {
+    console.error(`run: refusing to start — ${path} is not valid JSON: `
+      + `${e instanceof Error ? e.message : e}`)
+    return null
+  }
 }
 
 async function cmdRun(argv: string[]): Promise<number> {
@@ -176,12 +164,18 @@ async function cmdRun(argv: string[]): Promise<number> {
   let newsCfg: Record<string, unknown> = {}
   const instanceCfg = join(box.storeDir, 'news-config.json')
   if (existsSync(instanceCfg)) {
-    newsCfg = JSON.parse(readFileSync(instanceCfg, 'utf8'))
+    const parsed = readNewsConfig(instanceCfg)
+    if (parsed === null) return 1
+    newsCfg = parsed
   } else {
     const mainStore = resolveDataDir().dir
     if (mainStore) {
       const mainCfg = join(worldDir(mainStore), 'news-config.json')
-      if (existsSync(mainCfg)) newsCfg = JSON.parse(readFileSync(mainCfg, 'utf8'))
+      if (existsSync(mainCfg)) {
+        const parsed = readNewsConfig(mainCfg)
+        if (parsed === null) return 1
+        newsCfg = parsed
+      }
     }
   }
   const runtime = (newsCfg.runtime as string) ?? 'claude-code'
