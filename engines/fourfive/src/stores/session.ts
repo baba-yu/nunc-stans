@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
-import type { DependencyInfo, Message, Session } from '../../shared/types'
+import type { DependencyInfo, Message, Session, VerifyStep } from '../../shared/types'
 import type { Blueprint } from '../../shared/blueprint'
 import { api } from '../api/client'
 
@@ -47,6 +47,7 @@ export const useSessionStore = defineStore('session', () => {
   const messages = ref<Message[]>([])
   const sending = ref(false)
   const provider = ref('…')
+  const profile = ref<string | null>(null)
   const blueprint = ref<Blueprint | null>(null)
   const dependencies = ref<DependencyInfo[]>([])
   const showNewSessionModal = ref(false)
@@ -56,6 +57,10 @@ export const useSessionStore = defineStore('session', () => {
   const thinking = ref(loadBool('codev.thinking', false))
   const maxTokensOn = ref(loadBool('codev.maxTokensOn', false))
   const maxTokens = ref(loadNum('codev.maxTokens', 512))
+  // Goal-verify toggle (S-6): explicit on/off is sent with EVERY message so
+  // chat stays off-by-default regardless of the profile's own default.
+  const verifyOn = ref(loadBool('codev.verifyOn', false))
+  const verifyGoal = ref(localStorage.getItem('codev.verifyGoal') ?? '')
 
   // Markdown export
   const markdown = ref<string | null>(null)
@@ -64,10 +69,13 @@ export const useSessionStore = defineStore('session', () => {
   const showMarkdown = ref(false)
   const softwareStack = ref('') // user-specified, loaded from the blueprint
 
-  // Live streaming assistant message (thinking + content + collapse state).
-  const streamingMsg = ref<{ content: string; thinking: string; thinkingOpen: boolean } | null>(null)
+  // Live streaming assistant message (thinking + content + collapse state
+  // + the goal-verify loop boundaries as they arrive).
+  const streamingMsg = ref<{ content: string; thinking: string; thinkingOpen: boolean; verify: VerifyStep[] } | null>(null)
   // Thinking text per completed message id (collapsed/viewable; not persisted server-side).
   const thinkingById = ref<Record<string, string>>({})
+  // Goal-verify chains per completed message id (S-6: gaps + cost stay visible).
+  const verifyById = ref<Record<string, VerifyStep[]>>({})
 
   // "Scope of concern": the mock-UI field in focus drives cross-pane highlights.
   const activeFieldId = ref<string | null>(null)
@@ -112,6 +120,14 @@ export const useSessionStore = defineStore('session', () => {
     thinking.value = value
     save('codev.thinking', String(value))
   }
+  function setVerifyOn(value: boolean) {
+    verifyOn.value = value
+    save('codev.verifyOn', String(value))
+  }
+  function setVerifyGoal(value: string) {
+    verifyGoal.value = value
+    save('codev.verifyGoal', value)
+  }
   function setMaxTokensOn(value: boolean) {
     maxTokensOn.value = value
     save('codev.maxTokensOn', String(value))
@@ -124,7 +140,9 @@ export const useSessionStore = defineStore('session', () => {
 
   async function init() {
     try {
-      provider.value = (await api.health()).provider
+      const h = await api.health()
+      provider.value = h.provider
+      profile.value = h.profile ?? null
     } catch {
       provider.value = 'offline'
     }
@@ -208,14 +226,18 @@ export const useSessionStore = defineStore('session', () => {
       created_at: new Date().toISOString(),
     }
     messages.value.push(optimistic)
-    streamingMsg.value = { content: '', thinking: '', thinkingOpen: true }
+    streamingMsg.value = { content: '', thinking: '', thinkingOpen: true, verify: [] }
     let collapsed = false
 
     try {
       await api.streamMessage(
         sid,
         text,
-        { think: thinking.value, maxTokens: maxTokensOn.value ? maxTokens.value : undefined },
+        {
+          think: thinking.value,
+          maxTokens: maxTokensOn.value ? maxTokens.value : undefined,
+          verify: { on: verifyOn.value, goal: verifyGoal.value.trim() || undefined },
+        },
         (event, data) => {
           const sm = streamingMsg.value
           switch (event) {
@@ -238,10 +260,14 @@ export const useSessionStore = defineStore('session', () => {
                 sm.content += JSON.parse(data) as string
               }
               break
+            case 'verify':
+              if (sm) sm.verify.push(JSON.parse(data) as VerifyStep)
+              break
             case 'assistant': {
               const m = JSON.parse(data) as Message
               messages.value.push(m)
               if (sm?.thinking) thinkingById.value[m.id] = sm.thinking
+              if (sm?.verify.length) verifyById.value[m.id] = sm.verify
               streamingMsg.value = null
               break
             }
@@ -316,6 +342,7 @@ export const useSessionStore = defineStore('session', () => {
     messages,
     sending,
     provider,
+    profile,
     blueprint,
     dependencies,
     showNewSessionModal,
@@ -329,6 +356,11 @@ export const useSessionStore = defineStore('session', () => {
     softwareStack,
     streamingMsg,
     thinkingById,
+    verifyById,
+    verifyOn,
+    verifyGoal,
+    setVerifyOn,
+    setVerifyGoal,
     activeFieldId,
     scope,
     init,

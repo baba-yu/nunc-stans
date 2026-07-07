@@ -1,10 +1,12 @@
 import type { ChatMessage } from '../../shared/types'
 import type { Blueprint } from '../../shared/blueprint'
-import type { LLMProvider, LLMResult, ChatOptions, StreamHandler } from './provider'
 
-// Canned invoice blueprint — the PRD's running example. Returned by the mock
-// provider when the conversation mentions invoices, so the right pane populates
-// with realistic, schema-valid data and no external LLM is needed.
+// The offline demo (moved verbatim from the retired MockProvider at T5 —
+// product logic, not provider glue): a canned, schema-valid invoice
+// blueprint plus demo chat text, so the UI is fully usable with no model
+// and no network. The nunc-ai `mock` provider carries the chat side via
+// the responder below; the blueprint side short-circuits in the glue.
+
 const INVOICE_BLUEPRINT: Blueprint = {
   app: { name: 'Invoice App', description: 'An app to create and manage customer invoices' },
   mock_ui: {
@@ -86,61 +88,38 @@ const INVOICE_BLUEPRINT: Blueprint = {
   ],
 }
 
-// Matches invoice-shaped prompts in English or Japanese, so the offline demo
-// triggers regardless of the language the user types in.
+
+// Matches invoice-shaped prompts in English or Japanese, so the offline
+// demo triggers regardless of the language the user types in.
 const INVOICE_RE = /invoice|bill|請求|インボイス/i
 
-// Offline default provider. chat() returns canned guidance; proposeBlueprint()
-// returns the invoice blueprint once the conversation looks invoice-shaped.
-export class MockProvider implements LLMProvider {
-  readonly name = 'mock'
-  readonly model = 'mock-1'
+const looksInvoice = (messages: ChatMessage[]): boolean =>
+  INVOICE_RE.test(messages.filter((m) => m.role !== 'system').map((m) => m.content).join(' '))
 
-  async chat(messages: ChatMessage[]): Promise<LLMResult> {
-    const lastUser = [...messages].reverse().find((m) => m.role === 'user')
-    const text = (lastUser?.content ?? '').trim()
-    const looksInvoice = INVOICE_RE.test(messages.filter((m) => m.role !== 'system').map((m) => m.content).join(' '))
-    const lines = [
-      'This is a mock LLM response (for offline testing with no external connection).',
-      '',
-      `Received requirement: "${text.slice(0, 200)}${text.length > 200 ? '…' : ''}"`,
-    ]
-    if (looksInvoice) {
-      lines.push('', 'Generated design data for an invoice app. Check the tabs in the right pane (Mock UI / ERD / Logic / API / Terminology).')
-    } else {
-      lines.push('', 'Tip: write something like "I want to build an invoice app" and the mock will generate a full set of design data.')
-    }
-    lines.push('', 'To switch to a real LLM, set CODEV_LLM_PROVIDER to ollama / claude in .env.')
-    const content = lines.join('\n')
-    // Rough char/4 estimate — the mock has no real tokenizer.
-    const inputChars = messages.reduce((n, m) => n + m.content.length, 0)
-    return {
-      content,
-      model: this.model,
-      usage: { input: Math.ceil(inputChars / 4), output: Math.ceil(content.length / 4) },
-    }
+/** Canned chat reply — plugs into nunc-ai's mock provider as `responder`. */
+export function demoResponder(messages: ChatMessage[]): string {
+  const lastUser = [...messages].reverse().find((m) => m.role === 'user')
+  const text = (lastUser?.content ?? '').trim()
+  const lines = [
+    'This is a mock LLM response (for offline testing with no external connection).',
+    '',
+    `Received requirement: "${text.slice(0, 200)}${text.length > 200 ? '…' : ''}"`,
+  ]
+  if (looksInvoice(messages)) {
+    lines.push('', 'Generated design data for an invoice app. Check the tabs in the right pane (Mock UI / ERD / Logic / API / Terminology).')
+  } else {
+    lines.push('', 'Tip: write something like "I want to build an invoice app" and the mock will generate a full set of design data.')
   }
+  lines.push('', 'To switch to a real model, pick a profile on the Profiles screen (this is the offline fallback).')
+  return lines.join('\n')
+}
 
-  async chatStream(
-    messages: ChatMessage[],
-    opts: ChatOptions,
-    onDelta: StreamHandler,
-  ): Promise<LLMResult> {
-    const result = await this.chat(messages)
-    if (opts.think) {
-      const t =
-        '(thinking) Reviewing the requirements. For an invoice app, it looks like we need customers / invoices / invoice_items and tax calculation.'
-      for (const part of t.match(/.{1,10}/gs) ?? [t]) await onDelta({ thinking: part })
-    }
-    for (const part of result.content.match(/.{1,14}/gs) ?? [result.content]) {
-      await onDelta({ content: part })
-    }
-    return result
-  }
+/** Scripted thinking for the demo stream (shown when Thinking is on). */
+export const DEMO_THINKING =
+  '(thinking) Reviewing the requirements. For an invoice app, it looks like we need customers / invoices / invoice_items and tax calculation.'
 
-  async proposeBlueprint(history: ChatMessage[]): Promise<unknown> {
-    const text = history.filter((m) => m.role !== 'system').map((m) => m.content).join(' ')
-    if (INVOICE_RE.test(text)) return INVOICE_BLUEPRINT
-    return null
-  }
+/** The blueprint step for the offline profile: the canned invoice
+ * blueprint once the conversation looks invoice-shaped, else null. */
+export function proposeDemoBlueprint(history: ChatMessage[]): unknown {
+  return looksInvoice(history) ? INVOICE_BLUEPRINT : null
 }

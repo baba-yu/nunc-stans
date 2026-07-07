@@ -36,22 +36,25 @@ ollama pull qwen2.5:14b   # e.g. — qwen is strong at Japanese + structured JSO
 ollama list               # confirm installed models and exact tags
 ```
 
-### 3. Configure FourFive (`.env`)
-```bash
-cp .env.example .env      # or just edit if it already exists
+### 3. Create a profile (Phase D — replaces `.env` provider config)
+Model selection lives in **profiles** now. On the Formans **Profiles**
+screen create e.g.:
+```json
+{ "id": "local-chat", "name": "Local chat", "provider": "ollama",
+  "model": "qwen2.5:14b" }
 ```
-```ini
-CODEV_LLM_PROVIDER=ollama
-OLLAMA_BASE_URL=http://localhost:11434
-OLLAMA_MODEL=qwen2.5:14b   # match the exact tag from `ollama list`
+(match the exact tag from `ollama list`) and set it as the
+**FourFive chat** default. Or through the gate directly:
+```bash
+curl -X PUT :8720/api/profiles/local-chat -H 'content-type: application/json' \
+  -d '{"id":"local-chat","name":"Local chat","provider":"ollama","model":"qwen2.5:14b"}'
+curl -X PUT :8720/api/profiles/defaults -H 'content-type: application/json' \
+  -d '{"fourfive-chat":"local-chat"}'
 ```
 
-### 4. Restart FourFive (load `.env`)
-`.env` is read at server startup and the provider is cached in-process, so
-**always restart after changing it**:
-```bash
-bash scripts/dev-restart.sh
-```
+### 4. No restart needed
+The default profile is re-resolved **per message** — switching profiles
+takes effect on the next message.
 
 ### 5. Verify
 ```bash
@@ -66,9 +69,9 @@ successfully generated**.
 
 | action            | how                                                                       |
 | ----------------- | ------------------------------------------------------------------------- |
-| change model      | edit `OLLAMA_MODEL` in `.env` → `bash scripts/dev-restart.sh`             |
-| back to mock      | `CODEV_LLM_PROVIDER=mock` → restart                                       |
-| switch to Claude  | `CODEV_LLM_PROVIDER=claude` + `ANTHROPIC_API_KEY` (+ optional `ANTHROPIC_MODEL`) → restart |
+| change model      | edit the profile's `model` on the Profiles screen — next message uses it |
+| back to the offline demo | clear the FourFive chat default (or delete the profile)             |
+| switch to Anthropic | a profile with `"provider": "anthropic-api"` + `ANTHROPIC_API_KEY` in the env (BYOL — never in the profile) |
 | list installed    | `ollama list`                                                            |
 
 ---
@@ -139,7 +142,9 @@ always schema-valid. Ask if you want it.
 
 ## Related files
 
-- `server/llm/provider.ts` — provider selection (`CODEV_LLM_PROVIDER`), `chatStream`
-- `server/llm/ollama.ts` — Ollama (`chat`, `chatStream`, `proposeBlueprint`)
+- `server/llm/nunc-ai.ts` — profile resolution + the nunc-ai glue (chat,
+  stream, verify loop, blueprint step); providers live in
+  `frontend/packages/ai`
+- `server/llm/offline-demo.ts` — the canned no-model demo (invoice blueprint)
 - `server/llm/blueprint-prompt.ts` — blueprint prompt + JSON extraction
 - `scripts/ollama-bg.sh` / `ollama-restart.sh` / `ollama-diag.sh` / `dev-restart.sh` / `llm-check.mjs`
