@@ -37,6 +37,46 @@ export const SUNDAY = '2026-01-04';
 export const PREV_SUNDAY = '2025-12-28';
 const LOCALES = ['ja', 'es', 'fil'];
 
+// fixture-manifest.json is the TEST-side contract (build-db.ts drives
+// TODAY/dbRange from it, render-parity its day list): `inputs` emits it
+// from the SAME constants that drive the corpus, so a regen that moves
+// the calendar can never desync the two. The prose fields are fixed
+// strings — the emitted file is byte-stable while the constants hold.
+const MANIFEST_WHY = 'T12: the real-content golden corpus validated the TS port '
+  + 'against the Python oracle and was dropped with it — the redistributable '
+  + 'repo carries no personal editorial data. From here the suite is TS '
+  + "self-regression: expected/ is frozen from the pipeline's own output over "
+  + 'this schema-shaped micro-world. The oracle-parity record lives in git '
+  + 'history and design/verification/phase-c.md.';
+const MANIFEST_NORM_ISO = 'every timestamp in the DB dump is rewritten to the '
+  + 'epoch before comparing (CURRENT_TIMESTAMP metadata); with todayIso pinned '
+  + 'to the fixture Sunday there is no capture-day token — the corpus is fully '
+  + 'deterministic';
+const MANIFEST_NORM_NUM = 'export JSON comparisons stay parsed-value based '
+  + '(formatting-neutral)';
+
+function writeManifest(): void {
+  const j = (s: string) => JSON.stringify(s);
+  const jarr = (xs: readonly string[]) => `[${xs.map(j).join(', ')}]`;
+  w(join(HERE, 'fixture-manifest.json'), [
+    '{',
+    '  "synthetic": true,',
+    '  "generator": "goldens/synthesize.ts (node synthesize.ts all)",',
+    `  "why": ${j(MANIFEST_WHY)},`,
+    `  "renderDays": ${jarr(DAYS)},`,
+    `  "sundayDay": ${j(SUNDAY)},`,
+    `  "prevSunday": ${j(PREV_SUNDAY)},`,
+    `  "dbRange": { "start": ${j(DAYS[0])}, "end": ${j(DAYS[DAYS.length - 1])} },`,
+    `  "todayIso": ${j(SUNDAY)},`,
+    `  "locales": ${jarr(['en', ...LOCALES])},`,
+    '  "normalization": {',
+    `    "isoTimestamps": ${j(MANIFEST_NORM_ISO)},`,
+    `    "jsonNumberFormatting": ${j(MANIFEST_NORM_NUM)}`,
+    '  }',
+    '}',
+  ].join('\n') + '\n');
+}
+
 function stem(d: string): string { return d.replaceAll('-', ''); }
 
 function w(path: string, content: string): void {
@@ -418,7 +458,8 @@ export function writeInputs(): void {
     rmSync(tmpRoot, { recursive: true, force: true });
   }
 
-  console.log(`inputs written under ${INPUT}`);
+  writeManifest();
+  console.log(`inputs written under ${INPUT} (+ fixture-manifest.json)`);
 }
 
 // --- freeze -----------------------------------------------------------------

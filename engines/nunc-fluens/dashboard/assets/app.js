@@ -3,8 +3,8 @@
  * Vanilla JS (ES module). D3 v7 loaded globally via <script>.
  * Contract: data/manifest.json + data/graph-<scope>.json staged
  * beside the dashboard (tools/build-world.ts sources them from the
- * instance's data/exports/; docs/data survives only as the legacy
- * news-shaped-checkout fallback there).
+ * instance's data/exports/ — v2 instances only; news-shaped checkouts
+ * enter via `nunc-fluens import`).
  * ============================================================ */
 
 (function () {
