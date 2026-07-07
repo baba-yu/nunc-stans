@@ -19,12 +19,18 @@ function w(path: string, content: string): void {
   writeFileSync(path, content, 'utf8');
 }
 
-/** A tiny synthetic OLD-shape instance checkout (git repo). */
-function makeOldShapeRepo(): string {
+/** A tiny synthetic OLD-shape instance checkout (git repo). With
+ * `identity: false` the repo carries NO user.name/email config (the
+ * fixture commit passes them per-invocation) — the migration commit
+ * must still succeed via its own synthetic identity. */
+function makeOldShapeRepo(opts: { identity?: boolean } = {}): string {
+  const identity = opts.identity ?? true;
   const repo = mkdtempSync(join(tmpdir(), 'nf-migrate-'));
   execFileSync('git', ['init', '-q', repo]);
-  git(repo, 'config', 'user.email', 'fixture@example.com');
-  git(repo, 'config', 'user.name', 'Fixture');
+  if (identity) {
+    git(repo, 'config', 'user.email', 'fixture@example.com');
+    git(repo, 'config', 'user.name', 'Fixture');
+  }
   w(join(repo, 'report', 'en', 'news-20260101.md'), '# News Report 2026-01-01\n');
   w(join(repo, 'future-prediction', 'en', 'future-prediction-20260101.md'), '# FP\n');
   w(join(repo, 'memory', 'dormant', 'dormant-20260101.md'), '# Dormant pool\n');
@@ -44,7 +50,8 @@ function makeOldShapeRepo(): string {
   ].join('\n'));
   w(join(repo, 'app', 'sourcedata', '2026-01-01', 'news_section.json'), '{}\n');
   git(repo, 'add', '-A');
-  git(repo, 'commit', '-q', '-m', 'fixture: old-shape instance');
+  git(repo, '-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.com',
+    'commit', '-q', '-m', 'fixture: old-shape instance');
   // Ignored on-disk leftovers the migration must plain-delete / carry.
   w(join(repo, 'docs', 'archives', 'snapshots', '20251201', 'graph-mix.json'), '{}\n');
   w(join(repo, 'references.txt'), 'https://example.com/1\n');
@@ -85,6 +92,13 @@ describe('migrateLayout', () => {
       expect(existsSync(join(repo, 'app', 'sourcedata', '2026-01-01', 'news_section.json'))).toBe(true);
       expect(detectShape(repo)).toBe('new');
 
+      // Snapshot retention archives are MOVED (never deleted) and stay
+      // untracked — carried by the plain-rename branch under the
+      // already-translated /data/archives/ ignore line.
+      expect(existsSync(join(repo, 'data', 'archives', 'snapshots', '20251201', 'graph-mix.json')))
+        .toBe(true);
+      expect(git(repo, 'ls-files', '--', 'data/archives').trim()).toBe('');
+
       // Untracked-but-present files travel too (references.txt is
       // ignored and stays at the root).
       expect(existsSync(join(repo, 'references.txt'))).toBe(true);
@@ -119,6 +133,70 @@ describe('migrateLayout', () => {
       expect(() => migrateLayout(dir)).toThrow(/not a git work tree/);
     } finally {
       rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it('completes a partial migration instead of no-opping on the new-wins shape', () => {
+    const repo = makeOldShapeRepo();
+    try {
+      // Simulate a crash after the first move: report/ already at
+      // data/daily-news (staged, uncommitted) — detectShape now says
+      // 'new' while memory/, reference/, future-prediction/, docs/data
+      // are still at their old paths.
+      mkdirSync(join(repo, 'data'), { recursive: true });
+      git(repo, 'mv', 'report', 'data/daily-news');
+      expect(detectShape(repo)).toBe('new');
+
+      const r = migrateLayout(repo);
+      expect(r.migrated).toBe(true);
+      expect(existsSync(join(repo, 'data', 'memory', 'dormant', 'dormant-20260101.md'))).toBe(true);
+      expect(existsSync(join(repo, 'data', 'reference', 'glossary.yml'))).toBe(true);
+      expect(existsSync(join(repo, 'data', 'future-prediction', 'en', 'future-prediction-20260101.md'))).toBe(true);
+      expect(existsSync(join(repo, 'data', 'exports', 'manifest.json'))).toBe(true);
+      expect(existsSync(join(repo, 'data', 'archives', 'snapshots', '20251201', 'graph-mix.json'))).toBe(true);
+      for (const old of ['report', 'future-prediction', 'memory', 'reference', 'docs'])
+        expect(existsSync(join(repo, old)), `old ${old}/ gone`).toBe(false);
+      expect(readFileSync(join(repo, '.gitignore'), 'utf8')).toContain('/data/archives/');
+      // The manual pre-move and the completion land in ONE commit.
+      expect(git(repo, 'log', '--oneline').trim().split('\n').length).toBe(2);
+      expect(git(repo, 'status', '--porcelain').trim()).toBe('');
+      // And a further re-run is a true no-op.
+      expect(migrateLayout(repo).migrated).toBe(false);
+    } finally {
+      rmSync(repo, { recursive: true, force: true });
+    }
+  });
+
+  it('commits with a synthetic identity when the repo and host have none', () => {
+    const repo = makeOldShapeRepo({ identity: false });
+    const fakeHome = mkdtempSync(join(tmpdir(), 'nf-home-'));
+    // Hermetic spawn env: no global/system git config, no identity env.
+    const KEYS = ['GIT_CONFIG_GLOBAL', 'GIT_CONFIG_SYSTEM', 'HOME', 'XDG_CONFIG_HOME',
+      'GIT_AUTHOR_NAME', 'GIT_AUTHOR_EMAIL', 'GIT_COMMITTER_NAME', 'GIT_COMMITTER_EMAIL',
+      'EMAIL'] as const;
+    const saved = new Map<string, string | undefined>(
+      KEYS.map(k => [k, process.env[k]] as [string, string | undefined]));
+    process.env.GIT_CONFIG_GLOBAL = '/dev/null';
+    process.env.GIT_CONFIG_SYSTEM = '/dev/null';
+    process.env.HOME = fakeHome;
+    process.env.XDG_CONFIG_HOME = join(fakeHome, '.config');
+    for (const k of ['GIT_AUTHOR_NAME', 'GIT_AUTHOR_EMAIL', 'GIT_COMMITTER_NAME',
+      'GIT_COMMITTER_EMAIL', 'EMAIL']) delete process.env[k];
+    try {
+      // Sanity: this environment really has no usable committer identity.
+      expect(() => git(repo, 'commit', '--allow-empty', '-q', '-m', 'probe'))
+        .toThrow();
+      const r = migrateLayout(repo);
+      expect(r.migrated).toBe(true);
+      expect(git(repo, 'log', '-1', '--format=%an <%ae> %cn <%ce>').trim())
+        .toBe('nunc-fluens <nunc-fluens@localhost> nunc-fluens <nunc-fluens@localhost>');
+    } finally {
+      for (const [k, v] of saved) {
+        if (v === undefined) delete process.env[k];
+        else process.env[k] = v;
+      }
+      rmSync(fakeHome, { recursive: true, force: true });
+      rmSync(repo, { recursive: true, force: true });
     }
   });
 });

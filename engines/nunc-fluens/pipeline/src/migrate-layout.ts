@@ -3,13 +3,15 @@
 // Run side is single-shape — `sandbox` migrates fresh clones at
 // creation and `migrate-layout <dir>` converts existing instances; the
 // view side never migrates (the owner's old-shape checkout is read-only
-// and supported forever). Idempotent: a new-shape (or empty) tree is a
-// no-op.
+// and supported forever). Idempotent: a tree with nothing old left is a
+// no-op, and a PARTIALLY migrated tree (interrupted run) is completed
+// rather than skipped — every move is existsSync-guarded and the
+// .gitignore translation is idempotent.
 import { existsSync, readFileSync, renameSync, rmSync, writeFileSync, mkdirSync } from 'node:fs';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import {
-  DAILY_NEWS_REL, DATA_DIR, detectShape, EXPORTS_REL, FP_REL, MEMORY_REL,
+  DAILY_NEWS_REL, DATA_DIR, EXPORTS_REL, FP_REL, MEMORY_REL,
   OLD_DOCS_DATA_REL, OLD_DOCS_DIR, OLD_FP_DIR, OLD_MEMORY_DIR,
   OLD_REFERENCE_DIR, OLD_REPORT_DIR, REFERENCE_REL,
 } from './world-paths.ts';
@@ -23,6 +25,12 @@ const DIR_MOVES: Array<[string, string]> = [
   [OLD_MEMORY_DIR, MEMORY_REL],
   [OLD_REFERENCE_DIR, REFERENCE_REL],
   [OLD_DOCS_DATA_REL, EXPORTS_REL],
+  // Snapshot retention archives (theme-review: MOVE, never delete).
+  // Ignored/untracked, so this takes moveDir's plain-rename branch and
+  // stays out of the migration commit, ignored again via the translated
+  // /data/archives/ line. Must precede the docs/ cleanup below, which
+  // would otherwise rmSync the archives away with the other leftovers.
+  ['docs/archives', 'data/archives'],
 ];
 
 // .gitignore line-prefix mapping (conservative: only these known
@@ -60,6 +68,9 @@ function git(repo: string, ...args: string[]): string {
  * untracked-but-present dir still has to reach its new home so the
  * runtime finds it). */
 function moveDir(repo: string, from: string, to: string, log: string[]): void {
+  // Future-proof: a destination under a not-yet-created parent must not
+  // ENOENT (renameSync does not mkdir, and git mv needs the parent too).
+  mkdirSync(dirname(join(repo, to)), { recursive: true });
   const tracked = git(repo, 'ls-files', '--', from).trim() !== '';
   if (tracked) {
     git(repo, 'mv', from, to);
@@ -83,8 +94,14 @@ export function migrateLayout(repo: string): MigrationResult {
     throw new Error(`migrate-layout: ${repo} is not a git work tree — `
       + 'the migration commits into the instance repo and refuses to run without one');
   }
-  const shape = detectShape(repo);
-  if (shape === 'new') {
+  // No-op only when nothing OLD remains. detectShape's 'new'-wins rule
+  // (kept for read-side callers) would misclassify a half-migrated tree
+  // as done here: the migration is not atomic, so a crash between moves
+  // leaves data/ AND old dirs coexisting — re-running must complete the
+  // remaining moves, not refuse.
+  const oldRemains = DIR_MOVES.some(([from]) => existsSync(join(repo, from)))
+    || existsSync(join(repo, OLD_DOCS_DIR));
+  if (!oldRemains) {
     log.push('already new shape — nothing to do');
     return { migrated: false, log };
   }
@@ -95,7 +112,8 @@ export function migrateLayout(repo: string): MigrationResult {
 
   // Instances carry no dashboard (P2): drop the tracked docs/ remnants
   // (index.html, assets/, favicon, …) and plain-delete whatever ignored
-  // leftovers remain (docs/archives etc.) so docs/ disappears.
+  // leftovers remain so docs/ disappears (docs/archives was already
+  // carried to data/archives by the moves above).
   const docs = join(repo, OLD_DOCS_DIR);
   if (existsSync(docs)) {
     if (git(repo, 'ls-files', '--', OLD_DOCS_DIR).trim() !== '') {
@@ -133,7 +151,12 @@ export function migrateLayout(repo: string): MigrationResult {
     log.push('nothing staged — no migration commit');
     return { migrated: false, log };
   }
-  git(repo, 'commit', '--quiet', '-m', MIGRATION_COMMIT_MESSAGE);
+  // Synthetic identity: this is a machine-generated commit inside a
+  // disposable instance — it must not depend on host git config (a
+  // local clone copies no repo-local identity; a fresh machine/CI
+  // runner may have no global one either).
+  git(repo, '-c', 'user.name=nunc-fluens', '-c', 'user.email=nunc-fluens@localhost',
+    'commit', '--quiet', '-m', MIGRATION_COMMIT_MESSAGE);
   log.push(`committed: ${MIGRATION_COMMIT_MESSAGE}`);
   return { migrated: true, log };
 }

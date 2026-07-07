@@ -34,7 +34,9 @@ export const OLD_MEMORY_DIR = 'memory';
 export const OLD_REFERENCE_DIR = 'reference';
 export const OLD_DOCS_DIR = 'docs';
 export const OLD_DOCS_DATA_REL = 'docs/data';
-export const OLD_ARCHIVE_SNAPSHOTS_REL = 'docs/archives/snapshots';
+// (docs/archives → data/archives is handled by migrate-layout's
+// DIR_MOVES / IGNORE_PREFIX_MAP literals; no constant is exported for
+// the old location so nothing can read it by accident.)
 
 export type CheckoutShape = 'new' | 'old' | 'empty';
 

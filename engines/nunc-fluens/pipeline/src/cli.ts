@@ -18,7 +18,10 @@ import {
 } from './config.ts'
 import { integrityCheck, migrateDb } from './migrate.ts'
 import { CANONICAL_FILES } from './schemas/sourcedata.ts'
-import { DAILY_NEWS_REL, detectShape, OLD_REPORT_DIR, resolveLocaleSet } from './world-paths.ts'
+import {
+  DAILY_NEWS_REL, detectShape, OLD_DOCS_DIR, OLD_FP_DIR, OLD_MEMORY_DIR,
+  OLD_REFERENCE_DIR, OLD_REPORT_DIR, resolveLocaleSet,
+} from './world-paths.ts'
 import { migrateLayout } from './migrate-layout.ts'
 
 function cmdLink(dir: string | undefined): number {
@@ -116,8 +119,18 @@ function cmdSandbox(dir: string | undefined): number {
   // product data/ layout right here, before anything reads them. The
   // store seed below reads the clone's app/data DB — unaffected (P1:
   // app/ did not move).
-  const migration = migrateLayout(news)
-  for (const l of migration.log) console.log(`  migrate-layout: ${l}`)
+  try {
+    const migration = migrateLayout(news)
+    for (const l of migration.log) console.log(`  migrate-layout: ${l}`)
+  } catch (e) {
+    // A mid-migration failure leaves a half-created instance behind.
+    // Never auto-delete — surface the state and let the user dispose of
+    // it (the exists-guard above would otherwise block a silent retry).
+    console.error(`sandbox: layout migration failed: ${e instanceof Error ? e.message : e}`)
+    console.error(`sandbox: ${dir} is half-created (unmigrated clone, no seeded store) — `
+      + `remove it and retry: rm -rf ${dir}`)
+    return 1
+  }
   // Seed the sandbox DB. The checkout's own DB is gitignored upstream
   // (a rebuildable cache), so the clone won't carry one — fall back to
   // the source checkout's working tree, then to the main store's copy.
@@ -175,6 +188,19 @@ function requireSandbox(dirArg: string | null): SandboxPaths {
       `sandbox at ${dir} still carries the old news layout (report/, docs/data) — `
       + `convert it first with: nunc-fluens migrate-layout ${dir} `
       + '(or recreate it: just news-sandbox <fresh-dir>)')
+  // A MIXED tree (data/ present but old-shape dirs left behind) is an
+  // interrupted migration — detectShape says 'new', but a run would
+  // ENOENT on the unmoved classes (or worse, silently skip them).
+  // Refuse and point at the finisher.
+  if (detectShape(newsRepo) === 'new') {
+    const leftovers = [OLD_REPORT_DIR, OLD_FP_DIR, OLD_MEMORY_DIR, OLD_REFERENCE_DIR, OLD_DOCS_DIR]
+      .filter(d => existsSync(join(newsRepo, d)))
+    if (leftovers.length)
+      throw new Error(
+        `sandbox at ${dir} is only half-migrated: old-shape ${leftovers.join(', ')} `
+        + 'still present beside data/ — finish the conversion with: '
+        + `nunc-fluens migrate-layout ${dir}`)
+  }
   return { newsRepo, dataDir }
 }
 
