@@ -35,6 +35,9 @@ stans*, the standing now. manda and fourfive keep their names. The name
 | engines/news/FEDERATION.md | engines/nunc-fluens/INTEGRATION.md |
 | design/federation/ | design/constitution/ (journeys moved to design/stories/) |
 | htas-positioning-in-federation.md | htas-positioning-in-nunc-stans.md |
+| the external user-designated store ("no path convention exists") | **defaults to in-repo `<repo>/data/`** (gitignored — FD-3.2's no-data-in-git intent holds via the ignore; R13 2026-07-07). `NS_DATA` / config `data_dir` still designate a store kept elsewhere; `just bootstrap <dir>` writes the config |
+| `publish` step (git add/commit/push in daily runs) + Sunday `commitOnly` | retired 2026-07-07 (R9/R10) — instances are git-less plain data directories; steps just write files, and `run.json` is written once by the dag at end of run |
+| `data/memory/` + `data/references.txt` (instance layout) | `data/history/` + the citation ledger `data/history/reference-history.log` (R12, 2026-07-07) |
 
 Rule IDs (`F1`–`F15`, `FD-x.y`, `NS-x`, `Inv N`) are retained as opaque
 historical identifiers; the letters no longer expand to anything.

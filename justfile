@@ -1,26 +1,30 @@
 set shell := ["bash", "-uc"]
 set windows-shell := ["sh", "-cu"]
 
-# The data store is user-designated (workspace model): `just bootstrap [dir]`
-# initializes a folder of your choice and remembers it in the app config;
-# tools/data-dir.ts resolves it (NS_DATA env overrides per invocation).
-# No data path is hardcoded in this repo (FD-3.2).
+# The data store defaults to the in-repo <repo>/data/ (gitignored; R13
+# 2026-07-07 — FD-3.2's no-data-in-git intent holds via the ignore).
+# `just bootstrap [dir]` designates a folder kept elsewhere and remembers
+# it in the app config; tools/data-dir.ts resolves the effective store
+# (NS_DATA env overrides per invocation).
 
 data_dir := `node tools/data-dir.ts 2>/dev/null || true`
 
-# Doctor + data-store designation/init (idempotent). `just bootstrap <dir>`
-# designates a folder; without an argument it reuses the configured store
-# or asks interactively.
+# Doctor + data-store init (idempotent). `just bootstrap <dir>` designates
+# a folder kept elsewhere; without an argument it reuses the configured
+# store, else initializes the in-repo default <repo>/data/.
 bootstrap dir='':
     sh tools/bootstrap.sh "{{dir}}"
 
+# Safety net only: with the in-repo default the store always resolves;
+# an empty value means tools/data-dir.ts itself failed to run.
 _require_data:
-    @if [ -z "{{data_dir}}" ]; then echo "no data store configured - run: just bootstrap <dir>  (or set NS_DATA)"; exit 1; fi
+    @if [ -z "{{data_dir}}" ]; then echo "no data store resolved - node tools/data-dir.ts failed? (set NS_DATA or just bootstrap <dir>)"; exit 1; fi
 
-# --- News pipeline (nunc-fluens, Phase C; instance model V2) ----------
+# --- News pipeline (nunc-fluens, Phase C; instance model V2/V3) -------
 # The engine ships a TEMPLATE (pipeline/instance-template/); runs target
-# DATA INSTANCES stamped from it by `just news-init` — one git repo per
-# profile, defaulting to gitignored engines/nunc-fluens/instances/<name>/.
+# DATA INSTANCES stamped from it by `just news-init` — one plain (git-less)
+# data directory per profile, defaulting to gitignored
+# engines/nunc-fluens/instances/<name>/.
 # News-shaped checkouts are never run or viewed directly: their data
 # comes over once via `just news-import` (the product's only news-shaped
 # contact surface). The world view reads one instance, designated with
@@ -41,14 +45,14 @@ news-status:
 news-validate date:
     node engines/nunc-fluens/pipeline/src/cli.ts validate "{{date}}"
 
-# Create a data instance from the engine template (git init + skeleton
-# + synthetic editorial seeds + schema-initialized store). A bare name
-# lands under engines/nunc-fluens/instances/<name>/ (gitignored).
+# Create a data instance from the engine template (skeleton + instance.json
+# stamp + synthetic editorial seeds + schema-initialized store; no git).
+# A bare name lands under engines/nunc-fluens/instances/<name>/ (gitignored).
 news-init name_or_dir:
     node engines/nunc-fluens/pipeline/src/cli.ts init "{{name_or_dir}}"
 
 # Copy a news-shaped checkout's data into a fresh init-born instance
-# (one import commit there; the source is read-only, never touched).
+# (recorded in its instance.json; the source is read-only, never touched).
 news-import src instance:
     node engines/nunc-fluens/pipeline/src/cli.ts import "{{src}}" "{{instance}}"
 
