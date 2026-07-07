@@ -1,0 +1,119 @@
+{
+  "date": "2026-01-04",
+  "verifications": [
+    {
+      "topic": "LLM Workflow",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No fixture bullet anchors 'LLM Workflow' on 2026-01-04."
+    },
+    {
+      "topic": "Multi-profiling for Local LLM (e.g. Multica)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No fixture bullet anchors 'Multi-profiling for Local LLM (e.g. Multica)' on 2026-01-04."
+    },
+    {
+      "topic": "Agent Harness (OpenClaw, NemoClaw, Hermes Agents, etc.)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No fixture bullet anchors 'Agent Harness (OpenClaw, NemoClaw, Hermes Agents, etc.)' on 2026-01-04."
+    },
+    {
+      "topic": "Platform for Local LLM (vLLM, SGLang, etc.)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No fixture bullet anchors 'Platform for Local LLM (vLLM, SGLang, etc.)' on 2026-01-04."
+    },
+    {
+      "topic": "Ecosystems for Local LLM Embedded System (Foundry Local, etc.)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No fixture bullet anchors 'Ecosystems for Local LLM Embedded System (Foundry Local, etc.)' on 2026-01-04."
+    },
+    {
+      "topic": "Local LLM Models",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No fixture bullet anchors 'Local LLM Models' on 2026-01-04."
+    },
+    {
+      "topic": "Local LLM Optimization, Fine-tuning (Unsloth — every run)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No fixture bullet anchors 'Local LLM Optimization, Fine-tuning (Unsloth — every run)' on 2026-01-04."
+    },
+    {
+      "topic": "Ecosystems for LLM on PaaS (AWS Bedrock, Azure AI Foundry, etc.)",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No fixture bullet anchors 'Ecosystems for LLM on PaaS (AWS Bedrock, Azure AI Foundry, etc.)' on 2026-01-04."
+    },
+    {
+      "topic": "AI Security",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No fixture bullet anchors 'AI Security' on 2026-01-04."
+    },
+    {
+      "topic": "CVE update on score ≥ 8.0",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No fixture bullet anchors 'CVE update on score ≥ 8.0' on 2026-01-04."
+    },
+    {
+      "topic": "Hardware",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No fixture bullet anchors 'Hardware' on 2026-01-04."
+    },
+    {
+      "topic": "Physical AI",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No fixture bullet anchors 'Physical AI' on 2026-01-04."
+    },
+    {
+      "topic": "LLM-related research and papers",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No fixture bullet anchors 'LLM-related research and papers' on 2026-01-04."
+    },
+    {
+      "topic": "Stock prices and corporate activity",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No fixture bullet anchors 'Stock prices and corporate activity' on 2026-01-04."
+    },
+    {
+      "topic": "Bay Area / SV AI meet-up events",
+      "semantic_verdict": "covered",
+      "matching_bullets": [
+        0
+      ],
+      "search_log_alignment": "consistent",
+      "reason": "The events bullet carries the always-upcoming fixture meetup."
+    },
+    {
+      "topic": "Other standing-out topics",
+      "semantic_verdict": "uncovered",
+      "matching_bullets": [],
+      "search_log_alignment": "consistent",
+      "reason": "No fixture bullet anchors 'Other standing-out topics' on 2026-01-04."
+    }
+  ]
+}

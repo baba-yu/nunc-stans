@@ -1,0 +1,18 @@
+# nunc-fluens daily run (user unit). Installed by systemd/install.sh —
+# the @REPO@ / @SANDBOX@ / @NODE@ placeholders are substituted there.
+# The run targets a sandbox instance only; the view checkout is never
+# written (Phase C redirection).
+[Unit]
+Description=nunc-fluens daily news pipeline (sandbox run)
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=@REPO@
+Environment=NS_SANDBOX=@SANDBOX@
+# claude-code CLI and friends live in ~/.local/bin on a default install;
+# systemd user services do not run login shells, so PATH is explicit.
+Environment=PATH=%h/.local/bin:%h/.npm-global/bin:/usr/local/bin:/usr/bin:/bin
+ExecStart=@NODE@ engines/nunc-fluens/pipeline/src/cli.ts run
+TimeoutStartSec=4h

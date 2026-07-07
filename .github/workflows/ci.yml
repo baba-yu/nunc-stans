@@ -35,23 +35,25 @@ jobs:
       - run: corepack pnpm -C engines/fourfive typecheck
       - run: corepack pnpm -C engines/fourfive test
 
-  # Data-independent subset only until Phase C brings golden masters; the
-  # excluded tests need the live report/prediction data that stays in ~/news
-  # (see engines/nunc-fluens/INTEGRATION.md and design/verification/phase-a.md).
+  # The TS pipeline suite (Phase C T12: Python retired). Self-regression
+  # against the synthetic fixture corpus committed under
+  # engines/nunc-fluens/pipeline/goldens/ — no external data, 3-OS.
   nunc-fluens:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-node@v4
         with:
-          python-version: '3.12'
-      - run: pip install pytest jinja2 pyyaml
-      - run: >-
-          python -m pytest tests -q
-          --ignore=tests/test_rename_future_titles.py
-          --deselect tests/test_export.py::test_prediction_nodes_include_evidence
-          --deselect tests/test_plain_language_quick_def_rename.py::test_news_markdown_renders_plain_language_prose
-        working-directory: engines/nunc-fluens/app
+          node-version: 24
+      - run: corepack enable
+      - run: corepack pnpm install --frozen-lockfile
+      - run: corepack pnpm -C engines/nunc-fluens/pipeline typecheck
+      - run: corepack pnpm -C engines/nunc-fluens/pipeline test
+      - run: corepack pnpm -C frontend/packages/ai test
 
   invariants:
     runs-on: ubuntu-latest

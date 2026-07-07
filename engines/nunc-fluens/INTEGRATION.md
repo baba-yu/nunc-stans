@@ -1,49 +1,43 @@
-# Nunc Fluens (news) in the monorepo
+# Nunc Fluens — lineage note
 
-News owns the `world` scope: world prediction, observation, and external
-context (constitution §6.1). This directory is the News **pipeline code**,
-consolidated into the nunc-stans monorepo. The News **data** is deliberately
-not here.
+There is no integration relationship to document here: **nunc-stans has
+no relationship to any particular news project** (Phase C redirection,
+owner decision 2026-07-06). This engine is a self-contained product; what
+it consumes is a *news-shaped data checkout* — a directory the user
+designates with `just news-link <dir>` (config `news_repo`, env override
+`NS_NEWS_REPO`), read strictly read-only for the Formans world view. The
+stable contract is the data **shape** (`docs/` dashboard +
+`docs/data/graph-*.json` + `app/sourcedata/` day files), held by the
+schemas in `pipeline/src/schemas/` and exercised by the test fixtures.
 
-## Code here, data external
+## Lineage
 
-The upstream `~/news` repository is a live, data-heavy repo (~960 MB, mostly
-generated graph snapshots under `docs/data/` and `memory/snapshots/`, plus
-multilingual reports and predictions). Committing that into the monorepo
-would bloat the monorepo and duplicate the world source of truth — and the
-constitution treats News data as "a rebuildable cache," with News keeping the
-world SoR in its own repository.
+The pipeline is a TypeScript port of a personal news-research prototype
+(the owner's `~/news`, a conversational-agent + Python stack). That
+prototype keeps running independently as the owner's news board; it and
+this product diverged permanently at Phase C — no cutover, no rename, no
+resync (the re-sync recipe that used to live in this file is retired).
+This engine's job going forward is different in kind: investigation
+targets are configurable rather than a fixed daily routine, and its data
+exists to ground decisions (fourfive sessions, strategy-making — the
+constitution's world→self provenance loop, F9).
 
-So only the pipeline code was imported (via `git filter-repo` to the code
-paths, then `git subtree add`): `app/{src,skills,tests,templates,migrations}`,
-`reference/`, `docs/{index.html,assets}`, and the READMEs — about 1.7 MB. The
-data paths (`docs/data`, `memory`, `app/sourcedata`, `future-prediction`,
-`report`, `references.txt`) are excluded and `.gitignore`d so a pipeline run
-here can never commit them back.
+- `pipeline/` — the product: DAG orchestrator (`bin nunc-fluens`),
+  deterministic steps, LLM step contracts, schemas, goldens, systemd
+  units. See the Phase C plan
+  (`design/development/2026-07-05-phase-c-plan.md`).
+- `design/` — the frozen spec corpus the port was written against
+  (imported at Phase C T0, provenance in `design/README.md`).
+- `app/` — the frozen Python oracle the port was validated against,
+  byte-for-byte via `pipeline/goldens/`. Frozen at upstream `17682e9`
+  plus two recorded determinism fixes; **deleted at Phase C T12** (git
+  history keeps it). No further drift-sync happens.
 
-**The world source of truth remains `~/news`.** It has its own remote and runs
-the daily pipeline. Pre-v1 Phase 3 ("News view integration") is where
-News's `export.py` output is retargeted from GitHub Pages to local serving and
-a read-only world view is added to the ME screen (with `informed_by` edges
-auto-attached on "create a commitment from this headline"). Until then,
-`engines/news` is the code frame only; it is not wired into `just up`.
+## Running it
 
-## Re-syncing the code
-
-The upstream code evolves. To refresh `engines/news` from `~/news`:
-
-```sh
-git clone --single-branch --branch dev --no-local ~/news /tmp/news-code
-cd /tmp/news-code
-uvx git-filter-repo --force \
-  --path app/src --path app/skills --path app/tests --path app/templates \
-  --path app/migrations --path app/README.md --path app/pyproject.toml \
-  --path app/update_pages.sh --path app/update_pages.bat \
-  --path reference/ --path docs/index.html --path docs/assets \
-  --path README.md --path README.ja.md --path README.es.md --path README.fil.md
-cd ~/nunc-stans
-git subtree pull --prefix=engines/news /tmp/news-code dev
-```
-
-`git filter-repo` is deterministic, so the filtered history's commit ids are
-stable across refreshes and the subtree pull fast-forwards.
+The pipeline never writes the view checkout. Runs target a disposable
+**sandbox instance** (`just news-sandbox <dir>` — a local clone of the
+view checkout plus its own seeded data store); see the `justfile`
+recipes `news-daily` / `news-schedule`. The `analytics.sqlite` working
+cache lives in the run target's data store
+(`<store>/world/analytics.sqlite`), never in this repo.

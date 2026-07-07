@@ -1,0 +1,13 @@
+terms:
+  - term: FixtureTerm
+    aliases: [FXT]
+    quick_def: A term that exists only in the test fixtures.
+    why_it_matters: It proves the glossary seed path without real content.
+    quick_def_ja: フィクスチャ専用の用語。
+    quick_def_es: Un término solo de fixtures.
+    quick_def_fil: Terminong pang-fixture lamang.
+    why_it_matters_ja: 実データなしで検証するため。
+    why_it_matters_es: Prueba la ruta sin datos reales.
+    why_it_matters_fil: Sinusubok ang daloy nang walang totoong datos.
+    status: active
+    reviewed_by_human: true

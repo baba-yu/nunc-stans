@@ -1,0 +1,13 @@
+{
+  "week_ending": "2026-01-04",
+  "predictions": [
+    {
+      "prediction_id": "prediction.3596f21913b0aaea",
+      "change_signals": [
+        "relevance_drift"
+      ],
+      "confidence_drift_score": 1
+    }
+  ],
+  "glossary_terms": []
+}

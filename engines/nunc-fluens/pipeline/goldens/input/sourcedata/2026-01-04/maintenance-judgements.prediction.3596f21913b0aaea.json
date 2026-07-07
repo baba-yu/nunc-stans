@@ -1,0 +1,15 @@
+{
+  "prediction_id": "prediction.3596f21913b0aaea",
+  "judgements": [
+    {
+      "prediction_id": "prediction.3596f21913b0aaea",
+      "stream": "reasoning",
+      "entry_id": "prediction.3596f21913b0aaea",
+      "verdict": "fresh",
+      "reason": "the fixture storyline is unchanged",
+      "cross_stream_evidence": [],
+      "proposed_action": "noop",
+      "confidence": 0.9
+    }
+  ]
+}

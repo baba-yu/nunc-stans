@@ -15,8 +15,9 @@ just up
 just web              # Vite dev server on :5173
 ```
 
-`just build-world` refreshes `public/world-headlines.json` from News's
-export (`NEWS_WORLD`, optional — unset gives an empty world view).
+`just build-world` refreshes `public/world-headlines.json` from the linked
+news checkout (`just news-link <dir>`, strictly read-only; none linked
+gives an empty world view).
 
 ## Test / build
 

@@ -22,6 +22,10 @@ struct Args {
     /// Built FourFive dist directory.
     #[arg(long)]
     fourfive_dist: PathBuf,
+    /// User-designated data store (workspace model). Empty ⇒ the news
+    /// settings API answers 503. `just up` passes the configured store.
+    #[arg(long, default_value = "")]
+    data_dir: String,
 }
 
 #[tokio::main]
@@ -32,7 +36,13 @@ async fn main() -> anyhow::Result<()> {
         .init();
 
     let args = Args::parse();
-    let cfg = GateCfg::new(args.engine_url, args.fourfive_url, args.formans_dist);
+    let data_dir = if args.data_dir.trim().is_empty() {
+        None
+    } else {
+        Some(PathBuf::from(args.data_dir))
+    };
+    let cfg = GateCfg::new(args.engine_url, args.fourfive_url, args.formans_dist)
+        .with_data_dir(data_dir);
     let app = build_router(cfg, &args.fourfive_dist);
 
     // The screen is a single origin on localhost (§10-B): loopback only.

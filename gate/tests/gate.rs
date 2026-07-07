@@ -140,3 +140,59 @@ async fn upstream_down_is_a_502_with_advice() {
     let body = resp.text().await.unwrap();
     assert!(body.contains("just up"), "got: {body}");
 }
+
+// --- news settings API (Phase C T7) ---------------------------------------
+
+#[tokio::test]
+async fn news_config_roundtrip_and_validation() {
+    let (formans_dist, fourfive_dist) = make_dists();
+    let data_dir = formans_dist.parent().unwrap().join("data-store");
+    let cfg = GateCfg::new(
+        "http://127.0.0.1:1".into(),
+        "http://127.0.0.1:1".into(),
+        formans_dist.clone(),
+    )
+    .with_data_dir(Some(data_dir.clone()));
+    let gate = spawn(build_router(cfg, &fourfive_dist)).await;
+    let client = reqwest::Client::new();
+    let url = format!("{gate}/api/world/news-config");
+
+    // Unconfigured store file -> defaults.
+    let got: serde_json::Value = client.get(&url).send().await.unwrap().json().await.unwrap();
+    assert_eq!(got["runtime"], "claude-code");
+    assert_eq!(got["search"], "native");
+
+    // PUT external pair -> stored atomically, GET round-trips.
+    let put = client
+        .put(&url)
+        .json(&json!({"runtime": "ollama", "search": "external",
+                      "searchEngine": "brave", "synthModel": "qwen3.6:27b"}))
+        .send()
+        .await
+        .unwrap();
+    assert_eq!(put.status(), 200);
+    let file = data_dir.join("world/news-config.json");
+    assert!(file.is_file(), "config file written");
+    let got: serde_json::Value = client.get(&url).send().await.unwrap().json().await.unwrap();
+    assert_eq!(got["searchEngine"], "brave");
+    assert_eq!(got["synthModel"], "qwen3.6:27b");
+
+    // external without an engine -> 422; unknown key -> 400.
+    let bad = client.put(&url).json(&json!({"search": "external"})).send().await.unwrap();
+    assert_eq!(bad.status(), 422);
+    let unknown = client.put(&url).json(&json!({"serch": "native"})).send().await.unwrap();
+    assert_eq!(unknown.status(), 400);
+}
+
+#[tokio::test]
+async fn news_config_without_data_dir_is_503() {
+    let (formans_dist, fourfive_dist) = make_dists();
+    let cfg = GateCfg::new(
+        "http://127.0.0.1:1".into(),
+        "http://127.0.0.1:1".into(),
+        formans_dist,
+    );
+    let gate = spawn(build_router(cfg, &fourfive_dist)).await;
+    let resp = reqwest::get(format!("{gate}/api/world/news-config")).await.unwrap();
+    assert_eq!(resp.status(), 503);
+}

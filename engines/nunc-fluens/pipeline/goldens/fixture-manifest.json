@@ -1,0 +1,15 @@
+{
+  "synthetic": true,
+  "generator": "goldens/synthesize.ts (node synthesize.ts all)",
+  "why": "T12: the real-content golden corpus validated the TS port against the Python oracle and was dropped with it — the redistributable repo carries no personal editorial data. From here the suite is TS self-regression: expected/ is frozen from the pipeline's own output over this schema-shaped micro-world. The oracle-parity record lives in git history and design/verification/phase-c.md.",
+  "renderDays": ["2026-01-02", "2026-01-03", "2026-01-04"],
+  "sundayDay": "2026-01-04",
+  "prevSunday": "2025-12-28",
+  "dbRange": { "start": "2026-01-02", "end": "2026-01-04" },
+  "todayIso": "2026-01-04",
+  "locales": ["en", "ja", "es", "fil"],
+  "normalization": {
+    "isoTimestamps": "every timestamp in the DB dump is rewritten to the epoch before comparing (CURRENT_TIMESTAMP metadata); with todayIso pinned to the fixture Sunday there is no capture-day token — the corpus is fully deterministic",
+    "jsonNumberFormatting": "export JSON comparisons stay parsed-value based (formatting-neutral)"
+  }
+}
