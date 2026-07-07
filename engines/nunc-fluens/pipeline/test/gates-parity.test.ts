@@ -24,7 +24,7 @@ describe('check-topic-coverage parity', () => {
   for (const d of days) {
     it.skipIf(skipReason)(`matches the golden topic gate for ${d}`, () => {
       const gates = JSON.parse(readFileSync(join(EXPECTED, 'gates', `${d}.json`), 'utf8'));
-      const r = checkTopicCoverage({ sourcedataDir: join(INPUT, 'sourcedata'), date: d });
+      const r = checkTopicCoverage({ sourcedataDir: join(INPUT, 'data', 'sourcedata'), date: d });
       expect(r.exit).toBe(gates.topic);
       const golden = readFileSync(join(EXPECTED, 'gates', `${d}.topic.txt`), 'utf8');
       expect(normalizeVolatile(r.lines.join('\n') + '\n'))
@@ -36,13 +36,12 @@ describe('check-topic-coverage parity', () => {
 describe('daily-flow-check parity', () => {
   for (const d of days) {
     it.skipIf(skipReason)(`matches the golden flow report for ${d}`, () => {
-      // Recreate the capture-time work state: daily-news/FP/memory staged,
-      // no DB, no READMEs, no docs assets.
+      // Recreate the capture-time work state (v2 instance shape):
+      // sourcedata + the quartet staged, no store DB, no READMEs.
       const workRoot = mkdtempSync(join(tmpdir(), 'nf-flow-'));
       try {
-        mkdirSync(join(workRoot, 'app'), { recursive: true });
-        symlinkSync(join(INPUT, 'sourcedata'), join(workRoot, 'app', 'sourcedata'));
         mkdirSync(join(workRoot, 'data'), { recursive: true });
+        symlinkSync(join(INPUT, 'data', 'sourcedata'), join(workRoot, 'data', 'sourcedata'));
         for (const part of ['daily-news', 'future-prediction', 'memory', 'reference'])
           symlinkSync(join(INPUT, 'data', part), join(workRoot, 'data', part));
         const gates = JSON.parse(readFileSync(join(EXPECTED, 'gates', `${d}.json`), 'utf8'));

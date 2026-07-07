@@ -2,7 +2,7 @@
   "schema_version": "1.0",
   "scope_id": "business",
   "scope_label": "Business",
-  "generated_at": "2026-07-07T05:03:57Z",
+  "generated_at": "2026-07-07T16:45:14Z",
   "date_range": {
     "start": "2026-01-02",
     "end": "2026-01-04"
@@ -2205,36 +2205,36 @@
           "fil": "[fil] Widgetly announced a synthetic milestone on 2026-01-02. This fixture prediction exists to exercise the pipeline shape: it claims the vendor lands milestone 0 within two quarters, citing the fixture announcement. No real product, vendor, or person is referenced."
         },
         "prediction_date": "2026-01-02",
-        "source_report_path": "app/sourcedata/2026-01-02/predictions.json",
-        "validation_report_path": "app/sourcedata/2026-01-04/bridges.json",
+        "source_report_path": "data/sourcedata/2026-01-02/predictions.json",
+        "validation_report_path": "data/sourcedata/2026-01-04/bridges.json",
         "validation_reports": [
           {
             "date": "2026-01-04",
-            "path": "app/sourcedata/2026-01-04/bridges.json"
+            "path": "data/sourcedata/2026-01-04/bridges.json"
           },
           {
             "date": "2026-01-04",
-            "path": "app/sourcedata/2026-01-04/bridges.json"
+            "path": "data/sourcedata/2026-01-04/bridges.json"
           },
           {
             "date": "2026-01-04",
-            "path": "app/sourcedata/2026-01-04/bridges.json"
+            "path": "data/sourcedata/2026-01-04/bridges.json"
           },
           {
             "date": "2026-01-03",
-            "path": "app/sourcedata/2026-01-03/bridges.json"
+            "path": "data/sourcedata/2026-01-03/bridges.json"
           },
           {
             "date": "2026-01-03",
-            "path": "app/sourcedata/2026-01-03/bridges.json"
+            "path": "data/sourcedata/2026-01-03/bridges.json"
           },
           {
             "date": "2026-01-03",
-            "path": "app/sourcedata/2026-01-03/bridges.json"
+            "path": "data/sourcedata/2026-01-03/bridges.json"
           },
           {
             "date": "2026-01-02",
-            "path": "app/sourcedata/2026-01-02/bridges.json"
+            "path": "data/sourcedata/2026-01-02/bridges.json"
           }
         ],
         "parent_category_id": "business.capital-supply-chain",
@@ -2676,12 +2676,12 @@
           "fil": "[fil] Acme Metrics announced a synthetic milestone on 2026-01-02. This fixture prediction exists to exercise the pipeline shape: it claims the vendor lands milestone 1 within two quarters, citing the fixture announcement. No real product, vendor, or person is referenced."
         },
         "prediction_date": "2026-01-02",
-        "source_report_path": "app/sourcedata/2026-01-02/predictions.json",
-        "validation_report_path": "app/sourcedata/2026-01-02/bridges.json",
+        "source_report_path": "data/sourcedata/2026-01-02/predictions.json",
+        "validation_report_path": "data/sourcedata/2026-01-02/bridges.json",
         "validation_reports": [
           {
             "date": "2026-01-02",
-            "path": "app/sourcedata/2026-01-02/bridges.json"
+            "path": "data/sourcedata/2026-01-02/bridges.json"
           }
         ],
         "parent_category_id": "business.capital-supply-chain",
@@ -3075,12 +3075,12 @@
           "fil": "[fil] Exampletron announced a synthetic milestone on 2026-01-02. This fixture prediction exists to exercise the pipeline shape: it claims the vendor lands milestone 2 within two quarters, citing the fixture announcement. No real product, vendor, or person is referenced."
         },
         "prediction_date": "2026-01-02",
-        "source_report_path": "app/sourcedata/2026-01-02/predictions.json",
-        "validation_report_path": "app/sourcedata/2026-01-02/bridges.json",
+        "source_report_path": "data/sourcedata/2026-01-02/predictions.json",
+        "validation_report_path": "data/sourcedata/2026-01-02/bridges.json",
         "validation_reports": [
           {
             "date": "2026-01-02",
-            "path": "app/sourcedata/2026-01-02/bridges.json"
+            "path": "data/sourcedata/2026-01-02/bridges.json"
           }
         ],
         "parent_category_id": "business.capital-supply-chain",
@@ -3528,24 +3528,24 @@
           "fil": "[fil] Widgetly announced a synthetic milestone on 2026-01-03. This fixture prediction exists to exercise the pipeline shape: it claims the vendor lands milestone 0 within two quarters, citing the fixture announcement. No real product, vendor, or person is referenced."
         },
         "prediction_date": "2026-01-03",
-        "source_report_path": "app/sourcedata/2026-01-03/predictions.json",
-        "validation_report_path": "app/sourcedata/2026-01-04/bridges.json",
+        "source_report_path": "data/sourcedata/2026-01-03/predictions.json",
+        "validation_report_path": "data/sourcedata/2026-01-04/bridges.json",
         "validation_reports": [
           {
             "date": "2026-01-04",
-            "path": "app/sourcedata/2026-01-04/bridges.json"
+            "path": "data/sourcedata/2026-01-04/bridges.json"
           },
           {
             "date": "2026-01-04",
-            "path": "app/sourcedata/2026-01-04/bridges.json"
+            "path": "data/sourcedata/2026-01-04/bridges.json"
           },
           {
             "date": "2026-01-04",
-            "path": "app/sourcedata/2026-01-04/bridges.json"
+            "path": "data/sourcedata/2026-01-04/bridges.json"
           },
           {
             "date": "2026-01-03",
-            "path": "app/sourcedata/2026-01-03/bridges.json"
+            "path": "data/sourcedata/2026-01-03/bridges.json"
           }
         ],
         "parent_category_id": "business.capital-supply-chain",
@@ -3963,12 +3963,12 @@
           "fil": "[fil] Acme Metrics announced a synthetic milestone on 2026-01-03. This fixture prediction exists to exercise the pipeline shape: it claims the vendor lands milestone 1 within two quarters, citing the fixture announcement. No real product, vendor, or person is referenced."
         },
         "prediction_date": "2026-01-03",
-        "source_report_path": "app/sourcedata/2026-01-03/predictions.json",
-        "validation_report_path": "app/sourcedata/2026-01-03/bridges.json",
+        "source_report_path": "data/sourcedata/2026-01-03/predictions.json",
+        "validation_report_path": "data/sourcedata/2026-01-03/bridges.json",
         "validation_reports": [
           {
             "date": "2026-01-03",
-            "path": "app/sourcedata/2026-01-03/bridges.json"
+            "path": "data/sourcedata/2026-01-03/bridges.json"
           }
         ],
         "parent_category_id": "business.capital-supply-chain",
@@ -4362,12 +4362,12 @@
           "fil": "[fil] Exampletron announced a synthetic milestone on 2026-01-03. This fixture prediction exists to exercise the pipeline shape: it claims the vendor lands milestone 2 within two quarters, citing the fixture announcement. No real product, vendor, or person is referenced."
         },
         "prediction_date": "2026-01-03",
-        "source_report_path": "app/sourcedata/2026-01-03/predictions.json",
-        "validation_report_path": "app/sourcedata/2026-01-03/bridges.json",
+        "source_report_path": "data/sourcedata/2026-01-03/predictions.json",
+        "validation_report_path": "data/sourcedata/2026-01-03/bridges.json",
         "validation_reports": [
           {
             "date": "2026-01-03",
-            "path": "app/sourcedata/2026-01-03/bridges.json"
+            "path": "data/sourcedata/2026-01-03/bridges.json"
           }
         ],
         "parent_category_id": "business.capital-supply-chain",
@@ -4761,12 +4761,12 @@
           "fil": "[fil] Widgetly announced a synthetic milestone on 2026-01-04. This fixture prediction exists to exercise the pipeline shape: it claims the vendor lands milestone 0 within two quarters, citing the fixture announcement. No real product, vendor, or person is referenced."
         },
         "prediction_date": "2026-01-04",
-        "source_report_path": "app/sourcedata/2026-01-04/predictions.json",
-        "validation_report_path": "app/sourcedata/2026-01-04/bridges.json",
+        "source_report_path": "data/sourcedata/2026-01-04/predictions.json",
+        "validation_report_path": "data/sourcedata/2026-01-04/bridges.json",
         "validation_reports": [
           {
             "date": "2026-01-04",
-            "path": "app/sourcedata/2026-01-04/bridges.json"
+            "path": "data/sourcedata/2026-01-04/bridges.json"
           }
         ],
         "parent_category_id": "business.capital-supply-chain",
@@ -5160,12 +5160,12 @@
           "fil": "[fil] Acme Metrics announced a synthetic milestone on 2026-01-04. This fixture prediction exists to exercise the pipeline shape: it claims the vendor lands milestone 1 within two quarters, citing the fixture announcement. No real product, vendor, or person is referenced."
         },
         "prediction_date": "2026-01-04",
-        "source_report_path": "app/sourcedata/2026-01-04/predictions.json",
-        "validation_report_path": "app/sourcedata/2026-01-04/bridges.json",
+        "source_report_path": "data/sourcedata/2026-01-04/predictions.json",
+        "validation_report_path": "data/sourcedata/2026-01-04/bridges.json",
         "validation_reports": [
           {
             "date": "2026-01-04",
-            "path": "app/sourcedata/2026-01-04/bridges.json"
+            "path": "data/sourcedata/2026-01-04/bridges.json"
           }
         ],
         "parent_category_id": "business.capital-supply-chain",
@@ -5559,12 +5559,12 @@
           "fil": "[fil] Exampletron announced a synthetic milestone on 2026-01-04. This fixture prediction exists to exercise the pipeline shape: it claims the vendor lands milestone 2 within two quarters, citing the fixture announcement. No real product, vendor, or person is referenced."
         },
         "prediction_date": "2026-01-04",
-        "source_report_path": "app/sourcedata/2026-01-04/predictions.json",
-        "validation_report_path": "app/sourcedata/2026-01-04/bridges.json",
+        "source_report_path": "data/sourcedata/2026-01-04/predictions.json",
+        "validation_report_path": "data/sourcedata/2026-01-04/bridges.json",
         "validation_reports": [
           {
             "date": "2026-01-04",
-            "path": "app/sourcedata/2026-01-04/bridges.json"
+            "path": "data/sourcedata/2026-01-04/bridges.json"
           }
         ],
         "parent_category_id": "business.capital-supply-chain",

@@ -50,7 +50,8 @@ export function daysBetween(startIso: string, endIso: string): string[] {
 
 export interface BuiltDb {
   db: Database.Database;
-  /** Work-root-shaped temp dir (app/sourcedata + data/* symlinks). */
+  /** Work-root-shaped temp dir (v2 instance shape: data/sourcedata +
+   * the data/* quartet, all symlinked into the golden input). */
   workRoot: string;
 }
 
@@ -59,13 +60,12 @@ export interface BuiltDb {
  * removes workRoot. */
 export function buildGoldenDb(): BuiltDb {
   const workRoot = mkdtempSync(join(tmpdir(), 'nf-build-'));
-  mkdirSync(join(workRoot, 'app'), { recursive: true });
-  symlinkSync(join(INPUT, 'sourcedata'), join(workRoot, 'app', 'sourcedata'));
   mkdirSync(join(workRoot, 'data'), { recursive: true });
+  symlinkSync(join(INPUT, 'data', 'sourcedata'), join(workRoot, 'data', 'sourcedata'));
   for (const part of ['daily-news', 'future-prediction', 'memory', 'reference'])
     symlinkSync(join(INPUT, 'data', part), join(workRoot, 'data', part));
   const ctx = {
-    sourcedataRoot: join(workRoot, 'app', 'sourcedata'),
+    sourcedataRoot: join(workRoot, 'data', 'sourcedata'),
     repoRootForRel: workRoot,
     todayIso: TODAY,
   };

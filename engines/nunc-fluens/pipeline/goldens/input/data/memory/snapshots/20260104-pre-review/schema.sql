@@ -1526,8 +1526,8 @@ WHERE theme_id = 'tech.frontier_model_regulatory_board';
 -- empty database. To migrate an *existing* analytics.sqlite to this
 -- schema, the simplest path is:
 --
---     rm app/data/analytics.sqlite
---     python -m src.cli update     # rebuilds DB from scratch
+--     rm <instance>/store/world/analytics.sqlite   # then re-run the pipeline
+--     (oracle era: python -m src.cli update rebuilt it from scratch)
 --
 -- That is the documented procedure for the locale branch since the
 -- ingest pipeline is fully reproducible from the markdown corpus.

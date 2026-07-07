@@ -10,7 +10,7 @@ import { lintPaths, scanText } from '../src/render/lint-markdown-clean.ts';
 import { postWriteIntegrity } from '../src/render/post-write-integrity.ts';
 
 const GOLDENS = join(import.meta.dirname, '..', 'goldens');
-const SD = join(GOLDENS, 'input', 'sourcedata');
+const SD = join(GOLDENS, 'input', 'data', 'sourcedata');
 const EXPECTED = join(GOLDENS, 'expected');
 const M = JSON.parse(readFileSync(join(GOLDENS, 'fixture-manifest.json'), 'utf8'));
 
