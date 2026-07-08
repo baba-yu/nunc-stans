@@ -120,6 +120,44 @@ owner accepted in session.
   button + frozen/drift notes in the temp-app panel. fourfive 28→43
   green (10 generator + 5 freeze), typecheck + vite build green.
 
+- **2026-07-08 — T5 done** (bb01a31 contracts): `contracts/app-bundle.md`
+  v0 Draft — the FourFive↔apps-host boundary: bundle location + "bundle
+  presence IS the freeze marker" (consumers never read fourfive's DB),
+  the five file shapes with the NormalizedEntity guarantee, identifier/
+  reserved-name rails, the metrics contract (single-SELECT rail both
+  sides, read-only execution, grounding⊆declared), PE7 tool naming +
+  declared-surface-is-served-surface, the published REST API, app data
+  layout (installed.jsonl append-only), scenario vocabulary, named v0
+  deferrals. agent-abi §6 now cross-references it for the `apps:<slug>`
+  skills gating; glossary gained bundle / generated app / metric /
+  apps-host; reading-order updated. **Owner review at close (it is a
+  contract).**
+- **2026-07-08 — T6 done** (c679dfd + 1269b77 apps): apps-host v0.
+  Server: bundle discovery by scan (highest complete bundle wins,
+  malformed skipped loudly, manifest identifiers re-validated — SQL
+  injection through names impossible), per-app data
+  (`<store>/apps/<slug>/data.sqlite` lazy, WAL, FK ON;
+  `installed.jsonl` append-only; **schema drift ⇒ read-only mount with
+  the instructive reason, writes 409**), single service layer (deny-
+  unknown 400, host-maintained audit columns, archive-not-delete,
+  payload cap, metric views on a `query_only` read-only connection,
+  broken metric = readable error never a crash), REST per contract §6,
+  **MCP over Streamable HTTP at /mcp** (per-session transports; tool
+  list recomputed per tools/list so a mid-session freeze is offered
+  without restart; only declared tools dispatch; refusals verbatim
+  with isError), scenario runner (fresh throwaway store per scenario,
+  $id threading). UI shell: ONE vite build (Vue + nunc-ui tokens,
+  74KB) served at `/:slug/` — manifest-driven forms (mock_ui screens
+  grouped by target table; uncovered entities get column-driven
+  forms), tables with archive + archived toggle, metrics panel,
+  read-only banner; all fetches RELATIVE so no mount prefix is
+  hardcoded; trailing-slash redirect is relative too. Fixture bundle
+  hand-authored per the contract (an independent shape check).
+  apps-host tests 1→12 (REST walk incl. drift 409 + fk enforcement,
+  MCP live round-trip via the real SDK client against startHost,
+  runner green on the fixture), typecheck (tsc + vue-tsc) green,
+  `pnpm -r build` now covers the shell.
+
 ## Story executions
 
 (S-7 / S-8 written at T1; executed at T10 with transcripts and
