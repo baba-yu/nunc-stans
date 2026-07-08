@@ -40,6 +40,7 @@ fn stub_fourfive() -> Router {
 
 fn stub_apps_host() -> Router {
     Router::new()
+        .route("/", get(|| async { "APPS-INDEX" }))
         .route("/api", get(|| async { Json(json!([{"slug": "stub-app", "version": 1}])) }))
         .route(
             "/stub-app/api/metrics",
@@ -124,6 +125,10 @@ async fn apps_prefix_is_stripped_end_to_end() {
     let gate = spawn_gate().await;
     let list = reqwest::get(format!("{gate}/apps/api")).await.unwrap().text().await.unwrap();
     assert!(list.contains("\"stub-app\""), "got: {list}");
+    // The index page spelling must reach apps-host, NEVER the SPA fallback
+    // (the axum wildcard does not match an empty segment — found live).
+    let index = reqwest::get(format!("{gate}/apps/")).await.unwrap().text().await.unwrap();
+    assert!(index.contains("APPS-INDEX"), "got: {index}");
     let metrics = reqwest::get(format!("{gate}/apps/stub-app/api/metrics"))
         .await
         .unwrap()

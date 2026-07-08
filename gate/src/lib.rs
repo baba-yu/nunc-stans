@@ -107,7 +107,11 @@ pub fn build_router(cfg: GateCfg, fourfive_dist: &Path) -> Router {
         .route("/api/runs/instances", get(runs::list_run_instances))
         .route("/health", any(proxy_engine))
         .route("/self/{*path}", any(proxy_engine))
+        // All three spellings: the axum wildcard needs a non-empty segment,
+        // so bare "/apps" and "/apps/" (the index page) get literal routes —
+        // otherwise they fall through to the formans SPA fallback.
         .route("/apps", any(proxy_apps))
+        .route("/apps/", any(proxy_apps))
         .route("/apps/{*path}", any(proxy_apps))
         .nest_service("/fourfive", fourfive)
         .fallback(formans_static)
