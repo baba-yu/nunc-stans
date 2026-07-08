@@ -18,6 +18,10 @@ export interface HostConfig {
   dataRoot: string // <data store>
 }
 
+function escapeHtml(s: string): string {
+  return s.replace(/[&<>"']/g, (ch) => `&#${ch.charCodeAt(0)};`)
+}
+
 async function jsonBody(c: Context): Promise<Record<string, unknown>> {
   const text = await c.req.text()
   if (text.length > MAX_BODY_BYTES) throw new ServiceError(400, 'payload too large')
@@ -48,6 +52,24 @@ export function buildApi(cfg: HostConfig): Hono {
   })
 
   api.get('/api/health', (c) => c.json({ ok: true, name: 'apps-host', version: '0.1.0' }))
+
+  // Human-facing index at /apps/ (the Formans topbar lands here): the served
+  // apps as links. Deliberately tiny — each app's real UI is its shell.
+  api.get('/', (c) => {
+    const apps = discoverApps(cfg.artifactRoot)
+    const items = apps
+      .map((a) => `<li><a href="${a.slug}/">${escapeHtml(a.manifest.name)}</a> <code>${a.slug}@v${a.version}</code></li>`)
+      .join('\n')
+    return c.html(
+      `<!doctype html><meta charset="utf-8"><title>Apps</title>` +
+        `<body style="font-family:system-ui;background:#0f1115;color:#e6e8ec;padding:32px">` +
+        `<h1 style="font-size:18px">Generated apps</h1>` +
+        (apps.length
+          ? `<ul>${items}</ul>`
+          : `<p style="color:#9aa3b2">No served apps yet — design one in FourFive and press “Generate bundle”.</p>`) +
+        `</body>`,
+    )
+  })
 
   api.get('/api', (c) =>
     c.json(discoverApps(cfg.artifactRoot).map((a) => ({ slug: a.slug, version: a.version, name: a.manifest.name }))),
