@@ -233,12 +233,42 @@ Mechanical verdicts:
 PENDING (pristine Ubuntu container + native Windows, incl. the agent
 TTY path and the doctor manda check).
 
-## Constitutional check record (filled through the phase)
+## Constitutional check record
 
-1. F3 rejection test output (profile validator, both TS and Rust sides) — PENDING
-2. Agent out-of-mandate `memory_commit` refusal transcript — PENDING
-3. No goal-verify loop output faces the self scope this phase — statement to be confirmed at close
-4. F11 locality: no new remotes, no telemetry — to be confirmed at close
+1. **F3 rejection, both validator sides + the HTTP surface** — Rust
+   unit `f3_rejects_commitment_write_scope` (5 spellings), TS
+   `validateProfile` F3 spec, gate integration 422, and the live S-5
+   execution's 422 with the F3 message. DONE.
+2. **Agent refusal transcripts** — S-11 live: the agent's own F3 guard
+   refused `self/commitment/x` before manda was asked; manda refused
+   the out-of-mandate commit with its denial verbatim; an explicit
+   elicitation decline denied with nothing committed (test suite).
+   DONE.
+3. **No goal-verify loop output faces the self scope this phase** —
+   confirmed: the loop lives in nunc-ai chat calls (fourfive chat,
+   pipeline steps, the agent); none of those surfaces writes self/*,
+   and the engine gained no new writers. Journey checks 9–10 stay
+   noted, not exercised (plan derived decision).
+4. **F11 locality** — confirmed: profiles, run logs, and
+   `MANDA_DATA_DIR` all live under the local store; no new remotes;
+   the agent has no telemetry.
+
+## Mechanical V3 no-touch proof (run 2026-07-07 at close)
+
+    git log phase/d --not pre-phase-d -- \
+      engines/nunc-fluens/pipeline/src/instance.ts \
+      engines/nunc-fluens/pipeline/src/import.ts
+    → EMPTY
+
+Phase D's only nf commits are the T6 config-surface change (3e50813)
+and the post-C session's own ride-alongs (780e9c7, 892c7e0) — the
+instance lifecycle received zero Phase D commits.
+
+## manda state at close
+
+`v0.2.0` == `d0b61e2` == the commit every spike/story ran against —
+tagged by the owner mid-phase, zero drift. Setup line in the agent
+README and the bootstrap doctor is the real one.
 
 ## License section
 
@@ -253,13 +283,26 @@ surface).
 
 ## Exit criteria checklist (mirrors the plan's nine items)
 
-1. [ ] Profiles created/switched from the UI, defaults take effect without restarts
-2. [ ] Verify-on message visibly loops (≤ max_iters), gaps reported, cost visible
-3. [ ] Local model via Ollama works under a profile (FourFive chat + agent)
-4. [ ] `nunc-stans-agent chat` with mandate-gated memory (in-mandate propose+commit ok, out-of-mandate commit refused)
-5. [ ] S-5 / S-6 / S-11 written, executed, passing with evidence here
-6. [ ] `contracts/agent-abi.md` v0 Draft, owner-reviewed
-7. [ ] FourFive streaming stub + stale model id gone
-8. [ ] S-10 re-run passes (Ubuntu + native Windows) with the manda doctor check; 3-OS CI green; screenshots saved
-9. [ ] Verification doc complete; v1 plan/naming/reading-order updated; **PENDING owner: push `phase/d`, merge → `dev`, PR gate**
-   - [ ] PENDING owner: manda `v0.2.0` tag (flips the doctor hard-pass + setup line)
+1. [x] Profiles created/switched, defaults take effect without restarts
+       — proven via the gate APIs the screen calls (S-5 live: health +
+       the next message re-resolved instantly); the screen-click pass
+       + screenshots ride the owner-side T11 UI sweep
+2. [x] Verify-on message visibly loops (≤ max_iters), gaps reported,
+       cost visible — S-6 live SSE verify events + verdict chains in
+       the run log; UI renders them (component shipped, T5)
+3. [x] Local model via Ollama works under a profile — S-5 (fourfive
+       chat, qwen3.6:27b via the gate) + S-11 (the agent, thinking
+       pane streaming)
+4. [x] `nunc-stans-agent chat` with mandate-gated memory — S-11:
+       in-mandate propose+commit with `origin_verified:true`,
+       out-of-mandate commit refused verbatim, F3 pre-refusal
+5. [x] S-5 / S-6 / S-11 written (T1), executed (T10), evidence above
+6. [x] `contracts/agent-abi.md` v0 Draft — **owner review PENDING**
+7. [x] FourFive streaming stub + stale model id gone (T5, by deletion)
+8. [ ] **PENDING owner:** S-10 re-run (pristine Ubuntu container +
+       native Windows incl. the agent TTY path), push `phase/d` for
+       3-OS CI, screenshots → `design/ui/phase-d/`
+9. [ ] **PENDING owner:** merge `phase/d` → `dev`, PR gate. Doc
+       updates (v1 plan/naming/reading-order/CONTRIBUTING) done;
+       verification doc complete up to the owner-gated items.
+   - [x] manda `v0.2.0` tag — DONE by the owner mid-phase (d0b61e2)

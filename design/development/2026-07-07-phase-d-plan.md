@@ -589,39 +589,46 @@ Session-size guide (v1 plan: 3–5 focused sessions):
   this box incl. elicitation). The Ollama-live terminal pass is S-11's
   execution (T10). CI runs mock+attest+fake-manda on 3 OSes.
 
-### Task 10: Stories S-5 / S-6 / S-11 — execute (design) — depends: T4/T5 (S-5), T3/T5/T6 (S-6), T9 (S-11); specs written at T1
-- [ ] Execute all three against the built surfaces; evidence (command
-      transcripts, numbered verdicts, bugs-found-by-execution) appended to
-      `design/verification/phase-d.md` as separate `design:` commits. Any
-      spec refinement since T1 is visible in the story file's git history.
-- Acceptance: three PASS records with evidence in the verification doc.
+### Task 10: Stories S-5 / S-6 / S-11 — execute (design) — DONE 2026-07-07 (1adbb29, c0c4f5a)
+- [x] All three executed live with numbered verdicts in the
+      verification doc: S-11 (scripted-stdin REPL: ollama thinking
+      pane, elicitation approve → origin_verified, refusals, run-log
+      stamp), S-5 (gate-API core incl. the F3 422 and the no-restart
+      default switch), S-6 (scripted-judge mock pass + live ollama
+      loop that CONVERGED on iteration 2). Two recorded spec
+      refinements (S-6 mock token counts are zero-by-nature; S-5
+      screen-click pass rides T11) + one bug found by execution
+      (readline drops scripted stdin lines → line-queued REPL,
+      cedbea8). Screenshots ride the owner-side T11 sweep.
+- Acceptance MET: three PASS records with evidence.
 
-### Task 11: Doctor, setup line, S-10 + exit sweep (tool, design) — depends: T9; tag flip depends: OWNER
-- [ ] `just bootstrap` doctor gains the `manda` check (warn-if-missing;
-      hard-pass flag flipped when the owner tag lands — PD8). S-10.md
-      extended to cover it.
-- [ ] S-10 re-run: pristine Ubuntu container + native Windows (incl. the
-      agent's interactive TTY path — risk 9); 3-OS CI green on `phase/d`
-      (owner push).
-- [ ] Verify exit-line items 1–4 end-to-end on the real UI (profile
-      create/switch; verify-on loop visible with gaps + cost; Ollama under
-      a profile; agent chat with mandate-gated memory).
+### Task 11: Doctor, setup line, S-10 + exit sweep (tool, design) — code DONE 2026-07-07 (81b5fbf, e5014b8); re-runs PENDING OWNER
+- [x] Doctor gained the manda check — the owner tagged mid-phase, so
+      it shipped with the REAL install line from day one (found via
+      MANDA_BIN or PATH; missing = instructive info, never a bootstrap
+      failure — the home screen does not need manda). S-10.md extended.
+      Both branches proven live.
+- [ ] **PENDING OWNER:** S-10 re-run (pristine Ubuntu container +
+      native Windows incl. the agent TTY path — risk 9); push `phase/d`
+      for 3-OS CI; the real-UI sweep of exit items 1–4 + screenshots →
+      `design/ui/phase-d/` (every underlying API already proven live
+      at T10).
 - Acceptance: S-10 PASS recorded; CI green; doctor output archived.
 
-### Task 12: Plan updates + close (design) — depends: all
-- [ ] v1 plan in-place updates: §2.7 profile-versioning claim superseded
-      (PD2), §2.6/§2.11 run-log paths retargeted to the R13 store, the
-      line-523 "no AI attribution" clause noted as superseded by
-      CONTRIBUTING.md (trailer allowed since 2026-07-04), Phase D section
-      checked off; `design/naming.md` (profile-vs-instance note, PD4;
-      `agent` area); `design/documentation-reading-order.md` refresh
-      (agents/, agent-abi v0, new Formans routes).
-- [ ] Verification doc exit checklist filled (incl. the mechanical V3
-      no-touch proof and the manda commit/tag state at close); assistant
-      memory updated.
-- [ ] Commit: `design: close phase d with the verification record`.
-- [ ] OWNER gate: push `phase/d`, watch 3-OS CI, merge `phase/d` → `dev`;
-      PR `dev` → `main` at the review gate.
+### Task 12: Plan updates + close (design) — doc side DONE 2026-07-07 (e4a7562); owner gates remain
+- [x] v1 plan in-place updates all applied (PD2 supersession, R13 path
+      retargets ×2, the no-attribution supersession, Phase D marked
+      EXECUTED); naming.md gained the PD4 profile-vs-instance row + the
+      agent-area row; CONTRIBUTING reworded to `instances/<name>/`;
+      reading-order refreshed (agents/ landed, /profiles + /runs).
+- [x] Verification doc: exit checklist filled (items 1–7 done, 8–9
+      owner-pending), constitutional check record complete, the V3
+      no-touch proof ran EMPTY, manda close state recorded (v0.2.0 ==
+      d0b61e2, zero drift); assistant memory updated.
+- [ ] **PENDING OWNER, then the close commit:** S-10 re-runs + CI +
+      screenshots + agent-abi review + merge `phase/d` → `dev` + PR —
+      the `design: close phase d with the verification record` commit
+      lands when those clear.
 
 ## Exit criteria (phase closes when all hold)
 
