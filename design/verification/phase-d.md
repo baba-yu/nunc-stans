@@ -141,7 +141,44 @@ Running record; completed as the exit items execute. Plan:
 
 - S-5 — PENDING
 - S-6 — PENDING
-- S-11 — PENDING
+- S-11 — **EXECUTED 2026-07-07, PASS** (see below)
+
+### S-11 — EXECUTED 2026-07-07 (scripted stdin; scratch stores)
+
+Setup: `NS_DATA=/tmp/s11-store-*`, `MANDA_DATA_DIR=/tmp/s11-manda-*`,
+`MANDA_BIN=~/manda/target/release/manda` (v0.2.0 == d0b61e2); profile
+`agents-live` = ollama `qwen3.6:27b`, `ui.think: true`, agents default;
+one mandate granted by hand from `mandate-template` output
+(`m-2026-07-08-notes`, scope `notes/*`, 30-day expiry). The REPL was
+driven by piped stdin (the line-queue added for exactly this — found
+live: readline drops lines with no pending question; fixed in cedbea8).
+
+Mechanical verdicts:
+
+1. Startup banner named the profile and the mandate (scope + expiry);
+   the empty-mandate state was proven separately in the chat test
+   suite ("no active mandate — memory is read-only…"). PASS
+2. `What is 2+2?` streamed the qwen reasoning **through the dimmed
+   thinking pane, delta by delta** (ollama think mode via the
+   profile's `ui.think`), then the clean one-sentence answer.
+   `[ollama · qwen3.6:27b · 31/244 tok]`. PASS
+3. `/remember notes …` → candidate lane → interactive confirm →
+   **manda's real elicitation prompt** (untrusted-content framing) →
+   approve → `committed under mandate (origin verified
+   interactively)`; committed.jsonl carries
+   `"origin_verified":true`, `"mandate_id":"m-2026-07-08-notes"`. PASS
+4. `/recall notes` surfaced the committed fact (≤3 cap exercised in
+   the suite: 5 commits → 3 surfaced + "+2 suppressed"). PASS
+5. `/remember drafts …` → propose landed (candidate lane, by manda
+   design), commit **REFUSED** with manda's denial verbatim ("no
+   active write mandate covers scope 'drafts'…"). PASS
+6. `/remember self/commitment/x …` → refused by the agent's own F3
+   guard before manda was asked ("commitments are user-only") —
+   **constitutional check item 2 evidence**. PASS
+7. The run appears in the main-store run log with the stamp:
+   `{"caller":"nunc-stans-agent","provider":"ollama",
+   "model":"qwen3.6:27b","profile":"agents-live",…}` — readable in
+   the Formans /runs view (same API the gate test covers). PASS
 
 ## S-10 re-run (T11)
 
