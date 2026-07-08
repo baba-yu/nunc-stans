@@ -92,7 +92,8 @@ _up-gate:
       --fourfive-url "http://127.0.0.1:8787" \
       --formans-dist frontend/nunc-stans-formans/dist \
       --fourfive-dist engines/fourfive/dist \
-      --data-dir "{{data_dir}}"
+      --data-dir "{{data_dir}}" \
+      --instances-dir engines/nunc-fluens/instances
 
 # Build everything the gate serves. The world adapter runs first so the
 # read-only world view has fresh headlines. It reads the nunc-fluens
