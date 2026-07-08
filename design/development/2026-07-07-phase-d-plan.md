@@ -499,22 +499,29 @@ Session-size guide (v1 plan: 3–5 focused sessions):
   (chat + canned blueprint + persist + compose + vite build). The Ollama
   streaming + no-restart switch re-proven at S-5/S-6 execution (T10).
 
-### Task 6: News step config on profiles (gate + fe + nf, adjacent commits per PD14) — depends: T2, T4, V3 landed (T0)
-- [ ] `NewsConfig` gains the profile-reference/per-step keys; drawer
-      (`NewsSettings.vue`) gains profile selection; pipeline resolves the
-      profile's runtime/model/verify defaults through the existing config
-      precedence — instance override file still wins. Three adjacent
-      commits (`gate:`/`fe:`/`nf:`), deployed together (deny-unknown rule).
-- [ ] Per-step goal-verify config honored via `ChatOptions.verify` —
-      threaded through the pipeline's LLM helpers in `orchestrator/core.ts`
-      (a contained config-surface change; DAG/step structure and instance
-      lifecycle untouched).
-- [ ] Update the `cli.ts:165-166` comment: the recorded per-instance
-      gate-config follow-up stays recorded — Phase D's AI-profile keys do
-      not close it (PD14).
-- Acceptance: gate round-trip test; a dry-run/mocked pipeline invocation
-  logs the profile stamp and per-step verify settings in
-  `ai-runs.jsonl`/`run.json`; pipeline suite green.
+### Task 6: News step config on profiles (gate + fe + nf, adjacent commits per PD14) — DONE 2026-07-07 (9cc83cf gate, 6ece8ba fe, 3e50813 nf)
+- [x] `NewsConfig` gained `profile` (slug-validated) + `stepVerify`
+      (per-step `{verify, goal, maxIters, tokenBudget}`, deny-unknown,
+      value-validated) — gate integration test covers round-trip + all
+      three 422s + the nested-unknown 400. Drawer gained the
+      profile-defaults dropdown (fed by /api/profiles) and passes an
+      existing `stepVerify` through untouched. Three adjacent per-area
+      commits, deploy together.
+- [x] Pipeline: news-config's `profile` loads from the MAIN store
+      (refusal on unloadable, never a silent fallback); provider/model
+      become step DEFAULTS (explicit keys win); `goal_verify` becomes
+      the every-LLM-step default with `stepVerify` overriding per step
+      — threaded via `stepAiOptions()` into the three LLM helpers
+      (config surface only; DAG/lifecycle untouched). `run.json` gains
+      the `profile` stamp; ai-runs rows carry profile + verdicts via
+      nunc-ai.
+- [x] `cli.ts` comment updated: the per-INSTANCE gate-config follow-up
+      stays recorded; PD14's keys don't close it.
+- Acceptance MET: gate 6+11; pipeline typecheck + **193/193** (the
+  count moved 187→193 mid-phase: the post-C session's live-run
+  validation landed two ride-along `nf:` fixes with tests — 780e9c7
+  mid-2027 modifier-year parse, 892c7e0 readme link-check anchoring —
+  interleaved on this branch; recorded, not mine). Formans 20 + build.
 
 ### Task 7: Run-log viewer (gate, fe) — depends: T2; parallel with T5/T6
 - [ ] Gate `GET /api/runs` (+ `?instance=`, `/api/runs/instances`) per

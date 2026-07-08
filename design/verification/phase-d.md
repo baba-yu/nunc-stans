@@ -117,6 +117,17 @@ Running record; completed as the exit items execute. Plan:
   In passing: a mid-work `git rm` had pre-staged the four deletions and
   leaked them into the fe commit — caught by `tools/commit-scope.ts`
   exactly as designed; commits rebuilt per-area.
+- **2026-07-07 — T6 done** (9cc83cf gate, 6ece8ba fe, 3e50813 nf —
+  the PD14 adjacent-commit train). news-config now names an AI profile
+  (step defaults) + per-step verify overrides; pipeline threads them
+  into the LLM helpers and stamps `profile` into run.json/ai-runs;
+  the R3 per-instance follow-up stays recorded (comment updated).
+  Suites: gate 6+11, pipeline 193/193. **Baseline drift, recorded:**
+  the pipeline count moved 187→193/22 mid-phase because the post-C
+  session's real-data validation landed two ride-along `nf:` fixes
+  with tests on this branch (780e9c7, 892c7e0) — the shared checkout
+  now lives on phase/d, so that session's commits interleave here.
+  Legitimate fixes, no conflicts with the T6 diff.
 
 ## Stories (executed at T10; specs written at T1)
 
