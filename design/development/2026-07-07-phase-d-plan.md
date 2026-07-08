@@ -562,26 +562,32 @@ Session-size guide (v1 plan: 3–5 focused sessions):
 - Acceptance: `tools/check.ts` green; **owner review pending (it is a
   contract — owner action item 5)**.
 
-### Task 9: nunc-stans-agent v0 (agent) — depends: T1, T2, T3, T4, T7, T8
-- [ ] `chat` REPL: streaming render + visible thinking via nunc-ai
-      `chatStream`; profile-driven (PD3 `agents` default; `--profile`
-      override); goal-verify per profile defaults; every run appended to
-      the main-store `ai-runs.jsonl` with the profile stamp.
-- [ ] Memory commands on the T1 client: read/propose/commit with
-      elicitation approval (or the recorded attest fallback); startup
-      `mandate_list` check with a readable "no active mandate" state; the
-      F3 guard refuses commitment-scope writes before manda is even asked.
-- [ ] `doctor` subcommand: binary resolution (MANDA_BIN/PATH), data dir,
-      mandate state. `mandate-template` subcommand: prints, never writes
-      (PD9).
-- [ ] `justfile` target (`just agent`); README with the PD8-gated setup
-      line (`cargo install --locked --git https://github.com/baba-yu/manda
-      --tag v0.2.0`, marked pending-tag) and the local-checkout path.
-- Acceptance: terminal chat under an Ollama profile streams with visible
-  thinking; in-mandate propose+commit succeeds with `origin_verified`
-  surfaced; out-of-mandate commit refused with the denial shown; the run
-  appears in the run-log viewer (T7). CI runs the mock+attest+fake-manda
-  suite on 3 OSes.
+### Task 9: nunc-stans-agent v0 (agent) — DONE 2026-07-07 (6d89d8c agent, bbd4d80 tool)
+- [x] `chat` REPL (`src/chat.ts` turn engine, terminal-free for tests +
+      `cli.ts` readline shell): streaming content + dimmed visible
+      thinking via `Ai.chatStream`; profile-driven (agents default via
+      `resolveProfile`, `--profile` override, ad-hoc mock fallback
+      stated); goal-verify rides the profile with `verify` boundary
+      events rendered as meta lines; every call logged to the main-store
+      `ai-runs.jsonl` with the profile stamp (proven in tests).
+- [x] Memory commands on the T1 client: `/remember` = propose (candidate
+      lane) → interactive confirm → commit, with manda's ELICITATION as
+      a real terminal y/N prompt (cli approver; declines deny);
+      `/recall` renders ≤3 + the suppression count; `/mandates` +
+      startup check render the readable no-mandate state; refusals shown
+      verbatim; the F3 guard fires before manda is asked. Memory-OFF
+      states are explicit, never silent.
+- [x] `doctor` now also runs a live `mandate_list` when configured;
+      `mandate-template` prints-never-writes (PD9).
+- [x] `just agent` recipe (plumbing-committed around the owner's
+      justfile WIP again); README with the REAL setup line — **the
+      owner tagged v0.2.0 mid-phase, so the pending-tag marking never
+      shipped** — plus the MANDA_BIN local path and the out-of-band
+      first-mandate flow.
+- Acceptance: agent suite 12→22 green (chat turns, approve/decline/
+  refusal/F3/recall-cap flows on fake-manda; live-manda suite green on
+  this box incl. elicitation). The Ollama-live terminal pass is S-11's
+  execution (T10). CI runs mock+attest+fake-manda on 3 OSes.
 
 ### Task 10: Stories S-5 / S-6 / S-11 — execute (design) — depends: T4/T5 (S-5), T3/T5/T6 (S-6), T9 (S-11); specs written at T1
 - [ ] Execute all three against the built surfaces; evidence (command
