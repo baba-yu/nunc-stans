@@ -130,3 +130,9 @@ test:
 
 check:
     @node tools/check.ts
+
+# The first-party terminal agent (Phase D): chat under the agents-default
+# profile; memory through manda (MANDA_BIN / MANDA_DATA_DIR — see
+# agents/nunc-stans-agent/README.md).
+agent *args:
+    node agents/nunc-stans-agent/src/cli.ts chat {{args}}
