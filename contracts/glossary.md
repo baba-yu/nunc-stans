@@ -47,3 +47,23 @@ The source of truth of the artifact scope. Owns the fixed versions of the tactic
 ## News
 
 The source of truth of the world scope. Owns world prediction, observation, and external context.
+
+## profile
+
+An agent/AI configuration record: provider or runtime, model, system
+prompt, skill allowlist, memory scope, and goal-verify defaults. Plain
+JSON in the data store's `profiles/`; names providers and models, never
+credentials. Distinct from a nunc-fluens data instance (which older
+engine docs also called a "profile").
+
+## agent
+
+A program that calls models and tools under a registration (commitment +
+mandate + frozen version reference — agent-abi.md). Agents propose;
+principals commit; no agent writes self-scope commitments (F3).
+
+## agent runtime
+
+A selectable executor that brings its own tooling (claude-code,
+nunc-stans-agent) — one of the two tiers the AI layer serves, beside
+plain model providers.

@@ -162,8 +162,11 @@ async function cmdRun(argv: string[]): Promise<number> {
   // Runtime/search/locale settings (S-3): the instance's own
   // store/news-config.json wins when present (R3); otherwise the MAIN
   // store's copy — the defaults the gate API and Formans drawer edit.
-  // A per-profile gate API is a recorded follow-up; until then the
-  // override file is hand-placed. Defaults apply when neither exists.
+  // A per-INSTANCE gate config API is a recorded follow-up; until then
+  // the override file is hand-placed — Phase D's `profile`/`stepVerify`
+  // keys (PD14) are a different feature (an AI profile whose
+  // provider/model/goal-verify act as step DEFAULTS) and do not close
+  // that follow-up. Defaults apply when neither file exists.
   let newsCfg: Record<string, unknown> = {}
   const instanceCfg = join(box.storeDir, 'news-config.json')
   if (existsSync(instanceCfg)) {
@@ -181,11 +184,35 @@ async function cmdRun(argv: string[]): Promise<number> {
       }
     }
   }
-  const runtime = (newsCfg.runtime as string) ?? 'claude-code'
+  // Relative source import: node refuses to type-strip files under
+  // node_modules, so the workspace-linked 'nunc-ai' specifier only
+  // works in vitest. The relative path bypasses node_modules entirely.
+  const { createAi, loadProfile } = await import('../../../../frontend/packages/ai/src/index.ts') as
+    typeof import('nunc-ai')
+  // The AI profile named by news-config (PD14): provider/model become
+  // step defaults (explicit news-config keys still win), goal_verify
+  // becomes the every-LLM-step default. Profiles are MAIN-store state
+  // (PD3); a named-but-unloadable profile is a refusal, not a guess.
+  const profileId = (newsCfg.profile as string | undefined) ?? null
+  let profile: import('nunc-ai').Profile | null = null
+  if (profileId) {
+    const mainStore = resolveDataDir().dir
+    if (!mainStore) {
+      console.error(`run: news-config names profile ${JSON.stringify(profileId)} but no main data store resolves`)
+      return 1
+    }
+    try {
+      profile = loadProfile(mainStore, profileId)
+    } catch (e) {
+      console.error(`run: ${e instanceof Error ? e.message : e}`)
+      return 1
+    }
+  }
+  const runtime = (newsCfg.runtime as string) ?? profile?.provider ?? 'claude-code'
   const search = (newsCfg.search as string) === 'external'
     ? (newsCfg.searchEngine as string) ?? 'brave'
     : 'native'
-  const synthModel = (newsCfg.synthModel as string) ?? null
+  const synthModel = (newsCfg.synthModel as string) ?? profile?.model ?? null
   // Locale model (post-C P5): EN + the configured subset of ja/es/fil.
   // Absent key = the full trio (today's behavior). Invalid content is a
   // refusal, not a guess — the drawer/gate validate writes, but the
@@ -199,11 +226,6 @@ async function cmdRun(argv: string[]): Promise<number> {
     return 1
   }
 
-  // Relative source import: node refuses to type-strip files under
-  // node_modules, so the workspace-linked 'nunc-ai' specifier only
-  // works in vitest. The relative path bypasses node_modules entirely.
-  const { createAi } = await import('../../../../frontend/packages/ai/src/index.ts') as
-    typeof import('nunc-ai')
   const { runDay } = await import('./orchestrator/dag.ts')
   // The AI call log rides the INSTANCE store (R3): store/runs/ai-runs.jsonl.
   const ai = opts.replay ? null : createAi({ runLogFile: runLogFile(box.storeDir) })
@@ -212,6 +234,9 @@ async function cmdRun(argv: string[]): Promise<number> {
     dataDir: box.storeDir,
     newsRepo: box.root,
     ai, runtime, search, synthModel, locales,
+    profile: profileId,
+    verifyDefaults: profile?.goal_verify ?? null,
+    stepVerify: (newsCfg.stepVerify as Record<string, import('nunc-ai').VerifyConfig>) ?? {},
     replay: opts.replay,
     dryRun: opts.dryRun,
     only: opts.only,

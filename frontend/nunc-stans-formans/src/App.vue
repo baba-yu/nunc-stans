@@ -18,6 +18,8 @@ onMounted(() => store.load())
         <RouterLink to="/" class="tab" exact-active-class="tab--active">ME</RouterLink>
         <RouterLink to="/world" class="tab" active-class="tab--active">World</RouterLink>
         <RouterLink to="/timeline" class="tab" active-class="tab--active">Timeline</RouterLink>
+        <RouterLink to="/profiles" class="tab" active-class="tab--active">Profiles</RouterLink>
+        <RouterLink to="/runs" class="tab" active-class="tab--active">Runs</RouterLink>
         <a href="/fourfive/" class="tab">FourFive</a>
       </nav>
       <div class="topbar-meta">

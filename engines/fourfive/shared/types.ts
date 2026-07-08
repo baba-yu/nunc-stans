@@ -44,7 +44,19 @@ export interface HealthResponse {
   ok: boolean
   provider: string
   model: string
+  /** The resolved fourfive-chat default profile id (Phase D). */
+  profile?: string
   version: string
+}
+
+/** One goal-verify loop boundary on the chat stream (S-6): the judge's
+ * verdict for that iteration plus its token cost. */
+export interface VerifyStep {
+  iteration: number
+  met: boolean
+  gaps: string[]
+  tokensIn: number
+  tokensOut: number
 }
 
 export interface CreateSessionBody {

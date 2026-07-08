@@ -72,7 +72,7 @@ function checkPredictionsForDate(
           `prediction #${idx} (${pid}): ${col} is NULL — timewindow `
           + `parser couldn't extract from reasoning_landing=`
           + `${pyReprClip(rec.reasoning_landing, 80)} `
-          + `(check app/src/timewindow.py patterns)`);
+          + `(check src/ingest/timewindow.ts patterns)`);
   }
   return errs;
 }

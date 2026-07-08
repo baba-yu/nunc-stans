@@ -108,7 +108,7 @@ describe('replayLocaleSet precedence', () => {
       const d = '2026-01-04';
       const manifest = new RunManifest({
         date: d, mode: 'live', runtime: 'claude-code', search: 'native',
-        synthModel: null, locales: ['en', 'ja'],
+        synthModel: null, profile: null, locales: ['en', 'ja'],
       });
       const path = manifest.write(root, d);
       expect(JSON.parse(readFileSync(path, 'utf8')).locales).toEqual(['en', 'ja']);
@@ -238,6 +238,9 @@ describe('EN-only run behavior (set = [])', () => {
       runtime: 'claude-code',
       search: 'native',
       synthModel: null,
+      profile: null,
+      verifyDefaults: null,
+      stepVerify: {},
       locales,
       replay: false,
       dryRun: false,
@@ -245,7 +248,7 @@ describe('EN-only run behavior (set = [])', () => {
       log: () => {},
       manifest: new RunManifest({
         date: '2026-03-04', mode: 'live', runtime: 'claude-code',
-        search: 'native', synthModel: null, locales: ['en', ...locales],
+        search: 'native', synthModel: null, profile: null, locales: ['en', ...locales],
       }),
     };
   }

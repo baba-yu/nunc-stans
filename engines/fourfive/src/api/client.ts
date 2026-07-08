@@ -63,13 +63,21 @@ export const api = {
   async streamMessage(
     sessionId: string,
     content: string,
-    opts: { think?: boolean; maxTokens?: number },
+    opts: {
+      think?: boolean
+      maxTokens?: number
+      profileId?: string
+      verify?: { on: boolean; goal?: string }
+    },
     on: (event: string, data: string) => void,
   ): Promise<void> {
     const res = await fetch(`${API}/sessions/${sessionId}/messages/stream`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ content, think: opts.think, maxTokens: opts.maxTokens }),
+      body: JSON.stringify({
+        content, think: opts.think, maxTokens: opts.maxTokens,
+        profileId: opts.profileId, verify: opts.verify,
+      }),
     })
     if (!res.ok || !res.body) {
       throw new Error(`${res.status} ${res.statusText}: ${await res.text().catch(() => '')}`)

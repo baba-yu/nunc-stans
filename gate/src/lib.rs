@@ -1,6 +1,8 @@
 pub mod guard;
 pub mod news_config;
+pub mod profiles;
 pub mod proxy;
+pub mod runs;
 
 use std::path::{Path, PathBuf};
 
@@ -28,6 +30,10 @@ pub struct GateCfg {
     /// User-designated data store (workspace model); carries the news
     /// settings file the config API serves. None ⇒ the API answers 503.
     pub data_dir: Option<PathBuf>,
+    /// nunc-fluens instances home (PD13: an explicit handoff — the gate
+    /// never derives engine layout). None ⇒ the run-log viewer serves
+    /// the main store only.
+    pub instances_dir: Option<PathBuf>,
 }
 
 impl GateCfg {
@@ -38,11 +44,17 @@ impl GateCfg {
             fourfive_url,
             formans_dist,
             data_dir: None,
+            instances_dir: None,
         }
     }
 
     pub fn with_data_dir(mut self, data_dir: Option<PathBuf>) -> Self {
         self.data_dir = data_dir;
+        self
+    }
+
+    pub fn with_instances_dir(mut self, instances_dir: Option<PathBuf>) -> Self {
+        self.instances_dir = instances_dir;
         self
     }
 }
@@ -69,6 +81,19 @@ pub fn build_router(cfg: GateCfg, fourfive_dist: &Path) -> Router {
             "/api/world/news-config",
             get(news_config::get_news_config).put(news_config::put_news_config),
         )
+        .route("/api/profiles", get(profiles::list_profiles))
+        .route(
+            "/api/profiles/defaults",
+            get(profiles::get_defaults).put(profiles::put_defaults),
+        )
+        .route(
+            "/api/profiles/{id}",
+            get(profiles::get_profile)
+                .put(profiles::put_profile)
+                .delete(profiles::delete_profile),
+        )
+        .route("/api/runs", get(runs::get_runs))
+        .route("/api/runs/instances", get(runs::list_run_instances))
         .route("/health", any(proxy_engine))
         .route("/self/{*path}", any(proxy_engine))
         .nest_service("/fourfive", fourfive)

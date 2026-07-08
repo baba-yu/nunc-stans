@@ -10,7 +10,8 @@ import { Hono } from 'hono'
 import { streamSSE } from 'hono/streaming'
 import { randomUUID } from 'node:crypto'
 import { db, nowIso, DEFAULT_SESSION_TITLE } from './db'
-import { getProvider } from './llm/provider'
+import { FourfiveLlm } from './llm/nunc-ai'
+import type { TurnOptions } from './llm/nunc-ai'
 import { buildDependencyContext } from './llm/blueprint-prompt'
 import { validateBlueprint } from './blueprint-schema'
 import { saveBlueprint, getLatestBlueprint, saveMarkdown, setSoftwareStack, createComposedApp, getBlueprintWithDependencies } from './workspace'
@@ -22,11 +23,15 @@ import type { ChatMessage, Message } from '../shared/types'
 // proxy in dev: the browser never needs CORS, so none is offered.
 const app = new Hono()
 
-const provider = getProvider()
+// Profile-resolved model access (PD7): no boot singleton — the default
+// profile is re-resolved per request, so switching it on the Profiles
+// screen changes the NEXT message with no server restart (S-5).
+const llm = new FourfiveLlm()
 
-app.get('/api/health', (c) =>
-  c.json({ ok: true, provider: provider.name, model: provider.model, version: '0.1.0' }),
-)
+app.get('/api/health', (c) => {
+  const h = llm.health()
+  return c.json({ ok: true, provider: h.provider, model: h.model, profile: h.profile, version: '0.1.0' })
+})
 
 // --- sessions ---
 
@@ -112,13 +117,18 @@ app.post('/api/sessions/:id/messages', async (c) => {
     content?: string
     think?: boolean
     maxTokens?: number
+    profileId?: string
+    verify?: { on: boolean; goal?: string }
   }
   const content = (body.content ?? '').trim()
   if (!content) return c.json({ error: 'content is required' }, 400)
 
-  // Per-message LLM options (Thinking toggle, output-token cap). Providers that
-  // don't support a given option ignore it.
-  const opts = { think: body.think, maxTokens: body.maxTokens }
+  // Per-message LLM options (Thinking toggle, output-token cap, profile
+  // override, goal-verify toggle). Providers ignore what they don't support.
+  const opts: TurnOptions = {
+    think: body.think, maxTokens: body.maxTokens,
+    profileId: body.profileId, verify: body.verify,
+  }
 
   const userMsg: Message = {
     id: randomUUID(),
@@ -141,7 +151,7 @@ app.post('/api/sessions/:id/messages', async (c) => {
   let assistantText: string
   let usage: { input: number; output: number } | undefined
   try {
-    const result = await provider.chat(llmHistory, opts)
+    const result = await llm.chat(llmHistory, opts)
     assistantText = result.content
     usage = result.usage
     db.prepare(
@@ -149,14 +159,14 @@ app.post('/api/sessions/:id/messages', async (c) => {
     ).run(
       randomUUID(),
       sessionId,
-      provider.name,
+      result.provider,
       result.model,
       JSON.stringify(llmHistory),
       assistantText,
       nowIso(),
     )
   } catch (err) {
-    assistantText = `⚠️ LLM call failed (provider=${provider.name}): ${(err as Error).message}`
+    assistantText = `⚠️ LLM call failed: ${(err as Error).message}`
   }
 
   const assistantMsg: Message = {
@@ -176,7 +186,7 @@ app.post('/api/sessions/:id/messages', async (c) => {
   let blueprint = getLatestBlueprint(sessionId)
   try {
     const fullHistory: ChatMessage[] = [...llmHistory, { role: 'assistant', content: assistantText }]
-    const proposed = await provider.proposeBlueprint(fullHistory, blueprint, opts)
+    const proposed = await llm.proposeBlueprint(fullHistory, blueprint, opts)
     if (proposed != null) {
       const result = validateBlueprint(proposed)
       if (result.success) {
@@ -244,10 +254,15 @@ app.post('/api/sessions/:id/messages/stream', async (c) => {
     content?: string
     think?: boolean
     maxTokens?: number
+    profileId?: string
+    verify?: { on: boolean; goal?: string }
   }
   const content = (body.content ?? '').trim()
   if (!content) return c.json({ error: 'content is required' }, 400)
-  const opts = { think: body.think, maxTokens: body.maxTokens }
+  const opts: TurnOptions = {
+    think: body.think, maxTokens: body.maxTokens,
+    profileId: body.profileId, verify: body.verify,
+  }
 
   const userMsg: Message = {
     id: randomUUID(),
@@ -269,14 +284,26 @@ app.post('/api/sessions/:id/messages/stream', async (c) => {
     let assistantText = ''
     let usage: { input: number; output: number } | undefined
     try {
-      const result = await provider.chatStream(llmHistory, opts, async (d) => {
-        if (d.thinking) await stream.writeSSE({ event: 'thinking', data: JSON.stringify(d.thinking) })
-        if (d.content) await stream.writeSSE({ event: 'content', data: JSON.stringify(d.content) })
+      // Wire protocol unchanged for old events (user/thinking/content/
+      // assistant/blueprint/done); `verify` is additive — the S-6 loop
+      // boundaries, one event per judge verdict.
+      const result = await llm.chatStream(llmHistory, opts, async (e) => {
+        if (e.kind === 'thinking') await stream.writeSSE({ event: 'thinking', data: JSON.stringify(e.delta) })
+        else if (e.kind === 'content') await stream.writeSSE({ event: 'content', data: JSON.stringify(e.delta) })
+        else if (e.kind === 'verify') {
+          await stream.writeSSE({
+            event: 'verify',
+            data: JSON.stringify({
+              iteration: e.iteration, met: e.met, gaps: e.gaps,
+              tokensIn: e.tokensIn, tokensOut: e.tokensOut,
+            }),
+          })
+        }
       })
       assistantText = result.content
       usage = result.usage
     } catch (err) {
-      assistantText = `⚠️ LLM call failed (provider=${provider.name}): ${(err as Error).message}`
+      assistantText = `⚠️ LLM call failed: ${(err as Error).message}`
       await stream.writeSSE({ event: 'content', data: JSON.stringify(assistantText) })
     }
 
@@ -296,7 +323,7 @@ app.post('/api/sessions/:id/messages/stream', async (c) => {
     let blueprint = getLatestBlueprint(sessionId)
     try {
       const fullHistory: ChatMessage[] = [...llmHistory, { role: 'assistant', content: assistantText }]
-      const proposed = await provider.proposeBlueprint(fullHistory, blueprint, opts)
+      const proposed = await llm.proposeBlueprint(fullHistory, blueprint, opts)
       if (proposed != null) {
         const valid = validateBlueprint(proposed)
         if (valid.success) {
@@ -334,4 +361,7 @@ function insertMessage(m: Message): void {
 
 const port = Number(process.env.PORT ?? 8787)
 serve({ fetch: app.fetch, port })
-console.log(`[codev] server http://localhost:${port}  (LLM provider: ${provider.name} / ${provider.model})`)
+{
+  const h = llm.health()
+  console.log(`[codev] server http://localhost:${port}  (default profile: ${h.profile} → ${h.provider} / ${h.model})`)
+}

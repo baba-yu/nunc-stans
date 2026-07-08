@@ -11,7 +11,8 @@ if ! corepack pnpm typecheck; then echo "RESULT: TYPECHECK_FAILED"; exit 1; fi
 echo "typecheck OK"
 
 echo "=== smoke (E2E) ==="
-export CODEV_LLM_PROVIDER=mock
+# Phase D: provider selection moved to profiles; with no profile configured
+# the offline demo answers, which is exactly what this smoke run wants.
 ./node_modules/.bin/tsx server/index.ts >/tmp/codev-smoke-srv.log 2>&1 &
 node scripts/smoke.mjs
 SMOKE=$?

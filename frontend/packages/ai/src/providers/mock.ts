@@ -1,5 +1,6 @@
 import type {
   Capabilities, ChatMessage, ChatOptions, ChatResult, Provider,
+  StreamHandler,
 } from '../types.ts';
 
 export type MockResponder =
@@ -10,30 +11,52 @@ export interface MockConfig {
   reply?: string;
   byCaller?: Record<string, string>;
   responder?: MockResponder;
+  /** Scripted thinking text emitted (in chunks) before the content when
+   * chatStream is used — the S-11/S-6 rehearsal path, zero live tokens. */
+  thinking?: string;
 }
 
 /** Deterministic fixture provider — used by unit tests and pipeline dry
- * runs. Never touches the network. */
+ * runs. Never touches the network. Streams scripted deltas (chunked
+ * reply + optional scripted thinking) so streaming surfaces are testable
+ * without a live model. */
 export function mockProvider(cfg: MockConfig = {}): Provider {
   const capabilities: Capabilities = {
-    chat: true, stream: false, tools: false, structured: true,
-    webSearch: 'none', thinking: false, memory: false,
+    chat: true, stream: true, tools: false, structured: true,
+    webSearch: 'none', thinking: true, memory: false,
   };
+
+  function reply(messages: ChatMessage[], opts: ChatOptions): string {
+    return cfg.responder?.(messages, opts) ??
+      (opts.caller && cfg.byCaller?.[opts.caller]) ??
+      cfg.reply ??
+      `mock:${messages[messages.length - 1]?.content ?? ''}`;
+  }
+
+  function result(text: string, opts: ChatOptions): ChatResult {
+    return {
+      text,
+      usage: { inputTokens: 0, outputTokens: 0 },
+      model: opts.model ?? 'mock',
+      provider: 'mock',
+    };
+  }
+
+  const chunk = (s: string): string[] => s.match(/.{1,8}/gs) ?? [];
+
   return {
     name: 'mock',
     capabilities,
     async chat(messages: ChatMessage[], opts: ChatOptions = {}): Promise<ChatResult> {
-      const text =
-        cfg.responder?.(messages, opts) ??
-        (opts.caller && cfg.byCaller?.[opts.caller]) ??
-        cfg.reply ??
-        `mock:${messages[messages.length - 1]?.content ?? ''}`;
-      return {
-        text,
-        usage: { inputTokens: 0, outputTokens: 0 },
-        model: opts.model ?? 'mock',
-        provider: 'mock',
-      };
+      return result(reply(messages, opts), opts);
+    },
+    async chatStream(messages: ChatMessage[], opts: ChatOptions = {}, onEvent: StreamHandler): Promise<ChatResult> {
+      for (const delta of chunk(cfg.thinking ?? '')) onEvent({ type: 'thinking', delta });
+      const text = reply(messages, opts);
+      for (const delta of chunk(text)) onEvent({ type: 'content', delta });
+      const r = result(text, opts);
+      onEvent({ type: 'done', result: r });
+      return r;
     },
   };
 }

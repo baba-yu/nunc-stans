@@ -21,6 +21,10 @@ const DATE_RANGE_RE = new RegExp(
   `\\b(${MONTH_PAT})\\s+(\\d{1,2})\\s*[-–—]\\s*(\\d{1,2})(?:,)?\\s+(20\\d{2})\\b`, 'i');
 const MOD_MONTH_RE = new RegExp(
   `\\b(early|mid|late)[\\s-](${MONTH_PAT})\\s+(20\\d{2})\\b`, 'i');
+// "mid-2027" / "early 2028" — modifier on a bare year. Live-run find
+// (2026-07-07, instance `news`): the writer produced "By mid-2027, …"
+// and the missing pattern left target dates NULL, failing puv-news.
+const MOD_YEAR_RE = /\b(early|mid|late)[\s-](20\d{2})\b/i;
 const MONTH_YEAR_RE = new RegExp(
   `\\b(${MONTH_PAT})\\s+(20\\d{2})\\b|\\b(20\\d{2})-(\\d{2})\\b(?!-)`, 'i');
 const BY_PREFIX_RE = /\b(by|before|until|in)\s+/gi;
@@ -193,6 +197,16 @@ export function parseTimeWindow(
       const [a, b] = modifierBounds(+m[3], month, m[1]);
       return [iso(a), iso(b)];
     }
+  }
+
+  m = MOD_YEAR_RE.exec(s);
+  if (m) {
+    // Year thirds, mirroring the month-third convention above:
+    // early = Jan–Apr, mid = May–Aug, late = Sep–Dec.
+    const year = +m[2];
+    const mod = m[1].toLowerCase();
+    const [ma, mb] = mod === 'early' ? [1, 4] : mod === 'mid' ? [5, 8] : [9, 12];
+    return [iso({ y: year, m: ma, d: 1 }), iso({ y: year, m: mb, d: lastDay(year, mb) })];
   }
 
   m = MONTH_YEAR_RE.exec(s);

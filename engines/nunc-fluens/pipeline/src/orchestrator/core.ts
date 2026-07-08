@@ -6,7 +6,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import type Database from 'better-sqlite3';
-import type { Ai } from 'nunc-ai';
+import type { Ai, ChatOptions, VerifyConfig } from 'nunc-ai';
 
 export interface RunCtx {
   date: string;
@@ -23,6 +23,13 @@ export interface RunCtx {
   runtime: string;
   search: string;
   synthModel: string | null;
+  /** AI profile named by news-config (PD14) — stamped into ai-runs and
+   * run.json; null when none. */
+  profile: string | null;
+  /** Goal-verify default for every LLM step (the profile's), plus
+   * per-step overrides from news-config `stepVerify`. */
+  verifyDefaults: Partial<VerifyConfig> | null;
+  stepVerify: Record<string, Partial<VerifyConfig>>;
   /** The effective non-EN render set (⊆ ja/es/fil, universe order);
    * 'en' is implicit. Live runs resolve it from news-config, replay
    * derives it per day (world-paths replayLocaleSet). Every locale
@@ -44,10 +51,22 @@ export interface StepRecord {
   detail?: string;
 }
 
+/** The per-step AI options every LLM helper spreads in (PD14): the
+ * step's verify override > the profile's default, plus the profile
+ * stamp for the run log. */
+export function stepAiOptions(ctx: RunCtx, stepId: string): Partial<ChatOptions> {
+  const verify = ctx.stepVerify[stepId] ?? ctx.verifyDefaults ?? undefined;
+  return {
+    ...(verify ? { verify } : {}),
+    ...(ctx.profile ? { profile: ctx.profile } : {}),
+  };
+}
+
 export class RunManifest {
   readonly data: Record<string, any>;
   constructor(args: {
     date: string; mode: string; runtime: string; search: string; synthModel: string | null;
+    profile: string | null;
     /** The FULL effective render set, 'en' first (e.g. ['en','ja']).
      * run.json (whose `locales` is what replay needs) is written once,
      * by the dag at end of run. Non-full runs (--dry-run/--only) never
@@ -60,6 +79,7 @@ export class RunManifest {
       runtime: args.runtime,
       search: args.search,
       synth_model: args.synthModel,
+      profile: args.profile,
       locales: [...args.locales],
       started_at: new Date().toISOString(),
       finished_at: null,
@@ -199,7 +219,7 @@ export async function llmMarkdown(ctx: RunCtx, args: {
       role: 'user',
       content: attempt === 0 ? args.prompt
         : `${args.prompt}\n\nYour previous reply failed validation: ${lastErr}\nEmit the corrected markdown document only.`,
-    }], { caller: args.id, webSearch: false, model: ctx.synthModel ?? undefined });
+    }], { caller: args.id, webSearch: false, model: ctx.synthModel ?? undefined, ...stepAiOptions(ctx, args.id) });
     try {
       let text = res.text.trim();
       const fenced = /^```(?:markdown|md)?\s*\n([\s\S]*?)\n```$/.exec(text);
@@ -236,6 +256,7 @@ export async function llmJson<T>(ctx: RunCtx, args: {
       caller: args.id,
       webSearch: args.webSearch ?? false,
       model: ctx.synthModel ?? undefined,
+      ...stepAiOptions(ctx, args.id),
     });
     try {
       return args.validate(extractJson(res.text));
@@ -278,6 +299,7 @@ export async function llmArtifactStep(ctx: RunCtx, args: {
       caller: args.id,
       webSearch: args.webSearch ?? false,
       model: ctx.synthModel ?? undefined,
+      ...stepAiOptions(ctx, args.id),
     });
     try {
       let parsed = extractJson(res.text);
