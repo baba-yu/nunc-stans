@@ -5,7 +5,7 @@
 // lands here as a real terminal prompt). doctor: environment check.
 // mandate-template: prints a grant line for the PRINCIPAL to append —
 // never writes it (mandates are out-of-band only).
-import { createInterface } from 'node:readline/promises'
+import { createInterface } from 'node:readline'
 import * as path from 'node:path'
 import { MandaMemory, acceptContentFor, resolveMandaBin } from './memory.ts'
 import { HELP, describeMandates, runTurn } from './chat.ts'
@@ -38,12 +38,38 @@ async function cmdChat(argv: string[]): Promise<number> {
     ?? { id: 'adhoc-mock', name: 'Ad-hoc mock', provider: 'mock' as const }
   const ai = createAi({ runLogFile: path.join(dataDir, 'runs', 'ai-runs.jsonl') })
 
+  // Line-queued input: readline drops lines that arrive while no
+  // question is pending (exactly what piped/scripted stdin does — the
+  // S-11 transcript runs that way), so queue them and hand them to the
+  // next ask. Interactive TTY behavior is unchanged. A closed stdin
+  // answers '/exit' so both the main loop and any pending approval
+  // prompt terminate safely (an approval that reads '/exit' declines).
   const rl = createInterface({ input: process.stdin, output: process.stdout })
+  const pendingLines: string[] = []
+  const waiters: Array<(s: string) => void> = []
+  let stdinClosed = false
+  rl.on('line', l => {
+    const w = waiters.shift()
+    if (w) w(l)
+    else pendingLines.push(l)
+  })
+  rl.on('close', () => {
+    stdinClosed = true
+    while (waiters.length) waiters.shift()!('/exit')
+  })
+  const nextLine = (prompt: string): Promise<string> => {
+    process.stdout.write(prompt)
+    const queued = pendingLines.shift()
+    if (queued !== undefined) { process.stdout.write(`${queued}\n`); return Promise.resolve(queued) }
+    if (stdinClosed) return Promise.resolve('/exit')
+    return new Promise(res => waiters.push(res))
+  }
+
   const io: TurnIO = {
     out: s => process.stdout.write(s),
     thinking: s => process.stdout.write(`\x1b[2m${s}\x1b[0m`),
     meta: s => console.log(`\x1b[36m${s}\x1b[0m`),
-    ask: q => rl.question(q),
+    ask: q => nextLine(q),
   }
 
   // Memory: the manda gateway, or a stated OFF when no binary resolves.
@@ -79,7 +105,7 @@ async function cmdChat(argv: string[]): Promise<number> {
   const session: AgentSession = { ai, profile, memory, history: [], io }
   try {
     for (;;) {
-      const line = await rl.question('\x1b[1myou ▸\x1b[0m ')
+      const line = await nextLine('\x1b[1myou ▸\x1b[0m ')
       let keep: boolean
       try {
         keep = await runTurn(session, line)
@@ -88,6 +114,7 @@ async function cmdChat(argv: string[]): Promise<number> {
         keep = true
       }
       if (!keep) break
+      if (stdinClosed && pendingLines.length === 0) break
     }
   } finally {
     rl.close()

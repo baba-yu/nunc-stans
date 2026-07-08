@@ -134,12 +134,16 @@ export async function runTurn(s: AgentSession, input: string): Promise<boolean> 
         + ` (${e.tokensIn}/${e.tokensOut} tok)`)
     }
   }
+  // ui.think (profile pref): the provider-side reasoning toggle —
+  // ollama's think mode streams message.thinking into the dimmed pane.
+  const think = typeof s.profile.ui?.think === 'boolean' ? s.profile.ui.think : undefined
   const result = await s.ai.chatStream(s.profile.provider, s.history, {
     caller: 'nunc-stans-agent',
     profile: s.profile.id,
     model: s.profile.model,
     system: s.profile.system_prompt,
     verify: s.profile.goal_verify,
+    think,
   }, onEvent)
   s.io.out('\n')
   s.io.meta(`[${result.provider} · ${result.model} · ${result.usage.inputTokens}/${result.usage.outputTokens} tok]`)
