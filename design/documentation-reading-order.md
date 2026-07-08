@@ -93,7 +93,7 @@ nunc-stans/
 │   ├── edge.schema.json
 │   ├── scope-id.md
 │   ├── glossary.md
-│   └── agent-abi.md                 ← reserved; drafted in Phase D
+│   └── agent-abi.md                 ← v0 draft (Phase D): registration, capabilities, run records
 │
 ├── engines/
 │   ├── nunc-stans/docs/             ← spl-plan.md, prd-override.md (self-engine plans)
