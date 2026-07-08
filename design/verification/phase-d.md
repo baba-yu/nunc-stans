@@ -139,9 +139,57 @@ Running record; completed as the exit items execute. Plan:
 
 ## Stories (executed at T10; specs written at T1)
 
-- S-5 — PENDING
-- S-6 — PENDING
+- S-5 — **EXECUTED 2026-07-07, PASS (API core; screen pass rides T11)**
+- S-6 — **EXECUTED 2026-07-07, PASS** (mock + live)
 - S-11 — **EXECUTED 2026-07-07, PASS** (see below)
+
+### S-5 / S-6 — EXECUTED 2026-07-07 (scratch store, curl through the gate)
+
+Setup: scratch `NS_DATA=/tmp/s5-store-*`; fourfive (tsx, :8797) + the
+release gate (:8730, `--data-dir` scratch, `--instances-dir`
+engines/nunc-fluens/instances) — offset ports so the dev stack is
+untouched; no engine (neither story touches /self).
+
+S-5 verdicts:
+
+1. Two profiles created through the one door (`live-ollama` =
+   qwen3.6:27b with scopes+verify defaults; `offline-mock`);
+   round-trip + the atomic file on disk. PASS
+2. **F3 at the HTTP surface**: the rogue profile → 422 "F3: no profile
+   may grant write access to self-scope commitments…" —
+   constitutional check item 1's surface-level half. PASS
+3. defaults PUT `{"fourfive-chat":"live-ollama"}` → a real FourFive
+   chat message under the default answered by ollama via the gate;
+   the run log stamped `"profile":"live-ollama"` on BOTH callers
+   (fourfive-chat and fourfive-blueprint). PASS
+4. Default switched to `offline-mock` → `/api/health` reports the new
+   resolution immediately and the NEXT message stamps
+   `"profile":"offline-mock"` — **no server restart** (per-message
+   resolution proven live). PASS
+
+S-6 verdicts:
+
+1. Mock pass (zero live tokens): verify ON + "answer in exactly zero
+   words" under the offline scripted judge → run-log entry
+   `verify:"on"` with a 2-entry verdict chain (maxIters=2), scripted
+   never-met gaps, per-iteration token fields. PASS
+2. Off-by-default: the next message logged one call, **no verdicts
+   key**. PASS
+3. Live confirmation (ollama model + ollama judge): SSE `verify`
+   events — iteration 1 unmet with the judge's articulated gap ("The
+   response contains words (3), but the goal requires exactly zero
+   words."), iteration 2 **met** (the retry actually achieved the
+   goal — gap feedback works); loop ≤ maxIters; cost visible per
+   iteration (927/231, 1228/1160 tok) and in entry totals
+   (2155/1391). PASS
+4. The viewer API (`/api/runs`) returns the rows with verdict chains
+   and profile stamps. PASS
+
+Spec refinement, recorded: S-6's mock-pass line expected non-zero mock
+token counts; the mock provider's counts are zero by nature — the
+FIELDS are asserted present, real cost is the live pass's job (story
+doc updated). The Profiles-SCREEN interaction + screenshots ride the
+T11 UI pass; the APIs the screen calls are what this execution proved.
 
 ### S-11 — EXECUTED 2026-07-07 (scripted stdin; scratch stores)
 
