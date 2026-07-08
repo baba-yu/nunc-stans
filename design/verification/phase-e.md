@@ -158,6 +158,24 @@ owner accepted in session.
   runner green on the fixture), typecheck (tsc + vue-tsc) green,
   `pnpm -r build` now covers the shell.
 
+- **2026-07-08 — T7 done** (0ade52a gate, 30e1546 tool, 9b37126 apps,
+  e765654 fe, + the fix commit): gate `--apps-url` + `/apps` proxy
+  (prefix-stripped, streaming `forward()` reused); justfile `up` runs
+  4 processes (`_up-apps`), gate gets `--apps-url`, `down.ts` learns
+  :8788 — the justfile hunks landed via a plumbing blob so the
+  parallel lane's uncommitted `setup` WIP stayed out of the commit
+  (the Phase D precedent); apps-host gained a human-facing index at
+  `/`; Formans topbar gained the Apps tab. **Bug found BY the live
+  check (and now pinned by a gate test): the axum wildcard
+  `/apps/{*path}` does not match an empty segment, so `/apps/` fell
+  through to the formans SPA fallback and served the wrong app —
+  bare `/apps` and `/apps/` now have literal routes.** Live E2E
+  through the gate (fixture bundle in a scratch store): `/apps/api`
+  lists, POST create returns the audited row, `/api/metrics` computes
+  `deal_count: 1`, `/apps/` serves the index, `/apps/fixture-app/`
+  serves the shell. gate 13 integration tests green; apps-host 12;
+  Formans 20 + build.
+
 ## Story executions
 
 (S-7 / S-8 written at T1; executed at T10 with transcripts and
