@@ -397,3 +397,78 @@ async fn news_config_profile_and_step_verify_keys() {
         .unwrap();
     assert_eq!(unknown.status(), 400);
 }
+
+#[tokio::test]
+async fn runs_viewer_tails_main_and_instance_logs() {
+    let (formans_dist, fourfive_dist) = make_dists();
+    let base = formans_dist.parent().unwrap();
+    let data_dir = base.join("data-store");
+    let instances_dir = base.join("instances");
+
+    // Seed a main-store log (4 rows; one malformed line must be skipped)
+    // and one instance log.
+    std::fs::create_dir_all(data_dir.join("runs")).unwrap();
+    let mut main_log = String::new();
+    for i in 0..3 {
+        main_log.push_str(&format!(
+            "{{\"ts\":\"2026-07-07T00:00:0{i}Z\",\"caller\":\"fourfive-chat\",\"profile\":\"p{i}\"}}\n"
+        ));
+    }
+    main_log.push_str("this line is not json — hand-edit typo\n");
+    main_log.push_str("{\"ts\":\"2026-07-07T00:00:09Z\",\"caller\":\"agent\",\"profile\":\"p9\"}\n");
+    std::fs::write(data_dir.join("runs/ai-runs.jsonl"), main_log).unwrap();
+
+    std::fs::create_dir_all(instances_dir.join("news/store/runs")).unwrap();
+    std::fs::write(
+        instances_dir.join("news/store/runs/ai-runs.jsonl"),
+        "{\"ts\":\"2026-07-07T01:00:00Z\",\"caller\":\"compose-news-section\"}\n",
+    )
+    .unwrap();
+    // A dir without a log must not appear in the enumeration.
+    std::fs::create_dir_all(instances_dir.join("empty-instance")).unwrap();
+
+    let cfg = GateCfg::new(
+        "http://127.0.0.1:1".into(),
+        "http://127.0.0.1:1".into(),
+        formans_dist.clone(),
+    )
+    .with_data_dir(Some(data_dir.clone()))
+    .with_instances_dir(Some(instances_dir.clone()));
+    let gate = spawn(build_router(cfg, &fourfive_dist)).await;
+    let client = reqwest::Client::new();
+
+    // Main tail (limit applies, malformed skipped, oldest-first order).
+    let rows: serde_json::Value = client
+        .get(format!("{gate}/api/runs?limit=2"))
+        .send().await.unwrap().json().await.unwrap();
+    let rows = rows.as_array().unwrap();
+    assert_eq!(rows.len(), 2);
+    assert_eq!(rows[0]["profile"], "p2");
+    assert_eq!(rows[1]["caller"], "agent");
+
+    // Instance source + enumeration.
+    let inst: serde_json::Value = client
+        .get(format!("{gate}/api/runs?source=instance&instance=news"))
+        .send().await.unwrap().json().await.unwrap();
+    assert_eq!(inst.as_array().unwrap().len(), 1);
+    assert_eq!(inst[0]["caller"], "compose-news-section");
+    let names: serde_json::Value = client
+        .get(format!("{gate}/api/runs/instances"))
+        .send().await.unwrap().json().await.unwrap();
+    assert_eq!(names, json!(["news"]));
+
+    // Guard rails: bad source, missing/invalid instance names.
+    for (path, code) in [
+        ("/api/runs?source=nope", 400),
+        ("/api/runs?source=instance", 400),
+        ("/api/runs?source=instance&instance=../escape", 400),
+    ] {
+        let resp = client.get(format!("{gate}{path}")).send().await.unwrap();
+        assert_eq!(resp.status(), code, "{path}");
+    }
+    // Unknown instance = empty view, not an error (log may not exist yet).
+    let ghost: serde_json::Value = client
+        .get(format!("{gate}/api/runs?source=instance&instance=ghost"))
+        .send().await.unwrap().json().await.unwrap();
+    assert_eq!(ghost, json!([]));
+}

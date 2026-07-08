@@ -26,6 +26,11 @@ struct Args {
     /// settings API answers 503. `just up` passes the configured store.
     #[arg(long, default_value = "")]
     data_dir: String,
+    /// nunc-fluens instances home (the run-log viewer's per-instance
+    /// source; an explicit handoff — the gate never derives engine
+    /// layout). Empty ⇒ main-store logs only. `just up` passes it.
+    #[arg(long, default_value = "")]
+    instances_dir: String,
 }
 
 #[tokio::main]
@@ -41,8 +46,14 @@ async fn main() -> anyhow::Result<()> {
     } else {
         Some(PathBuf::from(args.data_dir))
     };
+    let instances_dir = if args.instances_dir.trim().is_empty() {
+        None
+    } else {
+        Some(PathBuf::from(args.instances_dir))
+    };
     let cfg = GateCfg::new(args.engine_url, args.fourfive_url, args.formans_dist)
-        .with_data_dir(data_dir);
+        .with_data_dir(data_dir)
+        .with_instances_dir(instances_dir);
     let app = build_router(cfg, &args.fourfive_dist);
 
     // The screen is a single origin on localhost (§10-B): loopback only.
