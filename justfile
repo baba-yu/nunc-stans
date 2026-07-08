@@ -95,6 +95,18 @@ _up-gate:
       --data-dir "{{data_dir}}" \
       --instances-dir engines/nunc-fluens/instances
 
+# Stop the stack started by `just up`: terminates whatever is LISTENING on the
+# gate/engine/fourfive ports (honoring the same NS_PORT / NS_ENGINE_PORT
+# overrides; fourfive fixed at :8787). SIGTERM, then SIGKILL any survivor.
+# Idempotent - a no-op if nothing is up. See tools/down.sh.
+down:
+    sh tools/down.sh
+
+# Stop the running stack (if any), then bring a fresh one up (rebuilds, like up).
+restart:
+    -sh tools/down.sh
+    just up
+
 # Build everything the gate serves. The world adapter runs first so the
 # read-only world view has fresh headlines. It reads the nunc-fluens
 # instance designated via `just news-link <instance>` (config news_repo,
