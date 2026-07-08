@@ -6,6 +6,7 @@
   (engines/nunc-stans), `nf` (engines/nunc-fluens), `ff` (engines/fourfive),
   `fe` (frontend), `gate` (gate/, the single-origin front door),
   `agent` (agents/, the first-party agent stack),
+  `apps` (apps-host/, the generated-app host),
   `tool` (justfile, tools/, CI).
 - One commit = one area unless `contracts/` is touched
   (`node tools/commit-scope.ts` enforces).

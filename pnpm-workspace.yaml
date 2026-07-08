@@ -4,3 +4,4 @@ packages:
   - engines/fourfive
   - engines/nunc-fluens/pipeline
   - agents/*
+  - apps-host
