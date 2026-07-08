@@ -1,8 +1,15 @@
 #!/usr/bin/env node
-// nunc-stans-agent — first-party terminal agent (Phase D).
-// v0 surface: chat (T9), doctor, mandate-template. Memory goes exclusively
-// through the manda MCP gateway (contracts/agent-abi.md).
-import { resolveMandaBin } from './memory.ts'
+// nunc-stans-agent — first-party terminal agent (Phase D, v1 plan §2.11).
+// chat: streaming REPL, profile-driven, memory EXCLUSIVELY through the
+// manda MCP gateway (commit approval is interactive — manda's elicitation
+// lands here as a real terminal prompt). doctor: environment check.
+// mandate-template: prints a grant line for the PRINCIPAL to append —
+// never writes it (mandates are out-of-band only).
+import { createInterface } from 'node:readline/promises'
+import * as path from 'node:path'
+import { MandaMemory, acceptContentFor, resolveMandaBin } from './memory.ts'
+import { HELP, describeMandates, runTurn } from './chat.ts'
+import type { AgentSession, TurnIO } from './chat.ts'
 
 const [cmd, ...rest] = process.argv.slice(2)
 
@@ -11,14 +18,109 @@ function usage(): never {
   process.exit(2)
 }
 
-switch (cmd) {
-  case 'doctor': {
-    const bin = resolveMandaBin()
-    console.log(`manda binary : ${bin ?? 'NOT FOUND (set MANDA_BIN or install manda on PATH)'}`)
-    console.log(`data dir     : ${process.env.MANDA_DATA_DIR ?? '(unset — the chat command will refuse)'}`)
-    console.log(`approval mode: ${process.env.MANDA_APPROVAL ?? 'elicit (default)'}`)
-    process.exit(bin ? 0 : 1)
+async function loadDataLayer() {
+  const { createAi, resolveProfile } = await import('../../../frontend/packages/ai/src/index.ts')
+  const { resolveDataDir } = await import('../../../tools/lib/data-dir.ts')
+  const resolved = resolveDataDir()
+  if (resolved.warning) console.error(resolved.warning)
+  if (!resolved.dir) throw new Error('no data store resolvable — set NS_DATA or run just bootstrap')
+  return { createAi, resolveProfile, dataDir: resolved.dir }
+}
+
+async function cmdChat(argv: string[]): Promise<number> {
+  let explicitProfile: string | undefined
+  for (let i = 0; i < argv.length; i++) {
+    if (argv[i] === '--profile') explicitProfile = argv[++i]
+    else { console.error(`chat: unknown flag ${argv[i]}`); return 2 }
   }
+  const { createAi, resolveProfile, dataDir } = await loadDataLayer()
+  const profile = resolveProfile(dataDir, 'agents', explicitProfile)
+    ?? { id: 'adhoc-mock', name: 'Ad-hoc mock', provider: 'mock' as const }
+  const ai = createAi({ runLogFile: path.join(dataDir, 'runs', 'ai-runs.jsonl') })
+
+  const rl = createInterface({ input: process.stdin, output: process.stdout })
+  const io: TurnIO = {
+    out: s => process.stdout.write(s),
+    thinking: s => process.stdout.write(`\x1b[2m${s}\x1b[0m`),
+    meta: s => console.log(`\x1b[36m${s}\x1b[0m`),
+    ask: q => rl.question(q),
+  }
+
+  // Memory: the manda gateway, or a stated OFF when no binary resolves.
+  // Elicitation (manda asking the principal to approve a commit) rides
+  // the same terminal: an explicit yes approves, anything else declines.
+  let memory: MandaMemory | null = null
+  const bin = resolveMandaBin()
+  const mandaDataDir = process.env.MANDA_DATA_DIR
+  if (bin && mandaDataDir) {
+    memory = await MandaMemory.connect({
+      dataDir: mandaDataDir,
+      bin,
+      approver: async ({ message, requestedSchema }) => {
+        const q = `${message ?? 'manda asks: approve this commit?'} [y/N] `
+        const a = (await io.ask(q)).trim().toLowerCase()
+        return a === 'y' || a === 'yes'
+          ? { action: 'accept', content: acceptContentFor(requestedSchema) }
+          : { action: 'decline' }
+      },
+    })
+  }
+
+  console.log(`nunc-stans-agent — profile ${profile.id} → ${profile.provider}${profile.model ? ` / ${profile.model}` : ''}`)
+  if (memory) {
+    io.meta(describeMandates(await memory.mandateList()))
+  } else {
+    io.meta(bin
+      ? 'memory OFF: set MANDA_DATA_DIR to a directory this agent alone writes'
+      : 'memory OFF: no manda binary (set MANDA_BIN or install manda — see the README)')
+  }
+  io.meta(HELP)
+
+  const session: AgentSession = { ai, profile, memory, history: [], io }
+  try {
+    for (;;) {
+      const line = await rl.question('\x1b[1myou ▸\x1b[0m ')
+      let keep: boolean
+      try {
+        keep = await runTurn(session, line)
+      } catch (e) {
+        io.meta(`error: ${e instanceof Error ? e.message : e}`)
+        keep = true
+      }
+      if (!keep) break
+    }
+  } finally {
+    rl.close()
+    await memory?.close()
+  }
+  return 0
+}
+
+async function cmdDoctor(): Promise<number> {
+  const bin = resolveMandaBin()
+  console.log(`manda binary : ${bin ?? 'NOT FOUND (set MANDA_BIN or install manda)'}`)
+  console.log(`data dir     : ${process.env.MANDA_DATA_DIR ?? '(unset — chat runs with memory OFF)'}`)
+  console.log(`approval mode: ${process.env.MANDA_APPROVAL ?? 'elicit (default)'}`)
+  if (bin && process.env.MANDA_DATA_DIR) {
+    try {
+      const memory = await MandaMemory.connect({ dataDir: process.env.MANDA_DATA_DIR, bin })
+      console.log(describeMandates(await memory.mandateList()))
+      await memory.close()
+    } catch (e) {
+      console.log(`mandate check: FAILED — ${e instanceof Error ? e.message : e}`)
+      return 1
+    }
+  }
+  return bin ? 0 : 1
+}
+
+switch (cmd) {
+  case 'chat':
+    cmdChat(rest).then(c => process.exit(c), e => { console.error(`chat: ${e instanceof Error ? e.message : e}`); process.exit(1) })
+    break
+  case 'doctor':
+    cmdDoctor().then(c => process.exit(c), e => { console.error(`doctor: ${e instanceof Error ? e.message : e}`); process.exit(1) })
+    break
   case 'mandate-template': {
     // Prints a filled mandates.jsonl line for the PRINCIPAL to append by
     // hand. Never writes it — mandates are granted out-of-band only (A1).
@@ -36,10 +138,8 @@ switch (cmd) {
     console.log('# append this ONE line to $MANDA_DATA_DIR/mandates.jsonl yourself (expiry: 30 days):')
     console.log(JSON.stringify(line))
     process.exit(0)
+    break
   }
-  case 'chat':
-    console.error('chat lands at T9 (see design/development/2026-07-07-phase-d-plan.md)')
-    process.exit(1)
   default:
     usage()
 }
