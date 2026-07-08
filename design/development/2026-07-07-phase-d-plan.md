@@ -545,20 +545,22 @@ Session-size guide (v1 plan: 3–5 focused sessions):
   two-source UI pass happens at S-5/T11. Suites: gate 6+12, Formans
   20 + build.
 
-### Task 8: agent-abi.md v0 (contracts) — depends: T1 (manda semantics proven), T4 (profile shape fixed)
-- [ ] Draft per PD11: registration form, capability vocabulary,
-      execution-record form/location, startup/suspension check via manda
-      `mandate_list` (named as the interim substitute for the
-      constitution.md:245 engine-side source of truth), both named
-      enforcement gaps, SPL-v3 pointer. Status: Reserved → v0 Draft.
-- [ ] `contracts/glossary.md` gains deliberate entries for `profile` and
-      `agent` / `agent runtime` — the constitution's §11 allowed-word list
-      says a new word is a deliberate commit, and Phase D promotes both to
-      contract vocabulary.
-- [ ] `design/documentation-reading-order.md` entry updated from
-      "reserved; drafted in Phase D".
-- Acceptance: owner review of the draft (it is a contract);
-  `tools/check.ts` green.
+### Task 8: agent-abi.md v0 (contracts) — DONE 2026-07-07 (1fd7b57) — OWNER REVIEW PENDING
+- [x] Drafted per PD11 (Reserved → v0 Draft): the three-part
+      registration (user-written commitment F3 + mandate with mandatory
+      expiry/lapse + frozen version reference F7), the §2.6 capability
+      vocabulary carried by the profile record (both code rails cited),
+      startup/suspension = manda `mandate_list` **named as the interim
+      substitute** for the F14 engine-side source of truth, execution
+      records = the ai-runs.jsonl shape + manda's audit lanes, BOTH
+      enforcement gaps named, §13-A out-of-scope kept. The Reserved
+      stub's rule survives verbatim as the governing sentence.
+- [x] `contracts/glossary.md` gained `profile` (incl. the
+      instance-collision note), `agent`, `agent runtime` (§11
+      deliberate-commit rule).
+- [x] Reading-order entry updated.
+- Acceptance: `tools/check.ts` green; **owner review pending (it is a
+  contract — owner action item 5)**.
 
 ### Task 9: nunc-stans-agent v0 (agent) — depends: T1, T2, T3, T4, T7, T8
 - [ ] `chat` REPL: streaming render + visible thinking via nunc-ai
