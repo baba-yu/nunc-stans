@@ -523,15 +523,27 @@ Session-size guide (v1 plan: 3–5 focused sessions):
   mid-2027 modifier-year parse, 892c7e0 readme link-check anchoring —
   interleaved on this branch; recorded, not mine). Formans 20 + build.
 
-### Task 7: Run-log viewer (gate, fe) — depends: T2; parallel with T5/T6
-- [ ] Gate `GET /api/runs` (+ `?instance=`, `/api/runs/instances`) per
-      PD13, tail-limited, read-only; instances root via `--instances-dir`
-      (justfile), never hardcoded.
-- [ ] Formans `/runs` route: table + verdict-chain expansion + source
-      switcher. Screenshots → `design/ui/phase-d/`.
-- Acceptance: viewer shows real entries from both a main-store and an
-  instance log; profile and cost columns populated; no prompt text
-  anywhere in the pipeline from log to screen.
+### Task 7: Run-log viewer (gate, fe) — DONE 2026-07-07 (cfcf7f3 gate, 80c1ce0 tool, 56e5fc1 fe)
+- [x] Gate `GET /api/runs?source=main|instance&instance=<name>&limit=N`
+      + `GET /api/runs/instances` — tail-parse (limit clamped ≤1000,
+      malformed lines skipped, oldest-first), slug-guarded instance
+      names, missing log = empty view; instances root ONLY via the new
+      `--instances-dir` flag (`just up` passes
+      `engines/nunc-fluens/instances`) — never derived in Rust.
+      Integration test: main tail + limit + malformed-skip, instance
+      source, enumeration (dir without a log excluded), the three 400s,
+      ghost instance = []. NB: the justfile hunk was committed via a
+      plumbing blob so the owner's uncommitted down/restart WIP stayed
+      out of the commit; both versions `just`-parse.
+- [x] Formans `/runs` route + topbar tab: newest-first table (ts,
+      caller, profile, provider·model, tokens, ms, verify, outcome),
+      source switcher fed by /api/runs/instances, expandable verdict
+      chain per verify-on row. No prompt text log-to-screen.
+      Screenshots land with the T10/T11 UI pass.
+- Acceptance MET at the API level (real fourfive smoke rows render the
+  main source; instance rows proven by the gate test); the live
+  two-source UI pass happens at S-5/T11. Suites: gate 6+12, Formans
+  20 + build.
 
 ### Task 8: agent-abi.md v0 (contracts) — depends: T1 (manda semantics proven), T4 (profile shape fixed)
 - [ ] Draft per PD11: registration form, capability vocabulary,

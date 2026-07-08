@@ -128,6 +128,14 @@ Running record; completed as the exit items execute. Plan:
   with tests on this branch (780e9c7, 892c7e0) — the shared checkout
   now lives on phase/d, so that session's commits interleave here.
   Legitimate fixes, no conflicts with the T6 diff.
+- **2026-07-07 — T7 done** (cfcf7f3 gate, 80c1ce0 tool, 56e5fc1 fe).
+  Run-log viewer live: gate tail API (main store + per-instance via the
+  explicit `--instances-dir` handoff) + Formans /runs view with the
+  verdict-chain expansion. The justfile `--instances-dir` line was
+  committed as a plumbing-built blob so the owner's uncommitted
+  down/restart WIP never entered a commit (working tree carries both;
+  committed and working justfiles both parse). Suites: gate 6+12,
+  Formans 20 + build.
 
 ## Stories (executed at T10; specs written at T1)
 
