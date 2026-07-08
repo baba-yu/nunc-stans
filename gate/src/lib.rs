@@ -26,6 +26,9 @@ pub struct GateCfg {
     pub client: reqwest::Client,
     pub engine_url: String,
     pub fourfive_url: String,
+    /// apps-host base URL (Phase E): everything under /apps/ proxies there,
+    /// prefix stripped — UI shell, per-app API, and the MCP endpoint alike.
+    pub apps_url: String,
     pub formans_dist: PathBuf,
     /// User-designated data store (workspace model); carries the news
     /// settings file the config API serves. None ⇒ the API answers 503.
@@ -42,10 +45,16 @@ impl GateCfg {
             client: reqwest::Client::new(),
             engine_url,
             fourfive_url,
+            apps_url: "http://127.0.0.1:8788".to_owned(),
             formans_dist,
             data_dir: None,
             instances_dir: None,
         }
+    }
+
+    pub fn with_apps_url(mut self, apps_url: String) -> Self {
+        self.apps_url = apps_url;
+        self
     }
 
     pub fn with_data_dir(mut self, data_dir: Option<PathBuf>) -> Self {
@@ -64,6 +73,8 @@ impl GateCfg {
 ///   /health, /self/*    → ledger engine (S-10 keeps proving gate→engine)
 ///   /fourfive/api/*     → fourfive server, `/fourfive` prefix stripped
 ///   /fourfive/**        fourfive dist (static; a missing asset is a 404)
+///   /apps/**            → apps-host, `/apps` prefix stripped (Phase E:
+///                       generated-app UI + API + MCP, one upstream)
 ///   everything else     formans dist; extensionless misses fall back to
 ///                       index.html (vue-router), file-like misses stay 404
 ///                       so probes (e.g. /world-graph/data/manifest.json)
@@ -96,6 +107,8 @@ pub fn build_router(cfg: GateCfg, fourfive_dist: &Path) -> Router {
         .route("/api/runs/instances", get(runs::list_run_instances))
         .route("/health", any(proxy_engine))
         .route("/self/{*path}", any(proxy_engine))
+        .route("/apps", any(proxy_apps))
+        .route("/apps/{*path}", any(proxy_apps))
         .nest_service("/fourfive", fourfive)
         .fallback(formans_static)
         .with_state(cfg)
@@ -161,4 +174,15 @@ async fn proxy_fourfive(
     let pq = orig.path_and_query().map(|p| p.as_str()).unwrap_or("/");
     let stripped = proxy::strip_mount(pq, "/fourfive");
     proxy::forward(&cfg.client, format!("{}{}", cfg.fourfive_url, stripped), req).await
+}
+
+async fn proxy_apps(State(cfg): State<GateCfg>, req: Request) -> Response {
+    let pq = req
+        .uri()
+        .path_and_query()
+        .map(|p| p.as_str().to_owned())
+        .unwrap_or_else(|| "/".to_owned());
+    let stripped = proxy::strip_mount(&pq, "/apps");
+    let stripped = if stripped.is_empty() { "/" } else { stripped };
+    proxy::forward(&cfg.client, format!("{}{}", cfg.apps_url, stripped), req).await
 }

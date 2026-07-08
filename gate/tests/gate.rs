@@ -38,6 +38,15 @@ fn stub_fourfive() -> Router {
         )
 }
 
+fn stub_apps_host() -> Router {
+    Router::new()
+        .route("/api", get(|| async { Json(json!([{"slug": "stub-app", "version": 1}])) }))
+        .route(
+            "/stub-app/api/metrics",
+            get(|| async { Json(json!([{"name": "m", "value": 1}])) }),
+        )
+}
+
 /// Two throwaway dist dirs so the static mounts and the SPA fallback are real.
 /// One base per CALL, not per process: tests run concurrently, and a shared
 /// index.html re-written by every caller (fs::write truncates first) was
@@ -62,8 +71,9 @@ fn make_dists() -> (PathBuf, PathBuf) {
 async fn spawn_gate() -> String {
     let engine = spawn(stub_engine()).await;
     let fourfive = spawn(stub_fourfive()).await;
+    let apps = spawn(stub_apps_host()).await;
     let (formans_dist, fourfive_dist) = make_dists();
-    let cfg = GateCfg::new(engine, fourfive, formans_dist);
+    let cfg = GateCfg::new(engine, fourfive, formans_dist).with_apps_url(apps);
     spawn(build_router(cfg, &fourfive_dist)).await
 }
 
@@ -107,6 +117,20 @@ async fn sse_passes_through_with_content_type() {
     assert!(ct.starts_with("text/event-stream"), "content-type: {ct}");
     let body = resp.text().await.unwrap();
     assert!(body.contains("data: one") && body.contains("data: two"), "got: {body}");
+}
+
+#[tokio::test]
+async fn apps_prefix_is_stripped_end_to_end() {
+    let gate = spawn_gate().await;
+    let list = reqwest::get(format!("{gate}/apps/api")).await.unwrap().text().await.unwrap();
+    assert!(list.contains("\"stub-app\""), "got: {list}");
+    let metrics = reqwest::get(format!("{gate}/apps/stub-app/api/metrics"))
+        .await
+        .unwrap()
+        .text()
+        .await
+        .unwrap();
+    assert!(metrics.contains("\"name\":\"m\""), "got: {metrics}");
 }
 
 #[tokio::test]
