@@ -57,6 +57,7 @@ async function orchestrateReplay(
   const locales = ['ja', 'es', 'fil'];
   const manifest = new RunManifest({
     date: day, mode: 'replay', runtime: 'claude-code', search: 'native', synthModel: null,
+    profile: null,
     locales: ['en', ...locales],
   });
   const ctx: RunCtx = {
@@ -71,6 +72,9 @@ async function orchestrateReplay(
     runtime: 'claude-code',
     search: 'native',
     synthModel: null,
+    profile: null,
+    verifyDefaults: null,
+    stepVerify: {},
     locales,
     replay: true,
     dryRun: false,

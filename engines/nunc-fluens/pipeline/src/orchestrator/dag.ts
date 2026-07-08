@@ -10,7 +10,7 @@ import {
   themeReviewSteps, weeklyMaintenanceSteps, weeklyMemorySteps,
 } from './steps-sunday.ts';
 import { replayLocaleSet, resolveLocaleSet } from '../world-paths.ts';
-import type { Ai } from 'nunc-ai';
+import type { Ai, VerifyConfig } from 'nunc-ai';
 
 export interface DayPlanTask {
   task: string;
@@ -43,6 +43,11 @@ export interface RunDayOptions {
   runtime: string;
   search: string;
   synthModel: string | null;
+  /** AI profile named by news-config (PD14); absent = none. */
+  profile?: string | null;
+  /** Goal-verify defaults (the profile's) + per-step overrides. */
+  verifyDefaults?: Partial<VerifyConfig> | null;
+  stepVerify?: Record<string, Partial<VerifyConfig>>;
   /** The configured non-EN render set (already validated by the
    * caller). Absent = the default trio. Ignored in replay, where the
    * effective set is derived from the day's committed state. */
@@ -74,6 +79,7 @@ export async function runDay(opts: RunDayOptions): Promise<RunDayResult> {
     runtime: opts.runtime,
     search: opts.search,
     synthModel: opts.synthModel,
+    profile: opts.profile ?? null,
     locales: ['en', ...locales],
   });
   const dbFile = worldDbFile(opts.dataDir);
@@ -90,6 +96,9 @@ export async function runDay(opts: RunDayOptions): Promise<RunDayResult> {
     runtime: opts.runtime,
     search: opts.search,
     synthModel: opts.synthModel,
+    profile: opts.profile ?? null,
+    verifyDefaults: opts.verifyDefaults ?? null,
+    stepVerify: opts.stepVerify ?? {},
     locales,
     replay: opts.replay,
     dryRun: opts.dryRun,
