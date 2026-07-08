@@ -1,17 +1,19 @@
 #!/usr/bin/env node
 // nunc-stans down: stop the stack started by `just up`.
-// Terminates whatever is LISTENING on the gate, engine, and fourfive ports,
-// honoring the same NS_PORT / NS_ENGINE_PORT overrides `just up` uses
-// (fourfive is fixed at :8787). SIGTERM first, then SIGKILL any survivor
-// (on Windows both terminate unconditionally — there is no graceful signal).
-// Idempotent: a no-op (exit 0) when nothing is running. Port-based on purpose
-// so it also stops individually-started sub-recipes, not just a concurrent up.
+// Terminates whatever is LISTENING on the gate, engine, fourfive, and
+// apps-host ports, honoring the same NS_PORT / NS_ENGINE_PORT overrides
+// `just up` uses (fourfive fixed at :8787, apps-host at :8788). SIGTERM
+// first, then SIGKILL any survivor (on Windows both terminate
+// unconditionally — there is no graceful signal). Idempotent: a no-op
+// (exit 0) when nothing is running. Port-based on purpose so it also stops
+// individually-started sub-recipes, not just a concurrent up.
 import { execFileSync } from 'node:child_process'
 
 const GATE_PORT = Number(process.env.NS_PORT ?? 8720)
 const ENGINE_PORT = Number(process.env.NS_ENGINE_PORT ?? 8721)
 const FOURFIVE_PORT = 8787
-const PORTS = [GATE_PORT, ENGINE_PORT, FOURFIVE_PORT]
+const APPS_HOST_PORT = 8788
+const PORTS = [GATE_PORT, ENGINE_PORT, FOURFIVE_PORT, APPS_HOST_PORT]
 const PORTS_LABEL = PORTS.join('/')
 
 function run(cmd: string, args: string[]): string {

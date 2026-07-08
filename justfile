@@ -68,14 +68,15 @@ news-daily instance:
 news-schedule instance oncalendar='*-*-* 06:30:00':
     sh engines/nunc-fluens/pipeline/systemd/install.sh "{{instance}}" "{{oncalendar}}"
 
-# One origin (the gate, :8720) fronts everything; the ledger engine (:8721)
-# and the fourfive server (:8787) stay loopback-internal behind it.
-# NS_PORT moves the gate; NS_ENGINE_PORT moves the engine. The three
-# commands live in sub-recipes so quoting and env expansion happen in
-# just's shell on every OS (concurrently itself never parses them).
+# One origin (the gate, :8720) fronts everything; the ledger engine (:8721),
+# the fourfive server (:8787), and apps-host (:8788, the generated-app host)
+# stay loopback-internal behind it. NS_PORT moves the gate; NS_ENGINE_PORT
+# moves the engine. The commands live in sub-recipes so quoting and env
+# expansion happen in just's shell on every OS (concurrently itself never
+# parses them).
 up: _require_data build
-    pnpm exec concurrently -k -n engine,fourfive,gate -c yellow,blue,cyan \
-      "just _up-engine" "just _up-fourfive" "just _up-gate"
+    pnpm exec concurrently -k -n engine,fourfive,apps,gate -c yellow,blue,magenta,cyan \
+      "just _up-engine" "just _up-fourfive" "just _up-apps" "just _up-gate"
 
 _up-engine: _require_data
     cargo run --manifest-path engines/nunc-stans/Cargo.toml --release -- \
@@ -85,20 +86,25 @@ _up-engine: _require_data
 _up-fourfive:
     pnpm -C engines/fourfive start:server
 
+_up-apps: _require_data
+    pnpm -C apps-host start:server
+
 _up-gate:
     cargo run --manifest-path gate/Cargo.toml --release -- \
       --port "${NS_PORT:-8720}" \
       --engine-url "http://127.0.0.1:${NS_ENGINE_PORT:-8721}" \
       --fourfive-url "http://127.0.0.1:8787" \
+      --apps-url "http://127.0.0.1:8788" \
       --formans-dist frontend/nunc-stans-formans/dist \
       --fourfive-dist engines/fourfive/dist \
       --data-dir "{{data_dir}}" \
       --instances-dir engines/nunc-fluens/instances
 
-# Stop the stack started by `just up`: terminates whatever is LISTENING on the
-# gate/engine/fourfive ports (honoring the same NS_PORT / NS_ENGINE_PORT
-# overrides; fourfive fixed at :8787). SIGTERM, then SIGKILL any survivor.
-# Idempotent - a no-op if nothing is up. See tools/down.ts.
+# Stop the stack started by `just up`: terminates whatever is LISTENING on
+# the gate/engine/fourfive/apps-host ports (honoring the same NS_PORT /
+# NS_ENGINE_PORT overrides; fourfive fixed at :8787, apps-host at :8788).
+# SIGTERM, then SIGKILL any survivor. Idempotent - a no-op if nothing is up.
+# See tools/down.ts.
 down:
     node tools/down.ts
 
