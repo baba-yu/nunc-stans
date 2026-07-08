@@ -57,6 +57,13 @@ export const api = {
       method: 'POST',
       body: JSON.stringify({ stack }),
     }),
+  // Phase E: freeze the session's current blueprint version and emit its
+  // bundle (generating IS freezing — F7).
+  generateBundle: (sessionId: string) =>
+    http<{ slug: string; version: number; frozen_at: string; bundle_hash: string; files: string[] }>(
+      `${API}/sessions/${sessionId}/bundle`,
+      { method: 'POST', body: '{}' },
+    ),
 
   // Consume the SSE message stream, invoking `on(event, data)` per event.
   // `data` is the raw (JSON-encoded) payload string; the caller parses it.

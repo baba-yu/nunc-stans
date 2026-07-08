@@ -1,4 +1,7 @@
 import { mkdirSync, writeFileSync, readFileSync, existsSync } from 'node:fs'
+import { generateBundle, bundleHash, GenerationError } from './bundle/generate'
+import type { BundleFiles } from './bundle/generate'
+import { validateBlueprint } from './blueprint-schema'
 import { resolve, join, relative } from 'node:path'
 import { randomUUID } from 'node:crypto'
 import { db, nowIso, WORKSPACE_DIR, DEFAULT_SESSION_TITLE } from './db'
@@ -155,7 +158,11 @@ export function saveMarkdown(sessionId: string, markdown: string): { path: strin
   return { path: rel(mdPath) }
 }
 
-/** Patch the current blueprint's user-specified software_stack in place. */
+/**
+ * Set the user-specified software_stack. Unfrozen current version: patched in
+ * place (the rolling-save UX). FROZEN version: immutable (F7, plan PE11) — the
+ * change rolls a NEW version carrying the same blueprint with the new stack.
+ */
 export function setSoftwareStack(sessionId: string, stack: string): boolean {
   const app = getSessionApp(sessionId)
   if (!app || app.current_version < 1) return false
@@ -164,11 +171,99 @@ export function setSoftwareStack(sessionId: string, stack: string): boolean {
   try {
     const bp = JSON.parse(readFileSync(file, 'utf8')) as Blueprint
     bp.software_stack = stack
+    if (isFrozen(app.id, app.current_version)) {
+      saveBlueprint(sessionId, bp)
+      return true
+    }
     writeFileSync(file, JSON.stringify(bp, null, 2))
     return true
   } catch {
     return false
   }
+}
+
+// --- bundle generation + freeze (Phase E, plan PE11) -----------------------
+
+export class FreezeError extends Error {
+  code: 'not_found' | 'drift' | 'invalid'
+  constructor(code: 'not_found' | 'drift' | 'invalid', message: string) {
+    super(message)
+    this.code = code
+  }
+}
+
+export function isFrozen(appId: string, version: number): boolean {
+  const row = db
+    .prepare('SELECT frozen_at FROM app_versions WHERE app_id = ? AND version_number = ?')
+    .get(appId, version) as { frozen_at: string | null } | undefined
+  return !!row?.frozen_at
+}
+
+const BUNDLE_FILES: (keyof BundleFiles)[] = ['app.json', 'schema.sql', 'mcp-tools.json', 'ui.json', 'tests/scenarios.json']
+
+/**
+ * Generate the bundle for one blueprint version and FREEZE it (the generation
+ * IS the freeze — F7 becomes mechanical). Idempotent: re-invoking on a frozen
+ * version regenerates and must reproduce the bundle byte-for-byte; any
+ * mismatch (a mutated blueprint, a hand-edited bundle) is refused loudly.
+ */
+export function freezeAndBundle(
+  slug: string,
+  version: number,
+): { slug: string; version: number; frozen_at: string; bundle_hash: string; files: string[] } {
+  const app = db.prepare('SELECT id FROM temporary_apps WHERE slug = ?').get(slug) as { id: string } | undefined
+  if (!app) throw new FreezeError('not_found', `unknown app: ${slug}`)
+  const versionRow = db
+    .prepare('SELECT frozen_at, bundle_hash FROM app_versions WHERE app_id = ? AND version_number = ?')
+    .get(app.id, version) as { frozen_at: string | null; bundle_hash: string | null } | undefined
+  if (!versionRow) throw new FreezeError('not_found', `unknown version: ${slug} v${version}`)
+
+  const blueprintFile = join(appDir(slug), 'versions', pad(version), 'blueprint.json')
+  if (!existsSync(blueprintFile)) throw new FreezeError('not_found', `no blueprint file for ${slug} v${version}`)
+  const raw = readFileSync(blueprintFile, 'utf8')
+  const parsed = validateBlueprint(JSON.parse(raw))
+  if (!parsed.success) throw new FreezeError('invalid', `stored blueprint fails validation: ${parsed.error.issues[0]?.message}`)
+
+  let files: BundleFiles
+  try {
+    files = generateBundle(parsed.data, slug, version, raw)
+  } catch (err) {
+    if (err instanceof GenerationError) throw new FreezeError('invalid', err.message)
+    throw err
+  }
+  const hash = bundleHash(files)
+  const bundleDir = join(appDir(slug), 'versions', pad(version), 'bundle')
+
+  if (versionRow.frozen_at) {
+    // Already frozen: this call may only CONFIRM the bundle, never change it.
+    for (const name of BUNDLE_FILES) {
+      const onDisk = join(bundleDir, name)
+      if (!existsSync(onDisk) || readFileSync(onDisk, 'utf8') !== files[name]) {
+        throw new FreezeError(
+          'drift',
+          `${slug} v${version} is frozen but ${name} does not reproduce byte-for-byte — the frozen source or bundle was modified (F7)`,
+        )
+      }
+    }
+    return {
+      slug,
+      version,
+      frozen_at: versionRow.frozen_at,
+      bundle_hash: versionRow.bundle_hash ?? hash,
+      files: BUNDLE_FILES.slice(),
+    }
+  }
+
+  mkdirSync(join(bundleDir, 'tests'), { recursive: true })
+  for (const name of BUNDLE_FILES) writeFileSync(join(bundleDir, name), files[name])
+  const ts = nowIso()
+  db.prepare('UPDATE app_versions SET frozen_at = ?, bundle_hash = ? WHERE app_id = ? AND version_number = ?').run(
+    ts,
+    hash,
+    app.id,
+    version,
+  )
+  return { slug, version, frozen_at: ts, bundle_hash: hash, files: BUNDLE_FILES.slice() }
 }
 
 /**

@@ -41,7 +41,9 @@ CREATE TABLE IF NOT EXISTS app_versions (
   version_number INTEGER NOT NULL,
   blueprint_path TEXT,
   output_md_path TEXT,
-  created_at     TEXT NOT NULL
+  created_at     TEXT NOT NULL,
+  frozen_at      TEXT,  -- set by bundle generation (Phase E); frozen = immutable (F7)
+  bundle_hash    TEXT   -- sha256 over the generated bundle files
 );
 
 CREATE TABLE IF NOT EXISTS llm_runs (
@@ -67,4 +69,9 @@ CREATE TABLE IF NOT EXISTS app_dependencies (
   const cols = db.prepare('PRAGMA table_info(messages)').all() as { name: string }[]
   if (!cols.some((c) => c.name === 'input_tokens')) db.exec('ALTER TABLE messages ADD COLUMN input_tokens INTEGER')
   if (!cols.some((c) => c.name === 'output_tokens')) db.exec('ALTER TABLE messages ADD COLUMN output_tokens INTEGER')
+
+  // Migration: freeze columns on app_versions for DBs created before Phase E.
+  const vcols = db.prepare('PRAGMA table_info(app_versions)').all() as { name: string }[]
+  if (!vcols.some((c) => c.name === 'frozen_at')) db.exec('ALTER TABLE app_versions ADD COLUMN frozen_at TEXT')
+  if (!vcols.some((c) => c.name === 'bundle_hash')) db.exec('ALTER TABLE app_versions ADD COLUMN bundle_hash TEXT')
 }

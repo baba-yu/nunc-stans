@@ -7,6 +7,7 @@ try {
 
 import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
+import type { Context } from 'hono'
 import { streamSSE } from 'hono/streaming'
 import { randomUUID } from 'node:crypto'
 import { db, nowIso, DEFAULT_SESSION_TITLE } from './db'
@@ -14,7 +15,7 @@ import { FourfiveLlm } from './llm/nunc-ai'
 import type { TurnOptions } from './llm/nunc-ai'
 import { buildDependencyContext } from './llm/blueprint-prompt'
 import { validateBlueprint } from './blueprint-schema'
-import { saveBlueprint, getLatestBlueprint, saveMarkdown, setSoftwareStack, createComposedApp, getBlueprintWithDependencies } from './workspace'
+import { saveBlueprint, getLatestBlueprint, saveMarkdown, setSoftwareStack, createComposedApp, getBlueprintWithDependencies, getSessionApp, freezeAndBundle, FreezeError } from './workspace'
 import { listComposableApps, updateDependencyPin, DependencyError } from './dependencies'
 import { renderBlueprintMarkdown } from './markdown'
 import type { ChatMessage, Message } from '../shared/types'
@@ -210,6 +211,35 @@ app.post('/api/sessions/:id/messages', async (c) => {
 
 app.get('/api/sessions/:id/blueprint', (c) => {
   return c.json(getBlueprintWithDependencies(c.req.param('id')))
+})
+
+// --- bundle generation (Phase E): generating IS freezing (F7, plan PE11) ---
+
+function freezeResponse(c: Context, slug: string, version: number) {
+  try {
+    return c.json(freezeAndBundle(slug, version))
+  } catch (err) {
+    if (err instanceof FreezeError) {
+      const status = err.code === 'not_found' ? 404 : err.code === 'drift' ? 409 : 422
+      return c.json({ error: err.message }, status)
+    }
+    throw err
+  }
+}
+
+// Session-scoped: freeze + bundle the session's CURRENT blueprint version
+// (the S-8 flow — the button in the temp-app panel).
+app.post('/api/sessions/:id/bundle', (c) => {
+  const sessionApp = getSessionApp(c.req.param('id'))
+  if (!sessionApp || sessionApp.current_version < 1) return c.json({ error: 'no blueprint yet' }, 400)
+  return freezeResponse(c, sessionApp.slug, sessionApp.current_version)
+})
+
+// Direct: freeze + bundle a specific version (tools, tests, re-verification).
+app.post('/api/apps/:slug/versions/:version/bundle', (c) => {
+  const version = Number(c.req.param('version'))
+  if (!Number.isInteger(version) || version < 1) return c.json({ error: 'version must be a positive integer' }, 400)
+  return freezeResponse(c, c.req.param('slug'), version)
 })
 
 // --- apps & dependencies ---
