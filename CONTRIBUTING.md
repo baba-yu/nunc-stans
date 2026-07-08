@@ -18,6 +18,8 @@
   2026-07-07); `NS_DATA` / the app config `data_dir` designate a store
   kept elsewhere. The self vault has no git remote (F11). nunc-fluens
   data instances are plain local data directories (git-less) living at
-  the gitignored `engines/nunc-fluens/instances/<profile>/`.
+  the gitignored `engines/nunc-fluens/instances/<name>/` ("profile" now
+  names an AI configuration record, not a data instance — see
+  design/naming.md).
 - Repo tooling is TypeScript run by Node (`tools/*.ts`); the one exception
   is `tools/bootstrap.sh`, which must run before the toolchain exists.

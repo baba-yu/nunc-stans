@@ -38,6 +38,8 @@ stans*, the standing now. manda and fourfive keep their names. The name
 | the external user-designated store ("no path convention exists") | **defaults to in-repo `<repo>/data/`** (gitignored — FD-3.2's no-data-in-git intent holds via the ignore; R13 2026-07-07). `NS_DATA` / config `data_dir` still designate a store kept elsewhere; `just bootstrap <dir>` writes the config |
 | `publish` step (git add/commit/push in daily runs) + Sunday `commitOnly` | retired 2026-07-07 (R9/R10) — instances are git-less plain data directories; steps just write files, and `run.json` is written once by the dag at end of run |
 | `data/memory/` + `data/references.txt` (instance layout) | `data/history/` + the citation ledger `data/history/reference-history.log` (R12, 2026-07-07) |
+| "profile" = a nunc-fluens data instance (old engine docs, instances/<profile>/) | **profile = an AI configuration record** (provider/model/prompt/skills/memory-scope/verify — Phase D); a data instance is an *instance*, `instances/<name>/` (PD4, 2026-07-07) |
+| (new area) | `agent` = `agents/**` (agents/nunc-stans-agent, Phase D) — commit-scope + CI registered |
 
 Rule IDs (`F1`–`F15`, `FD-x.y`, `NS-x`, `Inv N`) are retained as opaque
 historical identifiers; the letters no longer expand to anything.

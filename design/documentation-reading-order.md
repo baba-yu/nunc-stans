@@ -105,9 +105,10 @@ nunc-stans/
 └── tests/journey/                   ← arrives with Phase F
 ```
 
-Planned additions: `frontend/nunc-stans-formans/` and
+Landed since: `frontend/nunc-stans-formans/` and
 `frontend/packages/{nunc-ui,ai}` (Phase B–C), `agents/nunc-stans-agent/`
-(Phase D), `apps-host/` (Phase E).
+(Phase D — the first-party agent; Formans gained `/profiles` and `/runs`
+the same phase). Still planned: `apps-host/` (Phase E).
 
 ---
 

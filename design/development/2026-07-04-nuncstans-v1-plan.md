@@ -336,15 +336,18 @@ One place where models are called; nothing else talks to a provider directly.
   defaults from the active profile. Every verdict and retry is logged with
   token counts.
 - **Run log:** every call (provider, model, profile, tokens, duration,
-  verdict chain) appends to `~/nunc-stans-data/runs/ai-runs.jsonl` — the audit
-  substrate agent-abi needs.
+  verdict chain) appends to the data store's `runs/ai-runs.jsonl` (post-R13 default
+  `<repo>/data/runs/`) — the audit substrate agent-abi needs. *(Path
+  retargeted 2026-07-07 per R13.)*
 
 ### 2.7 Agent profiles + agent-abi v0 (requirement 5)
 
 Profile = `{id, name, provider, model, system_prompt, skills (tool
 allowlist), memory_scope {read[], write[]}, goal_verify defaults, ui prefs}`,
-stored as files in `~/nunc-stans-data/profiles/` (versioned by the vault's own
-git). The shell gets a Profiles screen: create, edit, duplicate, and set the
+stored as files in the data store's `profiles/` — post-R13 default
+`<repo>/data/profiles/`. *(Superseded 2026-07-07, Phase D PD2: profiles are
+plain gitignored files — only `self/` is a git vault, and the product is
+git-less elsewhere by the V3 direction.)* The shell gets a Profiles screen: create, edit, duplicate, and set the
 default profile per context (FourFive chat / News steps / app agents).
 
 Constitutional constraint carried into code: **no profile may grant write
@@ -492,7 +495,8 @@ v0 scope (built in Phase D):
 - MCP client for tools — including, from Phase E, the CRUD tools of generated
   apps: this agent is how "the agent co-uses the app" is proven (S-7).
 - Profile-driven (model, prompt, skills, memory scope) and subject to the
-  goal-verify loop (§2.6); every run logged to `~/nunc-stans-data/runs/`.
+  goal-verify loop (§2.6); every run logged to the data store's `runs/`
+  (post-R13 default `<repo>/data/runs/`).
 
 Not in v0: autonomous coding-agent behavior (file-editing loops). That is a
 later extension; until then, coding tasks go through the `claude-code`
@@ -520,7 +524,9 @@ Rules that apply to every phase:
   topic branch off `dev` (e.g. `newstack` for Phase C) when isolation
   helps. (Phase A ran on `phase/a-consolidation` under the earlier rule.)
 - Execution happens inside WSL (native modules, pnpm, cargo). Commit style
-  follows the repo convention (`area: message`, English, no AI attribution).
+  follows the repo convention (`area: message`, English). *(The no-AI-attribution
+  clause was lifted 2026-07-04 — CONTRIBUTING.md governs: the default co-author
+  trailer is fine.)*
 
 ### Phase A — Consolidation and naming
 
@@ -603,7 +609,11 @@ ported tests green against goldens; stories S-3 and S-4 pass. Content quality
 across providers will differ; acceptance is structural validity, and quality
 tuning is ongoing operations, not a phase gate.
 
-### Phase D — Profiles + goal-loop surfaces + nunc-stans-agent v0
+### Phase D — Profiles + goal-loop surfaces + nunc-stans-agent v0 — EXECUTED 2026-07-07
+
+(Plan: design/development/2026-07-07-phase-d-plan.md; evidence:
+design/verification/phase-d.md. S-5/S-6/S-11 executed same day; the
+S-10 re-run + CI push + merge are the owner's closing gates.)
 
 Work: profile store and Profiles screen; wire FourFive chat and News step
 config to profiles; goal-verify toggle per chat message and per pipeline
