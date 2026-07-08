@@ -66,6 +66,19 @@ owner accepted in session.
   `enableJsonResponse` — the MCP surface rides HTTP; the stdio bridge
   fallback is NOT needed.** Spike tool named in the PE7 shape
   (`spike-app_echo_create`).
+- **2026-07-08 — T2 done** (04be461 ff): blueprint gained `metrics[]`
+  (name snake_case-railed at the zod boundary, label, sql) and
+  `stories[]`, both defaulting to `[]` — the pre-E shape parses
+  untouched (regression-tested); extractor prompt elicits both;
+  Metrics/Stories tabs in the temp-app panel; the offline invoice demo
+  carries two metrics + a story (and the `invoices.status` column its
+  own state transitions implied). fourfive 24→28 green, typecheck
+  (vue-tsc + server tsc) green. **Risk-5 audit done**: the only
+  in-place writer of a version's `blueprint.json` is `setSoftwareStack`
+  (`workspace.ts:167`) — T4's freeze refusal targets exactly it;
+  `saveMarkdown` writes the derived `output.md` beside the blueprint
+  (allowed on frozen versions v0 — a render, not the source; noted for
+  T4's test).
 
 ## Story executions
 
