@@ -26,6 +26,15 @@ if command -v node >/dev/null 2>&1; then
   if [ "$major" -lt 24 ]; then say "MISS node >= 24 (found $(node --version))"; missing=1; fi
 fi
 command -v ollama  >/dev/null 2>&1 || say "info ollama not found (optional - local models)"
+# manda: the agent's memory gateway (Phase D). MANDA_BIN overrides PATH.
+if [ -n "${MANDA_BIN:-}" ] && [ -x "${MANDA_BIN:-}" ]; then
+  say "ok   manda (MANDA_BIN=$MANDA_BIN)"
+elif command -v manda >/dev/null 2>&1; then
+  say "ok   manda ($(command -v manda))"
+else
+  say "info manda not found (needed for nunc-stans-agent memory):"
+  say "     cargo install --locked --git https://github.com/baba-yu/manda --tag v0.2.0"
+fi
 
 say "== data store =="
 # The config must live where the app reads it (tools/data-dir.ts): %APPDATA%
