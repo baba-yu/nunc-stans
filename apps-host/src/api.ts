@@ -1,5 +1,7 @@
 import { Hono } from 'hono'
 import type { Context } from 'hono'
+import { existsSync, readFileSync } from 'node:fs'
+import { join, resolve } from 'node:path'
 import { discoverApps, findApp } from './bundles.ts'
 import type { ServedApp } from './bundles.ts'
 import { openAppData } from './appdb.ts'
@@ -91,6 +93,44 @@ export function buildApi(cfg: HostConfig): Hono {
   api.post('/:slug/api/:entity/:id/archive', (c) =>
     withApp(cfg, c, (app) => c.json(archiveRow(cfg.dataRoot, app, c.req.param('entity'), c.req.param('id')))),
   )
+
+  // --- the generic UI shell (one vite build for every app) -----------------
+  // Served at /apps/<slug>/ through the gate; the page fetches `api/...`
+  // RELATIVE so neither the shell nor this host hardcodes the gate prefix.
+  const uiDist = resolve(import.meta.dirname, '..', 'ui', 'dist')
+  const MIME: Record<string, string> = {
+    '.js': 'text/javascript',
+    '.css': 'text/css',
+    '.map': 'application/json',
+    '.svg': 'image/svg+xml',
+    '.ico': 'image/x-icon',
+    '.woff2': 'font/woff2',
+  }
+
+  api.get('/:slug/assets/:file', (c) => {
+    const file = c.req.param('file')
+    if (!/^[\w.-]+$/.test(file)) return c.text('not found', 404)
+    const path = join(uiDist, 'assets', file)
+    if (!existsSync(path)) return c.text('not found', 404)
+    const ext = file.slice(file.lastIndexOf('.'))
+    return c.body(readFileSync(path), 200, {
+      'content-type': MIME[ext] ?? 'application/octet-stream',
+      'cache-control': 'public, max-age=31536000, immutable', // hashed filenames
+    })
+  })
+
+  api.get('/:slug/', (c) =>
+    withApp(cfg, c, (app) => {
+      void app
+      const index = join(uiDist, 'index.html')
+      if (!existsSync(index)) return c.text('ui shell not built — run: pnpm -C apps-host build', 503)
+      return c.html(readFileSync(index, 'utf8'))
+    }),
+  )
+
+  // The shell's relative fetches need the trailing slash; a relative
+  // Location re-resolves correctly behind any mount prefix.
+  api.get('/:slug', (c) => c.body(null, 302, { location: `${c.req.param('slug')}/` }))
 
   return api
 }
