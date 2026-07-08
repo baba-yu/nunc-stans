@@ -52,6 +52,20 @@ owner accepted in session.
 - **2026-07-08 — T0 done**: plan proposed (d13b7ca), approved in
   session, status flipped in place; `pre-phase-e` tagged; baselines
   above re-measured (not copied); Ollama tools probe green.
+- **2026-07-08 — T1 done** (e20ddd3 tool, faf4d24 apps, this commit
+  design — the PD15 registration pattern): area `apps` registered
+  (commit-scope regex, FD-7.4 widened to `apps-host/` and green,
+  workspace glob, two enumerated CI steps); S-7/S-8 written as
+  executable specs (S-7 pins the allowlist refusal + the
+  grounding⊆declared code check; S-8 pins the same-session clock and
+  the freeze refusal); apps-host scaffolded (Hono skeleton on :8788,
+  strict tsconfig incl. `erasableSyntaxOnly`, typecheck + 1 test
+  green). **T1 spike PASSED (PE6 decided on evidence): the TS SDK
+  1.13 Streamable HTTP transport round-trips initialize → tools/list
+  → tools/call in-process (48ms), stateful session mode,
+  `enableJsonResponse` — the MCP surface rides HTTP; the stdio bridge
+  fallback is NOT needed.** Spike tool named in the PE7 shape
+  (`spike-app_echo_create`).
 
 ## Story executions
 
