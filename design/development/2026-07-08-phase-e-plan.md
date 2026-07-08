@@ -1,10 +1,10 @@
 # Phase E Implementation Plan — FourFive app factory (bundle generator + apps-host + agent co-use)
 
-**Status: PROPOSED — awaiting the §7 two-step (decisions PE1–PE14
-ratified, then the plan approved) plus the Phase E round-3 precondition:
-the Design spec section below (bundle format, apps-host API, MCP
-surface, codegen approach, security rails) is the design spec the v1
-plan requires owner-approved before code. No code before all of it.**
+**Status: APPROVED — decisions PE1–PE14 ratified, the plan approved,
+and the Design spec section below accepted as the round-3 precondition
+artifact (bundle format, apps-host API, MCP surface, codegen approach,
+security rails), all by the owner in session, 2026-07-08 (the §7
+two-step).**
 
 **Goal:** FourFive stops stopping at a markdown spec. From a frozen
 blueprint version it emits a **runnable app bundle**; a new **apps-host**
