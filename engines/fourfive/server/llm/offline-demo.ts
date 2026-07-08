@@ -49,6 +49,7 @@ const INVOICE_BLUEPRINT: Blueprint = {
         { name: 'tax_rate', type: 'REAL' },
         { name: 'tax_amount', type: 'INTEGER' },
         { name: 'total_amount', type: 'INTEGER' },
+        { name: 'status', type: 'TEXT', description: 'draft / sent / paid / overdue' },
         { name: 'notes', type: 'TEXT', nullable: true },
       ],
     },
@@ -85,6 +86,13 @@ const INVOICE_BLUEPRINT: Blueprint = {
     { subject: 'invoices.status', from: 'sent', to: 'paid', trigger: 'Payment confirmed' },
     { subject: 'invoices.status', from: 'sent', to: 'overdue', trigger: 'Past due date' },
     { subject: 'invoices.status', from: 'overdue', to: 'paid', trigger: 'Payment confirmed' },
+  ],
+  metrics: [
+    { name: 'outstanding_total', label: 'Outstanding total', sql: "SELECT COALESCE(SUM(total_amount), 0) FROM invoices WHERE status != 'paid'" },
+    { name: 'overdue_count', label: 'Overdue invoices', sql: "SELECT COUNT(*) FROM invoices WHERE status = 'overdue'" },
+  ],
+  stories: [
+    { id: 'st-1', title: 'Bill a customer', scenario: 'Create an invoice with line items and send it; the outstanding total reflects it.' },
   ],
 }
 

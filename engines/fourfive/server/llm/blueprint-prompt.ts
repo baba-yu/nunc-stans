@@ -21,10 +21,14 @@ const SCHEMA_HINT = `The JSON shape is:
   "apis": [ { "method": string, "path": string, "summary"?: string,
       "related_db": string[], "related_ui": string[] } ],
   "open_questions": string[],
-  "state_transitions": [ { "subject"?: string, "from": string, "to": string, "trigger"?: string, "description"?: string } ]
+  "state_transitions": [ { "subject"?: string, "from": string, "to": string, "trigger"?: string, "description"?: string } ],
+  "metrics": [ { "name": string, "label": string, "sql": string } ],
+  "stories": [ { "id": string, "title": string, "scenario": string } ]
 }
 "maps_to" links a UI field to "table.column". Reuse ids so UI/DB/API/logic cross-reference.
-"state_transitions" describes status lifecycles (e.g. an invoice: draft -> sent -> paid). Omit if the app has no meaningful states.`
+"state_transitions" describes status lifecycles (e.g. an invoice: draft -> sent -> paid). Omit if the app has no meaningful states.
+"metrics" are the app's DECLARED measurements — what the user wants this app to measure. Each is one SQLite SELECT statement over the app's own tables returning a single value; "name" is a snake_case identifier. Only declared metrics can ground strategy discussion later, so capture what the user says they want to watch.
+"stories" are the user stories the app must satisfy, in the user's own terms (one sentence each).`
 
 export function buildBlueprintMessages(
   history: ChatMessage[],

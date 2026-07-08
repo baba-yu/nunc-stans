@@ -11,6 +11,8 @@ const BP: Blueprint = {
   apis: [],
   open_questions: [],
   state_transitions: [],
+  metrics: [],
+  stories: [],
 }
 
 const BP2: Blueprint = {
@@ -22,6 +24,8 @@ const BP2: Blueprint = {
   apis: [],
   open_questions: [],
   state_transitions: [],
+  metrics: [],
+  stories: [],
 }
 
 describe('buildDependencyContext', () => {

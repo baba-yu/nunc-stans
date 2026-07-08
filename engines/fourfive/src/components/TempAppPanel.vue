@@ -8,9 +8,11 @@ import LogicView from './LogicView.vue'
 import StateView from './StateView.vue'
 import ApiView from './ApiView.vue'
 import TerminologyView from './TerminologyView.vue'
+import MetricsView from './MetricsView.vue'
+import StoriesView from './StoriesView.vue'
 
 const store = useSessionStore()
-const tabs = ['Mock UI', 'ERD', 'Logic', 'State', 'API', 'Terminology'] as const
+const tabs = ['Mock UI', 'ERD', 'Logic', 'State', 'API', 'Terminology', 'Metrics', 'Stories'] as const
 type Tab = (typeof tabs)[number]
 const active = ref<Tab>('Mock UI')
 const tabItems = tabs.map((t) => ({ id: t, label: t }))
@@ -69,6 +71,8 @@ const hasContent = computed(() => !!bp.value || store.dependencies.length > 0)
         <StateView v-else-if="active === 'State'" :transitions="bp?.state_transitions ?? []" />
         <ApiView v-else-if="active === 'API'" :apis="bp?.apis ?? []" :deps="depApis" />
         <TerminologyView v-else-if="active === 'Terminology'" :terms="bp?.terminology ?? []" />
+        <MetricsView v-else-if="active === 'Metrics'" :metrics="bp?.metrics ?? []" />
+        <StoriesView v-else-if="active === 'Stories'" :stories="bp?.stories ?? []" />
       </template>
     </div>
   </section>
