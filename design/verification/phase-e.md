@@ -79,6 +79,46 @@ owner accepted in session.
   `saveMarkdown` writes the derived `output.md` beside the blueprint
   (allowed on frozen versions v0 — a render, not the source; noted for
   T4's test).
+- **2026-07-08 — Amendment PE9' noted in this record** (owner-ratified
+  in session, written into the plan by the parallel onboarding lane):
+  local backend Ollama → llama.cpp; T0's Ollama probe stands as
+  historical evidence, and the PE9'/T0 retarget (llama-server GGUF tool
+  probe) is owed before T8 rides it. The parallel lane's WIP
+  (tools/setup.ts, llamacpp provider, mandate helper) is untouched by
+  this lane's commits.
+- **2026-07-08 — T3 done** (5ef2fa8 ff): `WORKSPACE_DIR` resolves via
+  the shared data-dir resolver → `<store>/artifact/` (PE5;
+  `FOURFIVE_WORKSPACE` override; vitest injects a throwaway dir so no
+  test can touch a real store); boot-time migration aid prints the
+  exact one-time `mv` when the legacy repo workspace still holds a
+  `codev.db` and the new home is empty (the move stays owner-manual).
+  The bootstrap-doctor variant of the hint is DEFERRED to when the
+  parallel lane's `tools/bootstrap.sh` WIP lands (file avoided on
+  purpose); the boot warning covers the gap. fourfive 28 green,
+  typecheck green. Owner `mv` still pending (legacy workspace holds the
+  B–D invoice/composite test apps).
+- **2026-07-08 — T4 done** (d78ac82 ff): `server/bundle/generate.ts` —
+  pure blueprint→bundle transform (no LLM, no clock: `generated_at`
+  DROPPED from the planned app.json shape for byte-determinism, a
+  recorded refinement; the freeze timestamp lives in `app_versions`).
+  Emits app.json (normalized entities incl. injected `id` pk + audit
+  columns, metrics, stories, ui, blueprint_hash), schema.sql (typed
+  DDL + `metric_<name>` views, PROVEN to apply on an in-memory DB at
+  generation time — a broken metric is a 422 at the button),
+  mcp-tools.json (PE7 names, JSON Schemas, NOT-NULL-driven required),
+  ui.json, tests/scenarios.json (per-entity CRUD walks with NOT-NULL
+  fk ancestors threaded via `$id` tokens + a metrics scenario).
+  Entity/column names identifier-railed; `metrics`/`manifest`/`api`
+  etc. reserved; metric SQL double-railed (single SELECT, no writes) —
+  generator side of rail 3. **Freeze (PE11)**: `freezeAndBundle` stamps
+  `frozen_at`+`bundle_hash` (schema migration added); re-freeze is
+  idempotent; a mutated frozen blueprint is refused with code `drift`
+  (409 at the API); `setSoftwareStack` on a frozen version now ROLLS a
+  new version — the risk-5 BL-1 shape is closed. Routes: session-scoped
+  `POST /api/sessions/:id/bundle` (the S-8 button) + direct
+  `POST /api/apps/:slug/versions/:version/bundle`. UI: Generate-bundle
+  button + frozen/drift notes in the temp-app panel. fourfive 28→43
+  green (10 generator + 5 freeze), typecheck + vite build green.
 
 ## Story executions
 
