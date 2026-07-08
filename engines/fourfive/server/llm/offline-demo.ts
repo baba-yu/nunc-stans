@@ -96,10 +96,16 @@ const INVOICE_RE = /invoice|bill|請求|インボイス/i
 const looksInvoice = (messages: ChatMessage[]): boolean =>
   INVOICE_RE.test(messages.filter((m) => m.role !== 'system').map((m) => m.content).join(' '))
 
-/** Canned chat reply — plugs into nunc-ai's mock provider as `responder`. */
+/** Canned chat reply — plugs into nunc-ai's mock provider as `responder`.
+ * Doubles as the SCRIPTED JUDGE (S-6): a goal-verify judge call under
+ * the mock provider gets a deterministic never-met verdict, so the
+ * loop's mechanics run to max_iters with zero live tokens. */
 export function demoResponder(messages: ChatMessage[]): string {
   const lastUser = [...messages].reverse().find((m) => m.role === 'user')
   const text = (lastUser?.content ?? '').trim()
+  if (text.startsWith('You are a strict goal judge.')) {
+    return JSON.stringify({ met: false, gaps: ['scripted never-met verdict (offline judge)'] })
+  }
   const lines = [
     'This is a mock LLM response (for offline testing with no external connection).',
     '',
