@@ -35,6 +35,8 @@ function makeNewsShapedSrc(opts: { withDb?: boolean; reportOnly?: boolean } = {}
   w(join(src, 'memory', 'dormant', 'dormant-20260101.md'), '# Dormant pool\n');
   w(join(src, 'reference', 'glossary.yml'), 'terms: []\n'); // overwrites the seed
   w(join(src, 'reference', 'editorial-notes.md'), 'real editorial extra\n');
+  w(join(src, 'reference', 'news-topics.md'),
+    '# Topics\n\n## Topic list\n\n- Real Topic One\n- Real Topic Two (every run)\n');
   w(join(src, 'docs', 'data', 'manifest.json'), '{"locales":["en"]}\n');
   w(join(src, 'docs', 'index.html'), '<html></html>\n'); // dashboard: NOT imported
   w(join(src, 'docs', 'assets', 'app.js'), '(() => {})();\n');
@@ -119,6 +121,13 @@ describe('importNewsCheckout', () => {
       // Real editorial files OVERWRITE the seeds; untouched seeds survive.
       expect(readFileSync(join(inst, 'data', 'reference', 'glossary.yml'), 'utf8'))
         .toBe('terms: []\n');
+      // Topics-authoring W1: the imported REAL news-topics.md is converted
+      // over the template's seed json — the authority reflects the import.
+      const topicsJson = JSON.parse(readFileSync(
+        join(inst, 'data', 'reference', 'news-topics.json'), 'utf8'));
+      expect(topicsJson.topics.map((t: any) => t.name))
+        .toEqual(['Real Topic One', 'Real Topic Two (every run)']);
+      expect(topicsJson.topics[1].mandatory).toBe(true); // "every run" annotation
       expect(existsSync(join(inst, 'data', 'reference', 'news-topics.md'))).toBe(true);
       // Old references.txt lands at the history ledger path.
       expect(readFileSync(

@@ -27,6 +27,7 @@ import {
 import { tmpdir } from 'node:os';
 import { dirname, join, relative, sep } from 'node:path';
 import { initInstance, instanceTemplateDir } from '../src/instance.ts';
+import { parseTopicsFile, topicNames } from '../src/topics.ts';
 
 const HERE = dirname(new URL(import.meta.url).pathname);
 const INPUT = join(HERE, 'input');
@@ -255,21 +256,15 @@ function summary(day: string) {
   };
 }
 
-// The topic taxonomy the check-topic-coverage gate enumerates (real
-// product topics, hardcoded in the gate). The synthetic corpus reports
-// every one honestly as uncovered/consistent, except the always-present
-// events bullet — so the gate passes (incl. the mandatory Unsloth row).
-const GATE_TOPICS = [
-  'LLM Workflow', 'Multi-profiling for Local LLM (e.g. Multica)',
-  'Agent Harness (OpenClaw, NemoClaw, Hermes Agents, etc.)',
-  'Platform for Local LLM (vLLM, SGLang, etc.)',
-  'Ecosystems for Local LLM Embedded System (Foundry Local, etc.)',
-  'Local LLM Models', 'Local LLM Optimization, Fine-tuning (Unsloth — every run)',
-  'Ecosystems for LLM on PaaS (AWS Bedrock, Azure AI Foundry, etc.)',
-  'AI Security', 'CVE update on score ≥ 8.0', 'Hardware', 'Physical AI',
-  'LLM-related research and papers', 'Stock prices and corporate activity',
-  'Bay Area / SV AI meet-up events', 'Other standing-out topics',
-];
+// The topic taxonomy the check-topic-coverage gate enumerates — read from
+// the TEMPLATE's news-topics.json (topics-authoring W1: the gate derives
+// from the instance topics, and the fixture instance is template-born).
+// The synthetic corpus reports every one honestly as uncovered/consistent,
+// except the always-present events bullet — so the gate passes (incl. the
+// mandatory Unsloth row).
+const TEMPLATE_TOPICS = parseTopicsFile(readFileSync(
+  join(instanceTemplateDir(), 'data', 'reference', 'news-topics.json'), 'utf8'));
+const GATE_TOPICS = topicNames(TEMPLATE_TOPICS);
 
 function verification(day: string) {
   return {
@@ -296,7 +291,7 @@ export function writeInputs(): void {
   // The editorial reference seeds come FROM the template (they double
   // as the fixture's policy files) — assert presence, never generate.
   const template = instanceTemplateDir();
-  for (const f of ['news-topics.md', 'citation-restrictions.md', 'glossary.yml'])
+  for (const f of ['news-topics.json', 'citation-restrictions.md', 'glossary.yml'])
     if (!existsSync(join(template, 'data', 'reference', f)))
       throw new Error(`instance template missing data/reference/${f} — `
         + 'the goldens inherit the template seeds');
@@ -590,7 +585,7 @@ export async function freeze(): Promise<void> {
   const { tmpdir } = await import('node:os');
   const rLocales = ['en', ...LOCALES];
   for (const day of DAYS) {
-    const topic = checkTopicCoverage({ sourcedataDir: sdRoot, date: day });
+    const topic = checkTopicCoverage({ sourcedataDir: sdRoot, date: day, topics: TEMPLATE_TOPICS.topics });
     w(join(EXPECTED, 'gates', `${day}.topic.txt`),
       normalize(topic.lines.join('\n') + '\n'));
     const workRoot = mkdtempSync(join(tmpdir(), 'nf-freeze-'));

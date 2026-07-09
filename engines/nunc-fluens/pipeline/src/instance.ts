@@ -87,7 +87,7 @@ export function resolveInstanceDir(nameOrPath: string): string {
 const TEMPLATE_REQUIRED = [
   'README.md',
   'data/history/reference-history.log',
-  'data/reference/news-topics.md',
+  'data/reference/news-topics.json', // topics-authoring W1: json is the authority
   'data/reference/citation-restrictions.md',
   'data/reference/glossary.yml',
 ];

@@ -6,6 +6,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { dailyFlowCheck } from '../src/gates/daily-flow-check.ts';
 import { checkTopicCoverage } from '../src/gates/check-topic-coverage.ts';
+import { loadTopics } from '../src/topics.ts';
 import { postUpdateValidation } from '../src/gates/post-update-validation.ts';
 import { citationCheck, classifyHost, parsePolicy } from '../src/gates/citation-check.ts';
 import { runExport } from '../src/export/export.ts';
@@ -24,7 +25,12 @@ describe('check-topic-coverage parity', () => {
   for (const d of days) {
     it.skipIf(skipReason)(`matches the golden topic gate for ${d}`, () => {
       const gates = JSON.parse(readFileSync(join(EXPECTED, 'gates', `${d}.json`), 'utf8'));
-      const r = checkTopicCoverage({ sourcedataDir: join(INPUT, 'data', 'sourcedata'), date: d });
+      // W1: the gate reads the INSTANCE's topics — the golden input
+      // instance is template-born, so its news-topics.json is the seed.
+      const r = checkTopicCoverage({
+        sourcedataDir: join(INPUT, 'data', 'sourcedata'), date: d,
+        topics: loadTopics(INPUT).topics,
+      });
       expect(r.exit).toBe(gates.topic);
       const golden = readFileSync(join(EXPECTED, 'gates', `${d}.topic.txt`), 'utf8');
       expect(normalizeVolatile(r.lines.join('\n') + '\n'))

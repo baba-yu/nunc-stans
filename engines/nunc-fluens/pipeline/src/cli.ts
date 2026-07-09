@@ -255,8 +255,27 @@ switch (cmd) {
   case 'init': code = cmdInit(arg); break
   case 'import': code = cmdImport(arg, arg2); break
   case 'run': code = await cmdRun(argvRest); break
+  case 'accumulate-glossary': {
+    // W10: distill export-graph vocabulary into the instance glossary —
+    // the scheduled background feeder for authoring's offline grounding.
+    if (!arg) { console.error('accumulate-glossary: pass <dir|name>'); code = 2; break }
+    const { accumulateGlossary } = await import('./ingest/glossary-accumulate.ts')
+    const { resolveInstanceDir } = await import('./instance.ts')
+    try {
+      const r = accumulateGlossary(resolveInstanceDir(arg))
+      console.log(`glossary: +${r.added.length} candidate term(s)`
+        + `${r.added.length ? ` (${r.added.join(', ')})` : ''}; `
+        + `${r.skippedExisting} already known`
+        + `${r.deferred ? `; ${r.deferred} deferred to the next run (cap)` : ''}`)
+      code = 0
+    } catch (e) {
+      console.error(`accumulate-glossary: ${e instanceof Error ? e.message : e}`)
+      code = 1
+    }
+    break
+  }
   default:
-    console.error('usage: nunc-fluens link <dir|name> | status | validate <date> | init <dir|name> | import <src> <instance> | run --instance <dir|name> [--date D] [--replay] [--dry-run] [--only step]')
+    console.error('usage: nunc-fluens link <dir|name> | status | validate <date> | init <dir|name> | import <src> <instance> | run --instance <dir|name> [--date D] [--replay] [--dry-run] [--only step] | accumulate-glossary <dir|name>')
     code = 2
 }
 process.exit(code)
