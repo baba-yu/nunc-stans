@@ -68,6 +68,39 @@ single-area rule held (design/ is free), noted for honesty.
   write-back, instructive refusal, prompt-block shape) + the import
   conversion assertions; typecheck green; `node tools/check.ts` ok.
 
+## T3 + T3b — intent → search, glossary accumulation (2026-07-08, 1b41a26 nf + 491935a tool)
+
+- `src/orchestrator/topic-search.ts` (W3): `watch` = 1 query, `broad` =
+  the deterministic two-angle pass, **`deep` = plan → execute → judge**:
+  the injected planner (llmJson + the new `prompts/skills/deep-search.md`
+  skill) proposes queries and judges coverage; the ORCHESTRATOR executes
+  through the adapter with URL dedup, stops on goal-met, on convergence
+  (a round surfacing no new domain and no new URL), or on the
+  code-enforced brakes (4 rounds / 12 queries per topic — risk 8: the
+  model never owns the stop). Every round is captured in
+  `search_plan.json` (audit; replay never re-searches, so goldens are
+  untouched — the parity suite stayed green as the proof). The module is
+  dependency-injected and unit-tested with zero live calls (9 tests:
+  per-intent query counts, judged-met stop, convergence, budget trip,
+  cross-round dedup, failing-query resilience, plan validation).
+- `steps.ts` compose fan-out rides `searchTopic` per topic (the 1.1s
+  rate-limit sleep lives inside the search dep); per-topic outcome
+  logged; the all-empty StepFailure kept.
+- **T3b (W10)**: `glossary-accumulate.ts` — distills export-graph node
+  labels (via the existing `extractCandidates`) into
+  `data/reference/glossary.yml` as `candidate` entries by **textual
+  append** (the user's own yaml, comments included, stays
+  byte-untouched); dedup against terms AND aliases; 20-per-run cap with
+  the deferral SURFACED; refuses non-instances (W7 — the write goes into
+  the reference tree). The existing machinery finishes the loop:
+  initGlossarySeed inserts on the next run, glossary-define fills,
+  validate gates. CLI `accumulate-glossary <dir|name>` +
+  `just news-glossary <instance>` (cron/systemd-friendly — the
+  standalone-recipe option the plan allowed, chosen over weekly-chain
+  wiring to keep goldens still). 4 tests (append+bytes, cap+deferral,
+  non-instance refusal, no-exports zero).
+- Suites: pipeline 210 → **214** green, typecheck green, check.ts ok.
+
 ## Exit criteria progress
 
 1. [x] `news-topics.json` is the only topic authority; gate + compose
@@ -75,8 +108,10 @@ single-area rule held (design/ is free), noted for honesty.
 2. [ ] NL authoring → structure → hand-edit → save; read-only refusal
        on a view source. [T5+T6]
 3. [ ] Ongoing NL merge (diff-reviewed). [T6]
-4. [ ] Offline world-grounded suggestions. [T3b+T6]
-5. [ ] `intent` changes fan-out counts; goldens deterministic. [T3]
+4. [~] Offline world-grounded suggestions — the vocabulary feeder is
+       built (T3b); the authoring surface consumes it at T6.
+5. [x] `intent` changes fan-out counts (unit-proven per intent); goldens
+       untouched (fan-out is live-only; parity suite green). [T3]
 6. [ ] `just up` runs `llama-server`; provider confirmed vs real
        frames; honest degrade. [T4]
 7. [x] F6 holds so far: nothing writes topics unattended (the lazy
