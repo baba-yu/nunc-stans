@@ -33,7 +33,8 @@ elif command -v manda >/dev/null 2>&1; then
   say "ok   manda ($(command -v manda))"
 else
   say "info manda not found (needed for nunc-stans-agent memory):"
-  say "     cargo install --locked --git https://github.com/baba-yu/manda --tag v0.2.0"
+  say "     run 'just setup' (installs manda + llama.cpp + a model), or build it:"
+  say "     git clone https://github.com/baba-yu/manda ~/manda && (cd ~/manda && cargo build --release)"
 fi
 
 say "== data store =="

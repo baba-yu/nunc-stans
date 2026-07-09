@@ -15,6 +15,12 @@ data_dir := `node tools/data-dir.ts 2>/dev/null || true`
 bootstrap dir='':
     sh tools/bootstrap.sh "{{dir}}"
 
+# Batteries-included first run: bootstrap + manda + llama.cpp + a model
+# (validated) + your first mandate (interactive). Re-runnable; each step
+# no-ops when already satisfied. See agents/nunc-stans-agent/README.md.
+setup *args:
+    node tools/setup.ts {{args}}
+
 # Safety net only: with the in-repo default the store always resolves;
 # an empty value means tools/data-dir.ts itself failed to run.
 _require_data:
