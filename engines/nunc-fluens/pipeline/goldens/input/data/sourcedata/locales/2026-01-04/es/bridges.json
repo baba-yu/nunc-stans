@@ -1,0 +1,194 @@
+{
+  "date": "2026-01-04",
+  "validation_rows": [
+    {
+      "prediction_ref": {
+        "id": "prediction.3596f21913b0aaea",
+        "short_label": "Widgetly ships synthetic milestone 20260102-0 by Q3 2026",
+        "prediction_date": "2026-01-02"
+      },
+      "today_relevance": 1,
+      "evidence_summary": "[es] Today's fixture update 20260104-0 touches the same synthetic storyline.",
+      "reference_links": [
+        {
+          "label": "Example 0 (2026-01-04)",
+          "url": "https://example.com/20260104/0"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "[es] Today's fixture update supports the synthetic milestone from 2026-01-02. The vendor has not shipped yet, so the remaining gap is the milestone artifact itself.",
+        "coherence": 3,
+        "remaining_gap": "milestone not yet shipped"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.3596f21913b0aaeb",
+        "short_label": "Acme Metrics ships synthetic milestone 20260102-1 by Q3 2026",
+        "prediction_date": "2026-01-02"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "[es] Today's fixture update 20260104-1 touches the same synthetic storyline.",
+      "reference_links": [
+        {
+          "label": "Example 1 (2026-01-04)",
+          "url": "https://example.com/20260104/1"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "[es] Today's fixture update supports the synthetic milestone from 2026-01-02. The vendor has not shipped yet, so the remaining gap is the milestone artifact itself.",
+        "coherence": 3,
+        "remaining_gap": "milestone not yet shipped"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.3596f21913b0aaec",
+        "short_label": "Exampletron ships synthetic milestone 20260102-2 by Q3 2026",
+        "prediction_date": "2026-01-02"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "[es] Today's fixture update 20260104-0 touches the same synthetic storyline.",
+      "reference_links": [
+        {
+          "label": "Example 0 (2026-01-04)",
+          "url": "https://example.com/20260104/0"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "so_that",
+        "narrative": "[es] Today's fixture update supports the synthetic milestone from 2026-01-02. The vendor has not shipped yet, so the remaining gap is the milestone artifact itself.",
+        "coherence": 3,
+        "remaining_gap": "milestone not yet shipped"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.3596f21913b0edf3",
+        "short_label": "Widgetly ships synthetic milestone 20260103-0 by Q3 2026",
+        "prediction_date": "2026-01-03"
+      },
+      "today_relevance": 1,
+      "evidence_summary": "[es] Today's fixture update 20260104-0 touches the same synthetic storyline.",
+      "reference_links": [
+        {
+          "label": "Example 0 (2026-01-04)",
+          "url": "https://example.com/20260104/0"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "[es] Today's fixture update supports the synthetic milestone from 2026-01-03. The vendor has not shipped yet, so the remaining gap is the milestone artifact itself.",
+        "coherence": 3,
+        "remaining_gap": "milestone not yet shipped"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.3596f21913b0edf4",
+        "short_label": "Acme Metrics ships synthetic milestone 20260103-1 by Q3 2026",
+        "prediction_date": "2026-01-03"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "[es] Today's fixture update 20260104-1 touches the same synthetic storyline.",
+      "reference_links": [
+        {
+          "label": "Example 1 (2026-01-04)",
+          "url": "https://example.com/20260104/1"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "[es] Today's fixture update supports the synthetic milestone from 2026-01-03. The vendor has not shipped yet, so the remaining gap is the milestone artifact itself.",
+        "coherence": 3,
+        "remaining_gap": "milestone not yet shipped"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.3596f21913b0edf5",
+        "short_label": "Exampletron ships synthetic milestone 20260103-2 by Q3 2026",
+        "prediction_date": "2026-01-03"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "[es] Today's fixture update 20260104-0 touches the same synthetic storyline.",
+      "reference_links": [
+        {
+          "label": "Example 0 (2026-01-04)",
+          "url": "https://example.com/20260104/0"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "so_that",
+        "narrative": "[es] Today's fixture update supports the synthetic milestone from 2026-01-03. The vendor has not shipped yet, so the remaining gap is the milestone artifact itself.",
+        "coherence": 3,
+        "remaining_gap": "milestone not yet shipped"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.3596f21913b130fc",
+        "short_label": "Widgetly ships synthetic milestone 20260104-0 by Q3 2026",
+        "prediction_date": "2026-01-04"
+      },
+      "today_relevance": 1,
+      "evidence_summary": "[es] Today's fixture update 20260104-0 touches the same synthetic storyline.",
+      "reference_links": [
+        {
+          "label": "Example 0 (2026-01-04)",
+          "url": "https://example.com/20260104/0"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "because",
+        "narrative": "[es] Today's fixture update supports the synthetic milestone from 2026-01-04. The vendor has not shipped yet, so the remaining gap is the milestone artifact itself.",
+        "coherence": 3,
+        "remaining_gap": "milestone not yet shipped"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.3596f21913b130fd",
+        "short_label": "Acme Metrics ships synthetic milestone 20260104-1 by Q3 2026",
+        "prediction_date": "2026-01-04"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "[es] Today's fixture update 20260104-1 touches the same synthetic storyline.",
+      "reference_links": [
+        {
+          "label": "Example 1 (2026-01-04)",
+          "url": "https://example.com/20260104/1"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "given",
+        "narrative": "[es] Today's fixture update supports the synthetic milestone from 2026-01-04. The vendor has not shipped yet, so the remaining gap is the milestone artifact itself.",
+        "coherence": 3,
+        "remaining_gap": "milestone not yet shipped"
+      }
+    },
+    {
+      "prediction_ref": {
+        "id": "prediction.3596f21913b130fe",
+        "short_label": "Exampletron ships synthetic milestone 20260104-2 by Q3 2026",
+        "prediction_date": "2026-01-04"
+      },
+      "today_relevance": 3,
+      "evidence_summary": "[es] Today's fixture update 20260104-0 touches the same synthetic storyline.",
+      "reference_links": [
+        {
+          "label": "Example 0 (2026-01-04)",
+          "url": "https://example.com/20260104/0"
+        }
+      ],
+      "bridge": {
+        "support_dimension": "so_that",
+        "narrative": "[es] Today's fixture update supports the synthetic milestone from 2026-01-04. The vendor has not shipped yet, so the remaining gap is the milestone artifact itself.",
+        "coherence": 3,
+        "remaining_gap": "milestone not yet shipped"
+      }
+    }
+  ]
+}

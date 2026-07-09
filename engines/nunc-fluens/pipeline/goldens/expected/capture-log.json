@@ -1,0 +1,4 @@
+{
+  "captureDay": "<SYNTHETIC>",
+  "note": "expected/ is frozen from the TS pipeline itself over the synthetic corpus (T12 self-regression baseline). The oracle-parity record lives in git history and design/verification/phase-c.md."
+}

@@ -1,0 +1,232 @@
+# Phase E verification record — FourFive app factory
+
+- Start: 2026-07-08. Branch `phase/e` off `dev` at **fd7d5d4** (post
+  PR #4); tag `pre-phase-e` = fd7d5d4.
+- Plan: `design/development/2026-07-08-phase-e-plan.md` — decisions
+  PE1–PE14 ratified AND plan approved (incl. the round-3 design spec
+  section) by the owner in session, 2026-07-08.
+- Constraints carried: scratch stores (`NS_DATA`) for every test/story
+  run — the owner's live store is never written by tests; production
+  `~/news` zero contact (standing); execute inside WSL (§5 note 12).
+
+## Preflight (T0, 2026-07-08)
+
+Re-measured suite baselines (WSL, this box):
+
+| suite | count |
+|---|---|
+| nunc-fluens pipeline | 193 passed |
+| nunc-ai (frontend/packages/ai) | 35 passed |
+| fourfive | 24 passed + typecheck green |
+| Formans | 20 passed |
+| agent (nunc-stans-agent) | 22 passed |
+| gate (Rust) | 6 unit + 12 integration |
+| ns engine (Rust) | 11 |
+| tools/check.ts | ok (FD-3.2, import scope, edge schema) |
+
+Environment probes:
+
+- **Ollama tools probe PASSED** (plan risk 3): `qwen3.6:27b` given a
+  `get_weather` tool over `/api/chat` returned a well-formed
+  `tool_calls` block (`{"name":"get_weather","arguments":{"city":
+  "Tokyo"}}`) plus thinking, `done_reason:"stop"`, ~1.8s. 35b remains
+  the on-disk fallback (`ollama list` archived).
+- FourFive workspace inventory (pre-PE5 move, repo-anchored
+  `engines/fourfive/workspace/`): `codev.db` (+wal/shm) and
+  `apps/{invoice-app, invoice-app-2..4, composite-smoke-app}` — Phase
+  B–D dev/test artifacts; the owner's one-time `mv` migrates them at
+  T3+ (doctor prints the line).
+- Phase D owner-gate snapshot (open, non-blocking for E per PE1):
+  S-10 re-run, CI push, screenshots → `design/ui/phase-d/`,
+  **agent-abi v0 review** (load-bearing for PE10 — flagged), phase-d
+  close commit.
+
+Mid-session note (pre-plan): the owner committed the down/restart WIP
+as 567469c (`ci:` — unregistered area, left as history); the next
+commit 6aed042 ported it to `tools/down.ts` per the TS-tooling
+convention (same port-based semantics + Windows netstat path); the
+owner accepted in session.
+
+## Evidence log
+
+- **2026-07-08 — T0 done**: plan proposed (d13b7ca), approved in
+  session, status flipped in place; `pre-phase-e` tagged; baselines
+  above re-measured (not copied); Ollama tools probe green.
+- **2026-07-08 — T1 done** (e20ddd3 tool, faf4d24 apps, this commit
+  design — the PD15 registration pattern): area `apps` registered
+  (commit-scope regex, FD-7.4 widened to `apps-host/` and green,
+  workspace glob, two enumerated CI steps); S-7/S-8 written as
+  executable specs (S-7 pins the allowlist refusal + the
+  grounding⊆declared code check; S-8 pins the same-session clock and
+  the freeze refusal); apps-host scaffolded (Hono skeleton on :8788,
+  strict tsconfig incl. `erasableSyntaxOnly`, typecheck + 1 test
+  green). **T1 spike PASSED (PE6 decided on evidence): the TS SDK
+  1.13 Streamable HTTP transport round-trips initialize → tools/list
+  → tools/call in-process (48ms), stateful session mode,
+  `enableJsonResponse` — the MCP surface rides HTTP; the stdio bridge
+  fallback is NOT needed.** Spike tool named in the PE7 shape
+  (`spike-app_echo_create`).
+- **2026-07-08 — T2 done** (04be461 ff): blueprint gained `metrics[]`
+  (name snake_case-railed at the zod boundary, label, sql) and
+  `stories[]`, both defaulting to `[]` — the pre-E shape parses
+  untouched (regression-tested); extractor prompt elicits both;
+  Metrics/Stories tabs in the temp-app panel; the offline invoice demo
+  carries two metrics + a story (and the `invoices.status` column its
+  own state transitions implied). fourfive 24→28 green, typecheck
+  (vue-tsc + server tsc) green. **Risk-5 audit done**: the only
+  in-place writer of a version's `blueprint.json` is `setSoftwareStack`
+  (`workspace.ts:167`) — T4's freeze refusal targets exactly it;
+  `saveMarkdown` writes the derived `output.md` beside the blueprint
+  (allowed on frozen versions v0 — a render, not the source; noted for
+  T4's test).
+- **2026-07-08 — Amendment PE9' noted in this record** (owner-ratified
+  in session, written into the plan by the parallel onboarding lane):
+  local backend Ollama → llama.cpp; T0's Ollama probe stands as
+  historical evidence, and the PE9'/T0 retarget (llama-server GGUF tool
+  probe) is owed before T8 rides it. The parallel lane's WIP
+  (tools/setup.ts, llamacpp provider, mandate helper) is untouched by
+  this lane's commits.
+- **2026-07-08 — T3 done** (5ef2fa8 ff): `WORKSPACE_DIR` resolves via
+  the shared data-dir resolver → `<store>/artifact/` (PE5;
+  `FOURFIVE_WORKSPACE` override; vitest injects a throwaway dir so no
+  test can touch a real store); boot-time migration aid prints the
+  exact one-time `mv` when the legacy repo workspace still holds a
+  `codev.db` and the new home is empty (the move stays owner-manual).
+  The bootstrap-doctor variant of the hint is DEFERRED to when the
+  parallel lane's `tools/bootstrap.sh` WIP lands (file avoided on
+  purpose); the boot warning covers the gap. fourfive 28 green,
+  typecheck green. Owner `mv` still pending (legacy workspace holds the
+  B–D invoice/composite test apps).
+- **2026-07-08 — T4 done** (d78ac82 ff): `server/bundle/generate.ts` —
+  pure blueprint→bundle transform (no LLM, no clock: `generated_at`
+  DROPPED from the planned app.json shape for byte-determinism, a
+  recorded refinement; the freeze timestamp lives in `app_versions`).
+  Emits app.json (normalized entities incl. injected `id` pk + audit
+  columns, metrics, stories, ui, blueprint_hash), schema.sql (typed
+  DDL + `metric_<name>` views, PROVEN to apply on an in-memory DB at
+  generation time — a broken metric is a 422 at the button),
+  mcp-tools.json (PE7 names, JSON Schemas, NOT-NULL-driven required),
+  ui.json, tests/scenarios.json (per-entity CRUD walks with NOT-NULL
+  fk ancestors threaded via `$id` tokens + a metrics scenario).
+  Entity/column names identifier-railed; `metrics`/`manifest`/`api`
+  etc. reserved; metric SQL double-railed (single SELECT, no writes) —
+  generator side of rail 3. **Freeze (PE11)**: `freezeAndBundle` stamps
+  `frozen_at`+`bundle_hash` (schema migration added); re-freeze is
+  idempotent; a mutated frozen blueprint is refused with code `drift`
+  (409 at the API); `setSoftwareStack` on a frozen version now ROLLS a
+  new version — the risk-5 BL-1 shape is closed. Routes: session-scoped
+  `POST /api/sessions/:id/bundle` (the S-8 button) + direct
+  `POST /api/apps/:slug/versions/:version/bundle`. UI: Generate-bundle
+  button + frozen/drift notes in the temp-app panel. fourfive 28→43
+  green (10 generator + 5 freeze), typecheck + vite build green.
+
+- **2026-07-08 — T5 done** (bb01a31 contracts): `contracts/app-bundle.md`
+  v0 Draft — the FourFive↔apps-host boundary: bundle location + "bundle
+  presence IS the freeze marker" (consumers never read fourfive's DB),
+  the five file shapes with the NormalizedEntity guarantee, identifier/
+  reserved-name rails, the metrics contract (single-SELECT rail both
+  sides, read-only execution, grounding⊆declared), PE7 tool naming +
+  declared-surface-is-served-surface, the published REST API, app data
+  layout (installed.jsonl append-only), scenario vocabulary, named v0
+  deferrals. agent-abi §6 now cross-references it for the `apps:<slug>`
+  skills gating; glossary gained bundle / generated app / metric /
+  apps-host; reading-order updated. **Owner review at close (it is a
+  contract).**
+- **2026-07-08 — T6 done** (c679dfd + 1269b77 apps): apps-host v0.
+  Server: bundle discovery by scan (highest complete bundle wins,
+  malformed skipped loudly, manifest identifiers re-validated — SQL
+  injection through names impossible), per-app data
+  (`<store>/apps/<slug>/data.sqlite` lazy, WAL, FK ON;
+  `installed.jsonl` append-only; **schema drift ⇒ read-only mount with
+  the instructive reason, writes 409**), single service layer (deny-
+  unknown 400, host-maintained audit columns, archive-not-delete,
+  payload cap, metric views on a `query_only` read-only connection,
+  broken metric = readable error never a crash), REST per contract §6,
+  **MCP over Streamable HTTP at /mcp** (per-session transports; tool
+  list recomputed per tools/list so a mid-session freeze is offered
+  without restart; only declared tools dispatch; refusals verbatim
+  with isError), scenario runner (fresh throwaway store per scenario,
+  $id threading). UI shell: ONE vite build (Vue + nunc-ui tokens,
+  74KB) served at `/:slug/` — manifest-driven forms (mock_ui screens
+  grouped by target table; uncovered entities get column-driven
+  forms), tables with archive + archived toggle, metrics panel,
+  read-only banner; all fetches RELATIVE so no mount prefix is
+  hardcoded; trailing-slash redirect is relative too. Fixture bundle
+  hand-authored per the contract (an independent shape check).
+  apps-host tests 1→12 (REST walk incl. drift 409 + fk enforcement,
+  MCP live round-trip via the real SDK client against startHost,
+  runner green on the fixture), typecheck (tsc + vue-tsc) green,
+  `pnpm -r build` now covers the shell.
+
+- **2026-07-08 — T7 done** (0ade52a gate, 30e1546 tool, 9b37126 apps,
+  e765654 fe, + the fix commit): gate `--apps-url` + `/apps` proxy
+  (prefix-stripped, streaming `forward()` reused); justfile `up` runs
+  4 processes (`_up-apps`), gate gets `--apps-url`, `down.ts` learns
+  :8788 — the justfile hunks landed via a plumbing blob so the
+  parallel lane's uncommitted `setup` WIP stayed out of the commit
+  (the Phase D precedent); apps-host gained a human-facing index at
+  `/`; Formans topbar gained the Apps tab. **Bug found BY the live
+  check (and now pinned by a gate test): the axum wildcard
+  `/apps/{*path}` does not match an empty segment, so `/apps/` fell
+  through to the formans SPA fallback and served the wrong app —
+  bare `/apps` and `/apps/` now have literal routes.** Live E2E
+  through the gate (fixture bundle in a scratch store): `/apps/api`
+  lists, POST create returns the audited row, `/api/metrics` computes
+  `deal_count: 1`, `/apps/` serves the index, `/apps/fixture-app/`
+  serves the shell. gate 13 integration tests green; apps-host 12;
+  Formans 20 + build.
+
+- **2026-07-08 — T8 done** (8647160 fe, 0be96b0 ff, a6e0489 agent):
+  nunc-ai gained the tool contract (`ToolSpec`/`ToolCall`,
+  `ChatMessage` role `tool` + `toolCalls`/`toolCallId`,
+  `ChatOptions.tools`, `ChatResult.toolCalls`,
+  `RunLogEntry.toolCalls` counts — no arguments logged, same
+  no-prompt-text rule) and `Ai.chatWithTools`: the bounded loop
+  (default 8; past budget the remaining requests get a refusal result
+  and tools are WITHDRAWN so the model must answer), ONE aggregated
+  run-log entry, tools+goal-verify = config error (PE9). Provider
+  mappings: `llama-cpp` (OpenAI tools + streamed tool_call delta
+  reassembly by index — PE9' first-class local), `anthropic-api`
+  (input_schema tools, tool_use blocks, tool_result threading),
+  `mock` (scripted toolScript rounds — the S-7 zero-token rehearsal).
+  Agent: `src/tools.ts` MCP client to apps-host over Streamable HTTP
+  (`NS_APPS_URL`), **PE10 allowlist enforced twice** (offer-time
+  filter + call-time recheck; `apps:<slug>` prefix grant can't leak
+  into lookalike slugs — tested), honest degrade when apps-host is
+  down, `/tools` command, tool turns render every call + refusal
+  verbatim as meta lines (non-streamed in v0, recorded). Suites:
+  nunc-ai 41 (6 new), agent 27 (4 new incl. a fixture Streamable-HTTP
+  host + the full tool-turn with run-log assertion), fourfive
+  43 + typecheck (the offline-demo responder now types against
+  nunc-ai's wider message shape), pipeline typecheck green — zero
+  call-site changes (the PD compatibility rule held). **Still owed
+  before S-7's live leg: the llama-server GGUF tool probe (PE9'
+  retarget — lands with the topics lane's T4 `_up-llama`).**
+
+## Story executions
+
+(S-7 / S-8 written at T1; executed at T10 with transcripts and
+numbered verdicts.)
+
+## Constitutional check record
+
+(Filled through the phase: F7 freeze refusal output, grounding⊆declared
+check output, F3 rails untouched, F11 locality, §13 one-path proof.)
+
+## Exit criteria checklist
+
+1. [ ] runway-tracker@v1 frozen + bundled + human CRUD via generated UI,
+       data in the store [T4, T6, T9]
+2. [ ] agent operates the same app via MCP under a profile grant;
+       mutual visibility; non-granted tool refused [T8, T10]
+3. [ ] declared metrics served; strategy card quotes only declared
+       metrics with version reference [T6, T9]
+4. [ ] second, unrelated app end-to-end in one sitting [T10]
+5. [ ] S-7 / S-8 written, executed, passing with evidence [T1, T10]
+6. [ ] contracts/app-bundle.md drafted + owner-reviewed [T5]
+7. [ ] deterministic + freezing generation proven; no generated code
+       executed [T4, T6]
+8. [ ] S-10 re-run (incl. /apps/), 3-OS CI green, screenshots under
+       design/ui/phase-e/ [T11]
+9. [ ] verification doc complete; v1 plan/naming/reading-order updated;
+       owner merge/push/PR gate [T12]

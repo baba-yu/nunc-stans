@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "build_id": "2026-07-09T02:32:07Z",
+  "latest_report_date": "2026-01-04",
+  "default_scope": "mix",
+  "default_window": "30d",
+  "default_locale": "en",
+  "locales": [
+    "en",
+    "ja",
+    "es",
+    "fil"
+  ],
+  "windows": [
+    {
+      "window_id": "7d",
+      "label": "7D",
+      "days": 7
+    },
+    {
+      "window_id": "30d",
+      "label": "30D",
+      "days": 30
+    },
+    {
+      "window_id": "90d",
+      "label": "90D",
+      "days": 90
+    }
+  ],
+  "scopes": [
+    {
+      "scope_id": "mix",
+      "label": "Mix",
+      "graph_file": "graph-mix.json"
+    },
+    {
+      "scope_id": "tech",
+      "label": "Tech",
+      "graph_file": "graph-tech.json"
+    },
+    {
+      "scope_id": "business",
+      "label": "Business",
+      "graph_file": "graph-business.json"
+    }
+  ]
+}

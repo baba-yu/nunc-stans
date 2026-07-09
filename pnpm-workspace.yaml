@@ -2,3 +2,6 @@ packages:
   - frontend/nunc-stans-formans
   - frontend/packages/*
   - engines/fourfive
+  - engines/nunc-fluens/pipeline
+  - agents/*
+  - apps-host

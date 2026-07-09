@@ -5,6 +5,8 @@
   co-author trailer is fine. Areas: `design`, `contracts`, `ns`
   (engines/nunc-stans), `nf` (engines/nunc-fluens), `ff` (engines/fourfive),
   `fe` (frontend), `gate` (gate/, the single-origin front door),
+  `agent` (agents/, the first-party agent stack),
+  `apps` (apps-host/, the generated-app host),
   `tool` (justfile, tools/, CI).
 - One commit = one area unless `contracts/` is touched
   (`node tools/commit-scope.ts` enforces).
@@ -12,7 +14,13 @@
 - Work lands on `dev`; the owner pushes and merges to `main` via PR at the
   review gates. Stories in `design/stories/` gate phase closure, with
   evidence in `design/verification/`.
-- Data lives under `NS_DATA` (never inside the repo — FD-3.2). The self
-  vault has no git remote (F11).
+- Data is never tracked by this git repo (FD-3.2's intent). The store
+  DEFAULTS to `<repo>/data/`, which is gitignored (owner decision R13,
+  2026-07-07); `NS_DATA` / the app config `data_dir` designate a store
+  kept elsewhere. The self vault has no git remote (F11). nunc-fluens
+  data instances are plain local data directories (git-less) living at
+  the gitignored `engines/nunc-fluens/instances/<name>/` ("profile" now
+  names an AI configuration record, not a data instance — see
+  design/naming.md).
 - Repo tooling is TypeScript run by Node (`tools/*.ts`); the one exception
   is `tools/bootstrap.sh`, which must run before the toolchain exists.

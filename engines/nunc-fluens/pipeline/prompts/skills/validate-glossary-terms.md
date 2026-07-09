@@ -1,0 +1,3 @@
+# Skill: validate-glossary-terms
+
+Phase C reinforcement of the glossary stream. Validates active `glossary_terms` rows on three orthogonal axes — form (Python, deterministic), semantic (LLM-as-judge, orchestrator-driven), and dedupe (Python, deterministic) — and records every verdict in the new `glossary_audit` table. Failed rows are auto-retired with `reviewed_by_human=1` so they don't loop back through the auto-retire-quiet rule in `define-glossary-terms`.

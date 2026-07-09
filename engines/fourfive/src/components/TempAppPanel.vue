@@ -8,9 +8,11 @@ import LogicView from './LogicView.vue'
 import StateView from './StateView.vue'
 import ApiView from './ApiView.vue'
 import TerminologyView from './TerminologyView.vue'
+import MetricsView from './MetricsView.vue'
+import StoriesView from './StoriesView.vue'
 
 const store = useSessionStore()
-const tabs = ['Mock UI', 'ERD', 'Logic', 'State', 'API', 'Terminology'] as const
+const tabs = ['Mock UI', 'ERD', 'Logic', 'State', 'API', 'Terminology', 'Metrics', 'Stories'] as const
 type Tab = (typeof tabs)[number]
 const active = ref<Tab>('Mock UI')
 const tabItems = tabs.map((t) => ({ id: t, label: t }))
@@ -36,8 +38,25 @@ const hasContent = computed(() => !!bp.value || store.dependencies.length > 0)
       <span class="temp__title">
         Temp app<template v-if="bp">: {{ bp.app.name }}</template>
       </span>
+      <button
+        v-if="bp"
+        class="temp__bundle-btn"
+        :disabled="store.bundling"
+        title="Freeze this blueprint version and generate its runnable bundle (F7: a frozen version is immutable)"
+        @click="store.generateBundle()"
+      >
+        {{ store.bundling ? 'Generating…' : 'Generate bundle' }}
+      </button>
       <Tabs :tabs="tabItems" :model-value="active" @update:model-value="active = $event as Tab" />
     </header>
+
+    <div v-if="store.bundleResult" class="temp__bundle-note temp__bundle-note--ok">
+      Frozen {{ store.bundleResult.slug }}@v{{ store.bundleResult.version }} — bundle
+      {{ store.bundleResult.bundle_hash.slice(0, 12) }}… ({{ store.bundleResult.frozen_at }})
+    </div>
+    <div v-else-if="store.bundleError" class="temp__bundle-note temp__bundle-note--err">
+      {{ store.bundleError }}
+    </div>
 
     <div v-if="store.dependencies.length" class="temp__deps">
       <span class="temp__deps-label">Depends on:</span>
@@ -69,7 +88,41 @@ const hasContent = computed(() => !!bp.value || store.dependencies.length > 0)
         <StateView v-else-if="active === 'State'" :transitions="bp?.state_transitions ?? []" />
         <ApiView v-else-if="active === 'API'" :apis="bp?.apis ?? []" :deps="depApis" />
         <TerminologyView v-else-if="active === 'Terminology'" :terms="bp?.terminology ?? []" />
+        <MetricsView v-else-if="active === 'Metrics'" :metrics="bp?.metrics ?? []" />
+        <StoriesView v-else-if="active === 'Stories'" :stories="bp?.stories ?? []" />
       </template>
     </div>
   </section>
 </template>
+
+<style scoped>
+.temp__bundle-btn {
+  margin-left: auto;
+  margin-right: 10px;
+  padding: 3px 10px;
+  font-size: 12px;
+  color: var(--text, #e6e8ec);
+  background: var(--elev-1, #171a21);
+  border: 1px solid var(--border, #2a2f3a);
+  border-radius: 6px;
+  cursor: pointer;
+}
+.temp__bundle-btn:hover:not(:disabled) {
+  border-color: var(--accent, #18c7d8);
+}
+.temp__bundle-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.temp__bundle-note {
+  padding: 4px 12px;
+  font-size: 12px;
+}
+.temp__bundle-note--ok {
+  color: var(--success, #5fd99f);
+}
+.temp__bundle-note--err {
+  color: var(--error, #e08f8f);
+  white-space: pre-wrap;
+}
+</style>

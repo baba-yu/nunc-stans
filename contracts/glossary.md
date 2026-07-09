@@ -47,3 +47,51 @@ The source of truth of the artifact scope. Owns the fixed versions of the tactic
 ## News
 
 The source of truth of the world scope. Owns world prediction, observation, and external context.
+
+## profile
+
+An agent/AI configuration record: provider or runtime, model, system
+prompt, skill allowlist, memory scope, and goal-verify defaults. Plain
+JSON in the data store's `profiles/`; names providers and models, never
+credentials. Distinct from a nunc-fluens data instance (which older
+engine docs also called a "profile").
+
+## agent
+
+A program that calls models and tools under a registration (commitment +
+mandate + frozen version reference — agent-abi.md). Agents propose;
+principals commit; no agent writes self-scope commitments (F3).
+
+## agent runtime
+
+A selectable executor that brings its own tooling (claude-code,
+nunc-stans-agent) — one of the two tiers the AI layer serves, beside
+plain model providers.
+
+## bundle
+
+The runnable, data-only artifact FourFive emits from a frozen blueprint
+version (app-bundle.md): manifest, DDL, declared MCP tools, UI manifest,
+scenario specs. Generating a bundle freezes the version (F7); bundles
+contain no executable code — apps-host interprets them.
+
+## generated app
+
+An app served from a bundle by apps-host at `/apps/<slug>/`: generic UI
+for the human, the declared MCP tools for agents, per-user working data
+in the store's `apps/<slug>/data.sqlite`. Working data allows full CRUD
+with soft-delete audit; it is never the self ledger.
+
+## metric
+
+A measurement an app DECLARES in its manifest ({name, label, sql} — one
+SELECT over the app's own tables, compiled to a `metric_<name>` view).
+Declared metrics are the only numbers strategy features may quote
+(app-bundle.md §4).
+
+## apps-host
+
+The Nunc Stans-side host process (loopback :8788, behind the gate at
+`/apps/`) that discovers bundles in the store's `artifact/` tree and
+serves every generated app — one interpreter, one write path, no
+per-app processes (§13: FourFive-made programs run on Nunc Stans).

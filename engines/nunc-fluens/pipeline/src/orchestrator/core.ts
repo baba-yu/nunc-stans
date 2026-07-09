@@ -1,0 +1,316 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// Orchestrator core: run context, the run.json manifest (S-3's "which
+// pair produced this day"), and the generic LLM-step machinery
+// (prompt from the skill specs under pipeline/prompts/ + schema
+// validation + one re-prompt + replay-from-stored-artifact).
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import type Database from 'better-sqlite3';
+import type { Ai, ChatOptions, VerifyConfig } from 'nunc-ai';
+
+export interface RunCtx {
+  date: string;
+  /** 0 = Sunday (the DOW table branches on this). */
+  dow: number;
+  dataDir: string;
+  /** The data instance — inputs and rendered outputs. */
+  newsRepo: string;
+  sourcedataRoot: string;
+  dbFile: string;
+  db: Database.Database;
+  /** null in replay mode — steps must never reach for it. */
+  ai: Ai | null;
+  runtime: string;
+  search: string;
+  synthModel: string | null;
+  /** AI profile named by news-config (PD14) — stamped into ai-runs and
+   * run.json; null when none. */
+  profile: string | null;
+  /** Goal-verify default for every LLM step (the profile's), plus
+   * per-step overrides from news-config `stepVerify`. */
+  verifyDefaults: Partial<VerifyConfig> | null;
+  stepVerify: Record<string, Partial<VerifyConfig>>;
+  /** The effective non-EN render set (⊆ ja/es/fil, universe order);
+   * 'en' is implicit. Live runs resolve it from news-config, replay
+   * derives it per day (world-paths replayLocaleSet). Every locale
+   * fan-out iterates this, never the LOCALES universe. */
+  locales: readonly string[];
+  replay: boolean;
+  dryRun: boolean;
+  todayIso: string;
+  log: (s: string) => void;
+  manifest: RunManifest;
+}
+
+export interface StepRecord {
+  id: string;
+  task: string;
+  kind: 'llm' | 'det';
+  status: 'ok' | 'replayed' | 'skipped' | 'failed';
+  durationMs: number;
+  detail?: string;
+}
+
+/** The per-step AI options every LLM helper spreads in (PD14): the
+ * step's verify override > the profile's default, plus the profile
+ * stamp for the run log. */
+export function stepAiOptions(ctx: RunCtx, stepId: string): Partial<ChatOptions> {
+  const verify = ctx.stepVerify[stepId] ?? ctx.verifyDefaults ?? undefined;
+  return {
+    ...(verify ? { verify } : {}),
+    ...(ctx.profile ? { profile: ctx.profile } : {}),
+  };
+}
+
+export class RunManifest {
+  readonly data: Record<string, any>;
+  constructor(args: {
+    date: string; mode: string; runtime: string; search: string; synthModel: string | null;
+    profile: string | null;
+    /** The FULL effective render set, 'en' first (e.g. ['en','ja']).
+     * run.json (whose `locales` is what replay needs) is written once,
+     * by the dag at end of run. Non-full runs (--dry-run/--only) never
+     * write the file at all. */
+    locales: readonly string[];
+  }) {
+    this.data = {
+      date: args.date,
+      mode: args.mode,
+      runtime: args.runtime,
+      search: args.search,
+      synth_model: args.synthModel,
+      profile: args.profile,
+      locales: [...args.locales],
+      started_at: new Date().toISOString(),
+      finished_at: null,
+      steps: [] as StepRecord[],
+    };
+  }
+  record(rec: StepRecord): void {
+    this.data.steps.push(rec);
+  }
+  finish(): void {
+    this.data.finished_at = new Date().toISOString();
+  }
+  write(sourcedataRoot: string, date: string): string {
+    const path = join(sourcedataRoot, date, 'run.json');
+    mkdirSync(dirname(path), { recursive: true });
+    writeFileSync(path, JSON.stringify(this.data, null, 2) + '\n', 'utf8');
+    return path;
+  }
+}
+
+export interface StepDef {
+  id: string;
+  kind: 'llm' | 'det';
+  run: (ctx: RunCtx) => Promise<unknown> | unknown;
+}
+
+export class StepFailure extends Error {
+  constructor(stepId: string, message: string) {
+    super(`step ${stepId}: ${message}`);
+  }
+}
+
+// --- prompt assets ---------------------------------------------------------
+
+/** The runtime prompt assets bundled with this package (moved out of the
+ * frozen T0 spec corpus post-C; normally-editable behavior files). */
+export function promptsDir(): string {
+  return join(import.meta.dirname, '..', '..', 'prompts');
+}
+
+/** The dashboard shipped as engine code (post-C P2: instances carry
+ * data only; the dashboard left the checkout). Resolved relative to
+ * this package like promptsDir(). */
+export function engineDashboardDir(): string {
+  return join(import.meta.dirname, '..', '..', '..', 'dashboard');
+}
+
+export function loadSkillSpec(name: string): string {
+  return readFileSync(join(promptsDir(), 'skills', `${name}.md`), 'utf8');
+}
+
+export function loadWriterRules(task: '1_daily_update' | '2_future_prediction'): string {
+  return readFileSync(join(promptsDir(), 'scheduled', `${task}-writer-rules.md`), 'utf8');
+}
+
+export function loadScheduledSpec(name: string): string {
+  return readFileSync(join(promptsDir(), 'scheduled', `${name}.md`), 'utf8');
+}
+
+export function loadMemoryPolicy(): string {
+  return readFileSync(join(promptsDir(), 'memory-policy.md'), 'utf8');
+}
+
+/** Skill spec text as embedded into a step prompt. locale-fanout's
+ * contract (prompts/skills/locale-fanout.md §Translation contract)
+ * MANDATES that every translate sub-agent also read
+ * locale-fanout-calques.md; headless prompts inline every input, so the
+ * calque rules are appended here. */
+export function skillSpecForPrompt(skill: string): string {
+  const spec = loadSkillSpec(skill);
+  if (skill !== 'locale-fanout') return spec;
+  return spec
+    + '\n--- CALQUE RULES (locale-fanout-calques) — apply with the contract above ---\n'
+    + loadSkillSpec('locale-fanout-calques');
+}
+
+/** Compose a single headless prompt for an LLM step: the skill spec is
+ * the contract; the framing pins date, output shape, and "JSON only". */
+export function buildStepPrompt(args: {
+  skill: string;
+  date: string;
+  extra?: string;
+  writerRules?: string;
+  outputNote: string;
+}): string {
+  const parts = [
+    `You are one step of the nunc-fluens daily news pipeline, run headlessly.`,
+    `Today's date: ${args.date}.`,
+    ``,
+    `Follow this skill contract exactly:`,
+    `--- SKILL SPEC (${args.skill}) ---`,
+    skillSpecForPrompt(args.skill),
+    `--- END SKILL SPEC ---`,
+  ];
+  if (args.writerRules) {
+    parts.push('', '--- WRITER RULES ---', args.writerRules, '--- END WRITER RULES ---');
+  }
+  if (args.extra) parts.push('', args.extra);
+  parts.push(
+    '',
+    `OUTPUT: ${args.outputNote}`,
+    `Reply with ONLY the JSON document — no prose, no markdown fences.`,
+  );
+  return parts.join('\n');
+}
+
+/** Tolerant JSON extraction: raw JSON, or the largest fenced block. */
+export function extractJson(text: string): unknown {
+  const t = text.trim();
+  try {
+    return JSON.parse(t);
+  } catch { /* try fenced */ }
+  const fence = /```(?:json)?\s*([\s\S]*?)```/g;
+  let best: string | null = null;
+  for (const m of t.matchAll(fence))
+    if (best === null || m[1].length > best.length) best = m[1];
+  if (best !== null) return JSON.parse(best.trim());
+  const start = t.indexOf('{');
+  const end = t.lastIndexOf('}');
+  if (start !== -1 && end > start) return JSON.parse(t.slice(start, end + 1));
+  throw new Error('no JSON found in model reply');
+}
+
+/** One validated LLM markdown call: the whole reply is the document
+ * (an outer ``` fence is stripped if the model wrapped it). validate
+ * throws with the reasons; one re-prompt carries them back. */
+export async function llmMarkdown(ctx: RunCtx, args: {
+  id: string;
+  prompt: string;
+  validate: (text: string) => void;
+}): Promise<string> {
+  if (ctx.ai === null)
+    throw new StepFailure(args.id, 'no AI runtime configured');
+  let lastErr = '';
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const res = await ctx.ai.chat(ctx.runtime, [{
+      role: 'user',
+      content: attempt === 0 ? args.prompt
+        : `${args.prompt}\n\nYour previous reply failed validation: ${lastErr}\nEmit the corrected markdown document only.`,
+    }], { caller: args.id, webSearch: false, model: ctx.synthModel ?? undefined, ...stepAiOptions(ctx, args.id) });
+    try {
+      let text = res.text.trim();
+      const fenced = /^```(?:markdown|md)?\s*\n([\s\S]*?)\n```$/.exec(text);
+      if (fenced) text = fenced[1];
+      if (!text.endsWith('\n')) text += '\n';
+      args.validate(text);
+      return text;
+    } catch (e) {
+      lastErr = e instanceof Error ? e.message : String(e);
+    }
+  }
+  throw new StepFailure(args.id, `model output failed validation twice: ${lastErr}`);
+}
+
+/** One validated LLM JSON call: extract, validate, one re-prompt with
+ * the validation error. For steps whose result lands in the DB (or a
+ * markdown file) rather than a sourcedata JSON artifact. */
+export async function llmJson<T>(ctx: RunCtx, args: {
+  id: string;
+  prompt: string;
+  /** validate returns the canonical object or throws. */
+  validate: (raw: unknown) => T;
+  webSearch?: boolean;
+}): Promise<T> {
+  if (ctx.ai === null)
+    throw new StepFailure(args.id, 'no AI runtime configured');
+  let lastErr = '';
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const res = await ctx.ai.chat(ctx.runtime, [{
+      role: 'user',
+      content: attempt === 0 ? args.prompt
+        : `${args.prompt}\n\nYour previous reply failed validation: ${lastErr}\nEmit corrected JSON only.`,
+    }], {
+      caller: args.id,
+      webSearch: args.webSearch ?? false,
+      model: ctx.synthModel ?? undefined,
+      ...stepAiOptions(ctx, args.id),
+    });
+    try {
+      return args.validate(extractJson(res.text));
+    } catch (e) {
+      lastErr = e instanceof Error ? e.message : String(e);
+    }
+  }
+  throw new StepFailure(args.id, `model output failed validation twice: ${lastErr}`);
+}
+
+/** Generic LLM step: replay reads + validates the stored artifact; live
+ * calls the runtime, validates, re-prompts once with the error, writes. */
+export async function llmArtifactStep(ctx: RunCtx, args: {
+  id: string;
+  artifact: string;
+  /** validate returns the canonical object or throws. */
+  validate: (raw: unknown) => unknown;
+  prompt: () => string;
+  webSearch?: boolean;
+  /** Post-process the model JSON before writing (e.g. merge). */
+  finalize?: (parsed: unknown) => unknown;
+}): Promise<'ok' | 'replayed'> {
+  if (existsSync(args.artifact)) {
+    args.validate(JSON.parse(readFileSync(args.artifact, 'utf8')));
+    return 'replayed';
+  }
+  if (ctx.replay)
+    throw new StepFailure(args.id,
+      `replay requires stored artifact ${args.artifact} — not found`);
+  if (ctx.ai === null)
+    throw new StepFailure(args.id, 'no AI runtime configured');
+  const prompt = args.prompt();
+  let lastErr = '';
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const res = await ctx.ai.chat(ctx.runtime, [{
+      role: 'user',
+      content: attempt === 0 ? prompt
+        : `${prompt}\n\nYour previous reply failed validation: ${lastErr}\nEmit corrected JSON only.`,
+    }], {
+      caller: args.id,
+      webSearch: args.webSearch ?? false,
+      model: ctx.synthModel ?? undefined,
+      ...stepAiOptions(ctx, args.id),
+    });
+    try {
+      let parsed = extractJson(res.text);
+      if (args.finalize) parsed = args.finalize(parsed);
+      args.validate(parsed);
+      mkdirSync(dirname(args.artifact), { recursive: true });
+      writeFileSync(args.artifact, JSON.stringify(parsed, null, 2) + '\n', 'utf8');
+      return 'ok';
+    } catch (e) {
+      lastErr = e instanceof Error ? e.message : String(e);
+    }
+  }
+  throw new StepFailure(args.id, `model output failed validation twice: ${lastErr}`);
+}

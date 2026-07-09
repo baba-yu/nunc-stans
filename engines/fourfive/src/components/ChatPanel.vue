@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { nextTick, ref, watch } from 'vue'
 import { useSessionStore } from '../stores/session'
-import type { Session } from '../../shared/types'
+import type { Session, VerifyStep } from '../../shared/types'
 
 const store = useSessionStore()
 const input = ref('')
@@ -49,6 +49,20 @@ function toggleThinking(id: string) {
 }
 function toggleStreamThinking() {
   if (store.streamingMsg) store.streamingMsg.thinkingOpen = !store.streamingMsg.thinkingOpen
+}
+
+// Goal-verify loop rendering (S-6): one line per judge verdict + a cost
+// line summing every iteration (model + judge tokens).
+function verifyCost(steps: VerifyStep[]): string {
+  const tokensIn = steps.reduce((n, s) => n + s.tokensIn, 0)
+  const tokensOut = steps.reduce((n, s) => n + s.tokensOut, 0)
+  return `${steps.length} iteration${steps.length === 1 ? '' : 's'} · in ${tokensIn} / out ${tokensOut} tok (model + judge)`
+}
+function verdictLine(s: VerifyStep): string {
+  const cost = `in ${s.tokensIn} / out ${s.tokensOut} tok`
+  return s.met
+    ? `iteration ${s.iteration}: goal met (${cost})`
+    : `iteration ${s.iteration}: unmet — ${s.gaps.length ? s.gaps.join('; ') : 'no gaps reported'} (${cost})`
 }
 
 watch(
@@ -101,6 +115,12 @@ watch(
           </button>
           <div v-if="openThinking[m.id]" class="think-box__body">{{ store.thinkingById[m.id] }}</div>
         </div>
+        <div v-if="store.verifyById[m.id]" class="verify-box">
+          <div v-for="s in store.verifyById[m.id]" :key="s.iteration" class="verify-box__line" :class="{ 'verify-box__line--met': s.met }">
+            {{ verdictLine(s) }}
+          </div>
+          <div class="verify-box__cost">{{ verifyCost(store.verifyById[m.id]) }}</div>
+        </div>
         <div class="msg__body">{{ m.content }}</div>
       </div>
 
@@ -112,6 +132,12 @@ watch(
             <span class="think-box__chev">{{ store.streamingMsg?.thinkingOpen ? '▲' : '▼' }}</span>
           </button>
           <div v-if="store.streamingMsg?.thinkingOpen" class="think-box__body">{{ store.streamingMsg?.thinking }}</div>
+        </div>
+        <div v-if="store.streamingMsg?.verify.length" class="verify-box">
+          <div v-for="s in store.streamingMsg.verify" :key="s.iteration" class="verify-box__line" :class="{ 'verify-box__line--met': s.met }">
+            {{ verdictLine(s) }}
+          </div>
+          <div class="verify-box__cost">{{ verifyCost(store.streamingMsg.verify) }}</div>
         </div>
         <div class="msg__body">
           <span v-if="!store.streamingMsg?.content && !store.streamingMsg?.thinking" class="msg__body--typing">…</span>

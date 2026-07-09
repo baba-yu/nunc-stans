@@ -1,6 +1,10 @@
 target/
 node_modules/
+# The default data store (R13, 2026-07-07): it lives in-repo at
+# <repo>/data/ but is never tracked (FD-3.2's no-data-in-git intent).
+/data/
 frontend/nunc-stans-formans/dist/
+apps-host/ui/dist/
 frontend/nunc-stans-formans/public/world-headlines.json
 frontend/nunc-stans-formans/public/world-graph/
 *.swp

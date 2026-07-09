@@ -72,6 +72,21 @@ const stateTransition = z.object({
   description: z.string().optional(),
 })
 
+// Metric names become `metric_<name>` view names and API keys (plan PE8) —
+// enforce identifier safety at the first trust boundary. The single-SELECT
+// rule for `sql` is enforced where it is compiled (generator, then apps-host).
+const metric = z.object({
+  name: z.string().regex(/^[a-z][a-z0-9_]*$/, 'snake_case identifier'),
+  label: z.string().min(1),
+  sql: z.string().min(1),
+})
+
+const story = z.object({
+  id: z.string().min(1),
+  title: z.string().min(1),
+  scenario: z.string().default(''),
+})
+
 export const blueprintSchema = z.object({
   app: z.object({ name: z.string().min(1), description: z.string().optional() }),
   mock_ui: z.object({ screens: z.array(mockUiScreen).default([]) }).default({ screens: [] }),
@@ -81,6 +96,8 @@ export const blueprintSchema = z.object({
   apis: z.array(apiEndpoint).default([]),
   open_questions: z.array(z.string()).default([]),
   state_transitions: z.array(stateTransition).default([]),
+  metrics: z.array(metric).default([]),
+  stories: z.array(story).default([]),
   software_stack: z.string().optional(),
 })
 

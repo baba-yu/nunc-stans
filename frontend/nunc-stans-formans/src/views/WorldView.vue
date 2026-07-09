@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue'
 import { HeatDot, Panel } from 'nunc-ui'
+import NewsSettings from '../components/NewsSettings.vue'
 import { useMeStore } from '../stores/me'
 import { slugFor } from '../slug'
 import type { WorldPrediction } from '../types'
@@ -13,7 +14,7 @@ const draft = reactive({ slug: '', title: '', started_at: '' })
 // The last commit outcome, keyed to a headline so it renders in that row
 // independently of whether the form is still open.
 const result = ref<{ id: string; ok: boolean; message: string } | null>(null)
-// Whether a staged dashboard exists (build-world ran with NEWS_WORLD set).
+// Whether a staged dashboard exists (build-world ran with an instance linked).
 const graphAvailable = ref(false)
 
 function today(): string {
@@ -100,9 +101,13 @@ onMounted(async () => {
             </div>
           </li>
           <li v-if="!store.world.length" class="meta">
-            no world headlines — run <code>just build-world</code> with <code>NEWS_WORLD</code> set
+            no world headlines — link a nunc-fluens instance (<code>just news-link &lt;instance&gt;</code>; create one with <code>just news-init</code>) and run <code>just build-world</code>
           </li>
         </ul>
+      </Panel>
+
+      <Panel cold title="News pipeline">
+        <NewsSettings />
       </Panel>
 
       <Panel cold title="Prediction dashboard" class="graph-panel">
@@ -113,7 +118,7 @@ onMounted(async () => {
           title="News prediction dashboard (wrapped as-is)"
         />
         <p v-else class="meta">
-          no staged dashboard — set <code>NEWS_WORLD</code> and run <code>just build-world</code>
+          no staged dashboard — link a nunc-fluens instance (<code>just news-link &lt;instance&gt;</code>; create one with <code>just news-init</code>) and run <code>just build-world</code>
         </p>
       </Panel>
     </main>

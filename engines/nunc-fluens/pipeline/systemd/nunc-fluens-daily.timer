@@ -1,0 +1,12 @@
+# nunc-fluens daily timer (user unit). OnCalendar is substituted by
+# systemd/install.sh (@ONCALENDAR@); Persistent=true catches up after a
+# sleeping machine.
+[Unit]
+Description=Daily nunc-fluens pipeline run
+
+[Timer]
+OnCalendar=@ONCALENDAR@
+Persistent=true
+
+[Install]
+WantedBy=timers.target

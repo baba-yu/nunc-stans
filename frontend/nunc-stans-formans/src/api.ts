@@ -83,7 +83,7 @@ export async function getOutcomes(slug: string): Promise<OutcomesResponse> {
 
 // The world view's data: News headlines flattened by the Nunc Stans-side
 // adapter and served as a static file (same origin). Absent file (adapter not
-// run / NEWS_WORLD unset) degrades to an empty world view, not an error.
+// run / no instance linked) degrades to an empty world view, not an error.
 export async function getWorld(): Promise<WorldPrediction[]> {
   try {
     const r = await fetch('/world-headlines.json')

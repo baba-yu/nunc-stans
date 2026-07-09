@@ -336,15 +336,18 @@ One place where models are called; nothing else talks to a provider directly.
   defaults from the active profile. Every verdict and retry is logged with
   token counts.
 - **Run log:** every call (provider, model, profile, tokens, duration,
-  verdict chain) appends to `~/nunc-stans-data/runs/ai-runs.jsonl` — the audit
-  substrate agent-abi needs.
+  verdict chain) appends to the data store's `runs/ai-runs.jsonl` (post-R13 default
+  `<repo>/data/runs/`) — the audit substrate agent-abi needs. *(Path
+  retargeted 2026-07-07 per R13.)*
 
 ### 2.7 Agent profiles + agent-abi v0 (requirement 5)
 
 Profile = `{id, name, provider, model, system_prompt, skills (tool
 allowlist), memory_scope {read[], write[]}, goal_verify defaults, ui prefs}`,
-stored as files in `~/nunc-stans-data/profiles/` (versioned by the vault's own
-git). The shell gets a Profiles screen: create, edit, duplicate, and set the
+stored as files in the data store's `profiles/` — post-R13 default
+`<repo>/data/profiles/`. *(Superseded 2026-07-07, Phase D PD2: profiles are
+plain gitignored files — only `self/` is a git vault, and the product is
+git-less elsewhere by the V3 direction.)* The shell gets a Profiles screen: create, edit, duplicate, and set the
 default profile per context (FourFive chat / News steps / app agents).
 
 Constitutional constraint carried into code: **no profile may grant write
@@ -492,7 +495,8 @@ v0 scope (built in Phase D):
 - MCP client for tools — including, from Phase E, the CRUD tools of generated
   apps: this agent is how "the agent co-uses the app" is proven (S-7).
 - Profile-driven (model, prompt, skills, memory scope) and subject to the
-  goal-verify loop (§2.6); every run logged to `~/nunc-stans-data/runs/`.
+  goal-verify loop (§2.6); every run logged to the data store's `runs/`
+  (post-R13 default `<repo>/data/runs/`).
 
 Not in v0: autonomous coding-agent behavior (file-editing loops). That is a
 later extension; until then, coding tasks go through the `claude-code`
@@ -520,7 +524,9 @@ Rules that apply to every phase:
   topic branch off `dev` (e.g. `newstack` for Phase C) when isolation
   helps. (Phase A ran on `phase/a-consolidation` under the earlier rule.)
 - Execution happens inside WSL (native modules, pnpm, cargo). Commit style
-  follows the repo convention (`area: message`, English, no AI attribution).
+  follows the repo convention (`area: message`, English). *(The no-AI-attribution
+  clause was lifted 2026-07-04 — CONTRIBUTING.md governs: the default co-author
+  trailer is fine.)*
 
 ### Phase A — Consolidation and naming
 
@@ -584,15 +590,16 @@ DAG as code (steps = functions, I/O = the existing sourcedata JSON schemas,
 gates = the existing deterministic checks); build `packages/ai` (§2.6);
 port the Python compute to TS against golden-master fixtures (Python stays as
 the oracle until parity); sync the news subtree to the `~/news` tip before
-any code change here (follow the re-sync recipe in `engines/nunc-fluens/INTEGRATION.md`); move `analytics.sqlite` out of the repo to
+any code change here; move `analytics.sqlite` out of the repo to
 `~/nunc-stans-data/world/` (same file, same schema, same data — new location);
-split `~/news` into a data+publishing remnant
-(report/, docs/ Pages) fed by the monorepo pipeline (D3), renaming that repo
-to `nunc-fluens` at this point (GitHub Pages URLs change and do not
-redirect — update links deliberately); schedule via a WSL
-systemd timer (or cron) calling the CLI — the daily run must start and finish
-with **no conversational step**; the current manual "run today's scheduled
-tasks" prompt to Claude Code is retired.
+~~split `~/news` into a data+publishing remnant … renaming that repo to
+`nunc-fluens`~~ **[D3 SUPERSEDED by the 2026-07-06 redirection — recorded
+in the Phase C plan: the dev repo never operates production news;
+`~/news` keeps its name and its own stack (complete fork); runs target
+disposable sandbox instances and publish nothing]**; schedule via a WSL
+systemd timer (or cron) calling the CLI — the daily run must start and
+finish with **no conversational step** (proven in the sandbox at Phase C;
+the production Cowork routine continues unchanged, per the redirection).
 
 Exit: one full daily run each of — (a) `claude-code` provider, (b) a
 non-Anthropic or local provider with an external search adapter, (c) a replay
@@ -602,7 +609,11 @@ ported tests green against goldens; stories S-3 and S-4 pass. Content quality
 across providers will differ; acceptance is structural validity, and quality
 tuning is ongoing operations, not a phase gate.
 
-### Phase D — Profiles + goal-loop surfaces + nunc-stans-agent v0
+### Phase D — Profiles + goal-loop surfaces + nunc-stans-agent v0 — EXECUTED 2026-07-07
+
+(Plan: design/development/2026-07-07-phase-d-plan.md; evidence:
+design/verification/phase-d.md. S-5/S-6/S-11 executed same day; the
+S-10 re-run + CI push + merge are the owner's closing gates.)
 
 Work: profile store and Profiles screen; wire FourFive chat and News step
 config to profiles; goal-verify toggle per chat message and per pipeline

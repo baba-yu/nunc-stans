@@ -1,19 +1,29 @@
 #!/usr/bin/env node
 // World adapter (constitution §13-B: conversion is written on the Nunc Stans
-// side; News is never asked to change its output format). Two jobs:
+// side; the engine is never asked to change its output format). Two jobs:
 //
-// 1. Flatten News's exported prediction graph into the minimal headline list
-//    the world view reads (world-headlines.json).
-// 2. Stage the News dashboard (engines/nunc-fluens/docs) plus the export's
-//    data directory into the formans public dir so the world view can wrap
-//    it as-is at /world-graph/ — with d3 vendored locally, because the
+// 1. Flatten the instance's exported prediction graph into the minimal
+//    headline list the world view reads (world-headlines.json).
+// 2. Stage the dashboard (ENGINE code at engines/nunc-fluens/dashboard/ —
+//    post-C P2: instances carry data only) plus the instance's exported
+//    data directory into the formans public dir so the world view can
+//    wrap it as-is at /world-graph/ — with d3 vendored locally, because the
 //    product allows no CDN dependency (§10-B: one origin, local).
 //
-// Input comes from $NEWS_WORLD (a graph JSON file, or a dir containing
-// graph-mix.json). Unset or missing ⇒ empty headline list and the stage is
-// removed, so `just up` still works and the world view degrades honestly.
+// The data source is a nunc-fluens data INSTANCE (post-C REDO V2, R6):
+// a v2 checkout stamped by `nunc-fluens init` (optionally seeded by
+// `nunc-fluens import`), designated via `just news-link <instance>`
+// (config key news_repo — unchanged key, instance semantics; env
+// override NS_NEWS_REPO). It is read strictly read-only here: only
+// data/exports/graph-mix.json is consumed. The old-shape docs/data
+// fallback is REMOVED (owner decision 2026-07-07) — news-shaped
+// checkouts are brought over via `nunc-fluens import`, the product's
+// only remaining news-shaped contact surface.
+// NEWS_WORLD is retired. Unset or missing ⇒ empty headline list and the
+// stage is removed, so `just up` still works and the view degrades
+// honestly.
 // This script lives in tools/ (not frontend/) because it legitimately names
-// an engine path — FD-7.4 keeps frontend/ itself engine-free.
+// engine/tool paths — FD-7.4 keeps frontend/ itself engine-free.
 import {
   cpSync,
   existsSync,
@@ -26,17 +36,25 @@ import {
 } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { resolveNewsRepo } from './lib/data-dir.ts'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const formansPublic = join(root, 'frontend', 'nunc-stans-formans', 'public')
 const outFile = join(formansPublic, 'world-headlines.json')
 const stageDir = join(formansPublic, 'world-graph')
-const dashboardSrc = join(root, 'engines', 'nunc-fluens', 'docs')
+
+const newsRepo = resolveNewsRepo()
+// The dashboard is engine code (post-C P2) — never read from the checkout.
+const dashboardSrc = join(root, 'engines', 'nunc-fluens', 'dashboard')
 
 function resolveInput(): string | null {
-  const p = process.env.NEWS_WORLD
-  if (!p || !existsSync(p)) return null
-  return statSync(p).isDirectory() ? join(p, 'graph-mix.json') : p
+  if (process.env.NEWS_WORLD)
+    console.warn('[build-world] NEWS_WORLD is retired and ignored — the view '
+      + 'source comes from `just news-link <instance>` (or NS_NEWS_REPO).')
+  if (!newsRepo) return null
+  // v2 instances only (R6): data/exports/graph-mix.json or nothing.
+  const p = join(newsRepo, 'data', 'exports', 'graph-mix.json')
+  return existsSync(p) ? p : null
 }
 
 function write(list: unknown[]) {
@@ -74,8 +92,12 @@ function copyTreeFresh(srcDir: string, destDir: string): [number, number] {
 const input = resolveInput()
 if (!input || !existsSync(input)) {
   console.warn(
-    '[build-world] NEWS_WORLD not set or graph not found; writing an empty world list and removing the stage.\n' +
-      "             Set NEWS_WORLD to News's exported graph (e.g. ~/news/docs/data/graph-mix.json).",
+    '[build-world] no nunc-fluens instance configured (or no exported graph '
+    + 'under its data/exports/); writing an empty world list and removing '
+    + 'the stage.\n'
+    + '             Create one: just news-init <name>   (then run the pipeline)\n'
+    + '             Bring news data over: just news-import <src> <instance>\n'
+    + '             Point the view at it: just news-link <instance>  (or set NS_NEWS_REPO).',
   )
   write([])
   rmSync(stageDir, { recursive: true, force: true })
@@ -124,9 +146,9 @@ const headlines = nodes
   .sort((a, b) => String(b.date ?? '').localeCompare(String(a.date ?? '')))
 
 write(headlines)
-console.log(`[build-world] wrote ${headlines.length} headlines from ${input}`)
+console.log(`[build-world] wrote ${headlines.length} headlines from ${input} (read-only source)`)
 
-// --- stage the dashboard, as-is except the d3 script goes local ---
+// --- stage the engine dashboard, as-is except the d3 script goes local ---
 let copied = 0
 const html = readFileSync(join(dashboardSrc, 'index.html'), 'utf8').replace(
   'https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js',
@@ -140,10 +162,13 @@ if (!existsSync(destHtml) || readFileSync(destHtml, 'utf8') !== html) {
 }
 copied += copyFresh(join(root, 'node_modules', 'd3', 'dist', 'd3.min.js'), join(stageDir, 'assets', 'd3.min.js'))
 copied += copyTreeFresh(join(dashboardSrc, 'assets'), join(stageDir, 'assets'))[0]
+// The engine dashboard ships no favicon today — stage one only if it
+// appears, and drop a stale one left by earlier checkout-sourced staging.
 const favicon = join(dashboardSrc, 'favicon.svg')
 if (existsSync(favicon)) copied += copyFresh(favicon, join(stageDir, 'favicon.svg'))
+else rmSync(join(stageDir, 'favicon.svg'), { force: true })
 const [dataCopied, dataTotal] = copyTreeFresh(dirname(input), join(stageDir, 'data'))
 copied += dataCopied
 console.log(
-  `[build-world] staged dashboard + data at public/world-graph/: ${copied} file(s) copied, ${dataTotal} data file(s) checked${copied === 0 ? ' (all fresh)' : ''}`,
+  `[build-world] staged engine dashboard + instance data at public/world-graph/: ${copied} file(s) copied, ${dataTotal} data file(s) checked${copied === 0 ? ' (all fresh)' : ''}`,
 )

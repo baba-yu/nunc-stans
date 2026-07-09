@@ -1,9 +1,10 @@
 #!/bin/sh
-# nunc-stans bootstrap: doctor + data-store designation (workspace model).
+# nunc-stans bootstrap: doctor + data-store designation.
 # Usage: sh tools/bootstrap.sh [data-dir]
 #   With an argument (or NS_DATA set): designates that folder, creates and
 #   initializes it if needed, and remembers it in the app config.
-#   Without: reuses the configured store, or asks interactively on a TTY.
+#   Without: reuses the configured store, else the in-repo default
+#   <repo>/data/ (gitignored; R13 2026-07-07).
 # POSIX sh on purpose: this is the one script that runs before the toolchain
 # exists (the documented exception to the TypeScript tooling policy).
 set -u
@@ -24,8 +25,17 @@ if command -v node >/dev/null 2>&1; then
   major=$(node -e 'console.log(process.versions.node.split(".")[0])')
   if [ "$major" -lt 24 ]; then say "MISS node >= 24 (found $(node --version))"; missing=1; fi
 fi
-command -v python3 >/dev/null 2>&1 || say "warn python3 missing (needed until Phase C retires the news pipeline)"
 command -v ollama  >/dev/null 2>&1 || say "info ollama not found (optional - local models)"
+# manda: the agent's memory gateway (Phase D). MANDA_BIN overrides PATH.
+if [ -n "${MANDA_BIN:-}" ] && [ -x "${MANDA_BIN:-}" ]; then
+  say "ok   manda (MANDA_BIN=$MANDA_BIN)"
+elif command -v manda >/dev/null 2>&1; then
+  say "ok   manda ($(command -v manda))"
+else
+  say "info manda not found (needed for nunc-stans-agent memory):"
+  say "     run 'just setup' (installs manda + llama.cpp + a model), or build it:"
+  say "     git clone https://github.com/baba-yu/manda ~/manda && (cd ~/manda && cargo build --release)"
+fi
 
 say "== data store =="
 # The config must live where the app reads it (tools/data-dir.ts): %APPDATA%
@@ -48,14 +58,11 @@ if [ -z "$DIR" ] && [ -f "$CFG" ]; then
   [ -n "$DIR" ] && say "using the configured store: $DIR"
 fi
 if [ -z "$DIR" ]; then
-  if [ -t 0 ]; then
-    printf 'Choose a folder for your data store (it will be created): '
-    read -r DIR
-  fi
-  if [ -z "$DIR" ]; then
-    say "NG   no data store designated - run: just bootstrap <dir>  (or set NS_DATA)"
-    exit 1
-  fi
+  # The in-repo default (mirrors tools/lib/data-dir.ts defaultDataDir):
+  # <repo>/data/, gitignored. An argument / NS_DATA / the config still
+  # designate a store kept elsewhere.
+  DIR="$(cd "$(dirname "$0")/.." && pwd)/data"
+  say "using the in-repo default store: $DIR"
 fi
 mkdir -p "$DIR" || { say "NG   cannot create $DIR"; exit 1; }
 if [ "$WIN" -eq 1 ]; then

@@ -21,11 +21,13 @@ const leak = gitGrep(['-e', 'nunc-stans-data', '-e', 'federation-data', '--',
 if (leak.trim()) ng(`FD-3.2: data-store path leaked into code/config\n${leak}`)
 else ok('FD-3.2: no vault path leak')
 
-// FD-7.4: frontend must not reference engine internals
-const imports = gitGrep(['-E', 'engines/(nunc-fluens|nunc-stans|fourfive)', '--', 'frontend'])
+// FD-7.4: frontend, agents, and apps-host must not reference engine
+// internals (apps-host consumes bundles through contracts/app-bundle.md,
+// never fourfive's code)
+const imports = gitGrep(['-E', 'engines/(nunc-fluens|nunc-stans|fourfive)', '--', 'frontend', 'agents', 'apps-host'])
 const bad = imports.split('\n').filter(l => l && !l.includes('contracts/'))
-if (bad.length) ng(`import: frontend references engine internals\n${bad.join('\n')}`)
-else ok('import: frontend→contracts only (so far)')
+if (bad.length) ng(`import: frontend/agents/apps-host reference engine internals\n${bad.join('\n')}`)
+else ok('import: frontend/agents/apps-host→contracts only')
 
 // The edge schema must be valid JSON
 try { JSON.parse(readFileSync('contracts/edge.schema.json', 'utf8')); ok('edge.schema.json valid') }

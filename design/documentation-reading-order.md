@@ -93,7 +93,8 @@ nunc-stans/
 │   ├── edge.schema.json
 │   ├── scope-id.md
 │   ├── glossary.md
-│   └── agent-abi.md                 ← reserved; drafted in Phase D
+│   ├── agent-abi.md                 ← v0 draft (Phase D): registration, capabilities, run records
+│   └── app-bundle.md                ← v0 draft (Phase E): bundle format, freeze, metrics, apps-host API
 │
 ├── engines/
 │   ├── nunc-stans/docs/             ← spl-plan.md, prd-override.md (self-engine plans)
@@ -105,9 +106,10 @@ nunc-stans/
 └── tests/journey/                   ← arrives with Phase F
 ```
 
-Planned additions: `frontend/nunc-stans-formans/` and
+Landed since: `frontend/nunc-stans-formans/` and
 `frontend/packages/{nunc-ui,ai}` (Phase B–C), `agents/nunc-stans-agent/`
-(Phase D), `apps-host/` (Phase E).
+(Phase D — the first-party agent; Formans gained `/profiles` and `/runs`
+the same phase). Still planned: `apps-host/` (Phase E).
 
 ---
 

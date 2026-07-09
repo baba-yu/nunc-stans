@@ -863,3 +863,24 @@ body {
   color: var(--text-dim);
   margin-left: auto;
 }
+
+/* Goal-verify loop rendering (S-6): verdicts + cost above the reply. */
+.verify-box {
+  margin: 0.25rem 0 0.4rem;
+  padding: 0.35rem 0.55rem;
+  border-left: 3px solid var(--accent, #0aa);
+  background: color-mix(in srgb, var(--accent, #0aa) 7%, transparent);
+  font-size: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.verify-box__line {
+  color: #a65;
+}
+.verify-box__line--met {
+  color: #2a7;
+}
+.verify-box__cost {
+  opacity: 0.75;
+}

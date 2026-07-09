@@ -1,0 +1,53 @@
+{
+  "date": "2026-01-03",
+  "by_prediction": {
+    "prediction.3596f21913b0edf3": [
+      {
+        "actor": "synthetic vendor 0",
+        "job": "ship the fixture milestone",
+        "outcome": "fixture milestone generally available",
+        "motivation": "keep the synthetic market believing announcements",
+        "task": {
+          "who": "the fixture vendor team",
+          "what": "publish milestone artifact 0",
+          "where": "example.com",
+          "when": "before Q3 2026",
+          "why": "the announcement said so",
+          "how": "run the fixture release process"
+        }
+      }
+    ],
+    "prediction.3596f21913b0edf4": [
+      {
+        "actor": "synthetic vendor 1",
+        "job": "ship the fixture milestone",
+        "outcome": "fixture milestone generally available",
+        "motivation": "keep the synthetic market believing announcements",
+        "task": {
+          "who": "the fixture vendor team",
+          "what": "publish milestone artifact 1",
+          "where": "example.com",
+          "when": "before Q3 2026",
+          "why": "the announcement said so",
+          "how": "run the fixture release process"
+        }
+      }
+    ],
+    "prediction.3596f21913b0edf5": [
+      {
+        "actor": "synthetic vendor 2",
+        "job": "ship the fixture milestone",
+        "outcome": "fixture milestone generally available",
+        "motivation": "keep the synthetic market believing announcements",
+        "task": {
+          "who": "the fixture vendor team",
+          "what": "publish milestone artifact 2",
+          "where": "example.com",
+          "when": "before Q3 2026",
+          "why": "the announcement said so",
+          "how": "run the fixture release process"
+        }
+      }
+    ]
+  }
+}

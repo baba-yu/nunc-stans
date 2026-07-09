@@ -57,19 +57,34 @@ export const api = {
       method: 'POST',
       body: JSON.stringify({ stack }),
     }),
+  // Phase E: freeze the session's current blueprint version and emit its
+  // bundle (generating IS freezing — F7).
+  generateBundle: (sessionId: string) =>
+    http<{ slug: string; version: number; frozen_at: string; bundle_hash: string; files: string[] }>(
+      `${API}/sessions/${sessionId}/bundle`,
+      { method: 'POST', body: '{}' },
+    ),
 
   // Consume the SSE message stream, invoking `on(event, data)` per event.
   // `data` is the raw (JSON-encoded) payload string; the caller parses it.
   async streamMessage(
     sessionId: string,
     content: string,
-    opts: { think?: boolean; maxTokens?: number },
+    opts: {
+      think?: boolean
+      maxTokens?: number
+      profileId?: string
+      verify?: { on: boolean; goal?: string }
+    },
     on: (event: string, data: string) => void,
   ): Promise<void> {
     const res = await fetch(`${API}/sessions/${sessionId}/messages/stream`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ content, think: opts.think, maxTokens: opts.maxTokens }),
+      body: JSON.stringify({
+        content, think: opts.think, maxTokens: opts.maxTokens,
+        profileId: opts.profileId, verify: opts.verify,
+      }),
     })
     if (!res.ok || !res.body) {
       throw new Error(`${res.status} ${res.statusText}: ${await res.text().catch(() => '')}`)

@@ -1,0 +1,16 @@
+daily-flow-check :: date=2026-01-03 (Mon-Sat)
+  repo-root: <WORK>
+
+OK news+FP markdown files (2026-01-03)
+FAIL DB population via post_update_validation (2026-01-03): 1 issue(s)
+  - post_update_validation exited 2 but produced no FAIL lines; stderr='FAIL: DB not found: <WORK>/store/world/analytics.sqlite\n'
+FAIL READMEs (3-day window including 2026-01-03): 4 issue(s)
+  - missing: README.md
+  - missing: README.ja.md
+  - missing: README.es.md
+  - missing: README.fil.md
+FAIL exports hygiene (manifest + sqlite): 2 issue(s)
+  - missing: data/exports/manifest.json
+  - missing: store/world/analytics.sqlite
+
+NOT DONE — see FAIL lines above
