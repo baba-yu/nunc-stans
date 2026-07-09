@@ -122,18 +122,20 @@ _up-gate:
 _up-llama:
     #!/usr/bin/env bash
     set -uo pipefail
-    if [ -n "${NS_SKIP_LLAMA:-}" ]; then echo "[llama] NS_SKIP_LLAMA set - local model backend skipped"; exec sleep infinity; fi
+    # inert = tail -f /dev/null, NOT `sleep infinity` (GNU-only; BusyBox sleep
+    # exits at once and concurrently -k would tear the whole stack down).
+    if [ -n "${NS_SKIP_LLAMA:-}" ]; then echo "[llama] NS_SKIP_LLAMA set - local model backend skipped"; exec tail -f /dev/null; fi
     bin=$(node tools/llama.ts bin || true)
     model=$(node tools/llama.ts model || true)
-    if [ -z "$bin" ]; then echo "[llama] no llama-server binary - run 'just setup' (llama-cpp profiles show 'local model offline')"; exec sleep infinity; fi
-    if [ -z "$model" ]; then echo "[llama] no GGUF in the store - run 'just setup' to install one"; exec sleep infinity; fi
+    if [ -z "$bin" ]; then echo "[llama] no llama-server binary - run 'just setup' (llama-cpp profiles show 'local model offline')"; exec tail -f /dev/null; fi
+    if [ -z "$model" ]; then echo "[llama] no GGUF in the store - run 'just setup' to install one"; exec tail -f /dev/null; fi
     echo "[llama] serving $model on :${NS_LLAMA_PORT:-8080}"
     # Run (not exec): if llama-server crashes or the model is unloadable, the
     # leg must NOT exit, or `concurrently -k` would tear down the whole stack.
     # Stay inert instead so the UI degrades honestly (W11 "local model offline").
     "$bin" -m "$model" --host 127.0.0.1 --port "${NS_LLAMA_PORT:-8080}" --jinja -c "${NS_LLAMA_CTX:-8192}"
     echo "[llama] llama-server exited (code $?) - staying inert; the rest of the stack keeps running, llama-cpp profiles show 'local model offline'"
-    exec sleep infinity
+    exec tail -f /dev/null
 
 # Run only the local model backend in the foreground (same resolution as the
 # _up-llama leg of `just up`) - (re)start the model without the whole stack.
@@ -147,7 +149,9 @@ llama:
 
 # Stop the stack started by `just up`: terminates whatever is LISTENING on
 # the gate/engine/fourfive/apps-host ports (honoring the same NS_PORT /
-# NS_ENGINE_PORT overrides; fourfive fixed at :8787, apps-host at :8788).
+# NS_ENGINE_PORT / NS_LLAMA_PORT overrides; fourfive fixed at :8787,
+# apps-host at :8788, llama-server at :8080 — killed only if the process
+# really is llama-server, since :8080 is a busy default port).
 # SIGTERM, then SIGKILL any survivor. Idempotent - a no-op if nothing is up.
 # See tools/down.ts.
 down:

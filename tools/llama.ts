@@ -27,7 +27,12 @@ function isFile(p: string): boolean {
   try { return statSync(p).isFile() } catch { return false }
 }
 
-function findUnder(dir: string, name: string): string | null {
+function mtimeSafe(p: string): number {
+  try { return statSync(p).mtimeMs } catch { return 0 }
+}
+
+function findAllUnder(dir: string, name: string): string[] {
+  const out: string[] = []
   const stack = [dir]
   while (stack.length) {
     const d = stack.pop()!
@@ -36,10 +41,10 @@ function findUnder(dir: string, name: string): string | null {
     for (const e of entries) {
       const full = join(d, e.name)
       if (e.isDirectory()) stack.push(full)
-      else if (e.name === name) return full
+      else if (e.name === name) out.push(full)
     }
   }
-  return null
+  return out
 }
 
 function onPath(name: string): string | null {
@@ -52,9 +57,21 @@ function onPath(name: string): string | null {
 
 function resolveBin(): string | null {
   const env = process.env.LLAMACPP_BIN
-  if (env && isFile(env)) return env
+  if (env) {
+    if (isFile(env)) return env
+    // An explicit override that dangles must fail loudly, never fall
+    // through to a different binary.
+    console.error(`[llama] LLAMACPP_BIN=${env} does not exist - fix or unset it`)
+    return null
+  }
   const exe = process.platform === 'win32' ? 'llama-server.exe' : 'llama-server'
-  return onPath(exe) ?? findUnder(LLAMA_HOME, exe)
+  const hit = onPath(exe)
+  if (hit) return hit
+  // Multiple extracted builds may coexist; newest mtime wins (the
+  // documented "newest build" contract), not readdir order.
+  const all = findAllUnder(LLAMA_HOME, exe)
+  if (!all.length) return null
+  return all.sort((a, b) => mtimeSafe(b) - mtimeSafe(a))[0]
 }
 
 function ggufs(modelsDir: string): string[] {
@@ -66,8 +83,8 @@ function ggufs(modelsDir: string): string[] {
 function newestGguf(modelsDir: string, files: string[]): string | null {
   let best: { f: string; m: number } | null = null
   for (const f of files) {
-    const m = statSync(join(modelsDir, f)).mtimeMs
-    if (!best || m > best.m) best = { f, m }
+    const m = mtimeSafe(join(modelsDir, f)) // 0 for broken symlinks — skipped, never thrown
+    if (m > 0 && (!best || m > best.m)) best = { f, m }
   }
   return best ? join(modelsDir, best.f) : null
 }
@@ -89,13 +106,22 @@ function resolveModel(): string | null {
   const modelsDir = join(dir, 'models')
 
   const env = process.env.NS_LLAMA_MODEL
-  if (env && existsSync(env)) return env
+  if (env) {
+    if (existsSync(env)) return env
+    const inDir = join(modelsDir, env)
+    if (existsSync(inDir)) return inDir
+    // Explicit override that resolves to nothing: fail loudly rather than
+    // silently serving a different model.
+    console.error(`[llama] NS_LLAMA_MODEL=${env} not found (checked as path and under ${modelsDir}) - fix or unset it`)
+    return null
+  }
 
   const cfg = readConfig().llama_model
   if (typeof cfg === 'string' && cfg) {
     if (existsSync(cfg)) return cfg
     const inDir = join(modelsDir, cfg)
     if (existsSync(inDir)) return inDir
+    console.error(`[llama] config llama_model=${cfg} not found - falling back to profile/newest`)
   }
 
   const files = ggufs(modelsDir)
