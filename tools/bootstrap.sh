@@ -1,9 +1,12 @@
 #!/bin/sh
 # nunc-stans bootstrap: doctor + data-store designation.
 # Usage: sh tools/bootstrap.sh [data-dir]
-#   With an argument (or NS_DATA set): designates that folder, creates and
-#   initializes it if needed, and remembers it in the app config.
-#   Without: reuses the configured store, else the in-repo default
+#   With an argument: designates that folder, creates and initializes it if
+#   needed, and remembers it in the app config.
+#   NS_DATA set (no argument): per-invocation override — the folder is
+#   initialized and used for THIS run only, never persisted; run
+#   `just bootstrap <dir>` to persist a store kept elsewhere.
+#   Without either: reuses the configured store, else the in-repo default
 #   <repo>/data/ (gitignored; R13 2026-07-07).
 # POSIX sh on purpose: this is the one script that runs before the toolchain
 # exists (the documented exception to the TypeScript tooling policy).
@@ -52,8 +55,9 @@ else
 fi
 CFG="$CFG_DIR/config.json"
 # NS_DATA is a per-invocation override (tools/lib/data-dir.ts), NOT a
-# designation to remember. Only an explicit arg (or a genuine first run)
-# is written to the persistent config; an NS_DATA-only run leaves it as-is.
+# designation to remember. Only an explicit arg — or a first run that fell
+# back to the in-repo default — is written to the persistent config; an
+# NS_DATA-only run leaves the config exactly as it was.
 # Regression guard: a story runbook's `export NS_DATA=$(mktemp -d)` once got
 # baked into the real config, pointing the live store at a scratch /tmp dir.
 ARG="${1:-}"
@@ -91,11 +95,18 @@ else
 fi
 chmod 700 "$DIR/self" 2>/dev/null || true
 if [ "$FROM_ENV" -eq 1 ]; then
-  say "info NS_DATA override - using $DIR for this run only (config left as-is)"
+  say "info NS_DATA override - using $DIR for this run only (config left as-is; run 'just bootstrap $DIR' to persist it)"
 else
-  mkdir -p "$CFG_DIR"
-  printf '{\n  "data_dir": "%s"\n}\n' "$DIR" > "$CFG"
-  say "ok   data store remembered in $CFG"
+  # Merge the key via the shared writer so sibling keys survive (the old
+  # whole-file printf erased news_repo/manda_data_dir/llama_model). The
+  # printf remains only as the no-node fallback (bootstrap runs pre-toolchain).
+  if command -v node >/dev/null 2>&1 && node "$(dirname "$0")/config-set.ts" data_dir "$DIR" >/dev/null 2>&1; then
+    say "ok   data store remembered in $CFG"
+  else
+    mkdir -p "$CFG_DIR"
+    printf '{\n  "data_dir": "%s"\n}\n' "$DIR" > "$CFG"
+    say "ok   data store remembered in $CFG (whole-file write - node unavailable)"
+  fi
 fi
 
 if [ "$missing" -eq 0 ]; then say "== bootstrap ok =="; else say "== bootstrap incomplete =="; fi
