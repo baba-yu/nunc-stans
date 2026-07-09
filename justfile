@@ -61,6 +61,12 @@ news-import src instance:
 news-daily instance:
     NS_INSTANCE="{{instance}}" node engines/nunc-fluens/pipeline/src/cli.ts run
 
+# Distill the World's export-graph vocabulary into the instance glossary
+# as candidate terms (topics-authoring W10) — the background feeder for
+# offline authoring grounding. Idempotent; cron/systemd-friendly.
+news-glossary instance:
+    node engines/nunc-fluens/pipeline/src/cli.ts accumulate-glossary "{{instance}}"
+
 # Install the daily systemd user units for an instance (Linux/WSL;
 # path or bare name — install.sh resolves names like the cli does).
 # Optional second arg = OnCalendar (default "*-*-* 06:30:00"); cron
