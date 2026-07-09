@@ -246,6 +246,47 @@ Derived decisions:
 
 ---
 
+## Amendment PE9' — local backend Ollama → llama.cpp (owner-ratified 2026-07-08)
+
+Ratified in session after the FourFive/onboarding review. **Supersedes
+the Ollama-specific parts of PE9, risk 3, and Task 0's probe** — the
+tool-calling architecture (PE9's provider-agnostic `ChatOptions.tools` +
+bounded loop) is unchanged; only the local model backend changes.
+
+- **llama.cpp becomes the first-class local backend.** A new
+  `llama-cpp` provider is added to nunc-ai (`llama-server` OpenAI-compatible
+  `/v1/chat/completions`, SSE streaming, `response_format` json_schema
+  for structured output, `reasoning_content` → thinking). It slots into
+  the existing provider seam (`frontend/packages/ai/src/index.ts`
+  registry) exactly like `ollama.ts` — additive, one new file + registry
+  entry + `PROVIDERS` allowlist.
+- **Ollama is deprecated, not deleted.** The `ollama` provider and its
+  scripts stay for one transition; new profiles default to `llama-cpp`.
+  Removal is a later cleanup, gated on the swap proving out.
+- **Task 0 probe retargets:** the T0 local tool-calling smoke runs against
+  a llama.cpp GGUF (qwen-family, tool-capable) via `llama-server`, not
+  Ollama `qwen3.6:27b`. PE9/T8 provider-side `tool_use` is implemented for
+  `llama-cpp` + `anthropic-api` (+ scripted `mock`); `ollama` tool_use is
+  no longer required for exit.
+- **Risk 3 restated:** the risk is now "a tool-capable GGUF at parity with
+  qwen3.6:27b's tool-calling" — validated at T0 before PE9 rides it (the
+  same probe-before-build discipline). If T0 fails parity, the fallback is
+  the retained Ollama path (why it is deprecated, not deleted).
+- **`mock` keeps CI deterministic** (mock-degradation rule §2.10, unchanged).
+- **Onboarding:** `just setup` (new, area `tool`) installs/builds
+  llama.cpp, selects+downloads a model, and validates it (chat smoke +
+  tool probe) as part of the batteries-included first-run — the operational
+  home for the backend swap.
+
+Touchpoints (all additive): `frontend/packages/ai/src/providers/llamacpp.ts`
+(new), `.../src/index.ts` (registry+export), `frontend/nunc-stans-formans/
+src/profiles.ts` (`PROVIDERS`, default), `engines/fourfive/docs/guides/
+local-llm.md` + `scripts/` (llama.cpp path), `tools/bootstrap.sh` +
+`tools/setup.ts` (install/validate). Ollama touchpoints stay green until
+removal.
+
+---
+
 ## Execution notes
 
 - Execute inside WSL (§5 note 12); scratch stores via `NS_DATA` for
