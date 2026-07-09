@@ -87,8 +87,8 @@ news-schedule instance oncalendar='*-*-* 06:30:00':
 # expansion happen in just's shell on every OS (concurrently itself never
 # parses them).
 up: _require_data build
-    pnpm exec concurrently -k -n engine,fourfive,apps,gate -c yellow,blue,magenta,cyan \
-      "just _up-engine" "just _up-fourfive" "just _up-apps" "just _up-gate"
+    pnpm exec concurrently -k -n llama,engine,fourfive,apps,gate -c green,yellow,blue,magenta,cyan \
+      "just _up-llama" "just _up-engine" "just _up-fourfive" "just _up-apps" "just _up-gate"
 
 _up-engine: _require_data
     cargo run --manifest-path engines/nunc-stans/Cargo.toml --release -- \
@@ -112,9 +112,46 @@ _up-gate:
       --data-dir "{{data_dir}}" \
       --instances-dir engines/nunc-fluens/instances
 
+# Local model backend (T4 / plan 2026-07-08-topics-authoring exit #6):
+# llama-server on :8080 (--jinja for tool-calls), the default provider for
+# llama-cpp profiles. tools/llama.ts resolves the binary + the GGUF
+# (NS_LLAMA_MODEL > config llama_model > the fourfive-chat profile's model >
+# newest in <store>/models). No binary / no model / NS_SKIP_LLAMA=1 -> the leg
+# stays inert so the rest of the stack still runs and the UI degrades honestly
+# (W11 "local model offline"). NS_LLAMA_PORT / NS_LLAMA_CTX override.
+_up-llama:
+    #!/usr/bin/env bash
+    set -uo pipefail
+    # inert = tail -f /dev/null, NOT `sleep infinity` (GNU-only; BusyBox sleep
+    # exits at once and concurrently -k would tear the whole stack down).
+    if [ -n "${NS_SKIP_LLAMA:-}" ]; then echo "[llama] NS_SKIP_LLAMA set - local model backend skipped"; exec tail -f /dev/null; fi
+    bin=$(node tools/llama.ts bin || true)
+    model=$(node tools/llama.ts model || true)
+    if [ -z "$bin" ]; then echo "[llama] no llama-server binary - run 'just setup' (llama-cpp profiles show 'local model offline')"; exec tail -f /dev/null; fi
+    if [ -z "$model" ]; then echo "[llama] no GGUF in the store - run 'just setup' to install one"; exec tail -f /dev/null; fi
+    echo "[llama] serving $model on :${NS_LLAMA_PORT:-8080}"
+    # Run (not exec): if llama-server crashes or the model is unloadable, the
+    # leg must NOT exit, or `concurrently -k` would tear down the whole stack.
+    # Stay inert instead so the UI degrades honestly (W11 "local model offline").
+    "$bin" -m "$model" --host 127.0.0.1 --port "${NS_LLAMA_PORT:-8080}" --jinja -c "${NS_LLAMA_CTX:-8192}"
+    echo "[llama] llama-server exited (code $?) - staying inert; the rest of the stack keeps running, llama-cpp profiles show 'local model offline'"
+    exec tail -f /dev/null
+
+# Run only the local model backend in the foreground (same resolution as the
+# _up-llama leg of `just up`) - (re)start the model without the whole stack.
+llama:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    bin=$(node tools/llama.ts bin); model=$(node tools/llama.ts model)
+    if [ -z "$bin" ] || [ -z "$model" ]; then echo "need llama-server + a GGUF - run 'just setup'"; exit 1; fi
+    echo "[llama] serving $model on :${NS_LLAMA_PORT:-8080}"
+    exec "$bin" -m "$model" --host 127.0.0.1 --port "${NS_LLAMA_PORT:-8080}" --jinja -c "${NS_LLAMA_CTX:-8192}"
+
 # Stop the stack started by `just up`: terminates whatever is LISTENING on
 # the gate/engine/fourfive/apps-host ports (honoring the same NS_PORT /
-# NS_ENGINE_PORT overrides; fourfive fixed at :8787, apps-host at :8788).
+# NS_ENGINE_PORT / NS_LLAMA_PORT overrides; fourfive fixed at :8787,
+# apps-host at :8788, llama-server at :8080 — killed only if the process
+# really is llama-server, since :8080 is a busy default port).
 # SIGTERM, then SIGKILL any survivor. Idempotent - a no-op if nothing is up.
 # See tools/down.ts.
 down:
