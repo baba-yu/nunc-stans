@@ -4,8 +4,27 @@
 // synthesis model; local models get search through external adapters.
 
 export interface ChatMessage {
-  role: 'system' | 'user' | 'assistant';
+  role: 'system' | 'user' | 'assistant' | 'tool';
   content: string;
+  /** Tool calls this assistant message requested (tool loop, PE9/T8). */
+  toolCalls?: ToolCall[];
+  /** For role 'tool': which call this message answers. */
+  toolCallId?: string;
+}
+
+/** A tool the model may call (PE9/T8). `inputSchema` is a JSON Schema —
+ * the same shape MCP serves, passed through to the provider verbatim. */
+export interface ToolSpec {
+  name: string;
+  description?: string;
+  inputSchema: Record<string, unknown>;
+}
+
+/** One tool invocation the model requested. */
+export interface ToolCall {
+  id: string;
+  name: string;
+  arguments: Record<string, unknown>;
 }
 
 export interface Usage {
@@ -37,6 +56,11 @@ export interface ChatOptions {
   /** Active profile id, stamped into the run log (S-5). Resolution from
    * the profile store happens at the call site; nunc-ai only records it. */
   profile?: string;
+  /** Tools the model may call this turn (capability `tools: true`
+   * required). Execution happens OUTSIDE the provider — use
+   * Ai.chatWithTools for the bounded loop; a bare chat() with tools
+   * returns the requested calls in ChatResult.toolCalls unexecuted. */
+  tools?: ToolSpec[];
 }
 
 /** One streamed chunk from a chatStream-capable provider. `thinking`
@@ -60,6 +84,10 @@ export interface ChatResult {
   model: string;
   provider: string;
   stopReason?: string;
+  /** Tool calls the model requested (present only when opts.tools were
+   * offered and the model chose to call — the loop in index.ts executes
+   * them and calls the model again). */
+  toolCalls?: ToolCall[];
 }
 
 export interface Capabilities {
@@ -137,6 +165,10 @@ export interface RunLogEntry {
   /** Goal-verify verdict chain, one entry per iteration (populated by the
    * T3 loop; absent when verify is off). */
   verdicts?: VerdictEntry[];
+  /** Tool-loop audit (PE9/T8): how many times each tool ran in this call.
+   * The names are the declared MCP tool names — no arguments are logged
+   * (the log carries no prompt text; same rule). */
+  toolCalls?: { name: string; count: number }[];
 }
 
 export type FetchLike = typeof globalThis.fetch;

@@ -8,7 +8,7 @@ import { appendRunLog } from './runlog.ts';
 import { normalizeVerify, runVerified } from './verify.ts';
 import type {
   ChatMessage, ChatOptions, ChatResult, FetchLike, Provider,
-  SearchOptions, SearchResult, StreamHandler, VerifyConfig,
+  SearchOptions, SearchResult, StreamHandler, ToolCall, ToolSpec, VerifyConfig,
 } from './types.ts';
 
 export * from './types.ts';
@@ -40,6 +40,20 @@ export interface AiConfig {
   verify?: Partial<VerifyConfig>;
 }
 
+/** One tool execution request surfaced by the loop; the executor returns
+ * the tool's text result (errors/refusals go back VERBATIM as the result
+ * — the model sees them, the caller renders them). */
+export type ToolExecutor = (call: ToolCall) => Promise<string>;
+
+export interface ToolLoopOptions extends ChatOptions {
+  tools: ToolSpec[];
+  onToolCall: ToolExecutor;
+  /** Hard budget across the whole loop (default 8): past it, remaining
+   * requested calls are answered with a refusal and the model is called
+   * once more WITHOUT tools so it must answer with what it has. */
+  maxToolCalls?: number;
+}
+
 export interface Ai {
   provider(name: string): Provider;
   chat(providerName: string, messages: ChatMessage[], opts?: ChatOptions): Promise<ChatResult>;
@@ -48,6 +62,12 @@ export interface Ai {
    * as one final content delta — honest, not hidden (PD6). Logged to the
    * run log exactly like chat(). */
   chatStream(providerName: string, messages: ChatMessage[], opts: ChatOptions | undefined, onEvent: StreamHandler): Promise<ChatResult>;
+  /** The bounded tool loop (PE9/T8): offer tools, execute what the model
+   * requests through `onToolCall`, feed results back, repeat until the
+   * model answers or the budget trips. ONE run-log entry for the whole
+   * loop (aggregated tokens + per-tool call counts, no arguments).
+   * tools+verify in one call is a config error in v0 (PE9). */
+  chatWithTools(providerName: string, messages: ChatMessage[], opts: ToolLoopOptions): Promise<ChatResult>;
   search(sourceName: string, query: string, opts?: SearchOptions): Promise<SearchResult[]>;
 }
 
@@ -191,9 +211,81 @@ export function createAi(cfg: AiConfig): Ai {
     });
   }
 
+  async function chatWithTools(
+    providerName: string, messages: ChatMessage[], opts: ToolLoopOptions,
+  ): Promise<ChatResult> {
+    const { tools, onToolCall, maxToolCalls, ...chatOpts } = opts;
+    if (effectiveVerify(chatOpts).verify === 'on')
+      throw new Error('ai: tools and goal-verify cannot combine in one call (v0 — run them separately)');
+    const p = provider(providerName);
+    if (!p.capabilities.tools)
+      throw new Error(`ai: provider '${p.name}' does not declare tool support`);
+    const budget = maxToolCalls ?? 8;
+    const msgs = [...messages];
+    const counts = new Map<string, number>();
+    let executed = 0;
+    let totalIn = 0;
+    let totalOut = 0;
+    const started = Date.now();
+    try {
+      for (;;) {
+        // Past the budget the model must answer from what it has: tools
+        // are withdrawn rather than silently ignored.
+        const offer = executed < budget ? tools : undefined;
+        const result = await p.chat(msgs, { ...chatOpts, ...(offer ? { tools: offer } : {}) });
+        totalIn += result.usage.inputTokens;
+        totalOut += result.usage.outputTokens;
+        if (!result.toolCalls?.length) {
+          appendRunLog(cfg.runLogFile, {
+            ts: new Date(started).toISOString(),
+            caller: chatOpts.caller ?? 'unknown',
+            provider: p.name,
+            model: result.model,
+            inputTokens: totalIn,
+            outputTokens: totalOut,
+            durationMs: Date.now() - started,
+            verify: 'off',
+            outcome: 'ok',
+            ...(counts.size ? { toolCalls: [...counts].map(([name, count]) => ({ name, count })) } : {}),
+            ...(chatOpts.profile ? { profile: chatOpts.profile } : {}),
+          });
+          return { ...result, usage: { inputTokens: totalIn, outputTokens: totalOut } };
+        }
+        msgs.push({ role: 'assistant', content: result.text, toolCalls: result.toolCalls });
+        for (const call of result.toolCalls) {
+          let output: string;
+          if (executed >= budget) {
+            output = `refused: the tool budget (${budget} calls) is exhausted — answer with what you have`;
+          } else {
+            executed += 1;
+            counts.set(call.name, (counts.get(call.name) ?? 0) + 1);
+            output = await onToolCall(call);
+          }
+          msgs.push({ role: 'tool', toolCallId: call.id, content: output });
+        }
+      }
+    } catch (err) {
+      appendRunLog(cfg.runLogFile, {
+        ts: new Date(started).toISOString(),
+        caller: chatOpts.caller ?? 'unknown',
+        provider: providerName,
+        model: chatOpts.model ?? '',
+        inputTokens: totalIn,
+        outputTokens: totalOut,
+        durationMs: Date.now() - started,
+        verify: 'off',
+        outcome: 'error',
+        error: err instanceof Error ? err.message.slice(0, 300) : String(err),
+        ...(counts.size ? { toolCalls: [...counts].map(([name, count]) => ({ name, count })) } : {}),
+        ...(chatOpts.profile ? { profile: chatOpts.profile } : {}),
+      });
+      throw err;
+    }
+  }
+
   async function search(sourceName: string, query: string, opts?: SearchOptions): Promise<SearchResult[]> {
     return getSearchSource(sourceName, cfg.fetchImpl).search(query, opts);
   }
 
-  return { provider, chat, chatStream, search };
+  return { provider, chat, chatStream, chatWithTools, search };
 }
