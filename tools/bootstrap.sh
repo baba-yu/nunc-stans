@@ -51,7 +51,15 @@ else
   CFG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/nunc-stans"
 fi
 CFG="$CFG_DIR/config.json"
-DIR="${1:-${NS_DATA:-}}"
+# NS_DATA is a per-invocation override (tools/lib/data-dir.ts), NOT a
+# designation to remember. Only an explicit arg (or a genuine first run)
+# is written to the persistent config; an NS_DATA-only run leaves it as-is.
+# Regression guard: a story runbook's `export NS_DATA=$(mktemp -d)` once got
+# baked into the real config, pointing the live store at a scratch /tmp dir.
+ARG="${1:-}"
+FROM_ENV=0
+[ -z "$ARG" ] && [ -n "${NS_DATA:-}" ] && FROM_ENV=1
+DIR="${ARG:-${NS_DATA:-}}"
 if [ -z "$DIR" ] && [ -f "$CFG" ]; then
   # single-key file written by this script; keep the parse simple
   DIR=$(sed -n 's/.*"data_dir"[[:space:]]*:[[:space:]]*"\(.*\)".*/\1/p' "$CFG")
@@ -82,9 +90,13 @@ else
   say "ok   self vault has no remote (F11)"
 fi
 chmod 700 "$DIR/self" 2>/dev/null || true
-mkdir -p "$CFG_DIR"
-printf '{\n  "data_dir": "%s"\n}\n' "$DIR" > "$CFG"
-say "ok   data store remembered in $CFG"
+if [ "$FROM_ENV" -eq 1 ]; then
+  say "info NS_DATA override - using $DIR for this run only (config left as-is)"
+else
+  mkdir -p "$CFG_DIR"
+  printf '{\n  "data_dir": "%s"\n}\n' "$DIR" > "$CFG"
+  say "ok   data store remembered in $CFG"
+fi
 
 if [ "$missing" -eq 0 ]; then say "== bootstrap ok =="; else say "== bootstrap incomplete =="; fi
 exit "$missing"
