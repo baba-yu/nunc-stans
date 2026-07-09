@@ -128,7 +128,12 @@ _up-llama:
     if [ -z "$bin" ]; then echo "[llama] no llama-server binary - run 'just setup' (llama-cpp profiles show 'local model offline')"; exec sleep infinity; fi
     if [ -z "$model" ]; then echo "[llama] no GGUF in the store - run 'just setup' to install one"; exec sleep infinity; fi
     echo "[llama] serving $model on :${NS_LLAMA_PORT:-8080}"
-    exec "$bin" -m "$model" --host 127.0.0.1 --port "${NS_LLAMA_PORT:-8080}" --jinja -c "${NS_LLAMA_CTX:-8192}"
+    # Run (not exec): if llama-server crashes or the model is unloadable, the
+    # leg must NOT exit, or `concurrently -k` would tear down the whole stack.
+    # Stay inert instead so the UI degrades honestly (W11 "local model offline").
+    "$bin" -m "$model" --host 127.0.0.1 --port "${NS_LLAMA_PORT:-8080}" --jinja -c "${NS_LLAMA_CTX:-8192}"
+    echo "[llama] llama-server exited (code $?) - staying inert; the rest of the stack keeps running, llama-cpp profiles show 'local model offline'"
+    exec sleep infinity
 
 # Run only the local model backend in the foreground (same resolution as the
 # _up-llama leg of `just up`) - (re)start the model without the whole stack.
