@@ -15,7 +15,7 @@
 // note 12); on native Windows it prints guidance and continues.
 import { spawn, spawnSync } from 'node:child_process'
 import {
-  appendFileSync, existsSync, mkdirSync, readdirSync, readFileSync, statSync,
+  appendFileSync, existsSync, mkdirSync, readdirSync, readFileSync, renameSync, statSync,
 } from 'node:fs'
 import { createInterface } from 'node:readline'
 import { delimiter, join } from 'node:path'
@@ -113,13 +113,28 @@ function resolveLlamaServer(): string | null {
   return findFile(LLAMA_DIR, isWin ? 'llama-server.exe' : 'llama-server')
 }
 
+// Accelerator flavors are never auto-picked AND an already-installed one is
+// replaced: the OpenVINO asset hard-links libggml-openvino.so (no plugin to
+// remove) and its backend cannot run hybrid/recurrent models — Qwen3.6's
+// DeltaNet cache tensors abort in ggml_backend_sched_split_graph
+// (llama.cpp #22333, closed not-planned). CPU is the portable default;
+// GPU stays a manual opt-in via LLAMACPP_BIN or PATH.
+const ACCEL = /cuda|vulkan|hip|sycl|kompute|openvino|openblas|musa|cann/i
+
+/** True when `bin` was auto-installed under LLAMA_DIR and sits in an
+ * accelerator-flavored build (accelerator libggml backend beside it). */
+function acceleratorBuild(bin: string): boolean {
+  if (!bin.startsWith(LLAMA_DIR)) return false // explicit PATH/LLAMACPP_BIN picks are the user's choice
+  try {
+    const dir = bin.slice(0, bin.lastIndexOf('/'))
+    return readdirSync(dir).some(f => f.startsWith('libggml-') && ACCEL.test(f))
+  } catch { return false }
+}
+
 /** Pick the CPU prebuilt asset for this platform from a release's assets. */
 function pickLlamaAsset(assets: Array<{ name: string; browser_download_url: string }>): { name: string; browser_download_url: string } | null {
   const p = platform(), a = process.arch
-  // Skip accelerator-specific builds — they need a vendor runtime the box
-  // may lack (openvino cost a wasted download on this machine, 2026-07-08).
-  // CPU is the portable default; GPU is a manual opt-in.
-  const bad = /cuda|vulkan|hip|sycl|kompute|openvino|openblas|musa|cann/i
+  const bad = ACCEL
   let rx: RegExp
   if (p === 'linux') rx = /(ubuntu|linux).*(x64|amd64)/i
   else if (p === 'darwin') rx = a === 'arm64' ? /macos-arm64/i : /macos-x64/i
@@ -133,7 +148,16 @@ function pickLlamaAsset(assets: Array<{ name: string; browser_download_url: stri
 async function ensureLlamaServer(): Promise<string | null> {
   step('llama.cpp (local model backend)')
   const existing = resolveLlamaServer()
-  if (existing) { say(`ok   llama-server: ${existing}`); return existing }
+  if (existing && acceleratorBuild(existing)) {
+    // Quarantine OUTSIDE LLAMA_DIR so no resolver can find it again, then
+    // fall through to the CPU download below.
+    say(`NG   ${existing} is an accelerator build — crashes on hybrid models (llama.cpp #22333); replacing with the plain CPU build.`)
+    const disabled = LLAMA_DIR + '-disabled'
+    const top = existing.slice(LLAMA_DIR.length + 1).split('/')[0]
+    mkdirSync(disabled, { recursive: true })
+    renameSync(join(LLAMA_DIR, top), join(disabled, top))
+    say(`     old build kept at ${join(disabled, top)} (delete it when confident)`)
+  } else if (existing) { say(`ok   llama-server: ${existing}`); return existing }
   if (isWin) {
     say('info native Windows: download a llama.cpp release and put llama-server.exe on PATH')
     say('     https://github.com/ggml-org/llama.cpp/releases  (or set LLAMACPP_BIN)')
@@ -224,7 +248,10 @@ async function selectAndDownloadModel(): Promise<string | null> {
 // --- validation ------------------------------------------------------
 const sleep = (ms: number) => new Promise(r => setTimeout(r, ms))
 
-async function validateModel(llamaBin: string, modelPath: string): Promise<void> {
+/** True only when the server came up AND answered a chat. A model that
+ * cannot serve is a setup FAILURE (a broken 27B once passed as "done"
+ * because this was a WARN) — main() exits nonzero on false. */
+async function validateModel(llamaBin: string, modelPath: string): Promise<boolean> {
   step('validate the model (chat smoke + tool probe)')
   const port = 8791
   const base = `http://127.0.0.1:${port}`
@@ -234,32 +261,40 @@ async function validateModel(llamaBin: string, modelPath: string): Promise<void>
     let up = false
     for (let i = 0; i < 120; i++) { // model load can be slow; ~120s budget
       await sleep(1000)
+      if (srv.exitCode !== null) { say(`NG   llama-server exited (code ${srv.exitCode}) while loading — this model cannot be served by this build.`); return false }
       try { if ((await fetch(`${base}/health`, { signal: AbortSignal.timeout(2000) })).ok) { up = true; break } } catch { /* not ready */ }
     }
-    if (!up) { say('NG   server did not come up in time — validation inconclusive.'); return }
+    if (!up) { say('NG   server did not come up in time — the model backend is NOT usable.'); return false }
 
+    // Reasoning models (Qwen3.6 with --jinja) may spend the whole budget on
+    // reasoning_content; any generated text proves the backend serves.
+    // Budgets/timeouts sized for CPU-speed 27B (~2-3 tok/s).
     const chat = await fetch(`${base}/v1/chat/completions`, {
       method: 'POST', headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ messages: [{ role: 'user', content: 'Reply with the single word: ready' }], max_tokens: 16 }),
-      signal: AbortSignal.timeout(60_000),
+      body: JSON.stringify({ messages: [{ role: 'user', content: 'Reply with the single word: ready' }], max_tokens: 128 }),
+      signal: AbortSignal.timeout(180_000),
     })
-    const chatBody = await chat.json() as { choices?: Array<{ message?: { content?: string } }> }
-    say(chat.ok && chatBody.choices?.[0]?.message?.content ? `ok   chat: "${chatBody.choices[0].message!.content!.trim().slice(0, 40)}"` : 'WARN chat smoke returned no content')
+    const chatBody = await chat.json() as { choices?: Array<{ message?: { content?: string; reasoning_content?: string } }> }
+    const msg = chatBody.choices?.[0]?.message
+    const text = msg?.content?.trim() || msg?.reasoning_content?.trim() || ''
+    if (!(chat.ok && text)) { say('NG   chat smoke returned no content — the model backend is NOT usable.'); return false }
+    say(`ok   chat: "${text.slice(0, 40)}"${msg?.content?.trim() ? '' : ' (reasoning-only within budget — serving works)'}`)
 
     const tool = await fetch(`${base}/v1/chat/completions`, {
       method: 'POST', headers: { 'content-type': 'application/json' },
       body: JSON.stringify({
         messages: [{ role: 'user', content: 'What time is it in Tokyo? Use the tool.' }],
-        max_tokens: 128,
+        max_tokens: 512, // reasoning models think before calling — leave room
         tools: [{ type: 'function', function: { name: 'get_time', description: 'Get the current time in a city', parameters: { type: 'object', properties: { city: { type: 'string' } }, required: ['city'] } } }],
       }),
-      signal: AbortSignal.timeout(60_000),
+      signal: AbortSignal.timeout(360_000), // 512 tokens at CPU-27B speed
     })
     const toolBody = await tool.json() as { choices?: Array<{ message?: { tool_calls?: unknown[] } }> }
     const calls = toolBody.choices?.[0]?.message?.tool_calls
     say(Array.isArray(calls) && calls.length
       ? `ok   tool-calling: model emitted ${calls.length} tool_call(s) — PE9' target confirmed`
       : 'WARN tool probe: no tool_calls (model may not be tool-tuned; PE9/T0 must re-check)')
+    return true
   } finally {
     srv.kill('SIGTERM')
     await sleep(500)
@@ -271,8 +306,16 @@ function ensureMandaHome(): string {
   step('manda memory home')
   const dir = resolveMandaDataDir()
   mkdirSync(dir, { recursive: true })
-  writeConfigKey('manda_data_dir', dir)
-  say(`ok   memory home: ${dir}`)
+  // Mirror bootstrap's guard: a home derived from a per-invocation env
+  // override (NS_DATA / MANDA_DATA_DIR / deprecated FED_DATA) is used for
+  // this run only, never baked into the persistent config — a story
+  // runbook's mktemp scratch must not become the agent's memory home.
+  if (process.env.MANDA_DATA_DIR || process.env.NS_DATA || process.env.FED_DATA) {
+    say(`ok   memory home (env override, not persisted): ${dir}`)
+  } else {
+    writeConfigKey('manda_data_dir', dir)
+    say(`ok   memory home: ${dir}`)
+  }
   return dir
 }
 
@@ -316,7 +359,8 @@ async function main(): Promise<void> {
   if (skipModel) say('\n(skipping model per --skip-model)')
   else modelPath = await selectAndDownloadModel()
 
-  if (llamaBin && modelPath) await validateModel(llamaBin, modelPath)
+  let valOk: boolean | null = null
+  if (llamaBin && modelPath) valOk = await validateModel(llamaBin, modelPath)
   else say('\n(model validation skipped — need both llama-server and a model)')
 
   const home = ensureMandaHome()
@@ -324,11 +368,18 @@ async function main(): Promise<void> {
   else if (resolveMandaBin()) await firstMandate(home)
   else say('\n(no manda binary — mandate step skipped; re-run once manda is built)')
 
+  if (valOk === false) {
+    step('FAILED')
+    say('NG   the local model backend failed validation — `just up` would serve')
+    say('     the offline demo only. Fix the model/build above, then re-run.')
+    process.exitCode = 1
+    return
+  }
   step('done')
   say('next:')
-  say('  just up         # start the stack (gate + engine + fourfive)')
+  say('  just up         # start the stack (llama + gate + engine + fourfive + apps)')
   say('  just agent      # chat with the first-party agent (memory ON if manda + mandate)')
-  if (llamaBin) say(`  ${llamaBin} -m <model> --port 8080 --jinja   # run the local model for llama-cpp profiles`)
+  say('  just llama      # (re)start only the local model backend')
 }
 
 main().then(() => { rl.close(); process.exit(0) }, e => { rl.close(); console.error(`setup: ${e instanceof Error ? e.message : e}`); process.exit(1) })
