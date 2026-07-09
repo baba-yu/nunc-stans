@@ -13,6 +13,7 @@ import { resolveMandaDataDir } from '../../../tools/lib/data-dir.ts'
 import { mandateJsonl } from '../../../tools/lib/mandate.ts'
 import { HELP, describeMandates, runTurn } from './chat.ts'
 import type { AgentSession, TurnIO } from './chat.ts'
+import { connectAppsTools } from './tools.ts'
 
 const [cmd, ...rest] = process.argv.slice(2)
 
@@ -104,9 +105,19 @@ async function cmdChat(argv: string[]): Promise<number> {
   } else {
     io.meta('memory OFF: no manda binary (run `just setup`, or set MANDA_BIN — see the README)')
   }
+
+  // Generated-app tools (Phase E T8): connected only when the profile's
+  // skills grant something (apps:<slug>); refusals and outages surface as
+  // meta lines, never crash the REPL.
+  const tools = await connectAppsTools(profile, io.meta)
+  if (tools) {
+    io.meta(tools.specs.length
+      ? `app tools ON: ${tools.specs.length} granted (see /tools)`
+      : 'app tools: connected, but this profile grants no served tool')
+  }
   io.meta(HELP)
 
-  const session: AgentSession = { ai, profile, memory, history: [], io }
+  const session: AgentSession = { ai, profile, memory, tools, history: [], io }
   try {
     for (;;) {
       const line = await nextLine('\x1b[1myou ▸\x1b[0m ')
@@ -123,6 +134,7 @@ async function cmdChat(argv: string[]): Promise<number> {
   } finally {
     rl.close()
     await memory?.close()
+    await tools?.close().catch(() => {})
   }
   return 0
 }
