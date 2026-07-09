@@ -275,6 +275,181 @@ async fn news_config_without_data_dir_is_503() {
     assert_eq!(resp.status(), 503);
 }
 
+// --- topics authoring API (topics-authoring W6/W7) ------------------------
+
+/// A writable init-born instance: an instance.json stamp + the reference dir.
+fn make_instance(tag: &str) -> PathBuf {
+    use std::sync::atomic::{AtomicUsize, Ordering};
+    static SEQ: AtomicUsize = AtomicUsize::new(0);
+    let dir = std::env::temp_dir().join(format!(
+        "gate-inst-{}-{}-{}",
+        tag,
+        std::process::id(),
+        SEQ.fetch_add(1, Ordering::Relaxed)
+    ));
+    std::fs::create_dir_all(dir.join("data/reference")).unwrap();
+    std::fs::write(
+        dir.join("instance.json"),
+        r#"{"nunc_fluens":1,"created":"2026-07-08","imports":[]}"#,
+    )
+    .unwrap();
+    dir
+}
+
+fn topics_gate(news_repo: Option<PathBuf>) -> impl std::future::Future<Output = String> {
+    let (formans_dist, fourfive_dist) = make_dists();
+    let cfg = GateCfg::new(
+        "http://127.0.0.1:1".into(),
+        "http://127.0.0.1:1".into(),
+        formans_dist,
+    )
+    .with_news_repo(news_repo);
+    async move { spawn(build_router(cfg, &fourfive_dist)).await }
+}
+
+#[tokio::test]
+async fn topics_roundtrip_and_validation() {
+    let inst = make_instance("rt");
+    let gate = topics_gate(Some(inst.clone())).await;
+    let client = reqwest::Client::new();
+    let url = format!("{gate}/api/world/topics");
+
+    // No file yet -> empty, writable (author from scratch).
+    let got: serde_json::Value = client.get(&url).send().await.unwrap().json().await.unwrap();
+    assert_eq!(got["topics"], json!([]));
+    assert_eq!(got["writable"], json!(true));
+
+    // PUT topics -> stored atomically at the instance path, GET round-trips.
+    let put = client
+        .put(&url)
+        .json(&json!({"topics": [
+            {"name": "Agent Harness", "intent": "deep", "mandatory": true},
+            {"name": "Hardware", "intent": "watch", "mandatory": false, "note": "news-driven"}
+        ], "reference_sites": ["https://example.com/"]}))
+        .send()
+        .await
+        .unwrap();
+    assert_eq!(put.status(), 200);
+    let file = inst.join("data/reference/news-topics.json");
+    assert!(file.is_file(), "topics file written to the instance");
+    let got: serde_json::Value = client.get(&url).send().await.unwrap().json().await.unwrap();
+    assert_eq!(got["topics"][0]["intent"], "deep");
+    assert_eq!(got["topics"][1]["note"], "news-driven");
+
+    // Bad intent -> 422; duplicate name -> 422; empty list -> 422.
+    let bad = client
+        .put(&url)
+        .json(&json!({"topics": [{"name": "X", "intent": "loud", "mandatory": false}]}))
+        .send().await.unwrap();
+    assert_eq!(bad.status(), 422);
+    let dup = client
+        .put(&url)
+        .json(&json!({"topics": [
+            {"name": "X", "intent": "broad", "mandatory": false},
+            {"name": "X", "intent": "watch", "mandatory": false}]}))
+        .send().await.unwrap();
+    assert_eq!(dup.status(), 422);
+    let empty = client.put(&url).json(&json!({"topics": []})).send().await.unwrap();
+    assert_eq!(empty.status(), 422);
+    // Unknown field -> 400 (deny_unknown_fields).
+    let unknown = client
+        .put(&url)
+        .json(&json!({"topics": [{"name": "X", "intent": "broad", "mandatory": false, "weight": 3}]}))
+        .send().await.unwrap();
+    assert_eq!(unknown.status(), 400);
+}
+
+#[tokio::test]
+async fn topics_read_only_on_a_view_source() {
+    // A news-shaped/view source: no instance.json stamp.
+    let src = std::env::temp_dir().join(format!("gate-viewsrc-{}", std::process::id()));
+    std::fs::create_dir_all(src.join("data/reference")).unwrap();
+    std::fs::write(
+        src.join("data/reference/news-topics.json"),
+        r#"{"topics":[{"name":"Seeded","intent":"broad","mandatory":false}]}"#,
+    )
+    .unwrap();
+    let gate = topics_gate(Some(src.clone())).await;
+    let client = reqwest::Client::new();
+    let url = format!("{gate}/api/world/topics");
+
+    // GET works but flags read-only.
+    let got: serde_json::Value = client.get(&url).send().await.unwrap().json().await.unwrap();
+    assert_eq!(got["writable"], json!(false));
+    assert!(got["read_only_reason"].is_string());
+
+    // PUT is refused with 409 — a view source is never written (W7).
+    let put = client
+        .put(&url)
+        .json(&json!({"topics": [{"name": "Y", "intent": "broad", "mandatory": false}]}))
+        .send().await.unwrap();
+    assert_eq!(put.status(), 409);
+    // The seeded file is untouched.
+    let after = std::fs::read_to_string(src.join("data/reference/news-topics.json")).unwrap();
+    assert!(after.contains("Seeded"), "view source not modified");
+}
+
+#[tokio::test]
+async fn topics_without_a_linked_instance_is_503() {
+    let gate = topics_gate(None).await;
+    let resp = reqwest::get(format!("{gate}/api/world/topics")).await.unwrap();
+    assert_eq!(resp.status(), 503);
+}
+
+/// A stub OpenAI-compatible model returning a fixed structured completion.
+fn stub_llama() -> Router {
+    Router::new().route(
+        "/v1/chat/completions",
+        axum::routing::post(|| async {
+            Json(json!({
+                "choices": [{"message": {"content":
+                    "{\"topics\":[{\"name\":\"RISC-V hardware\",\"intent\":\"watch\",\"mandatory\":false}]}"}}]
+            }))
+        }),
+    )
+}
+
+#[tokio::test]
+async fn topics_extract_proxies_the_local_model() {
+    let llama = spawn(stub_llama()).await;
+    let (formans_dist, fourfive_dist) = make_dists();
+    let cfg = GateCfg::new(
+        "http://127.0.0.1:1".into(),
+        "http://127.0.0.1:1".into(),
+        formans_dist,
+    )
+    .with_llama_url(llama);
+    let gate = spawn(build_router(cfg, &fourfive_dist)).await;
+    let client = reqwest::Client::new();
+
+    let got: serde_json::Value = client
+        .post(format!("{gate}/api/world/topics/extract"))
+        .json(&json!({"request": "watch RISC-V hardware", "existing": []}))
+        .send().await.unwrap()
+        .json().await.unwrap();
+    assert_eq!(got["topics"][0]["name"], "RISC-V hardware");
+    assert_eq!(got["topics"][0]["intent"], "watch");
+}
+
+#[tokio::test]
+async fn topics_extract_is_503_when_the_model_is_offline() {
+    let (formans_dist, fourfive_dist) = make_dists();
+    // Point at a port where nothing listens.
+    let cfg = GateCfg::new(
+        "http://127.0.0.1:1".into(),
+        "http://127.0.0.1:1".into(),
+        formans_dist,
+    )
+    .with_llama_url("http://127.0.0.1:1".into());
+    let gate = spawn(build_router(cfg, &fourfive_dist)).await;
+    let resp = reqwest::Client::new()
+        .post(format!("{gate}/api/world/topics/extract"))
+        .json(&json!({"request": "anything", "existing": []}))
+        .send().await.unwrap();
+    assert_eq!(resp.status(), 503);
+    assert!(resp.text().await.unwrap().contains("just setup"));
+}
+
 #[tokio::test]
 async fn profiles_crud_defaults_and_rails() {
     let (formans_dist, fourfive_dist) = make_dists();

@@ -34,6 +34,11 @@ struct Args {
     /// layout). Empty ⇒ main-store logs only. `just up` passes it.
     #[arg(long, default_value = "")]
     instances_dir: String,
+    /// The linked nunc-fluens instance (world-view source) — where the
+    /// topics API reads/writes news-topics.json. Empty ⇒ topics API 503s.
+    /// `just up` resolves `news_repo` and passes it.
+    #[arg(long, default_value = "")]
+    news_repo: String,
 }
 
 #[tokio::main]
@@ -54,10 +59,16 @@ async fn main() -> anyhow::Result<()> {
     } else {
         Some(PathBuf::from(args.instances_dir))
     };
+    let news_repo = if args.news_repo.trim().is_empty() {
+        None
+    } else {
+        Some(PathBuf::from(args.news_repo))
+    };
     let cfg = GateCfg::new(args.engine_url, args.fourfive_url, args.formans_dist)
         .with_apps_url(args.apps_url)
         .with_data_dir(data_dir)
-        .with_instances_dir(instances_dir);
+        .with_instances_dir(instances_dir)
+        .with_news_repo(news_repo);
     let app = build_router(cfg, &args.fourfive_dist);
 
     // The screen is a single origin on localhost (§10-B): loopback only.
