@@ -176,6 +176,33 @@ owner accepted in session.
   serves the shell. gate 13 integration tests green; apps-host 12;
   Formans 20 + build.
 
+- **2026-07-08 — T8 done** (8647160 fe, 0be96b0 ff, a6e0489 agent):
+  nunc-ai gained the tool contract (`ToolSpec`/`ToolCall`,
+  `ChatMessage` role `tool` + `toolCalls`/`toolCallId`,
+  `ChatOptions.tools`, `ChatResult.toolCalls`,
+  `RunLogEntry.toolCalls` counts — no arguments logged, same
+  no-prompt-text rule) and `Ai.chatWithTools`: the bounded loop
+  (default 8; past budget the remaining requests get a refusal result
+  and tools are WITHDRAWN so the model must answer), ONE aggregated
+  run-log entry, tools+goal-verify = config error (PE9). Provider
+  mappings: `llama-cpp` (OpenAI tools + streamed tool_call delta
+  reassembly by index — PE9' first-class local), `anthropic-api`
+  (input_schema tools, tool_use blocks, tool_result threading),
+  `mock` (scripted toolScript rounds — the S-7 zero-token rehearsal).
+  Agent: `src/tools.ts` MCP client to apps-host over Streamable HTTP
+  (`NS_APPS_URL`), **PE10 allowlist enforced twice** (offer-time
+  filter + call-time recheck; `apps:<slug>` prefix grant can't leak
+  into lookalike slugs — tested), honest degrade when apps-host is
+  down, `/tools` command, tool turns render every call + refusal
+  verbatim as meta lines (non-streamed in v0, recorded). Suites:
+  nunc-ai 41 (6 new), agent 27 (4 new incl. a fixture Streamable-HTTP
+  host + the full tool-turn with run-log assertion), fourfive
+  43 + typecheck (the offline-demo responder now types against
+  nunc-ai's wider message shape), pipeline typecheck green — zero
+  call-site changes (the PD compatibility rule held). **Still owed
+  before S-7's live leg: the llama-server GGUF tool probe (PE9'
+  retarget — lands with the topics lane's T4 `_up-llama`).**
+
 ## Story executions
 
 (S-7 / S-8 written at T1; executed at T10 with transcripts and
