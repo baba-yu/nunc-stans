@@ -101,19 +101,69 @@ single-area rule held (design/ is free), noted for honesty.
   non-instance refusal, no-exports zero).
 - Suites: pipeline 210 → **214** green, typecheck green, check.ts ok.
 
+## T5 + T6 — gate topics API + World topic editor (2026-07-09, branch topics-authoring-ui)
+
+Resumed on a fresh branch `topics-authoring-ui` off the updated `dev`
+(fd61b04, after PR #5/#6 landed phase/e + the topics backend). The
+llama-dependent T4 stays owner-gated (`just setup`); T5/T6 are built so
+the AI-structuring leg degrades honestly until then.
+
+- **T5 gate API** (33e510a gate, 61ce0c7 tool): `gate/src/topics.rs` —
+  GET/PUT `/api/world/topics` against the LINKED instance's
+  `data/reference/news-topics.json` (the single authority T1 established).
+  Serde mirror of `src/topics.ts` (deny-unknown-fields, intent enum,
+  unique-name + non-empty validation), atomic tmp+rename — the
+  news_config.rs discipline. **W7 read-only guard**: writability =
+  presence of `instance.json` (init-born stamp); a view source /
+  news-shaped checkout GETs read-only (`writable:false` + reason) and
+  PUT is refused 409 — production ~/news is never written. The gate
+  learns the linked instance via a new `--news-repo` flag, resolved by
+  `tools/news-repo.ts` (mirrors data-dir.ts) and passed by `just up`
+  (`news_repo` var) — explicit handoff, the gate never derives nf
+  layout. **NL-structuring proxy** `POST /api/world/topics/extract`:
+  forwards the request to the local `llama-server` (OpenAI-compatible,
+  `llama_url`/LLAMACPP_HOST, json_schema-constrained) and returns the
+  model's JSON for the browser to merge; **model unreachable ⇒ 503
+  "run just setup"** (honest degrade). gate 13→**18** integration tests
+  (roundtrip+validation, read-only-409, no-instance-503, extract via a
+  stub model, extract-offline-503).
+- **T6 World topic editor** (46616e3 fe): `src/topics.ts` — pure model +
+  `validateTopics` (mirrors the gate rails, case-sensitive like the
+  authority) + **`mergeProposal`** (W9: an authored proposal refines
+  existing topics by normalized name, never blind-overwrites, never
+  removes; a proposal's empty note can't erase an existing one; returns
+  every add/refine change for the diff) + `parseProposal` (tolerant of
+  model output). `TopicEditor.vue` in the World view: a "Research
+  topics" panel with the full manual editor (name / intent select /
+  mandatory / note / add / remove / reference sites / Save), the intent
+  legend, the read-only banner when the source isn't writable, and the
+  **NL box → "Structure with AI" → diff-review → Apply to form → Save**
+  flow (W4/W5/F6 — nothing persists until the user reviews the diff and
+  saves). The AI button honestly reports "local model offline — run just
+  setup" until T4. Formans 20→**29** tests (9 new: merge add/refine/
+  no-remove/no-op/note-preserve, parse tolerance, validate rails),
+  build + vue-tsc green.
+- **Live E2E** through the gate against a scratch init-born instance:
+  GET seed topics (writable) → PUT edited topics (200, file on disk
+  reflects it) → extract with the model offline → 503. check.ts ok.
+
 ## Exit criteria progress
 
 1. [x] `news-topics.json` is the only topic authority; gate + compose
        read it via `topics.ts`; hardcoded arrays gone. [T1+T2]
-2. [ ] NL authoring → structure → hand-edit → save; read-only refusal
-       on a view source. [T5+T6]
-3. [ ] Ongoing NL merge (diff-reviewed). [T6]
-4. [~] Offline world-grounded suggestions — the vocabulary feeder is
-       built (T3b); the authoring surface consumes it at T6.
+2. [x] Manual authoring → hand-edit → save works; read-only 409 on a
+       view source (W7). NL structuring wired (extract proxy + diff-merge
+       review UI); its LIVE leg needs llama (T4/`just setup`). [T5+T6]
+3. [x] mergeProposal refines-by-name + diff-review before apply (W9),
+       unit-proven; live proposal awaits llama (T4). [T6]
+4. [~] Vocabulary feeder built (T3b); the extract prompt passes existing
+       topic names for refine-grounding. Glossary-into-prompt grounding
+       lands when the live model does (T4/T7).
 5. [x] `intent` changes fan-out counts (unit-proven per intent); goldens
        untouched (fan-out is live-only; parity suite green). [T3]
-6. [ ] `just up` runs `llama-server`; provider confirmed vs real
-       frames; honest degrade. [T4]
+6. [~] Honest degrade DONE (extract 503 → "just setup"); `just up`
+       running llama-server + the live provider confirmation stay T4
+       (owner `just setup`). [T4]
 7. [x] F6 holds so far: nothing writes topics unattended (the lazy
        converter only rewrites what the md already said — a format
        migration, not a content edit; recorded reading of W5).
