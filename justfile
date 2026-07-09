@@ -11,6 +11,12 @@ data_dir := `node tools/data-dir.ts 2>/dev/null || true`
 # The linked instance (world-view source); the gate's topics API reads/
 # writes its news-topics.json. Empty when nothing is linked.
 news_repo := `node tools/news-repo.ts 2>/dev/null || true`
+# External OpenAI-compatible model backend (config llama_url, NS_LLAMA_URL
+# override) — e.g. a GPU-resident ollama at http://127.0.0.1:11434. When set,
+# it is exported as LLAMACPP_HOST to every consumer (fourfive, apps-host,
+# gate topics-extract, agent) and `just up` does NOT start a local
+# llama-server. Empty = serve the local GGUF on :8080 as before.
+llama_url := `node tools/llama.ts url 2>/dev/null || true`
 
 # Doctor + data-store init (idempotent). `just bootstrap <dir>` designates
 # a folder kept elsewhere; without an argument it reuses the configured
@@ -99,13 +105,16 @@ _up-engine: _require_data
       --port "${NS_ENGINE_PORT:-8721}"
 
 _up-fourfive:
-    pnpm -C engines/fourfive start:server
+    if [ -n "{{llama_url}}" ]; then export LLAMACPP_HOST="{{llama_url}}"; fi; \
+      exec pnpm -C engines/fourfive start:server
 
 _up-apps: _require_data
-    pnpm -C apps-host start:server
+    if [ -n "{{llama_url}}" ]; then export LLAMACPP_HOST="{{llama_url}}"; fi; \
+      exec pnpm -C apps-host start:server
 
 _up-gate:
-    cargo run --manifest-path gate/Cargo.toml --release -- \
+    if [ -n "{{llama_url}}" ]; then export LLAMACPP_HOST="{{llama_url}}"; fi; \
+      exec cargo run --manifest-path gate/Cargo.toml --release -- \
       --port "${NS_PORT:-8720}" \
       --engine-url "http://127.0.0.1:${NS_ENGINE_PORT:-8721}" \
       --fourfive-url "http://127.0.0.1:8787" \
@@ -129,6 +138,7 @@ _up-llama:
     # inert = tail -f /dev/null, NOT `sleep infinity` (GNU-only; BusyBox sleep
     # exits at once and concurrently -k would tear the whole stack down).
     if [ -n "${NS_SKIP_LLAMA:-}" ]; then echo "[llama] NS_SKIP_LLAMA set - local model backend skipped"; exec tail -f /dev/null; fi
+    if [ -n "{{llama_url}}" ]; then echo "[llama] external backend {{llama_url}} (config llama_url) - not starting a local llama-server"; exec tail -f /dev/null; fi
     bin=$(node tools/llama.ts bin || true)
     model=$(node tools/llama.ts model || true)
     if [ -z "$bin" ]; then echo "[llama] no llama-server binary - run 'just setup' (llama-cpp profiles show 'local model offline')"; exec tail -f /dev/null; fi
@@ -146,6 +156,7 @@ _up-llama:
 llama:
     #!/usr/bin/env bash
     set -euo pipefail
+    if [ -n "{{llama_url}}" ]; then echo "note: config llama_url={{llama_url}} - the stack uses that external backend; this local server is extra"; fi
     bin=$(node tools/llama.ts bin); model=$(node tools/llama.ts model)
     if [ -z "$bin" ] || [ -z "$model" ]; then echo "need llama-server + a GGUF - run 'just setup'"; exit 1; fi
     echo "[llama] serving $model on :${NS_LLAMA_PORT:-8080}"
@@ -206,4 +217,5 @@ check:
 # profile; memory through manda (MANDA_BIN / MANDA_DATA_DIR — see
 # agents/nunc-stans-agent/README.md).
 agent *args:
-    node agents/nunc-stans-agent/src/cli.ts chat {{args}}
+    if [ -n "{{llama_url}}" ]; then export LLAMACPP_HOST="{{llama_url}}"; fi; \
+      exec node agents/nunc-stans-agent/src/cli.ts chat {{args}}

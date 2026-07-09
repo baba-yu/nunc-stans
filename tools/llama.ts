@@ -6,6 +6,12 @@
 //
 //   node tools/llama.ts bin    -> the llama-server executable
 //   node tools/llama.ts model  -> the GGUF to serve
+//   node tools/llama.ts url    -> an EXTERNAL OpenAI-compatible backend
+//                                 (NS_LLAMA_URL > config llama_url), e.g. a
+//                                 GPU-resident ollama at :11434. When set,
+//                                 `just up` exports it as LLAMACPP_HOST for
+//                                 every consumer and does NOT start a local
+//                                 llama-server.
 //
 // bin:   LLAMACPP_BIN > `llama-server` on PATH > the newest build under
 //        ~/.local/share/nunc-stans/llama.cpp (where `just setup` installs it).
@@ -135,6 +141,13 @@ function resolveModel(): string | null {
   return newestGguf(modelsDir, files)
 }
 
+function resolveUrl(): string | null {
+  const env = process.env.NS_LLAMA_URL
+  if (env) return env
+  const cfg = readConfig().llama_url
+  return typeof cfg === 'string' && cfg ? cfg : null
+}
+
 const cmd = process.argv[2]
 if (cmd === 'bin') {
   const b = resolveBin()
@@ -142,7 +155,10 @@ if (cmd === 'bin') {
 } else if (cmd === 'model') {
   const m = resolveModel()
   if (m) console.log(m)
+} else if (cmd === 'url') {
+  const u = resolveUrl()
+  if (u) console.log(u)
 } else {
-  console.error('usage: node tools/llama.ts <bin|model>')
+  console.error('usage: node tools/llama.ts <bin|model|url>')
   process.exit(2)
 }
