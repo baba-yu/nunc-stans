@@ -1,0 +1,23 @@
+{
+  "topics": [
+    { "name": "LLM Workflow", "intent": "broad", "mandatory": false },
+    { "name": "Multi-profiling for Local LLM (e.g. Multica)", "intent": "broad", "mandatory": false, "note": "news-driven" },
+    { "name": "Agent Harness (OpenClaw, NemoClaw, Hermes Agents, etc.)", "intent": "broad", "mandatory": false },
+    { "name": "Platform for Local LLM (vLLM, SGLang, etc.)", "intent": "broad", "mandatory": false },
+    { "name": "Ecosystems for Local LLM Embedded System (Foundry Local, etc.)", "intent": "broad", "mandatory": false },
+    { "name": "Local LLM Models", "intent": "broad", "mandatory": false },
+    { "name": "Local LLM Optimization, Fine-tuning (Unsloth — every run)", "intent": "broad", "mandatory": true },
+    { "name": "Ecosystems for LLM on PaaS (AWS Bedrock, Azure AI Foundry, etc.)", "intent": "broad", "mandatory": false },
+    { "name": "AI Security", "intent": "broad", "mandatory": false },
+    { "name": "CVE update on score ≥ 8.0", "intent": "broad", "mandatory": false },
+    { "name": "Hardware", "intent": "broad", "mandatory": false },
+    { "name": "Physical AI", "intent": "broad", "mandatory": false },
+    { "name": "LLM-related research and papers", "intent": "broad", "mandatory": false },
+    { "name": "Stock prices and corporate activity", "intent": "broad", "mandatory": false },
+    { "name": "Bay Area / SV AI meet-up events", "intent": "broad", "mandatory": false },
+    { "name": "Other standing-out topics", "intent": "broad", "mandatory": false }
+  ],
+  "reference_sites": [
+    "https://example.com/"
+  ]
+}

@@ -18,12 +18,14 @@
 // strings; new ingests write `data/sourcedata/…`. Mixed provenance is
 // accepted — nothing joins on the path prefix.
 import {
-  copyFileSync, cpSync, existsSync, readdirSync, renameSync, statSync,
+  copyFileSync, cpSync, existsSync, readdirSync, readFileSync, renameSync, statSync,
+  writeFileSync,
 } from 'node:fs';
 import { basename, join, resolve } from 'node:path';
 import { integrityCheck } from './migrate.ts';
 import { readInstanceStamp, writeInstanceStamp } from './instance.ts';
 import { instanceStoreDir, worldDbFile } from './config.ts';
+import { convertTopicsMd, serializeTopicsFile, topicsJsonPath, topicsMdPath } from './topics.ts';
 import {
   DAILY_NEWS_REL, EXPORTS_REL, FP_REL, HISTORY_REL, REFERENCE_REL,
   REFERENCE_HISTORY_REL, SOURCEDATA_REL,
@@ -140,6 +142,16 @@ export function importNewsCheckout(
   if (existsSync(join(src, 'references.txt'))) {
     copyFileSync(join(src, 'references.txt'), p(instance, REFERENCE_HISTORY_REL));
     log.push(`copied references.txt -> ${REFERENCE_HISTORY_REL}`);
+  }
+  // Topics-authoring W1: a news-shaped source carries its real topics as
+  // news-topics.md. The copy above landed it beside the template's seed
+  // news-topics.json — convert the REAL list over the seed so the json
+  // authority reflects the imported editorial policy, not the template.
+  const importedMd = topicsMdPath(instance);
+  if (existsSync(importedMd)) {
+    writeFileSync(topicsJsonPath(instance),
+      serializeTopicsFile(convertTopicsMd(readFileSync(importedMd, 'utf8'))));
+    log.push('converted imported news-topics.md -> news-topics.json (authority)');
   }
   for (const f of readdirSync(src))
     if (/^README(\.[A-Za-z-]+)?\.md$/.test(f)) {

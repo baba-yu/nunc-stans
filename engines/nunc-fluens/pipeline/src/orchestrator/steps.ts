@@ -34,7 +34,8 @@ import { runScore } from '../ingest/score.ts';
 import { runExport } from '../export/export.ts';
 import { buildEvidenceReverse } from '../export/evidence-reverse.ts';
 import { citationCheck, classifyHost, parsePolicy } from '../gates/citation-check.ts';
-import { ALL_TOPICS, checkTopicCoverage } from '../gates/check-topic-coverage.ts';
+import { checkTopicCoverage } from '../gates/check-topic-coverage.ts';
+import { loadTopics, topicNames, topicsPromptBlock } from '../topics.ts';
 import { postUpdateValidation } from '../gates/post-update-validation.ts';
 import { checkReadmeLinks } from './readme-checks.ts';
 import Database from 'better-sqlite3';
@@ -155,12 +156,11 @@ export function dailyUpdateSteps(): StepDef[] {
         let searchBlock = '';
         if (ctx.search !== 'native' && !ctx.replay && ctx.ai
           && !existsSync(sdFile(ctx, 'news_section.json'))) {
-          const topicsMd = readFileSync(
-            join(ctx.newsRepo, REFERENCE_REL, 'news-topics.md'), 'utf8');
-          const listSection = /## Topic list\n([\s\S]*?)\n## /.exec(topicsMd)?.[1] ?? '';
-          const topics = listSection.split('\n')
-            .filter(l => l.startsWith('- ') && !/For each of the above/i.test(l))
-            .map(l => l.slice(2).replace(/\(.*?\)/g, '').trim())
+          // Topics-authoring W1: names come from news-topics.json via the
+          // loader (parentheticals stripped for query strings, as before).
+          // Flat one-query-per-topic fan-out; intent weighting arrives at T3.
+          const topics = topicNames(loadTopics(ctx.newsRepo))
+            .map(n => n.replace(/\(.*?\)/g, '').trim())
             .filter(Boolean);
           const chunks: string[] = [];
           for (const topic of topics) {
@@ -200,8 +200,7 @@ export function dailyUpdateSteps(): StepDef[] {
           // (the first live run proved the point: a prompt that only
           // NAMES its input files gets an honest empty answer back).
           prompt: () => {
-            const topics = readFileSync(
-              join(ctx.newsRepo, REFERENCE_REL, 'news-topics.md'), 'utf8');
+            const topics = topicsPromptBlock(loadTopics(ctx.newsRepo));
             const refPath = join(ctx.newsRepo, REFERENCE_HISTORY_REL);
             const recentRefs = existsSync(refPath)
               ? readFileSync(refPath, 'utf8').trim().split('\n').slice(-300).join('\n')
@@ -210,8 +209,8 @@ export function dailyUpdateSteps(): StepDef[] {
               skill: 'compose-news-section', date: ctx.date,
               writerRules: loadWriterRules('1_daily_update'),
               extra: [
-                'Reference topic list (data/reference/news-topics.md — search the '
-                + 'trusted sources for the last 3 days; always include Unsloth):',
+                'Reference topic list (data/reference/news-topics.json — search the '
+                + 'trusted sources for the last 3 days; always include every mandatory topic):',
                 topics,
                 'Recently cited URLs to SKIP (tail of the citation ledger '
                 + 'data/history/reference-history.log):',
@@ -508,45 +507,51 @@ export function dailyUpdateSteps(): StepDef[] {
     },
     {
       id: 'verify-topic-coverage', kind: 'llm',
-      run: (ctx) => llmArtifactStep(ctx, {
-        id: 'verify-topic-coverage',
-        artifact: sdFile(ctx, 'verification.json'),
+      run: (ctx) => {
         // The downstream check-topic-coverage gate matches topic names
-        // EXACTLY against the hardcoded list and requires the mandatory
-        // Unsloth row — so enforce verbatim enumeration here (a local
-        // model abbreviated the names on exit run (b) and the gate
+        // EXACTLY against the instance's news-topics.json and requires
+        // every mandatory row — so enforce verbatim enumeration here (a
+        // local model abbreviated the names on exit run (b) and the gate
         // failed three... one step later). Re-prompt on any miss.
-        validate: (raw: any) => {
-          if (typeof raw !== 'object' || raw === null || !Array.isArray(raw.verifications))
-            throw new Error('verification.json: expected {verifications: []}');
-          if (!ctx.replay) {
-            const seen = new Set(raw.verifications.map((v: any) => v?.topic));
-            const missing = ALL_TOPICS.filter(t => !seen.has(t));
-            if (missing.length)
-              throw new Error('verification.json must enumerate EVERY topic '
-                + `by its exact name; missing: ${missing.map(m => `"${m}"`).join(', ')}`);
-          }
-          return raw;
-        },
-        prompt: () => buildStepPrompt({
-          skill: 'verify-topic-coverage', date: ctx.date,
-          extra: `Today's news_section.json:\n`
-            + readFileSync(sdFile(ctx, 'news_section.json'), 'utf8')
-            + '\n\nEnumerate a verification entry for EVERY ONE of these topics, '
-            + 'using the topic string VERBATIM as the `topic` field '
-            + '(semantic_verdict covered|uncovered|ambiguous, '
-            + 'search_log_alignment consistent|search_log_overreports|'
-            + 'search_log_underreports, matching_bullets, reason):\n'
-            + ALL_TOPICS.map(t => `- ${t}`).join('\n'),
-          outputNote: 'the verification.json document ({date, verifications[]}) '
-            + `covering all ${ALL_TOPICS.length} topics verbatim.`,
-        }),
-      }),
+        const allTopics = topicNames(loadTopics(ctx.newsRepo));
+        return llmArtifactStep(ctx, {
+          id: 'verify-topic-coverage',
+          artifact: sdFile(ctx, 'verification.json'),
+          validate: (raw: any) => {
+            if (typeof raw !== 'object' || raw === null || !Array.isArray(raw.verifications))
+              throw new Error('verification.json: expected {verifications: []}');
+            if (!ctx.replay) {
+              const seen = new Set(raw.verifications.map((v: any) => v?.topic));
+              const missing = allTopics.filter(t => !seen.has(t));
+              if (missing.length)
+                throw new Error('verification.json must enumerate EVERY topic '
+                  + `by its exact name; missing: ${missing.map(m => `"${m}"`).join(', ')}`);
+            }
+            return raw;
+          },
+          prompt: () => buildStepPrompt({
+            skill: 'verify-topic-coverage', date: ctx.date,
+            extra: `Today's news_section.json:\n`
+              + readFileSync(sdFile(ctx, 'news_section.json'), 'utf8')
+              + '\n\nEnumerate a verification entry for EVERY ONE of these topics, '
+              + 'using the topic string VERBATIM as the `topic` field '
+              + '(semantic_verdict covered|uncovered|ambiguous, '
+              + 'search_log_alignment consistent|search_log_overreports|'
+              + 'search_log_underreports, matching_bullets, reason):\n'
+              + allTopics.map(t => `- ${t}`).join('\n'),
+            outputNote: 'the verification.json document ({date, verifications[]}) '
+              + `covering all ${allTopics.length} topics verbatim.`,
+          }),
+        });
+      },
     },
     {
       id: 'check-topic-coverage', kind: 'det',
       run: (ctx) => gateOrFail('check-topic-coverage',
-        checkTopicCoverage({ sourcedataDir: ctx.sourcedataRoot, date: ctx.date }), ctx),
+        checkTopicCoverage({
+          sourcedataDir: ctx.sourcedataRoot, date: ctx.date,
+          topics: loadTopics(ctx.newsRepo).topics,
+        }), ctx),
     },
     {
       id: 'puv-news', kind: 'det',

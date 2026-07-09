@@ -1,9 +1,15 @@
 // TS port of app/skills/check_topic_coverage.py — the topic-coverage
 // gate with its three modes (verification.json / legacy search_log /
 // self-anchored heuristic fallback).
+// Topics-authoring W1: the topic list is no longer hardcoded here — the
+// caller loads the instance's news-topics.json (src/topics.ts) and passes
+// it in. `mandatory` drives enforcement exactly as the old MANDATORY set
+// did; a topic's `note` renders as its tag (the old [news-driven]
+// annotation rides the data now, not the code).
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import type { GateResult } from './post-update-validation.ts';
+import type { Topic } from '../topics.ts';
 
 const SELF_ANCHORED: Array<[string, RegExp[]]> = [
   ['CVE update on score ≥ 8.0', [/\bCVE-\d{4}-\d+\b/i, /\bCVSS\b/]],
@@ -11,29 +17,10 @@ const SELF_ANCHORED: Array<[string, RegExp[]]> = [
   ['Stock prices and corporate activity', [/\bNASDAQ:/, /\bNYSE:/]],
 ];
 
-export const ALL_TOPICS = [
-  'LLM Workflow',
-  'Multi-profiling for Local LLM (e.g. Multica)',
-  'Agent Harness (OpenClaw, NemoClaw, Hermes Agents, etc.)',
-  'Platform for Local LLM (vLLM, SGLang, etc.)',
-  'Ecosystems for Local LLM Embedded System (Foundry Local, etc.)',
-  'Local LLM Models',
-  'Local LLM Optimization, Fine-tuning (Unsloth — every run)',
-  'Ecosystems for LLM on PaaS (AWS Bedrock, Azure AI Foundry, etc.)',
-  'AI Security',
-  'CVE update on score ≥ 8.0',
-  'Hardware',
-  'Physical AI',
-  'LLM-related research and papers',
-  'Stock prices and corporate activity',
-  'Bay Area / SV AI meet-up events',
-  'Other standing-out topics',
-];
+const tagOf = (t: Topic): string =>
+  t.mandatory ? ' [MANDATORY]' : t.note ? ` [${t.note}]` : '';
 
-export const MANDATORY = new Set(['Local LLM Optimization, Fine-tuning (Unsloth — every run)']);
-const NEWS_DRIVEN = new Set(['Multi-profiling for Local LLM (e.g. Multica)']);
-
-function validateVerification(verificationPath: string): [number, string[]] {
+function validateVerification(topics: Topic[], verificationPath: string): [number, string[]] {
   const log = JSON.parse(readFileSync(verificationPath, 'utf8'));
   const verifications = new Map<string, any>(
     (log.verifications ?? []).map((e: any) => [e.topic, e]));
@@ -42,13 +29,13 @@ function validateVerification(verificationPath: string): [number, string[]] {
   let overreports = 0;
   let underreports = 0;
 
-  for (const topic of ALL_TOPICS) {
+  for (const t of topics) {
+    const topic = t.name;
     const entry = verifications.get(topic);
-    const tag = MANDATORY.has(topic) ? ' [MANDATORY]'
-      : NEWS_DRIVEN.has(topic) ? ' [news-driven]' : '';
+    const tag = tagOf(t);
     if (entry === undefined) {
       findings.push(`-- ${topic}${tag}: NOT IN verification.json (auditor didn't enumerate it)`);
-      if (MANDATORY.has(topic)) exitCode = 1;
+      if (t.mandatory) exitCode = 1;
       continue;
     }
     const verdict = entry.semantic_verdict ?? 'ambiguous';
@@ -56,7 +43,7 @@ function validateVerification(verificationPath: string): [number, string[]] {
     const reason = entry.reason ?? '';
     const matching = entry.matching_bullets ?? [];
 
-    if (MANDATORY.has(topic)
+    if (t.mandatory
       && verdict === 'uncovered' && alignment === 'search_log_overreports') {
       exitCode = 1;
       findings.push(`FAIL ${topic}${tag}: verdict=${verdict}, alignment=${alignment} (mandatory topic — writer over-claimed)`);
@@ -79,10 +66,10 @@ function validateVerification(verificationPath: string): [number, string[]] {
       findings.push(`     reason: ${reason}`);
   }
 
-  const covered = ALL_TOPICS.filter(
-    t => verifications.get(t)?.semantic_verdict === 'covered').length;
+  const covered = topics.filter(
+    t => verifications.get(t.name)?.semantic_verdict === 'covered').length;
   findings.push('');
-  findings.push(`Summary: ${covered}/${ALL_TOPICS.length} topics covered (semantic verdict)`);
+  findings.push(`Summary: ${covered}/${topics.length} topics covered (semantic verdict)`);
   if (overreports)
     findings.push(`WARN: ${overreports} topic(s) with search_log_overreports — writer's self-report drifted higher than reality`);
   if (underreports)
@@ -99,18 +86,18 @@ function pyList(xs: unknown[]): string {
   return `[${xs.map(x => `'${String(x).replaceAll('\\', '\\\\').replaceAll("'", "\\'")}'`).join(', ')}]`;
 }
 
-function validateSearchLog(searchLogPath: string): [number, string[]] {
+function validateSearchLog(topics: Topic[], searchLogPath: string): [number, string[]] {
   const log = JSON.parse(readFileSync(searchLogPath, 'utf8'));
   const searches = new Map<string, any>((log.searches ?? []).map((e: any) => [e.topic, e]));
   const findings: string[] = [];
   let exitCode = 0;
-  for (const topic of ALL_TOPICS) {
+  for (const t of topics) {
+    const topic = t.name;
     const entry = searches.get(topic);
-    const tag = MANDATORY.has(topic) ? ' [MANDATORY]'
-      : NEWS_DRIVEN.has(topic) ? ' [news-driven]' : '';
+    const tag = tagOf(t);
     if (entry === undefined) {
       findings.push(`-- ${topic}${tag}: NOT IN search_log.json (writer didn't enumerate it)`);
-      if (MANDATORY.has(topic)) exitCode = 1;
+      if (t.mandatory) exitCode = 1;
       continue;
     }
     const searched = Boolean(entry.searched);
@@ -119,7 +106,7 @@ function validateSearchLog(searchLogPath: string): [number, string[]] {
     if (!searched) {
       const reason = entry.reason_skipped ?? '—';
       findings.push(`-- ${topic}${tag}: searched=false (reason: ${reason})`);
-      if (MANDATORY.has(topic)) exitCode = 1;
+      if (t.mandatory) exitCode = 1;
     } else {
       const mark = promoted || hits > 0 ? 'OK' : '  ';
       findings.push(`${mark} ${topic}${tag}: searched=true, hits=${hits}, promoted=${promoted ? 'True' : 'False'}`);
@@ -168,7 +155,7 @@ function heuristicSelfAnchored(newsSectionPath: string): [number, string[]] {
   return [0, findings];
 }
 
-export function checkTopicCoverage(args: { sourcedataDir: string; date: string }): GateResult {
+export function checkTopicCoverage(args: { sourcedataDir: string; date: string; topics: Topic[] }): GateResult {
   const dateDir = join(args.sourcedataDir, args.date);
   const newsSection = join(dateDir, 'news_section.json');
   const searchLog = join(dateDir, 'search_log.json');
@@ -187,13 +174,13 @@ export function checkTopicCoverage(args: { sourcedataDir: string; date: string }
 
   if (existsSync(verification)) {
     lines.push('  mode=verification (verification.json present — LLM auditor verdict)');
-    const [exit, findings] = validateVerification(verification);
+    const [exit, findings] = validateVerification(args.topics, verification);
     emit(findings, ['OK ', 'FAIL ', 'WARN', 'Summary']);
     return { exit, lines };
   }
   if (existsSync(searchLog)) {
     lines.push('  mode=legacy-search-log (search_log.json only — writer self-report)');
-    const [exit, findings] = validateSearchLog(searchLog);
+    const [exit, findings] = validateSearchLog(args.topics, searchLog);
     emit(findings, ['OK ', 'FAIL ']);
     return { exit, lines };
   }

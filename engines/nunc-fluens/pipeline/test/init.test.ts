@@ -26,17 +26,19 @@ describe('initInstance', () => {
       // Skeleton + seeds from the template.
       for (const f of ['README.md', 'instance.json',
         'data/history/reference-history.log',
-        'data/reference/news-topics.md', 'data/reference/citation-restrictions.md',
+        'data/reference/news-topics.json', 'data/reference/citation-restrictions.md',
         'data/reference/glossary.yml',
         'data/sourcedata/.gitkeep', 'data/daily-news/.gitkeep',
         'data/future-prediction/.gitkeep', 'data/exports/.gitkeep'])
         expect(existsSync(join(dir, ...f.split('/'))), f).toBe(true);
       // The seeds carry real content (glossary seed term, citation
-      // denylist, the topic list header the composer parses).
+      // denylist, a valid topic authority incl. a mandatory row).
       expect(readFileSync(join(dir, 'data', 'reference', 'glossary.yml'), 'utf8'))
         .toContain('FixtureTerm');
-      expect(readFileSync(join(dir, 'data', 'reference', 'news-topics.md'), 'utf8'))
-        .toContain('## Topic list');
+      const seedTopics = JSON.parse(readFileSync(
+        join(dir, 'data', 'reference', 'news-topics.json'), 'utf8'));
+      expect(seedTopics.topics.length).toBeGreaterThan(0);
+      expect(seedTopics.topics.some((t: any) => t.mandatory)).toBe(true);
       // The citation ledger is born empty.
       expect(readFileSync(
         join(dir, 'data', 'history', 'reference-history.log'), 'utf8')).toBe('');
