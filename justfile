@@ -8,6 +8,9 @@ set windows-shell := ["sh", "-cu"]
 # (NS_DATA env overrides per invocation).
 
 data_dir := `node tools/data-dir.ts 2>/dev/null || true`
+# The linked instance (world-view source); the gate's topics API reads/
+# writes its news-topics.json. Empty when nothing is linked.
+news_repo := `node tools/news-repo.ts 2>/dev/null || true`
 
 # Doctor + data-store init (idempotent). `just bootstrap <dir>` designates
 # a folder kept elsewhere; without an argument it reuses the configured
@@ -110,7 +113,8 @@ _up-gate:
       --formans-dist frontend/nunc-stans-formans/dist \
       --fourfive-dist engines/fourfive/dist \
       --data-dir "{{data_dir}}" \
-      --instances-dir engines/nunc-fluens/instances
+      --instances-dir engines/nunc-fluens/instances \
+      --news-repo "{{news_repo}}"
 
 # Stop the stack started by `just up`: terminates whatever is LISTENING on
 # the gate/engine/fourfive/apps-host ports (honoring the same NS_PORT /
