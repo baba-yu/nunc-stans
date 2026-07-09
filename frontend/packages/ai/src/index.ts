@@ -1,5 +1,6 @@
 import { anthropicProvider } from './providers/anthropic.ts';
 import { ollamaProvider } from './providers/ollama.ts';
+import { llamaCppProvider } from './providers/llamacpp.ts';
 import { forbidProvider, mockProvider, type MockConfig } from './providers/mock.ts';
 import { claudeCodeRuntime, type ClaudeCodeConfig } from './runtimes/claude-code.ts';
 import { getSearchSource } from './search/adapters.ts';
@@ -13,6 +14,7 @@ import type {
 export * from './types.ts';
 export { anthropicProvider } from './providers/anthropic.ts';
 export { ollamaProvider } from './providers/ollama.ts';
+export { llamaCppProvider } from './providers/llamacpp.ts';
 export { mockProvider, forbidProvider } from './providers/mock.ts';
 export { claudeCodeRuntime } from './runtimes/claude-code.ts';
 export {
@@ -54,6 +56,7 @@ export function createAi(cfg: AiConfig): Ai {
   const builtin: Record<string, () => Provider> = {
     'anthropic-api': () => anthropicProvider({ fetchImpl: cfg.fetchImpl }),
     'ollama': () => ollamaProvider({ fetchImpl: cfg.fetchImpl }),
+    'llama-cpp': () => llamaCppProvider({ fetchImpl: cfg.fetchImpl }),
     'mock': () => mockProvider(cfg.mock),
     'forbid': () => forbidProvider(),
     'claude-code': () => claudeCodeRuntime(cfg.claudeCode),
