@@ -9,31 +9,40 @@ commitments (F3), regardless of profile.
 
 ## Setup
 
-1. **manda** (runtime dependency, never vendored):
+**One command — `just setup`** — is the batteries-included path: it runs
+bootstrap, builds/installs **manda** (the memory gateway), installs
+**llama.cpp**'s `llama-server` (the default local model backend, PE9'),
+downloads and validates a GGUF model, resolves the memory home, and grants
+your first mandate interactively. Re-runnable; each step no-ops when
+already satisfied.
+
+You still pick **a profile** — create one on the Formans Profiles screen
+(or via the gate), provider `llama-cpp` (default), and set it as the
+**Agents** default; `--profile <id>` overrides per session. Without one,
+an ad-hoc mock profile answers (offline).
+
+<details><summary>Manual path (what <code>just setup</code> automates)</summary>
+
+1. **manda** (runtime dependency, never vendored) — `MANDA_BIN`, or
+   `manda` on PATH, or the local build `~/manda/target/release/manda`:
 
    ```sh
-   cargo install --locked --git https://github.com/baba-yu/manda --tag v0.2.0
+   git clone https://github.com/baba-yu/manda ~/manda && (cd ~/manda && cargo build --release)
    ```
 
-   or point `MANDA_BIN` at a local build
-   (`~/manda/target/release/manda`).
+2. **Memory home** — resolves to `<data store>/manda` by default
+   (`MANDA_DATA_DIR` or the config `manda_data_dir` override it). A
+   directory this agent alone writes. Memory is ON as soon as a manda
+   binary resolves — no env var required.
 
-2. **Memory home** — one directory this agent alone writes:
-
-   ```sh
-   export MANDA_DATA_DIR=~/.local/share/nunc-stans-agent/manda
-   ```
-
-3. **A profile** — create one on the Formans Profiles screen (or via the
-   gate) and set it as the **Agents** default; `--profile <id>` overrides
-   per session. Without one, an ad-hoc mock profile answers (offline).
-
-4. **The first mandate** — granted by YOU, out of band, never through
+3. **The first mandate** — granted by YOU, out of band, never through
    the agent:
 
    ```sh
    nunc-stans-agent mandate-template 'notes/*' | tail -1 >> "$MANDA_DATA_DIR/mandates.jsonl"
    ```
+
+</details>
 
 ## Use
 

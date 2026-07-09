@@ -6,8 +6,11 @@
 // mandate-template: prints a grant line for the PRINCIPAL to append —
 // never writes it (mandates are out-of-band only).
 import { createInterface } from 'node:readline'
+import { mkdirSync } from 'node:fs'
 import * as path from 'node:path'
 import { MandaMemory, acceptContentFor, resolveMandaBin } from './memory.ts'
+import { resolveMandaDataDir } from '../../../tools/lib/data-dir.ts'
+import { mandateJsonl } from '../../../tools/lib/mandate.ts'
 import { HELP, describeMandates, runTurn } from './chat.ts'
 import type { AgentSession, TurnIO } from './chat.ts'
 
@@ -72,13 +75,16 @@ async function cmdChat(argv: string[]): Promise<number> {
     ask: q => nextLine(q),
   }
 
-  // Memory: the manda gateway, or a stated OFF when no binary resolves.
-  // Elicitation (manda asking the principal to approve a commit) rides
-  // the same terminal: an explicit yes approves, anything else declines.
+  // Memory: the manda gateway, ON by default whenever a binary resolves
+  // (the data dir always resolves — <data store>/manda unless overridden).
+  // OFF only when no binary is found. Elicitation (manda asking the
+  // principal to approve a commit) rides the same terminal: an explicit
+  // yes approves, anything else declines.
   let memory: MandaMemory | null = null
   const bin = resolveMandaBin()
-  const mandaDataDir = process.env.MANDA_DATA_DIR
-  if (bin && mandaDataDir) {
+  const mandaDataDir = resolveMandaDataDir()
+  if (bin) {
+    mkdirSync(mandaDataDir, { recursive: true })
     memory = await MandaMemory.connect({
       dataDir: mandaDataDir,
       bin,
@@ -96,9 +102,7 @@ async function cmdChat(argv: string[]): Promise<number> {
   if (memory) {
     io.meta(describeMandates(await memory.mandateList()))
   } else {
-    io.meta(bin
-      ? 'memory OFF: set MANDA_DATA_DIR to a directory this agent alone writes'
-      : 'memory OFF: no manda binary (set MANDA_BIN or install manda — see the README)')
+    io.meta('memory OFF: no manda binary (run `just setup`, or set MANDA_BIN — see the README)')
   }
   io.meta(HELP)
 
@@ -125,12 +129,14 @@ async function cmdChat(argv: string[]): Promise<number> {
 
 async function cmdDoctor(): Promise<number> {
   const bin = resolveMandaBin()
-  console.log(`manda binary : ${bin ?? 'NOT FOUND (set MANDA_BIN or install manda)'}`)
-  console.log(`data dir     : ${process.env.MANDA_DATA_DIR ?? '(unset — chat runs with memory OFF)'}`)
+  const dataDir = resolveMandaDataDir()
+  console.log(`manda binary : ${bin ?? 'NOT FOUND (run just setup, or set MANDA_BIN)'}`)
+  console.log(`data dir     : ${dataDir}`)
   console.log(`approval mode: ${process.env.MANDA_APPROVAL ?? 'elicit (default)'}`)
-  if (bin && process.env.MANDA_DATA_DIR) {
+  if (bin) {
+    mkdirSync(dataDir, { recursive: true })
     try {
-      const memory = await MandaMemory.connect({ dataDir: process.env.MANDA_DATA_DIR, bin })
+      const memory = await MandaMemory.connect({ dataDir, bin })
       console.log(describeMandates(await memory.mandateList()))
       await memory.close()
     } catch (e) {
@@ -152,18 +158,8 @@ switch (cmd) {
     // Prints a filled mandates.jsonl line for the PRINCIPAL to append by
     // hand. Never writes it — mandates are granted out-of-band only (A1).
     const scope = rest[0] ?? 'notes/*'
-    const now = new Date()
-    const expires = new Date(now.getTime() + 30 * 24 * 3600 * 1000)
-    const line = {
-      id: `m-${now.toISOString().slice(0, 10)}-${scope.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '')}`,
-      scope,
-      access: ['read', 'write'],
-      external_side_effects: false,
-      granted_at: now.toISOString(),
-      expires_at: expires.toISOString(),
-    }
     console.log('# append this ONE line to $MANDA_DATA_DIR/mandates.jsonl yourself (expiry: 30 days):')
-    console.log(JSON.stringify(line))
+    console.log(mandateJsonl(scope, new Date()))
     process.exit(0)
     break
   }
