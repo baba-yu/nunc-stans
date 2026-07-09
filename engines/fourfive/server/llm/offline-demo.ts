@@ -1,4 +1,6 @@
-import type { ChatMessage } from '../../shared/types'
+// The responder signature must accept nunc-ai's ChatMessage (which is
+// wider than fourfive's chat protocol — it carries tool-loop roles too).
+import type { ChatMessage } from '../../../../frontend/packages/ai/src/index.ts'
 import type { Blueprint } from '../../shared/blueprint'
 
 // The offline demo (moved verbatim from the retired MockProvider at T5 —
