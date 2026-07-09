@@ -20,7 +20,7 @@ import {
 import { createInterface } from 'node:readline'
 import { delimiter, join } from 'node:path'
 import { homedir, platform } from 'node:os'
-import { resolveDataDir, resolveMandaDataDir, writeConfigKey } from './lib/data-dir.ts'
+import { readConfig, resolveDataDir, resolveMandaDataDir, writeConfigKey } from './lib/data-dir.ts'
 import { mandateJsonl } from './lib/mandate.ts'
 
 const args = process.argv.slice(2)
@@ -113,50 +113,125 @@ function resolveLlamaServer(): string | null {
   return findFile(LLAMA_DIR, isWin ? 'llama-server.exe' : 'llama-server')
 }
 
-// Accelerator flavors are never auto-picked AND an already-installed one is
-// replaced: the OpenVINO asset hard-links libggml-openvino.so (no plugin to
-// remove) and its backend cannot run hybrid/recurrent models — Qwen3.6's
-// DeltaNet cache tensors abort in ggml_backend_sched_split_graph
-// (llama.cpp #22333, closed not-planned). CPU is the portable default;
-// GPU stays a manual opt-in via LLAMACPP_BIN or PATH.
-const ACCEL = /cuda|vulkan|hip|sycl|kompute|openvino|openblas|musa|cann/i
+// Build-flavor policy. The machine decides:
+// - NVIDIA GPU present (nvidia-smi works, WSL2 included) => a GPU-offload
+//   asset: cuda when the release ships one for this OS, else vulkan (the
+//   ubuntu releases carry no cuda prebuilt — vulkan is the NVIDIA path
+//   there). A CPU build on a GPU box wastes the hardware (a 27B runs
+//   ~2.6 tok/s on CPU; found the hard way 2026-07-09).
+// - No GPU => the plain CPU asset (portable default).
+// - The remaining accelerator flavors are never auto-picked AND an
+//   installed one is replaced: the OpenVINO asset hard-links
+//   libggml-openvino.so (no plugin to remove) and cannot run
+//   hybrid/recurrent models — Qwen3.6's DeltaNet cache tensors abort in
+//   ggml_backend_sched_split_graph (llama.cpp #22333, closed not-planned).
+// LLAMACPP_BIN / PATH picks are always the user's own choice, never vetted.
+//
+// Flavor detection parses the backend TOKEN out of libggml-<backend>[-.]…
+// filenames — a substring regex once matched Huawei 'cann' inside the CPU
+// variant lib 'libggml-cpu-CANNonlake.so' and re-quarantined healthy CPU
+// builds on every setup run.
+const GPU_BACKENDS = new Set(['cuda', 'vulkan'])
+const OTHER_ACCEL_BACKENDS = new Set(['hip', 'rocm', 'sycl', 'kompute', 'openvino', 'opencl', 'blas', 'openblas', 'musa', 'cann'])
+// Asset-name filter (hyphen-delimited words — 'cannonlake' never appears here).
+const ACCEL_ASSET = /-(cuda|vulkan|hip|rocm|sycl|kompute|openvino|opencl|blas|openblas|musa|cann)\b/i
 
-/** True when `bin` was auto-installed under LLAMA_DIR and sits in an
- * accelerator-flavored build (accelerator libggml backend beside it). */
-function acceleratorBuild(bin: string): boolean {
-  if (!bin.startsWith(LLAMA_DIR)) return false // explicit PATH/LLAMACPP_BIN picks are the user's choice
+const hasNvidiaGpu: boolean = (() => {
+  const r = spawnSync('nvidia-smi', ['-L'], { encoding: 'utf8' })
+  return r.status === 0 && /GPU/i.test(r.stdout ?? '')
+})()
+
+// Under WSL2 the vulkan prebuilt goes through Mesa's Dozen (Vulkan-on-D3D12)
+// and is SLOWER than plain CPU (measured 2026-07-09: 27B 0.7 tok/s vulkan vs
+// 2.6 CPU vs ~54 via ollama's native CUDA). So on WSL the local binary stays
+// CPU and the GPU path is an external backend (config llama_url — see
+// detectExternalBackend below).
+const isWsl: boolean = (() => {
+  try { return /microsoft/i.test(readFileSync('/proc/version', 'utf8')) } catch { return false }
+})()
+
+const wantGpuBuild = hasNvidiaGpu && !isWsl
+
+/** A GPU-resident ollama serves an OpenAI-compatible /v1 — on WSL that is
+ * the only prebuilt way to use an NVIDIA card, and it beats the local CPU
+ * server everywhere. Detect it and remember it as `llama_url` (only when
+ * the key is absent — an explicit choice is never overwritten). */
+async function detectExternalBackend(): Promise<void> {
+  if (!hasNvidiaGpu) return
+  const cfg = readConfig()
+  if (typeof cfg.llama_url === 'string' && cfg.llama_url) {
+    say(`ok   external model backend (config llama_url): ${cfg.llama_url}`)
+    return
+  }
+  const url = 'http://127.0.0.1:11434'
   try {
-    const dir = bin.slice(0, bin.lastIndexOf('/'))
-    return readdirSync(dir).some(f => f.startsWith('libggml-') && ACCEL.test(f))
-  } catch { return false }
+    const res = await fetch(`${url}/api/version`, { signal: AbortSignal.timeout(2000) })
+    if (!res.ok) return
+    writeConfigKey('llama_url', url)
+    say(`ok   NVIDIA GPU + ollama detected — llama_url=${url} remembered (GPU-served models; unset the config key to go back to the local llama-server)`)
+  } catch { /* no ollama — the local server stays the backend */ }
 }
 
-/** Pick the CPU prebuilt asset for this platform from a release's assets. */
+type Flavor = 'gpu' | 'accel-other' | 'cpu'
+
+function buildFlavor(bin: string): Flavor {
+  try {
+    const dir = bin.slice(0, bin.lastIndexOf('/'))
+    const backends = readdirSync(dir)
+      .map(f => /^libggml-([a-z0-9]+)[.-]/i.exec(f)?.[1]?.toLowerCase())
+      .filter((b): b is string => !!b)
+    if (backends.some(b => GPU_BACKENDS.has(b))) return 'gpu'
+    if (backends.some(b => OTHER_ACCEL_BACKENDS.has(b))) return 'accel-other'
+    return 'cpu'
+  } catch { return 'cpu' }
+}
+
+/** Does an auto-installed build fit this machine? */
+function flavorFits(flavor: Flavor): boolean {
+  return wantGpuBuild ? flavor === 'gpu' : flavor === 'cpu'
+}
+
+/** Pick the prebuilt asset for this platform per the flavor policy above. */
 function pickLlamaAsset(assets: Array<{ name: string; browser_download_url: string }>): { name: string; browser_download_url: string } | null {
   const p = platform(), a = process.arch
-  const bad = ACCEL
   let rx: RegExp
   if (p === 'linux') rx = /(ubuntu|linux).*(x64|amd64)/i
   else if (p === 'darwin') rx = a === 'arm64' ? /macos-arm64/i : /macos-x64/i
   else rx = /win.*(x64|amd64)/i
-  const matches = assets
-    .filter(x => rx.test(x.name) && !bad.test(x.name) && /\.(zip|tar\.gz|tgz)$/i.test(x.name))
-    .sort((x, y) => x.name.length - y.name.length) // plainest (shortest) name = the portable CPU build
-  return matches[0] ?? null
+  const archived = (n: string) => /\.(zip|tar\.gz|tgz)$/i.test(n)
+  const shortest = (m: typeof assets) => [...m].sort((x, y) => x.name.length - y.name.length)[0] ?? null
+  const plat = assets.filter(x => rx.test(x.name) && archived(x.name))
+  if (wantGpuBuild) {
+    for (const want of ['cuda', 'vulkan']) {
+      const hit = shortest(plat.filter(x => new RegExp(`-${want}\\b`, 'i').test(x.name)))
+      if (hit) return hit
+    }
+    say('WARN NVIDIA GPU detected but no cuda/vulkan asset in this release — falling back to the CPU build.')
+  }
+  return shortest(plat.filter(x => !ACCEL_ASSET.test(x.name))) // plainest = the portable CPU build
 }
 
 async function ensureLlamaServer(): Promise<string | null> {
   step('llama.cpp (local model backend)')
   const existing = resolveLlamaServer()
-  if (existing && acceleratorBuild(existing)) {
-    // Quarantine OUTSIDE LLAMA_DIR so no resolver can find it again, then
-    // fall through to the CPU download below.
-    say(`NG   ${existing} is an accelerator build — crashes on hybrid models (llama.cpp #22333); replacing with the plain CPU build.`)
+  const vetted = existing !== null && existing.startsWith(LLAMA_DIR) // PATH/LLAMACPP_BIN = user's choice
+  if (existing && vetted && !flavorFits(buildFlavor(existing))) {
+    // Wrong flavor for this machine: quarantine OUTSIDE LLAMA_DIR so no
+    // resolver can find it again, then fall through to the download below.
+    const why = buildFlavor(existing) === 'accel-other'
+      ? 'an accelerator build that crashes on hybrid models (llama.cpp #22333)'
+      : wantGpuBuild ? 'a CPU-only build on an NVIDIA machine (wastes the GPU)'
+      : 'a GPU-flavored build this machine cannot use well (WSL vulkan runs via Dozen, slower than CPU)'
+    say(`NG   ${existing} is ${why} — replacing with the ${wantGpuBuild ? 'GPU (cuda/vulkan)' : 'plain CPU'} build.`)
     const disabled = LLAMA_DIR + '-disabled'
     const top = existing.slice(LLAMA_DIR.length + 1).split('/')[0]
     mkdirSync(disabled, { recursive: true })
-    renameSync(join(LLAMA_DIR, top), join(disabled, top))
-    say(`     old build kept at ${join(disabled, top)} (delete it when confident)`)
+    // The same build name may already sit in quarantine (e.g. re-runs after
+    // a flavor-policy change) — pick a free target instead of crashing.
+    let target = join(disabled, top)
+    for (let n = 2; existsSync(target); n++) target = join(disabled, `${top}-${n}`)
+    renameSync(join(LLAMA_DIR, top), target)
+    say(`     old build kept at ${target} (delete it when confident)`)
   } else if (existing) { say(`ok   llama-server: ${existing}`); return existing }
   if (isWin) {
     say('info native Windows: download a llama.cpp release and put llama-server.exe on PATH')
@@ -350,6 +425,9 @@ async function main(): Promise<void> {
   if (!run('sh', ['tools/bootstrap.sh'])) say('WARN bootstrap reported issues (see above) — continuing.')
 
   ensureManda()
+
+  step('model backend routing')
+  await detectExternalBackend()
 
   let llamaBin: string | null = null
   if (skipLlama) say('\n(skipping llama.cpp per --skip-llama)')
