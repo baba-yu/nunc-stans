@@ -3,6 +3,7 @@ pub mod news_config;
 pub mod profiles;
 pub mod proxy;
 pub mod runs;
+pub mod topics;
 
 use std::path::{Path, PathBuf};
 
@@ -37,6 +38,14 @@ pub struct GateCfg {
     /// never derives engine layout). None ⇒ the run-log viewer serves
     /// the main store only.
     pub instances_dir: Option<PathBuf>,
+    /// The linked nunc-fluens instance (the world-view source) — the
+    /// explicit handoff the topics API writes into (`just up` resolves
+    /// `news_repo` and passes it). None ⇒ the topics API answers 503.
+    pub news_repo: Option<PathBuf>,
+    /// Local model base URL (llama-server, OpenAI-compatible) for the
+    /// topic NL-structuring proxy. Unreachable ⇒ the extract API 503s
+    /// ("local model offline — just setup"). Env LLAMACPP_HOST overrides.
+    pub llama_url: String,
 }
 
 impl GateCfg {
@@ -49,7 +58,15 @@ impl GateCfg {
             formans_dist,
             data_dir: None,
             instances_dir: None,
+            news_repo: None,
+            llama_url: std::env::var("LLAMACPP_HOST")
+                .unwrap_or_else(|_| "http://127.0.0.1:8080".to_owned()),
         }
+    }
+
+    pub fn with_llama_url(mut self, llama_url: String) -> Self {
+        self.llama_url = llama_url;
+        self
     }
 
     pub fn with_apps_url(mut self, apps_url: String) -> Self {
@@ -64,6 +81,11 @@ impl GateCfg {
 
     pub fn with_instances_dir(mut self, instances_dir: Option<PathBuf>) -> Self {
         self.instances_dir = instances_dir;
+        self
+    }
+
+    pub fn with_news_repo(mut self, news_repo: Option<PathBuf>) -> Self {
+        self.news_repo = news_repo;
         self
     }
 }
@@ -92,6 +114,11 @@ pub fn build_router(cfg: GateCfg, fourfive_dist: &Path) -> Router {
             "/api/world/news-config",
             get(news_config::get_news_config).put(news_config::put_news_config),
         )
+        .route(
+            "/api/world/topics",
+            get(topics::get_topics).put(topics::put_topics),
+        )
+        .route("/api/world/topics/extract", axum::routing::post(topics::extract_topics))
         .route("/api/profiles", get(profiles::list_profiles))
         .route(
             "/api/profiles/defaults",
