@@ -64,6 +64,25 @@ export function resolveDataDir(): Resolved {
   return { dir: typeof v === 'string' && v ? v : defaultDataDir() }
 }
 
+/** The manda memory home, sibling to self/world/artifact under the
+ * store: <data_store>/manda. A directory the agent alone writes (the
+ * nunc-stans-agent README's requirement). */
+export function defaultMandaDataDir(): string {
+  return join(resolveDataDir().dir ?? defaultDataDir(), 'manda')
+}
+
+/** Manda data-dir resolution: MANDA_DATA_DIR env > config
+ * `manda_data_dir` > the in-repo default <data_store>/manda. Having a
+ * default is what makes the agent's memory ON out of the box once a
+ * manda binary resolves — no env var required (just setup writes the
+ * config key + seeds the first mandate). */
+export function resolveMandaDataDir(): string {
+  const env = process.env.MANDA_DATA_DIR
+  if (env) return env
+  const v = readConfig().manda_data_dir
+  return typeof v === 'string' && v ? v : defaultMandaDataDir()
+}
+
 /** Linked-instance resolution: NS_NEWS_REPO > config news_repo
  * (unchanged key, instance semantics — points at a v2 nunc-fluens data
  * instance; see tools/build-world.ts and design/naming.md). Set via

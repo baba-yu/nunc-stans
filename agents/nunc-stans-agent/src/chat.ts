@@ -8,6 +8,7 @@ import type {
   Ai, ChatMessage, Profile, StreamEvent,
 } from '../../../frontend/packages/ai/src/index.ts'
 import type { MandaMemory, ToolResult } from './memory.ts'
+import type { AppsTools } from './tools.ts'
 
 export interface TurnIO {
   /** Normal output (content deltas arrive unbuffered). */
@@ -24,6 +25,8 @@ export interface AgentSession {
   ai: Ai
   profile: Profile
   memory: MandaMemory | null
+  /** Generated-app tools (Phase E T8): null = none granted / host down. */
+  tools: AppsTools | null
   history: ChatMessage[]
   io: TurnIO
 }
@@ -33,6 +36,7 @@ export const HELP = [
   '  /remember <scope> <text>   propose a memory, then commit with your approval',
   '  /recall <scope>            read committed memories (≤3 surfaced, audited)',
   '  /mandates                  list mandates and their state',
+  '  /tools                     list the generated-app tools this profile grants',
   '  /help                      this help',
   '  /exit                      leave',
 ].join('\n')
@@ -121,11 +125,50 @@ export async function runTurn(s: AgentSession, input: string): Promise<boolean> 
   if (remember) { await rememberFlow(s, remember[1], remember[2]); return true }
   const recall = /^\/recall\s+(\S+)$/.exec(line)
   if (recall) { await recallFlow(s, recall[1]); return true }
+  if (line === '/tools') {
+    if (!s.tools) s.io.meta('app tools OFF: none granted by this profile (skills: apps:<slug>) or apps-host is down')
+    else if (!s.tools.specs.length) s.io.meta('connected to apps-host, but this profile grants no served tool')
+    else s.io.meta(s.tools.specs.map(t => `· ${t.name}${t.description ? ` — ${t.description}` : ''}`).join('\n'))
+    return true
+  }
   if (line.startsWith('/')) { s.io.meta(`unknown command ${line.split(/\s/)[0]} — /help lists them`); return true }
+
+  s.history.push({ role: 'user', content: line })
+  // ui.think (profile pref): the provider-side reasoning toggle —
+  // it streams reasoning into the dimmed pane where the model emits it.
+  const think = typeof s.profile.ui?.think === 'boolean' ? s.profile.ui.think : undefined
+  const baseOpts = {
+    caller: 'nunc-stans-agent',
+    profile: s.profile.id,
+    model: s.profile.model,
+    system: s.profile.system_prompt,
+    think,
+  }
+
+  if (s.tools && s.tools.specs.length > 0) {
+    // Tool turn (Phase E T8): the bounded loop in nunc-ai; every call and
+    // every refusal is rendered as a meta line, verbatim. Non-streamed in
+    // v0 (recorded); goal-verify never combines with tools (PE9), so the
+    // profile's verify default is deliberately not passed here.
+    const tools = s.tools
+    const result = await s.ai.chatWithTools(s.profile.provider, s.history, {
+      ...baseOpts,
+      tools: tools.specs,
+      onToolCall: async (call) => {
+        s.io.meta(`⚙ ${call.name} ${JSON.stringify(call.arguments)}`)
+        const r = await tools.call(call)
+        s.io.meta(r.isError ? `⚠ ${call.name}: ${r.text}` : `✓ ${call.name}: ${r.text.slice(0, 160)}`)
+        return r.text
+      },
+    })
+    s.io.out(result.text + '\n')
+    s.io.meta(`[${result.provider} · ${result.model} · ${result.usage.inputTokens}/${result.usage.outputTokens} tok]`)
+    s.history.push({ role: 'assistant', content: result.text })
+    return true
+  }
 
   // A chat turn: stream with visible thinking; the goal-verify loop (if
   // the profile turns it on) surfaces its boundaries as meta lines.
-  s.history.push({ role: 'user', content: line })
   const onEvent = (e: StreamEvent) => {
     if (e.type === 'thinking') s.io.thinking(e.delta)
     else if (e.type === 'content') s.io.out(e.delta)
@@ -134,16 +177,9 @@ export async function runTurn(s: AgentSession, input: string): Promise<boolean> 
         + ` (${e.tokensIn}/${e.tokensOut} tok)`)
     }
   }
-  // ui.think (profile pref): the provider-side reasoning toggle —
-  // ollama's think mode streams message.thinking into the dimmed pane.
-  const think = typeof s.profile.ui?.think === 'boolean' ? s.profile.ui.think : undefined
   const result = await s.ai.chatStream(s.profile.provider, s.history, {
-    caller: 'nunc-stans-agent',
-    profile: s.profile.id,
-    model: s.profile.model,
-    system: s.profile.system_prompt,
+    ...baseOpts,
     verify: s.profile.goal_verify,
-    think,
   }, onEvent)
   s.io.out('\n')
   s.io.meta(`[${result.provider} · ${result.model} · ${result.usage.inputTokens}/${result.usage.outputTokens} tok]`)

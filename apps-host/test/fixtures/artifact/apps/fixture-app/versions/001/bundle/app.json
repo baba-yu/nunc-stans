@@ -1,0 +1,36 @@
+{
+  "slug": "fixture-app",
+  "version": 1,
+  "name": "Fixture App",
+  "description": "Hand-authored per contracts/app-bundle.md — an independent check of the contract shapes.",
+  "entities": [
+    {
+      "name": "deals",
+      "columns": [
+        { "name": "id", "type": "TEXT", "pk": true, "notNull": true },
+        { "name": "name", "type": "TEXT", "notNull": true },
+        { "name": "status", "type": "TEXT" },
+        { "name": "created_at", "type": "TEXT", "notNull": true, "audit": true },
+        { "name": "updated_at", "type": "TEXT", "notNull": true, "audit": true },
+        { "name": "archived_at", "type": "TEXT", "audit": true }
+      ]
+    },
+    {
+      "name": "notes",
+      "columns": [
+        { "name": "id", "type": "TEXT", "pk": true, "notNull": true },
+        { "name": "deal_id", "type": "TEXT", "fk": "deals.id", "notNull": true },
+        { "name": "body", "type": "TEXT" },
+        { "name": "created_at", "type": "TEXT", "notNull": true, "audit": true },
+        { "name": "updated_at", "type": "TEXT", "notNull": true, "audit": true },
+        { "name": "archived_at", "type": "TEXT", "audit": true }
+      ]
+    }
+  ],
+  "metrics": [
+    { "name": "deal_count", "label": "Deals", "sql": "SELECT COUNT(*) FROM deals WHERE archived_at IS NULL" }
+  ],
+  "stories": [],
+  "ui": { "screens": [] },
+  "blueprint_hash": "0000000000000000000000000000000000000000000000000000000000000000"
+}

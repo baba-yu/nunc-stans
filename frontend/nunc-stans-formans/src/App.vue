@@ -21,6 +21,7 @@ onMounted(() => store.load())
         <RouterLink to="/profiles" class="tab" active-class="tab--active">Profiles</RouterLink>
         <RouterLink to="/runs" class="tab" active-class="tab--active">Runs</RouterLink>
         <a href="/fourfive/" class="tab">FourFive</a>
+        <a href="/apps/" class="tab">Apps</a>
       </nav>
       <div class="topbar-meta">
         <Badge :variant="store.reachable ? 'success' : 'error'">

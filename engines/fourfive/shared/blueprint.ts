@@ -77,6 +77,24 @@ export interface StateTransition {
   description?: string
 }
 
+// A declared measurement (Phase E metrics contract, plan PE8): compiled to a
+// `metric_<name>` SQLite view by the bundle generator; the ONLY numbers the
+// strategy read-out may quote. `sql` is a single SELECT over the app's own
+// tables returning one value (validated at generation and again by apps-host).
+export interface Metric {
+  name: string // snake_case identifier — the view suffix and the API key
+  label: string
+  sql: string
+}
+
+// A user story the app must satisfy. Carried in the bundle manifest for
+// traceability; v0 does NOT compile stories to tests (plan, Design spec §4).
+export interface Story {
+  id: string
+  title: string
+  scenario: string
+}
+
 export interface Blueprint {
   app: { name: string; description?: string }
   mock_ui: { screens: MockUiScreen[] }
@@ -86,6 +104,8 @@ export interface Blueprint {
   apis: ApiEndpoint[]
   open_questions: string[]
   state_transitions: StateTransition[]
+  metrics: Metric[]
+  stories: Story[]
   // User-specified (not LLM-generated); preserved across blueprint updates.
   software_stack?: string
 }

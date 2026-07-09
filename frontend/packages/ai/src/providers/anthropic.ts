@@ -1,6 +1,6 @@
 import type {
   Capabilities, ChatMessage, ChatOptions, ChatResult, FetchLike, Provider,
-  StreamHandler,
+  StreamHandler, ToolCall,
 } from '../types.ts';
 
 const API = 'https://api.anthropic.com/v1/messages';
@@ -27,17 +27,40 @@ export function anthropicProvider(cfg: AnthropicConfig = {}): Provider {
     const model = opts.model ?? cfg.defaultModel ?? 'claude-sonnet-5';
     const system = [opts.system, ...messages.filter(m => m.role === 'system').map(m => m.content)]
       .filter(Boolean).join('\n\n');
+    // Message mapping incl. the tool loop (PE9/T8): an assistant message
+    // that requested calls becomes text + tool_use blocks; a role:'tool'
+    // message becomes a user message with one tool_result block.
     const body: Record<string, unknown> = {
       model,
       max_tokens: opts.maxTokens ?? 4096,
-      messages: messages.filter(m => m.role !== 'system')
-        .map(m => ({ role: m.role, content: m.content })),
+      messages: messages.filter(m => m.role !== 'system').map(m => {
+        if (m.role === 'tool') {
+          return {
+            role: 'user',
+            content: [{ type: 'tool_result', tool_use_id: m.toolCallId ?? '', content: m.content }],
+          };
+        }
+        if (m.role === 'assistant' && m.toolCalls?.length) {
+          return {
+            role: 'assistant',
+            content: [
+              ...(m.content ? [{ type: 'text', text: m.content }] : []),
+              ...m.toolCalls.map(c => ({ type: 'tool_use', id: c.id, name: c.name, input: c.arguments })),
+            ],
+          };
+        }
+        return { role: m.role, content: m.content };
+      }),
     };
     if (stream) body.stream = true;
     if (system) body.system = system;
     if (opts.temperature !== undefined) body.temperature = opts.temperature;
+    const tools: unknown[] = (opts.tools ?? []).map(t => ({
+      name: t.name, description: t.description ?? '', input_schema: t.inputSchema,
+    }));
     if (opts.webSearch)
-      body.tools = [{ type: 'web_search_20250305', name: 'web_search', max_uses: 8 }];
+      tools.push({ type: 'web_search_20250305', name: 'web_search', max_uses: 8 });
+    if (tools.length) body.tools = tools;
     return {
       model,
       init: {
@@ -62,12 +85,15 @@ export function anthropicProvider(cfg: AnthropicConfig = {}): Provider {
       if (!res.ok)
         throw new Error(`anthropic-api: HTTP ${res.status}: ${(await res.text()).slice(0, 500)}`);
       const data = await res.json() as {
-        content: Array<{ type: string; text?: string }>;
+        content: Array<{ type: string; text?: string; id?: string; name?: string; input?: Record<string, unknown> }>;
         usage?: { input_tokens?: number; output_tokens?: number };
         model?: string; stop_reason?: string;
       };
       const text = data.content.filter(b => b.type === 'text' && b.text)
         .map(b => b.text).join('');
+      const toolCalls: ToolCall[] = data.content
+        .filter(b => b.type === 'tool_use' && b.name)
+        .map((b, i) => ({ id: b.id ?? `toolu_${i}`, name: b.name!, arguments: b.input ?? {} }));
       return {
         text,
         usage: {
@@ -77,6 +103,7 @@ export function anthropicProvider(cfg: AnthropicConfig = {}): Provider {
         model: data.model ?? model,
         provider: 'anthropic-api',
         stopReason: data.stop_reason,
+        ...(toolCalls.length ? { toolCalls } : {}),
       };
     },
 

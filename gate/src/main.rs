@@ -16,6 +16,9 @@ struct Args {
     /// FourFive server base URL (loopback).
     #[arg(long, default_value = "http://127.0.0.1:8787")]
     fourfive_url: String,
+    /// apps-host base URL (loopback) — the generated-app host (Phase E).
+    #[arg(long, default_value = "http://127.0.0.1:8788")]
+    apps_url: String,
     /// Built Nunc Stans Formans dist directory (FD-3.2: paths only by flag).
     #[arg(long)]
     formans_dist: PathBuf,
@@ -52,6 +55,7 @@ async fn main() -> anyhow::Result<()> {
         Some(PathBuf::from(args.instances_dir))
     };
     let cfg = GateCfg::new(args.engine_url, args.fourfive_url, args.formans_dist)
+        .with_apps_url(args.apps_url)
         .with_data_dir(data_dir)
         .with_instances_dir(instances_dir);
     let app = build_router(cfg, &args.fourfive_dist);

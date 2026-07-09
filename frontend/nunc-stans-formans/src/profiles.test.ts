@@ -7,7 +7,7 @@ describe('toPayload', () => {
     const form = blankForm()
     form.id = 'local-chat'
     form.name = 'Local chat'
-    expect(toPayload(form)).toEqual({ id: 'local-chat', name: 'Local chat', provider: 'ollama' })
+    expect(toPayload(form)).toEqual({ id: 'local-chat', name: 'Local chat', provider: 'llama-cpp' })
   })
 
   it('carries the full record and splits comma lists', () => {

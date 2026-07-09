@@ -35,11 +35,11 @@ export const CONTEXTS = [
 
 export type ContextKey = (typeof CONTEXTS)[number]['key']
 
-export const PROVIDERS = ['ollama', 'anthropic-api', 'claude-code', 'mock']
+export const PROVIDERS = ['llama-cpp', 'ollama', 'anthropic-api', 'claude-code', 'mock']
 
 export function blankForm(): ProfileForm {
   return {
-    id: '', name: '', provider: 'ollama', model: '', systemPrompt: '',
+    id: '', name: '', provider: 'llama-cpp', model: '', systemPrompt: '',
     skills: '', memoryRead: '', memoryWrite: '', verify: 'off',
     verifyGoal: '', maxIters: 2,
   }

@@ -1,6 +1,6 @@
 import type {
   Capabilities, ChatMessage, ChatOptions, ChatResult, Provider,
-  StreamHandler,
+  StreamHandler, ToolCall,
 } from '../types.ts';
 
 export type MockResponder =
@@ -14,6 +14,10 @@ export interface MockConfig {
   /** Scripted thinking text emitted (in chunks) before the content when
    * chatStream is used — the S-11/S-6 rehearsal path, zero live tokens. */
   thinking?: string;
+  /** Scripted tool rounds (PE9/T8, the S-7 zero-token rehearsal): when
+   * tools are offered, each chat call pops the next batch of tool calls;
+   * once the script is exhausted the reply text answers normally. */
+  toolScript?: ToolCall[][];
 }
 
 /** Deterministic fixture provider — used by unit tests and pipeline dry
@@ -22,9 +26,10 @@ export interface MockConfig {
  * without a live model. */
 export function mockProvider(cfg: MockConfig = {}): Provider {
   const capabilities: Capabilities = {
-    chat: true, stream: true, tools: false, structured: true,
+    chat: true, stream: true, tools: true, structured: true,
     webSearch: 'none', thinking: true, memory: false,
   };
+  const toolScript = [...(cfg.toolScript ?? [])];
 
   function reply(messages: ChatMessage[], opts: ChatOptions): string {
     return cfg.responder?.(messages, opts) ??
@@ -48,6 +53,10 @@ export function mockProvider(cfg: MockConfig = {}): Provider {
     name: 'mock',
     capabilities,
     async chat(messages: ChatMessage[], opts: ChatOptions = {}): Promise<ChatResult> {
+      if (opts.tools?.length && toolScript.length) {
+        const calls = toolScript.shift()!;
+        return { ...result('', opts), toolCalls: calls };
+      }
       return result(reply(messages, opts), opts);
     },
     async chatStream(messages: ChatMessage[], opts: ChatOptions = {}, onEvent: StreamHandler): Promise<ChatResult> {

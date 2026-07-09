@@ -46,7 +46,7 @@ function makeSession(io: TurnIO, withMemory = true): AgentSession {
     runLogFile: join(dataDir, 'runs', 'ai-runs.jsonl'),
     mock: { reply: 'a streamed reply', thinking: 'pondering the question' },
   })
-  return { ai, profile: PROFILE, memory: withMemory ? memory : null, history: [], io }
+  return { ai, profile: PROFILE, memory: withMemory ? memory : null, tools: null, history: [], io }
 }
 
 beforeEach(async () => {

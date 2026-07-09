@@ -101,5 +101,10 @@ substrate requires (v1 plan §2.6):
 ## 6. Out of scope (FourFive's jurisdiction, §13-A/§13-D)
 
 - The agent's internal design, skill format, and runtime.
-- MCP tool surfaces beyond manda (generated-app CRUD arrives with
-  Phase E's apps-host).
+- MCP tool surfaces beyond manda are defined by their own contracts:
+  generated-app CRUD tools are `contracts/app-bundle.md` §5 (Phase E).
+  The gating stays here in §2: the profile's `skills` allowlist —
+  `apps:<slug>` grants one app's five CRUD verbs, a full tool name
+  grants one tool, and no grant means the tool is not offered. App
+  working data is not the self ledger; F3 and the memory mandate rail
+  are untouched by app tools.

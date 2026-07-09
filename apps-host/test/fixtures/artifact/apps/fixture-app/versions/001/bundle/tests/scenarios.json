@@ -1,0 +1,37 @@
+{
+  "scenarios": [
+    {
+      "name": "deals crud",
+      "steps": [
+        { "op": "create", "entity": "deals", "payload": { "name": "name sample", "status": "status sample" } },
+        { "op": "list", "entity": "deals", "expect": { "count": 1 } },
+        { "op": "get", "entity": "deals" },
+        { "op": "update", "entity": "deals", "payload": { "name": "name updated" } },
+        { "op": "archive", "entity": "deals" },
+        { "op": "list", "entity": "deals", "expect": { "count": 0 } },
+        { "op": "list", "entity": "deals", "archived": true, "expect": { "count": 1 } }
+      ]
+    },
+    {
+      "name": "notes crud",
+      "steps": [
+        { "op": "create", "entity": "deals", "payload": { "name": "name sample", "status": "status sample" } },
+        { "op": "create", "entity": "notes", "payload": { "deal_id": { "$id": "deals" }, "body": "body sample" } },
+        { "op": "list", "entity": "notes", "expect": { "count": 1 } },
+        { "op": "get", "entity": "notes" },
+        { "op": "update", "entity": "notes", "payload": { "body": "body updated" } },
+        { "op": "archive", "entity": "notes" },
+        { "op": "list", "entity": "notes", "expect": { "count": 0 } },
+        { "op": "list", "entity": "notes", "archived": true, "expect": { "count": 1 } }
+      ]
+    },
+    {
+      "name": "declared metrics answer",
+      "steps": [
+        { "op": "create", "entity": "deals", "payload": { "name": "name sample" } },
+        { "op": "create", "entity": "notes", "payload": { "deal_id": { "$id": "deals" }, "body": "body sample" } },
+        { "op": "metric", "name": "deal_count", "expect": { "ok": true } }
+      ]
+    }
+  ]
+}

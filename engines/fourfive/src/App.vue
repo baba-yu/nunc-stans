@@ -25,6 +25,7 @@ onMounted(() => store.init())
 <template>
   <div class="app">
     <header class="topbar">
+      <a class="home" href="/" title="Back to Nunc Stans">⌂ Nunc Stans</a>
       <div class="brand">FourFive</div>
       <div class="topbar__meta">
         <button
@@ -101,6 +102,24 @@ onMounted(() => store.init())
 </template>
 
 <style scoped>
+/* Back to the Nunc Stans home (Formans) — FourFive is served at
+   /fourfive/ behind the gate, so `/` is the single-origin home. Every
+   gate-fronted surface carries this affordance so no surface is a
+   one-way island (the /apps host inherits it in Phase E). */
+.home {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-right: 0.75rem;
+  color: inherit;
+  text-decoration: none;
+  opacity: 0.65;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+.home:hover {
+  opacity: 1;
+}
 .numctl__input--goal {
   width: 16rem;
 }

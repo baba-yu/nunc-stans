@@ -36,6 +36,8 @@ jobs:
       - run: corepack pnpm -C engines/fourfive test
       - run: corepack pnpm -C agents/nunc-stans-agent typecheck
       - run: corepack pnpm -C agents/nunc-stans-agent test
+      - run: corepack pnpm -C apps-host typecheck
+      - run: corepack pnpm -C apps-host test
 
   # The TS pipeline suite (Phase C T12: Python retired). Self-regression
   # against the synthetic fixture corpus committed under

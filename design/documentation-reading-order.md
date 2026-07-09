@@ -93,7 +93,8 @@ nunc-stans/
 │   ├── edge.schema.json
 │   ├── scope-id.md
 │   ├── glossary.md
-│   └── agent-abi.md                 ← v0 draft (Phase D): registration, capabilities, run records
+│   ├── agent-abi.md                 ← v0 draft (Phase D): registration, capabilities, run records
+│   └── app-bundle.md                ← v0 draft (Phase E): bundle format, freeze, metrics, apps-host API
 │
 ├── engines/
 │   ├── nunc-stans/docs/             ← spl-plan.md, prd-override.md (self-engine plans)

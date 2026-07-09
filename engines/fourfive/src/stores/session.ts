@@ -328,6 +328,27 @@ export const useSessionStore = defineStore('session', () => {
     showMarkdown.value = false
   }
 
+  // Phase E: freeze + bundle the session's current version. The result (or
+  // the refusal — drift/validation errors surface verbatim) is shown in the
+  // temp-app panel.
+  const bundling = ref(false)
+  const bundleResult = ref<{ slug: string; version: number; frozen_at: string; bundle_hash: string } | null>(null)
+  const bundleError = ref<string | null>(null)
+
+  async function generateBundle() {
+    if (!current.value || bundling.value) return
+    bundling.value = true
+    bundleError.value = null
+    try {
+      bundleResult.value = await api.generateBundle(current.value.id)
+    } catch (e) {
+      bundleResult.value = null
+      bundleError.value = (e as Error).message
+    } finally {
+      bundling.value = false
+    }
+  }
+
   async function renameSession(title: string) {
     const t = title.trim()
     if (!current.value || !t || t === current.value.title) return
@@ -379,5 +400,9 @@ export const useSessionStore = defineStore('session', () => {
     renameSession,
     usage,
     refreshUsage,
+    bundling,
+    bundleResult,
+    bundleError,
+    generateBundle,
   }
 })

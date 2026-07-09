@@ -1,0 +1,54 @@
+{
+  "tools": [
+    {
+      "name": "fixture-app_deals_list",
+      "description": "List deals rows (archived excluded unless archived=true)",
+      "inputSchema": { "type": "object", "properties": { "archived": { "type": "boolean" }, "limit": { "type": "number" } }, "additionalProperties": false }
+    },
+    {
+      "name": "fixture-app_deals_get",
+      "description": "Get one deals row by id",
+      "inputSchema": { "type": "object", "properties": { "id": { "type": "string" } }, "required": ["id"], "additionalProperties": false }
+    },
+    {
+      "name": "fixture-app_deals_create",
+      "description": "Create a deals row",
+      "inputSchema": { "type": "object", "properties": { "name": { "type": "string" }, "status": { "type": "string" } }, "required": ["name"], "additionalProperties": false }
+    },
+    {
+      "name": "fixture-app_deals_update",
+      "description": "Update fields of a deals row",
+      "inputSchema": { "type": "object", "properties": { "id": { "type": "string" }, "name": { "type": "string" }, "status": { "type": "string" } }, "required": ["id"], "additionalProperties": false }
+    },
+    {
+      "name": "fixture-app_deals_archive",
+      "description": "Archive (soft-delete) a deals row",
+      "inputSchema": { "type": "object", "properties": { "id": { "type": "string" } }, "required": ["id"], "additionalProperties": false }
+    },
+    {
+      "name": "fixture-app_notes_list",
+      "description": "List notes rows (archived excluded unless archived=true)",
+      "inputSchema": { "type": "object", "properties": { "archived": { "type": "boolean" }, "limit": { "type": "number" } }, "additionalProperties": false }
+    },
+    {
+      "name": "fixture-app_notes_get",
+      "description": "Get one notes row by id",
+      "inputSchema": { "type": "object", "properties": { "id": { "type": "string" } }, "required": ["id"], "additionalProperties": false }
+    },
+    {
+      "name": "fixture-app_notes_create",
+      "description": "Create a notes row",
+      "inputSchema": { "type": "object", "properties": { "deal_id": { "type": "string" }, "body": { "type": "string" } }, "required": ["deal_id"], "additionalProperties": false }
+    },
+    {
+      "name": "fixture-app_notes_update",
+      "description": "Update fields of a notes row",
+      "inputSchema": { "type": "object", "properties": { "id": { "type": "string" }, "deal_id": { "type": "string" }, "body": { "type": "string" } }, "required": ["id"], "additionalProperties": false }
+    },
+    {
+      "name": "fixture-app_notes_archive",
+      "description": "Archive (soft-delete) a notes row",
+      "inputSchema": { "type": "object", "properties": { "id": { "type": "string" } }, "required": ["id"], "additionalProperties": false }
+    }
+  ]
+}
