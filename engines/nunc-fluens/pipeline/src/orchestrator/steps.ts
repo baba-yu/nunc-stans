@@ -36,6 +36,8 @@ import { buildEvidenceReverse } from '../export/evidence-reverse.ts';
 import { citationCheck, classifyHost, parsePolicy } from '../gates/citation-check.ts';
 import { checkTopicCoverage } from '../gates/check-topic-coverage.ts';
 import { loadTopics, topicNames, topicsPromptBlock } from '../topics.ts';
+import { searchTopic, validateDeepPlan } from './topic-search.ts';
+import type { TopicSearchDeps, TopicSearchRecord } from './topic-search.ts';
 import { postUpdateValidation } from '../gates/post-update-validation.ts';
 import { checkReadmeLinks } from './readme-checks.ts';
 import Database from 'better-sqlite3';
@@ -156,24 +158,49 @@ export function dailyUpdateSteps(): StepDef[] {
         let searchBlock = '';
         if (ctx.search !== 'native' && !ctx.replay && ctx.ai
           && !existsSync(sdFile(ctx, 'news_section.json'))) {
-          // Topics-authoring W1: names come from news-topics.json via the
-          // loader (parentheticals stripped for query strings, as before).
-          // Flat one-query-per-topic fan-out; intent weighting arrives at T3.
-          const topics = topicNames(loadTopics(ctx.newsRepo))
-            .map(n => n.replace(/\(.*?\)/g, '').trim())
-            .filter(Boolean);
+          // Topics-authoring W3: intent-weighted fan-out — watch=1 query,
+          // broad=light multi-angle, deep=the goal-driven plan/judge loop
+          // (LLM decisions; deterministic execution + code-enforced stop).
+          // The loop's decisions are captured in search_plan.json (audit;
+          // replay never re-searches).
+          const ai = ctx.ai;
+          const tf = loadTopics(ctx.newsRepo);
+          const deps: TopicSearchDeps = {
+            search: async (q) => {
+              try {
+                return await ai.search(ctx.search, q, { count: 5 });
+              } finally {
+                await new Promise(res => setTimeout(res, 1100)); // free-tier rate limit
+              }
+            },
+            plan: (topic, round, seenSummary) => llmJson(ctx, {
+              id: 'deep-search',
+              validate: validateDeepPlan,
+              prompt: buildStepPrompt({
+                skill: 'deep-search', date: ctx.date,
+                extra: [
+                  `Topic: ${topic.name}`,
+                  topic.note ? `Authoring note: ${topic.note}` : '',
+                  `Round: ${round}`,
+                  'Results surfaced so far:',
+                  seenSummary,
+                ].filter(Boolean).join('\n'),
+                outputNote: 'the deep-search plan JSON ({queries, goal_met, reason}).',
+              }),
+            }),
+            log: ctx.log,
+          };
           const chunks: string[] = [];
-          for (const topic of topics) {
-            try {
-              const results = await ctx.ai.search(ctx.search, `${topic} AI news`, { count: 5 });
-              chunks.push(`### ${topic}\n` + results.map(r =>
-                `- ${r.title} — ${r.url}\n  ${(r.snippet ?? '').slice(0, 300)}`).join('\n'));
-            } catch (e) {
-              ctx.log(`  search '${topic}' failed via ${ctx.search}: `
-                + `${e instanceof Error ? e.message.slice(0, 120) : e}`);
-            }
-            await new Promise(res => setTimeout(res, 1100)); // free-tier rate limit
+          const records: TopicSearchRecord[] = [];
+          for (const topic of tf.topics) {
+            const { chunk, record } = await searchTopic(topic, deps);
+            if (chunk) chunks.push(chunk);
+            records.push(record);
+            ctx.log(`  topic '${topic.name}' [${topic.intent}] → ${record.urls.length} urls (${record.stopped})`);
           }
+          mkdirSync(dateDir(ctx.sourcedataRoot, ctx.date), { recursive: true });
+          writeFileSync(sdFile(ctx, 'search_plan.json'),
+            JSON.stringify({ date: ctx.date, search: ctx.search, topics: records }, null, 2));
           if (!chunks.length)
             throw new StepFailure('compose-news-section',
               `external search via '${ctx.search}' returned nothing for any topic`);
