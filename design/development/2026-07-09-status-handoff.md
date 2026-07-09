@@ -61,13 +61,21 @@ the fourfive-chat profile's `model` > newest GGUF in `<store>/models`
 local-llama`; a real FourFive chat answered through the 27B; tool_calls
 probe emits `get_time({"city":"Tokyo"})` (PE9' target confirmed on the 27B).
 
-**Known reality:** 27B on CPU ≈ 2.6 tok/s generation; it is a thinking
-model, so a short reply runs 1–3 minutes. Fallback profile
-`local-llama-3b` (Qwen2.5-3B) exists for fast iterations — switch the
-`fourfive-chat` default on the Profiles screen. The quarantined OpenVINO
-build (~380MB, `~/.local/share/nunc-stans/llama.cpp-disabled/`) and ~10
-stale `/tmp/tmp.*` scratch stores from story rehearsals are delete-when-
-confident cleanup candidates.
+**Model backend routing (evening addition):** the box has an RTX 5090; the
+snappy Phase-D experience was ollama serving the 27B 100% GPU-resident. WSL
+prebuilts can't use it (no ubuntu cuda asset; vulkan-via-Dozen measured
+0.7 tok/s — slower than CPU 2.6), so a new config key **`llama_url`**
+(NS_LLAMA_URL override) routes every consumer to an external OpenAI-
+compatible backend: `just up` exports it as LLAMACPP_HOST (fourfive,
+apps-host, gate topics-extract, agent) and the `_up-llama` leg idles.
+`just setup` auto-detects NVIDIA + live ollama and remembers it (never
+overwrites an explicit value; unset the key to return to the local CPU
+llama-server, which remains installed as the fallback). **Live: FourFive
+27B turn 145s (CPU) → 5s (GPU), ~33 tok/s incl. thinking; tool_calls OK.**
+Profiles: `local-llama` (model `qwen3.6:27b`, the ollama tag — default) +
+`local-llama-3b`. Cleanup candidates: quarantined builds in
+`~/.local/share/nunc-stans/llama.cpp-disabled/`, leftover release tarballs
+in `llama.cpp/`, ~10 stale `/tmp/tmp.*` scratch stores, config.json.bak.*.
 
 ## 2. Branch / merge state (verified)
 
@@ -112,10 +120,12 @@ rerun before believing a red.
 ## 5. Run / try it
 
 ```sh
-just up   # llama :8080 (27B), engine :8721, fourfive :8787, apps :8788, gate :8720
+just up   # engine :8721, fourfive :8787, apps :8788, gate :8720
+          # model: config llama_url (ollama :11434, GPU) — llama leg idles;
+          # no llama_url = local llama-server on :8080 (CPU fallback)
 # http://127.0.0.1:8720 → FourFive badge shows: LLM: llama-cpp · local-llama
-just llama            # just the model backend
-NS_SKIP_LLAMA=1 just up   # skip the model (fast UI iterations)
+just llama                # run the local model backend explicitly
+NS_SKIP_LLAMA=1 just up   # skip the model leg (fast UI iterations)
 ```
 
 - World topic UI (now on dev): needs an instance — `just news-init <name>`
