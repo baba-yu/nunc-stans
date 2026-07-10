@@ -43,7 +43,7 @@ const FORBIDDEN: Array<[string, RegExp]> = [
   // immediately followed by a support word (en/es/fil particles
   // included) is exempt too.
   ['day-N storyline numbering',
-    /\bday-(?:[1-9]\d*|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen)(?:-(?:one|two|three|four|five|six|seven|eight|nine))?\b(?!(?:\s+(?:na|ng|de))?\s+(?:support|suporta|soporte|サポート))/i],
+    /\bday-(?:[1-9]\d*|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen)(?:-(?:one|two|three|four|five|six|seven|eight|nine))?\b(?!(?:\s+\S+){0,3}?\s+(?:support|suporta|soporte|サポート))/i],
   ['aging vocabulary',
     /\b(?:weekend|doubly|triply|quadruply|quintuply|sextuply)[\s-](?:weekend[\s-])?aged\b/i],
   ['N-day-old artifact filler',
