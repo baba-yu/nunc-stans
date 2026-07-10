@@ -123,6 +123,7 @@ export function createAi(cfg: AiConfig): Ai {
         durationMs: Date.now() - started,
         verify: callVerify.verify,
         outcome: 'ok',
+        ...(result.stopReason ? { stopReason: result.stopReason } : {}),
         ...(opts.profile ? { profile: opts.profile } : {}),
       });
       return result;
@@ -168,6 +169,7 @@ export function createAi(cfg: AiConfig): Ai {
         verify: 'on',
         outcome: 'ok',
         verdicts: out.verdicts,
+        ...(out.result.stopReason ? { stopReason: out.result.stopReason } : {}),
         ...(opts.profile ? { profile: opts.profile } : {}),
       });
       return out.result;
@@ -246,6 +248,7 @@ export function createAi(cfg: AiConfig): Ai {
             durationMs: Date.now() - started,
             verify: 'off',
             outcome: 'ok',
+            ...(result.stopReason ? { stopReason: result.stopReason } : {}),
             ...(counts.size ? { toolCalls: [...counts].map(([name, count]) => ({ name, count })) } : {}),
             ...(chatOpts.profile ? { profile: chatOpts.profile } : {}),
           });
