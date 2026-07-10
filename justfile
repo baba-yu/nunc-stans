@@ -123,7 +123,8 @@ _up-gate:
       --fourfive-dist engines/fourfive/dist \
       --data-dir "{{data_dir}}" \
       --instances-dir engines/nunc-fluens/instances \
-      --news-repo "{{news_repo}}"
+      --news-repo "{{news_repo}}" \
+      --model-catalog tools/model-catalog.json
 
 # Local model backend (T4 / plan 2026-07-08-topics-authoring exit #6):
 # llama-server on :8080 (--jinja for tool-calls), the default provider for
@@ -143,17 +144,31 @@ _up-llama:
     model=$(node tools/llama.ts model || true)
     if [ -z "$bin" ]; then echo "[llama] no llama-server binary - run 'just setup' (llama-cpp profiles show 'local model offline')"; exec tail -f /dev/null; fi
     if [ -z "$model" ]; then echo "[llama] no GGUF in the store - run 'just setup' to install one"; exec tail -f /dev/null; fi
-    ctx=$(node tools/llama.ts ctx); par=$(node tools/llama.ts parallel)
-    echo "[llama] serving $model on :${NS_LLAMA_PORT:-8080} (ctx $ctx, $par parallel slots)"
-    # Run (not exec): if llama-server crashes or the model is unloadable, the
-    # leg must NOT exit, or `concurrently -k` would tear down the whole stack.
-    # Stay inert instead so the UI degrades honestly (W11 "local model offline").
-    # --parallel N = N concurrent requests (KV split N ways: each slot sees
-    # ctx/N); knobs come from config llama_ctx/llama_parallel (Formans
-    # model-backend settings) with NS_LLAMA_CTX/NS_LLAMA_PARALLEL overrides.
-    "$bin" -m "$model" --host 127.0.0.1 --port "${NS_LLAMA_PORT:-8080}" --jinja -c "$ctx" --parallel "$par"
-    echo "[llama] llama-server exited (code $?) - staying inert; the rest of the stack keeps running, llama-cpp profiles show 'local model offline'"
-    exec tail -f /dev/null
+    # RESTART LOOP: settings (model/ctx/parallel/url) are re-resolved on
+    # every (re)start, so the Formans panel's "apply now" (gate POST
+    # /api/model-backend/restart = SIGTERM the server) picks up new values
+    # without touching the rest of the stack. Two crashes inside 20s in a
+    # row = a broken config, so the leg goes inert instead of crash-looping
+    # (never exits - `concurrently -k` would tear the whole stack down; the
+    # UI degrades honestly, W11 "local model offline").
+    fails=0
+    while true; do
+      url=$(node tools/llama.ts url || true)
+      if [ -n "$url" ]; then echo "[llama] external backend $url configured - stopping the local server leg"; exec tail -f /dev/null; fi
+      bin=$(node tools/llama.ts bin || true); model=$(node tools/llama.ts model || true)
+      if [ -z "$bin" ] || [ -z "$model" ]; then echo "[llama] no server/model resolvable anymore - going inert"; exec tail -f /dev/null; fi
+      ctx=$(node tools/llama.ts ctx); par=$(node tools/llama.ts parallel)
+      echo "[llama] serving $model on :${NS_LLAMA_PORT:-8080} (ctx $ctx, $par parallel slots)"
+      start=$(date +%s)
+      "$bin" -m "$model" --host 127.0.0.1 --port "${NS_LLAMA_PORT:-8080}" --jinja -c "$ctx" --parallel "$par"
+      code=$?
+      if [ $(( $(date +%s) - start )) -lt 20 ]; then fails=$((fails+1)); else fails=0; fi
+      if [ "$fails" -ge 2 ]; then
+        echo "[llama] llama-server died twice within 20s (code $code) - staying inert; fix the settings and restart via just up"
+        exec tail -f /dev/null
+      fi
+      echo "[llama] llama-server exited (code $code) - restarting with the current settings"
+    done
 
 # Run only the local model backend in the foreground (same resolution as the
 # _up-llama leg of `just up`) - (re)start the model without the whole stack.

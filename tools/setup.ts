@@ -374,7 +374,17 @@ async function ensureLlamaServer(): Promise<string | null> {
 
 // --- model -----------------------------------------------------------
 interface ModelChoice { label: string; url: string; approx: string }
-const MODELS: ModelChoice[] = [
+/** The shared install catalog (tools/model-catalog.json) — the same list
+ * the gate's model-backend install API serves to the Formans panel. */
+function catalogModels(): ModelChoice[] {
+  try {
+    const raw = JSON.parse(readFileSync(join(import.meta.dirname, 'model-catalog.json'), 'utf8'))
+    const models = (raw.models ?? []) as Array<{ label: string; url: string; approx: string }>
+    if (models.length) return models.map(m => ({ label: m.label, url: m.url, approx: m.approx }))
+  } catch { /* fall through to the inline fallback */ }
+  return FALLBACK_MODELS
+}
+const FALLBACK_MODELS: ModelChoice[] = [
   // Qwen family = PE9' tool-calling target. URLs are VERIFIED by download;
   // if one 404s, pick another or paste a custom resolve URL.
   { label: 'Qwen2.5-3B-Instruct (Q4_K_M, small/fast)', approx: '~2.0 GB', url: 'https://huggingface.co/Qwen/Qwen2.5-3B-Instruct-GGUF/resolve/main/qwen2.5-3b-instruct-q4_k_m.gguf' },
@@ -391,8 +401,9 @@ async function selectAndDownloadModel(): Promise<string | null> {
     say(`found existing model(s): ${already.join(', ')}`)
     if ((await ask('download another? [y/N] ')).toLowerCase() !== 'y') return join(modelsDir, already[0])
   }
+  const models = catalogModels()
   say('choose a model (Qwen = tool-calling target, PE9\'):')
-  MODELS.forEach((m, i) => say(`  ${i + 1}) ${m.label}  ${m.approx}`))
+  models.forEach((m, i) => say(`  ${i + 1}) ${m.label}  ${m.approx}`))
   say('  c) custom Hugging Face resolve URL')
   say('  s) skip (choose later)')
   const choice = (await ask('selection [2]: ')).toLowerCase() || '2'
@@ -401,8 +412,8 @@ async function selectAndDownloadModel(): Promise<string | null> {
   if (choice === 'c') url = await ask('paste .gguf resolve URL: ')
   else {
     const idx = Number(choice) - 1
-    if (!MODELS[idx]) { say('invalid selection — skipping.'); return null }
-    url = MODELS[idx].url
+    if (!models[idx]) { say('invalid selection — skipping.'); return null }
+    url = models[idx].url
   }
   if (!/^https?:\/\/.+\.gguf(\?.*)?$/i.test(url)) { say('NG   not a .gguf URL — skipping.'); return null }
   const dest = join(modelsDir, url.split('/').pop()!.split('?')[0])
