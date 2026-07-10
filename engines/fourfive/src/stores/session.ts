@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
-import type { DependencyInfo, Message, Session, VerifyStep } from '../../shared/types'
+import type { BlueprintStepStatus, DependencyInfo, Message, Session, VerifyStep } from '../../shared/types'
 import type { Blueprint } from '../../shared/blueprint'
 import { api } from '../api/client'
 
@@ -49,6 +49,10 @@ export const useSessionStore = defineStore('session', () => {
   const provider = ref('…')
   const profile = ref<string | null>(null)
   const blueprint = ref<Blueprint | null>(null)
+  // Why the last turn's blueprint step did/didn't move the right pane
+  // (server-classified; null until a turn reports one). The panel shows a
+  // hint for warn-worthy outcomes instead of silently keeping the old view.
+  const blueprintStatus = ref<BlueprintStepStatus | null>(null)
   const dependencies = ref<DependencyInfo[]>([])
   const showNewSessionModal = ref(false)
   const usage = ref({ input: 0, output: 0, total: 0 })
@@ -204,6 +208,7 @@ export const useSessionStore = defineStore('session', () => {
   async function openSession(s: Session) {
     current.value = s
     activeFieldId.value = null
+    blueprintStatus.value = null
     messages.value = await api.getMessages(s.id)
     const res = await api.getBlueprint(s.id)
     blueprint.value = res.blueprint
@@ -227,6 +232,7 @@ export const useSessionStore = defineStore('session', () => {
     }
     messages.value.push(optimistic)
     streamingMsg.value = { content: '', thinking: '', thinkingOpen: true, verify: [] }
+    blueprintStatus.value = null
     let collapsed = false
 
     try {
@@ -273,6 +279,9 @@ export const useSessionStore = defineStore('session', () => {
             }
             case 'blueprint':
               blueprint.value = JSON.parse(data) as Blueprint | null
+              break
+            case 'blueprint_status':
+              blueprintStatus.value = JSON.parse(data) as BlueprintStepStatus
               break
           }
         },
@@ -365,6 +374,7 @@ export const useSessionStore = defineStore('session', () => {
     provider,
     profile,
     blueprint,
+    blueprintStatus,
     dependencies,
     showNewSessionModal,
     thinking,
