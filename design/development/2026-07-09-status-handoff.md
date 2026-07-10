@@ -80,6 +80,16 @@ quarantined builds in `~/.local/share/nunc-stans/llama.cpp-disabled/`,
 leftover release tarballs in `llama.cpp/`, ~10 stale `/tmp/tmp.*` scratch
 stores, config.json.bak.*.
 
+**Serving knobs + settings (2026-07-10 evening):** the llama leg starts with
+`-c <ctx> --parallel <slots>` (defaults 32768/4 = 8k per slot) so several
+tasks share the one loaded model CONCURRENTLY (proven: two requests 3.4s vs
+3.0s solo). Knobs live in the app config (`llama_ctx`/`llama_parallel`/
+`llama_model`/`llama_url`), editable in the **Formans Profiles view →
+"Model backend" panel** (gate GET/PUT `/api/model-backend`; applies on
+model-backend restart). `just setup` now ASKS before the CUDA source build
+(--cuda/--no-cuda skip the prompt) after validating the toolchain (nvcc <=
+driver CUDA, cmake, compiler).
+
 ## 2. Branch / merge state (verified)
 
 | ref | commit | meaning |
