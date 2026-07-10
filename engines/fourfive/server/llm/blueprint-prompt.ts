@@ -27,7 +27,8 @@ const SCHEMA_HINT = `The JSON shape is:
 }
 "maps_to" links a UI field to "table.column". Reuse ids so UI/DB/API/logic cross-reference.
 "state_transitions" describes status lifecycles (e.g. an invoice: draft -> sent -> paid). Omit if the app has no meaningful states.
-"metrics" are the app's DECLARED measurements — what the user wants this app to measure. Each is one SQLite SELECT statement over the app's own tables returning a single value; "name" is a snake_case identifier. Only declared metrics can ground strategy discussion later, so capture what the user says they want to watch.
+"metrics" are the app's DECLARED measurements — what the user wants this app to measure. Each is one SQLite SELECT statement over the app's own tables returning a single value; "name" is a snake_case identifier. When the user names metrics explicitly, use EXACTLY those names and replace any others. Only declared metrics can ground strategy discussion later, so capture what the user says they want to watch.
+ALL SQL (metrics and schema) must be plain SQLite dialect: no GREATEST/LEAST (use MAX(a,b) or CASE), no stored procedures, no vendor extensions.
 "stories" are the user stories the app must satisfy, in the user's own terms (one sentence each).`
 
 export function buildBlueprintMessages(
@@ -49,7 +50,7 @@ export function buildBlueprintMessages(
 
   const convo = turns.map((m) => `${m.role}: ${m.content}`).join('\n')
   const currentStr = current
-    ? `\n\nCurrent blueprint (refine it; keep prior detail unless contradicted):\n${JSON.stringify(current)}`
+    ? `\n\nCurrent blueprint (refine it; keep prior detail unless contradicted — but the user's LATEST explicit instructions ALWAYS override it: rename, replace, or drop whatever they name):\n${JSON.stringify(current)}`
     : ''
 
   return [
