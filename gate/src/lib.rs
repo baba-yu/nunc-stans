@@ -1,4 +1,5 @@
 pub mod guard;
+pub mod model_backend;
 pub mod news_config;
 pub mod profiles;
 pub mod proxy;
@@ -46,6 +47,10 @@ pub struct GateCfg {
     /// topic NL-structuring proxy. Unreachable ⇒ the extract API 503s
     /// ("local model offline — just setup"). Env LLAMACPP_HOST overrides.
     pub llama_url: String,
+    /// APP config file override (tests) — the model-backend settings API
+    /// reads/writes `<config-home>/nunc-stans/config.json`; None resolves
+    /// the real per-user path at request time.
+    pub app_config_file: Option<PathBuf>,
 }
 
 impl GateCfg {
@@ -61,7 +66,13 @@ impl GateCfg {
             news_repo: None,
             llama_url: std::env::var("LLAMACPP_HOST")
                 .unwrap_or_else(|_| "http://127.0.0.1:8080".to_owned()),
+            app_config_file: None,
         }
+    }
+
+    pub fn with_app_config_file(mut self, file: PathBuf) -> Self {
+        self.app_config_file = Some(file);
+        self
     }
 
     pub fn with_llama_url(mut self, llama_url: String) -> Self {
@@ -119,6 +130,10 @@ pub fn build_router(cfg: GateCfg, fourfive_dist: &Path) -> Router {
             get(topics::get_topics).put(topics::put_topics),
         )
         .route("/api/world/topics/extract", axum::routing::post(topics::extract_topics))
+        .route(
+            "/api/model-backend",
+            get(model_backend::get_model_backend).put(model_backend::put_model_backend),
+        )
         .route("/api/profiles", get(profiles::list_profiles))
         .route(
             "/api/profiles/defaults",
