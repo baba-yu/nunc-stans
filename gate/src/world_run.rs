@@ -136,9 +136,24 @@ pub async fn post_run(State(cfg): State<GateCfg>) -> Response {
                 Ok(()) => {
                     *state.lock().unwrap() = "staging".to_owned();
                     push_line(&lines, "[gate] run OK - restaging world exports".to_owned());
-                    match run_step("node", &["tools/build-world.ts"], &[], &lines).await {
-                        Ok(()) => *state.lock().unwrap() = "done".to_owned(),
-                        Err(e) => *state.lock().unwrap() = format!("error: staging: {e}"),
+                    // build-world stages into formans public/; the gate serves
+                    // dist/ (public reaches dist only on a full vite build), so
+                    // mirror the staged world data into dist for a no-rebuild
+                    // refresh (found live 2026-07-10: the run finished but the
+                    // served manifest still showed the previous day).
+                    let mirror = "d=frontend/nunc-stans-formans; \
+                        if [ -d \"$d/public/world-graph\" ]; then \
+                        rm -rf \"$d/dist/world-graph\" && cp -r \"$d/public/world-graph\" \"$d/dist/world-graph\"; fi";
+                    let staged = run_step("node", &["tools/build-world.ts"], &[], &lines).await;
+                    let mirrored = match &staged {
+                        Ok(()) => run_step("sh", &["-c", mirror], &[], &lines).await,
+                        Err(_) => Ok(()),
+                    };
+                    match (staged, mirrored) {
+                        (Ok(()), Ok(())) => *state.lock().unwrap() = "done".to_owned(),
+                        (Err(e), _) | (_, Err(e)) => {
+                            *state.lock().unwrap() = format!("error: staging: {e}");
+                        }
                     }
                 }
             }
