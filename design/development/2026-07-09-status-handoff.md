@@ -144,3 +144,13 @@ NS_SKIP_LLAMA=1 just up   # skip the model leg (fast UI iterations)
 - World topic UI (now on dev): needs an instance — `just news-init <name>`
   → `just news-link <name>` → World → "Research topics".
 - Suites: `pnpm -C <pkg> test`; `cargo test --manifest-path gate/Cargo.toml`.
+
+**Model install from the UI (2026-07-10):** Profiles → Model backend panel
+installs GGUFs (catalog `tools/model-catalog.json` — official Qwen/ HF repos
+are gated, mirrors used — or a custom https URL; gate-side download with
+progress, atomic rename) and "apply now" restarts the llama leg with the
+saved settings (the leg is a restart loop; 2 quick crashes → inert). LIVE:
+**Qwen3.6-35B-A3B (22GB) installed through this flow — 236 tok/s gen,
+FourFive turn 1.4s, VRAM 25.3/32.6GB, no --cpu-moe needed.** It is now the
+default model. Caveat: a gate restart kills an in-flight download (re-POST
+to resume from scratch; stale .part is harmless).
