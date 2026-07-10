@@ -9,6 +9,10 @@ import {
   CONTEXTS, PROVIDERS, blankForm, duplicateForm, toForm, toPayload,
 } from '../profiles'
 import type { ContextKey, ProfileForm, ProfilePayload } from '../profiles'
+import {
+  perSlotCtx, toForm as backendToForm, toPayload as backendToPayload,
+} from '../model-backend'
+import type { ModelBackendForm, ModelBackendState } from '../model-backend'
 
 const profiles = ref<ProfilePayload[]>([])
 const defaults = reactive<Partial<Record<ContextKey, string>>>({})
@@ -96,7 +100,42 @@ async function saveDefaults() {
     : { ok: false, message: `defaults save failed (${r.status}): ${await r.text()}` }
 }
 
-onMounted(load)
+// --- Model backend (local llama-server serving knobs / external URL) ---
+const backend = ref<ModelBackendForm | null>(null)
+const backendState = ref<ModelBackendState | null>(null)
+const backendStatus = ref<{ ok: boolean; message: string } | null>(null)
+
+async function loadBackend() {
+  try {
+    const r = await fetch('/api/model-backend')
+    if (!r.ok) {
+      backendStatus.value = { ok: false, message: `model backend unavailable (${r.status})` }
+      return
+    }
+    backendState.value = await r.json()
+    backend.value = backendToForm(backendState.value!)
+  } catch (e) {
+    backendStatus.value = { ok: false, message: `model backend unavailable: ${e}` }
+  }
+}
+
+async function saveBackend() {
+  if (!backend.value) return
+  const r = await fetch('/api/model-backend', {
+    method: 'PUT',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify(backendToPayload(backend.value)),
+  })
+  if (r.ok) {
+    backendState.value = await r.json()
+    backend.value = backendToForm(backendState.value!)
+    backendStatus.value = { ok: true, message: `saved — applies on ${backendState.value!.applies_on}` }
+  } else {
+    backendStatus.value = { ok: false, message: `save failed (${r.status}): ${await r.text()}` }
+  }
+}
+
+onMounted(() => { load(); loadBackend() })
 </script>
 
 <template>
@@ -201,6 +240,44 @@ onMounted(load)
         </label>
         <div><button type="submit">save defaults</button></div>
       </form>
+    </Panel>
+
+    <Panel title="Model backend">
+      <p class="meta">
+        The local llama-server's serving knobs — parallel slots let several
+        tasks (code generation, web search, …) share the one loaded model
+        concurrently; context is the TOTAL split across slots. Changes apply
+        when the model backend restarts (<code>just up</code> / <code>just llama</code>).
+      </p>
+      <p v-if="backendStatus" class="meta" :class="{ warn: !backendStatus.ok }">{{ backendStatus.message }}</p>
+      <form v-if="backend" class="defaults" @submit.prevent="saveBackend">
+        <label>
+          model (GGUF in the store)
+          <select v-model="backend.model">
+            <option value="">automatic (newest / profile)</option>
+            <option v-for="m in backendState?.available_models ?? []" :key="m" :value="m">{{ m }}</option>
+          </select>
+        </label>
+        <label>
+          context (total tokens)
+          <input v-model.number="backend.ctx" type="number" min="1024" step="1024" />
+        </label>
+        <label>
+          parallel slots
+          <input v-model.number="backend.parallel" type="number" min="1" max="32" />
+        </label>
+        <label>
+          external backend URL (empty = local server)
+          <input v-model="backend.url" placeholder="http://127.0.0.1:11434" />
+        </label>
+        <div class="editor-actions">
+          <button type="submit">save</button>
+          <span class="meta">
+            {{ backendState?.effective_backend === 'external' ? 'external backend' : `≈ ${perSlotCtx(backend).toLocaleString()} tokens per slot` }}
+          </span>
+        </div>
+      </form>
+      <p v-else-if="!backendStatus" class="meta">loading…</p>
     </Panel>
   </main>
 </template>
