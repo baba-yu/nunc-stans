@@ -61,21 +61,24 @@ the fourfive-chat profile's `model` > newest GGUF in `<store>/models`
 local-llama`; a real FourFive chat answered through the 27B; tool_calls
 probe emits `get_time({"city":"Tokyo"})` (PE9' target confirmed on the 27B).
 
-**Model backend routing (evening addition):** the box has an RTX 5090; the
-snappy Phase-D experience was ollama serving the 27B 100% GPU-resident. WSL
-prebuilts can't use it (no ubuntu cuda asset; vulkan-via-Dozen measured
-0.7 tok/s — slower than CPU 2.6), so a new config key **`llama_url`**
-(NS_LLAMA_URL override) routes every consumer to an external OpenAI-
-compatible backend: `just up` exports it as LLAMACPP_HOST (fourfive,
-apps-host, gate topics-extract, agent) and the `_up-llama` leg idles.
-`just setup` auto-detects NVIDIA + live ollama and remembers it (never
-overwrites an explicit value; unset the key to return to the local CPU
-llama-server, which remains installed as the fallback). **Live: FourFive
-27B turn 145s (CPU) → 5s (GPU), ~33 tok/s incl. thinking; tool_calls OK.**
-Profiles: `local-llama` (model `qwen3.6:27b`, the ollama tag — default) +
-`local-llama-3b`. Cleanup candidates: quarantined builds in
-`~/.local/share/nunc-stans/llama.cpp-disabled/`, leftover release tarballs
-in `llama.cpp/`, ~10 stale `/tmp/tmp.*` scratch stores, config.json.bak.*.
+**Model backend (final, 2026-07-10):** the box has an RTX 5090. The stack's
+own llama-server is now a **CUDA source build** (`llama.cpp-src/` b9946 tag,
+nvcc 12.9 → `llama.cpp/llama-b9946-cuda-local/`; tools/llama.ts picks it as
+the newest build): **27B ~70 tok/s gen, FourFive turn 3.3s through the
+gate; tool_calls OK.** No ollama dependency — `llama_url` is cleared;
+the ollama service is redundant now (owner runs
+`sudo systemctl disable --now ollama` for the permanent stop; Restart=always
+means a plain kill just resurrects it). The `llama_url` mechanism remains
+for external OpenAI-compatible backends (NS_LLAMA_URL override; setup
+auto-detects NVIDIA+ollama only when the key is absent). WSL notes: no
+ubuntu cuda prebuilt exists (vulkan-via-Dozen measured 0.7 tok/s, slower
+than CPU 2.6 — setup never picks it on WSL); the CPU prebuilt stays
+installed as the fallback; upgrading the CUDA server later = rebuild from
+a newer tag in `llama.cpp-src/`. Profiles: `local-llama` (model
+`Qwen3.6-27B-Q4_K_M` — default) + `local-llama-3b`. Cleanup candidates:
+quarantined builds in `~/.local/share/nunc-stans/llama.cpp-disabled/`,
+leftover release tarballs in `llama.cpp/`, ~10 stale `/tmp/tmp.*` scratch
+stores, config.json.bak.*.
 
 ## 2. Branch / merge state (verified)
 
@@ -120,12 +123,12 @@ rerun before believing a red.
 ## 5. Run / try it
 
 ```sh
-just up   # engine :8721, fourfive :8787, apps :8788, gate :8720
-          # model: config llama_url (ollama :11434, GPU) — llama leg idles;
-          # no llama_url = local llama-server on :8080 (CPU fallback)
-# http://127.0.0.1:8720 → FourFive badge shows: LLM: llama-cpp · local-llama
-just llama                # run the local model backend explicitly
+just up   # llama :8080 (27B on the GPU, CUDA build), engine :8721,
+          # fourfive :8787, apps :8788, gate :8720
+# http://127.0.0.1:8720 → FourFive badge: LLM: llama-cpp · local-llama (~3s turns)
+just llama                # run only the model backend
 NS_SKIP_LLAMA=1 just up   # skip the model leg (fast UI iterations)
+# config llama_url (NS_LLAMA_URL) = optional external OpenAI-compat backend
 ```
 
 - World topic UI (now on dev): needs an instance — `just news-init <name>`
