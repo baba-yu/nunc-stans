@@ -116,6 +116,9 @@ impl GateCfg {
 
 /// The single-origin route table (first match wins):
 ///   /gate/health        the gate's own liveness
+///   /api/*              gate-owned APIs (world, model-backend, profiles,
+///                       runs); an /api path no route owns is an honest 404
+///                       terminal, never the SPA fallback
 ///   /health, /self/*    → ledger engine (S-10 keeps proving gate→engine)
 ///   /fourfive/api/*     → fourfive server, `/fourfive` prefix stripped
 ///   /fourfive/**        fourfive dist (static; a missing asset is a 404)
@@ -172,6 +175,15 @@ pub fn build_router(cfg: GateCfg, fourfive_dist: &Path) -> Router {
         )
         .route("/api/runs", get(runs::get_runs))
         .route("/api/runs/instances", get(runs::list_run_instances))
+        // Unknown /api/* terminates HERE. Without these, bare API paths fell
+        // through to the formans SPA fallback: a GET came back as index.html
+        // with a 200 (the exact masquerade formans_static exists to prevent)
+        // and a non-GET as ServeDir's bare 405 — found live 2026-07-10 by
+        // POSTing /api/sessions (fourfive's API is at /fourfive/api/*).
+        // All three spellings, same as /apps: the wildcard needs a segment.
+        .route("/api", any(api_not_found))
+        .route("/api/", any(api_not_found))
+        .route("/api/{*path}", any(api_not_found))
         .route("/health", any(proxy_engine))
         .route("/self/{*path}", any(proxy_engine))
         // All three spellings: the axum wildcard needs a non-empty segment,
@@ -192,6 +204,15 @@ async fn gate_health() -> Json<Value> {
         "gate": "nunc-stans-gate",
         "version": env!("CARGO_PKG_VERSION"),
     }))
+}
+
+/// Honest terminal for /api paths no gate route owns (see the route table).
+async fn api_not_found() -> Response {
+    (
+        StatusCode::NOT_FOUND,
+        "no such gate API — fourfive's API is at /fourfive/api/*, generated apps under /apps/*",
+    )
+        .into_response()
 }
 
 /// Static serving with an honest SPA fallback: only a path whose last

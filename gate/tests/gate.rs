@@ -155,6 +155,34 @@ async fn static_mounts_and_spa_fallback() {
 }
 
 #[tokio::test]
+async fn unknown_api_paths_are_honest_404s() {
+    let gate = spawn_gate().await;
+    // Bare /api/* is nobody's mount (fourfive's API lives at /fourfive/api/*),
+    // so it must terminate honestly: a GET used to fall into the SPA fallback
+    // and come back as the formans index with a 200, a POST as ServeDir's
+    // bare 405 (found live 2026-07-10).
+    let get = reqwest::get(format!("{gate}/api/sessions")).await.unwrap();
+    assert_eq!(get.status(), 404);
+    let body = get.text().await.unwrap();
+    assert!(body.contains("/fourfive/api"), "got: {body}");
+    let post = reqwest::Client::new()
+        .post(format!("{gate}/api/sessions"))
+        .header(header::CONTENT_TYPE, "application/json")
+        .body("{}")
+        .send()
+        .await
+        .unwrap();
+    assert_eq!(post.status(), 404);
+    // The gate's own /api routes are unaffected (405 = matched, wrong method).
+    let put = reqwest::Client::new()
+        .put(format!("{gate}/api/runs"))
+        .send()
+        .await
+        .unwrap();
+    assert_eq!(put.status(), 405);
+}
+
+#[tokio::test]
 async fn foreign_host_is_refused() {
     let gate = spawn_gate().await;
     let refused = raw_get(&gate, "/health", "evil.example").await;
