@@ -10,9 +10,9 @@ import {
 } from '../profiles'
 import type { ContextKey, ProfileForm, ProfilePayload } from '../profiles'
 import {
-  perSlotCtx, toForm as backendToForm, toPayload as backendToPayload,
+  downloadLabel, perSlotCtx, toForm as backendToForm, toPayload as backendToPayload,
 } from '../model-backend'
-import type { ModelBackendForm, ModelBackendState } from '../model-backend'
+import type { DownloadStatus, ModelBackendForm, ModelBackendState } from '../model-backend'
 
 const profiles = ref<ProfilePayload[]>([])
 const defaults = reactive<Partial<Record<ContextKey, string>>>({})
@@ -135,7 +135,50 @@ async function saveBackend() {
   }
 }
 
-onMounted(() => { load(); loadBackend() })
+// --- Model install (catalog / custom URL, gate-managed download) ---
+const installChoice = ref('')
+const customUrl = ref('')
+const download = ref<DownloadStatus>({ state: 'idle' })
+let pollTimer: ReturnType<typeof setInterval> | null = null
+
+async function pollDownload() {
+  try {
+    const r = await fetch('/api/model-backend/download')
+    if (r.ok) download.value = await r.json()
+  } catch { /* transient */ }
+  if (download.value.state !== 'running' && pollTimer) {
+    clearInterval(pollTimer)
+    pollTimer = null
+    if (download.value.state === 'done') await loadBackend() // new GGUF appears
+  }
+}
+
+async function startInstall() {
+  const body = installChoice.value === 'custom'
+    ? { url: customUrl.value.trim() }
+    : { id: installChoice.value }
+  const r = await fetch('/api/model-backend/download', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify(body),
+  })
+  if (!r.ok) {
+    backendStatus.value = { ok: false, message: `install failed (${r.status}): ${await r.text()}` }
+    return
+  }
+  backendStatus.value = { ok: true, message: await r.text() }
+  download.value = { state: 'running' }
+  if (!pollTimer) pollTimer = setInterval(pollDownload, 2000)
+}
+
+async function applyNow() {
+  const r = await fetch('/api/model-backend/restart', { method: 'POST' })
+  backendStatus.value = r.ok
+    ? { ok: true, message: 'model backend restarting with the saved settings (a few seconds to reload)' }
+    : { ok: false, message: `restart failed (${r.status}): ${await r.text()}` }
+}
+
+onMounted(() => { load(); loadBackend(); pollDownload() })
 </script>
 
 <template>
@@ -272,12 +315,35 @@ onMounted(() => { load(); loadBackend() })
         </label>
         <div class="editor-actions">
           <button type="submit">save</button>
+          <button type="button" @click="applyNow">apply now (restart model)</button>
           <span class="meta">
             {{ backendState?.effective_backend === 'external' ? 'external backend' : `≈ ${perSlotCtx(backend).toLocaleString()} tokens per slot` }}
           </span>
         </div>
       </form>
       <p v-else-if="!backendStatus" class="meta">loading…</p>
+
+      <p class="meta" style="margin-top: 0.75rem"><strong>Install a model</strong> — downloads into the store; pick it above once installed.</p>
+      <form class="defaults" @submit.prevent="startInstall">
+        <label>
+          catalog
+          <select v-model="installChoice">
+            <option value="" disabled>choose…</option>
+            <option v-for="c in backendState?.catalog ?? []" :key="c.id" :value="c.id" :disabled="c.installed">
+              {{ c.label }} {{ c.approx }}{{ c.installed ? ' — installed' : '' }}
+            </option>
+            <option value="custom">custom .gguf URL…</option>
+          </select>
+        </label>
+        <label v-if="installChoice === 'custom'">
+          https URL to a .gguf
+          <input v-model="customUrl" placeholder="https://huggingface.co/…/resolve/main/….gguf" />
+        </label>
+        <div class="editor-actions">
+          <button type="submit" :disabled="!installChoice || download.state === 'running'">download</button>
+          <span v-if="download.state !== 'idle'" class="meta">{{ downloadLabel(download) }}</span>
+        </div>
+      </form>
     </Panel>
   </main>
 </template>

@@ -4,7 +4,25 @@
 // edits the app-config keys the llama runtime reads at start; values apply
 // when the model backend restarts (just up / just llama).
 
+export interface CatalogEntry {
+  id: string
+  label: string
+  file: string
+  approx: string
+  note: string
+  installed: boolean
+}
+
+export interface DownloadStatus {
+  state: string // idle | running | done | error: <msg>
+  file?: string
+  done_bytes?: number
+  total_bytes?: number | null
+  percent?: number | null
+}
+
 export interface ModelBackendState {
+  catalog: CatalogEntry[]
   llama_model: string | null
   llama_ctx: number
   llama_parallel: number
@@ -13,6 +31,15 @@ export interface ModelBackendState {
   available_models: string[]
   effective_backend: 'local' | 'external'
   applies_on: string
+}
+
+/** Human progress line for the download poller. */
+export function downloadLabel(d: DownloadStatus): string {
+  if (d.state === 'idle') return ''
+  if (d.state === 'done') return `${d.file} installed`
+  if (d.state.startsWith('error')) return `${d.file ?? ''} failed — ${d.state}`
+  const gb = (n?: number | null) => (n ? (n / 1e9).toFixed(1) : '?')
+  return `${d.file}: ${gb(d.done_bytes)} / ${gb(d.total_bytes)} GB${d.percent != null ? ` (${d.percent}%)` : ''}`
 }
 
 export interface ModelBackendForm {

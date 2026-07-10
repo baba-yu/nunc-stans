@@ -3,6 +3,7 @@ import { perSlotCtx, toForm, toPayload } from './model-backend'
 import type { ModelBackendState } from './model-backend'
 
 const state: ModelBackendState = {
+  catalog: [],
   llama_model: 'Qwen3.6-27B-Q4_K_M.gguf',
   llama_ctx: 32768,
   llama_parallel: 4,
