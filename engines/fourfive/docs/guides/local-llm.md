@@ -44,14 +44,19 @@ ollama list               # confirm installed models and exact tags
 Model selection lives in **profiles** now. On the Formans **Profiles**
 screen create e.g.:
 ```json
-{ "id": "local-chat", "name": "Local chat", "provider": "ollama",
-  "model": "qwen2.5:14b" }
+{ "id": "local-chat", "name": "Local chat", "provider": "llama-cpp",
+  "model": "Qwen3.6-27B-Q4_K_M.gguf",
+  "system_prompt": "You are FourFive's design partner. Help the user shape the app they want: confirm requirements, ask at most a few clarifying questions, and summarize decisions. Keep replies under 300 words. Never write implementation code or HTML — the system builds the app from the design automatically. Reply in the user's language." }
 ```
-(match the exact tag from `ollama list`) and set it as the
-**FourFive chat** default. Or through the gate directly:
+(provider `ollama` + the exact tag from `ollama list` for the legacy path.)
+**Do not omit `system_prompt`** — see
+[prompt discipline](#serving-knobs--prompt-discipline-llama-server): without
+it, code-eager models dump a full implementation into chat and starve the
+blueprint step. Set the profile as the **FourFive chat** default. Or through
+the gate directly:
 ```bash
 curl -X PUT :8720/api/profiles/local-chat -H 'content-type: application/json' \
-  -d '{"id":"local-chat","name":"Local chat","provider":"ollama","model":"qwen2.5:14b"}'
+  -d '{"id":"local-chat","name":"Local chat","provider":"llama-cpp","model":"Qwen3.6-27B-Q4_K_M.gguf","system_prompt":"You are FourFive'\''s design partner. Confirm requirements, ask at most a few clarifying questions, summarize decisions. Keep replies under 300 words. Never write implementation code or HTML — the system builds the app from the design automatically. Reply in the user'\''s language."}'
 curl -X PUT :8720/api/profiles/defaults -H 'content-type: application/json' \
   -d '{"fourfive-chat":"local-chat"}'
 ```
