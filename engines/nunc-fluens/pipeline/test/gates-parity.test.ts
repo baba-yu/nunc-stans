@@ -54,7 +54,16 @@ describe('daily-flow-check parity', () => {
         const r = dailyFlowCheck({ repoRoot: workRoot, date: d, mode: 'report-missing' });
         expect(r.exit).toBe(gates.flow);
         const golden = readFileSync(join(EXPECTED, 'gates', `${d}.flow.txt`), 'utf8');
-        const got = (r.lines.join('\n') + '\n').replaceAll(workRoot, '<WORK>');
+        // On Windows the work root appears with native separators AND
+        // backslash-doubled inside the report's escaped stderr
+        // rendering; fold both to the golden's <WORK>/posix form. A
+        // lone backslash after that is an escape like \n, never a
+        // separator — leave it.
+        const escRoot = workRoot.replaceAll('\\', '\\\\');
+        const got = (r.lines.join('\n') + '\n')
+          .replaceAll(escRoot, '<WORK>')
+          .replaceAll(workRoot, '<WORK>')
+          .replace(/<WORK>(?:\\\\|[^\s'\\])*/g, (m) => m.replaceAll('\\\\', '/'));
         expect(normalizeVolatile(got)).toBe(normalizeVolatile(golden));
       } finally {
         rmSync(workRoot, { recursive: true, force: true });
