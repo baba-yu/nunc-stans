@@ -245,8 +245,9 @@ export const useSessionStore = defineStore('session', () => {
     const text = content.trim()
     if (!current.value || !text || sending.value) return
     // A slash command, not a chat turn: /strategy renders the ephemeral
-    // stage-3 card (PE12) instead of talking to the design chat.
-    if (text === '/strategy') {
+    // stage-3 card (PE12) instead of talking to the design chat. Trailing
+    // words are tolerated (the read-out takes no arguments in v0).
+    if (text === '/strategy' || text.startsWith('/strategy ')) {
       await runStrategy()
       return
     }

@@ -281,7 +281,14 @@ app.post('/api/sessions/:id/strategy', async (c) => {
   try {
     const served = await fetchServedApp(sessionApp.slug)
     const metrics = await fetchServedMetrics(sessionApp.slug)
-    const raw = await llm.strategyReadout(served, metrics, { profileId: body.profileId })
+    let raw: unknown
+    try {
+      raw = await llm.strategyReadout(served, metrics, { profileId: body.profileId })
+    } catch (err) {
+      // Model backend down/unreachable is an infrastructure failure, not a
+      // strategy refusal — surface it verbatim like the chat path does.
+      return c.json({ error: `LLM call failed: ${(err as Error).message}` }, 502)
+    }
     const card = parseStrategyCard(raw, metrics.map((m) => m.name))
     return c.json({ card, app: served, metrics })
   } catch (err) {
