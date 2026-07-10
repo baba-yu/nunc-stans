@@ -1,8 +1,12 @@
-# FourFive × local LLM (Ollama) setup
+# FourFive × local LLM setup
 
-FourFive abstracts the LLM provider (`server/llm/`); `.env` switches between `mock`
-(default, offline), `ollama`, and `claude`. This guide covers connecting a local
-LLM via **Ollama**.
+FourFive abstracts the LLM provider (`server/llm/` → nunc-ai profiles). The
+stack's **first-class local backend is its own llama-server** (`just setup`
+installs it; the `_up-llama` leg of `just up` serves `<store>/models/*.gguf`
+on :8080; knobs live in the Formans Profiles → "Model backend" panel).
+**Read [Serving knobs & prompt discipline](#serving-knobs--prompt-discipline-llama-server)
+before debugging "chat answers but no blueprint appears".** The Ollama path
+below still works as a legacy/external backend (config `llama_url`).
 
 ---
 
@@ -137,6 +141,58 @@ always schema-valid. Ask if you want it.
 | GPU not used                                     | check `nvidia-smi`. New GPUs may need an Ollama update (`ollama -v`); otherwise falls back to CPU (slow) |
 | model-name error                                 | confirm the exact tag with `ollama list`; pull if missing                           |
 | `unknown runner engine` / new model spins forever | typically a **stale daemon after upgrading the ollama binary**. Check server/client version skew with `ollama -v` → `bash scripts/ollama-restart.sh`. Diagnose with `bash scripts/ollama-diag.sh` |
+
+---
+
+## Serving knobs & prompt discipline (llama-server)
+
+Field notes from a live root-cause session (2026-07-10): FourFive "answers in
+chat but never produces a Mock UI / ERD" is almost never the model's fault.
+Three traps, in the order they bite:
+
+### 1. Per-slot context = `llama_ctx / llama_parallel`
+
+llama-server's `-c` (config `llama_ctx`) is the **total** KV budget, split
+evenly across `--parallel` (config `llama_parallel`) static slots. One request
+gets `llama_ctx / llama_parallel` tokens for prompt **and** output combined
+(32768 / 4 = 8192 per slot). The blueprint call sends the whole conversation +
+the current blueprint + the schema and generates a large JSON, so it is the
+first thing to die: over-budget generations truncate (broken JSON → discarded),
+oversized prompts get HTTP 400 `exceed_context_size_error`. Rule of thumb:
+**give FourFive ≥16k per slot** (e.g. 65536/4). Knobs apply on backend restart
+(the panel's Apply, or `POST /api/model-backend/restart`).
+
+### 2. Where the prompts live — and which ones NOT to touch
+
+| prompt | lives in | touch it? |
+| --- | --- | --- |
+| chat discipline (design-partner behavior) | the profile's `system_prompt` — `<store>/profiles/<id>.json`, editable on the Profiles screen | yes, this is the user-tunable one. **Without it, code-eager models (Qwen3.6 27B and 35B alike, measured) answer "make me an app" by dumping an entire single-file implementation (8–14k tokens), flooding the slot and killing the blueprint step** |
+| blueprint extractor | `server/llm/blueprint-prompt.ts` | no — engine-internal, paired with the `shared/blueprint.ts` schema contract; change them together or not at all |
+| offline demo | `server/llm/offline-demo.ts` | no — engine-internal |
+| news pipeline steps | `engines/nunc-fluens/pipeline/prompts/` | no — engine-internal, golden-tested |
+
+A proven `system_prompt` for local models: *"You are FourFive's design partner.
+Confirm requirements, ask at most a few clarifying questions, summarize
+decisions. Keep replies under 300 words. Never write implementation code or
+HTML — the system builds the app from the design automatically. Reply in the
+user's language."*
+
+### 3. The thinking tax on `maxTokens`
+
+Reasoning models (Qwen3.6 family) think **before** they answer, and the
+reasoning tokens count against the per-message output cap first. A cap under
+~8000 can produce an empty visible reply (the whole budget went to thinking)
+and a truncated blueprint — the same cap is currently passed to both calls.
+Leave the per-message cap **unset** unless you know the model's habits.
+
+### Forensics
+
+Every LLM call appends one line to `<store>/runs/ai-runs.jsonl` (caller,
+model, input/output tokens, outcome). Two smoking guns:
+`inputTokens + outputTokens == llama_ctx / llama_parallel` exactly ⇒ slot
+truncation; `exceed_context_size_error` ⇒ the prompt alone no longer fits.
+A failed blueprint never breaks chat (best-effort by design), so check the
+run log before blaming the model.
 
 ---
 
