@@ -3,6 +3,7 @@ import { onMounted, reactive, ref } from 'vue'
 import { HeatDot, Panel } from 'nunc-ui'
 import NewsSettings from '../components/NewsSettings.vue'
 import TopicEditor from '../components/TopicEditor.vue'
+import WorldRun from '../components/WorldRun.vue'
 import { useMeStore } from '../stores/me'
 import { slugFor } from '../slug'
 import type { WorldPrediction } from '../types'
@@ -117,6 +118,7 @@ onMounted(async () => {
       </Panel>
 
       <Panel cold title="News pipeline">
+        <WorldRun />
         <NewsSettings />
       </Panel>
 
