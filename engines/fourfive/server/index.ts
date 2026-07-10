@@ -215,7 +215,8 @@ app.post('/api/sessions/:id/messages', async (c) => {
           blueprint = result.data
         }
       } else {
-        console.warn('[codev] proposed blueprint failed validation:', result.error.issues.length, 'issues')
+        console.warn('[codev] proposed blueprint failed validation:', result.error.issues.length, 'issues —',
+          result.error.issues.slice(0, 4).map((i) => `${i.path.join('.')}: ${i.message}`).join(' | '))
       }
     }
   } catch (err) {
@@ -379,6 +380,9 @@ app.post('/api/sessions/:id/messages/stream', async (c) => {
             saveBlueprint(sessionId, valid.data)
             blueprint = valid.data
           }
+        } else {
+          console.warn('[codev] proposed blueprint failed validation:', valid.error.issues.length, 'issues —',
+            valid.error.issues.slice(0, 4).map((i) => `${i.path.join('.')}: ${i.message}`).join(' | '))
         }
       }
     } catch (err) {
