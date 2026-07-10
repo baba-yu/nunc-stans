@@ -1,0 +1,5 @@
+# Check out every text file with LF on all platforms. CI runs the golden
+# suites on windows-latest, where the git default core.autocrlf=true would
+# rewrite committed LF fixtures to CRLF at checkout and break byte-parity
+# tests (engines/nunc-fluens/pipeline/test/render-parity.test.ts).
+* text=auto eol=lf
