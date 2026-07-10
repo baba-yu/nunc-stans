@@ -450,6 +450,60 @@ async fn topics_extract_is_503_when_the_model_is_offline() {
     assert!(resp.text().await.unwrap().contains("just setup"));
 }
 
+/// A stub model returning a fixed structured commitment.
+fn stub_llama_commitment() -> Router {
+    Router::new().route(
+        "/v1/chat/completions",
+        axum::routing::post(|| async {
+            Json(json!({
+                "choices": [{"message": {"content":
+                    "{\"slug\":\"eikaiwa\",\"title\":\"英会話を月3万円で続ける\",\"started_at\":\"2026-06-01\",\"money_jpy\":30000,\"hours\":null,\"note\":null}"}}]
+            }))
+        }),
+    )
+}
+
+#[tokio::test]
+async fn commitment_extract_proxies_the_local_model() {
+    let llama = spawn(stub_llama_commitment()).await;
+    let (formans_dist, fourfive_dist) = make_dists();
+    let cfg = GateCfg::new(
+        "http://127.0.0.1:1".into(),
+        "http://127.0.0.1:1".into(),
+        formans_dist,
+    )
+    .with_llama_url(llama);
+    let gate = spawn(build_router(cfg, &fourfive_dist)).await;
+    let client = reqwest::Client::new();
+
+    let got: serde_json::Value = client
+        .post(format!("{gate}/api/self/commitment/extract"))
+        .json(&json!({"request": "6月から月3万円で英会話を始めた", "today": "2026-07-10"}))
+        .send().await.unwrap()
+        .json().await.unwrap();
+    assert_eq!(got["slug"], "eikaiwa");
+    assert_eq!(got["started_at"], "2026-06-01");
+    assert_eq!(got["money_jpy"], 30000);
+}
+
+#[tokio::test]
+async fn commitment_extract_is_503_when_the_model_is_offline() {
+    let (formans_dist, fourfive_dist) = make_dists();
+    let cfg = GateCfg::new(
+        "http://127.0.0.1:1".into(),
+        "http://127.0.0.1:1".into(),
+        formans_dist,
+    )
+    .with_llama_url("http://127.0.0.1:1".into());
+    let gate = spawn(build_router(cfg, &fourfive_dist)).await;
+    let resp = reqwest::Client::new()
+        .post(format!("{gate}/api/self/commitment/extract"))
+        .json(&json!({"request": "anything"}))
+        .send().await.unwrap();
+    assert_eq!(resp.status(), 503);
+    assert!(resp.text().await.unwrap().contains("just setup"));
+}
+
 #[tokio::test]
 async fn profiles_crud_defaults_and_rails() {
     let (formans_dist, fourfive_dist) = make_dists();

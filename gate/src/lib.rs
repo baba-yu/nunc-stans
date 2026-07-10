@@ -1,3 +1,4 @@
+pub mod commitment_extract;
 pub mod guard;
 pub mod model_backend;
 pub mod news_config;
@@ -142,6 +143,10 @@ pub fn build_router(cfg: GateCfg, fourfive_dist: &Path) -> Router {
             get(topics::get_topics).put(topics::put_topics),
         )
         .route("/api/world/topics/extract", axum::routing::post(topics::extract_topics))
+        .route(
+            "/api/self/commitment/extract",
+            axum::routing::post(commitment_extract::extract_commitment),
+        )
         .route(
             "/api/model-backend",
             get(model_backend::get_model_backend).put(model_backend::put_model_backend),
