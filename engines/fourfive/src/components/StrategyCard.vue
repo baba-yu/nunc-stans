@@ -67,6 +67,10 @@ const grounds = computed(() => {
 
 <style scoped>
 .strategy {
+  /* The chat list is a flex column: without this the card gets squeezed
+   * to ~0 height once the conversation overflows (it IS in the DOM but
+   * renders 2px tall — found live on the runway-tracker session). */
+  flex: none;
   margin: 8px 0;
   border: 1px solid var(--accent, #18c7d8);
   border-radius: 8px;
