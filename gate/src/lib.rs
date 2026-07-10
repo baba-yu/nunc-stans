@@ -6,6 +6,7 @@ pub mod profiles;
 pub mod proxy;
 pub mod runs;
 pub mod topics;
+pub mod world_run;
 
 use std::path::{Path, PathBuf};
 
@@ -57,6 +58,8 @@ pub struct GateCfg {
     pub model_catalog: Option<PathBuf>,
     /// The one in-flight model download (one at a time; progress polled).
     pub download: std::sync::Arc<std::sync::Mutex<Option<model_backend::DownloadJob>>>,
+    /// The one in-flight World pipeline run (W-R1; one at a time).
+    pub world_run: std::sync::Arc<std::sync::Mutex<Option<world_run::RunJob>>>,
 }
 
 impl GateCfg {
@@ -75,6 +78,7 @@ impl GateCfg {
             app_config_file: None,
             model_catalog: None,
             download: std::sync::Arc::new(std::sync::Mutex::new(None)),
+            world_run: std::sync::Arc::new(std::sync::Mutex::new(None)),
         }
     }
 
@@ -146,6 +150,10 @@ pub fn build_router(cfg: GateCfg, fourfive_dist: &Path) -> Router {
             get(topics::get_topics).put(topics::put_topics),
         )
         .route("/api/world/topics/extract", axum::routing::post(topics::extract_topics))
+        .route(
+            "/api/world/run",
+            get(world_run::get_run).post(world_run::post_run),
+        )
         .route(
             "/api/self/commitment/extract",
             axum::routing::post(commitment_extract::extract_commitment),
