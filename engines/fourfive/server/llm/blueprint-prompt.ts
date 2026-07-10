@@ -29,6 +29,7 @@ const SCHEMA_HINT = `The JSON shape is:
 "state_transitions" describes status lifecycles (e.g. an invoice: draft -> sent -> paid). Omit if the app has no meaningful states.
 "metrics" are the app's DECLARED measurements — what the user wants this app to measure. Each is one SQLite SELECT statement over the app's own tables returning a single value; "name" is a snake_case identifier. When the user names metrics explicitly, use EXACTLY those names and replace any others. Only declared metrics can ground strategy discussion later, so capture what the user says they want to watch.
 ALL SQL (metrics and schema) must be plain SQLite dialect: no GREATEST/LEAST (use MAX(a,b) or CASE), no stored procedures, no vendor extensions.
+NEVER define an entity named "manifest", "metrics", "api", "mcp", or "health" — those names are reserved by the app host. Declared measurements belong in the metrics LIST, never as a table.
 "stories" are the user stories the app must satisfy, in the user's own terms (one sentence each).`
 
 export function buildBlueprintMessages(

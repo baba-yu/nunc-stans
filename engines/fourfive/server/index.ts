@@ -15,6 +15,21 @@ import { FourfiveLlm } from './llm/nunc-ai'
 import type { TurnOptions } from './llm/nunc-ai'
 import { buildDependencyContext } from './llm/blueprint-prompt'
 import { validateBlueprint } from './blueprint-schema'
+import { RESERVED_ENTITY_NAMES } from './bundle/generate'
+
+/** Reserved-name rail at PROPOSAL time (T9, 2026-07-10): the extractor
+ * sometimes materializes a `metrics` TABLE, which the bundle step can only
+ * refuse at freeze — a dead end the model would not back out of. Drop such
+ * entities on ingest, loudly; declared measurements live in the metrics
+ * list, never as tables. */
+function stripReservedEntities<T extends { entities: Array<{ name: string }> }>(bp: T): T {
+  const dropped = bp.entities.filter((e) => RESERVED_ENTITY_NAMES.has(e.name))
+  if (dropped.length) {
+    console.warn('[codev] dropped reserved-name entities from the proposal:', dropped.map((e) => e.name).join(', '))
+    bp.entities = bp.entities.filter((e) => !RESERVED_ENTITY_NAMES.has(e.name))
+  }
+  return bp
+}
 import { saveBlueprint, getLatestBlueprint, saveMarkdown, setSoftwareStack, createComposedApp, getBlueprintWithDependencies, getSessionApp, freezeAndBundle, FreezeError } from './workspace'
 import { listComposableApps, updateDependencyPin, DependencyError } from './dependencies'
 import { renderBlueprintMarkdown } from './markdown'
@@ -191,6 +206,7 @@ app.post('/api/sessions/:id/messages', async (c) => {
     if (proposed != null) {
       const result = validateBlueprint(proposed)
       if (result.success) {
+        stripReservedEntities(result.data)
         // software_stack is user-owned; the LLM never sets it. Carry it forward.
         result.data.software_stack = blueprint?.software_stack
         const changed = JSON.stringify(result.data) !== JSON.stringify(blueprint)
@@ -357,6 +373,7 @@ app.post('/api/sessions/:id/messages/stream', async (c) => {
       if (proposed != null) {
         const valid = validateBlueprint(proposed)
         if (valid.success) {
+          stripReservedEntities(valid.data)
           valid.data.software_stack = blueprint?.software_stack
           if (JSON.stringify(valid.data) !== JSON.stringify(blueprint)) {
             saveBlueprint(sessionId, valid.data)
