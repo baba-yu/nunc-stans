@@ -51,6 +51,11 @@ pub struct GateCfg {
     /// reads/writes `<config-home>/nunc-stans/config.json`; None resolves
     /// the real per-user path at request time.
     pub app_config_file: Option<PathBuf>,
+    /// Installable-model catalog JSON (tools/model-catalog.json). None ⇒
+    /// the install API accepts custom URLs only.
+    pub model_catalog: Option<PathBuf>,
+    /// The one in-flight model download (one at a time; progress polled).
+    pub download: std::sync::Arc<std::sync::Mutex<Option<model_backend::DownloadJob>>>,
 }
 
 impl GateCfg {
@@ -67,11 +72,18 @@ impl GateCfg {
             llama_url: std::env::var("LLAMACPP_HOST")
                 .unwrap_or_else(|_| "http://127.0.0.1:8080".to_owned()),
             app_config_file: None,
+            model_catalog: None,
+            download: std::sync::Arc::new(std::sync::Mutex::new(None)),
         }
     }
 
     pub fn with_app_config_file(mut self, file: PathBuf) -> Self {
         self.app_config_file = Some(file);
+        self
+    }
+
+    pub fn with_model_catalog(mut self, file: Option<PathBuf>) -> Self {
+        self.model_catalog = file;
         self
     }
 
@@ -133,6 +145,14 @@ pub fn build_router(cfg: GateCfg, fourfive_dist: &Path) -> Router {
         .route(
             "/api/model-backend",
             get(model_backend::get_model_backend).put(model_backend::put_model_backend),
+        )
+        .route(
+            "/api/model-backend/download",
+            get(model_backend::get_download).post(model_backend::post_download),
+        )
+        .route(
+            "/api/model-backend/restart",
+            axum::routing::post(model_backend::post_restart),
         )
         .route("/api/profiles", get(profiles::list_profiles))
         .route(

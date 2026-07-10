@@ -18,4 +18,4 @@ tower-http = { version = "0.6", features = ["fs"] }
 clap = { version = "4", features = ["derive"] }
 # Loopback-only plain-http client for the reverse proxy: no TLS stack on
 # purpose (the gate never talks to anything but 127.0.0.1).
-reqwest = { version = "0.12", default-features = false, features = ["stream", "json"] }
+reqwest = { version = "0.12", default-features = false, features = ["stream", "json", "rustls-tls"] }

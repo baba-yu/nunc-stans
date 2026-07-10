@@ -166,13 +166,25 @@ pub async fn get_model_backend(State(cfg): State<GateCfg>) -> Response {
     let file = config_file(&cfg);
     let obj = read_obj(&file).await;
     let url = str_key(&obj, "llama_url").unwrap_or_default();
+    let available = available_models(&cfg);
+    let catalog: Vec<Value> = read_catalog(&cfg)
+        .into_iter()
+        .map(|c| {
+            let installed = available.iter().any(|a| a == &c.file);
+            json!({
+                "id": c.id, "label": c.label, "file": c.file, "approx": c.approx,
+                "note": c.note, "installed": installed,
+            })
+        })
+        .collect();
     Json(json!({
+        "catalog": catalog,
         "llama_model": str_key(&obj, "llama_model"),
         "llama_ctx": knob(&obj, "llama_ctx", CTX_DEFAULT),
         "llama_parallel": knob(&obj, "llama_parallel", PARALLEL_DEFAULT),
         "llama_url": url,
         "defaults": { "llama_ctx": CTX_DEFAULT, "llama_parallel": PARALLEL_DEFAULT },
-        "available_models": available_models(&cfg),
+        "available_models": available,
         "effective_backend": if url.is_empty() { "local" } else { "external" },
         "applies_on": "model-backend restart (just up / just llama)",
     }))
@@ -226,6 +238,237 @@ pub async fn put_model_backend(
             .into_response();
     }
     get_model_backend(State(cfg)).await
+}
+
+// --- model install (download) + backend restart ------------------------
+
+/// One in-flight GGUF download; the Formans panel polls its progress.
+#[derive(Debug)]
+pub struct DownloadJob {
+    pub file: String,
+    pub total: Option<u64>,
+    pub done: std::sync::Arc<std::sync::atomic::AtomicU64>,
+    pub state: std::sync::Arc<std::sync::Mutex<String>>, // running | done | error: <msg>
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct DownloadRequest {
+    #[serde(default)]
+    pub id: Option<String>,
+    #[serde(default)]
+    pub url: Option<String>,
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct CatalogEntry {
+    pub id: String,
+    pub label: String,
+    pub file: String,
+    pub url: String,
+    #[serde(default)]
+    pub approx: String,
+    #[serde(default)]
+    pub note: String,
+}
+
+pub fn read_catalog(cfg: &GateCfg) -> Vec<CatalogEntry> {
+    let Some(path) = &cfg.model_catalog else {
+        return Vec::new();
+    };
+    std::fs::read(path)
+        .ok()
+        .and_then(|b| serde_json::from_slice::<Value>(&b).ok())
+        .and_then(|v| v.get("models").cloned())
+        .and_then(|m| serde_json::from_value::<Vec<CatalogEntry>>(m).ok())
+        .unwrap_or_default()
+}
+
+/// A download target must be an https .gguf and land as a PLAIN file name.
+fn vet_download(url: &str) -> Result<String, String> {
+    if !url.starts_with("https://") {
+        return Err(format!("model URL must be https, got {url:?}"));
+    }
+    let name = url
+        .split('?')
+        .next()
+        .unwrap_or("")
+        .rsplit('/')
+        .next()
+        .unwrap_or("")
+        .to_owned();
+    if !name.to_ascii_lowercase().ends_with(".gguf") || name.contains("..") || name.len() < 6 {
+        return Err(format!("URL must name a .gguf file, got {name:?}"));
+    }
+    Ok(name)
+}
+
+pub async fn get_download(State(cfg): State<GateCfg>) -> Response {
+    let guard = cfg.download.lock().unwrap();
+    match guard.as_ref() {
+        None => Json(json!({ "state": "idle" })).into_response(),
+        Some(job) => {
+            let done = job.done.load(std::sync::atomic::Ordering::Relaxed);
+            Json(json!({
+                "state": job.state.lock().unwrap().clone(),
+                "file": job.file,
+                "done_bytes": done,
+                "total_bytes": job.total,
+                "percent": job.total.map(|t| if t > 0 { (done as f64 / t as f64 * 100.0).round() } else { 0.0 }),
+            }))
+            .into_response()
+        }
+    }
+}
+
+pub async fn post_download(
+    State(cfg): State<GateCfg>,
+    payload: Result<Json<DownloadRequest>, axum::extract::rejection::JsonRejection>,
+) -> Response {
+    let Some(data_dir) = cfg.data_dir.clone() else {
+        return (StatusCode::SERVICE_UNAVAILABLE, "no data store configured").into_response();
+    };
+    let Json(req) = match payload {
+        Ok(p) => p,
+        Err(e) => return (StatusCode::BAD_REQUEST, format!("invalid body: {e}")).into_response(),
+    };
+    let url = match (&req.id, &req.url) {
+        (Some(id), _) => match read_catalog(&cfg).into_iter().find(|c| &c.id == id) {
+            Some(c) => c.url,
+            None => {
+                return (StatusCode::UNPROCESSABLE_ENTITY, format!("no catalog entry {id:?}"))
+                    .into_response();
+            }
+        },
+        (None, Some(u)) => u.clone(),
+        (None, None) => {
+            return (StatusCode::BAD_REQUEST, "need id (catalog) or url").into_response();
+        }
+    };
+    let name = match vet_download(&url) {
+        Ok(n) => n,
+        Err(msg) => return (StatusCode::UNPROCESSABLE_ENTITY, msg).into_response(),
+    };
+    let models_dir = data_dir.join("models");
+    let dest = models_dir.join(&name);
+    if dest.exists() {
+        return (StatusCode::CONFLICT, format!("{name} is already installed")).into_response();
+    }
+    {
+        let mut guard = cfg.download.lock().unwrap();
+        if let Some(job) = guard.as_ref() {
+            if job.state.lock().unwrap().as_str() == "running" {
+                return (
+                    StatusCode::CONFLICT,
+                    format!("a download is already running ({})", job.file),
+                )
+                    .into_response();
+            }
+        }
+        let job = DownloadJob {
+            file: name.clone(),
+            total: None,
+            done: std::sync::Arc::new(std::sync::atomic::AtomicU64::new(0)),
+            state: std::sync::Arc::new(std::sync::Mutex::new("running".to_owned())),
+        };
+        let done = job.done.clone();
+        let state = job.state.clone();
+        let client = cfg.client.clone();
+        let slot = cfg.download.clone();
+        let file_name = name.clone();
+        tokio::spawn(async move {
+            let fail = |msg: String, state: &std::sync::Arc<std::sync::Mutex<String>>| {
+                *state.lock().unwrap() = format!("error: {msg}");
+            };
+            if let Err(e) = tokio::fs::create_dir_all(&models_dir).await {
+                return fail(format!("mkdir: {e}"), &state);
+            }
+            let part = models_dir.join(format!("{file_name}.part"));
+            let res = match client.get(&url).send().await {
+                Ok(r) if r.status().is_success() => r,
+                Ok(r) => return fail(format!("HTTP {}", r.status()), &state),
+                Err(e) => return fail(format!("{e}"), &state),
+            };
+            let total = res.content_length();
+            if let Some(t) = total {
+                if let Some(j) = slot.lock().unwrap().as_mut() {
+                    j.total = Some(t);
+                }
+            }
+            let mut out = match tokio::fs::File::create(&part).await {
+                Ok(f) => f,
+                Err(e) => return fail(format!("create {}: {e}", part.display()), &state),
+            };
+            let mut res = res;
+            use tokio::io::AsyncWriteExt;
+            loop {
+                match res.chunk().await {
+                    Ok(Some(bytes)) => {
+                        if let Err(e) = out.write_all(&bytes).await {
+                            let _ = tokio::fs::remove_file(&part).await;
+                            return fail(format!("write: {e}"), &state);
+                        }
+                        done.fetch_add(bytes.len() as u64, std::sync::atomic::Ordering::Relaxed);
+                    }
+                    Ok(None) => break,
+                    Err(e) => {
+                        let _ = tokio::fs::remove_file(&part).await;
+                        return fail(format!("read: {e}"), &state);
+                    }
+                }
+            }
+            if let Err(e) = out.sync_all().await {
+                return fail(format!("sync: {e}"), &state);
+            }
+            drop(out);
+            if let Err(e) = tokio::fs::rename(&part, &dest).await {
+                let _ = tokio::fs::remove_file(&part).await;
+                return fail(format!("rename: {e}"), &state);
+            }
+            *state.lock().unwrap() = "done".to_owned();
+        });
+        *guard = Some(job);
+    }
+    (StatusCode::ACCEPTED, format!("downloading {name}")).into_response()
+}
+
+/// SIGTERM the llama-server on :8080 so the `_up-llama` restart loop brings
+/// it back with the CURRENT settings. Name-checked — an unrelated :8080
+/// squatter is refused. Linux/WSL only (the stack's runtime).
+pub async fn post_restart(State(_cfg): State<GateCfg>) -> Response {
+    if !cfg!(target_os = "linux") {
+        return (
+            StatusCode::NOT_IMPLEMENTED,
+            "backend restart is Linux/WSL-only - run `just llama` by hand",
+        )
+            .into_response();
+    }
+    let out = std::process::Command::new("ss")
+        .args(["-ltnpH", "sport = :8080"])
+        .output()
+        .map(|o| String::from_utf8_lossy(&o.stdout).into_owned())
+        .unwrap_or_default();
+    let mut killed = Vec::new();
+    for cap in out.split("pid=").skip(1) {
+        let pid: String = cap.chars().take_while(|c| c.is_ascii_digit()).collect();
+        if pid.is_empty() {
+            continue;
+        }
+        let comm = std::fs::read_to_string(format!("/proc/{pid}/comm")).unwrap_or_default();
+        if comm.trim().starts_with("llama-server") {
+            let _ = std::process::Command::new("kill").args(["-TERM", &pid]).status();
+            killed.push(pid);
+        }
+    }
+    if killed.is_empty() {
+        return (
+            StatusCode::NOT_FOUND,
+            "no llama-server on :8080 (external backend, or the leg is inert - restart via just up)",
+        )
+            .into_response();
+    }
+    Json(json!({ "restarted": killed, "note": "the _up-llama loop restarts it with the saved settings" }))
+        .into_response()
 }
 
 #[cfg(test)]
@@ -298,6 +541,17 @@ mod tests {
         assert_eq!(cfg.get("llama_ctx").unwrap(), 32768);
         assert_eq!(cfg.get("llama_parallel").unwrap(), 4);
         assert!(!cfg.contains_key("llama_url"));
+    }
+
+    #[test]
+    fn download_targets_are_vetted() {
+        assert!(vet_download("http://x/a.gguf").is_err()); // https only
+        assert!(vet_download("https://x/dir/").is_err());
+        assert!(vet_download("https://x/..gguf").is_err());
+        assert_eq!(
+            vet_download("https://hf.co/r/resolve/main/model-Q4.gguf?download=true").unwrap(),
+            "model-Q4.gguf"
+        );
     }
 
     #[test]
