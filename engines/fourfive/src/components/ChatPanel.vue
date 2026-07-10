@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { nextTick, ref, watch } from 'vue'
 import { useSessionStore } from '../stores/session'
+import StrategyCard from './StrategyCard.vue'
 import type { Session, VerifyStep } from '../../shared/types'
 
 const store = useSessionStore()
@@ -66,7 +67,14 @@ function verdictLine(s: VerifyStep): string {
 }
 
 watch(
-  () => [store.messages.length, store.streamingMsg?.content, store.streamingMsg?.thinking],
+  () => [
+    store.messages.length,
+    store.streamingMsg?.content,
+    store.streamingMsg?.thinking,
+    store.strategy,
+    store.strategyError,
+    store.strategyLoading,
+  ],
   async () => {
     await nextTick()
     listEl.value?.scrollTo({ top: listEl.value.scrollHeight })
@@ -144,6 +152,9 @@ watch(
           <span>{{ store.streamingMsg?.content }}</span><span v-if="store.sending" class="cursor">▍</span>
         </div>
       </div>
+
+      <!-- /strategy stage-3 card (PE12): ephemeral, dismissable, version-stamped -->
+      <StrategyCard />
     </div>
 
     <footer class="chat__input">

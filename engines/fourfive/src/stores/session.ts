@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
-import type { DependencyInfo, Message, Session, VerifyStep } from '../../shared/types'
+import type { DependencyInfo, Message, Session, StrategyResponse, VerifyStep } from '../../shared/types'
 import type { Blueprint } from '../../shared/blueprint'
 import { api } from '../api/client'
 
@@ -201,9 +201,38 @@ export const useSessionStore = defineStore('session', () => {
     }
   }
 
+  // The /strategy stage-3 card (PE12): EPHEMERAL — store state only, gone on
+  // dismiss or session switch. Persistence into superposition_state + the
+  // informed_by edge is a named Phase F prerequisite.
+  const strategy = ref<StrategyResponse | null>(null)
+  const strategyError = ref<string | null>(null)
+  const strategyLoading = ref(false)
+
+  async function runStrategy() {
+    if (!current.value || strategyLoading.value) return
+    strategyLoading.value = true
+    strategy.value = null
+    strategyError.value = null
+    try {
+      strategy.value = await api.strategyReadout(current.value.id)
+    } catch (e) {
+      // Refusals render verbatim — a grounding violation is a FAILED render
+      // (S-7), never silently retried or softened.
+      strategyError.value = (e as Error).message
+    } finally {
+      strategyLoading.value = false
+    }
+  }
+
+  function dismissStrategy() {
+    strategy.value = null
+    strategyError.value = null
+  }
+
   async function openSession(s: Session) {
     current.value = s
     activeFieldId.value = null
+    dismissStrategy()
     messages.value = await api.getMessages(s.id)
     const res = await api.getBlueprint(s.id)
     blueprint.value = res.blueprint
@@ -215,6 +244,12 @@ export const useSessionStore = defineStore('session', () => {
   async function send(content: string) {
     const text = content.trim()
     if (!current.value || !text || sending.value) return
+    // A slash command, not a chat turn: /strategy renders the ephemeral
+    // stage-3 card (PE12) instead of talking to the design chat.
+    if (text === '/strategy') {
+      await runStrategy()
+      return
+    }
     sending.value = true
     const sid = current.value.id
 
@@ -404,5 +439,10 @@ export const useSessionStore = defineStore('session', () => {
     bundleResult,
     bundleError,
     generateBundle,
+    strategy,
+    strategyError,
+    strategyLoading,
+    runStrategy,
+    dismissStrategy,
   }
 })

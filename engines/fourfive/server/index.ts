@@ -34,6 +34,7 @@ function stripReservedEntities<T extends { entities: Array<{ name: string }>; me
   return bp
 }
 import { saveBlueprint, getLatestBlueprint, saveMarkdown, setSoftwareStack, createComposedApp, getBlueprintWithDependencies, getSessionApp, freezeAndBundle, FreezeError } from './workspace'
+import { StrategyError, fetchServedApp, fetchServedMetrics, parseStrategyCard } from './strategy'
 import { listComposableApps, updateDependencyPin, DependencyError } from './dependencies'
 import { renderBlueprintMarkdown } from './markdown'
 import type { ChatMessage, Message } from '../shared/types'
@@ -260,6 +261,33 @@ app.post('/api/apps/:slug/versions/:version/bundle', (c) => {
   const version = Number(c.req.param('version'))
   if (!Number.isInteger(version) || version < 1) return c.json({ error: 'version must be a positive integer' }, 400)
   return freezeResponse(c, c.req.param('slug'), version)
+})
+
+// --- strategy read-out (Phase E, plan PE12; story S-7) ---
+// Grounded ONLY in the served bundle's declared metrics, fetched from
+// apps-host's published API. EPHEMERAL by design: nothing is persisted —
+// superposition_state + the informed_by edge are a named Phase F
+// prerequisite, not silently absorbed here.
+app.post('/api/sessions/:id/strategy', async (c) => {
+  const sessionId = c.req.param('id')
+  if (!db.prepare('SELECT id FROM sessions WHERE id = ?').get(sessionId)) {
+    return c.json({ error: 'session not found' }, 404)
+  }
+  const sessionApp = getSessionApp(sessionId)
+  if (!sessionApp) {
+    return c.json({ error: 'this session has no app yet — the strategy read-out needs a served bundle' }, 400)
+  }
+  const body = (await c.req.json().catch(() => ({}))) as { profileId?: string }
+  try {
+    const served = await fetchServedApp(sessionApp.slug)
+    const metrics = await fetchServedMetrics(sessionApp.slug)
+    const raw = await llm.strategyReadout(served, metrics, { profileId: body.profileId })
+    const card = parseStrategyCard(raw, metrics.map((m) => m.name))
+    return c.json({ card, app: served, metrics })
+  } catch (err) {
+    if (err instanceof StrategyError) return c.json({ error: err.message }, err.status)
+    throw err
+  }
 })
 
 // --- apps & dependencies ---

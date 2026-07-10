@@ -17,10 +17,12 @@ import type {
   Ai, ChatOptions as AiChatOptions, ChatResult, Profile, StreamEvent,
 } from '../../../../frontend/packages/ai/src/index.ts'
 import { resolveDataDir } from '../../../../tools/lib/data-dir.ts'
-import type { ChatMessage } from '../../shared/types'
+import type { ChatMessage, ServedMetric } from '../../shared/types'
 import type { Blueprint } from '../../shared/blueprint'
 import { buildBlueprintMessages, extractJson } from './blueprint-prompt'
-import { DEMO_THINKING, demoResponder, proposeDemoBlueprint } from './offline-demo'
+import { buildStrategyMessages, strategyJsonSchema } from '../strategy'
+import type { ServedApp } from '../strategy'
+import { DEMO_THINKING, demoResponder, demoStrategyCard, proposeDemoBlueprint } from './offline-demo'
 
 /** Per-message options from the chat surfaces. */
 export interface TurnOptions {
@@ -166,6 +168,27 @@ export class FourfiveLlm {
       profile: profile.id,
       model: profile.model,
       maxTokens: opts.maxTokens,
+      verify: { verify: 'off' },
+    })
+    return extractJson(result.text)
+  }
+
+  /** The /strategy read-out (plan PE12): the model sees the declared metrics
+   * ONLY — no chat history, no blueprint. The offline profile short-circuits
+   * to the canned card; either way the output goes through the caller's
+   * grounding-subset parse, which is the gate (never verified — §2.6). */
+  async strategyReadout(
+    app: ServedApp,
+    metrics: ServedMetric[],
+    opts: { profileId?: string },
+  ): Promise<unknown> {
+    const profile = this.resolveProfile(opts.profileId)
+    if (profile.provider === 'mock') return demoStrategyCard(metrics)
+    const result = await this.ai.chat(profile.provider, buildStrategyMessages(app, metrics), {
+      caller: 'fourfive-strategy',
+      profile: profile.id,
+      model: profile.model,
+      jsonSchema: strategyJsonSchema(metrics.map((m) => m.name)),
       verify: { verify: 'off' },
     })
     return extractJson(result.text)
