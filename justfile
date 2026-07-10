@@ -143,11 +143,15 @@ _up-llama:
     model=$(node tools/llama.ts model || true)
     if [ -z "$bin" ]; then echo "[llama] no llama-server binary - run 'just setup' (llama-cpp profiles show 'local model offline')"; exec tail -f /dev/null; fi
     if [ -z "$model" ]; then echo "[llama] no GGUF in the store - run 'just setup' to install one"; exec tail -f /dev/null; fi
-    echo "[llama] serving $model on :${NS_LLAMA_PORT:-8080}"
+    ctx=$(node tools/llama.ts ctx); par=$(node tools/llama.ts parallel)
+    echo "[llama] serving $model on :${NS_LLAMA_PORT:-8080} (ctx $ctx, $par parallel slots)"
     # Run (not exec): if llama-server crashes or the model is unloadable, the
     # leg must NOT exit, or `concurrently -k` would tear down the whole stack.
     # Stay inert instead so the UI degrades honestly (W11 "local model offline").
-    "$bin" -m "$model" --host 127.0.0.1 --port "${NS_LLAMA_PORT:-8080}" --jinja -c "${NS_LLAMA_CTX:-8192}"
+    # --parallel N = N concurrent requests (KV split N ways: each slot sees
+    # ctx/N); knobs come from config llama_ctx/llama_parallel (Formans
+    # model-backend settings) with NS_LLAMA_CTX/NS_LLAMA_PARALLEL overrides.
+    "$bin" -m "$model" --host 127.0.0.1 --port "${NS_LLAMA_PORT:-8080}" --jinja -c "$ctx" --parallel "$par"
     echo "[llama] llama-server exited (code $?) - staying inert; the rest of the stack keeps running, llama-cpp profiles show 'local model offline'"
     exec tail -f /dev/null
 
@@ -159,8 +163,9 @@ llama:
     if [ -n "{{llama_url}}" ]; then echo "note: config llama_url={{llama_url}} - the stack uses that external backend; this local server is extra"; fi
     bin=$(node tools/llama.ts bin); model=$(node tools/llama.ts model)
     if [ -z "$bin" ] || [ -z "$model" ]; then echo "need llama-server + a GGUF - run 'just setup'"; exit 1; fi
-    echo "[llama] serving $model on :${NS_LLAMA_PORT:-8080}"
-    exec "$bin" -m "$model" --host 127.0.0.1 --port "${NS_LLAMA_PORT:-8080}" --jinja -c "${NS_LLAMA_CTX:-8192}"
+    ctx=$(node tools/llama.ts ctx); par=$(node tools/llama.ts parallel)
+    echo "[llama] serving $model on :${NS_LLAMA_PORT:-8080} (ctx $ctx, $par parallel slots)"
+    exec "$bin" -m "$model" --host 127.0.0.1 --port "${NS_LLAMA_PORT:-8080}" --jinja -c "$ctx" --parallel "$par"
 
 # Stop the stack started by `just up`: terminates whatever is LISTENING on
 # the gate/engine/fourfive/apps-host ports (honoring the same NS_PORT /

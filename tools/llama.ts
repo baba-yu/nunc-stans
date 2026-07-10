@@ -148,6 +148,23 @@ function resolveUrl(): string | null {
   return typeof cfg === 'string' && cfg ? cfg : null
 }
 
+/** Positive-integer knob: env > config > default (bad values fall through). */
+function resolveKnob(envName: string, cfgKey: string, dflt: number): number {
+  const env = Number(process.env[envName])
+  if (Number.isInteger(env) && env > 0) return env
+  const cfg = Number(readConfig()[cfgKey])
+  if (Number.isInteger(cfg) && cfg > 0) return cfg
+  return dflt
+}
+
+// Serving knobs (multi-task support): --parallel splits the KV cache into
+// static slots so several requests run CONCURRENTLY (code-gen + web-search
+// at once); -c is the TOTAL context, so each slot effectively gets c/parallel
+// (32768/4 = 8k per slot). Editable in the Formans model-backend settings;
+// applied when the server restarts.
+const CTX_DEFAULT = 32768
+const PARALLEL_DEFAULT = 4
+
 const cmd = process.argv[2]
 if (cmd === 'bin') {
   const b = resolveBin()
@@ -158,7 +175,11 @@ if (cmd === 'bin') {
 } else if (cmd === 'url') {
   const u = resolveUrl()
   if (u) console.log(u)
+} else if (cmd === 'ctx') {
+  console.log(resolveKnob('NS_LLAMA_CTX', 'llama_ctx', CTX_DEFAULT))
+} else if (cmd === 'parallel') {
+  console.log(resolveKnob('NS_LLAMA_PARALLEL', 'llama_parallel', PARALLEL_DEFAULT))
 } else {
-  console.error('usage: node tools/llama.ts <bin|model|url>')
+  console.error('usage: node tools/llama.ts <bin|model|url|ctx|parallel>')
   process.exit(2)
 }

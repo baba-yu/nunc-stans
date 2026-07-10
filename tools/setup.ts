@@ -15,7 +15,7 @@
 // note 12); on native Windows it prints guidance and continues.
 import { spawn, spawnSync } from 'node:child_process'
 import {
-  appendFileSync, existsSync, mkdirSync, readdirSync, readFileSync, renameSync, statSync,
+  appendFileSync, copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, renameSync, rmSync, statSync,
 } from 'node:fs'
 import { createInterface } from 'node:readline'
 import { delimiter, join } from 'node:path'
@@ -25,14 +25,20 @@ import { mandateJsonl } from './lib/mandate.ts'
 
 const args = process.argv.slice(2)
 if (args.includes('--help') || args.includes('-h')) {
-  console.log(`usage: node tools/setup.ts [--skip-llama] [--skip-model] [--skip-mandate]
+  console.log(`usage: node tools/setup.ts [--skip-llama] [--skip-model] [--skip-mandate] [--cuda|--no-cuda]
   Ensures manda + llama.cpp, downloads/validates a model, seeds the first
-  mandate. Re-runnable; each step no-ops when already done.`)
+  mandate. Re-runnable; each step no-ops when already done.
+  On an NVIDIA machine, offers a CUDA source build of llama-server (asks
+  first; --cuda builds without asking, --no-cuda never asks) after
+  validating the toolkit (nvcc <= driver CUDA version, cmake, compiler).`)
   process.exit(0)
 }
 const skipLlama = args.includes('--skip-llama')
 const skipModel = args.includes('--skip-model')
 const skipMandate = args.includes('--skip-mandate')
+// CUDA source build: --cuda builds without prompting, --no-cuda never asks;
+// otherwise setup ASKS interactively (and defaults to no on a non-TTY run).
+const cudaChoice: 'yes' | 'no' | 'ask' = args.includes('--cuda') ? 'yes' : args.includes('--no-cuda') ? 'no' : 'ask'
 
 const rl = createInterface({ input: process.stdin, output: process.stdout })
 const ask = (q: string): Promise<string> => new Promise(res => rl.question(q, a => res(a.trim())))
@@ -40,8 +46,8 @@ const say = (s: string): void => console.log(s)
 const step = (s: string): void => console.log(`\n=== ${s} ===`)
 
 /** Run a command inheriting stdio (for long/interactive ops); true on exit 0. */
-function run(cmd: string, cmdArgs: string[], cwd?: string): boolean {
-  const r = spawnSync(cmd, cmdArgs, { stdio: 'inherit', cwd })
+function run(cmd: string, cmdArgs: string[], cwd?: string, env?: NodeJS.ProcessEnv): boolean {
+  const r = spawnSync(cmd, cmdArgs, { stdio: 'inherit', cwd, env })
   return r.status === 0
 }
 /** Run capturing stdout; '' on any failure. */
@@ -158,8 +164,12 @@ const wantGpuBuild = hasNvidiaGpu && !isWsl
 async function detectExternalBackend(): Promise<void> {
   if (!hasNvidiaGpu) return
   const cfg = readConfig()
-  if (typeof cfg.llama_url === 'string' && cfg.llama_url) {
-    say(`ok   external model backend (config llama_url): ${cfg.llama_url}`)
+  // A PRESENT key is an explicit choice — including an explicitly empty
+  // one ("use the local server"), which auto-detection must not override.
+  if ('llama_url' in cfg) {
+    say(typeof cfg.llama_url === 'string' && cfg.llama_url
+      ? `ok   external model backend (config llama_url): ${cfg.llama_url}`
+      : 'ok   local llama-server chosen (config llama_url explicitly empty)')
     return
   }
   const url = 'http://127.0.0.1:11434'
@@ -218,6 +228,60 @@ function pickLlamaAsset(assets: Array<{ name: string; browser_download_url: stri
   return shortest(plat.filter(x => !ACCEL_ASSET.test(x.name))) // plainest = the portable CPU build
 }
 
+/** Validate the CUDA build prerequisites BEFORE offering the source build:
+ * nvcc present, its release not newer than what the driver supports
+ * (nvidia-smi "CUDA Version"), cmake + a C++ compiler available. */
+function cudaToolkitStatus(): { ok: boolean; why: string; nvcc?: string } {
+  const nvcc = has('nvcc') ? 'nvcc'
+    : ['/usr/local/cuda/bin/nvcc', '/opt/cuda/bin/nvcc'].find(p => existsSync(p)) ?? null
+  if (!nvcc) return { ok: false, why: 'nvcc not found — install the CUDA toolkit (WSL: https://docs.nvidia.com/cuda/wsl-user-guide/)' }
+  const toolkit = /release (\d+\.\d+)/.exec(capture(nvcc, ['--version']))?.[1]
+  if (!toolkit) return { ok: false, why: `could not parse \`${nvcc} --version\`` }
+  const driver = /CUDA Version:\s*(\d+\.\d+)/.exec(capture('nvidia-smi', []))?.[1]
+  if (driver && parseFloat(toolkit) > parseFloat(driver)) {
+    return { ok: false, why: `CUDA toolkit ${toolkit} is newer than the driver supports (${driver}) — update the driver or install a toolkit <= ${driver}` }
+  }
+  if (!has('cmake')) return { ok: false, why: 'cmake not found — install cmake' }
+  if (!has('g++') && !has('c++') && !has('clang++')) return { ok: false, why: 'no C++ compiler — install build-essential' }
+  return { ok: true, why: `toolkit ${toolkit}${driver ? ` <= driver CUDA ${driver}` : ''}`, nvcc }
+}
+
+/** Clone (pinned to the release tag) + cmake-build llama-server with CUDA,
+ * installed as its own build dir under LLAMA_DIR so tools/llama.ts picks it
+ * (newest mtime). Returns the built binary or null. */
+async function buildCudaServer(tag: string): Promise<string | null> {
+  const src = join(homedir(), '.local', 'share', 'nunc-stans', 'llama.cpp-src')
+  if (!existsSync(join(src, 'CMakeLists.txt'))) {
+    say(`… cloning llama.cpp ${tag} into ${src}`)
+    if (!run('git', ['clone', '--depth', '1', '--branch', tag, 'https://github.com/ggml-org/llama.cpp', src])) {
+      say('NG   clone failed.'); return null
+    }
+  } else {
+    say(`ok   reusing source checkout ${src} (delete it to re-clone at ${tag})`)
+  }
+  const env = { ...process.env, PATH: `/usr/local/cuda/bin:${process.env.PATH ?? ''}` }
+  say('… cmake configure (CUDA)')
+  if (!run('cmake', ['-B', 'build', '-DGGML_CUDA=ON', '-DCMAKE_BUILD_TYPE=Release',
+    '-DLLAMA_BUILD_TESTS=OFF', '-DLLAMA_BUILD_EXAMPLES=OFF', '-DLLAMA_BUILD_SERVER=ON'], src, env)) {
+    say('NG   cmake configure failed.'); return null
+  }
+  say('… building llama-server (10-20 min the first time)')
+  if (!run('cmake', ['--build', 'build', '--target', 'llama-server', '-j', String(Math.max(2, (await import('node:os')).cpus().length - 2))], src, env)) {
+    say('NG   build failed.'); return null
+  }
+  const binDir = join(src, 'build', 'bin')
+  const dest = join(LLAMA_DIR, `llama-${tag}-cuda-local`)
+  rmSync(dest, { recursive: true, force: true })
+  mkdirSync(dest, { recursive: true })
+  for (const f of readdirSync(binDir)) {
+    if (f === 'llama-server' || /\.so(\.|$)/.test(f)) copyFileSync(join(binDir, f), join(dest, f))
+  }
+  const bin = join(dest, 'llama-server')
+  run('chmod', ['+x', bin])
+  say(`ok   CUDA llama-server: ${bin}`)
+  return bin
+}
+
 async function ensureLlamaServer(): Promise<string | null> {
   step('llama.cpp (local model backend)')
   const existing = resolveLlamaServer()
@@ -255,6 +319,29 @@ async function ensureLlamaServer(): Promise<string | null> {
     })
     if (!res.ok) throw new Error(`HTTP ${res.status}`)
     const rel = await res.json() as { tag_name?: string; assets?: Array<{ name: string; browser_download_url: string }> }
+    // On an NVIDIA box, a CUDA SOURCE build beats every prebuilt this side
+    // of native Linux (WSL: 70 tok/s CUDA vs 2.6 CPU vs 0.7 Dozen-vulkan,
+    // measured 2026-07-10) — offer it, but only after validating the
+    // toolchain, and never without asking (or the explicit --cuda flag).
+    const tag = rel.tag_name ?? 'master'
+    if (hasNvidiaGpu && cudaChoice !== 'no') {
+      const tk = cudaToolkitStatus()
+      if (!tk.ok) {
+        say(`info CUDA source build unavailable: ${tk.why}`)
+      } else {
+        let yes = cudaChoice === 'yes'
+        if (!yes && process.stdin.isTTY) {
+          yes = (await ask(`NVIDIA GPU detected, ${tk.why}. Build llama.cpp ${tag} with CUDA from source (~10-20 min)? [y/N] `)).toLowerCase() === 'y'
+        } else if (!yes) {
+          say('info non-interactive run — CUDA build skipped (pass --cuda to build without asking)')
+        }
+        if (yes) {
+          const built = await buildCudaServer(tag)
+          if (built) return built
+          say('WARN CUDA build failed — falling back to a prebuilt asset.')
+        }
+      }
+    }
     asset = pickLlamaAsset(rel.assets ?? [])
     if (!asset) {
       say(`NG   no prebuilt asset matched ${platform()}/${process.arch}. Available:`)
