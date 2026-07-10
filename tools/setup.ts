@@ -131,7 +131,6 @@ function resolveLlamaServer(): string | null {
 // filenames — a substring regex once matched Huawei 'cann' inside the CPU
 // variant lib 'libggml-cpu-CANNonlake.so' and re-quarantined healthy CPU
 // builds on every setup run.
-const GPU_BACKENDS = new Set(['cuda', 'vulkan'])
 const OTHER_ACCEL_BACKENDS = new Set(['hip', 'rocm', 'sycl', 'kompute', 'openvino', 'opencl', 'blas', 'openblas', 'musa', 'cann'])
 // Asset-name filter (hyphen-delimited words — 'cannonlake' never appears here).
 const ACCEL_ASSET = /-(cuda|vulkan|hip|rocm|sycl|kompute|openvino|opencl|blas|openblas|musa|cann)\b/i
@@ -172,7 +171,7 @@ async function detectExternalBackend(): Promise<void> {
   } catch { /* no ollama — the local server stays the backend */ }
 }
 
-type Flavor = 'gpu' | 'accel-other' | 'cpu'
+type Flavor = 'cuda' | 'vulkan' | 'accel-other' | 'cpu'
 
 function buildFlavor(bin: string): Flavor {
   try {
@@ -180,15 +179,23 @@ function buildFlavor(bin: string): Flavor {
     const backends = readdirSync(dir)
       .map(f => /^libggml-([a-z0-9]+)[.-]/i.exec(f)?.[1]?.toLowerCase())
       .filter((b): b is string => !!b)
-    if (backends.some(b => GPU_BACKENDS.has(b))) return 'gpu'
+    if (backends.includes('cuda')) return 'cuda'
+    if (backends.includes('vulkan')) return 'vulkan'
     if (backends.some(b => OTHER_ACCEL_BACKENDS.has(b))) return 'accel-other'
     return 'cpu'
   } catch { return 'cpu' }
 }
 
-/** Does an auto-installed build fit this machine? */
+/** Does an installed build fit this machine? cuda fits ANY NVIDIA box
+ * (WSL CUDA is native-speed — a source-built server lives here too);
+ * vulkan only fits native Linux (Dozen on WSL is slower than CPU); cpu
+ * fits wherever a GPU prebuilt isn't wanted (incl. WSL, as the fallback
+ * beside a source-built cuda dir — tools/llama.ts picks the newest). */
 function flavorFits(flavor: Flavor): boolean {
-  return wantGpuBuild ? flavor === 'gpu' : flavor === 'cpu'
+  if (flavor === 'cuda') return hasNvidiaGpu
+  if (flavor === 'vulkan') return hasNvidiaGpu && !isWsl
+  if (flavor === 'cpu') return !wantGpuBuild
+  return false
 }
 
 /** Pick the prebuilt asset for this platform per the flavor policy above. */
