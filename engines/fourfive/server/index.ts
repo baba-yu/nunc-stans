@@ -18,7 +18,8 @@ import { validateBlueprint } from './blueprint-schema'
 import { saveBlueprint, getLatestBlueprint, saveMarkdown, setSoftwareStack, createComposedApp, getBlueprintWithDependencies, getSessionApp, freezeAndBundle, FreezeError } from './workspace'
 import { listComposableApps, updateDependencyPin, DependencyError } from './dependencies'
 import { renderBlueprintMarkdown } from './markdown'
-import type { ChatMessage, Message } from '../shared/types'
+import type { BlueprintStepStatus, ChatMessage, Message } from '../shared/types'
+import type { Blueprint } from '../shared/blueprint'
 
 // Single origin in production (behind the gate) and a same-origin vite
 // proxy in dev: the browser never needs CORS, so none is offered.
@@ -183,30 +184,13 @@ app.post('/api/sessions/:id/messages', async (c) => {
   db.prepare('UPDATE sessions SET updated_at = ? WHERE id = ?').run(assistantMsg.created_at, sessionId)
 
   // Try to (re)build the structured blueprint from the conversation. Failures
-  // here never break the chat — the blueprint is best-effort.
-  let blueprint = getLatestBlueprint(sessionId)
-  try {
-    const fullHistory: ChatMessage[] = [...llmHistory, { role: 'assistant', content: assistantText }]
-    const proposed = await llm.proposeBlueprint(fullHistory, blueprint, opts)
-    if (proposed != null) {
-      const result = validateBlueprint(proposed)
-      if (result.success) {
-        // software_stack is user-owned; the LLM never sets it. Carry it forward.
-        result.data.software_stack = blueprint?.software_stack
-        const changed = JSON.stringify(result.data) !== JSON.stringify(blueprint)
-        if (changed) {
-          saveBlueprint(sessionId, result.data)
-          blueprint = result.data
-        }
-      } else {
-        console.warn('[codev] proposed blueprint failed validation:', result.error.issues.length, 'issues')
-      }
-    }
-  } catch (err) {
-    console.warn('[codev] blueprint step error:', (err as Error).message)
-  }
-
-  return c.json({ userMessage: userMsg, assistantMessage: assistantMsg, blueprint })
+  // here never break the chat — the blueprint is best-effort, but the outcome
+  // is classified and reported, never swallowed.
+  const bp = await blueprintStep(sessionId, llmHistory, assistantText, opts)
+  return c.json({
+    userMessage: userMsg, assistantMessage: assistantMsg,
+    blueprint: bp.blueprint, blueprintStatus: bp.status,
+  })
 })
 
 app.get('/api/sessions/:id/blueprint', (c) => {
@@ -350,24 +334,11 @@ app.post('/api/sessions/:id/messages/stream', async (c) => {
     db.prepare('UPDATE sessions SET updated_at = ? WHERE id = ?').run(assistantMsg.created_at, sessionId)
     await stream.writeSSE({ event: 'assistant', data: JSON.stringify(assistantMsg) })
 
-    let blueprint = getLatestBlueprint(sessionId)
-    try {
-      const fullHistory: ChatMessage[] = [...llmHistory, { role: 'assistant', content: assistantText }]
-      const proposed = await llm.proposeBlueprint(fullHistory, blueprint, opts)
-      if (proposed != null) {
-        const valid = validateBlueprint(proposed)
-        if (valid.success) {
-          valid.data.software_stack = blueprint?.software_stack
-          if (JSON.stringify(valid.data) !== JSON.stringify(blueprint)) {
-            saveBlueprint(sessionId, valid.data)
-            blueprint = valid.data
-          }
-        }
-      }
-    } catch (err) {
-      console.warn('[codev] blueprint step error:', (err as Error).message)
-    }
-    await stream.writeSSE({ event: 'blueprint', data: JSON.stringify(blueprint) })
+    const bp = await blueprintStep(sessionId, llmHistory, assistantText, opts)
+    await stream.writeSSE({ event: 'blueprint', data: JSON.stringify(bp.blueprint) })
+    // Additive event (old clients ignore unknown event names): why the
+    // right pane did or didn't move this turn.
+    await stream.writeSSE({ event: 'blueprint_status', data: JSON.stringify(bp.status) })
     await stream.writeSSE({ event: 'done', data: '1' })
   })
 })
@@ -387,6 +358,48 @@ function insertMessage(m: Message): void {
   db.prepare(
     'INSERT INTO messages (id, session_id, role, content, created_at, input_tokens, output_tokens) VALUES (?,?,?,?,?,?,?)',
   ).run(m.id, m.session_id, m.role, m.content, m.created_at, m.input_tokens ?? null, m.output_tokens ?? null)
+}
+
+// The best-effort blueprint step shared by both message routes: propose,
+// validate, persist-if-changed — and CLASSIFY the outcome. Silent nulls
+// hid every blueprint failure under local serving (2026-07-10); anything
+// warn-worthy hits the server log here and the panel via the status.
+async function blueprintStep(
+  sessionId: string,
+  llmHistory: ChatMessage[],
+  assistantText: string,
+  opts: TurnOptions,
+): Promise<{ blueprint: Blueprint | null; status: BlueprintStepStatus }> {
+  let blueprint = getLatestBlueprint(sessionId)
+  let status: BlueprintStepStatus = { outcome: 'ok' }
+  try {
+    const fullHistory: ChatMessage[] = [...llmHistory, { role: 'assistant', content: assistantText }]
+    const proposal = await llm.proposeBlueprint(fullHistory, blueprint, opts)
+    if (proposal.outcome !== 'ok') {
+      status = { outcome: proposal.outcome, ...(proposal.detail ? { detail: proposal.detail } : {}) }
+    } else {
+      const result = validateBlueprint(proposal.proposed)
+      if (result.success) {
+        // software_stack is user-owned; the LLM never sets it. Carry it forward.
+        result.data.software_stack = blueprint?.software_stack
+        if (JSON.stringify(result.data) !== JSON.stringify(blueprint)) {
+          saveBlueprint(sessionId, result.data)
+          blueprint = result.data
+        }
+      } else {
+        status = {
+          outcome: 'invalid',
+          detail: `proposed blueprint failed validation: ${result.error.issues.length} issues`,
+        }
+      }
+    }
+  } catch (err) {
+    status = { outcome: 'error', detail: (err as Error).message }
+  }
+  if (status.outcome !== 'ok' && status.outcome !== 'empty') {
+    console.warn(`[codev] blueprint step ${status.outcome}: ${status.detail ?? ''}`)
+  }
+  return { blueprint, status }
 }
 
 const port = Number(process.env.PORT ?? 8787)

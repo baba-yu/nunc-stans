@@ -74,10 +74,33 @@ export interface SendMessageBody {
   maxTokens?: number
 }
 
+/** Why the blueprint step of a turn did (or did not) yield a usable
+ * blueprint. The first five are classified from the LLM call itself
+ * (server/llm/nunc-ai.ts); 'invalid' (schema refusal) and 'error'
+ * (unexpected failure) are added by the route handler. Every outcome
+ * except 'ok' keeps the previously saved blueprint; everything except
+ * 'ok'/'empty' is surfaced ('empty' is the model's honest "not enough
+ * info yet", the normal early-conversation state). */
+export type BlueprintOutcome =
+  | 'ok'
+  | 'empty'
+  | 'parse-failed'
+  | 'length-truncated'
+  | 'context-overflow'
+  | 'invalid'
+  | 'error'
+
+export interface BlueprintStepStatus {
+  outcome: BlueprintOutcome
+  detail?: string
+}
+
 export interface SendMessageResponse {
   userMessage: Message
   assistantMessage: Message
   blueprint: Blueprint | null
+  /** Present since the 2026-07-10 hardening — older callers ignore it. */
+  blueprintStatus?: BlueprintStepStatus
 }
 
 export interface UsageResponse {
