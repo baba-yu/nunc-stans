@@ -146,6 +146,28 @@ export interface StrategyResponse {
   metrics: ServedMetric[]
 }
 
+// --- app status + opening patrol (Phase F, F-2) ---
+
+/** Served-bundle probe for the design‖app toggle. */
+export interface AppStatusResponse {
+  slug: string | null
+  served: boolean
+  version?: number
+  name?: string
+}
+
+/** The interactive opening patrol — ephemeral (the strategy-card precedent):
+ * the deterministic sweep + the model's one status question. */
+export interface PatrolResponse {
+  patrol: {
+    text: string
+    app: { slug: string; version: number; name: string }
+    rows: { entity: string; count: number; latest: string | null }[]
+    metrics: ServedMetric[]
+  } | null
+  reason?: string
+}
+
 /** One dependency of the current session's app, with its pinned blueprint. */
 export interface DependencyInfo {
   app_id: string

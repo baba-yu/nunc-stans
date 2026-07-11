@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, watch } from 'vue'
 import { useSessionStore } from '../stores/session'
+import PatrolCard from './PatrolCard.vue'
 import StrategyCard from './StrategyCard.vue'
 import type { Session, VerifyStep } from '../../shared/types'
 
@@ -176,6 +177,9 @@ watch(
 
       <!-- /strategy stage-3 card (PE12): ephemeral, dismissable, version-stamped -->
       <StrategyCard />
+      <!-- opening patrol (F-2 B): the AI speaks first over the served app's
+           record state; ephemeral — answers go through the normal chat box -->
+      <PatrolCard />
     </div>
 
     <footer class="chat__input">

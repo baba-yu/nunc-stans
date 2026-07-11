@@ -18,6 +18,19 @@ type Tab = (typeof tabs)[number]
 const active = ref<Tab>('Mock UI')
 const tabItems = tabs.map((t) => ({ id: t, label: t }))
 const bp = computed(() => store.blueprint)
+
+// F-2 A: the design‖app toggle. Design view = the cognition surface; App
+// view = the inspection surface (the served shell embedded same-origin
+// behind the gate). Available once a bundle is served — probed on session
+// open (appStatus) or freshly frozen this session (bundleResult).
+const view = ref<'design' | 'app'>('design')
+const servedSlug = computed(() => {
+  if (store.appStatus?.served && store.appStatus.slug) return store.appStatus.slug
+  return store.bundleResult?.slug ?? null
+})
+// The SPA runs under /fourfive/, so the iframe src must be ORIGIN-absolute:
+// /apps/<slug>/ goes through the gate to apps-host on the same origin.
+const appUrl = computed(() => (servedSlug.value ? `/apps/${servedSlug.value}/` : null))
 // Read-only slices of each dependency's pinned blueprint for the merged views.
 const depEntities = computed(() =>
   store.dependencies
@@ -55,6 +68,26 @@ const bpWarn = computed(() => {
       <span class="temp__title">
         Temp app<template v-if="bp">: {{ bp.app.name }}</template>
       </span>
+      <span class="temp__view-toggle" role="group" aria-label="design or app view">
+        <button
+          class="temp__view-btn"
+          :class="{ 'temp__view-btn--on': view === 'design' }"
+          @click="view = 'design'"
+        >
+          design
+        </button>
+        <button
+          class="temp__view-btn"
+          :class="{ 'temp__view-btn--on': view === 'app' }"
+          :disabled="!servedSlug"
+          :title="servedSlug
+            ? 'The served app: live records + metrics (the inspection surface)'
+            : 'Serve a bundle first (Generate bundle) — then the live app appears here'"
+          @click="view = 'app'"
+        >
+          app
+        </button>
+      </span>
       <button
         v-if="bp"
         class="temp__bundle-btn"
@@ -64,7 +97,7 @@ const bpWarn = computed(() => {
       >
         {{ store.bundling ? 'Generating…' : 'Generate bundle' }}
       </button>
-      <Tabs :tabs="tabItems" :model-value="active" @update:model-value="active = $event as Tab" />
+      <Tabs v-if="view === 'design'" :tabs="tabItems" :model-value="active" @update:model-value="active = $event as Tab" />
     </header>
 
     <div v-if="store.bundleResult" class="temp__bundle-note temp__bundle-note--ok">
@@ -94,7 +127,12 @@ const bpWarn = computed(() => {
       </span>
     </div>
 
-    <div class="temp__body" :class="{ 'temp__body--filled': hasContent }">
+    <div v-if="view === 'app' && appUrl" class="temp__appview">
+      <!-- F-2 A: the served shell, same origin behind the gate. Inspection
+           surface — the primary operation path is the chat (F-2 B). -->
+      <iframe class="temp__appframe" :src="appUrl" :title="`served app ${servedSlug}`" />
+    </div>
+    <div v-else class="temp__body" :class="{ 'temp__body--filled': hasContent }">
       <div v-if="!hasContent" class="temp__placeholder">
         <p class="temp__ph-title">{{ active }}</p>
         <p class="temp__ph-desc">
@@ -117,6 +155,40 @@ const bpWarn = computed(() => {
 </template>
 
 <style scoped>
+.temp__view-toggle {
+  display: inline-flex;
+  margin-right: 10px;
+  border: 1px solid var(--border, #2a2f3a);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.temp__view-btn {
+  padding: 3px 10px;
+  font-size: 12px;
+  color: var(--text-dim, #9aa3b2);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.temp__view-btn--on {
+  color: var(--text, #e6e8ec);
+  background: var(--elev-2, #1d212b);
+}
+.temp__view-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.temp__appview {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+.temp__appframe {
+  flex: 1;
+  width: 100%;
+  border: 0;
+  background: var(--elev-0, #101218);
+}
 .temp__bundle-btn {
   margin-left: auto;
   margin-right: 10px;

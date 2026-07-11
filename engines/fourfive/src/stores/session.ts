@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
-import type { BlueprintStepStatus, DependencyInfo, Message, Session, StrategyResponse, VerifyStep } from '../../shared/types'
+import type { AppStatusResponse, BlueprintStepStatus, DependencyInfo, Message, PatrolResponse, Session, StrategyResponse, VerifyStep } from '../../shared/types'
 import type { Blueprint } from '../../shared/blueprint'
 import { api } from '../api/client'
 
@@ -214,6 +214,32 @@ export const useSessionStore = defineStore('session', () => {
   // F-3 save-path state: 'idle' | 'saving' | 'saved' | an error string.
   const strategySaveState = ref<'idle' | 'saving' | 'saved' | { error: string }>('idle')
 
+  // F-2: served-bundle status (the design‖app toggle) + the opening patrol.
+  // Both ephemeral, probed lazily after session open — never block it. The
+  // patrol fires once per session per page load, only when a bundle is served.
+  const appStatus = ref<AppStatusResponse | null>(null)
+  const patrol = ref<PatrolResponse['patrol']>(null)
+  const patrolled = new Set<string>()
+
+  function dismissPatrol() {
+    patrol.value = null
+  }
+
+  async function probeApp(sessionId: string) {
+    try {
+      const st = await api.appStatus(sessionId)
+      if (current.value?.id !== sessionId) return // stale probe — session switched
+      appStatus.value = st
+      if (st.served && !patrolled.has(sessionId)) {
+        patrolled.add(sessionId)
+        const res = await api.patrol(sessionId)
+        if (current.value?.id === sessionId && res.patrol) patrol.value = res.patrol
+      }
+    } catch {
+      // No status → the right pane simply stays design-only; no patrol.
+    }
+  }
+
   async function runStrategy() {
     if (!current.value || strategyLoading.value) return
     strategyLoading.value = true
@@ -253,6 +279,8 @@ export const useSessionStore = defineStore('session', () => {
     current.value = s
     activeFieldId.value = null
     dismissStrategy()
+    dismissPatrol()
+    appStatus.value = null
     blueprintStatus.value = null
     messages.value = await api.getMessages(s.id)
     const res = await api.getBlueprint(s.id)
@@ -260,6 +288,9 @@ export const useSessionStore = defineStore('session', () => {
     dependencies.value = res.dependencies
     softwareStack.value = res.blueprint?.software_stack ?? ''
     await refreshUsage()
+    // F-2: probe served-ness + fire the opening patrol in the background —
+    // session open never waits on apps-host or a model.
+    void probeApp(s.id)
   }
 
   async function send(content: string) {
@@ -308,6 +339,13 @@ export const useSessionStore = defineStore('session', () => {
             case 'thinking':
               if (sm) sm.thinking += JSON.parse(data) as string
               break
+            case 'tool': {
+              // F-2 B: one line per executed app-tool call, shown in the
+              // dimmed thinking pane (meta activity, not reply content).
+              const t = JSON.parse(data) as { name: string; arguments: Record<string, unknown> }
+              if (sm) sm.thinking += `${sm.thinking ? '\n' : ''}⚙ ${t.name} ${JSON.stringify(t.arguments)}`
+              break
+            }
             case 'content':
               if (sm) {
                 // Collapse the thinking section once the real reply starts.
@@ -473,5 +511,8 @@ export const useSessionStore = defineStore('session', () => {
     runStrategy,
     dismissStrategy,
     saveStrategy,
+    appStatus,
+    patrol,
+    dismissPatrol,
   }
 })
