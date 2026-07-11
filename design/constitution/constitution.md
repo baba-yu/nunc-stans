@@ -45,12 +45,12 @@ Edge types:
 
 | type | from → to | Meaning |
 |---|---|---|
-| informed_by | commitment / prediction → observation / prediction; superposition_state → artifact_version | What prompted this bet / prediction; or the app a strategy understanding reads |
+| informed_by | commitment / prediction → observation / prediction / knowledge; superposition_state → artifact_version | What prompted this bet / prediction (incl. one's own past knowledge — journey T6); or the app a strategy understanding reads |
 | serves | commitment → prediction (either world / self) | Which prediction this action wagered on |
 | produced | commitment → artifact_version / knowledge | What was produced |
 | closes | outcome → prediction / commitment | Existing |
 | supersedes | between nodes of the same type | Existing (revision linkage) |
-| dismisses | user → AI's prediction, edge, intervention, or superposition_state | self scope only |
+| dismisses | user → AI's prediction, edge, or superposition_state | self scope only |
 
 Edge record: `{ id, type, from, to, to_label(required), from_label(optional), author: user|ai|sensor, created_at, note(optional) }`
 

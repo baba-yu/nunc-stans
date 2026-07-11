@@ -143,9 +143,11 @@ GET   /api                       [{slug, version, name}] — served apps
 GET   /:slug/api/manifest        the served app.json
 GET   /:slug/api/metrics         [{name, label, value}] (read-only conn)
 GET   /:slug/api/status          {slug, version, readOnly, reason|null}
-GET   /:slug/api/tools           the frozen mcp-tools.json, verbatim — the
-                                 declared tool surface over REST (Phase F;
-                                 the same list /mcp serves)
+GET   /:slug/api/tools           the tools ARRAY from the frozen
+                                 mcp-tools.json (the file's wrapper object is
+                                 stripped at discovery) — the declared tool
+                                 surface over REST (Phase F; the same list
+                                 /mcp serves)
 GET   /:slug/api/:entity         rows; archived excluded, ?archived=1 includes
 POST  /:slug/api/:entity         create → the row (id host-generated if absent)
 GET   /:slug/api/:entity/:id     one row

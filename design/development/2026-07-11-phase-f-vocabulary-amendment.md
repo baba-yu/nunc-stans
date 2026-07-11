@@ -105,6 +105,21 @@ the vocabulary honest for the injected journey test-data.)*
   timestamp" over injected data, not an engine gate. Do not ratify F15 as
   "mechanical" (plan honesty ledger; no caller auth on the self engine).
 
+## 6b. Round-2 review corrections (applied on top of §§1–5)
+
+- **dismisses row:** `intervention` was REMOVED again — it named a node type
+  no list declares (the intervention lane is SPL v3; naming it was
+  speculative). The row now adds only `superposition_state`.
+- **informed_by row:** gained `commitment → knowledge` — the journey spec's
+  own T6 prescribes `informed_by → self/knowledge/gpu-build-notes`; the table
+  was out of sync with the spec it governs, not the other way round.
+- **Pre-existing residue, NOT touched (owner's call):** scope-id.md's and the
+  glossary's `self` enumerations omit `dismissal` and `knowledge` (both §3
+  node types, both used by the journey); the dismisses row's "self scope
+  only" is ambiguous against a dismissal whose TARGET is a world prediction
+  (journey T9) — plain reading suggests it means the EDGE lives in the self
+  vault. Both predate Phase F.
+
 ## 7. Owner action
 
 Apply §§1–5 as one `contracts`-area commit (constitution + scope-id + glossary;
