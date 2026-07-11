@@ -430,13 +430,23 @@ implementer driving).
        owner's 発言記録アプリ]
 5. [x] S-7 / S-8 written, executed, passing with evidence [T1, T10 —
        records above; 3 execution-found defects fixed with tests]
-6. [ ] contracts/app-bundle.md drafted + owner-reviewed [T5]
+6. [x] contracts/app-bundle.md drafted [T5]; **owner decision at close
+       (2026-07-11, verbatim: 「契約はオープンのままでいい」): the
+       app-bundle + agent-abi reviews stay OPEN past the phase close —
+       a standing owner item, deliberately deferred, not waived
+       silently.** The contracts remain v0 Draft until reviewed.
 7. [x] deterministic + freezing generation proven; no generated code
        executed [T4, T6 — plus two live tamper→409-F7 proofs at T10]
 8. [x] S-10 re-run (incl. /apps/), 3-OS CI green, screenshots under
        design/ui/phase-e/ [T11 — S-10-PASS ubuntu:24.04; CI 10/10 jobs
        on 9f958e9; 5 PNGs + agent transcript committed]
-9. [ ] verification doc complete; v1 plan/naming/reading-order updated
-       (all done 2026-07-11); **OWNER GATES remaining: review
-       contracts/app-bundle.md + contracts/agent-abi.md, reopen/merge
-       PR #9 (phase-e-finish → dev), close commit** [T12]
+9. [x] verification doc complete; v1 plan/naming/reading-order updated;
+       merged to dev on the owner's close instruction (2026-07-11
+       「クローズして」— the 2026-07-09 direct-merge precedent); close
+       commit is this one [T12]
+
+**Phase E CLOSED 2026-07-11.** Standing post-close owner items:
+contracts/app-bundle.md + agent-abi.md review (deferred above); the
+Phase D open gates unchanged. Next lanes: Topics T7; the
+app-operation-delegation lane
+(design/development/2026-07-10-app-operation-delegation.md).
