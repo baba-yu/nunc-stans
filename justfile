@@ -239,6 +239,20 @@ test:
     cargo test --manifest-path gate/Cargo.toml
     pnpm -r test
 
+# Journey automation (Phase F, F-4): v1's termination test. First the checks
+# self-test (the eleven invariants), then a replay against a FRESH temp vault
+# that drives the real nunc-stans engine over HTTP and asserts checks 1–11 at
+# every step. Never touches the real store.
+journey:
+    node tests/journey/checks.selftest.ts
+    node tests/journey/run.ts
+
+# F-5 live gate: replay checks 1–11 READ-ONLY against a real vault's git
+# history (git show/ls-tree only — never mutates it). Defaults to the
+# configured self vault.
+journey-verify vault=(data_dir / "self"):
+    node tests/journey/verify.ts "{{vault}}"
+
 check:
     @node tools/check.ts
 
