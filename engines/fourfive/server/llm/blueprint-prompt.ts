@@ -31,6 +31,42 @@ const SCHEMA_HINT = `The JSON shape is:
 ALL SQL (metrics and schema) must be plain SQLite dialect: no GREATEST/LEAST (use MAX(a,b) or CASE), no stored procedures, no vendor extensions.
 "stories" are the user stories the app must satisfy, in the user's own terms (one sentence each).`
 
+// The conversation the extractor sees is BOUNDED so the blueprint prompt
+// cannot outgrow the serving window (llama-server splits its context into
+// ctx/parallel slots; an oversized prompt gets HTTP 400 or truncates at the
+// slot boundary — live 2026-07-10). Old turns are redundant context, not
+// lost decisions: the current blueprint below the transcript carries the
+// accumulated design. ~16k chars ≈ 4k tokens, sized so system + blueprint +
+// convo fit the input half of the smallest sane slot (8k of 16k).
+export const BLUEPRINT_MAX_TURNS = 16
+export const BLUEPRINT_MAX_CONVO_CHARS = 16_000
+const OMISSION_MARKER = '[earlier turns omitted — the current blueprint carries the accumulated design]'
+
+/** Last-N-turns window under a character budget. The newest turn always
+ * survives, clipped if it alone busts the budget (a pasted document). */
+function boundTurns(turns: ChatMessage[]): { kept: ChatMessage[]; omitted: boolean } {
+  const recent = turns.slice(-BLUEPRINT_MAX_TURNS)
+  let omitted = recent.length < turns.length
+  const kept: ChatMessage[] = []
+  let used = 0
+  for (let i = recent.length - 1; i >= 0; i--) {
+    const m = recent[i]
+    const cost = m.role.length + m.content.length + 3 // "role: content\n"
+    if (kept.length === 0 && cost > BLUEPRINT_MAX_CONVO_CHARS) {
+      kept.unshift({ ...m, content: `${m.content.slice(0, BLUEPRINT_MAX_CONVO_CHARS)} …[clipped]` })
+      omitted = true
+      break
+    }
+    if (used + cost > BLUEPRINT_MAX_CONVO_CHARS) {
+      omitted = true
+      break
+    }
+    kept.unshift(m)
+    used += cost
+  }
+  return { kept, omitted }
+}
+
 export function buildBlueprintMessages(
   history: ChatMessage[],
   current: Blueprint | null,
@@ -38,7 +74,7 @@ export function buildBlueprintMessages(
   // System-role entries (e.g. dependency context) must arrive as instructions,
   // not as quoted transcript text, so split them out before building the convo.
   const systemExtras = history.filter((m) => m.role === 'system').map((m) => m.content)
-  const turns = history.filter((m) => m.role !== 'system')
+  const { kept, omitted } = boundTurns(history.filter((m) => m.role !== 'system'))
 
   const system = [
     "You are FourFive's design extractor. From the conversation, infer the app being designed and output ONLY a single JSON object — no prose, no code fences.",
@@ -48,7 +84,9 @@ export function buildBlueprintMessages(
     ...systemExtras,
   ].join('\n\n')
 
-  const convo = turns.map((m) => `${m.role}: ${m.content}`).join('\n')
+  const lines = kept.map((m) => `${m.role}: ${m.content}`)
+  if (omitted) lines.unshift(OMISSION_MARKER)
+  const convo = lines.join('\n')
   const currentStr = current
     ? `\n\nCurrent blueprint (refine it; keep prior detail unless contradicted — but the user's LATEST explicit instructions ALWAYS override it: rename, replace, or drop whatever they name):\n${JSON.stringify(current)}`
     : ''

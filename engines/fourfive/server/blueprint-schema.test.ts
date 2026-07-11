@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { validateBlueprint } from './blueprint-schema'
+import { blueprintResponseJsonSchema, blueprintSchema, validateBlueprint } from './blueprint-schema'
 
 // Phase E: metrics[] / stories[] arrive as optional collections — every
 // pre-E persisted blueprint must keep parsing (plan derived decision), and
@@ -53,5 +53,28 @@ describe('blueprint schema (Phase E fields)', () => {
     expect(
       validateBlueprint({ ...PRE_E_BLUEPRINT, metrics: [{ name: 'a', label: 'A', sql: '' }] }).success,
     ).toBe(false)
+  })
+})
+
+describe('blueprintResponseJsonSchema (constrained-decoding mirror)', () => {
+  const objectSchema = blueprintResponseJsonSchema.anyOf[0] as unknown as {
+    properties: Record<string, unknown>
+    required: string[]
+  }
+
+  it('offers the null escape hatch — "not enough info yet" stays expressible under the grammar', () => {
+    expect(blueprintResponseJsonSchema.anyOf.some((s) => (s as { type?: string }).type === 'null')).toBe(true)
+  })
+
+  it('mirrors the zod key set, software_stack excluded (user-owned, the LLM never sets it)', () => {
+    const mirrored = Object.keys(objectSchema.properties).sort()
+    const zodKeys = Object.keys(blueprintSchema.shape)
+      .filter((k) => k !== 'software_stack')
+      .sort()
+    expect(mirrored).toEqual(zodKeys)
+  })
+
+  it('requires only app — everything else is defaulted by zod on the way in', () => {
+    expect(objectSchema.required).toEqual(['app'])
   })
 })

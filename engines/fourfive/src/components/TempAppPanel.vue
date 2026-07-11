@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { Tabs } from 'nunc-ui'
+import type { BlueprintOutcome } from '../../shared/types'
 import { useSessionStore } from '../stores/session'
 import MockUiView from './MockUiView.vue'
 import EntitiesView from './EntitiesView.vue'
@@ -30,6 +31,22 @@ const depApis = computed(() =>
 )
 // A compose session has dependencies before its first own blueprint — still show content.
 const hasContent = computed(() => !!bp.value || store.dependencies.length > 0)
+
+// Warn-worthy blueprint-step outcomes get a one-line hint (the old behavior
+// was a silently unchanged pane); 'ok'/'empty' stay quiet.
+const BP_WARN_TEXT: Partial<Record<BlueprintOutcome, string>> = {
+  'length-truncated': 'the model hit its output budget mid-JSON',
+  'context-overflow': "the conversation no longer fits the model's serving window",
+  'parse-failed': 'the model returned unparseable JSON',
+  invalid: 'the proposed blueprint failed validation',
+  error: 'the blueprint call failed',
+}
+const bpWarn = computed(() => {
+  const s = store.blueprintStatus
+  if (!s) return null
+  const text = BP_WARN_TEXT[s.outcome]
+  return text ? { text, detail: s.detail } : null
+})
 </script>
 
 <template>
@@ -56,6 +73,10 @@ const hasContent = computed(() => !!bp.value || store.dependencies.length > 0)
     </div>
     <div v-else-if="store.bundleError" class="temp__bundle-note temp__bundle-note--err">
       {{ store.bundleError }}
+    </div>
+
+    <div v-if="bpWarn" class="temp__bundle-note temp__bundle-note--warn" :title="bpWarn.detail">
+      Blueprint not updated this turn — {{ bpWarn.text }}. Showing the last saved version.
     </div>
 
     <div v-if="store.dependencies.length" class="temp__deps">
@@ -124,5 +145,8 @@ const hasContent = computed(() => !!bp.value || store.dependencies.length > 0)
 .temp__bundle-note--err {
   color: var(--error, #e08f8f);
   white-space: pre-wrap;
+}
+.temp__bundle-note--warn {
+  color: var(--warning, #d9b45f);
 }
 </style>
