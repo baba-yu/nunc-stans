@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest'
-import { buildDependencyContext, buildBlueprintMessages } from './blueprint-prompt'
+import {
+  BLUEPRINT_MAX_CONVO_CHARS, BLUEPRINT_MAX_TURNS,
+  buildDependencyContext, buildBlueprintMessages,
+} from './blueprint-prompt'
 import type { Blueprint } from '../../shared/blueprint'
 
 const BP: Blueprint = {
@@ -76,5 +79,51 @@ describe('buildBlueprintMessages', () => {
     expect(msgs[1].content).not.toContain('DEP-CONTEXT-MARKER')
     expect(msgs[1].content).not.toContain('system:')
     expect(msgs[1].content).toContain('user: hello')
+  })
+
+  // The bounded window (2026-07-10): the blueprint prompt must not outgrow
+  // the serving slot however long the chat gets — the current blueprint
+  // carries the accumulated design, so dropping old turns loses nothing.
+  const turn = (i: number) => ({
+    role: (i % 2 === 0 ? 'user' : 'assistant') as 'user' | 'assistant',
+    content: `t${String(i).padStart(2, '0')}`,
+  })
+
+  it('keeps a short conversation intact with no omission marker', () => {
+    const msgs = buildBlueprintMessages([{ role: 'user', content: 'hello' }], null)
+    expect(msgs[1].content).toContain('user: hello')
+    expect(msgs[1].content).not.toContain('omitted')
+  })
+
+  it('keeps only the newest turns past the turn cap and marks the omission', () => {
+    const history = Array.from({ length: BLUEPRINT_MAX_TURNS + 10 }, (_, i) => turn(i))
+    const user = buildBlueprintMessages(history, null)[1].content
+    expect(user).toContain('earlier turns omitted')
+    expect(user).not.toContain('t09') // 26 turns, window 16 → t10..t25 survive
+    expect(user).toContain('t10')
+    expect(user).toContain('t25')
+  })
+
+  it('respects the character budget, newest turns winning', () => {
+    const big = 'x'.repeat(Math.floor(BLUEPRINT_MAX_CONVO_CHARS / 3))
+    const history = [
+      { role: 'user' as const, content: `A${big}` },
+      { role: 'assistant' as const, content: `B${big}` },
+      { role: 'user' as const, content: `C${big}` },
+      { role: 'assistant' as const, content: `D${big}` },
+    ]
+    const user = buildBlueprintMessages(history, null)[1].content
+    expect(user).toContain('earlier turns omitted')
+    expect(user).toContain('user: C')
+    expect(user).toContain('assistant: D')
+    expect(user).not.toContain('user: A')
+    expect(user).not.toContain('assistant: B')
+  })
+
+  it('clips a single turn that alone busts the budget', () => {
+    const history = [{ role: 'user' as const, content: 'y'.repeat(BLUEPRINT_MAX_CONVO_CHARS + 5000) }]
+    const user = buildBlueprintMessages(history, null)[1].content
+    expect(user).toContain('…[clipped]')
+    expect(user.length).toBeLessThan(BLUEPRINT_MAX_CONVO_CHARS + 2000)
   })
 })

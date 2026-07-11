@@ -160,6 +160,10 @@ export interface RunLogEntry {
   verify: 'on' | 'off';
   outcome: 'ok' | 'error';
   error?: string;
+  /** The provider's finish reason for the final result ('stop', 'length',
+   * …) when it reports one. 'length' is the truncation fingerprint —
+   * without it a capped-off reply and a complete one log identically. */
+  stopReason?: string;
   /** Active profile id (S-5 stamp). */
   profile?: string;
   /** Goal-verify verdict chain, one entry per iteration (populated by the
