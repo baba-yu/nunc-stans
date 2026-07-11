@@ -196,8 +196,10 @@ pub fn build_router(cfg: GateCfg, fourfive_dist: &Path) -> Router {
         .route("/self/{*path}", any(proxy_engine))
         // All three spellings: the axum wildcard needs a non-empty segment,
         // so bare "/apps" and "/apps/" (the index page) get literal routes —
-        // otherwise they fall through to the formans SPA fallback.
-        .route("/apps", any(proxy_apps))
+        // otherwise they fall through to the formans SPA fallback. Bare
+        // "/apps" redirects to "/apps/" so the index shell's relative assets
+        // (./assets/*) resolve under the mount instead of at the origin root.
+        .route("/apps", any(apps_trailing_redirect))
         .route("/apps/", any(proxy_apps))
         .route("/apps/{*path}", any(proxy_apps))
         .nest_service("/fourfive", fourfive)
@@ -274,6 +276,13 @@ async fn proxy_fourfive(
     let pq = orig.path_and_query().map(|p| p.as_str()).unwrap_or("/");
     let stripped = proxy::strip_mount(pq, "/fourfive");
     proxy::forward(&cfg.client, format!("{}{}", cfg.fourfive_url, stripped), req).await
+}
+
+/// Bare `/apps` → `/apps/` (308). The index shell loads its assets relative
+/// (`./assets/*`); without the trailing slash the browser resolves them at the
+/// origin root instead of under the mount, and the shell fails to boot.
+async fn apps_trailing_redirect() -> Response {
+    (StatusCode::PERMANENT_REDIRECT, [(header::LOCATION, "/apps/")]).into_response()
 }
 
 async fn proxy_apps(State(cfg): State<GateCfg>, req: Request) -> Response {

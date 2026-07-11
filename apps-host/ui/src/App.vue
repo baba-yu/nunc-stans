@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from 'vue'
-import { Panel, Badge } from 'nunc-ui'
+import { Panel, Badge, SHELL_NAV, SideNav } from 'nunc-ui'
 
 // The generic shell: everything below is driven by the served manifest —
 // no per-app code exists anywhere (contract §6). Served at /apps/<slug>/,
@@ -47,6 +47,17 @@ interface MetricValue {
   value: number | string | null
   error?: string
 }
+
+interface AppInfo {
+  slug: string
+  version: number
+  name: string
+}
+
+// Two modes, one build: 'index' at /apps/ (the app list), 'app' at
+// /apps/<slug>/. Distinguished at load — a missing manifest means the index.
+const mode = ref<'app' | 'index'>('app')
+const appList = ref<AppInfo[]>([])
 
 const manifest = ref<Manifest | null>(null)
 const status = ref<{ readOnly: boolean; reason: string | null } | null>(null)
@@ -212,14 +223,54 @@ onMounted(async () => {
     status.value = await get<{ readOnly: boolean; reason: string | null }>('api/status')
     document.title = manifest.value.name
     await refresh()
-  } catch (err) {
-    banner.value = (err as Error).message
+  } catch {
+    // No manifest here → the /apps index: list every served app in the shell.
+    try {
+      mode.value = 'index'
+      document.title = 'Apps · Nunc Stans'
+      appList.value = await get<AppInfo[]>('api')
+    } catch (err) {
+      banner.value = (err as Error).message
+    }
   }
 })
 </script>
 
 <template>
-  <main class="shell">
+  <div class="layout">
+    <!-- The generic app UI adopts the shared shell rail (contract §6):
+         Apps is no longer a one-way island — the gate-fronted nav travels
+         with it, active on the Apps entry. -->
+    <SideNav>
+      <template #nav>
+        <a
+          v-for="l in SHELL_NAV"
+          :key="l.href"
+          :href="l.href"
+          class="nui-sidenav__link"
+          :class="{ 'nui-sidenav__link--active': l.href === '/apps/' }"
+        >
+          {{ l.label }}
+        </a>
+      </template>
+    </SideNav>
+    <main class="shell">
+    <template v-if="mode === 'index'">
+      <header class="shell__head"><h1>Apps</h1></header>
+      <p v-if="banner" class="shell__banner">{{ banner }}</p>
+      <Panel title="Generated apps">
+        <ul v-if="appList.length" class="app-list">
+          <li v-for="a in appList" :key="a.slug">
+            <a :href="`${a.slug}/`">{{ a.name }}</a>
+            <code>{{ a.slug }}@v{{ a.version }}</code>
+          </li>
+        </ul>
+        <p v-else class="shell__desc">
+          No served apps yet — design one in FourFive and press “Generate bundle”.
+        </p>
+      </Panel>
+    </template>
+    <template v-else>
     <header class="shell__head">
       <h1>{{ manifest?.name ?? 'Loading…' }}</h1>
       <Badge v-if="manifest">{{ manifest.slug }}@v{{ manifest.version }}</Badge>
@@ -299,11 +350,19 @@ onMounted(async () => {
         </tbody>
       </table>
     </Panel>
-  </main>
+    </template>
+    </main>
+  </div>
 </template>
 
 <style scoped>
+.layout {
+  display: flex;
+  align-items: flex-start;
+}
 .shell {
+  flex: 1;
+  min-width: 0;
   max-width: 960px;
   margin: 0 auto;
   padding: 24px 16px 64px;
@@ -322,6 +381,19 @@ onMounted(async () => {
 .shell__desc {
   color: var(--text-dim, #9aa3b2);
   margin: 0;
+}
+.app-list {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 6px;
+}
+.app-list a {
+  color: var(--accent, #18c7d8);
+}
+.app-list code {
+  color: var(--text-dim, #9aa3b2);
+  margin-left: 8px;
 }
 .shell__banner {
   color: var(--warn, #d9c47f);
