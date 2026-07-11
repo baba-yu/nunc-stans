@@ -373,6 +373,17 @@ workspace/apps/<slug>/versions/<N>/   (design-time, as today)
 data: ~/nunc-stans-data/apps/<slug>/data.sqlite   (per-user, local — requirement 8)
 ```
 
+**[Sketch PARTIALLY SUPERSEDED at Phase E close (2026-07-11) — decisions,
+not drift, per the phase-e plan]**: a bundle is **declarative data only**
+— `crud.ts` and generated Vue screens are not emitted; apps-host
+interprets `app.json`/`ui.json` with one generic runtime and no
+generated code ever executes (PE2/PE3). Tool names use underscores
+(`<slug>_<entity>_{list,get,create,update,archive}`) — provider tool-name
+charsets exclude dots (PE7). `tests/scenarios.json` is derived from
+entities (CRUD walks + metrics), not from user stories; `stories[]` ride
+the manifest for traceability (Design spec §4). The rest of the sketch
+shipped as written: contracts/app-bundle.md is the boundary.
+
 - **apps-host** (one Hono server) serves every bundle under the single origin
   and exposes the MCP tool surface, so *agents operate the same app the human
   uses* — the co-use loop. One host process, not one process per app.
@@ -398,7 +409,7 @@ exists in code or docs (FD-3.2 enforces this). Inside the designated store:
 <data store>/
   self/         ledger vault (git, NO remote — F11 unchanged)
   world/        News DB cache (analytics.sqlite moves here; rebuildable from report/ markdown)
-  artifact/     FourFive workspace (blueprints, versions) — moves out of the repo
+  artifact/     FourFive workspace (blueprints, versions) — moves out of the repo *(done, Phase E T3/PE5)*
   apps/<slug>/  per-app user data (SQLite)
   profiles/     agent profiles
   runs/         AI run logs

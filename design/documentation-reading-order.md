@@ -109,7 +109,8 @@ nunc-stans/
 Landed since: `frontend/nunc-stans-formans/` and
 `frontend/packages/{nunc-ui,ai}` (Phase B–C), `agents/nunc-stans-agent/`
 (Phase D — the first-party agent; Formans gained `/profiles` and `/runs`
-the same phase). Still planned: `apps-host/` (Phase E).
+the same phase), and `apps-host/` (Phase E — the generated-app host at
+`/apps/` behind the gate; contract `contracts/app-bundle.md`).
 
 ---
 

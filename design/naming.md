@@ -40,6 +40,7 @@ stans*, the standing now. manda and fourfive keep their names. The name
 | `data/memory/` + `data/references.txt` (instance layout) | `data/history/` + the citation ledger `data/history/reference-history.log` (R12, 2026-07-07) |
 | "profile" = a nunc-fluens data instance (old engine docs, instances/<profile>/) | **profile = an AI configuration record** (provider/model/prompt/skills/memory-scope/verify — Phase D); a data instance is an *instance*, `instances/<name>/` (PD4, 2026-07-07) |
 | (new area) | `agent` = `agents/**` (agents/nunc-stans-agent, Phase D) — commit-scope + CI registered |
+| (new area) | `apps` = `apps-host/**` (the generated-app host at /apps/ behind the gate, Phase E) — commit-scope + CI + FD-7.4 registered; boundary contract `contracts/app-bundle.md`; glossary gained bundle / generated app / metric / apps-host |
 
 Rule IDs (`F1`–`F15`, `FD-x.y`, `NS-x`, `Inv N`) are retained as opaque
 historical identifiers; the letters no longer expand to anything.

@@ -351,10 +351,55 @@ home-library-lending-log (this story), and the owner's own
 the strongest generality signal: the factory worked without the
 implementer driving).
 
-## Constitutional check record
+- **2026-07-11 — T11 (in progress → completed below)**: full local
+  suite green post-merge (`just test`: ns 11 + gate 13/21, ai 42,
+  agent 27, nunc-ui 9, formans 40, fourfive 75, apps-host 13, pipeline
+  214). **3-OS CI GREEN on 9f958e9**: all 10 jobs succeeded —
+  engine/web/nunc-fluens on ubuntu+windows+macos, plus invariants
+  (the branch was mirrored to `phase/e-finish` to hit the push-CI
+  matcher; PR #9 re-open is an owner click). Screenshots + the S-7
+  agent transcript committed under `design/ui/phase-e/` (bfb6c4b):
+  apps index, both generated UIs, FourFive design view, the /strategy
+  card live on the S-8 app.
+- **2026-07-11 — T12 doc sweep**: v1 plan §2.8 got the close-time
+  supersede note (declarative bundle / underscore tool names /
+  entity-derived scenarios — PE3/PE7/spec-§4) and §2.9's artifact/
+  move marked done (PE5); naming.md gained the `apps` area row;
+  reading-order's repo map moved apps-host from planned to landed.
 
-(Filled through the phase: F7 freeze refusal output, grounding⊆declared
-check output, F3 rails untouched, F11 locality, §13 one-path proof.)
+## Constitutional check record (filled at T10–T12, 2026-07-11)
+
+- **F7 (a cut version is immutable) — live refusal output**, twice, on
+  two different apps: "<slug> v1 is frozen but app.json does not
+  reproduce byte-for-byte — the frozen source or bundle was modified
+  (F7)" (HTTP 409; plant-care-log and home-library-lending-log, S-8
+  records above). Determinism: freeze.test.ts byte-identity suite +
+  the manual double-runs — re-generating each frozen version returned
+  200 with the identical bundle_hash (`bcde7361…`, `b25b1027…`).
+- **Grounding⊆declared ("metrics the app does not measure are not
+  grounds") — enforced in code**: parseStrategyCard throws on any
+  undeclared grounding entry (render fails, 422; unit test names the
+  offender, strategy.test.ts). Live: the S-7 card's grounding equalled
+  the declared set exactly; the metrics-only prompt carries nothing
+  else (buildStrategyMessages test).
+- **F3 rails untouched**: the agent suite (27) is green; app CRUD rides
+  profile-skills gating (PE10), memory still goes exclusively through
+  manda; no commitment-scope surface was touched this phase.
+- **F11 locality**: everything serves loopback behind the gate; app
+  data lives in `<store>/apps/<slug>/data.sqlite`; no remote, no
+  telemetry; bundles carry no user data.
+- **§13 one-path**: fourfive↔apps-host touch ONLY through the bundle
+  contract (filesystem, discovery-by-scan) and the published API (the
+  /strategy fetch — §13-A-legal); FD-7.4 import check green
+  (`apps-host/` may import contracts/ + frontend/packages/* only).
+
+## Determinism record
+
+- generate.test.ts: bundle bytes are a pure function of blueprint.json
+  (no clock, no LLM); bundleHash pinned.
+- Manual double-runs at T10: two POSTs against each frozen version
+  reproduced identical hashes (see S-8); a tampered source refused
+  rather than regenerated — determinism enforced, not assumed.
 
 ## Exit criteria checklist
 
