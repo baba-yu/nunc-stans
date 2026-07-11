@@ -124,8 +124,35 @@ issues, addressed in [a14951b, 5fc3ca5]:
   F-3); `mandateStatusAt` reads inline `m.events`, not a `mandate_events.jsonl`
   (mandates are SPL v3 / injected-only in Phase F); `/strategy/save` maps an
   engine 4xx to 502 (the error text is surfaced verbatim — a status cosmetic).
-Final: ns **18**, fourfive **78**, journey self-test **28**, `just journey` 10
-steps green, `just journey-verify` read-only proven.
+
+**Round 2 (after the F-2 build + full journey; 3 lenses over
+035fa02..HEAD):** no blockers; 4 majors + minors, ALL addressed
+[98e0a85 ff, c0a270f apps, 3a96359 tool, 561b8a3 contracts]:
+- an explicit S-6 **verify toggle was silently dropped** on served-app
+  sessions (tools forced verify off) → verify now WINS over ambient tools;
+- **bundleResult leaked across sessions** (session B could iframe and operate
+  session A's app) → per-session reset;
+- a **cleared edit field silently kept its old value** → surfaced in the
+  banner;
+- **silence steps compared record counts only** (a stray file/event line
+  passed) → the file list is compared too;
+- plus: T14's rewrite now draws the documented outcome→outcome supersedes
+  edge; T18's lapse window derives from the vault's mandates; §5 metrics are
+  derived-and-asserted (or labeled narrative); sweep no longer claims a wrong
+  'newest' at the 1000-row cap; live-empty patrol doesn't leak 'Mock' framing;
+  ids URL-encoded; FK empty-target fallback; NaN guard; the contract's tools
+  row says ARRAY; 'intervention' dropped from the dismisses row (undeclared);
+  informed_by admits commitment→knowledge (the journey spec's own T6).
+- **Left, pre-existing/by-design (named):** scope-id/glossary omit
+  dismissal/knowledge (predates F); check 4's commitment-authorship arm is
+  vacuous against engine-written commitments (they carry no author field —
+  by the engine's own design); saveEdit PATCHes a full snapshot (single-user
+  v0); the SSE parser's multi-line data joining (pre-existing, unreachable).
+
+Final after both rounds: ns **18** · ff **92** · apps **14** · journey
+self-test **28** · `just journey` **18 steps green** (now with derived §5
+assertions + file-level silence checks) · full sweep + `just check` green ·
+live smoke **13/13**.
 
 ## F-5 — 4-week live gate (mechanism DONE; clock owner-run)
 
