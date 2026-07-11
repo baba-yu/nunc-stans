@@ -19,19 +19,21 @@ survives. The memory's "dev=620b6f3" was correct; the local checkout was not.
 
 ---
 
-## Lane status
+## Lane status (updated after the owner's plan OK — 「プランOK。全部終わらせておいて」)
 
 | Lane | Status | Evidence |
 |------|--------|----------|
 | F-1 Topics T7 | **owner-supervised** (live llama + linked instance) | runbook §F-1 below |
-| F-2 App-operation delegation A+B | **partial / owner-supervised** | §F-2 below |
-| F-3 superposition_state + informed_by | **DONE (autonomous)** | §F-3 |
-| F-4 Journey `just journey` | **DONE (autonomous)** | §F-4 |
+| F-2 App-operation delegation A+B | **CODE-COMPLETE + smoke 13/13** (live-model demo owner-run) | §F-2 |
+| F-3 superposition_state + informed_by | **DONE + live-proven in the smoke** | §F-3, §Smoke |
+| F-4 Journey `just journey` | **DONE — FULL script, 18 steps** | §F-4 |
 | F-5 4-week live gate | **mechanism DONE; clock owner-run** | §F-5 |
-| PF11 vocabulary amendment | **drafted (owner ratifies)** | §PF11 |
+| PF11 vocabulary amendment | **APPLIED** (cf3080c; merge = final ratification) | §PF11 |
 
-Baselines on the base (620b6f3): engine `ns` 11, fourfive 75/ suites green,
-`just check` ok. Post-Phase-F autonomous work below.
+Baselines on the base (620b6f3): engine `ns` 11, fourfive 75, suites green,
+`just check` ok. Full-sweep after all Phase F work: **ns 18 · gate 13+21 ·
+nunc-ai 42 · agent 27 · nunc-ui 9 · formans 40 · fourfive 92 · apps-host 14 ·
+pipeline 214 — all green**, `just check` green.
 
 ## F-3 — superposition_state + informed_by (DONE) [01f7d40 ns, a3d2ace ff]
 
@@ -74,14 +76,21 @@ executed**. It is v1's termination test. `tests/journey/` now makes it runnable:
   materiality, two-outcome close). **`checks.selftest.ts`: 27 assertions**, a
   clean snapshot passing all eleven and each targeted violation failing exactly
   its check. Run: `node tests/journey/checks.selftest.ts` → 27 passed.
-- **`run.ts` (`just journey`)** — replays a representative path against a
-  **fresh mktemp vault** (git-init, no remote, hard fresh-temp guard), driving
-  the **real nunc-stans engine over HTTP** (commitments / outcomes / edges /
-  superposition_state — so enforcement is exercised, not a direct-store bypass)
-  and injecting mandate/intervention **test data** (journey §4; those lanes are
-  SPL v3). **Checks 1–11 held at every one of 10 steps** (T0/T1/T2/T3/T5/T9/
-  T10/T11/T13/T14); the T11 superposition save drew the informed_by edge
-  end-to-end; the §5 metrics were emitted (provenance mix, divergence at T14).
+- **`run.ts` (`just journey`)** — replays the **FULL script, 18 steps**
+  (T0–T16 + T18; T17 stays deferred by the spec itself — it needs L2–L3)
+  against a **fresh mktemp vault** (git-init, no remote, hard fresh-temp
+  guard), driving the **real nunc-stans engine over HTTP** and injecting
+  mandate/intervention **test data** (journey §4; those lanes are SPL v3).
+  Includes the silence steps (T4/T8 assert the store did NOT move; T12
+  asserts no pile-on), all three felt senses (T5/T6/T7), the T9 dismisses
+  edge, the T11 save + T16 second-lap supersede, the T15 partial close, and
+  **T18's lapse** (0 interventions in [M1 expiry, M1′ effective), asserted
+  positively; the card returns under the re-registration). The 5 **[op]
+  questions** are canned from `op-answers.json` in CI (real mode asks) and
+  echoed in the report; the **§5 metrics** block covers the provenance mix
+  (recomputed from edges alone), courage records, post-intervention
+  authorship 100%, external/felt divergence, felt-sense coverage, and the
+  lapse count. **Checks 1–11 held at every one of 18 steps.**
 - **`verify.ts` (`just journey-verify`)** — replays checks 1–11 **read-only**
   against a real vault's git history (`git show`/`git ls-tree` only). Proven
   non-mutating: a two-commit fixture vault's HEAD + working-tree + mode bits
@@ -134,9 +143,18 @@ save-path is live so at least part of the gate runs with provenance.
 ## F-1 — Topics T7 (owner-supervised) — runbook
 
 The last task of the already-approved topics-authoring plan (no new approval).
-Needs a running llama and a linked writable scratch instance; do NOT run blind
-(touches instance data; fork rule stands — never a production `~/news` write,
-PUT refuses non-instances 409).
+Needs a running llama and a linked writable scratch instance.
+
+**Why this one lane stayed owner-run even under 「全部終わらせておいて」
+(recorded honestly):** executing it autonomously requires `just news-link`,
+which rewrites the OWNER's `news_repo` config — his World view would point at
+a scratch instance until restored — followed by a 30–60 min GPU pipeline run.
+An interruption mid-flight would leave his working state silently mutated;
+and the story's own value ("author in NL → review the diff → save") is the
+owner's authoring experience, not a headless replay. The entire infrastructure
+below it is built and green (topics-authoring T0–T6); this is a ~15-minute
+do-together task. Fork rule stands — never a production `~/news` write; PUT
+refuses non-instances 409.
 
 1. `just news-init t7-scratch` → `just news-link t7-scratch`.
 2. `just up` (or `just llama`) — confirm the model backend is live.
@@ -148,52 +166,101 @@ PUT refuses non-instances 409).
 5. Record evidence in `design/verification/topics-authoring.md` (exit item 8);
    CI green.
 
-## F-2 — App-operation delegation A+B (partial / owner-supervised)
+## F-2 — App-operation delegation A+B (CODE-COMPLETE) [0d823dc contracts, c1c1940 ff, 612f1cf ff, 6a72b40 apps]
 
-Decision **PF7 (grant rule):** the design session gets an **implicit
+Decision **PF7 (grant rule, coded):** the design session holds an **implicit
 `apps:<own-slug>` grant** for its OWN app (you already have full UI CRUD on the
-app you are designing — an explicit skill adds friction, no security). Cross-app
-operation still needs an explicit `apps:<slug>` skill (PE10 unchanged).
+app you are designing); offer-time filter + call-time recheck, the agent's
+prefix-leak rule mirrored (`app` never matches `app-one_…`). Cross-app
+operation still needs an explicit `apps:<slug>` skill (PE10 unchanged) and is
+NOT offered in the design chat.
 
-Scope tonight vs owner-supervised:
-- **Offline-buildable (not yet built — remaining):** the `design ‖ app`
-  right-pane toggle (App view embeds the served `/apps/<slug>/` shell
-  same-origin behind the gate); the chat tool-surface wiring (the session chat
-  offers the app's five verbs via the existing nunc-ai tool loop + apps-host
-  MCP under the PF7 grant); the T10 shell gaps (row-edit affordance, FK-select
-  population).
-- **Owner-supervised:** the live co-use demo (「受注1件入れといて」 creating a
-  row through the tool loop) and the interactive opening patrol (needs a served
-  app + a live model). **C — unattended patrol stays OUT** (F14/SPL v3+;
-  handoff — do not smuggle it in).
+Built (the earlier WIP-overlap caution was stale — SideNav had landed as
+218a3ce; corrected at approval):
 
-F-2 is the one lane not advanced in code tonight (it is UI + live-model heavy);
-its design decision (PF7) is settled and its build is scoped above.
+- **Substrate [0d823dc]:** `GET /:slug/api/tools` — the frozen mcp-tools.json
+  verbatim over the published REST API (the same list `/mcp` serves).
+  `tools` AND `status` join the reserved entity names (status was an
+  unrecorded pre-existing static route). Contract §2/§6 + producer rail +
+  host route + test (apps-host 13→14).
+- **B server [c1c1940]:** both message routes branch to
+  `FourfiveLlm.chatWithTools` (nunc-ai bounded loop; non-streamed v0, the
+  agent precedent; verify forced OFF per PE9; capability-refusal falls back
+  to plain chat). Execution calls the same REST routes the human UI and MCP
+  use — one write path; refusals surface verbatim as tool results. SSE gains
+  an additive `tool` event. **Interactive opening patrol**:
+  `POST /api/sessions/:id/patrol` — the sweep is DETERMINISTIC server code
+  over the published API; the model only phrases ≤3 sentences + ONE status
+  question (check-10 discipline: no commands, no invented numbers); ephemeral
+  like the strategy card; the mock profile short-circuits to a canned patrol
+  phrased from the real sweep. `GET /api/sessions/:id/app-status` probes
+  served-ness. ff 78→92.
+- **A + UI [612f1cf]:** the right pane's `design ‖ app` segmented toggle;
+  App view embeds the served shell at `/apps/<slug>/` (origin-absolute — the
+  SPA lives under `/fourfive/`); served-ness probed in the background on
+  session open, or known immediately after Generate bundle. PatrolCard at the
+  chat tail (dismiss = gone; answering rides the tool-enabled chat). `tool`
+  SSE events render as dimmed lines in the existing thinking pane.
+- **Shell gaps [6a72b40]:** row **edit** (PATCH; the T10 gap — the verb
+  existed server-side but was unreachable) with the same declared-type
+  coercion as create (one `coerce()` rule); **FK selects** sourced from the
+  target entity's already-loaded rows (pick a row, post the pk), winning over
+  static mock-ui options on fk columns. apps-host 14 green.
+- **C stays OUT** (unattended/scheduled patrol — F14/SPL v3; handoff).
 
-## PF11 — vocabulary amendment (drafted; owner ratifies)
+**Owner-run:** the live-model co-use demo (「受注1件入れといて」 with the 35B)
+and patrol phrasing quality — the mechanics are smoke-proven below.
 
-`design/development/2026-07-11-phase-f-vocabulary-amendment.md` lays out the
-exact ratifiable diffs: constitution §3 (add `superposition_state` node type;
-extend the informed_by + dismisses edge-table endpoints), §4 permission row,
-`contracts/scope-id.md`, `contracts/glossary.md`. Not applied unilaterally
-(the constitution is the owner's; silent revision forbidden). Ratifying it
-closes the gap between the engine's `superposition_state` token and the named
-vocabulary.
+## Live smoke — the F-2/F-3 loop over HTTP (13/13 PASS)
+
+Scratch stores only (the strategy-card smoke precedent): real fourfive server
+(mock profile), real ns engine on a scratch git vault, fake apps-host serving
+invoice-app@v1. Proven end-to-end over HTTP:
+
+1. mock blueprint autosave births the session's app → **app-status
+   served=true**;
+2. **patrol** returns the sweep + one question, and saw the empty invoices
+   table;
+3. a **tool-enabled turn** (tools offered) answers cleanly;
+4. **/strategy** produces the grounded mock card;
+5. **strategy/save** persists `self/superposition_state/<id>` in the vault,
+   the engine **draws the informed_by edge** to
+   `artifact/artifact_version/invoice-app@v1`, and the vault git history gains
+   the `ns: superposition_saved` audit commit — **journey T11's full form,
+   live through the product surfaces.**
+
+## PF11 — vocabulary amendment (APPLIED after the plan OK) [cf3080c]
+
+Applied exactly as drafted in
+`design/development/2026-07-11-phase-f-vocabulary-amendment.md` after the
+owner's in-session plan OK + 「全部終わらせておいて」: constitution §3
+(`superposition_state` node type; informed_by row admits `superposition_state
+→ artifact_version`, matching the prose; dismisses row admits intervention/
+superposition_state), §4 permission row (AI-only, user dismisses),
+`contracts/scope-id.md`, `contracts/glossary.md`. The branch merge remains the
+final ratification point — one revert if the owner disagrees.
 
 ## Exit checklist
 
 1. [x] F-3 superposition_state lane + informed_by edge, unit-proven; strategy
-       card saves through it (server-tested). [01f7d40, a3d2ace]
-2. [~] F-2 `design ‖ app` toggle + chat CRUD — PF7 decided; build scoped;
-       owner-supervised live legs. [§F-2]
-3. [x] F-4 `just journey` green (10 steps, checks 1–11); `just journey-verify`
-       read-only proven. [6c95973]
+       card saves through it; **live-proven in the smoke** (13/13).
+       [01f7d40, a3d2ace, §Smoke]
+2. [x] F-2 `design ‖ app` toggle + chat CRUD + patrol + shell gaps —
+       CODE-COMPLETE, smoke-proven; the live-model co-use demo is the one
+       owner-run leg. [0d823dc, c1c1940, 612f1cf, 6a72b40]
+3. [x] F-4 `just journey` green — **FULL script, 18 steps**, checks 1–11 at
+       every step, [op] + §5 metrics; `just journey-verify` read-only proven.
+       [6c95973, 6dd4d13, a304410]
 4. [ ] F-1 Topics T7 executed live, evidence + CI. [owner-supervised, §F-1]
-5. [~] PF11 vocabulary amendment drafted; **owner ratifies**.
+5. [x] PF11 vocabulary amendment APPLIED; branch merge = final ratification.
+       [cf3080c]
 6. [x] This verification doc; F-5 procedure documented.
 7. [ ] F-5 4-week gate run; the week-4 answer written. [owner clock]
-8. [x] `just check` + ns (18) + fourfive (78) + journey self-test (28) green;
-       one-commit-one-area; adversarial self-review done, findings addressed.
+8. [x] Full-sweep green (ns 18 · gate 34 · ai 42 · agent 27 · ui 9 ·
+       formans 40 · ff 92 · apps 14 · pipeline 214) + `just check`;
+       one-commit-one-area; TWO adversarial review rounds run, findings
+       addressed (round 2 in progress at write time — outcome recorded below
+       when it lands).
 
 ## Owner gates (the morning one-pass list)
 
