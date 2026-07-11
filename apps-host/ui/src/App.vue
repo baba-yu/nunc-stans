@@ -162,8 +162,12 @@ async function submit(spec: FormSpec): Promise<void> {
     const raw = form[f.column]
     if (raw === undefined || raw === '') continue
     const col = entity.columns.find((c) => c.name === f.column)!
-    payload[f.column] =
-      col.type === 'INTEGER' || col.type === 'REAL' || col.type === 'NUMERIC' ? Number(raw) : raw
+    // Serialize to the DECLARED column type. Vue's v-model auto-casts
+    // type="number" inputs to JS numbers, so a numeric UI field mapped to a
+    // TEXT column would otherwise post a number the host rightly refuses
+    // (S-7 execution 2026-07-10: deals.expected_monthly_amount TEXT).
+    const numeric = col.type === 'INTEGER' || col.type === 'REAL' || col.type === 'NUMERIC'
+    payload[f.column] = numeric ? Number(raw) : typeof raw === 'number' ? String(raw) : raw
   }
   const res = await fetch(`api/${spec.entity}`, {
     method: 'POST',
