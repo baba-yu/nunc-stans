@@ -74,10 +74,33 @@ export interface SendMessageBody {
   maxTokens?: number
 }
 
+/** Why the blueprint step of a turn did (or did not) yield a usable
+ * blueprint. The first five are classified from the LLM call itself
+ * (server/llm/nunc-ai.ts); 'invalid' (schema refusal) and 'error'
+ * (unexpected failure) are added by the route handler. Every outcome
+ * except 'ok' keeps the previously saved blueprint; everything except
+ * 'ok'/'empty' is surfaced ('empty' is the model's honest "not enough
+ * info yet", the normal early-conversation state). */
+export type BlueprintOutcome =
+  | 'ok'
+  | 'empty'
+  | 'parse-failed'
+  | 'length-truncated'
+  | 'context-overflow'
+  | 'invalid'
+  | 'error'
+
+export interface BlueprintStepStatus {
+  outcome: BlueprintOutcome
+  detail?: string
+}
+
 export interface SendMessageResponse {
   userMessage: Message
   assistantMessage: Message
   blueprint: Blueprint | null
+  /** Present since the 2026-07-10 hardening — older callers ignore it. */
+  blueprintStatus?: BlueprintStepStatus
 }
 
 export interface UsageResponse {
@@ -93,6 +116,56 @@ export interface AppListItem {
   description: string | null
   current_version: number
   updated_at: string
+}
+
+// --- strategy read-out (Phase E, plan PE12) ---
+
+/** One declared metric with its current value, exactly as apps-host's
+ * published API serves it (contracts/app-bundle.md §6). */
+export interface ServedMetric {
+  name: string
+  label: string
+  value: number | string | null
+  error?: string
+}
+
+/** The stage-3 card. `grounding` must be a subset of the declared metric
+ * names — enforced server-side in code, not prose (S-7). */
+export interface StrategyCard {
+  win: string
+  constraint: string
+  risk_to_watch: string
+  grounding: string[]
+}
+
+export interface StrategyResponse {
+  card: StrategyCard
+  /** The SERVED app version the metrics came from (may trail the session's
+   * rolling blueprint version) — the card's `<slug>@v<N>` stamp. */
+  app: { slug: string; version: number; name: string }
+  metrics: ServedMetric[]
+}
+
+// --- app status + opening patrol (Phase F, F-2) ---
+
+/** Served-bundle probe for the design‖app toggle. */
+export interface AppStatusResponse {
+  slug: string | null
+  served: boolean
+  version?: number
+  name?: string
+}
+
+/** The interactive opening patrol — ephemeral (the strategy-card precedent):
+ * the deterministic sweep + the model's one status question. */
+export interface PatrolResponse {
+  patrol: {
+    text: string
+    app: { slug: string; version: number; name: string }
+    rows: { entity: string; count: number; latest: string | null }[]
+    metrics: ServedMetric[]
+  } | null
+  reason?: string
 }
 
 /** One dependency of the current session's app, with its pinned blueprint. */

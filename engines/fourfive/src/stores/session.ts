@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
-import type { DependencyInfo, Message, Session, VerifyStep } from '../../shared/types'
+import type { AppStatusResponse, BlueprintStepStatus, DependencyInfo, Message, PatrolResponse, Session, StrategyResponse, VerifyStep } from '../../shared/types'
 import type { Blueprint } from '../../shared/blueprint'
 import { api } from '../api/client'
 
@@ -49,6 +49,10 @@ export const useSessionStore = defineStore('session', () => {
   const provider = ref('…')
   const profile = ref<string | null>(null)
   const blueprint = ref<Blueprint | null>(null)
+  // Why the last turn's blueprint step did/didn't move the right pane
+  // (server-classified; null until a turn reports one). The panel shows a
+  // hint for warn-worthy outcomes instead of silently keeping the old view.
+  const blueprintStatus = ref<BlueprintStepStatus | null>(null)
   const dependencies = ref<DependencyInfo[]>([])
   const showNewSessionModal = ref(false)
   const usage = ref({ input: 0, output: 0, total: 0 })
@@ -201,20 +205,112 @@ export const useSessionStore = defineStore('session', () => {
     }
   }
 
+  // The /strategy stage-3 card (PE12): ephemeral until the user SAVES it as
+  // grounds (Phase F, F-3 — a superposition_state record + informed_by edge).
+  // Dismiss stays the default; ephemeral remains the no-action behavior.
+  const strategy = ref<StrategyResponse | null>(null)
+  const strategyError = ref<string | null>(null)
+  const strategyLoading = ref(false)
+  // F-3 save-path state: 'idle' | 'saving' | 'saved' | an error string.
+  const strategySaveState = ref<'idle' | 'saving' | 'saved' | { error: string }>('idle')
+
+  // F-2: served-bundle status (the design‖app toggle) + the opening patrol.
+  // Both ephemeral, probed lazily after session open — never block it. The
+  // patrol fires once per session per page load, only when a bundle is served.
+  const appStatus = ref<AppStatusResponse | null>(null)
+  const patrol = ref<PatrolResponse['patrol']>(null)
+  const patrolled = new Set<string>()
+
+  function dismissPatrol() {
+    patrol.value = null
+  }
+
+  async function probeApp(sessionId: string) {
+    try {
+      const st = await api.appStatus(sessionId)
+      if (current.value?.id !== sessionId) return // stale probe — session switched
+      appStatus.value = st
+      if (st.served && !patrolled.has(sessionId)) {
+        const res = await api.patrol(sessionId)
+        // Mark patrolled only on SUCCESS — a transient 502 (llama mid-backoff)
+        // must not silently consume the once-per-load patrol; reopening the
+        // session retries (review-found 2026-07-11).
+        patrolled.add(sessionId)
+        if (current.value?.id === sessionId && res.patrol) patrol.value = res.patrol
+      }
+    } catch {
+      // No status → the right pane simply stays design-only; no patrol.
+    }
+  }
+
+  async function runStrategy() {
+    if (!current.value || strategyLoading.value) return
+    strategyLoading.value = true
+    strategy.value = null
+    strategyError.value = null
+    try {
+      strategy.value = await api.strategyReadout(current.value.id)
+    } catch (e) {
+      // Refusals render verbatim — a grounding violation is a FAILED render
+      // (S-7), never silently retried or softened.
+      strategyError.value = (e as Error).message
+    } finally {
+      strategyLoading.value = false
+    }
+  }
+
+  function dismissStrategy() {
+    strategy.value = null
+    strategyError.value = null
+    strategySaveState.value = 'idle'
+  }
+
+  // F-3: save the read-out as grounds. The card is re-validated server-side
+  // against the live declaration before it is persisted (defense in depth).
+  async function saveStrategy() {
+    if (!current.value || !strategy.value || strategySaveState.value === 'saving') return
+    strategySaveState.value = 'saving'
+    try {
+      await api.saveStrategy(current.value.id, strategy.value.card)
+      strategySaveState.value = 'saved'
+    } catch (e) {
+      strategySaveState.value = { error: (e as Error).message }
+    }
+  }
+
   async function openSession(s: Session) {
     current.value = s
     activeFieldId.value = null
+    dismissStrategy()
+    dismissPatrol()
+    appStatus.value = null
+    // Bundle results are per-session: without this reset, a bundle frozen in
+    // session A kept the app toggle + "Frozen…" note (and the iframe) alive
+    // in every other session (review-found 2026-07-11).
+    bundleResult.value = null
+    bundleError.value = null
+    blueprintStatus.value = null
     messages.value = await api.getMessages(s.id)
     const res = await api.getBlueprint(s.id)
     blueprint.value = res.blueprint
     dependencies.value = res.dependencies
     softwareStack.value = res.blueprint?.software_stack ?? ''
     await refreshUsage()
+    // F-2: probe served-ness + fire the opening patrol in the background —
+    // session open never waits on apps-host or a model.
+    void probeApp(s.id)
   }
 
   async function send(content: string) {
     const text = content.trim()
     if (!current.value || !text || sending.value) return
+    // A slash command, not a chat turn: /strategy renders the ephemeral
+    // stage-3 card (PE12) instead of talking to the design chat. Trailing
+    // words are tolerated (the read-out takes no arguments in v0).
+    if (text === '/strategy' || text.startsWith('/strategy ')) {
+      await runStrategy()
+      return
+    }
     sending.value = true
     const sid = current.value.id
 
@@ -227,6 +323,7 @@ export const useSessionStore = defineStore('session', () => {
     }
     messages.value.push(optimistic)
     streamingMsg.value = { content: '', thinking: '', thinkingOpen: true, verify: [] }
+    blueprintStatus.value = null
     let collapsed = false
 
     try {
@@ -250,6 +347,13 @@ export const useSessionStore = defineStore('session', () => {
             case 'thinking':
               if (sm) sm.thinking += JSON.parse(data) as string
               break
+            case 'tool': {
+              // F-2 B: one line per executed app-tool call, shown in the
+              // dimmed thinking pane (meta activity, not reply content).
+              const t = JSON.parse(data) as { name: string; arguments: Record<string, unknown> }
+              if (sm) sm.thinking += `${sm.thinking ? '\n' : ''}⚙ ${t.name} ${JSON.stringify(t.arguments)}`
+              break
+            }
             case 'content':
               if (sm) {
                 // Collapse the thinking section once the real reply starts.
@@ -273,6 +377,9 @@ export const useSessionStore = defineStore('session', () => {
             }
             case 'blueprint':
               blueprint.value = JSON.parse(data) as Blueprint | null
+              break
+            case 'blueprint_status':
+              blueprintStatus.value = JSON.parse(data) as BlueprintStepStatus
               break
           }
         },
@@ -365,6 +472,7 @@ export const useSessionStore = defineStore('session', () => {
     provider,
     profile,
     blueprint,
+    blueprintStatus,
     dependencies,
     showNewSessionModal,
     thinking,
@@ -404,5 +512,15 @@ export const useSessionStore = defineStore('session', () => {
     bundleResult,
     bundleError,
     generateBundle,
+    strategy,
+    strategyError,
+    strategyLoading,
+    strategySaveState,
+    runStrategy,
+    dismissStrategy,
+    saveStrategy,
+    appStatus,
+    patrol,
+    dismissPatrol,
   }
 })

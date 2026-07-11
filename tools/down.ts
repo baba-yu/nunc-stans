@@ -1,19 +1,24 @@
 #!/usr/bin/env node
 // nunc-stans down: stop the stack started by `just up`.
-// Terminates whatever is LISTENING on the gate, engine, fourfive, and
-// apps-host ports, honoring the same NS_PORT / NS_ENGINE_PORT overrides
-// `just up` uses (fourfive fixed at :8787, apps-host at :8788). SIGTERM
+// Terminates whatever is LISTENING on the gate, engine, fourfive, apps-host,
+// and llama-server ports, honoring the same NS_PORT / NS_ENGINE_PORT /
+// NS_LLAMA_PORT overrides `just up` uses (fourfive fixed at :8787, apps-host
+// at :8788, llama-server at :8080). :8080 is a heavily shared default port,
+// so its PID is killed ONLY when the process actually is llama-server —
+// an unrelated dev server squatting there is left alone. SIGTERM
 // first, then SIGKILL any survivor (on Windows both terminate
 // unconditionally — there is no graceful signal). Idempotent: a no-op
 // (exit 0) when nothing is running. Port-based on purpose so it also stops
 // individually-started sub-recipes, not just a concurrent up.
 import { execFileSync } from 'node:child_process'
+import { readFileSync } from 'node:fs'
 
 const GATE_PORT = Number(process.env.NS_PORT ?? 8720)
 const ENGINE_PORT = Number(process.env.NS_ENGINE_PORT ?? 8721)
 const FOURFIVE_PORT = 8787
 const APPS_HOST_PORT = 8788
-const PORTS = [GATE_PORT, ENGINE_PORT, FOURFIVE_PORT, APPS_HOST_PORT]
+const LLAMA_PORT = Number(process.env.NS_LLAMA_PORT ?? 8080)
+const PORTS = [GATE_PORT, ENGINE_PORT, FOURFIVE_PORT, APPS_HOST_PORT, LLAMA_PORT]
 const PORTS_LABEL = PORTS.join('/')
 
 function run(cmd: string, args: string[]): string {
@@ -46,8 +51,22 @@ function pidsOn(port: number): number[] {
     .filter((pid) => Number.isInteger(pid) && pid > 0)
 }
 
+/** Is this PID actually llama-server? (:8080 is too popular to port-kill.) */
+function isLlamaServer(pid: number): boolean {
+  if (process.platform === 'win32') {
+    return /llama-server/i.test(run('tasklist', ['/fi', `PID eq ${pid}`, '/fo', 'csv', '/nh']))
+  }
+  try {
+    return readFileSync(`/proc/${pid}/comm`, 'utf8').trim().startsWith('llama-server')
+  } catch {
+    return /llama-server/.test(run('ps', ['-p', String(pid), '-o', 'comm='])) // macOS: no /proc
+  }
+}
+
 function allPids(): number[] {
-  return [...new Set(PORTS.flatMap(pidsOn))]
+  const core = PORTS.filter((p) => p !== LLAMA_PORT).flatMap(pidsOn)
+  const llama = pidsOn(LLAMA_PORT).filter(isLlamaServer)
+  return [...new Set([...core, ...llama])]
 }
 
 function signalAll(sig: 'SIGTERM' | 'SIGKILL'): void {

@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest'
-import { appendFileSync, mkdirSync, mkdtempSync } from 'node:fs'
+import { appendFileSync, mkdirSync, mkdtempSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { buildApi } from '../src/api.ts'
@@ -27,6 +27,17 @@ describe('apps-host REST surface (contract §6)', () => {
     const res = await api().request('/api')
     expect(res.status).toBe(200)
     expect(await json(res)).toEqual([{ slug: 'fixture-app', version: 1, name: 'Fixture App' }])
+  })
+
+  it('serves the declared tool surface over REST, verbatim (Phase F)', async () => {
+    const res = await api().request('/fixture-app/api/tools')
+    expect(res.status).toBe(200)
+    const tools = await json<{ name: string }[]>(res)
+    // The same frozen mcp-tools.json /mcp serves: slug-prefixed five-verb names.
+    expect(tools.length).toBeGreaterThan(0)
+    for (const t of tools) expect(t.name).toMatch(/^fixture-app_[a-z0-9_]+_(list|get|create|update|archive)$/)
+    // 404 for an unserved slug, like every other app route.
+    expect((await api().request('/ghost-app/api/tools')).status).toBe(404)
   })
 
   it('serves the manifest and creates the data file lazily on first write', async () => {
@@ -124,5 +135,64 @@ describe('bundle runner (contract §8)', () => {
     const result = runScenarios(app)
     expect(result.failures).toEqual([])
     expect(result.passed).toBe(3)
+  })
+})
+
+describe('INTEGER primary keys (found by S-8 execution, 2026-07-10)', () => {
+  // A chat-designed blueprint may declare `id INTEGER PRIMARY KEY` (the
+  // rowid alias); the host must let SQLite assign it instead of forcing a
+  // UUID string into an INTEGER column (datatype mismatch on every create).
+  it('creates rows by letting SQLite assign the rowid pk', async () => {
+    const artifactRoot = mkdtempSync(join(tmpdir(), 'apps-host-intpk-'))
+    const dir = join(artifactRoot, 'apps', 'int-pk-app', 'versions', '001', 'bundle')
+    mkdirSync(join(dir, 'tests'), { recursive: true })
+    writeFileSync(
+      join(dir, 'app.json'),
+      JSON.stringify({
+        slug: 'int-pk-app',
+        version: 1,
+        name: 'Int PK App',
+        entities: [
+          {
+            name: 'items',
+            columns: [
+              { name: 'id', type: 'INTEGER', pk: true, notNull: true },
+              { name: 'title', type: 'TEXT' },
+              { name: 'created_at', type: 'TEXT', notNull: true, audit: true },
+              { name: 'updated_at', type: 'TEXT', notNull: true, audit: true },
+              { name: 'archived_at', type: 'TEXT', audit: true },
+            ],
+          },
+        ],
+        metrics: [],
+        stories: [],
+        ui: { screens: [] },
+        blueprint_hash: '0'.repeat(64),
+      }),
+    )
+    writeFileSync(
+      join(dir, 'schema.sql'),
+      'CREATE TABLE IF NOT EXISTS items (\n' +
+        '  id INTEGER PRIMARY KEY,\n  title TEXT,\n' +
+        '  created_at TEXT NOT NULL,\n  updated_at TEXT NOT NULL,\n  archived_at TEXT\n);\n',
+    )
+    writeFileSync(join(dir, 'mcp-tools.json'), JSON.stringify({ tools: [] }))
+    writeFileSync(join(dir, 'ui.json'), JSON.stringify({ screens: [] }))
+    writeFileSync(join(dir, 'tests', 'scenarios.json'), JSON.stringify({ scenarios: [] }))
+
+    const a = buildApi({ artifactRoot, dataRoot: mkdtempSync(join(tmpdir(), 'apps-host-intpk-data-')) })
+    const created = await a.request('/int-pk-app/api/items', {
+      method: 'POST',
+      body: JSON.stringify({ title: 'first' }),
+    })
+    expect(created.status).toBe(201)
+    const row = await json<{ id: number; title: string; created_at: string }>(created)
+    expect(row.id).toBe(1)
+    expect(row.title).toBe('first')
+    expect(row.created_at).toBeTruthy()
+    const second = await json<{ id: number }>(
+      await a.request('/int-pk-app/api/items', { method: 'POST', body: JSON.stringify({ title: 'second' }) }),
+    )
+    expect(second.id).toBe(2)
   })
 })

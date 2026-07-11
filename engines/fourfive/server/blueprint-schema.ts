@@ -6,11 +6,19 @@ import type { Blueprint } from '../shared/blueprint'
 
 const fieldType = z.enum(['text', 'number', 'select', 'checkbox', 'radio', 'date', 'textarea'])
 
+// Real models (T9, 2026-07-10) emit single links as bare strings
+// ("maps_to": "deals.name") where the shape wants string[] — normalize
+// instead of refusing the whole proposal; the parsed type stays string[].
+const strArray = z.preprocess(
+  (v) => (typeof v === 'string' ? [v] : v),
+  z.array(z.string()).default([]),
+)
+
 const mockUiField = z.object({
   id: z.string().min(1),
   label: z.string().min(1),
   type: fieldType,
-  maps_to: z.array(z.string()).default([]),
+  maps_to: strArray,
   description: z.string().optional(),
   options: z.array(z.string()).optional(),
   required: z.boolean().optional(),
@@ -41,18 +49,18 @@ const entity = z.object({
 const businessRule = z.object({
   id: z.string().min(1),
   name: z.string().min(1),
-  inputs: z.array(z.string()).default([]),
-  outputs: z.array(z.string()).default([]),
-  related_db: z.array(z.string()).default([]),
-  related_api: z.array(z.string()).default([]),
+  inputs: strArray,
+  outputs: strArray,
+  related_db: strArray,
+  related_api: strArray,
   description: z.string().optional(),
 })
 
 const term = z.object({
   term: z.string().min(1),
   definition: z.string().default(''),
-  aliases: z.array(z.string()).default([]),
-  related_objects: z.array(z.string()).default([]),
+  aliases: strArray,
+  related_objects: strArray,
   status: z.enum(['confirmed', 'tentative']).default('tentative'),
 })
 
@@ -60,8 +68,8 @@ const apiEndpoint = z.object({
   method: z.string().min(1),
   path: z.string().min(1),
   summary: z.string().optional(),
-  related_db: z.array(z.string()).default([]),
-  related_ui: z.array(z.string()).default([]),
+  related_db: strArray,
+  related_ui: strArray,
 })
 
 const stateTransition = z.object({
@@ -94,7 +102,7 @@ export const blueprintSchema = z.object({
   business_logic: z.array(businessRule).default([]),
   terminology: z.array(term).default([]),
   apis: z.array(apiEndpoint).default([]),
-  open_questions: z.array(z.string()).default([]),
+  open_questions: strArray,
   state_transitions: z.array(stateTransition).default([]),
   metrics: z.array(metric).default([]),
   stories: z.array(story).default([]),
@@ -104,6 +112,121 @@ export const blueprintSchema = z.object({
 export function validateBlueprint(data: unknown) {
   return blueprintSchema.safeParse(data)
 }
+
+// --- JSON Schema mirror (constrained decoding) ------------------------------
+// Hand-written mirror of blueprintSchema for ChatOptions.jsonSchema: the
+// llama-cpp provider sends it as response_format json_schema, which
+// llama-server compiles to a GBNF grammar — the model then CANNOT wrap the
+// blueprint in prose or code fences. zod above stays the trust boundary;
+// this only constrains generation. Kept in this file so the two shapes can
+// only drift in one diff (and the mirror test locks the key sets).
+// software_stack is deliberately absent: it is user-owned, the LLM never
+// sets it (additionalProperties: false makes that unrepresentable).
+
+const str = { type: 'string' } as const
+const strArr = { type: 'array', items: str } as const
+const bool = { type: 'boolean' } as const
+
+function obj(properties: Record<string, unknown>, required?: string[]) {
+  return {
+    type: 'object',
+    properties,
+    additionalProperties: false,
+    ...(required?.length ? { required } : {}),
+  }
+}
+
+const blueprintObjectJsonSchema = obj(
+  {
+    app: obj({ name: str, description: str }, ['name']),
+    mock_ui: obj({
+      screens: {
+        type: 'array',
+        items: obj(
+          {
+            id: str,
+            name: str,
+            fields: {
+              type: 'array',
+              items: obj(
+                {
+                  id: str,
+                  label: str,
+                  type: { enum: fieldType.options },
+                  maps_to: strArr,
+                  description: str,
+                  options: strArr,
+                  required: bool,
+                },
+                ['id', 'label', 'type'],
+              ),
+            },
+          },
+          ['id', 'name'],
+        ),
+      },
+    }),
+    entities: {
+      type: 'array',
+      items: obj(
+        {
+          name: str,
+          description: str,
+          columns: {
+            type: 'array',
+            items: obj(
+              { name: str, type: str, pk: bool, fk: str, nullable: bool, unique: bool, description: str },
+              ['name', 'type'],
+            ),
+          },
+        },
+        ['name'],
+      ),
+    },
+    business_logic: {
+      type: 'array',
+      items: obj(
+        { id: str, name: str, inputs: strArr, outputs: strArr, related_db: strArr, related_api: strArr, description: str },
+        ['id', 'name'],
+      ),
+    },
+    terminology: {
+      type: 'array',
+      items: obj(
+        { term: str, definition: str, aliases: strArr, related_objects: strArr, status: { enum: ['confirmed', 'tentative'] } },
+        ['term'],
+      ),
+    },
+    apis: {
+      type: 'array',
+      items: obj({ method: str, path: str, summary: str, related_db: strArr, related_ui: strArr }, ['method', 'path']),
+    },
+    open_questions: strArr,
+    state_transitions: {
+      type: 'array',
+      items: obj({ subject: str, from: str, to: str, trigger: str, description: str }, ['from', 'to']),
+    },
+    metrics: {
+      type: 'array',
+      items: obj(
+        { name: { type: 'string', pattern: '^[a-z][a-z0-9_]*$' }, label: str, sql: str },
+        ['name', 'label', 'sql'],
+      ),
+    },
+    stories: {
+      type: 'array',
+      items: obj({ id: str, title: str, scenario: str }, ['id', 'title']),
+    },
+  },
+  ['app'],
+)
+
+/** What proposeBlueprint asks the model for: the blueprint object, or JSON
+ * null — the prompt's "not enough information yet" escape hatch must stay
+ * expressible under the grammar. */
+export const blueprintResponseJsonSchema = {
+  anyOf: [blueprintObjectJsonSchema, { type: 'null' }],
+} as const
 
 // Compile-time only: ensures the validated output stays assignable to the
 // shared Blueprint type (no runtime cost). Fails typecheck if the two drift.

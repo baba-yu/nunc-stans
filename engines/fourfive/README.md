@@ -15,7 +15,8 @@ app", and export everything-but-the-UI as a Markdown blueprint.
 > entity in the ERD. You can export a Markdown blueprint (PRD §18) including state
 > transitions and a software stack. Replies stream token-by-token over SSE, with a
 > collapsible "thinking" view and an async blueprint update.
-> The LLM is switchable: `mock` (default), Ollama (GPU-capable), Claude — see
+> The LLM is switchable via profiles: `mock` (default), the stack's own
+> llama-server (first-class local backend), Ollama, Claude — see
 > [docs/guides/local-llm.md](docs/guides/local-llm.md).
 
 ## Stack
@@ -90,6 +91,13 @@ workspace/         SQLite + per-app artifacts (gitignored except .gitkeep)
 
 - **WSL-native.** `better-sqlite3` is a native module, so install and run with the
   same Node (don't mix an install done by a different-OS Node).
+- **Local-model gotchas** — "chat answers but no blueprint" is usually serving
+  config, not the model: per-slot context is `llama_ctx / llama_parallel`, chat
+  discipline comes from the profile's `system_prompt`, and reasoning models
+  spend `maxTokens` on thinking first. Details + which prompts are engine-
+  internal (do **not** edit `server/llm/blueprint-prompt.ts` casually — it is
+  paired with the blueprint schema):
+  [docs/guides/local-llm.md → Serving knobs & prompt discipline](docs/guides/local-llm.md#serving-knobs--prompt-discipline-llama-server).
 - Ollama is verified working ([docs/guides/local-llm.md](docs/guides/local-llm.md)); small models
   sometimes produce unstable blueprint JSON — use a larger model.
 - **Claude is a partial stub**: chat works but does **not** stream token-by-token

@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
-import { Badge } from 'nunc-ui'
+import { Badge, SHELL_NAV, SideNav } from 'nunc-ui'
 import { useSessionStore } from './stores/session'
+
+// Embedded = served under /fourfive/ behind the Nunc Stans gate: adopt the
+// shared shell (SideNav rail). Standalone (own origin, e.g. a future
+// microservice or the bare :8787 dev server) keeps the self-contained topbar.
+const embedded = window.location.pathname.startsWith('/fourfive')
 import ChatPanel from './components/ChatPanel.vue'
 import TempAppPanel from './components/TempAppPanel.vue'
 import MarkdownModal from './components/MarkdownModal.vue'
@@ -23,9 +28,23 @@ onMounted(() => store.init())
 </script>
 
 <template>
-  <div class="app">
+  <div class="app" :class="{ 'app--embedded': embedded }">
+    <SideNav v-if="embedded">
+      <template #nav>
+        <a
+          v-for="l in SHELL_NAV"
+          :key="l.href"
+          :href="l.href"
+          class="nui-sidenav__link"
+          :class="{ 'nui-sidenav__link--active': l.href === '/fourfive/' }"
+        >
+          {{ l.label }}
+        </a>
+      </template>
+    </SideNav>
+    <div class="app__col">
     <header class="topbar">
-      <a class="home" href="/" title="Back to Nunc Stans">⌂ Nunc Stans</a>
+      <a v-if="!embedded" class="home" href="/" title="Back to Nunc Stans">⌂ Nunc Stans</a>
       <div class="brand">FourFive</div>
       <div class="topbar__meta">
         <button
@@ -96,6 +115,7 @@ onMounted(() => store.init())
       <ChatPanel class="panes__left" />
       <TempAppPanel class="panes__right" />
     </main>
+    </div>
     <MarkdownModal />
     <NewSessionModal />
   </div>

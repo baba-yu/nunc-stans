@@ -8,6 +8,15 @@ set windows-shell := ["sh", "-cu"]
 # (NS_DATA env overrides per invocation).
 
 data_dir := `node tools/data-dir.ts 2>/dev/null || true`
+# The linked instance (world-view source); the gate's topics API reads/
+# writes its news-topics.json. Empty when nothing is linked.
+news_repo := `node tools/news-repo.ts 2>/dev/null || true`
+# External OpenAI-compatible model backend (config llama_url, NS_LLAMA_URL
+# override) — e.g. a GPU-resident ollama at http://127.0.0.1:11434. When set,
+# it is exported as LLAMACPP_HOST to every consumer (fourfive, apps-host,
+# gate topics-extract, agent) and `just up` does NOT start a local
+# llama-server. Empty = serve the local GGUF on :8080 as before.
+llama_url := `node tools/llama.ts url 2>/dev/null || true`
 
 # Doctor + data-store init (idempotent). `just bootstrap <dir>` designates
 # a folder kept elsewhere; without an argument it reuses the configured
@@ -87,8 +96,8 @@ news-schedule instance oncalendar='*-*-* 06:30:00':
 # expansion happen in just's shell on every OS (concurrently itself never
 # parses them).
 up: _require_data build
-    pnpm exec concurrently -k -n engine,fourfive,apps,gate -c yellow,blue,magenta,cyan \
-      "just _up-engine" "just _up-fourfive" "just _up-apps" "just _up-gate"
+    pnpm exec concurrently -k -n llama,engine,fourfive,apps,gate -c green,yellow,blue,magenta,cyan \
+      "just _up-llama" "just _up-engine" "just _up-fourfive" "just _up-apps" "just _up-gate"
 
 _up-engine: _require_data
     cargo run --manifest-path engines/nunc-stans/Cargo.toml --release -- \
@@ -96,13 +105,16 @@ _up-engine: _require_data
       --port "${NS_ENGINE_PORT:-8721}"
 
 _up-fourfive:
-    pnpm -C engines/fourfive start:server
+    if [ -n "{{llama_url}}" ]; then export LLAMACPP_HOST="{{llama_url}}"; fi; \
+      exec pnpm -C engines/fourfive start:server
 
 _up-apps: _require_data
-    pnpm -C apps-host start:server
+    if [ -n "{{llama_url}}" ]; then export LLAMACPP_HOST="{{llama_url}}"; fi; \
+      exec pnpm -C apps-host start:server
 
 _up-gate:
-    cargo run --manifest-path gate/Cargo.toml --release -- \
+    if [ -n "{{llama_url}}" ]; then export LLAMACPP_HOST="{{llama_url}}"; fi; \
+      exec cargo run --manifest-path gate/Cargo.toml --release -- \
       --port "${NS_PORT:-8720}" \
       --engine-url "http://127.0.0.1:${NS_ENGINE_PORT:-8721}" \
       --fourfive-url "http://127.0.0.1:8787" \
@@ -110,11 +122,80 @@ _up-gate:
       --formans-dist frontend/nunc-stans-formans/dist \
       --fourfive-dist engines/fourfive/dist \
       --data-dir "{{data_dir}}" \
-      --instances-dir engines/nunc-fluens/instances
+      --instances-dir engines/nunc-fluens/instances \
+      --news-repo "{{news_repo}}" \
+      --model-catalog tools/model-catalog.json
+
+# Local model backend (T4 / plan 2026-07-08-topics-authoring exit #6):
+# llama-server on :8080 (--jinja for tool-calls), the default provider for
+# llama-cpp profiles. tools/llama.ts resolves the binary + the GGUF
+# (NS_LLAMA_MODEL > config llama_model > the fourfive-chat profile's model >
+# newest in <store>/models). No binary / no model / NS_SKIP_LLAMA=1 -> the leg
+# stays inert so the rest of the stack still runs and the UI degrades honestly
+# (W11 "local model offline"). NS_LLAMA_PORT / NS_LLAMA_CTX override.
+_up-llama:
+    #!/usr/bin/env bash
+    set -uo pipefail
+    # inert = tail -f /dev/null, NOT `sleep infinity` (GNU-only; BusyBox sleep
+    # exits at once and concurrently -k would tear the whole stack down).
+    if [ -n "${NS_SKIP_LLAMA:-}" ]; then echo "[llama] NS_SKIP_LLAMA set - local model backend skipped"; exec tail -f /dev/null; fi
+    if [ -n "{{llama_url}}" ]; then echo "[llama] external backend {{llama_url}} (config llama_url) - not starting a local llama-server"; exec tail -f /dev/null; fi
+    bin=$(node tools/llama.ts bin || true)
+    model=$(node tools/llama.ts model || true)
+    if [ -z "$bin" ]; then echo "[llama] no llama-server binary - run 'just setup' (llama-cpp profiles show 'local model offline')"; exec tail -f /dev/null; fi
+    if [ -z "$model" ]; then echo "[llama] no GGUF in the store - run 'just setup' to install one"; exec tail -f /dev/null; fi
+    # RESTART LOOP: settings (model/ctx/parallel/url) are re-resolved on
+    # every (re)start, so the Formans panel's "apply now" (gate POST
+    # /api/model-backend/restart = SIGTERM the server) picks up new values
+    # without touching the rest of the stack. Two crashes inside 20s in a
+    # row = a broken config, so the leg goes inert instead of crash-looping
+    # (never exits - `concurrently -k` would tear the whole stack down; the
+    # UI degrades honestly, W11 "local model offline").
+    fails=0
+    while true; do
+      url=$(node tools/llama.ts url || true)
+      if [ -n "$url" ]; then echo "[llama] external backend $url configured - stopping the local server leg"; exec tail -f /dev/null; fi
+      bin=$(node tools/llama.ts bin || true); model=$(node tools/llama.ts model || true)
+      if [ -z "$bin" ] || [ -z "$model" ]; then echo "[llama] no server/model resolvable anymore - going inert"; exec tail -f /dev/null; fi
+      ctx=$(node tools/llama.ts ctx); par=$(node tools/llama.ts parallel)
+      echo "[llama] serving $model on :${NS_LLAMA_PORT:-8080} (ctx $ctx, $par parallel slots)"
+      start=$(date +%s)
+      "$bin" -m "$model" --host 127.0.0.1 --port "${NS_LLAMA_PORT:-8080}" --jinja -c "$ctx" --parallel "$par"
+      code=$?
+      if [ $(( $(date +%s) - start )) -lt 20 ]; then fails=$((fails+1)); else fails=0; fi
+      if [ "$fails" -ge 3 ]; then
+        echo "[llama] llama-server died 3 times within 20s (code $code) - staying inert; fix the settings and restart via just up"
+        exec tail -f /dev/null
+      fi
+      if [ "$fails" -gt 0 ]; then
+        # A fast death right after `just up` is usually the PREVIOUS server's
+        # VRAM still being released (just down killed it seconds earlier; a
+        # 22GB model takes a moment to free) - wait it out instead of burning
+        # the retries into inert (observed live twice, 2026-07-10).
+        echo "[llama] fast death $fails/3 (code $code) - waiting 10s (VRAM release) before retrying"
+        sleep 10
+      else
+        echo "[llama] llama-server exited (code $code) - restarting with the current settings"
+      fi
+    done
+
+# Run only the local model backend in the foreground (same resolution as the
+# _up-llama leg of `just up`) - (re)start the model without the whole stack.
+llama:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    if [ -n "{{llama_url}}" ]; then echo "note: config llama_url={{llama_url}} - the stack uses that external backend; this local server is extra"; fi
+    bin=$(node tools/llama.ts bin); model=$(node tools/llama.ts model)
+    if [ -z "$bin" ] || [ -z "$model" ]; then echo "need llama-server + a GGUF - run 'just setup'"; exit 1; fi
+    ctx=$(node tools/llama.ts ctx); par=$(node tools/llama.ts parallel)
+    echo "[llama] serving $model on :${NS_LLAMA_PORT:-8080} (ctx $ctx, $par parallel slots)"
+    exec "$bin" -m "$model" --host 127.0.0.1 --port "${NS_LLAMA_PORT:-8080}" --jinja -c "$ctx" --parallel "$par"
 
 # Stop the stack started by `just up`: terminates whatever is LISTENING on
 # the gate/engine/fourfive/apps-host ports (honoring the same NS_PORT /
-# NS_ENGINE_PORT overrides; fourfive fixed at :8787, apps-host at :8788).
+# NS_ENGINE_PORT / NS_LLAMA_PORT overrides; fourfive fixed at :8787,
+# apps-host at :8788, llama-server at :8080 — killed only if the process
+# really is llama-server, since :8080 is a busy default port).
 # SIGTERM, then SIGKILL any survivor. Idempotent - a no-op if nothing is up.
 # See tools/down.ts.
 down:
@@ -158,6 +239,20 @@ test:
     cargo test --manifest-path gate/Cargo.toml
     pnpm -r test
 
+# Journey automation (Phase F, F-4): v1's termination test. First the checks
+# self-test (the eleven invariants), then a replay against a FRESH temp vault
+# that drives the real nunc-stans engine over HTTP and asserts checks 1–11 at
+# every step. Never touches the real store.
+journey:
+    node tests/journey/checks.selftest.ts
+    node tests/journey/run.ts
+
+# F-5 live gate: replay checks 1–11 READ-ONLY against a real vault's git
+# history (git show/ls-tree only — never mutates it). Defaults to the
+# configured self vault.
+journey-verify vault=(data_dir / "self"):
+    node tests/journey/verify.ts "{{vault}}"
+
 check:
     @node tools/check.ts
 
@@ -165,4 +260,5 @@ check:
 # profile; memory through manda (MANDA_BIN / MANDA_DATA_DIR — see
 # agents/nunc-stans-agent/README.md).
 agent *args:
-    node agents/nunc-stans-agent/src/cli.ts chat {{args}}
+    if [ -n "{{llama_url}}" ]; then export LLAMACPP_HOST="{{llama_url}}"; fi; \
+      exec node agents/nunc-stans-agent/src/cli.ts chat {{args}}

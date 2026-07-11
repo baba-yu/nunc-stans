@@ -94,21 +94,27 @@ export function createRow(dataRoot: string, app: ServedApp, entity: string, payl
     if (c.notNull && !picked.has(c.name)) throw new ServiceError(400, `missing required field: ${e.name}.${c.name}`)
   }
   const pk = pkOf(e)
-  const id = picked.has(pk.name) ? picked.get(pk.name) : randomUUID()
-  picked.set(pk.name, id)
+  // Host-generated ids follow the DECLARED pk type: a UUID string suits a
+  // TEXT pk only — an INTEGER PRIMARY KEY is SQLite's rowid alias, so omit
+  // the id and let SQLite assign it (S-8 execution 2026-07-10: a
+  // chat-designed blueprint declared INTEGER ids and every UUID insert
+  // died as a datatype mismatch). An explicitly supplied id still wins.
+  if (!picked.has(pk.name) && pk.type !== 'INTEGER') picked.set(pk.name, randomUUID())
   const now = new Date().toISOString()
   const auditNames = new Set(e.columns.filter((c) => c.audit).map((c) => c.name))
   if (auditNames.has('created_at')) picked.set('created_at', now)
   if (auditNames.has('updated_at')) picked.set('updated_at', now)
   const names = [...picked.keys()]
+  let assignedId = picked.get(pk.name)
   try {
-    data.db
+    const info = data.db
       .prepare(`INSERT INTO ${e.name} (${names.join(', ')}) VALUES (${names.map(() => '?').join(', ')})`)
       .run(...names.map((n) => picked.get(n)))
+    if (assignedId === undefined) assignedId = info.lastInsertRowid
   } catch (err) {
     throw new ServiceError(400, `insert refused: ${(err as Error).message}`)
   }
-  return getRow(dataRoot, app, entity, String(id))
+  return getRow(dataRoot, app, entity, String(assignedId))
 }
 
 export function updateRow(dataRoot: string, app: ServedApp, entity: string, id: string, payload: Row): Row {

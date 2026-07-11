@@ -139,3 +139,44 @@ export const DEMO_THINKING =
 export function proposeDemoBlueprint(history: ChatMessage[]): unknown {
   return looksInvoice(history) ? INVOICE_BLUEPRINT : null
 }
+
+/** The /strategy read-out for the offline profile (plan PE12's offline-demo
+ * rule): deterministic, and grounded in the app's REAL declared metrics so
+ * the grounding-subset rail downstream exercises the same code path as a
+ * live model. Caller guarantees `metrics` is non-empty (the no_metrics rail
+ * fires first). Returned as `unknown` — it goes through parseStrategyCard
+ * like any model output. */
+export function demoStrategyCard(
+  metrics: { name: string; label: string; value: number | string | null }[],
+): unknown {
+  const quoted = metrics.slice(0, 2)
+  const say = (m: (typeof metrics)[number]) => `${m.label} = ${m.value ?? 'n/a'}`
+  return {
+    win: `Mock read-out: ${say(quoted[0])} is the strongest signal in the declared numbers.`,
+    constraint: quoted[1]
+      ? `Mock read-out: ${say(quoted[1])} is the binding limitation right now.`
+      : 'Mock read-out: a single declared metric leaves the picture one-dimensional — that is itself the constraint.',
+    risk_to_watch: `Mock read-out: watch ${quoted[0].label} — movement there hurts first.`,
+    grounding: quoted.map((m) => m.name),
+  }
+}
+
+/** The opening patrol for the offline profile (F-2 B, the strategy-card
+ * offline-demo rule): deterministic, phrased from the REAL sweep so the
+ * materiality shape (observe + ONE question, no commands) exercises the same
+ * path as a live model. */
+export function demoPatrol(sweep: {
+  app: { name: string; slug: string; version: number }
+  rows: { entity: string; count: number; latest: string | null }[]
+  metrics: { label: string; value: number | string | null; error?: string }[]
+}): string {
+  const total = sweep.rows.reduce((n, r) => n + r.count, 0)
+  const empty = sweep.rows.filter((r) => r.count === 0).map((r) => r.entity)
+  const m = sweep.metrics[0]
+  const lines = [
+    `Mock patrol of ${sweep.app.name} (${sweep.app.slug}@v${sweep.app.version}): ${total} row${total === 1 ? '' : 's'} across ${sweep.rows.length} table${sweep.rows.length === 1 ? '' : 's'}${empty.length ? `; ${empty.join(', ')} still empty` : ''}.`,
+    m ? `${m.label} currently reads ${m.error ? 'unavailable' : (m.value ?? 'n/a')}.` : '',
+    'Anything happen since last time that should go on the record?',
+  ]
+  return lines.filter(Boolean).join(' ')
+}

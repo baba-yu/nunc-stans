@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { RouterLink, RouterView } from 'vue-router'
-import { Badge } from 'nunc-ui'
+import { Badge, SHELL_NAV, SideNav } from 'nunc-ui'
 import { useMeStore } from './stores/me'
 
 const store = useMeStore()
@@ -12,23 +12,29 @@ onMounted(() => store.load())
 
 <template>
   <div class="shell">
-    <header class="topbar">
-      <div class="brand">Nunc Stans</div>
-      <nav class="tabs">
-        <RouterLink to="/" class="tab" exact-active-class="tab--active">ME</RouterLink>
-        <RouterLink to="/world" class="tab" active-class="tab--active">World</RouterLink>
-        <RouterLink to="/timeline" class="tab" active-class="tab--active">Timeline</RouterLink>
-        <RouterLink to="/profiles" class="tab" active-class="tab--active">Profiles</RouterLink>
-        <RouterLink to="/runs" class="tab" active-class="tab--active">Runs</RouterLink>
-        <a href="/fourfive/" class="tab">FourFive</a>
-        <a href="/apps/" class="tab">Apps</a>
-      </nav>
-      <div class="topbar-meta">
+    <SideNav>
+      <template #nav>
+        <template v-for="l in SHELL_NAV" :key="l.href">
+          <RouterLink
+            v-if="l.spa"
+            :to="l.href"
+            class="nui-sidenav__link"
+            :exact-active-class="l.href === '/' ? 'nui-sidenav__link--active' : ''"
+            :active-class="l.href === '/' ? '' : 'nui-sidenav__link--active'"
+          >
+            {{ l.label }}
+          </RouterLink>
+          <a v-else :href="l.href" class="nui-sidenav__link">{{ l.label }}</a>
+        </template>
+      </template>
+      <template #meta>
         <Badge :variant="store.reachable ? 'success' : 'error'">
           {{ store.reachable ? 'engine ok' : 'engine unreachable' }}
         </Badge>
-      </div>
-    </header>
-    <RouterView />
+      </template>
+    </SideNav>
+    <div class="content">
+      <RouterView />
+    </div>
   </div>
 </template>

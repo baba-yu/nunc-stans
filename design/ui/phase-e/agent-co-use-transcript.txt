@@ -1,0 +1,61 @@
+S-7 agent co-use — terminal transcript (verbatim, ANSI stripped)
+Executed 2026-07-11T01:00Z against the live stack; profile s7-granted
+(llama-cpp / Qwen3.6-35B-A3B, skills: ["apps:runway-tracker-4"]).
+Run-log rows in <store>/runs/ai-runs.jsonl carry the toolCalls counts.
+
+=================== GRANTED RUN ===================
+nunc-stans-agent — profile s7-granted → llama-cpp / Qwen3.6-35B-A3B-UD-Q4_K_M.gguf
+mandate m-2026-07-08-test scope=test access=["read","write"] expires=2026-08-07T21:15:14.085Z
+app tools ON: 15 granted (see /tools)
+
+you ▸ /tools
+· runway-tracker-4_deals_list — List deals rows (archived excluded unless archived=true)
+· runway-tracker-4_deals_get — Get one deals row by id
+· runway-tracker-4_deals_create — Create a deals row
+· runway-tracker-4_deals_update — Update fields of a deals row
+· runway-tracker-4_deals_archive — Archive (soft-delete) a deals row
+· runway-tracker-4_income_entries_list — List income_entries rows (archived excluded unless archived=true)
+· runway-tracker-4_income_entries_get — Get one income_entries row by id
+· runway-tracker-4_income_entries_create — Create a income_entries row
+· runway-tracker-4_income_entries_update — Update fields of a income_entries row
+· runway-tracker-4_income_entries_archive — Archive (soft-delete) a income_entries row
+· runway-tracker-4_cash_snapshots_list — List cash_snapshots rows (archived excluded unless archived=true)
+· runway-tracker-4_cash_snapshots_get — Get one cash_snapshots row by id
+· runway-tracker-4_cash_snapshots_create — Create a cash_snapshots row
+· runway-tracker-4_cash_snapshots_update — Update fields of a cash_snapshots row
+· runway-tracker-4_cash_snapshots_archive — Archive (soft-delete) a cash_snapshots row
+
+you ▸ List all deals in the app and give me each name, counterparty and stage.
+⚙ runway-tracker-4_deals_list {}
+✓ runway-tracker-4_deals_list: [{"id":"48c508ed-80f6-4e97-a119-48c7bd71e417","name":"Acme retainer","counterparty":"Acme Corp","stage":"discussion","expected_monthly_amount":"5000","created_a
+Here are all the deals in the app:
+1. Name: "Acme retainer", Counterparty: "Acme Corp", Stage: "discussion"
+2. Name: "S7 human deal", Counterparty: "Beta LLC", Stage: "discussion"
+[llama-cpp · Qwen3.6-35B-A3B-UD-Q4_K_M.gguf · 3345/174 tok]
+
+you ▸ Add a new deal named "S7 agent deal" with counterparty "Gamma KK", stage "discussion", expected monthly amount "1200".
+⚙ runway-tracker-4_deals_create {"name":"S7 agent deal","counterparty":"Gamma KK","stage":"discussion","expected_monthly_amount":"1200"}
+✓ runway-tracker-4_deals_create: {"id":"e6a90273-551e-4e35-aa0c-eb9597d0bf33","name":"S7 agent deal","counterparty":"Gamma KK","stage":"discussion","expected_monthly_amount":"1200","created_at"
+I created a new deal named "S7 agent deal" with counterparty "Gamma KK", stage "discussion", and expected monthly amount "1200".
+[llama-cpp · Qwen3.6-35B-A3B-UD-Q4_K_M.gguf · 3471/227 tok]
+
+you ▸ /exit
+=================== GRANTED RUN END (exit 0) ===================
+
+=================== REFUSED RUN (skills: apps:invoice-app only) ===================
+nunc-stans-agent — profile s7-refused → llama-cpp / Qwen3.6-35B-A3B-UD-Q4_K_M.gguf
+app tools: connected, but this profile grants no served tool
+
+you ▸ /tools
+connected to apps-host, but this profile grants no served tool
+
+you ▸ Add a new deal named "S7 refused deal" to the runway tracker with counterparty "Delta Inc", stage "discussion", expected monthly amount "999".
+(thinking elided)
+I lack the tool to add a new deal to the runway tracker.
+[llama-cpp · Qwen3.6-35B-A3B-UD-Q4_K_M.gguf · 73/482 tok]
+
+you ▸ /exit
+=================== REFUSED RUN END (exit 0) ===================
+
+Post-run check: GET /apps/runway-tracker-4/api/deals contains no
+"S7 refused deal" — the refusal produced no write.

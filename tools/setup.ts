@@ -15,24 +15,30 @@
 // note 12); on native Windows it prints guidance and continues.
 import { spawn, spawnSync } from 'node:child_process'
 import {
-  appendFileSync, existsSync, mkdirSync, readdirSync, readFileSync, statSync,
+  appendFileSync, copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, renameSync, rmSync, statSync,
 } from 'node:fs'
 import { createInterface } from 'node:readline'
 import { delimiter, join } from 'node:path'
 import { homedir, platform } from 'node:os'
-import { resolveDataDir, resolveMandaDataDir, writeConfigKey } from './lib/data-dir.ts'
+import { readConfig, resolveDataDir, resolveMandaDataDir, writeConfigKey } from './lib/data-dir.ts'
 import { mandateJsonl } from './lib/mandate.ts'
 
 const args = process.argv.slice(2)
 if (args.includes('--help') || args.includes('-h')) {
-  console.log(`usage: node tools/setup.ts [--skip-llama] [--skip-model] [--skip-mandate]
+  console.log(`usage: node tools/setup.ts [--skip-llama] [--skip-model] [--skip-mandate] [--cuda|--no-cuda]
   Ensures manda + llama.cpp, downloads/validates a model, seeds the first
-  mandate. Re-runnable; each step no-ops when already done.`)
+  mandate. Re-runnable; each step no-ops when already done.
+  On an NVIDIA machine, offers a CUDA source build of llama-server (asks
+  first; --cuda builds without asking, --no-cuda never asks) after
+  validating the toolkit (nvcc <= driver CUDA version, cmake, compiler).`)
   process.exit(0)
 }
 const skipLlama = args.includes('--skip-llama')
 const skipModel = args.includes('--skip-model')
 const skipMandate = args.includes('--skip-mandate')
+// CUDA source build: --cuda builds without prompting, --no-cuda never asks;
+// otherwise setup ASKS interactively (and defaults to no on a non-TTY run).
+const cudaChoice: 'yes' | 'no' | 'ask' = args.includes('--cuda') ? 'yes' : args.includes('--no-cuda') ? 'no' : 'ask'
 
 const rl = createInterface({ input: process.stdin, output: process.stdout })
 const ask = (q: string): Promise<string> => new Promise(res => rl.question(q, a => res(a.trim())))
@@ -40,8 +46,8 @@ const say = (s: string): void => console.log(s)
 const step = (s: string): void => console.log(`\n=== ${s} ===`)
 
 /** Run a command inheriting stdio (for long/interactive ops); true on exit 0. */
-function run(cmd: string, cmdArgs: string[], cwd?: string): boolean {
-  const r = spawnSync(cmd, cmdArgs, { stdio: 'inherit', cwd })
+function run(cmd: string, cmdArgs: string[], cwd?: string, env?: NodeJS.ProcessEnv): boolean {
+  const r = spawnSync(cmd, cmdArgs, { stdio: 'inherit', cwd, env })
   return r.status === 0
 }
 /** Run capturing stdout; '' on any failure. */
@@ -113,27 +119,191 @@ function resolveLlamaServer(): string | null {
   return findFile(LLAMA_DIR, isWin ? 'llama-server.exe' : 'llama-server')
 }
 
-/** Pick the CPU prebuilt asset for this platform from a release's assets. */
+// Build-flavor policy. The machine decides:
+// - NVIDIA GPU present (nvidia-smi works, WSL2 included) => a GPU-offload
+//   asset: cuda when the release ships one for this OS, else vulkan (the
+//   ubuntu releases carry no cuda prebuilt — vulkan is the NVIDIA path
+//   there). A CPU build on a GPU box wastes the hardware (a 27B runs
+//   ~2.6 tok/s on CPU; found the hard way 2026-07-09).
+// - No GPU => the plain CPU asset (portable default).
+// - The remaining accelerator flavors are never auto-picked AND an
+//   installed one is replaced: the OpenVINO asset hard-links
+//   libggml-openvino.so (no plugin to remove) and cannot run
+//   hybrid/recurrent models — Qwen3.6's DeltaNet cache tensors abort in
+//   ggml_backend_sched_split_graph (llama.cpp #22333, closed not-planned).
+// LLAMACPP_BIN / PATH picks are always the user's own choice, never vetted.
+//
+// Flavor detection parses the backend TOKEN out of libggml-<backend>[-.]…
+// filenames — a substring regex once matched Huawei 'cann' inside the CPU
+// variant lib 'libggml-cpu-CANNonlake.so' and re-quarantined healthy CPU
+// builds on every setup run.
+const OTHER_ACCEL_BACKENDS = new Set(['hip', 'rocm', 'sycl', 'kompute', 'openvino', 'opencl', 'blas', 'openblas', 'musa', 'cann'])
+// Asset-name filter (hyphen-delimited words — 'cannonlake' never appears here).
+const ACCEL_ASSET = /-(cuda|vulkan|hip|rocm|sycl|kompute|openvino|opencl|blas|openblas|musa|cann)\b/i
+
+const hasNvidiaGpu: boolean = (() => {
+  const r = spawnSync('nvidia-smi', ['-L'], { encoding: 'utf8' })
+  return r.status === 0 && /GPU/i.test(r.stdout ?? '')
+})()
+
+// Under WSL2 the vulkan prebuilt goes through Mesa's Dozen (Vulkan-on-D3D12)
+// and is SLOWER than plain CPU (measured 2026-07-09: 27B 0.7 tok/s vulkan vs
+// 2.6 CPU vs ~54 via ollama's native CUDA). So on WSL the local binary stays
+// CPU and the GPU path is an external backend (config llama_url — see
+// detectExternalBackend below).
+const isWsl: boolean = (() => {
+  try { return /microsoft/i.test(readFileSync('/proc/version', 'utf8')) } catch { return false }
+})()
+
+const wantGpuBuild = hasNvidiaGpu && !isWsl
+
+/** A GPU-resident ollama serves an OpenAI-compatible /v1 — on WSL that is
+ * the only prebuilt way to use an NVIDIA card, and it beats the local CPU
+ * server everywhere. Detect it and remember it as `llama_url` (only when
+ * the key is absent — an explicit choice is never overwritten). */
+async function detectExternalBackend(): Promise<void> {
+  if (!hasNvidiaGpu) return
+  const cfg = readConfig()
+  // A PRESENT key is an explicit choice — including an explicitly empty
+  // one ("use the local server"), which auto-detection must not override.
+  if ('llama_url' in cfg) {
+    say(typeof cfg.llama_url === 'string' && cfg.llama_url
+      ? `ok   external model backend (config llama_url): ${cfg.llama_url}`
+      : 'ok   local llama-server chosen (config llama_url explicitly empty)')
+    return
+  }
+  const url = 'http://127.0.0.1:11434'
+  try {
+    const res = await fetch(`${url}/api/version`, { signal: AbortSignal.timeout(2000) })
+    if (!res.ok) return
+    writeConfigKey('llama_url', url)
+    say(`ok   NVIDIA GPU + ollama detected — llama_url=${url} remembered (GPU-served models; unset the config key to go back to the local llama-server)`)
+  } catch { /* no ollama — the local server stays the backend */ }
+}
+
+type Flavor = 'cuda' | 'vulkan' | 'accel-other' | 'cpu'
+
+function buildFlavor(bin: string): Flavor {
+  try {
+    const dir = bin.slice(0, bin.lastIndexOf('/'))
+    const backends = readdirSync(dir)
+      .map(f => /^libggml-([a-z0-9]+)[.-]/i.exec(f)?.[1]?.toLowerCase())
+      .filter((b): b is string => !!b)
+    if (backends.includes('cuda')) return 'cuda'
+    if (backends.includes('vulkan')) return 'vulkan'
+    if (backends.some(b => OTHER_ACCEL_BACKENDS.has(b))) return 'accel-other'
+    return 'cpu'
+  } catch { return 'cpu' }
+}
+
+/** Does an installed build fit this machine? cuda fits ANY NVIDIA box
+ * (WSL CUDA is native-speed — a source-built server lives here too);
+ * vulkan only fits native Linux (Dozen on WSL is slower than CPU); cpu
+ * fits wherever a GPU prebuilt isn't wanted (incl. WSL, as the fallback
+ * beside a source-built cuda dir — tools/llama.ts picks the newest). */
+function flavorFits(flavor: Flavor): boolean {
+  if (flavor === 'cuda') return hasNvidiaGpu
+  if (flavor === 'vulkan') return hasNvidiaGpu && !isWsl
+  if (flavor === 'cpu') return !wantGpuBuild
+  return false
+}
+
+/** Pick the prebuilt asset for this platform per the flavor policy above. */
 function pickLlamaAsset(assets: Array<{ name: string; browser_download_url: string }>): { name: string; browser_download_url: string } | null {
   const p = platform(), a = process.arch
-  // Skip accelerator-specific builds — they need a vendor runtime the box
-  // may lack (openvino cost a wasted download on this machine, 2026-07-08).
-  // CPU is the portable default; GPU is a manual opt-in.
-  const bad = /cuda|vulkan|hip|sycl|kompute|openvino|openblas|musa|cann/i
   let rx: RegExp
   if (p === 'linux') rx = /(ubuntu|linux).*(x64|amd64)/i
   else if (p === 'darwin') rx = a === 'arm64' ? /macos-arm64/i : /macos-x64/i
   else rx = /win.*(x64|amd64)/i
-  const matches = assets
-    .filter(x => rx.test(x.name) && !bad.test(x.name) && /\.(zip|tar\.gz|tgz)$/i.test(x.name))
-    .sort((x, y) => x.name.length - y.name.length) // plainest (shortest) name = the portable CPU build
-  return matches[0] ?? null
+  const archived = (n: string) => /\.(zip|tar\.gz|tgz)$/i.test(n)
+  const shortest = (m: typeof assets) => [...m].sort((x, y) => x.name.length - y.name.length)[0] ?? null
+  const plat = assets.filter(x => rx.test(x.name) && archived(x.name))
+  if (wantGpuBuild) {
+    for (const want of ['cuda', 'vulkan']) {
+      const hit = shortest(plat.filter(x => new RegExp(`-${want}\\b`, 'i').test(x.name)))
+      if (hit) return hit
+    }
+    say('WARN NVIDIA GPU detected but no cuda/vulkan asset in this release — falling back to the CPU build.')
+  }
+  return shortest(plat.filter(x => !ACCEL_ASSET.test(x.name))) // plainest = the portable CPU build
+}
+
+/** Validate the CUDA build prerequisites BEFORE offering the source build:
+ * nvcc present, its release not newer than what the driver supports
+ * (nvidia-smi "CUDA Version"), cmake + a C++ compiler available. */
+function cudaToolkitStatus(): { ok: boolean; why: string; nvcc?: string } {
+  const nvcc = has('nvcc') ? 'nvcc'
+    : ['/usr/local/cuda/bin/nvcc', '/opt/cuda/bin/nvcc'].find(p => existsSync(p)) ?? null
+  if (!nvcc) return { ok: false, why: 'nvcc not found — install the CUDA toolkit (WSL: https://docs.nvidia.com/cuda/wsl-user-guide/)' }
+  const toolkit = /release (\d+\.\d+)/.exec(capture(nvcc, ['--version']))?.[1]
+  if (!toolkit) return { ok: false, why: `could not parse \`${nvcc} --version\`` }
+  const driver = /CUDA Version:\s*(\d+\.\d+)/.exec(capture('nvidia-smi', []))?.[1]
+  if (driver && parseFloat(toolkit) > parseFloat(driver)) {
+    return { ok: false, why: `CUDA toolkit ${toolkit} is newer than the driver supports (${driver}) — update the driver or install a toolkit <= ${driver}` }
+  }
+  if (!has('cmake')) return { ok: false, why: 'cmake not found — install cmake' }
+  if (!has('g++') && !has('c++') && !has('clang++')) return { ok: false, why: 'no C++ compiler — install build-essential' }
+  return { ok: true, why: `toolkit ${toolkit}${driver ? ` <= driver CUDA ${driver}` : ''}`, nvcc }
+}
+
+/** Clone (pinned to the release tag) + cmake-build llama-server with CUDA,
+ * installed as its own build dir under LLAMA_DIR so tools/llama.ts picks it
+ * (newest mtime). Returns the built binary or null. */
+async function buildCudaServer(tag: string): Promise<string | null> {
+  const src = join(homedir(), '.local', 'share', 'nunc-stans', 'llama.cpp-src')
+  if (!existsSync(join(src, 'CMakeLists.txt'))) {
+    say(`… cloning llama.cpp ${tag} into ${src}`)
+    if (!run('git', ['clone', '--depth', '1', '--branch', tag, 'https://github.com/ggml-org/llama.cpp', src])) {
+      say('NG   clone failed.'); return null
+    }
+  } else {
+    say(`ok   reusing source checkout ${src} (delete it to re-clone at ${tag})`)
+  }
+  const env = { ...process.env, PATH: `/usr/local/cuda/bin:${process.env.PATH ?? ''}` }
+  say('… cmake configure (CUDA)')
+  if (!run('cmake', ['-B', 'build', '-DGGML_CUDA=ON', '-DCMAKE_BUILD_TYPE=Release',
+    '-DLLAMA_BUILD_TESTS=OFF', '-DLLAMA_BUILD_EXAMPLES=OFF', '-DLLAMA_BUILD_SERVER=ON'], src, env)) {
+    say('NG   cmake configure failed.'); return null
+  }
+  say('… building llama-server (10-20 min the first time)')
+  if (!run('cmake', ['--build', 'build', '--target', 'llama-server', '-j', String(Math.max(2, (await import('node:os')).cpus().length - 2))], src, env)) {
+    say('NG   build failed.'); return null
+  }
+  const binDir = join(src, 'build', 'bin')
+  const dest = join(LLAMA_DIR, `llama-${tag}-cuda-local`)
+  rmSync(dest, { recursive: true, force: true })
+  mkdirSync(dest, { recursive: true })
+  for (const f of readdirSync(binDir)) {
+    if (f === 'llama-server' || /\.so(\.|$)/.test(f)) copyFileSync(join(binDir, f), join(dest, f))
+  }
+  const bin = join(dest, 'llama-server')
+  run('chmod', ['+x', bin])
+  say(`ok   CUDA llama-server: ${bin}`)
+  return bin
 }
 
 async function ensureLlamaServer(): Promise<string | null> {
   step('llama.cpp (local model backend)')
   const existing = resolveLlamaServer()
-  if (existing) { say(`ok   llama-server: ${existing}`); return existing }
+  const vetted = existing !== null && existing.startsWith(LLAMA_DIR) // PATH/LLAMACPP_BIN = user's choice
+  if (existing && vetted && !flavorFits(buildFlavor(existing))) {
+    // Wrong flavor for this machine: quarantine OUTSIDE LLAMA_DIR so no
+    // resolver can find it again, then fall through to the download below.
+    const why = buildFlavor(existing) === 'accel-other'
+      ? 'an accelerator build that crashes on hybrid models (llama.cpp #22333)'
+      : wantGpuBuild ? 'a CPU-only build on an NVIDIA machine (wastes the GPU)'
+      : 'a GPU-flavored build this machine cannot use well (WSL vulkan runs via Dozen, slower than CPU)'
+    say(`NG   ${existing} is ${why} — replacing with the ${wantGpuBuild ? 'GPU (cuda/vulkan)' : 'plain CPU'} build.`)
+    const disabled = LLAMA_DIR + '-disabled'
+    const top = existing.slice(LLAMA_DIR.length + 1).split('/')[0]
+    mkdirSync(disabled, { recursive: true })
+    // The same build name may already sit in quarantine (e.g. re-runs after
+    // a flavor-policy change) — pick a free target instead of crashing.
+    let target = join(disabled, top)
+    for (let n = 2; existsSync(target); n++) target = join(disabled, `${top}-${n}`)
+    renameSync(join(LLAMA_DIR, top), target)
+    say(`     old build kept at ${target} (delete it when confident)`)
+  } else if (existing) { say(`ok   llama-server: ${existing}`); return existing }
   if (isWin) {
     say('info native Windows: download a llama.cpp release and put llama-server.exe on PATH')
     say('     https://github.com/ggml-org/llama.cpp/releases  (or set LLAMACPP_BIN)')
@@ -149,6 +319,29 @@ async function ensureLlamaServer(): Promise<string | null> {
     })
     if (!res.ok) throw new Error(`HTTP ${res.status}`)
     const rel = await res.json() as { tag_name?: string; assets?: Array<{ name: string; browser_download_url: string }> }
+    // On an NVIDIA box, a CUDA SOURCE build beats every prebuilt this side
+    // of native Linux (WSL: 70 tok/s CUDA vs 2.6 CPU vs 0.7 Dozen-vulkan,
+    // measured 2026-07-10) — offer it, but only after validating the
+    // toolchain, and never without asking (or the explicit --cuda flag).
+    const tag = rel.tag_name ?? 'master'
+    if (hasNvidiaGpu && cudaChoice !== 'no') {
+      const tk = cudaToolkitStatus()
+      if (!tk.ok) {
+        say(`info CUDA source build unavailable: ${tk.why}`)
+      } else {
+        let yes = cudaChoice === 'yes'
+        if (!yes && process.stdin.isTTY) {
+          yes = (await ask(`NVIDIA GPU detected, ${tk.why}. Build llama.cpp ${tag} with CUDA from source (~10-20 min)? [y/N] `)).toLowerCase() === 'y'
+        } else if (!yes) {
+          say('info non-interactive run — CUDA build skipped (pass --cuda to build without asking)')
+        }
+        if (yes) {
+          const built = await buildCudaServer(tag)
+          if (built) return built
+          say('WARN CUDA build failed — falling back to a prebuilt asset.')
+        }
+      }
+    }
     asset = pickLlamaAsset(rel.assets ?? [])
     if (!asset) {
       say(`NG   no prebuilt asset matched ${platform()}/${process.arch}. Available:`)
@@ -181,7 +374,17 @@ async function ensureLlamaServer(): Promise<string | null> {
 
 // --- model -----------------------------------------------------------
 interface ModelChoice { label: string; url: string; approx: string }
-const MODELS: ModelChoice[] = [
+/** The shared install catalog (tools/model-catalog.json) — the same list
+ * the gate's model-backend install API serves to the Formans panel. */
+function catalogModels(): ModelChoice[] {
+  try {
+    const raw = JSON.parse(readFileSync(join(import.meta.dirname, 'model-catalog.json'), 'utf8'))
+    const models = (raw.models ?? []) as Array<{ label: string; url: string; approx: string }>
+    if (models.length) return models.map(m => ({ label: m.label, url: m.url, approx: m.approx }))
+  } catch { /* fall through to the inline fallback */ }
+  return FALLBACK_MODELS
+}
+const FALLBACK_MODELS: ModelChoice[] = [
   // Qwen family = PE9' tool-calling target. URLs are VERIFIED by download;
   // if one 404s, pick another or paste a custom resolve URL.
   { label: 'Qwen2.5-3B-Instruct (Q4_K_M, small/fast)', approx: '~2.0 GB', url: 'https://huggingface.co/Qwen/Qwen2.5-3B-Instruct-GGUF/resolve/main/qwen2.5-3b-instruct-q4_k_m.gguf' },
@@ -198,8 +401,9 @@ async function selectAndDownloadModel(): Promise<string | null> {
     say(`found existing model(s): ${already.join(', ')}`)
     if ((await ask('download another? [y/N] ')).toLowerCase() !== 'y') return join(modelsDir, already[0])
   }
+  const models = catalogModels()
   say('choose a model (Qwen = tool-calling target, PE9\'):')
-  MODELS.forEach((m, i) => say(`  ${i + 1}) ${m.label}  ${m.approx}`))
+  models.forEach((m, i) => say(`  ${i + 1}) ${m.label}  ${m.approx}`))
   say('  c) custom Hugging Face resolve URL')
   say('  s) skip (choose later)')
   const choice = (await ask('selection [2]: ')).toLowerCase() || '2'
@@ -208,8 +412,8 @@ async function selectAndDownloadModel(): Promise<string | null> {
   if (choice === 'c') url = await ask('paste .gguf resolve URL: ')
   else {
     const idx = Number(choice) - 1
-    if (!MODELS[idx]) { say('invalid selection — skipping.'); return null }
-    url = MODELS[idx].url
+    if (!models[idx]) { say('invalid selection — skipping.'); return null }
+    url = models[idx].url
   }
   if (!/^https?:\/\/.+\.gguf(\?.*)?$/i.test(url)) { say('NG   not a .gguf URL — skipping.'); return null }
   const dest = join(modelsDir, url.split('/').pop()!.split('?')[0])
@@ -224,7 +428,10 @@ async function selectAndDownloadModel(): Promise<string | null> {
 // --- validation ------------------------------------------------------
 const sleep = (ms: number) => new Promise(r => setTimeout(r, ms))
 
-async function validateModel(llamaBin: string, modelPath: string): Promise<void> {
+/** True only when the server came up AND answered a chat. A model that
+ * cannot serve is a setup FAILURE (a broken 27B once passed as "done"
+ * because this was a WARN) — main() exits nonzero on false. */
+async function validateModel(llamaBin: string, modelPath: string): Promise<boolean> {
   step('validate the model (chat smoke + tool probe)')
   const port = 8791
   const base = `http://127.0.0.1:${port}`
@@ -234,32 +441,40 @@ async function validateModel(llamaBin: string, modelPath: string): Promise<void>
     let up = false
     for (let i = 0; i < 120; i++) { // model load can be slow; ~120s budget
       await sleep(1000)
+      if (srv.exitCode !== null) { say(`NG   llama-server exited (code ${srv.exitCode}) while loading — this model cannot be served by this build.`); return false }
       try { if ((await fetch(`${base}/health`, { signal: AbortSignal.timeout(2000) })).ok) { up = true; break } } catch { /* not ready */ }
     }
-    if (!up) { say('NG   server did not come up in time — validation inconclusive.'); return }
+    if (!up) { say('NG   server did not come up in time — the model backend is NOT usable.'); return false }
 
+    // Reasoning models (Qwen3.6 with --jinja) may spend the whole budget on
+    // reasoning_content; any generated text proves the backend serves.
+    // Budgets/timeouts sized for CPU-speed 27B (~2-3 tok/s).
     const chat = await fetch(`${base}/v1/chat/completions`, {
       method: 'POST', headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ messages: [{ role: 'user', content: 'Reply with the single word: ready' }], max_tokens: 16 }),
-      signal: AbortSignal.timeout(60_000),
+      body: JSON.stringify({ messages: [{ role: 'user', content: 'Reply with the single word: ready' }], max_tokens: 128 }),
+      signal: AbortSignal.timeout(180_000),
     })
-    const chatBody = await chat.json() as { choices?: Array<{ message?: { content?: string } }> }
-    say(chat.ok && chatBody.choices?.[0]?.message?.content ? `ok   chat: "${chatBody.choices[0].message!.content!.trim().slice(0, 40)}"` : 'WARN chat smoke returned no content')
+    const chatBody = await chat.json() as { choices?: Array<{ message?: { content?: string; reasoning_content?: string } }> }
+    const msg = chatBody.choices?.[0]?.message
+    const text = msg?.content?.trim() || msg?.reasoning_content?.trim() || ''
+    if (!(chat.ok && text)) { say('NG   chat smoke returned no content — the model backend is NOT usable.'); return false }
+    say(`ok   chat: "${text.slice(0, 40)}"${msg?.content?.trim() ? '' : ' (reasoning-only within budget — serving works)'}`)
 
     const tool = await fetch(`${base}/v1/chat/completions`, {
       method: 'POST', headers: { 'content-type': 'application/json' },
       body: JSON.stringify({
         messages: [{ role: 'user', content: 'What time is it in Tokyo? Use the tool.' }],
-        max_tokens: 128,
+        max_tokens: 512, // reasoning models think before calling — leave room
         tools: [{ type: 'function', function: { name: 'get_time', description: 'Get the current time in a city', parameters: { type: 'object', properties: { city: { type: 'string' } }, required: ['city'] } } }],
       }),
-      signal: AbortSignal.timeout(60_000),
+      signal: AbortSignal.timeout(360_000), // 512 tokens at CPU-27B speed
     })
     const toolBody = await tool.json() as { choices?: Array<{ message?: { tool_calls?: unknown[] } }> }
     const calls = toolBody.choices?.[0]?.message?.tool_calls
     say(Array.isArray(calls) && calls.length
       ? `ok   tool-calling: model emitted ${calls.length} tool_call(s) — PE9' target confirmed`
       : 'WARN tool probe: no tool_calls (model may not be tool-tuned; PE9/T0 must re-check)')
+    return true
   } finally {
     srv.kill('SIGTERM')
     await sleep(500)
@@ -271,8 +486,16 @@ function ensureMandaHome(): string {
   step('manda memory home')
   const dir = resolveMandaDataDir()
   mkdirSync(dir, { recursive: true })
-  writeConfigKey('manda_data_dir', dir)
-  say(`ok   memory home: ${dir}`)
+  // Mirror bootstrap's guard: a home derived from a per-invocation env
+  // override (NS_DATA / MANDA_DATA_DIR / deprecated FED_DATA) is used for
+  // this run only, never baked into the persistent config — a story
+  // runbook's mktemp scratch must not become the agent's memory home.
+  if (process.env.MANDA_DATA_DIR || process.env.NS_DATA || process.env.FED_DATA) {
+    say(`ok   memory home (env override, not persisted): ${dir}`)
+  } else {
+    writeConfigKey('manda_data_dir', dir)
+    say(`ok   memory home: ${dir}`)
+  }
   return dir
 }
 
@@ -308,6 +531,9 @@ async function main(): Promise<void> {
 
   ensureManda()
 
+  step('model backend routing')
+  await detectExternalBackend()
+
   let llamaBin: string | null = null
   if (skipLlama) say('\n(skipping llama.cpp per --skip-llama)')
   else llamaBin = await ensureLlamaServer()
@@ -316,7 +542,8 @@ async function main(): Promise<void> {
   if (skipModel) say('\n(skipping model per --skip-model)')
   else modelPath = await selectAndDownloadModel()
 
-  if (llamaBin && modelPath) await validateModel(llamaBin, modelPath)
+  let valOk: boolean | null = null
+  if (llamaBin && modelPath) valOk = await validateModel(llamaBin, modelPath)
   else say('\n(model validation skipped — need both llama-server and a model)')
 
   const home = ensureMandaHome()
@@ -324,11 +551,18 @@ async function main(): Promise<void> {
   else if (resolveMandaBin()) await firstMandate(home)
   else say('\n(no manda binary — mandate step skipped; re-run once manda is built)')
 
+  if (valOk === false) {
+    step('FAILED')
+    say('NG   the local model backend failed validation — `just up` would serve')
+    say('     the offline demo only. Fix the model/build above, then re-run.')
+    process.exitCode = 1
+    return
+  }
   step('done')
   say('next:')
-  say('  just up         # start the stack (gate + engine + fourfive)')
+  say('  just up         # start the stack (llama + gate + engine + fourfive + apps)')
   say('  just agent      # chat with the first-party agent (memory ON if manda + mandate)')
-  if (llamaBin) say(`  ${llamaBin} -m <model> --port 8080 --jinja   # run the local model for llama-cpp profiles`)
+  say('  just llama      # (re)start only the local model backend')
 }
 
 main().then(() => { rl.close(); process.exit(0) }, e => { rl.close(); console.error(`setup: ${e instanceof Error ? e.message : e}`); process.exit(1) })

@@ -37,9 +37,13 @@ const FORBIDDEN: Array<[string, RegExp]> = [
   // day-0 is exempt: storyline numbering never starts at zero, while
   // "day-0 support" is legitimate industry vocabulary (day-0 model
   // support in vLLM/SGLang etc.) — the cold-start first run 2026-07-07
-  // hit exactly that false positive in all four locales.
+  // hit exactly that false positive in all four locales. Same family:
+  // "day-N support" is release vocabulary, not storyline filler — the
+  // fil locale's "day-one na suporta" hit it 2026-07-10, so any day-N
+  // immediately followed by a support word (en/es/fil particles
+  // included) is exempt too.
   ['day-N storyline numbering',
-    /\bday-(?:[1-9]\d*|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen)(?:-(?:one|two|three|four|five|six|seven|eight|nine))?\b/],
+    /\bday-(?:[1-9]\d*|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen)(?:-(?:one|two|three|four|five|six|seven|eight|nine))?\b(?!(?:\s+\S+){0,3}?\s+(?:support|suporta|soporte|サポート))/i],
   ['aging vocabulary',
     /\b(?:weekend|doubly|triply|quadruply|quintuply|sextuply)[\s-](?:weekend[\s-])?aged\b/i],
   ['N-day-old artifact filler',

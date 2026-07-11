@@ -27,8 +27,46 @@ const SCHEMA_HINT = `The JSON shape is:
 }
 "maps_to" links a UI field to "table.column". Reuse ids so UI/DB/API/logic cross-reference.
 "state_transitions" describes status lifecycles (e.g. an invoice: draft -> sent -> paid). Omit if the app has no meaningful states.
-"metrics" are the app's DECLARED measurements — what the user wants this app to measure. Each is one SQLite SELECT statement over the app's own tables returning a single value; "name" is a snake_case identifier. Only declared metrics can ground strategy discussion later, so capture what the user says they want to watch.
+"metrics" are the app's DECLARED measurements — what the user wants this app to measure. Each is one SQLite SELECT statement over the app's own tables returning a single value; "name" is a snake_case identifier. When the user names metrics explicitly, use EXACTLY those names and replace any others. Only declared metrics can ground strategy discussion later, so capture what the user says they want to watch.
+ALL SQL (metrics and schema) must be plain SQLite dialect: no GREATEST/LEAST (use MAX(a,b) or CASE), no stored procedures, no vendor extensions.
+NEVER define an entity named "manifest", "metrics", "api", "mcp", or "health" — those names are reserved by the app host. Declared measurements belong in the metrics LIST, never as a table.
 "stories" are the user stories the app must satisfy, in the user's own terms (one sentence each).`
+
+// The conversation the extractor sees is BOUNDED so the blueprint prompt
+// cannot outgrow the serving window (llama-server splits its context into
+// ctx/parallel slots; an oversized prompt gets HTTP 400 or truncates at the
+// slot boundary — live 2026-07-10). Old turns are redundant context, not
+// lost decisions: the current blueprint below the transcript carries the
+// accumulated design. ~16k chars ≈ 4k tokens, sized so system + blueprint +
+// convo fit the input half of the smallest sane slot (8k of 16k).
+export const BLUEPRINT_MAX_TURNS = 16
+export const BLUEPRINT_MAX_CONVO_CHARS = 16_000
+const OMISSION_MARKER = '[earlier turns omitted — the current blueprint carries the accumulated design]'
+
+/** Last-N-turns window under a character budget. The newest turn always
+ * survives, clipped if it alone busts the budget (a pasted document). */
+function boundTurns(turns: ChatMessage[]): { kept: ChatMessage[]; omitted: boolean } {
+  const recent = turns.slice(-BLUEPRINT_MAX_TURNS)
+  let omitted = recent.length < turns.length
+  const kept: ChatMessage[] = []
+  let used = 0
+  for (let i = recent.length - 1; i >= 0; i--) {
+    const m = recent[i]
+    const cost = m.role.length + m.content.length + 3 // "role: content\n"
+    if (kept.length === 0 && cost > BLUEPRINT_MAX_CONVO_CHARS) {
+      kept.unshift({ ...m, content: `${m.content.slice(0, BLUEPRINT_MAX_CONVO_CHARS)} …[clipped]` })
+      omitted = true
+      break
+    }
+    if (used + cost > BLUEPRINT_MAX_CONVO_CHARS) {
+      omitted = true
+      break
+    }
+    kept.unshift(m)
+    used += cost
+  }
+  return { kept, omitted }
+}
 
 export function buildBlueprintMessages(
   history: ChatMessage[],
@@ -37,7 +75,7 @@ export function buildBlueprintMessages(
   // System-role entries (e.g. dependency context) must arrive as instructions,
   // not as quoted transcript text, so split them out before building the convo.
   const systemExtras = history.filter((m) => m.role === 'system').map((m) => m.content)
-  const turns = history.filter((m) => m.role !== 'system')
+  const { kept, omitted } = boundTurns(history.filter((m) => m.role !== 'system'))
 
   const system = [
     "You are FourFive's design extractor. From the conversation, infer the app being designed and output ONLY a single JSON object — no prose, no code fences.",
@@ -47,9 +85,11 @@ export function buildBlueprintMessages(
     ...systemExtras,
   ].join('\n\n')
 
-  const convo = turns.map((m) => `${m.role}: ${m.content}`).join('\n')
+  const lines = kept.map((m) => `${m.role}: ${m.content}`)
+  if (omitted) lines.unshift(OMISSION_MARKER)
+  const convo = lines.join('\n')
   const currentStr = current
-    ? `\n\nCurrent blueprint (refine it; keep prior detail unless contradicted):\n${JSON.stringify(current)}`
+    ? `\n\nCurrent blueprint (refine it; keep prior detail unless contradicted — but the user's LATEST explicit instructions ALWAYS override it: rename, replace, or drop whatever they name):\n${JSON.stringify(current)}`
     : ''
 
   return [

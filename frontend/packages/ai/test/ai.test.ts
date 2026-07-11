@@ -3,6 +3,7 @@ import * as fs from 'node:fs';
 import * as os from 'node:os';
 import * as path from 'node:path';
 import { createAi } from '../src/index.ts';
+import type { ChatResult, Provider } from '../src/index.ts';
 
 const tmp: string[] = [];
 function tmpLog(): string {
@@ -22,6 +23,29 @@ describe('createAi + mock provider + run log', () => {
     const lines = fs.readFileSync(log, 'utf8').trim().split('\n').map(l => JSON.parse(l));
     expect(lines).toHaveLength(1);
     expect(lines[0]).toMatchObject({ caller: 'step-x', provider: 'mock', outcome: 'ok', verify: 'off' });
+    // The mock reports no finish reason — the key must be absent, not ''.
+    expect(lines[0]).not.toHaveProperty('stopReason');
+  });
+
+  it('records the provider stopReason in the run-log row', async () => {
+    const log = tmpLog();
+    const truncating: Provider = {
+      name: 'trunc',
+      capabilities: {
+        chat: true, stream: false, tools: false, structured: false,
+        webSearch: 'none', thinking: false, memory: false,
+      },
+      async chat(): Promise<ChatResult> {
+        return {
+          text: '{"partial":', usage: { inputTokens: 5, outputTokens: 7 },
+          model: 'm', provider: 'trunc', stopReason: 'length',
+        };
+      },
+    };
+    const ai = createAi({ runLogFile: log, providers: { trunc: truncating } });
+    await ai.chat('trunc', [{ role: 'user', content: 'x' }], { caller: 'step-y' });
+    const entry = JSON.parse(fs.readFileSync(log, 'utf8').trim());
+    expect(entry).toMatchObject({ caller: 'step-y', outcome: 'ok', stopReason: 'length' });
   });
 
   it('logs an error entry and rethrows for the forbid provider', async () => {

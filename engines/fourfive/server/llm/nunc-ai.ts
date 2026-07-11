@@ -14,13 +14,19 @@ import {
   createAi, loadDefaults, loadProfile,
 } from '../../../../frontend/packages/ai/src/index.ts'
 import type {
-  Ai, ChatOptions as AiChatOptions, ChatResult, Profile, StreamEvent,
+  Ai, ChatOptions as AiChatOptions, ChatResult, Profile, Provider, StreamEvent,
+  ToolCall, ToolSpec,
 } from '../../../../frontend/packages/ai/src/index.ts'
-import { resolveDataDir } from '../../../../tools/lib/data-dir.ts'
-import type { ChatMessage } from '../../shared/types'
+import { readConfig, resolveDataDir } from '../../../../tools/lib/data-dir.ts'
+import type { BlueprintOutcome, ChatMessage, ServedMetric } from '../../shared/types'
 import type { Blueprint } from '../../shared/blueprint'
+import { blueprintResponseJsonSchema } from '../blueprint-schema'
 import { buildBlueprintMessages, extractJson } from './blueprint-prompt'
-import { DEMO_THINKING, demoResponder, proposeDemoBlueprint } from './offline-demo'
+import { buildStrategyMessages, strategyJsonSchema } from '../strategy'
+import type { ServedApp } from '../strategy'
+import { buildPatrolMessages } from '../app-tools'
+import type { AppSweep } from '../app-tools'
+import { DEMO_THINKING, demoPatrol, demoResponder, demoStrategyCard, proposeDemoBlueprint } from './offline-demo'
 
 /** Per-message options from the chat surfaces. */
 export interface TurnOptions {
@@ -52,20 +58,83 @@ export type TurnEvent =
  * only falls back here so a fresh checkout still chats. */
 const OFFLINE: Profile = { id: 'offline-demo', name: 'Offline demo', provider: 'mock' }
 
+/** Chat-step fallback when the resolved profile carries no system_prompt.
+ * Without one, code-eager models (Qwen3.6, live 2026-07-10) dump full app
+ * implementations every turn — 8-14k tokens that then ride the history
+ * into the blueprint prompt. Wording proven on the local-llama profile. */
+export const DEFAULT_CHAT_SYSTEM_PROMPT =
+  "You are FourFive's design partner. Help the user shape the app they want: " +
+  'confirm requirements, ask at most a few clarifying questions, and summarize decisions. ' +
+  'Keep replies under 300 words. Never write implementation code or HTML — the system ' +
+  "builds the app from the design automatically. Reply in the user's language."
+
+// The blueprint call's own output budget — NEVER the per-message chat cap
+// (thinking models spend that on reasoning and truncate the JSON; the
+// silent-blueprint failure of 2026-07-10). llama-server splits its context
+// into --parallel slots, so one request gets llama_ctx/llama_parallel
+// tokens for prompt and completion TOGETHER: half a slot goes to output
+// here, the other half is what buildBlueprintMessages' history bound
+// protects. With an external backend (llama_url) the local knobs don't
+// describe the server; the clamp keeps the budget sane either way.
+const BLUEPRINT_MAX_OUTPUT_TOKENS = 8000
+const BLUEPRINT_MIN_OUTPUT_TOKENS = 2048
+
+/** One serving knob: env > config > default (tools/llama.ts resolveKnob,
+ * string-typed config values tolerated like the gate's knob()). */
+function servingKnob(envValue: string | undefined, cfgValue: unknown, dflt: number): number {
+  for (const v of [Number(envValue), Number(cfgValue)]) {
+    if (Number.isInteger(v) && v > 0) return v
+  }
+  return dflt
+}
+
+export function blueprintMaxTokens(
+  cfg: Record<string, unknown> = readConfig(),
+  env: Record<string, string | undefined> = process.env,
+): number {
+  const ctx = servingKnob(env.NS_LLAMA_CTX, cfg.llama_ctx, 32768)
+  const parallel = servingKnob(env.NS_LLAMA_PARALLEL, cfg.llama_parallel, 4)
+  const slot = Math.floor(ctx / Math.max(1, parallel))
+  return Math.min(BLUEPRINT_MAX_OUTPUT_TOKENS, Math.max(BLUEPRINT_MIN_OUTPUT_TOKENS, Math.floor(slot / 2)))
+}
+
+/** proposeBlueprint's classified result: the parsed candidate (non-null
+ * only when outcome is 'ok') plus why. 'empty' is the model's honest "not
+ * enough info yet" (the prompt's `null` escape hatch) — a no-op, not a
+ * failure. The route handler decides what to persist and surface. */
+export interface BlueprintProposal {
+  proposed: unknown
+  outcome: Extract<BlueprintOutcome, 'ok' | 'empty' | 'parse-failed' | 'length-truncated' | 'context-overflow'>
+  stopReason?: string
+  detail?: string
+}
+
+/** Test seams: a fixed store dir (else resolveDataDir()) and override
+ * providers passed through to createAi. Production callers pass nothing. */
+export interface FourfiveLlmOptions {
+  dataDir?: string
+  providers?: Record<string, Provider>
+}
+
 export class FourfiveLlm {
   private ai: Ai
   private dataDir: string
 
-  constructor() {
-    const resolved = resolveDataDir()
-    if (resolved.warning) console.warn(`[codev] ${resolved.warning}`)
-    // Post-R13 the resolver always lands on the in-repo default when
-    // nothing else is configured; null survives only for hard misconfig.
-    if (!resolved.dir) throw new Error('no data store resolvable — set NS_DATA or run just bootstrap')
-    this.dataDir = resolved.dir
+  constructor(opts: FourfiveLlmOptions = {}) {
+    if (opts.dataDir) {
+      this.dataDir = opts.dataDir
+    } else {
+      const resolved = resolveDataDir()
+      if (resolved.warning) console.warn(`[codev] ${resolved.warning}`)
+      // Post-R13 the resolver always lands on the in-repo default when
+      // nothing else is configured; null survives only for hard misconfig.
+      if (!resolved.dir) throw new Error('no data store resolvable — set NS_DATA or run just bootstrap')
+      this.dataDir = resolved.dir
+    }
     this.ai = createAi({
       runLogFile: path.join(this.dataDir, 'runs', 'ai-runs.jsonl'),
       mock: { responder: demoResponder, thinking: DEMO_THINKING },
+      ...(opts.providers ? { providers: opts.providers } : {}),
     })
   }
 
@@ -95,7 +164,9 @@ export class FourfiveLlm {
       caller,
       profile: profile.id,
       model: profile.model,
-      system: profile.system_prompt,
+      // A profile with no prompt of its own still gets the design-partner
+      // framing — promptless must not mean unguided (2026-07-10).
+      system: profile.system_prompt?.trim() ? profile.system_prompt : DEFAULT_CHAT_SYSTEM_PROMPT,
       think: opts.think,
       maxTokens: opts.maxTokens,
     }
@@ -119,6 +190,44 @@ export class FourfiveLlm {
     const profile = this.resolveProfile(opts.profileId)
     const result = await this.ai.chat(profile.provider, messages, this.aiOptions(profile, opts, 'fourfive-chat'))
     return toTurnResult(result, profile)
+  }
+
+  /** A tool-enabled turn (Phase F, F-2 B): the session chat operates its own
+   * served app through nunc-ai's bounded tool loop. Non-streamed in v0 (the
+   * agent precedent); verify is forced OFF for the turn (tools+verify in one
+   * call is a config error, PE9). If the resolved profile's provider has no
+   * tool support, this falls back to a plain chat — the turn still answers,
+   * it just cannot operate the app (honest degrade, surfaced by the caller
+   * via the absent tool events). */
+  async chatWithTools(
+    messages: ChatMessage[],
+    opts: TurnOptions,
+    tools: ToolSpec[],
+    onToolCall: (call: ToolCall) => Promise<string>,
+  ): Promise<TurnResult & { toolCalls?: { name: string; count: number }[] }> {
+    const profile = this.resolveProfile(opts.profileId)
+    const aiOpts = this.aiOptions(profile, opts, 'fourfive-chat')
+    aiOpts.verify = { verify: 'off' }
+    const counts = new Map<string, number>()
+    const counting = async (call: ToolCall) => {
+      counts.set(call.name, (counts.get(call.name) ?? 0) + 1)
+      return onToolCall(call)
+    }
+    try {
+      const result = await this.ai.chatWithTools(profile.provider, messages, {
+        ...aiOpts, tools, onToolCall: counting,
+      })
+      const turn = toTurnResult(result, profile)
+      return counts.size
+        ? { ...turn, toolCalls: [...counts].map(([name, count]) => ({ name, count })) }
+        : turn
+    } catch (err) {
+      // Only the capability refusal falls back; real errors surface.
+      if (/does not declare tool support/i.test((err as Error).message)) {
+        return this.chat(messages, opts)
+      }
+      throw err
+    }
   }
 
   async chatStream(
@@ -153,22 +262,110 @@ export class FourfiveLlm {
 
   /** The blueprint step. The offline profile short-circuits to the canned
    * demo; real profiles get the extractor prompt through nunc-ai (never
-   * verified — the zod validation downstream is the gate, §2.6 cost rule). */
+   * verified — the zod validation downstream is the gate, §2.6 cost rule).
+   * The result is CLASSIFIED, never a silent null: 2026-07-10 every
+   * blueprint failure under local serving was invisible. */
   async proposeBlueprint(
     history: ChatMessage[],
     current: Blueprint | null,
     opts: TurnOptions,
+  ): Promise<BlueprintProposal> {
+    const profile = this.resolveProfile(opts.profileId)
+    if (profile.provider === 'mock') {
+      const proposed = proposeDemoBlueprint(history)
+      return { proposed, outcome: proposed == null ? 'empty' : 'ok' }
+    }
+    const maxTokens = blueprintMaxTokens()
+    let result: ChatResult
+    try {
+      result = await this.ai.chat(profile.provider, buildBlueprintMessages(history, current), {
+        caller: 'fourfive-blueprint',
+        profile: profile.id,
+        model: profile.model,
+        // Own generous budget — never opts.maxTokens, the per-message chat
+        // cap (thinking models spend that on reasoning before the JSON).
+        maxTokens,
+        // Constrained decoding where the backend compiles schemas to a
+        // grammar (llama-server). Other providers are left to the prompt:
+        // the anthropic provider ignores jsonSchema and ollama's format
+        // support for anyOf-rooted schemas is unproven.
+        ...(profile.provider === 'llama-cpp' ? { jsonSchema: blueprintResponseJsonSchema } : {}),
+        verify: { verify: 'off' },
+      })
+    } catch (err) {
+      const msg = (err as Error).message
+      // llama-server refuses a prompt bigger than its per-slot window
+      // (ctx/parallel) with HTTP 400 exceed_context_size_error.
+      if (/exceed_context|context size/i.test(msg)) {
+        return { proposed: null, outcome: 'context-overflow', detail: msg.slice(0, 300) }
+      }
+      throw err
+    }
+    const text = result.text.trim()
+    if (result.stopReason === 'length') {
+      // Truncated JSON can still parse (zod defaults would then validate a
+      // half-empty blueprint and wipe saved sections) — always discard.
+      return {
+        proposed: null,
+        outcome: 'length-truncated',
+        stopReason: result.stopReason,
+        detail: `output hit the ${maxTokens}-token blueprint budget after ${result.usage.outputTokens} tokens`,
+      }
+    }
+    const proposed = extractJson(text)
+    if (proposed == null) {
+      if (text === '' || text === 'null') return { proposed: null, outcome: 'empty', stopReason: result.stopReason }
+      return {
+        proposed: null,
+        outcome: 'parse-failed',
+        stopReason: result.stopReason,
+        detail: `model output is not blueprint JSON (${text.length} chars): ${text.slice(0, 80)}`,
+      }
+    }
+    return { proposed, outcome: 'ok', stopReason: result.stopReason }
+  }
+
+  /** The /strategy read-out (plan PE12): the model sees the declared metrics
+   * ONLY — no chat history, no blueprint. The offline profile short-circuits
+   * to the canned card; either way the output goes through the caller's
+   * grounding-subset parse, which is the gate (never verified — §2.6). */
+  async strategyReadout(
+    app: ServedApp,
+    metrics: ServedMetric[],
+    opts: { profileId?: string },
   ): Promise<unknown> {
     const profile = this.resolveProfile(opts.profileId)
-    if (profile.provider === 'mock') return proposeDemoBlueprint(history)
-    const result = await this.ai.chat(profile.provider, buildBlueprintMessages(history, current), {
-      caller: 'fourfive-blueprint',
+    if (profile.provider === 'mock') return demoStrategyCard(metrics)
+    const result = await this.ai.chat(profile.provider, buildStrategyMessages(app, metrics), {
+      caller: 'fourfive-strategy',
       profile: profile.id,
       model: profile.model,
-      maxTokens: opts.maxTokens,
+      jsonSchema: strategyJsonSchema(metrics.map((m) => m.name)),
       verify: { verify: 'off' },
     })
     return extractJson(result.text)
+  }
+
+  /** The opening patrol (F-2 B): the model sees the deterministic sweep ONLY
+   * and phrases at most 3 sentences + ONE status question. The offline
+   * profile short-circuits to the canned patrol (the strategy-card offline
+   * rule). Never verified, never tool-enabled — the sweep already happened
+   * in code; answers flow through the normal tool-enabled chat. */
+  async patrolOpener(sweep: AppSweep, opts: { profileId?: string }): Promise<string> {
+    const profile = this.resolveProfile(opts.profileId)
+    if (profile.provider === 'mock') return demoPatrol(sweep)
+    const result = await this.ai.chat(profile.provider, buildPatrolMessages(sweep), {
+      caller: 'fourfive-patrol',
+      profile: profile.id,
+      model: profile.model,
+      maxTokens: 400,
+      verify: { verify: 'off' },
+    })
+    const text = result.text.trim()
+    // A live model that returns nothing must not leak the 'Mock patrol'
+    // framing to a production user (review-found): reuse the deterministic
+    // phrasing but labeled as what it is — a plain patrol.
+    return text || demoPatrol(sweep).replace(/^Mock patrol/, 'Patrol')
   }
 }
 

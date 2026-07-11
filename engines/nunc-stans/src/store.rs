@@ -261,6 +261,68 @@ impl SelfStore {
         Ok(LaneRead { values, malformed })
     }
 
+    // --- Generic doc lane (superposition_state; reusable for future lanes) --
+    //
+    // A doc lane is one create_new json file per record under me/<subdir>/,
+    // exactly the commitment shape. Storage stays Value-based (like
+    // create_commitment) so the store keeps no compile dependency on the typed
+    // record modules; typed validation lives in the module + api.
+
+    fn lane_dir(&self, subdir: &str) -> PathBuf {
+        self.dir.join("me").join(subdir)
+    }
+
+    /// Append-only doc create under me/<subdir>/<slug>.json (never overwrite).
+    pub fn create_doc(&self, subdir: &str, slug: &str, doc: &Value) -> Result<()> {
+        let dir = self.lane_dir(subdir);
+        fs::create_dir_all(&dir)?;
+        restrict_permissions(&dir);
+        let path = dir.join(format!("{slug}.json"));
+        let mut f = fs::OpenOptions::new()
+            .write(true)
+            .create_new(true)
+            .open(&path)
+            .with_context(|| format!("cannot create {subdir} '{slug}'"))?;
+        f.write_all(serde_json::to_string_pretty(doc)?.as_bytes())?;
+        f.write_all(b"\n")?;
+        restrict_permissions(&path);
+        Ok(())
+    }
+
+    pub fn doc_exists(&self, subdir: &str, slug: &str) -> bool {
+        self.lane_dir(subdir).join(format!("{slug}.json")).exists()
+    }
+
+    /// List every well-formed doc in a lane (sorted, malformed skipped). An
+    /// unread lane is empty, not an error.
+    pub fn list_docs(&self, subdir: &str) -> Result<LaneRead> {
+        let dir = self.lane_dir(subdir);
+        if !dir.is_dir() {
+            return Ok(LaneRead { values: Vec::new(), malformed: 0 });
+        }
+        let mut paths: Vec<PathBuf> = fs::read_dir(&dir)?
+            .filter_map(|e| e.ok())
+            .map(|e| e.path())
+            .filter(|p| p.extension().is_some_and(|x| x == "json"))
+            .collect();
+        paths.sort();
+        let mut values = Vec::new();
+        let mut malformed = 0;
+        for path in paths {
+            match fs::read_to_string(&path)
+                .ok()
+                .and_then(|s| serde_json::from_str::<Value>(&s).ok())
+            {
+                Some(v) => values.push(v),
+                None => {
+                    tracing::warn!("skipping malformed {subdir} {}", path.display());
+                    malformed += 1;
+                }
+            }
+        }
+        Ok(LaneRead { values, malformed })
+    }
+
     /// Best-effort audit commit into the vault's own git history — the
     /// interim audit record (prd-override §1.2). Failure never blocks the
     /// write itself; the caller reports vault_committed to the client. The
@@ -404,6 +466,22 @@ mod tests {
         assert_eq!(read.values.len(), 2);
         // each outcome carries a scope id for supersedes linkage
         assert!(read.values.iter().all(|v| v["id"].as_str().is_some_and(|s| s.starts_with("self/outcome/a/"))));
+        let _ = fs::remove_dir_all(dir);
+    }
+
+    #[test]
+    fn generic_doc_lane_is_append_only() {
+        let (s, dir) = temp_store();
+        s.create_doc("superposition_state", "s1", &json!({"id": "self/superposition_state/s1"}))
+            .unwrap();
+        // No overwrite, ever.
+        assert!(s.create_doc("superposition_state", "s1", &json!({"id": "x"})).is_err());
+        assert!(s.doc_exists("superposition_state", "s1"));
+        let listed = s.list_docs("superposition_state").unwrap();
+        assert_eq!(listed.values.len(), 1);
+        assert_eq!(listed.values[0]["id"], "self/superposition_state/s1");
+        // an unread lane is empty, not an error
+        assert_eq!(s.list_docs("nonexistent_lane").unwrap().values.len(), 0);
         let _ = fs::remove_dir_all(dir);
     }
 }

@@ -1,0 +1,37 @@
+{
+  "comment": "Installable GGUF catalog - ONE source for `just setup` and the gate's model-backend install API (Formans Profiles > Model backend). URLs verified public 2026-07-10; the official Qwen/ HF repos went gated, so mirrors are used. approx sizes are download sizes.",
+  "models": [
+    {
+      "id": "qwen3.6-35b-a3b-q4",
+      "label": "Qwen3.6-35B-A3B (MoE, Q4_K_M) - strongest on a 32GB GPU",
+      "file": "Qwen3.6-35B-A3B-UD-Q4_K_M.gguf",
+      "url": "https://huggingface.co/unsloth/Qwen3.6-35B-A3B-GGUF/resolve/main/Qwen3.6-35B-A3B-UD-Q4_K_M.gguf",
+      "approx": "~22 GB",
+      "note": "MoE (3B active). If VRAM is tight beside other GPU work, llama.cpp's fit will partially offload; --cpu-moe is the manual lever."
+    },
+    {
+      "id": "qwen2.5-14b-q4",
+      "label": "Qwen2.5-14B-Instruct (Q4_K_M, balanced)",
+      "file": "qwen2.5-14b-instruct-q4_k_m.gguf",
+      "url": "https://huggingface.co/Qwen/Qwen2.5-14B-Instruct-GGUF/resolve/main/qwen2.5-14b-instruct-q4_k_m.gguf",
+      "approx": "~9.0 GB",
+      "note": "classic dense transformer; fast and roomy on the 5090"
+    },
+    {
+      "id": "qwen2.5-7b-q4",
+      "label": "Qwen2.5-7B-Instruct (Q4_K_M)",
+      "file": "qwen2.5-7b-instruct-q4_k_m.gguf",
+      "url": "https://huggingface.co/Qwen/Qwen2.5-7B-Instruct-GGUF/resolve/main/qwen2.5-7b-instruct-q4_k_m.gguf",
+      "approx": "~4.7 GB",
+      "note": ""
+    },
+    {
+      "id": "qwen2.5-3b-q4",
+      "label": "Qwen2.5-3B-Instruct (Q4_K_M, small/fast)",
+      "file": "qwen2.5-3b-instruct-q4_k_m.gguf",
+      "url": "https://huggingface.co/Qwen/Qwen2.5-3B-Instruct-GGUF/resolve/main/qwen2.5-3b-instruct-q4_k_m.gguf",
+      "approx": "~2.0 GB",
+      "note": "already installed on this box"
+    }
+  ]
+}

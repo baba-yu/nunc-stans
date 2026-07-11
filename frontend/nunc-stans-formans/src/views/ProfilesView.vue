@@ -9,6 +9,10 @@ import {
   CONTEXTS, PROVIDERS, blankForm, duplicateForm, toForm, toPayload,
 } from '../profiles'
 import type { ContextKey, ProfileForm, ProfilePayload } from '../profiles'
+import {
+  downloadLabel, perSlotCtx, toForm as backendToForm, toPayload as backendToPayload,
+} from '../model-backend'
+import type { DownloadStatus, ModelBackendForm, ModelBackendState } from '../model-backend'
 
 const profiles = ref<ProfilePayload[]>([])
 const defaults = reactive<Partial<Record<ContextKey, string>>>({})
@@ -96,7 +100,85 @@ async function saveDefaults() {
     : { ok: false, message: `defaults save failed (${r.status}): ${await r.text()}` }
 }
 
-onMounted(load)
+// --- Model backend (local llama-server serving knobs / external URL) ---
+const backend = ref<ModelBackendForm | null>(null)
+const backendState = ref<ModelBackendState | null>(null)
+const backendStatus = ref<{ ok: boolean; message: string } | null>(null)
+
+async function loadBackend() {
+  try {
+    const r = await fetch('/api/model-backend')
+    if (!r.ok) {
+      backendStatus.value = { ok: false, message: `model backend unavailable (${r.status})` }
+      return
+    }
+    backendState.value = await r.json()
+    backend.value = backendToForm(backendState.value!)
+  } catch (e) {
+    backendStatus.value = { ok: false, message: `model backend unavailable: ${e}` }
+  }
+}
+
+async function saveBackend() {
+  if (!backend.value) return
+  const r = await fetch('/api/model-backend', {
+    method: 'PUT',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify(backendToPayload(backend.value)),
+  })
+  if (r.ok) {
+    backendState.value = await r.json()
+    backend.value = backendToForm(backendState.value!)
+    backendStatus.value = { ok: true, message: `saved — applies on ${backendState.value!.applies_on}` }
+  } else {
+    backendStatus.value = { ok: false, message: `save failed (${r.status}): ${await r.text()}` }
+  }
+}
+
+// --- Model install (catalog / custom URL, gate-managed download) ---
+const installChoice = ref('')
+const customUrl = ref('')
+const download = ref<DownloadStatus>({ state: 'idle' })
+let pollTimer: ReturnType<typeof setInterval> | null = null
+
+async function pollDownload() {
+  try {
+    const r = await fetch('/api/model-backend/download')
+    if (r.ok) download.value = await r.json()
+  } catch { /* transient */ }
+  if (download.value.state !== 'running' && pollTimer) {
+    clearInterval(pollTimer)
+    pollTimer = null
+    if (download.value.state === 'done') await loadBackend() // new GGUF appears
+  }
+}
+
+async function startInstall() {
+  const body = installChoice.value === 'custom'
+    ? { url: customUrl.value.trim() }
+    : { id: installChoice.value }
+  const r = await fetch('/api/model-backend/download', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify(body),
+  })
+  if (!r.ok) {
+    backendStatus.value = { ok: false, message: `install failed (${r.status}): ${await r.text()}` }
+    return
+  }
+  backendStatus.value = { ok: true, message: await r.text() }
+  download.value = { state: 'running' }
+  if (!pollTimer) pollTimer = setInterval(pollDownload, 2000)
+}
+
+async function applyNow() {
+  const r = await fetch('/api/model-backend/restart', { method: 'POST' })
+  backendStatus.value = r.ok
+    ? { ok: true, message: 'model backend restarting with the saved settings (a few seconds to reload)' }
+    : { ok: false, message: `restart failed (${r.status}): ${await r.text()}` }
+}
+
+onMounted(() => { load(); loadBackend(); pollDownload() })
 </script>
 
 <template>
@@ -200,6 +282,67 @@ onMounted(load)
           </select>
         </label>
         <div><button type="submit">save defaults</button></div>
+      </form>
+    </Panel>
+
+    <Panel title="Model backend">
+      <p class="meta">
+        The local llama-server's serving knobs — parallel slots let several
+        tasks (code generation, web search, …) share the one loaded model
+        concurrently; context is the TOTAL split across slots. Changes apply
+        when the model backend restarts (<code>just up</code> / <code>just llama</code>).
+      </p>
+      <p v-if="backendStatus" class="meta" :class="{ warn: !backendStatus.ok }">{{ backendStatus.message }}</p>
+      <form v-if="backend" class="defaults" @submit.prevent="saveBackend">
+        <label>
+          model (GGUF in the store)
+          <select v-model="backend.model">
+            <option value="">automatic (newest / profile)</option>
+            <option v-for="m in backendState?.available_models ?? []" :key="m" :value="m">{{ m }}</option>
+          </select>
+        </label>
+        <label>
+          context (total tokens)
+          <input v-model.number="backend.ctx" type="number" min="1024" step="1024" />
+        </label>
+        <label>
+          parallel slots
+          <input v-model.number="backend.parallel" type="number" min="1" max="32" />
+        </label>
+        <label>
+          external backend URL (empty = local server)
+          <input v-model="backend.url" placeholder="http://127.0.0.1:11434" />
+        </label>
+        <div class="editor-actions">
+          <button type="submit">save</button>
+          <button type="button" @click="applyNow">apply now (restart model)</button>
+          <span class="meta">
+            {{ backendState?.effective_backend === 'external' ? 'external backend' : `≈ ${perSlotCtx(backend).toLocaleString()} tokens per slot` }}
+          </span>
+        </div>
+      </form>
+      <p v-else-if="!backendStatus" class="meta">loading…</p>
+
+      <p class="meta" style="margin-top: 0.75rem"><strong>Install a model</strong> — downloads into the store; pick it above once installed.</p>
+      <form class="defaults" @submit.prevent="startInstall">
+        <label>
+          catalog
+          <select v-model="installChoice">
+            <option value="" disabled>choose…</option>
+            <option v-for="c in backendState?.catalog ?? []" :key="c.id" :value="c.id" :disabled="c.installed">
+              {{ c.label }} {{ c.approx }}{{ c.installed ? ' — installed' : '' }}
+            </option>
+            <option value="custom">custom .gguf URL…</option>
+          </select>
+        </label>
+        <label v-if="installChoice === 'custom'">
+          https URL to a .gguf
+          <input v-model="customUrl" placeholder="https://huggingface.co/…/resolve/main/….gguf" />
+        </label>
+        <div class="editor-actions">
+          <button type="submit" :disabled="!installChoice || download.state === 'running'">download</button>
+          <span v-if="download.state !== 'idle'" class="meta">{{ downloadLabel(download) }}</span>
+        </div>
       </form>
     </Panel>
   </main>

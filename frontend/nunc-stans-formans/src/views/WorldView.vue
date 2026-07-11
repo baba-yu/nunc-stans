@@ -2,6 +2,8 @@
 import { onMounted, reactive, ref } from 'vue'
 import { HeatDot, Panel } from 'nunc-ui'
 import NewsSettings from '../components/NewsSettings.vue'
+import TopicEditor from '../components/TopicEditor.vue'
+import WorldRun from '../components/WorldRun.vue'
 import { useMeStore } from '../stores/me'
 import { slugFor } from '../slug'
 import type { WorldPrediction } from '../types'
@@ -106,7 +108,17 @@ onMounted(async () => {
         </ul>
       </Panel>
 
+      <Panel cold title="Research topics">
+        <p class="meta">
+          What the pipeline investigates — the single topic authority
+          (<code>news-topics.json</code>) the search fan-out and the coverage
+          gate both read. You author these; the AI only proposes (§6, F6).
+        </p>
+        <TopicEditor />
+      </Panel>
+
       <Panel cold title="News pipeline">
+        <WorldRun />
         <NewsSettings />
       </Panel>
 
