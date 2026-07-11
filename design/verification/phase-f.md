@@ -44,8 +44,9 @@ F-3 gives it a save-path so a read-out becomes **grounds for a decision**
   lane (`me/superposition_state/<id>.json`). On save the engine draws the
   **canonical `informed_by` edge** to the `artifact_version` it read (and a
   `supersedes` edge when re-authored). `author=ai`; validates that
-  `informed_by` names a well-formed artifact. **Engine tests 11 → 17** (5
-  superposition validate cases + the generic doc-lane append-only test).
+  `informed_by` names a well-formed artifact. **Engine tests 11 → 18**
+  (superposition validate cases incl. supersedes-shape, + the generic doc-lane
+  append-only test).
 - **F-3b FourFive (`ff`, a3d2ace):** a **"Save as grounds"** button on the
   card (dismiss stays default; ephemeral stays the no-action behavior). Save
   POSTs to the ns engine's published API through
@@ -95,6 +96,27 @@ executed**. It is v1's termination test. `tests/journey/` now makes it runnable:
   more injected data + engine POSTs of the same shapes.
 
 `just check` green (FD-3.2 no-vault-leak, import scope, edge.schema valid).
+
+## Self-review (adversarial, before handoff)
+
+The F-3/F-4 code was built autonomously, so an adversarial correctness review
+was run over the diff before handoff. It found one MAJOR and several MINOR
+issues, addressed in [a14951b, 5fc3ca5]:
+- **MAJOR (fixed):** `create_superposition` persisted the record + informed_by
+  edge before validating the `supersedes` edge → a malformed `supersedes`
+  returned 422 after leaving an orphan + wedging the slug. Now validated up
+  front (nothing persisted on a bad value).
+- **MINOR (fixed):** check 1 now compares outcomes by their raw json (catches a
+  note/recorded_at tamper), uses a positional fallback for id-less records;
+  check 11 matches the engine's extensible observable shape (no false-fail on a
+  future result_type); `mandateStatusAt` fails closed on a NaN timestamp.
+- **Noted, out of scope (not fixed):** the engine outcome lane does not cap
+  observable count server-side (check 3 catches it — pre-existing lane, not
+  F-3); `mandateStatusAt` reads inline `m.events`, not a `mandate_events.jsonl`
+  (mandates are SPL v3 / injected-only in Phase F); `/strategy/save` maps an
+  engine 4xx to 502 (the error text is surfaced verbatim — a status cosmetic).
+Final: ns **18**, fourfive **78**, journey self-test **28**, `just journey` 10
+steps green, `just journey-verify` read-only proven.
 
 ## F-5 — 4-week live gate (mechanism DONE; clock owner-run)
 
@@ -170,7 +192,8 @@ vocabulary.
 5. [~] PF11 vocabulary amendment drafted; **owner ratifies**.
 6. [x] This verification doc; F-5 procedure documented.
 7. [ ] F-5 4-week gate run; the week-4 answer written. [owner clock]
-8. [x] `just check` + ns (17) + fourfive (78) suites green; one-commit-one-area.
+8. [x] `just check` + ns (18) + fourfive (78) + journey self-test (28) green;
+       one-commit-one-area; adversarial self-review done, findings addressed.
 
 ## Owner gates (the morning one-pass list)
 
