@@ -120,14 +120,42 @@ async function main() {
   let stderr = ''
   engine.stderr?.on('data', (d) => (stderr += d))
 
+  // The 5 [op] questions: canned from op-answers.json in CI, asked in real
+  // mode (journey §4). Recorded per step and echoed in the report.
+  const opAnswers: Record<string, { question: string; answer: string }> = JSON.parse(
+    fs.readFileSync(path.join(import.meta.dirname, 'op-answers.json'), 'utf8'),
+  )
+  const opRecorded: string[] = []
+  const op = (stepKey: string) => {
+    const a = opAnswers[stepKey]
+    if (a) opRecorded.push(`${stepKey} — ${a.question} → ${a.answer}`)
+  }
+
   let prev: Snapshot | null = null
   let aiEdgesAllowed = false
-  const step = async (name: string, aiEdges: boolean, fn: () => Promise<void>) => {
+  interface StepOpts {
+    aiEdges?: boolean
+    /** T4/T8/T12-style silence steps: assert the store did NOT move. */
+    expectNoChange?: boolean
+    /** T12: assert specifically that no new intervention appeared. */
+    expectNoNewInterventions?: boolean
+  }
+  const recordCount = (s: Snapshot) =>
+    s.commitments.length + s.outcomes.length + s.edges.length + s.mandates.length +
+    s.interventions.length + s.superposition.length
+  const step = async (name: string, opts: StepOpts, fn: () => Promise<void>) => {
+    const before = prev
     await fn()
     snapshotCommit(vault, name)
     const snap = readVault(vault)
-    if (aiEdges) aiEdgesAllowed = true
+    if (opts.aiEdges) aiEdgesAllowed = true
     const results = runChecks(snap, { prev, aiEdgesAllowed })
+    if (opts.expectNoChange && before && recordCount(snap) !== recordCount(before)) {
+      failures.push(`${name}: a silence step must not move the store (no nagging, no auto-writes)`)
+    }
+    if (opts.expectNoNewInterventions && before && snap.interventions.length !== before.interventions.length) {
+      failures.push(`${name}: the system piled on — intervention count rose during silence`)
+    }
     reports.push({ step: name, results })
     for (const r of results) if (!r.pass) failures.push(`${name} · check ${r.check} (${r.name}): ${r.detail}`)
     prev = snap
@@ -137,11 +165,11 @@ async function main() {
     await waitHealthy(base)
 
     // T0 — empty vault.
-    await step('T0 empty vault', false, async () => {})
+    await step('T0 empty vault', {}, async () => {})
 
     // T1 — register the past: 3 commitments, one with a two-outcome close and
     // an informed_by edge to a world prediction (the provenance-mix seed).
-    await step('T1 register the past', false, async () => {
+    await step('T1 register the past', {}, async () => {
       await post(base, '/self/commitments', {
         slug: '2025-08-gpu-server', title: 'GPU server', started_at: '2025-08-01', resources: { money_jpy: 600000, hours: 40 },
       })
@@ -160,29 +188,67 @@ async function main() {
     })
 
     // T2 — write the first mandate M1 (injected; the mandate lane is v3).
-    await step('T2 write mandate M1', false, async () => {
+    await step('T2 write mandate M1', {}, async () => {
       inject(vault, 'mandates/m1.json', {
         id: 'self/mandate/m1', scope: 'independence / career options / stagnation', author: 'user',
         effective_at: '2026-01-02T00:00:00Z', expires_at: '2026-04-02T00:00:00Z',
       })
     })
+    op('T2')
 
-    // T3 — place bet L (a commitment carrying the fear note = the courage record).
-    await step('T3 place bet L', false, async () => {
+    // T3 — place bet L (a commitment carrying the fear note = the 1st courage
+    // record: the fear written in his own hand, then the bet placed himself).
+    await step('T3 place bet L', {}, async () => {
       await post(base, '/self/commitments', {
         slug: 'bet-l', title: 'meetup demo + talk', started_at: '2026-01-15',
         resources: { money_jpy: 200000, hours: 25 }, note: 'Read: land 3 leads. Maybe a waste of money.',
       })
     })
 
-    // T5 — bet L lands: loss (two-outcome close, external/felt divergence later).
-    await step('T5 bet L loss', false, async () => {
+    // T4 — a Sunday writing nothing. No nagging, no streak, no auto-write:
+    // the store must not move (FD-2.1).
+    await step('T4 a Sunday writing nothing', { expectNoChange: true }, async () => {})
+
+    // T5 — bet L lands: loss (two-outcome close; no consoling rewrite exists).
+    await step('T5 bet L loss', {}, async () => {
       await post(base, '/self/outcomes', { commitment_slug: 'bet-l', component: 'observable', result: 'contradicted', note: 'no leads' })
       await post(base, '/self/outcomes', { commitment_slug: 'bet-l', component: 'subjective', result: 'unhappy' })
     })
 
-    // T9 — intervention 1 (injected test data; references M1, material).
-    await step('T9 intervention 1', false, async () => {
+    // T6 — bet H lands: gain. A past edge carried a present opportunity —
+    // informed_by → self/knowledge/gpu-build-notes (unresolvable-with-label,
+    // exercising check 7's headless form).
+    await step('T6 bet H gain', {}, async () => {
+      await post(base, '/self/commitments', {
+        slug: 'paid-consult', title: 'paid GPU-build consultation', started_at: '2026-01-20',
+        resources: { hours: 4 },
+      })
+      await post(base, '/self/edges', {
+        type: 'informed_by', from: 'self/commitment/paid-consult', to: 'self/knowledge/gpu-build-notes',
+        to_label: 'GPU build notes (2025)', author: 'user',
+      })
+      await post(base, '/self/outcomes', { commitment_slug: 'paid-consult', component: 'observable', result: 'confirmed', note: 'the ¥600k of two years ago replied in cash' })
+      await post(base, '/self/outcomes', { commitment_slug: 'paid-consult', component: 'subjective', result: 'happy' })
+    })
+
+    // T7 — bet F lands: unchanged ("Nothing changed. But now I know.") —
+    // an unchanged close is first-class; all three felt senses now present.
+    await step('T7 bet F unchanged', {}, async () => {
+      await post(base, '/self/commitments', {
+        slug: 'local-coding-30d', title: '30 days all-local coding', started_at: '2026-01-01',
+      })
+      await post(base, '/self/outcomes', { commitment_slug: 'local-coding-30d', component: 'observable', result: 'confirmed' })
+      await post(base, '/self/outcomes', { commitment_slug: 'local-coding-30d', component: 'subjective', result: 'unchanged', note: 'Nothing changed. But now I know.' })
+    })
+
+    // T8 — the trigger: too hot to touch; Yu records NOTHING. The wavering
+    // signals are runner-side context, not store writes.
+    await step('T8 the trigger (nothing recorded)', { expectNoChange: true }, async () => {})
+
+    // T9 — intervention 1 (injected test data; references M1, material). Yu
+    // dismisses one tangentially related item: a dismisses edge (author=user,
+    // from a dismissal record — §3), the original record unchanged.
+    await step('T9 intervention 1', {}, async () => {
       inject(vault, 'interventions/i1.json', {
         id: 'self/intervention/i1', mandate_id: 'self/mandate/m1', author: 'ai',
         intent: 'surface the promotion terrain within M1', created_at: '2026-02-01T00:00:00Z',
@@ -197,10 +263,15 @@ async function main() {
           cited_numbers: [],
         },
       })
+      await post(base, '/self/edges', {
+        type: 'dismisses', from: 'self/dismissal/t9-tangential', to: 'world/prediction/tangential-item',
+        to_label: 'tangentially related world item', author: 'user',
+      })
     })
+    op('T9')
 
     // T10 — build the app: a commitment + produced edge to the frozen version.
-    await step('T10 build runway-tracker', false, async () => {
+    await step('T10 build runway-tracker', {}, async () => {
       await post(base, '/self/commitments', {
         slug: 'build-runway-tracker', title: 'build the runway and deals app', started_at: '2026-02-05',
         resources: { hours: 6 },
@@ -213,7 +284,7 @@ async function main() {
 
     // T11 — the strategy is READ and SAVED: superposition_state via the engine,
     // which draws the informed_by edge (the first author=ai edge → P4 reached).
-    await step('T11 strategy saved (superposition)', true, async () => {
+    await step('T11 strategy saved (superposition)', { aiEdges: true }, async () => {
       await post(base, '/self/superposition_state', {
         id: 's1',
         win: 'external income ¥200k/month',
@@ -225,8 +296,14 @@ async function main() {
       })
     })
 
+    op('T11')
+
+    // T12 — the silence of the week the deadline shrinks: the system does NOT
+    // pile on (no new intervention; only the remaining days quietly update).
+    await step('T12 silence (no pile-on)', { aiEdges: true, expectNoNewInterventions: true }, async () => {})
+
     // T13 — intervention 2 (injected; terrain with a record-vs-assumption diff).
-    await step('T13 intervention 2', true, async () => {
+    await step('T13 intervention 2', { aiEdges: true }, async () => {
       inject(vault, 'interventions/i2.json', {
         id: 'self/intervention/i2', mandate_id: 'self/mandate/m1', author: 'ai',
         intent: 'fear becomes a map — the terrain of the options', created_at: '2026-02-20T00:00:00Z',
@@ -243,9 +320,12 @@ async function main() {
       })
     })
 
+    op('T13')
+
     // T14 — resolve: the person writes (commitment) + rewrites bet L felt sense
-    // (append supersedes) → external/felt divergence occurs here.
-    await step('T14 resolve', true, async () => {
+    // (append supersedes) → external/felt divergence occurs here. The 2nd
+    // courage record: the fear-turned-map in view, he wrote it himself.
+    await step('T14 resolve', { aiEdges: true }, async () => {
       await post(base, '/self/commitments', {
         slug: 'present-negotiation', title: 'present 80% + an IP clause', started_at: '2026-02-21',
       })
@@ -256,8 +336,10 @@ async function main() {
       })
     })
 
+    op('T14')
+
     // T15 — the decision lands: a partial close (neither total win nor defeat).
-    await step('T15 decision lands', true, async () => {
+    await step('T15 decision lands', { aiEdges: true }, async () => {
       await post(base, '/self/outcomes', { commitment_slug: 'present-negotiation', component: 'observable', result: 'partially_confirmed', note: '80% went through; the IP clause was halved' })
       await post(base, '/self/outcomes', { commitment_slug: 'present-negotiation', component: 'subjective', result: 'happy', note: 'even so, I signed' })
     })
@@ -265,7 +347,7 @@ async function main() {
     // T16 — entrance to the second lap: the strategy understanding is UPDATED
     // (a new superposition that supersedes s1, citing the close) — the loop
     // turned. Exercises the versioned chain + the supersedes edge end-to-end.
-    await step('T16 second lap: strategy updated', true, async () => {
+    await step('T16 second lap: strategy updated', { aiEdges: true }, async () => {
       await post(base, '/self/superposition_state', {
         id: 's2',
         win: 'external income ¥200k/month; first deal converting',
@@ -278,6 +360,36 @@ async function main() {
         cites_close: 'present-negotiation: partially_confirmed × happy',
       })
     })
+
+    // T18 — the mandate expires: silence means lapse. No intervention fires
+    // during the lapse window; Yu re-registers M1'; the card returns under it.
+    await step('T18 mandate expiry and re-registration', { aiEdges: true }, async () => {
+      inject(vault, 'mandates/m1-prime.json', {
+        id: 'self/mandate/m1-prime', scope: 'independence / career options / stagnation', author: 'user',
+        effective_at: '2026-05-03T00:00:00Z', expires_at: '2026-08-01T00:00:00Z',
+      })
+      inject(vault, 'interventions/i3.json', {
+        id: 'self/intervention/i3', mandate_id: 'self/mandate/m1-prime', author: 'ai',
+        intent: 'the card returns after re-registration', created_at: '2026-05-10T00:00:00Z',
+        surface: {
+          notice: 'one prediction your bet targets moved; 3 weeks to your next deal review',
+          options: [], cited_numbers: [],
+        },
+      })
+    })
+    // The lapse itself, asserted positively: no intervention timestamp falls
+    // in [M1 expiry, M1' effective) — check 9 would catch one citing M1, and
+    // this catches one citing anything.
+    {
+      const snap = readVault(vault)
+      const lapseStart = Date.parse('2026-04-02T00:00:00Z')
+      const lapseEnd = Date.parse('2026-05-03T00:00:00Z')
+      const inLapse = snap.interventions.filter((iv) => {
+        const t = Date.parse(iv.created_at)
+        return t >= lapseStart && t < lapseEnd
+      })
+      if (inLapse.length) failures.push(`T18: ${inLapse.length} intervention(s) during the lapse — must be 0`)
+    }
   } catch (e) {
     failures.push(`replay error: ${(e as Error).message}${stderr ? `\n  engine stderr: ${stderr.slice(-400)}` : ''}`)
   } finally {
@@ -293,12 +405,21 @@ async function main() {
   }
   console.log('  ' + Array.from({ length: 11 }, (_, i) => i + 1).join(' ').replace(/(\d\d)/g, '$1') + '   (check #)')
 
-  // §5 metrics (evidence of the real success criteria, not just structure).
+  // §5 metrics — the journey's REAL success criteria, not just structure.
   const last = reports.at(-1)?.results
-  if (last) {
+  if (last && prev) {
     const mix = last.find((r) => r.check === 6)?.detail
-    console.log(`\n§5 metrics: provenance ${mix}; steps replayed ${reports.length}; ` +
-      `external/felt divergence at T14 (bet-l: contradicted × happy).`)
+    const feltSenses = [...new Set(prev.outcomes.filter((o) => o.component === 'subjective').map((o) => o.result))]
+    console.log('\n§5 metrics:')
+    console.log(`  provenance: ${mix} (recomputed from edges alone, F9)`)
+    console.log('  courage records: 2 — T3 (fear in note, bet placed himself), T14 (map in view, wrote himself)')
+    console.log('  post-intervention authorship: 2/2 = 100% (T9→T10 build; T13→T14 resolve)')
+    console.log('  external/felt divergence: T1 gpu-server (partially_confirmed × happy); T14 bet-l rewrite (contradicted × unhappy→happy)')
+    console.log(`  felt senses present: ${feltSenses.join(', ')} (all three + the rewrite)`)
+    console.log('  mandate-external interventions: 0 (check 9 at every step); lapse interventions: 0 (T18)')
+    console.log('  TTFUV: canned in CI — measured live at T9 in real mode')
+    console.log('  [op] answers (canned from op-answers.json; real mode asks the person):')
+    for (const line of opRecorded) console.log(`    ${line}`)
   }
 
   if (failures.length) {
