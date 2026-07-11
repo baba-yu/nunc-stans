@@ -12,7 +12,7 @@ import { streamSSE } from 'hono/streaming'
 import { randomUUID } from 'node:crypto'
 import { db, nowIso, DEFAULT_SESSION_TITLE } from './db'
 import { FourfiveLlm } from './llm/nunc-ai'
-import type { TurnOptions } from './llm/nunc-ai'
+import type { TurnOptions, TurnResult } from './llm/nunc-ai'
 import { buildDependencyContext } from './llm/blueprint-prompt'
 import { validateBlueprint } from './blueprint-schema'
 import { RESERVED_ENTITY_NAMES } from './bundle/generate'
@@ -34,10 +34,11 @@ function stripReservedEntities<T extends { entities: Array<{ name: string }>; me
   return bp
 }
 import { saveBlueprint, getLatestBlueprint, saveMarkdown, setSoftwareStack, createComposedApp, getBlueprintWithDependencies, getSessionApp, freezeAndBundle, FreezeError } from './workspace'
-import { StrategyError, fetchServedApp, fetchServedMetrics, parseStrategyCard } from './strategy'
+import { StrategyError, fetchServedApp, fetchServedMetrics, parseStrategyCard, saveSuperposition } from './strategy'
+import { buildAppToolExecutor, fetchDeclaredTools, sweepServedApp } from './app-tools'
 import { listComposableApps, updateDependencyPin, DependencyError } from './dependencies'
 import { renderBlueprintMarkdown } from './markdown'
-import type { BlueprintStepStatus, ChatMessage, Message } from '../shared/types'
+import type { BlueprintStepStatus, ChatMessage, Message, StrategyCard } from '../shared/types'
 import type { Blueprint } from '../shared/blueprint'
 
 // Single origin in production (behind the gate) and a same-origin vite
@@ -48,6 +49,19 @@ const app = new Hono()
 // profile is re-resolved per request, so switching it on the Profiles
 // screen changes the NEXT message with no server restart (S-5).
 const llm = new FourfiveLlm()
+
+/** F-2 B: the session's OWN served app's declared tool surface (PF7 —
+ * the design chat holds an implicit `apps:<own-slug>` grant; cross-app
+ * operation still requires an explicit profile skill and is not offered
+ * here). null = no app / not served / apps-host unreachable — the turn
+ * simply runs tool-less (honest degrade). */
+async function sessionTools(sessionId: string) {
+  const sessionApp = getSessionApp(sessionId)
+  if (!sessionApp) return null
+  const tools = await fetchDeclaredTools(sessionApp.slug)
+  if (tools.length === 0) return null
+  return { slug: sessionApp.slug, tools, exec: buildAppToolExecutor(sessionApp.slug) }
+}
 
 app.get('/api/health', (c) => {
   const h = llm.health()
@@ -171,10 +185,20 @@ app.post('/api/sessions/:id/messages', async (c) => {
 
   let assistantText: string
   let usage: { input: number; output: number } | undefined
+  let toolCalls: { name: string; count: number }[] | undefined
   try {
-    const result = await llm.chat(llmHistory, opts)
+    // F-2 B: when the session's app has a served bundle, the turn carries the
+    // app's five verbs (PF7 implicit own-app grant); otherwise plain chat.
+    // An EXPLICIT verify toggle wins over the ambient tools (PE9 forbids the
+    // combination; silently dropping the user's verify request is worse than
+    // a tool-less verified turn — review-found 2026-07-11).
+    const toolCtx = opts.verify?.on ? null : await sessionTools(sessionId)
+    const result: TurnResult & { toolCalls?: { name: string; count: number }[] } = toolCtx
+      ? await llm.chatWithTools(llmHistory, opts, toolCtx.tools, toolCtx.exec)
+      : await llm.chat(llmHistory, opts)
     assistantText = result.content
     usage = result.usage
+    toolCalls = result.toolCalls
     db.prepare(
       'INSERT INTO llm_runs (id, session_id, provider, model, prompt, response, created_at) VALUES (?,?,?,?,?,?,?)',
     ).run(
@@ -209,6 +233,8 @@ app.post('/api/sessions/:id/messages', async (c) => {
   return c.json({
     userMessage: userMsg, assistantMessage: assistantMsg,
     blueprint: bp.blueprint, blueprintStatus: bp.status,
+    // Additive (F-2 B): which app tools this turn executed, when any.
+    ...(toolCalls ? { toolCalls } : {}),
   })
 })
 
@@ -276,6 +302,78 @@ app.post('/api/sessions/:id/strategy', async (c) => {
   } catch (err) {
     if (err instanceof StrategyError) return c.json({ error: err.message }, err.status)
     throw err
+  }
+})
+
+// --- strategy SAVE (Phase F, F-3): read-out → superposition_state ---------
+// The card the user is looking at becomes GROUNDS for a decision: persisted in
+// the self scope via the ns engine's published API, with an informed_by edge
+// to the served bundle. Dismiss stays the default; this is the opt-in save.
+app.post('/api/sessions/:id/strategy/save', async (c) => {
+  const sessionId = c.req.param('id')
+  if (!db.prepare('SELECT id FROM sessions WHERE id = ?').get(sessionId)) {
+    return c.json({ error: 'session not found' }, 404)
+  }
+  const sessionApp = getSessionApp(sessionId)
+  if (!sessionApp) {
+    return c.json({ error: 'this session has no app — nothing to ground a read-out in' }, 400)
+  }
+  const body = (await c.req.json().catch(() => ({}))) as { card?: StrategyCard }
+  if (!body.card) return c.json({ error: 'a card is required to save' }, 400)
+  try {
+    // Re-fetch the live declaration and re-validate before persisting — the
+    // save endpoint is a fresh entry point, not to be trusted with the client's
+    // word that the grounding is declared (defense in depth).
+    const served = await fetchServedApp(sessionApp.slug)
+    const metrics = await fetchServedMetrics(sessionApp.slug)
+    const saved = await saveSuperposition(body.card, served, metrics.map((m) => m.name))
+    return c.json({ saved: true, ...saved, app: served })
+  } catch (err) {
+    if (err instanceof StrategyError) return c.json({ error: err.message }, err.status)
+    // engine unreachable / refused — an infrastructure failure, surfaced 502
+    return c.json({ error: (err as Error).message }, 502)
+  }
+})
+
+// --- app status + opening patrol (Phase F, F-2) ---------------------------
+
+// F-2 A: does this session's app have a served bundle? Cheap probe for the
+// design‖app toggle — never blocks session open (the client asks lazily).
+app.get('/api/sessions/:id/app-status', async (c) => {
+  const sessionId = c.req.param('id')
+  if (!db.prepare('SELECT id FROM sessions WHERE id = ?').get(sessionId)) {
+    return c.json({ error: 'session not found' }, 404)
+  }
+  const sessionApp = getSessionApp(sessionId)
+  if (!sessionApp) return c.json({ slug: null, served: false })
+  try {
+    const served = await fetchServedApp(sessionApp.slug)
+    return c.json({ slug: served.slug, served: true, version: served.version, name: served.name })
+  } catch {
+    return c.json({ slug: sessionApp.slug, served: false })
+  }
+})
+
+// F-2 B: the interactive opening patrol. The AI sweeps the served app's rows
+// + metrics (deterministic server code over the published API) and opens with
+// ONE status question. EPHEMERAL (the strategy-card precedent): nothing
+// persists unless the human replies through the normal tool-enabled chat.
+// The unattended/scheduled form stays OUT (F14 / SPL v3 — handoff).
+app.post('/api/sessions/:id/patrol', async (c) => {
+  const sessionId = c.req.param('id')
+  if (!db.prepare('SELECT id FROM sessions WHERE id = ?').get(sessionId)) {
+    return c.json({ error: 'session not found' }, 404)
+  }
+  const sessionApp = getSessionApp(sessionId)
+  if (!sessionApp) return c.json({ patrol: null, reason: 'this session has no app' })
+  const sweep = await sweepServedApp(sessionApp.slug)
+  if (!sweep) return c.json({ patrol: null, reason: 'no served bundle' })
+  const body = (await c.req.json().catch(() => ({}))) as { profileId?: string }
+  try {
+    const text = await llm.patrolOpener(sweep, { profileId: body.profileId })
+    return c.json({ patrol: { text, app: sweep.app, rows: sweep.rows, metrics: sweep.metrics } })
+  } catch (err) {
+    return c.json({ error: `LLM call failed: ${(err as Error).message}` }, 502)
   }
 })
 
@@ -351,24 +449,41 @@ app.post('/api/sessions/:id/messages/stream', async (c) => {
     let assistantText = ''
     let usage: { input: number; output: number } | undefined
     try {
-      // Wire protocol unchanged for old events (user/thinking/content/
-      // assistant/blueprint/done); `verify` is additive — the S-6 loop
-      // boundaries, one event per judge verdict.
-      const result = await llm.chatStream(llmHistory, opts, async (e) => {
-        if (e.kind === 'thinking') await stream.writeSSE({ event: 'thinking', data: JSON.stringify(e.delta) })
-        else if (e.kind === 'content') await stream.writeSSE({ event: 'content', data: JSON.stringify(e.delta) })
-        else if (e.kind === 'verify') {
-          await stream.writeSSE({
-            event: 'verify',
-            data: JSON.stringify({
-              iteration: e.iteration, met: e.met, gaps: e.gaps,
-              tokensIn: e.tokensIn, tokensOut: e.tokensOut,
-            }),
-          })
-        }
-      })
-      assistantText = result.content
-      usage = result.usage
+      // F-2 B: a served app makes this a tool-enabled turn — non-streamed in
+      // v0 (the agent precedent). Each executed call goes out as an additive
+      // `tool` event; the final text arrives as ONE content event. Old
+      // clients ignore unknown event names. An EXPLICIT verify toggle wins
+      // over the ambient tools (PE9; never silently drop a verify request —
+      // the verify turn streams normally with its verdict events).
+      const toolCtx = opts.verify?.on ? null : await sessionTools(sessionId)
+      if (toolCtx) {
+        const result = await llm.chatWithTools(llmHistory, opts, toolCtx.tools, async (call) => {
+          await stream.writeSSE({ event: 'tool', data: JSON.stringify({ name: call.name, arguments: call.arguments }) })
+          return toolCtx.exec(call)
+        })
+        assistantText = result.content
+        usage = result.usage
+        if (assistantText) await stream.writeSSE({ event: 'content', data: JSON.stringify(assistantText) })
+      } else {
+        // Wire protocol unchanged for old events (user/thinking/content/
+        // assistant/blueprint/done); `verify` is additive — the S-6 loop
+        // boundaries, one event per judge verdict.
+        const result = await llm.chatStream(llmHistory, opts, async (e) => {
+          if (e.kind === 'thinking') await stream.writeSSE({ event: 'thinking', data: JSON.stringify(e.delta) })
+          else if (e.kind === 'content') await stream.writeSSE({ event: 'content', data: JSON.stringify(e.delta) })
+          else if (e.kind === 'verify') {
+            await stream.writeSSE({
+              event: 'verify',
+              data: JSON.stringify({
+                iteration: e.iteration, met: e.met, gaps: e.gaps,
+                tokensIn: e.tokensIn, tokensOut: e.tokensOut,
+              }),
+            })
+          }
+        })
+        assistantText = result.content
+        usage = result.usage
+      }
     } catch (err) {
       assistantText = `⚠️ LLM call failed: ${(err as Error).message}`
       await stream.writeSSE({ event: 'content', data: JSON.stringify(assistantText) })

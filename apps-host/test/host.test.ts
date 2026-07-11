@@ -29,6 +29,17 @@ describe('apps-host REST surface (contract §6)', () => {
     expect(await json(res)).toEqual([{ slug: 'fixture-app', version: 1, name: 'Fixture App' }])
   })
 
+  it('serves the declared tool surface over REST, verbatim (Phase F)', async () => {
+    const res = await api().request('/fixture-app/api/tools')
+    expect(res.status).toBe(200)
+    const tools = await json<{ name: string }[]>(res)
+    // The same frozen mcp-tools.json /mcp serves: slug-prefixed five-verb names.
+    expect(tools.length).toBeGreaterThan(0)
+    for (const t of tools) expect(t.name).toMatch(/^fixture-app_[a-z0-9_]+_(list|get|create|update|archive)$/)
+    // 404 for an unserved slug, like every other app route.
+    expect((await api().request('/ghost-app/api/tools')).status).toBe(404)
+  })
+
   it('serves the manifest and creates the data file lazily on first write', async () => {
     const res = await api().request('/fixture-app/api/manifest')
     expect((await json<{ slug: string }>(res)).slug).toBe('fixture-app')

@@ -15,6 +15,7 @@ import {
 } from '../../../../frontend/packages/ai/src/index.ts'
 import type {
   Ai, ChatOptions as AiChatOptions, ChatResult, Profile, Provider, StreamEvent,
+  ToolCall, ToolSpec,
 } from '../../../../frontend/packages/ai/src/index.ts'
 import { readConfig, resolveDataDir } from '../../../../tools/lib/data-dir.ts'
 import type { BlueprintOutcome, ChatMessage, ServedMetric } from '../../shared/types'
@@ -23,7 +24,9 @@ import { blueprintResponseJsonSchema } from '../blueprint-schema'
 import { buildBlueprintMessages, extractJson } from './blueprint-prompt'
 import { buildStrategyMessages, strategyJsonSchema } from '../strategy'
 import type { ServedApp } from '../strategy'
-import { DEMO_THINKING, demoResponder, demoStrategyCard, proposeDemoBlueprint } from './offline-demo'
+import { buildPatrolMessages } from '../app-tools'
+import type { AppSweep } from '../app-tools'
+import { DEMO_THINKING, demoPatrol, demoResponder, demoStrategyCard, proposeDemoBlueprint } from './offline-demo'
 
 /** Per-message options from the chat surfaces. */
 export interface TurnOptions {
@@ -189,6 +192,44 @@ export class FourfiveLlm {
     return toTurnResult(result, profile)
   }
 
+  /** A tool-enabled turn (Phase F, F-2 B): the session chat operates its own
+   * served app through nunc-ai's bounded tool loop. Non-streamed in v0 (the
+   * agent precedent); verify is forced OFF for the turn (tools+verify in one
+   * call is a config error, PE9). If the resolved profile's provider has no
+   * tool support, this falls back to a plain chat — the turn still answers,
+   * it just cannot operate the app (honest degrade, surfaced by the caller
+   * via the absent tool events). */
+  async chatWithTools(
+    messages: ChatMessage[],
+    opts: TurnOptions,
+    tools: ToolSpec[],
+    onToolCall: (call: ToolCall) => Promise<string>,
+  ): Promise<TurnResult & { toolCalls?: { name: string; count: number }[] }> {
+    const profile = this.resolveProfile(opts.profileId)
+    const aiOpts = this.aiOptions(profile, opts, 'fourfive-chat')
+    aiOpts.verify = { verify: 'off' }
+    const counts = new Map<string, number>()
+    const counting = async (call: ToolCall) => {
+      counts.set(call.name, (counts.get(call.name) ?? 0) + 1)
+      return onToolCall(call)
+    }
+    try {
+      const result = await this.ai.chatWithTools(profile.provider, messages, {
+        ...aiOpts, tools, onToolCall: counting,
+      })
+      const turn = toTurnResult(result, profile)
+      return counts.size
+        ? { ...turn, toolCalls: [...counts].map(([name, count]) => ({ name, count })) }
+        : turn
+    } catch (err) {
+      // Only the capability refusal falls back; real errors surface.
+      if (/does not declare tool support/i.test((err as Error).message)) {
+        return this.chat(messages, opts)
+      }
+      throw err
+    }
+  }
+
   async chatStream(
     messages: ChatMessage[],
     opts: TurnOptions,
@@ -303,6 +344,28 @@ export class FourfiveLlm {
       verify: { verify: 'off' },
     })
     return extractJson(result.text)
+  }
+
+  /** The opening patrol (F-2 B): the model sees the deterministic sweep ONLY
+   * and phrases at most 3 sentences + ONE status question. The offline
+   * profile short-circuits to the canned patrol (the strategy-card offline
+   * rule). Never verified, never tool-enabled — the sweep already happened
+   * in code; answers flow through the normal tool-enabled chat. */
+  async patrolOpener(sweep: AppSweep, opts: { profileId?: string }): Promise<string> {
+    const profile = this.resolveProfile(opts.profileId)
+    if (profile.provider === 'mock') return demoPatrol(sweep)
+    const result = await this.ai.chat(profile.provider, buildPatrolMessages(sweep), {
+      caller: 'fourfive-patrol',
+      profile: profile.id,
+      model: profile.model,
+      maxTokens: 400,
+      verify: { verify: 'off' },
+    })
+    const text = result.text.trim()
+    // A live model that returns nothing must not leak the 'Mock patrol'
+    // framing to a production user (review-found): reuse the deterministic
+    // phrasing but labeled as what it is — a plain patrol.
+    return text || demoPatrol(sweep).replace(/^Mock patrol/, 'Patrol')
   }
 }
 

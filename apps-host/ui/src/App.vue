@@ -164,32 +164,136 @@ async function refresh(): Promise<void> {
   await Promise.all(m.entities.map((e) => loadRows(e.name)))
 }
 
+// Serialize raw form strings to the DECLARED column types. Vue's v-model
+// auto-casts type="number" inputs to JS numbers, so a numeric UI field mapped
+// to a TEXT column would otherwise post a number the host rightly refuses
+// (S-7 execution 2026-07-10: deals.expected_monthly_amount TEXT). Shared by
+// create (submit) and row edit (saveEdit) — one coercion rule.
+function coerce(entity: Entity, vals: Record<string, unknown>): Record<string, unknown> {
+  const payload: Record<string, unknown> = {}
+  for (const [name, raw] of Object.entries(vals)) {
+    if (raw === undefined || raw === '') continue
+    const col = entity.columns.find((c) => c.name === name)
+    if (!col) continue
+    const numeric = col.type === 'INTEGER' || col.type === 'REAL' || col.type === 'NUMERIC'
+    if (numeric) {
+      // Non-numeric input at a numeric column must NOT become JSON null
+      // (Number('x') = NaN → null on stringify); post the raw string so the
+      // server's type error names the column honestly (review-found).
+      const n = Number(raw)
+      payload[name] = Number.isFinite(n) ? n : raw
+    } else {
+      payload[name] = typeof raw === 'number' ? String(raw) : raw
+    }
+  }
+  return payload
+}
+
 async function submit(spec: FormSpec): Promise<void> {
   banner.value = null
   const form = forms[spec.key] ?? {}
   const entity = manifest.value!.entities.find((e) => e.name === spec.entity)!
-  const payload: Record<string, unknown> = {}
-  for (const f of spec.fields) {
-    const raw = form[f.column]
-    if (raw === undefined || raw === '') continue
-    const col = entity.columns.find((c) => c.name === f.column)!
-    // Serialize to the DECLARED column type. Vue's v-model auto-casts
-    // type="number" inputs to JS numbers, so a numeric UI field mapped to a
-    // TEXT column would otherwise post a number the host rightly refuses
-    // (S-7 execution 2026-07-10: deals.expected_monthly_amount TEXT).
-    const numeric = col.type === 'INTEGER' || col.type === 'REAL' || col.type === 'NUMERIC'
-    payload[f.column] = numeric ? Number(raw) : typeof raw === 'number' ? String(raw) : raw
-  }
+  const picked: Record<string, unknown> = {}
+  for (const f of spec.fields) picked[f.column] = form[f.column]
   const res = await fetch(`api/${spec.entity}`, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
-    body: JSON.stringify(payload),
+    body: JSON.stringify(coerce(entity, picked)),
   })
   if (!res.ok) {
     banner.value = `create refused: ${(await res.json().catch(() => ({ error: res.statusText })) as { error?: string }).error}`
     return
   }
   forms[spec.key] = {}
+  await refresh()
+}
+
+// --- FK selects (Phase F, F-2 — a T10-recorded shell gap) -----------------
+// A column with `fk: "target.column"` (in-app only, contract §2) renders as a
+// select sourced from the target entity's ALREADY-LOADED rows: the human
+// picks a row, the pk value is posted. The label shows the target's first
+// human-readable column beside the key.
+
+function fkOptionsFor(entityName: string, colName: string): { value: string; label: string }[] | null {
+  const m = manifest.value
+  const entity = m?.entities.find((e) => e.name === entityName)
+  const col = entity?.columns.find((c) => c.name === colName)
+  if (!m || !col?.fk) return null
+  const [targetEntity, targetCol] = col.fk.split('.')
+  const target = m.entities.find((e) => e.name === targetEntity)
+  if (!target || !targetCol) return null
+  const list = rows[targetEntity] ?? []
+  // No target rows yet → fall back to a plain input (an empty REQUIRED select
+  // would make the form unsubmittable with zero explanation, and an edit cell
+  // would display blank over a live value — review-found).
+  if (!list.length) return null
+  const labelCol = target.columns.find((c) => !c.pk && !c.audit && c.type === 'TEXT')?.name
+  return list.map((r) => {
+    const value = String(r[targetCol] ?? '')
+    const label = labelCol && r[labelCol] != null && r[labelCol] !== '' ? String(r[labelCol]) : value
+    return { value, label: label === value ? value : `${label} (${value})` }
+  })
+}
+
+// --- row edit (Phase F, F-2 — a T10-recorded shell gap) --------------------
+// The PATCH capability existed server-side (and as the MCP update verb) but
+// was unreachable from the shell. Editing keeps to writable columns; empty
+// fields are left unsent (clearing a value to NULL is not a v0 affordance).
+
+const editing = reactive<Record<string, Record<string, string>>>({})
+const editKey = (entity: string, id: unknown) => `${entity}:${String(id)}`
+
+function isEditing(e: Entity, row: Record<string, unknown>): boolean {
+  return editKey(e.name, row[pkOf(e.name)]) in editing
+}
+
+function editVals(e: Entity, row: Record<string, unknown>): Record<string, string> {
+  return editing[editKey(e.name, row[pkOf(e.name)])]
+}
+
+function beginEdit(e: Entity, row: Record<string, unknown>): void {
+  const vals: Record<string, string> = {}
+  for (const c of writable(e)) vals[c.name] = row[c.name] == null ? '' : String(row[c.name])
+  editing[editKey(e.name, row[pkOf(e.name)])] = vals
+}
+
+function cancelEdit(e: Entity, row: Record<string, unknown>): void {
+  delete editing[editKey(e.name, row[pkOf(e.name)])]
+}
+
+function editableCol(e: Entity, name: string): boolean {
+  return writable(e).some((c) => c.name === name)
+}
+
+function colInput(e: Entity, name: string): 'number' | 'text' {
+  const c = e.columns.find((x) => x.name === name)
+  return c && (c.type === 'INTEGER' || c.type === 'REAL' || c.type === 'NUMERIC') ? 'number' : 'text'
+}
+
+async function saveEdit(e: Entity, row: Record<string, unknown>): Promise<void> {
+  const id = row[pkOf(e.name)]
+  const vals = editing[editKey(e.name, id)]
+  if (!vals) return
+  banner.value = null
+  // A field the user CLEARED is skipped by coerce (clearing to NULL is not a
+  // v0 affordance) — say so instead of silently restoring the old value on
+  // refresh, which reads as data corruption (review-found).
+  const cleared = Object.entries(vals)
+    .filter(([k, v]) => v === '' && row[k] != null && row[k] !== '')
+    .map(([k]) => k)
+  const res = await fetch(`api/${e.name}/${String(id)}`, {
+    method: 'PATCH',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify(coerce(e, vals)),
+  })
+  if (!res.ok) {
+    banner.value = `update refused: ${(await res.json().catch(() => ({ error: res.statusText })) as { error?: string }).error}`
+    return
+  }
+  delete editing[editKey(e.name, id)]
+  if (cleared.length) {
+    banner.value = `saved — note: ${cleared.join(', ')} kept the previous value (clearing a field to empty is not supported yet)`
+  }
   await refresh()
 }
 
@@ -294,8 +398,20 @@ onMounted(async () => {
       <form class="form" @submit.prevent="submit(spec)">
         <label v-for="f in spec.fields" :key="f.column" class="form__field">
           <span>{{ f.label }}<span v-if="f.required"> *</span></span>
+          <!-- fk column → pick a target ROW; the pk value is what posts
+               (takes precedence over a static mock-ui option list) -->
           <select
-            v-if="f.input === 'select'"
+            v-if="fkOptionsFor(spec.entity, f.column)"
+            v-model="(forms[spec.key] ??= {})[f.column]"
+            :required="f.required"
+          >
+            <option value="" disabled>choose…</option>
+            <option v-for="o in fkOptionsFor(spec.entity, f.column)!" :key="o.value" :value="o.value">
+              {{ o.label }}
+            </option>
+          </select>
+          <select
+            v-else-if="f.input === 'select'"
             v-model="(forms[spec.key] ??= {})[f.column]"
             :required="f.required"
           >
@@ -333,15 +449,40 @@ onMounted(async () => {
         </thead>
         <tbody>
           <tr v-for="row in rows[e.name] ?? []" :key="String(row[pkOf(e.name)])">
-            <td v-for="c in displayColumns(e)" :key="c">{{ row[c] ?? '' }}</td>
-            <td>
-              <button
-                v-if="!row.archived_at"
-                :disabled="status?.readOnly"
-                @click="archive(e.name, row[pkOf(e.name)])"
-              >
-                archive
-              </button>
+            <td v-for="c in displayColumns(e)" :key="c">
+              <template v-if="isEditing(e, row) && editableCol(e, c)">
+                <select v-if="fkOptionsFor(e.name, c)" v-model="editVals(e, row)[c]" class="tbl__edit">
+                  <option value="" disabled>choose…</option>
+                  <option v-for="o in fkOptionsFor(e.name, c)!" :key="o.value" :value="o.value">
+                    {{ o.label }}
+                  </option>
+                </select>
+                <input v-else v-model="editVals(e, row)[c]" :type="colInput(e, c)" class="tbl__edit" />
+              </template>
+              <template v-else>{{ row[c] ?? '' }}</template>
+            </td>
+            <td class="tbl__actions">
+              <template v-if="isEditing(e, row)">
+                <button :disabled="status?.readOnly" @click="saveEdit(e, row)">save</button>
+                <button @click="cancelEdit(e, row)">cancel</button>
+              </template>
+              <template v-else>
+                <button
+                  v-if="!row.archived_at"
+                  :disabled="status?.readOnly"
+                  title="Edit writable fields in place (PATCH)"
+                  @click="beginEdit(e, row)"
+                >
+                  edit
+                </button>
+                <button
+                  v-if="!row.archived_at"
+                  :disabled="status?.readOnly"
+                  @click="archive(e.name, row[pkOf(e.name)])"
+                >
+                  archive
+                </button>
+              </template>
             </td>
           </tr>
           <tr v-if="!(rows[e.name] ?? []).length">
@@ -481,5 +622,21 @@ onMounted(async () => {
 }
 .tbl__empty {
   color: var(--text-dim, #9aa3b2);
+}
+.tbl__edit {
+  width: 100%;
+  min-width: 70px;
+  font-size: 12px;
+  padding: 2px 4px;
+  background: var(--elev-0, #101218);
+  color: var(--text, #e6e8ec);
+  border: 1px solid var(--accent, #18c7d8);
+  border-radius: 4px;
+}
+.tbl__actions {
+  white-space: nowrap;
+}
+.tbl__actions button + button {
+  margin-left: 6px;
 }
 </style>

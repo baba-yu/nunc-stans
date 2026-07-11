@@ -160,3 +160,23 @@ export function demoStrategyCard(
     grounding: quoted.map((m) => m.name),
   }
 }
+
+/** The opening patrol for the offline profile (F-2 B, the strategy-card
+ * offline-demo rule): deterministic, phrased from the REAL sweep so the
+ * materiality shape (observe + ONE question, no commands) exercises the same
+ * path as a live model. */
+export function demoPatrol(sweep: {
+  app: { name: string; slug: string; version: number }
+  rows: { entity: string; count: number; latest: string | null }[]
+  metrics: { label: string; value: number | string | null; error?: string }[]
+}): string {
+  const total = sweep.rows.reduce((n, r) => n + r.count, 0)
+  const empty = sweep.rows.filter((r) => r.count === 0).map((r) => r.entity)
+  const m = sweep.metrics[0]
+  const lines = [
+    `Mock patrol of ${sweep.app.name} (${sweep.app.slug}@v${sweep.app.version}): ${total} row${total === 1 ? '' : 's'} across ${sweep.rows.length} table${sweep.rows.length === 1 ? '' : 's'}${empty.length ? `; ${empty.join(', ')} still empty` : ''}.`,
+    m ? `${m.label} currently reads ${m.error ? 'unavailable' : (m.value ?? 'n/a')}.` : '',
+    'Anything happen since last time that should go on the record?',
+  ]
+  return lines.filter(Boolean).join(' ')
+}

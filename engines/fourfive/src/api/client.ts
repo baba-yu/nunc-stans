@@ -1,10 +1,13 @@
 import type {
   AppListItem,
+  AppStatusResponse,
   HealthResponse,
   Message,
+  PatrolResponse,
   SendMessageResponse,
   Session,
   SessionBlueprintResponse,
+  StrategyCard,
   StrategyResponse,
   UsageResponse,
 } from '../../shared/types'
@@ -65,9 +68,22 @@ export const api = {
       `${API}/sessions/${sessionId}/bundle`,
       { method: 'POST', body: '{}' },
     ),
-  // Phase E (PE12): the /strategy stage-3 read-out — ephemeral, never persisted.
+  // Phase E (PE12): the /strategy stage-3 read-out — ephemeral until saved.
   strategyReadout: (sessionId: string) =>
     http<StrategyResponse>(`${API}/sessions/${sessionId}/strategy`, { method: 'POST', body: '{}' }),
+  // Phase F (F-2): served-bundle probe for the design‖app toggle.
+  appStatus: (sessionId: string) =>
+    http<AppStatusResponse>(`${API}/sessions/${sessionId}/app-status`),
+  // Phase F (F-2): the interactive opening patrol — ephemeral.
+  patrol: (sessionId: string) =>
+    http<PatrolResponse>(`${API}/sessions/${sessionId}/patrol`, { method: 'POST', body: '{}' }),
+  // Phase F (F-3): save the read-out as grounds — a superposition_state record
+  // in the self scope with an informed_by edge to the served bundle.
+  saveStrategy: (sessionId: string, card: StrategyCard) =>
+    http<{ saved: true; id: string; informed_by_edge: string; app: { slug: string; version: number } }>(
+      `${API}/sessions/${sessionId}/strategy/save`,
+      { method: 'POST', body: JSON.stringify({ card }) },
+    ),
 
   // Consume the SSE message stream, invoking `on(event, data)` per event.
   // `data` is the raw (JSON-encoded) payload string; the caller parses it.

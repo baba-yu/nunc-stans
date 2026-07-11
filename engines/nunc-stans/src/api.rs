@@ -18,6 +18,7 @@ use uuid::Uuid;
 use crate::{
     edge::{Author, Edge, EdgeType},
     store::SelfStore,
+    superposition::{self, Superposition},
 };
 
 #[derive(Clone)]
@@ -37,6 +38,10 @@ pub fn router(self_dir: PathBuf, static_dir: Option<PathBuf>) -> anyhow::Result<
         .route("/self/edges", get(list_edges).post(append_edge))
         .route("/self/outcomes", post(append_outcome))
         .route("/self/outcomes/{slug}", get(list_outcomes))
+        .route(
+            "/self/superposition_state",
+            get(list_superposition).post(create_superposition),
+        )
         .with_state(app);
     if let Some(dir) = static_dir {
         router = router.fallback_service(ServeDir::new(dir));
@@ -284,6 +289,140 @@ async fn list_outcomes(State(app): State<App>, UrlPath(slug): UrlPath<String>) -
     let store = app.store.lock().await;
     match store.list_outcomes(&slug) {
         Ok(r) => Json(json!({ "outcomes": r.values, "malformed_skipped": r.malformed }))
+            .into_response(),
+        Err(e) => internal(e),
+    }
+}
+
+// --- superposition_state lane (Phase F, F-3) ---------------------------
+//
+// The AI's strategy understanding, saved as grounds for a decision. On create
+// the engine draws the `informed_by` edge to the artifact it read (journey
+// T11's full form) — that edge is the canonical link (§10-A); a re-authored
+// version additionally draws a `supersedes` edge to the prior. author=ai is an
+// asserted field (no caller auth on the self engine — agent-abi §5 gap 1);
+// grounding ⊆ declared is enforced upstream (FourFive parseStrategyCard), not
+// here (the engine has no cross-scope metric read).
+
+#[derive(Debug, Deserialize)]
+#[serde(deny_unknown_fields)]
+struct NewSuperposition {
+    /// Optional stable id (a slug); a uuid is minted when absent.
+    id: Option<String>,
+    win: String,
+    constraint: String,
+    risk_to_watch: String,
+    grounding: Vec<String>,
+    /// The artifact scope id read: artifact/artifact_version/<slug>@v<N>.
+    informed_by: String,
+    informed_by_label: String,
+    /// The prior superposition_state id this version supersedes (versioning).
+    supersedes: Option<String>,
+    cites_close: Option<String>,
+    note: Option<String>,
+}
+
+async fn create_superposition(
+    State(app): State<App>,
+    Json(input): Json<NewSuperposition>,
+) -> Response {
+    let slug = match input.id {
+        Some(s) => {
+            if !valid_slug(&s) {
+                return err(StatusCode::UNPROCESSABLE_ENTITY, "id must be [a-z0-9-]+");
+            }
+            s
+        }
+        None => Uuid::new_v4().to_string(),
+    };
+    let now = Utc::now().to_rfc3339_opts(SecondsFormat::Secs, true);
+    let record = Superposition {
+        id: format!("self/{}/{}", superposition::NODE_TYPE, slug),
+        win: input.win,
+        constraint: input.constraint,
+        risk_to_watch: input.risk_to_watch,
+        grounding: input.grounding,
+        informed_by: input.informed_by,
+        informed_by_label: input.informed_by_label,
+        author: Author::Ai,
+        created_at: now.clone(),
+        supersedes: input.supersedes.clone(),
+        cites_close: input.cites_close,
+        note: input.note,
+    };
+    if let Err(msg) = record.validate() {
+        return err(StatusCode::UNPROCESSABLE_ENTITY, msg);
+    }
+    let doc = match serde_json::to_value(&record) {
+        Ok(v) => v,
+        Err(e) => return internal(e),
+    };
+    let store = app.store.lock().await;
+    if store.doc_exists(superposition::NODE_TYPE, &slug) {
+        return err(
+            StatusCode::CONFLICT,
+            "superposition_state already exists; records are append-only — supersede instead",
+        );
+    }
+    if let Err(e) = store.create_doc(superposition::NODE_TYPE, &slug, &doc) {
+        return internal(e);
+    }
+    // The canonical link (§10-A): informed_by → the artifact this read.
+    let informed = Edge {
+        id: Uuid::new_v4().to_string(),
+        edge_type: EdgeType::InformedBy,
+        from: record.id.clone(),
+        to: record.informed_by.clone(),
+        to_label: record.informed_by_label.clone(),
+        from_label: None,
+        author: Author::Ai,
+        created_at: now.clone(),
+        note: None,
+    };
+    if let Err(msg) = informed.validate() {
+        // Should be unreachable (validate() checked the artifact id) — surface
+        // rather than silently drop the link.
+        return err(StatusCode::UNPROCESSABLE_ENTITY, format!("informed_by edge invalid: {msg}"));
+    }
+    if let Err(e) = store.append_edge(&informed) {
+        return internal(e);
+    }
+    // A re-authored version supersedes the prior (a versioned chain).
+    if let Some(prior) = record.supersedes.as_deref() {
+        let sup = Edge {
+            id: Uuid::new_v4().to_string(),
+            edge_type: EdgeType::Supersedes,
+            from: record.id.clone(),
+            to: prior.to_string(),
+            to_label: "prior strategy read-out".into(),
+            from_label: None,
+            author: Author::Ai,
+            created_at: now.clone(),
+            note: None,
+        };
+        if let Err(msg) = sup.validate() {
+            return err(StatusCode::UNPROCESSABLE_ENTITY, format!("supersedes edge invalid: {msg}"));
+        }
+        if let Err(e) = store.append_edge(&sup) {
+            return internal(e);
+        }
+    }
+    let vaulted = store.vault_commit(&format!("ns: superposition_saved {}", record.id));
+    (
+        StatusCode::CREATED,
+        Json(json!({
+            "id": record.id,
+            "informed_by_edge": informed.id,
+            "vault_committed": vaulted
+        })),
+    )
+        .into_response()
+}
+
+async fn list_superposition(State(app): State<App>) -> Response {
+    let store = app.store.lock().await;
+    match store.list_docs(superposition::NODE_TYPE) {
+        Ok(r) => Json(json!({ "superposition_state": r.values, "malformed_skipped": r.malformed }))
             .into_response(),
         Err(e) => internal(e),
     }

@@ -6,7 +6,7 @@ The scope owned by News for world prediction, observation, and external context;
 
 ## self
 
-The scope owned by Nunc Stans for self-prediction, commitment, outcome, revision, mandate, and edge; user-authored world predictions are stored in self with scope=world.
+The scope owned by Nunc Stans for self-prediction, commitment, outcome, revision, mandate, superposition_state, and edge; user-authored world predictions are stored in self with scope=world.
 
 ## artifact
 
@@ -19,6 +19,15 @@ A record of action. Expresses which prediction, what, and how much was wagered. 
 ## edge
 
 A connection record that spans scopes. Append-only. Requires `author` and `to_label`.
+
+## superposition_state
+
+The AI's transparent, versioned understanding of the user's strategy
+(constitution §3). Authored by the AI, readable and dismissable by the user,
+never user-authored. Holds an `informed_by` edge to the `artifact_version`
+whose declared metrics ground it (the FourFive strategy read-out saved as
+grounds — journey T11). Reuses SPL's existing `superposition_state`; no new
+location is created (prd-override §1.5).
 
 ## WRITE
 

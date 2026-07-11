@@ -174,3 +174,79 @@ describe('blueprintMaxTokens', () => {
     ).toBe(4096)
   })
 })
+
+describe('chatWithTools (F-2 B: the tool-enabled turn)', () => {
+  const P = { id: 'tooly', name: 'Tooly', provider: 'llama-cpp', model: 'm' }
+  const TOOLS = [{ name: 'my-app_deals_create', inputSchema: { type: 'object' } }]
+
+  it('drives the loop, counts executed calls, and forces verify off', async () => {
+    const fake = fakeLlamaCpp([
+      { toolCalls: [{ id: 't1', name: 'my-app_deals_create', arguments: { name: 'Acme' } }] },
+      { text: 'created it' },
+    ])
+    const dataDir = makeStore({ tooly: P }, { 'fourfive-chat': 'tooly' })
+    const llm = new FourfiveLlm({ dataDir, providers: { 'llama-cpp': fake.provider } })
+    const executed: string[] = []
+    const result = await llm.chatWithTools(
+      [{ role: 'user', content: '受注1件入れといて' }],
+      { verify: { on: true, goal: 'must be ignored' } }, // tools force verify OFF
+      TOOLS,
+      async (call) => {
+        executed.push(call.name)
+        return '{"id":"r1"}'
+      },
+    )
+    expect(result.content).toBe('created it')
+    expect(executed).toEqual(['my-app_deals_create'])
+    expect(result.toolCalls).toEqual([{ name: 'my-app_deals_create', count: 1 }])
+    // every provider call in the loop carried verify off (no judge ran):
+    // 2 calls total (tool round + final), none with a goal prompt
+    expect(fake.calls).toHaveLength(2)
+  })
+
+  it('falls back to plain chat when the provider declares no tool support', async () => {
+    const fake = fakeLlamaCpp([{ text: 'plain answer' }])
+    fake.provider.capabilities.tools = false
+    const dataDir = makeStore({ tooly: P }, { 'fourfive-chat': 'tooly' })
+    const llm = new FourfiveLlm({ dataDir, providers: { 'llama-cpp': fake.provider } })
+    const result = await llm.chatWithTools(
+      [{ role: 'user', content: 'hi' }], {}, TOOLS, async () => 'never',
+    )
+    expect(result.content).toBe('plain answer')
+    expect('toolCalls' in result && result.toolCalls).toBeFalsy()
+  })
+})
+
+describe('patrolOpener (F-2 B: the interactive opening patrol)', () => {
+  const SWEEP = {
+    app: { slug: 'my-app', version: 2, name: 'My App' },
+    metrics: [{ name: 'cash_runway', label: 'Cash runway', value: 7.5 }],
+    rows: [
+      { entity: 'deals', count: 2, latest: '2026-07-09T00:00:00Z' },
+      { entity: 'notes', count: 0, latest: null },
+    ],
+  }
+
+  it('short-circuits to the canned patrol on the offline profile', async () => {
+    const llm = new FourfiveLlm({ dataDir: makeStore({}) }) // no default → offline mock
+    const text = await llm.patrolOpener(SWEEP, {})
+    expect(text).toContain('My App')
+    expect(text).toContain('notes')
+    expect(text).toMatch(/\?/) // it asks a question, it does not command
+  })
+
+  it('phrases the opener from the sweep on a live provider, verify off', async () => {
+    const fake = fakeLlamaCpp([{ text: 'Deals moved last on the 9th — anything new since?' }])
+    const dataDir = makeStore(
+      { tooly: { id: 'tooly', name: 'T', provider: 'llama-cpp', model: 'm' } },
+      { 'fourfive-chat': 'tooly' },
+    )
+    const llm = new FourfiveLlm({ dataDir, providers: { 'llama-cpp': fake.provider } })
+    const text = await llm.patrolOpener(SWEEP, {})
+    expect(text).toContain('anything new since?')
+    expect(fake.calls).toHaveLength(1)
+    const system = fake.calls[0].messages[0].content
+    expect(system).toContain('my-app@v2')
+    expect(system).toContain('ONE brief status question')
+  })
+})
