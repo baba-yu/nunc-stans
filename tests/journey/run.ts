@@ -215,6 +215,7 @@ async function main() {
     // which draws the informed_by edge (the first author=ai edge → P4 reached).
     await step('T11 strategy saved (superposition)', true, async () => {
       await post(base, '/self/superposition_state', {
+        id: 's1',
         win: 'external income ¥200k/month',
         constraint: 'do not fall below 12 months of runway',
         risk_to_watch: 'concentration of dependence',
@@ -252,6 +253,29 @@ async function main() {
       await post(base, '/self/edges', {
         type: 'supersedes', from: 'self/commitment/present-negotiation', to: 'self/commitment/bet-l',
         to_label: 'bet L (context)', author: 'user',
+      })
+    })
+
+    // T15 — the decision lands: a partial close (neither total win nor defeat).
+    await step('T15 decision lands', true, async () => {
+      await post(base, '/self/outcomes', { commitment_slug: 'present-negotiation', component: 'observable', result: 'partially_confirmed', note: '80% went through; the IP clause was halved' })
+      await post(base, '/self/outcomes', { commitment_slug: 'present-negotiation', component: 'subjective', result: 'happy', note: 'even so, I signed' })
+    })
+
+    // T16 — entrance to the second lap: the strategy understanding is UPDATED
+    // (a new superposition that supersedes s1, citing the close) — the loop
+    // turned. Exercises the versioned chain + the supersedes edge end-to-end.
+    await step('T16 second lap: strategy updated', true, async () => {
+      await post(base, '/self/superposition_state', {
+        id: 's2',
+        win: 'external income ¥200k/month; first deal converting',
+        constraint: 'do not fall below 12 months of runway',
+        risk_to_watch: 'conversion from discussion to a contract',
+        grounding: ['monthly_external_income', 'deals_in_discussion', 'cash_runway'],
+        informed_by: 'artifact/artifact_version/runway-tracker@v1',
+        informed_by_label: 'runway-tracker@v1',
+        supersedes: 'self/superposition_state/s1',
+        cites_close: 'present-negotiation: partially_confirmed × happy',
       })
     })
   } catch (e) {
