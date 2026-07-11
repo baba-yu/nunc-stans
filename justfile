@@ -163,11 +163,20 @@ _up-llama:
       "$bin" -m "$model" --host 127.0.0.1 --port "${NS_LLAMA_PORT:-8080}" --jinja -c "$ctx" --parallel "$par"
       code=$?
       if [ $(( $(date +%s) - start )) -lt 20 ]; then fails=$((fails+1)); else fails=0; fi
-      if [ "$fails" -ge 2 ]; then
-        echo "[llama] llama-server died twice within 20s (code $code) - staying inert; fix the settings and restart via just up"
+      if [ "$fails" -ge 3 ]; then
+        echo "[llama] llama-server died 3 times within 20s (code $code) - staying inert; fix the settings and restart via just up"
         exec tail -f /dev/null
       fi
-      echo "[llama] llama-server exited (code $code) - restarting with the current settings"
+      if [ "$fails" -gt 0 ]; then
+        # A fast death right after `just up` is usually the PREVIOUS server's
+        # VRAM still being released (just down killed it seconds earlier; a
+        # 22GB model takes a moment to free) - wait it out instead of burning
+        # the retries into inert (observed live twice, 2026-07-10).
+        echo "[llama] fast death $fails/3 (code $code) - waiting 10s (VRAM release) before retrying"
+        sleep 10
+      else
+        echo "[llama] llama-server exited (code $code) - restarting with the current settings"
+      fi
     done
 
 # Run only the local model backend in the foreground (same resolution as the
