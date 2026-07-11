@@ -231,8 +231,11 @@ export const useSessionStore = defineStore('session', () => {
       if (current.value?.id !== sessionId) return // stale probe — session switched
       appStatus.value = st
       if (st.served && !patrolled.has(sessionId)) {
-        patrolled.add(sessionId)
         const res = await api.patrol(sessionId)
+        // Mark patrolled only on SUCCESS — a transient 502 (llama mid-backoff)
+        // must not silently consume the once-per-load patrol; reopening the
+        // session retries (review-found 2026-07-11).
+        patrolled.add(sessionId)
         if (current.value?.id === sessionId && res.patrol) patrol.value = res.patrol
       }
     } catch {
@@ -281,6 +284,11 @@ export const useSessionStore = defineStore('session', () => {
     dismissStrategy()
     dismissPatrol()
     appStatus.value = null
+    // Bundle results are per-session: without this reset, a bundle frozen in
+    // session A kept the app toggle + "Frozen…" note (and the iframe) alive
+    // in every other session (review-found 2026-07-11).
+    bundleResult.value = null
+    bundleError.value = null
     blueprintStatus.value = null
     messages.value = await api.getMessages(s.id)
     const res = await api.getBlueprint(s.id)

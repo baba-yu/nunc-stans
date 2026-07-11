@@ -78,7 +78,7 @@ export function buildAppToolExecutor(
           break
         }
         case 'get':
-          res = await f(url(`${entity}/${String(args.id)}`), { signal: AbortSignal.timeout(10_000) })
+          res = await f(url(`${entity}/${encodeURIComponent(String(args.id))}`), { signal: AbortSignal.timeout(10_000) })
           break
         case 'create':
           res = await f(url(entity), {
@@ -90,7 +90,7 @@ export function buildAppToolExecutor(
           break
         case 'update': {
           const { id, ...fields } = args
-          res = await f(url(`${entity}/${String(id)}`), {
+          res = await f(url(`${entity}/${encodeURIComponent(String(id))}`), {
             method: 'PATCH',
             headers: { 'content-type': 'application/json' },
             body: JSON.stringify(fields),
@@ -99,7 +99,7 @@ export function buildAppToolExecutor(
           break
         }
         case 'archive':
-          res = await f(url(`${entity}/${String(args.id)}/archive`), {
+          res = await f(url(`${entity}/${encodeURIComponent(String(args.id))}/archive`), {
             method: 'POST',
             signal: AbortSignal.timeout(10_000),
           })
@@ -151,7 +151,11 @@ export async function sweepServedApp(
         const r = await f(`${base}/${slug}/api/${e.name}?limit=1000`, { signal: AbortSignal.timeout(5_000) })
         if (!r.ok) continue
         const list = (await r.json()) as { created_at?: string }[]
-        const latest = list.length
+        // listRows serves oldest-first, capped at 1000: at the cap the true
+        // newest row is NOT in this page, so claiming a 'latest' would state
+        // a wrong staleness — report unknown instead (review-found).
+        const capped = list.length >= 1000
+        const latest = !capped && list.length
           ? list.map((x) => x.created_at ?? '').sort().at(-1) || null
           : null
         rows.push({ entity: e.name, count: list.length, latest })
@@ -173,9 +177,11 @@ export async function sweepServedApp(
  * (journey check 10): ask ONE brief status question; no commands, no
  * recommendations, no invented numbers. */
 export function buildPatrolMessages(sweep: AppSweep): ChatMessage[] {
-  const rowLines = sweep.rows.map(
-    (r) => `- ${r.entity}: ${r.count} row${r.count === 1 ? '' : 's'}${r.latest ? `, newest ${r.latest}` : ' (empty)'}`,
-  )
+  const rowLines = sweep.rows.map((r) => {
+    const count = r.count >= 1000 ? '1000+' : String(r.count)
+    const note = r.latest ? `, newest ${r.latest}` : r.count === 0 ? ' (empty)' : ''
+    return `- ${r.entity}: ${count} row${r.count === 1 ? '' : 's'}${note}`
+  })
   const metricLines = sweep.metrics.map(
     (m) => `- ${m.name} ("${m.label}"): ${m.error ? 'unavailable' : JSON.stringify(m.value)}`,
   )

@@ -96,6 +96,9 @@ watch(
     store.strategy,
     store.strategyError,
     store.strategyLoading,
+    // The patrol card lands seconds after open (bg probe + LLM call) — keep
+    // "the AI speaks first" above the fold (review-found 2026-07-11).
+    store.patrol,
   ],
   async () => {
     await nextTick()

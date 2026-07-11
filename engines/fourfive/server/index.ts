@@ -189,7 +189,10 @@ app.post('/api/sessions/:id/messages', async (c) => {
   try {
     // F-2 B: when the session's app has a served bundle, the turn carries the
     // app's five verbs (PF7 implicit own-app grant); otherwise plain chat.
-    const toolCtx = await sessionTools(sessionId)
+    // An EXPLICIT verify toggle wins over the ambient tools (PE9 forbids the
+    // combination; silently dropping the user's verify request is worse than
+    // a tool-less verified turn — review-found 2026-07-11).
+    const toolCtx = opts.verify?.on ? null : await sessionTools(sessionId)
     const result: TurnResult & { toolCalls?: { name: string; count: number }[] } = toolCtx
       ? await llm.chatWithTools(llmHistory, opts, toolCtx.tools, toolCtx.exec)
       : await llm.chat(llmHistory, opts)
@@ -449,8 +452,10 @@ app.post('/api/sessions/:id/messages/stream', async (c) => {
       // F-2 B: a served app makes this a tool-enabled turn — non-streamed in
       // v0 (the agent precedent). Each executed call goes out as an additive
       // `tool` event; the final text arrives as ONE content event. Old
-      // clients ignore unknown event names.
-      const toolCtx = await sessionTools(sessionId)
+      // clients ignore unknown event names. An EXPLICIT verify toggle wins
+      // over the ambient tools (PE9; never silently drop a verify request —
+      // the verify turn streams normally with its verdict events).
+      const toolCtx = opts.verify?.on ? null : await sessionTools(sessionId)
       if (toolCtx) {
         const result = await llm.chatWithTools(llmHistory, opts, toolCtx.tools, async (call) => {
           await stream.writeSSE({ event: 'tool', data: JSON.stringify({ name: call.name, arguments: call.arguments }) })

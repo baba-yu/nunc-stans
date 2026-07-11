@@ -362,7 +362,10 @@ export class FourfiveLlm {
       verify: { verify: 'off' },
     })
     const text = result.text.trim()
-    return text || demoPatrol(sweep)
+    // A live model that returns nothing must not leak the 'Mock patrol'
+    // framing to a production user (review-found): reuse the deterministic
+    // phrasing but labeled as what it is — a plain patrol.
+    return text || demoPatrol(sweep).replace(/^Mock patrol/, 'Patrol')
   }
 }
 

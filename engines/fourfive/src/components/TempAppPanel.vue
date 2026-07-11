@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { Tabs } from 'nunc-ui'
 import type { BlueprintOutcome } from '../../shared/types'
 import { useSessionStore } from '../stores/session'
@@ -31,6 +31,12 @@ const servedSlug = computed(() => {
 // The SPA runs under /fourfive/, so the iframe src must be ORIGIN-absolute:
 // /apps/<slug>/ goes through the gate to apps-host on the same origin.
 const appUrl = computed(() => (servedSlug.value ? `/apps/${servedSlug.value}/` : null))
+// The panel is mounted once (no :key): when a session switch drops the served
+// slug, snap back to design — otherwise the 'app'-lit toggle hides the tab
+// bar over design content (review-found 2026-07-11).
+watch(servedSlug, (v) => {
+  if (!v) view.value = 'design'
+})
 // Read-only slices of each dependency's pinned blueprint for the merged views.
 const depEntities = computed(() =>
   store.dependencies
