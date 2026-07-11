@@ -65,7 +65,7 @@ on — the host never re-derives from the blueprint):
 {
   "name": "deals",                 // ^[a-z][a-z0-9_]*$; not one of the
                                    // reserved names: manifest, metrics,
-                                   // api, mcp, health
+                                   // api, mcp, health, status, tools
   "description": "…",              // optional
   "columns": [
     { "name": "id", "type": "TEXT", "pk": true, "notNull": true },
@@ -142,6 +142,10 @@ Host-relative (the gate strips `/apps`):
 GET   /api                       [{slug, version, name}] — served apps
 GET   /:slug/api/manifest        the served app.json
 GET   /:slug/api/metrics         [{name, label, value}] (read-only conn)
+GET   /:slug/api/status          {slug, version, readOnly, reason|null}
+GET   /:slug/api/tools           the frozen mcp-tools.json, verbatim — the
+                                 declared tool surface over REST (Phase F;
+                                 the same list /mcp serves)
 GET   /:slug/api/:entity         rows; archived excluded, ?archived=1 includes
 POST  /:slug/api/:entity         create → the row (id host-generated if absent)
 GET   /:slug/api/:entity/:id     one row

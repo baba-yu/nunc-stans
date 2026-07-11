@@ -66,6 +66,12 @@ export function buildApi(cfg: HostConfig): Hono {
     }),
   )
 
+  // The declared tool surface over REST (Phase F): the frozen mcp-tools.json,
+  // verbatim — the same list /mcp serves. Lets a REST-side consumer (FourFive's
+  // chat) offer the app's verbs without speaking MCP. 'tools' is a reserved
+  // entity name (contract §2) so this static route cannot shadow app data.
+  api.get('/:slug/api/tools', (c) => withApp(cfg, c, (app) => c.json(app.tools)))
+
   api.get('/:slug/api/:entity', (c) =>
     withApp(cfg, c, (app) =>
       c.json(
