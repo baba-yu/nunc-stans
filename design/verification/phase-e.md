@@ -203,10 +203,96 @@ owner accepted in session.
   before S-7's live leg: the llama-server GGUF tool probe (PE9'
   retarget — lands with the topics lane's T4 `_up-llama`).**
 
+- **2026-07-10 — T9 done** (owner build + 941dea9/ae5eaf9/2bf3934 ff on
+  `phase-e-finish`): `runway-tracker` was designed by the owner through
+  the REAL FourFive chat flow (four iterations; the 4th froze + bundled
+  → the served app is **`runway-tracker-4@v3`** — slugs -2/-3 are
+  abandoned drafts, recorded honestly rather than renamed). En route the
+  extractor kept dead-ending on reserved names / SQL dialect — the
+  proposal-time rails earlier on this branch (6cbe0f2, aad1e39, 4ef6463)
+  came from that. **Strategy card (PE12)**: `server/strategy.ts` fetches
+  the served version + metric values from apps-host's published API
+  ONLY, prompts the profile's model with the declared metrics and
+  NOTHING else, and `parseStrategyCard` THROWS on any grounding outside
+  the declaration (422, render fails — S-7's mechanical criterion; 14
+  unit tests incl. the violation naming the offender). `/strategy` in
+  chat renders the ephemeral, dismissable, version-stamped card;
+  persistence (superposition_state + informed_by) stays the named
+  Phase F prerequisite. Found live while shipping it: the card rendered
+  2px tall in long chats (flex column squeeze — 2bf3934), `/strategy
+  <words>` fell through to chat + no command discoverability (popup +
+  prefix match — ae5eaf9), model-down = honest 502 in the card
+  (ae5eaf9). Merge with dev's blueprint-hardening lane: 7430fba (both
+  lanes' semantics kept; ff suite 75 green).
+
 ## Story executions
 
 (S-7 / S-8 written at T1; executed at T10 with transcripts and
 numbered verdicts.)
+
+### S-7 executed 2026-07-11 (UTC; 2026-07-10 evening PDT) — PASS (8/8 mechanical checks)
+
+Environment: the LIVE stack (`just up` legs on :8720/:8787/:8788 + a
+manually re-armed llama-server 35B on :8080 after the leg went inert),
+app **`runway-tracker-4@v3`** in the owner's store.
+**Recorded deviation from the runbook setup:** executed against the
+live store, NOT a scratch `NS_DATA` — the story's subject app is T9's
+chat-built artifact, which lives there; rebuilding it in a scratch
+store would have replaced the real T9 artifact with a re-run. Writes
+were ordinary app working data (deals/income/cash rows, all
+archivable) + two `s7-*` agent profiles; no ledger/vault surface was
+touched. Owner may archive the S7 rows at will.
+
+1. **Human leg — generated UI form**: PASS. `S7 human deal` (Beta LLC,
+   discussion, 800) + cash snapshots + a dated income entry created
+   through the manifest-driven forms at `/apps/runway-tracker-4/`;
+   rows confirmed in `<store>/apps/runway-tracker-4/data.sqlite` and
+   via the published API. **Defect found BY this leg, fixed+committed
+   (01251e6 apps):** Vue auto-casts `type=number` inputs, so a numeric
+   UI field mapped to a TEXT column posted a JS number the host rightly
+   400'd — the form could never create the row. Shell now serializes to
+   the DECLARED column type.
+2. **Agent /tools surface**: PASS. Profile `s7-granted` (llama-cpp /
+   Qwen3.6-35B, `skills:["apps:runway-tracker-4"]`) lists EXACTLY the
+   15 declared tools (5 verbs × 3 entities), nothing else.
+3. **Agent reads the human's row**: PASS. `runway-tracker-4_deals_list`
+   fired; the reply enumerated `S7 human deal | Beta LLC | discussion`.
+4. **Agent writes; run-log carries toolCalls**: PASS.
+   `runway-tracker-4_deals_create` fired with the exact arguments;
+   `ai-runs.jsonl` rows `2026-07-11T01:00:33/35Z` carry
+   `toolCalls:[{name:runway-tracker-4_deals_list,count:1}]` and
+   `[...deals_create,count:1}]` under profile `s7-granted`.
+   (The PE9' llama tool-probe debt is settled by this live leg.)
+5. **Mutual visibility**: PASS. Generated UI reload shows the agent's
+   `S7 agent deal | Gamma KK` beside the human's row.
+6. **Metrics from both writes**: PASS. `GET /apps/runway-tracker-4/api/
+   metrics` returns exactly the four declared names, nothing
+   undeclared; `deals_in_discussion` reflects both rows (3). Final
+   values: 2500 / 3 / 2.4 / 1. App-authoring observation (not a
+   platform gate, S-11 rule): the app's own metric SQL is
+   format-sensitive — `strftime('%Y-%m', month)` returns NULL for a
+   bare `2026-07` string, so script-seeded rows without full dates
+   don't count; UI date fields produce full dates and compute fine.
+7. **Refusal — allowlisted, not ambient**: PASS. Profile `s7-refused`
+   (`skills:["apps:invoice-app"]` — a second app, not served): startup
+   + `/tools` report "connected to apps-host, but this profile grants
+   no served tool"; asked to add a deal, the model answers "I lack the
+   tool to add a new deal to the runway tracker." — surfaced verbatim,
+   no silent retry, and the deals table is unchanged (no `S7 refused
+   deal`).
+8. **Strategy read-out grounded only in declared metrics**: PASS.
+   `/strategy` → HTTP 200 card `{win, constraint, risk_to_watch}`,
+   version reference `runway-tracker-4@v3`,
+   `grounding = [deals_in_discussion, cash_runway,
+   monthly_external_income, income_concentration]` ⊆ (here =) the
+   declared set. The subset check is code (`parseStrategyCard` throws,
+   422, render fails), unit-tested incl. the undeclared-name case;
+   live 2px-collapse and model-down failure modes were found and fixed
+   during this leg (2bf3934, ae5eaf9).
+
+Screenshots for both UI directions ride the T11 screenshot pass
+(`design/ui/phase-e/`). Terminal transcripts, metrics JSON, and the
+run-log rows are reproduced above verbatim from the session.
 
 ## Constitutional check record
 
@@ -215,12 +301,14 @@ check output, F3 rails untouched, F11 locality, §13 one-path proof.)
 
 ## Exit criteria checklist
 
-1. [ ] runway-tracker@v1 frozen + bundled + human CRUD via generated UI,
-       data in the store [T4, T6, T9]
-2. [ ] agent operates the same app via MCP under a profile grant;
-       mutual visibility; non-granted tool refused [T8, T10]
-3. [ ] declared metrics served; strategy card quotes only declared
-       metrics with version reference [T6, T9]
+1. [x] runway-tracker frozen + bundled + human CRUD via generated UI,
+       data in the store [T4, T6, T9 — served as `runway-tracker-4@v3`,
+       chat-built; S-7 leg 1]
+2. [x] agent operates the same app via MCP under a profile grant;
+       mutual visibility; non-granted tool refused [T8, T10 — S-7 legs
+       2–5, 7]
+3. [x] declared metrics served; strategy card quotes only declared
+       metrics with version reference [T6, T9 — S-7 legs 6, 8]
 4. [ ] second, unrelated app end-to-end in one sitting [T10]
 5. [ ] S-7 / S-8 written, executed, passing with evidence [T1, T10]
 6. [ ] contracts/app-bundle.md drafted + owner-reviewed [T5]
