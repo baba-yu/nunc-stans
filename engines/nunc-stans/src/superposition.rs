@@ -90,6 +90,17 @@ impl Superposition {
         if self.informed_by_label.trim().is_empty() {
             return Err("informed_by_label must be non-empty (fallback display, F1/§10-A)".into());
         }
+        // Validate the supersedes target's SHAPE here, before any write — the
+        // api handler draws the supersedes edge only after persisting the
+        // record + the informed_by edge, so a malformed supersedes caught late
+        // would leave an orphaned record + edge and wedge the slug on retry.
+        if let Some(prior) = &self.supersedes {
+            if !prior.starts_with("self/superposition_state/") || !valid_scope_id(prior) {
+                return Err(format!(
+                    "supersedes '{prior}' must be a self/superposition_state/<id> scope id"
+                ));
+            }
+        }
         Ok(())
     }
 }
@@ -152,5 +163,20 @@ mod tests {
         let mut s = base();
         s.win = "  ".into();
         assert!(s.validate().is_err());
+    }
+
+    #[test]
+    fn malformed_supersedes_refused_before_any_write() {
+        let mut s = base();
+        // a bare slug (the natural mistake) is not a scope id — must fail
+        // validate() so the handler never persists a partial record.
+        s.supersedes = Some("s0".into());
+        assert!(s.validate().is_err());
+        // a non-superposition scope id is also refused
+        s.supersedes = Some("self/commitment/x".into());
+        assert!(s.validate().is_err());
+        // a well-formed prior id passes
+        s.supersedes = Some("self/superposition_state/s0".into());
+        assert!(s.validate().is_ok());
     }
 }
