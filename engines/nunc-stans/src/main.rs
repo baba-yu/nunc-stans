@@ -1,6 +1,7 @@
 mod api;
 mod edge;
 mod store;
+mod superposition;
 
 use std::net::SocketAddr;
 use std::path::PathBuf;
