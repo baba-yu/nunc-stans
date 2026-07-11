@@ -294,6 +294,63 @@ Screenshots for both UI directions ride the T11 screenshot pass
 (`design/ui/phase-e/`). Terminal transcripts, metrics JSON, and the
 run-log rows are reproduced above verbatim from the session.
 
+### S-8 executed 2026-07-11 (UTC) — PASS (clean run after a bug-find run)
+
+**Run 1 (bug find, plant-care-log):** designed in ONE 40s chat turn
+(35B live), frozen+bundled 65s after session start, discovered by scan
+and served WITHOUT any restart — but the generated UI could not create
+a single row: the chat blueprint declared `id INTEGER PRIMARY KEY` and
+the host forced UUID strings into it (datatype mismatch on every
+insert, surfaced verbatim in the shell banner). **Fixed + regression-
+tested (c6565c8 apps):** INTEGER pks now take SQLite's rowid; TEXT pks
+keep UUIDs. plant-care-log@v1 stays frozen as the bug-find artifact;
+its freeze checks passed live (re-generate = 200 same hash
+`bcde7361…`; tampered blueprint = 409 F7 verbatim; restored = 200).
+
+**Run 2 (clean, home-library-lending-log):** after the stack restart
+that loaded the fix, the full story in one sitting, stack untouched
+throughout — wall clock **01:33:15Z → 01:36:46Z (3m31s)**:
+
+- One FourFive session, one design turn (18s from session create to
+  frozen+bundled+served): entities `books`/`loans`, declared metrics
+  `books_count`/`loans_total`, 2 screens; `blueprintStatus: ok` (the
+  hardening lane's classified outcome, live).
+- `POST /sessions/:id/bundle` → `home-library-lending-log@v1`, hash
+  `b25b1027…`, all five files on disk; in the served list by scan,
+  no restart.
+- Generated UI: "Snow Country" created via the form (INTEGER-pk fix
+  live), row in
+  `<store>/apps/home-library-lending-log/data.sqlite`; loan archived
+  via the UI button — leaves the default list, `?archived=1` shows it
+  with `archived_at` stamped.
+- Edit + the loan create ran via the published REST surface (PATCH
+  books/1 author change 200 + updated_at bump; POST loans 201):
+  **recorded shell gaps** — the generated UI has no row-edit
+  affordance and FK selects are not populated from rows; both fold
+  into the app-operation-delegation lane
+  (design/development/2026-07-10-app-operation-delegation.md), where
+  the human UI demotes to inspection anyway.
+- Metrics answer with values: `books_count 1`, `loans_total 1`,
+  nothing undeclared.
+- Freeze held while in use: re-generate = 200 with the identical
+  hash; tampered `blueprint.json` = **409 "frozen but app.json does
+  not reproduce byte-for-byte — the frozen source or bundle was
+  modified (F7)"**; byte-restored = 200.
+
+**Recorded deviations:** live store, not scratch (S-7's rationale
+stands); the model leg was re-armed manually BEFORE the session
+started (the leg had gone inert at `just up` — root-caused to the
+previous server's VRAM still releasing when the new leg starts;
+backoff fix a949ca2 tool — takes effect next `just up`); no stack
+process was touched between design and use, which is the criterion.
+
+**PE14 generality:** beyond runway-tracker-4, THREE further apps went
+chat→freeze→bundle→served on this stack: plant-care-log (this story),
+home-library-lending-log (this story), and the owner's own
+発言記録アプリ (`app-1af0ddc5@v2`, bundled by the owner independently —
+the strongest generality signal: the factory worked without the
+implementer driving).
+
 ## Constitutional check record
 
 (Filled through the phase: F7 freeze refusal output, grounding⊆declared
@@ -309,11 +366,14 @@ check output, F3 rails untouched, F11 locality, §13 one-path proof.)
        2–5, 7]
 3. [x] declared metrics served; strategy card quotes only declared
        metrics with version reference [T6, T9 — S-7 legs 6, 8]
-4. [ ] second, unrelated app end-to-end in one sitting [T10]
-5. [ ] S-7 / S-8 written, executed, passing with evidence [T1, T10]
+4. [x] second, unrelated app end-to-end in one sitting [T10 — S-8:
+       home-library-lending-log 3m31s; plus plant-care-log and the
+       owner's 発言記録アプリ]
+5. [x] S-7 / S-8 written, executed, passing with evidence [T1, T10 —
+       records above; 3 execution-found defects fixed with tests]
 6. [ ] contracts/app-bundle.md drafted + owner-reviewed [T5]
-7. [ ] deterministic + freezing generation proven; no generated code
-       executed [T4, T6]
+7. [x] deterministic + freezing generation proven; no generated code
+       executed [T4, T6 — plus two live tamper→409-F7 proofs at T10]
 8. [ ] S-10 re-run (incl. /apps/), 3-OS CI green, screenshots under
        design/ui/phase-e/ [T11]
 9. [ ] verification doc complete; v1 plan/naming/reading-order updated;
