@@ -176,7 +176,15 @@ function coerce(entity: Entity, vals: Record<string, unknown>): Record<string, u
     const col = entity.columns.find((c) => c.name === name)
     if (!col) continue
     const numeric = col.type === 'INTEGER' || col.type === 'REAL' || col.type === 'NUMERIC'
-    payload[name] = numeric ? Number(raw) : typeof raw === 'number' ? String(raw) : raw
+    if (numeric) {
+      // Non-numeric input at a numeric column must NOT become JSON null
+      // (Number('x') = NaN → null on stringify); post the raw string so the
+      // server's type error names the column honestly (review-found).
+      const n = Number(raw)
+      payload[name] = Number.isFinite(n) ? n : raw
+    } else {
+      payload[name] = typeof raw === 'number' ? String(raw) : raw
+    }
   }
   return payload
 }
@@ -214,8 +222,13 @@ function fkOptionsFor(entityName: string, colName: string): { value: string; lab
   const [targetEntity, targetCol] = col.fk.split('.')
   const target = m.entities.find((e) => e.name === targetEntity)
   if (!target || !targetCol) return null
+  const list = rows[targetEntity] ?? []
+  // No target rows yet → fall back to a plain input (an empty REQUIRED select
+  // would make the form unsubmittable with zero explanation, and an edit cell
+  // would display blank over a live value — review-found).
+  if (!list.length) return null
   const labelCol = target.columns.find((c) => !c.pk && !c.audit && c.type === 'TEXT')?.name
-  return (rows[targetEntity] ?? []).map((r) => {
+  return list.map((r) => {
     const value = String(r[targetCol] ?? '')
     const label = labelCol && r[labelCol] != null && r[labelCol] !== '' ? String(r[labelCol]) : value
     return { value, label: label === value ? value : `${label} (${value})` }
@@ -262,6 +275,12 @@ async function saveEdit(e: Entity, row: Record<string, unknown>): Promise<void> 
   const vals = editing[editKey(e.name, id)]
   if (!vals) return
   banner.value = null
+  // A field the user CLEARED is skipped by coerce (clearing to NULL is not a
+  // v0 affordance) — say so instead of silently restoring the old value on
+  // refresh, which reads as data corruption (review-found).
+  const cleared = Object.entries(vals)
+    .filter(([k, v]) => v === '' && row[k] != null && row[k] !== '')
+    .map(([k]) => k)
   const res = await fetch(`api/${e.name}/${String(id)}`, {
     method: 'PATCH',
     headers: { 'content-type': 'application/json' },
@@ -272,6 +291,9 @@ async function saveEdit(e: Entity, row: Record<string, unknown>): Promise<void> 
     return
   }
   delete editing[editKey(e.name, id)]
+  if (cleared.length) {
+    banner.value = `saved — note: ${cleared.join(', ')} kept the previous value (clearing a field to empty is not supported yet)`
+  }
   await refresh()
 }
 
