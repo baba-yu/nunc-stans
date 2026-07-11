@@ -6,11 +6,19 @@ import type { Blueprint } from '../shared/blueprint'
 
 const fieldType = z.enum(['text', 'number', 'select', 'checkbox', 'radio', 'date', 'textarea'])
 
+// Real models (T9, 2026-07-10) emit single links as bare strings
+// ("maps_to": "deals.name") where the shape wants string[] — normalize
+// instead of refusing the whole proposal; the parsed type stays string[].
+const strArray = z.preprocess(
+  (v) => (typeof v === 'string' ? [v] : v),
+  z.array(z.string()).default([]),
+)
+
 const mockUiField = z.object({
   id: z.string().min(1),
   label: z.string().min(1),
   type: fieldType,
-  maps_to: z.array(z.string()).default([]),
+  maps_to: strArray,
   description: z.string().optional(),
   options: z.array(z.string()).optional(),
   required: z.boolean().optional(),
@@ -41,18 +49,18 @@ const entity = z.object({
 const businessRule = z.object({
   id: z.string().min(1),
   name: z.string().min(1),
-  inputs: z.array(z.string()).default([]),
-  outputs: z.array(z.string()).default([]),
-  related_db: z.array(z.string()).default([]),
-  related_api: z.array(z.string()).default([]),
+  inputs: strArray,
+  outputs: strArray,
+  related_db: strArray,
+  related_api: strArray,
   description: z.string().optional(),
 })
 
 const term = z.object({
   term: z.string().min(1),
   definition: z.string().default(''),
-  aliases: z.array(z.string()).default([]),
-  related_objects: z.array(z.string()).default([]),
+  aliases: strArray,
+  related_objects: strArray,
   status: z.enum(['confirmed', 'tentative']).default('tentative'),
 })
 
@@ -60,8 +68,8 @@ const apiEndpoint = z.object({
   method: z.string().min(1),
   path: z.string().min(1),
   summary: z.string().optional(),
-  related_db: z.array(z.string()).default([]),
-  related_ui: z.array(z.string()).default([]),
+  related_db: strArray,
+  related_ui: strArray,
 })
 
 const stateTransition = z.object({
@@ -94,7 +102,7 @@ export const blueprintSchema = z.object({
   business_logic: z.array(businessRule).default([]),
   terminology: z.array(term).default([]),
   apis: z.array(apiEndpoint).default([]),
-  open_questions: z.array(z.string()).default([]),
+  open_questions: strArray,
   state_transitions: z.array(stateTransition).default([]),
   metrics: z.array(metric).default([]),
   stories: z.array(story).default([]),

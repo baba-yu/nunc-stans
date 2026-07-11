@@ -118,6 +118,34 @@ export interface AppListItem {
   updated_at: string
 }
 
+// --- strategy read-out (Phase E, plan PE12) ---
+
+/** One declared metric with its current value, exactly as apps-host's
+ * published API serves it (contracts/app-bundle.md §6). */
+export interface ServedMetric {
+  name: string
+  label: string
+  value: number | string | null
+  error?: string
+}
+
+/** The stage-3 card. `grounding` must be a subset of the declared metric
+ * names — enforced server-side in code, not prose (S-7). */
+export interface StrategyCard {
+  win: string
+  constraint: string
+  risk_to_watch: string
+  grounding: string[]
+}
+
+export interface StrategyResponse {
+  card: StrategyCard
+  /** The SERVED app version the metrics came from (may trail the session's
+   * rolling blueprint version) — the card's `<slug>@v<N>` stamp. */
+  app: { slug: string; version: number; name: string }
+  metrics: ServedMetric[]
+}
+
 /** One dependency of the current session's app, with its pinned blueprint. */
 export interface DependencyInfo {
   app_id: string

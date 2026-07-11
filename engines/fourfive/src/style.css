@@ -35,6 +35,18 @@ body {
   flex-direction: column;
   height: 100vh;
 }
+/* Embedded behind the gate: the shared SideNav rail sits left of the app
+   column (standalone keeps the plain column layout). */
+.app--embedded {
+  flex-direction: row;
+}
+.app__col {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
 
 .topbar {
   display: flex;

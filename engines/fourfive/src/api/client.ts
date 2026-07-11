@@ -5,6 +5,7 @@ import type {
   SendMessageResponse,
   Session,
   SessionBlueprintResponse,
+  StrategyResponse,
   UsageResponse,
 } from '../../shared/types'
 
@@ -64,6 +65,9 @@ export const api = {
       `${API}/sessions/${sessionId}/bundle`,
       { method: 'POST', body: '{}' },
     ),
+  // Phase E (PE12): the /strategy stage-3 read-out — ephemeral, never persisted.
+  strategyReadout: (sessionId: string) =>
+    http<StrategyResponse>(`${API}/sessions/${sessionId}/strategy`, { method: 'POST', body: '{}' }),
 
   // Consume the SSE message stream, invoking `on(event, data)` per event.
   // `data` is the raw (JSON-encoded) payload string; the caller parses it.

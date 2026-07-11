@@ -15,7 +15,26 @@ import { FourfiveLlm } from './llm/nunc-ai'
 import type { TurnOptions } from './llm/nunc-ai'
 import { buildDependencyContext } from './llm/blueprint-prompt'
 import { validateBlueprint } from './blueprint-schema'
+import { RESERVED_ENTITY_NAMES } from './bundle/generate'
+
+/** Reserved-name rail at PROPOSAL time (T9, 2026-07-10): the extractor
+ * sometimes materializes a `metrics` TABLE, which the bundle step can only
+ * refuse at freeze — a dead end the model would not back out of. Drop such
+ * entities on ingest, loudly; declared measurements live in the metrics
+ * list, never as tables. */
+function stripReservedEntities<T extends { entities: Array<{ name: string }>; metrics?: Array<{ sql: string }> }>(bp: T): T {
+  const dropped = bp.entities.filter((e) => RESERVED_ENTITY_NAMES.has(e.name))
+  if (dropped.length) {
+    console.warn('[codev] dropped reserved-name entities from the proposal:', dropped.map((e) => e.name).join(', '))
+    bp.entities = bp.entities.filter((e) => !RESERVED_ENTITY_NAMES.has(e.name))
+  }
+  // Models habitually terminate SQL with ';' — the bundle rail requires one
+  // bare statement, so normalize instead of dead-ending the freeze.
+  for (const m of bp.metrics ?? []) m.sql = m.sql.trim().replace(/;+\s*$/, '')
+  return bp
+}
 import { saveBlueprint, getLatestBlueprint, saveMarkdown, setSoftwareStack, createComposedApp, getBlueprintWithDependencies, getSessionApp, freezeAndBundle, FreezeError } from './workspace'
+import { StrategyError, fetchServedApp, fetchServedMetrics, parseStrategyCard } from './strategy'
 import { listComposableApps, updateDependencyPin, DependencyError } from './dependencies'
 import { renderBlueprintMarkdown } from './markdown'
 import type { BlueprintStepStatus, ChatMessage, Message } from '../shared/types'
@@ -226,6 +245,40 @@ app.post('/api/apps/:slug/versions/:version/bundle', (c) => {
   return freezeResponse(c, c.req.param('slug'), version)
 })
 
+// --- strategy read-out (Phase E, plan PE12; story S-7) ---
+// Grounded ONLY in the served bundle's declared metrics, fetched from
+// apps-host's published API. EPHEMERAL by design: nothing is persisted —
+// superposition_state + the informed_by edge are a named Phase F
+// prerequisite, not silently absorbed here.
+app.post('/api/sessions/:id/strategy', async (c) => {
+  const sessionId = c.req.param('id')
+  if (!db.prepare('SELECT id FROM sessions WHERE id = ?').get(sessionId)) {
+    return c.json({ error: 'session not found' }, 404)
+  }
+  const sessionApp = getSessionApp(sessionId)
+  if (!sessionApp) {
+    return c.json({ error: 'this session has no app yet — the strategy read-out needs a served bundle' }, 400)
+  }
+  const body = (await c.req.json().catch(() => ({}))) as { profileId?: string }
+  try {
+    const served = await fetchServedApp(sessionApp.slug)
+    const metrics = await fetchServedMetrics(sessionApp.slug)
+    let raw: unknown
+    try {
+      raw = await llm.strategyReadout(served, metrics, { profileId: body.profileId })
+    } catch (err) {
+      // Model backend down/unreachable is an infrastructure failure, not a
+      // strategy refusal — surface it verbatim like the chat path does.
+      return c.json({ error: `LLM call failed: ${(err as Error).message}` }, 502)
+    }
+    const card = parseStrategyCard(raw, metrics.map((m) => m.name))
+    return c.json({ card, app: served, metrics })
+  } catch (err) {
+    if (err instanceof StrategyError) return c.json({ error: err.message }, err.status)
+    throw err
+  }
+})
+
 // --- apps & dependencies ---
 
 app.get('/api/apps', (c) => c.json(listComposableApps(db)))
@@ -380,6 +433,7 @@ async function blueprintStep(
     } else {
       const result = validateBlueprint(proposal.proposed)
       if (result.success) {
+        stripReservedEntities(result.data)
         // software_stack is user-owned; the LLM never sets it. Carry it forward.
         result.data.software_stack = blueprint?.software_stack
         if (JSON.stringify(result.data) !== JSON.stringify(blueprint)) {
@@ -389,7 +443,10 @@ async function blueprintStep(
       } else {
         status = {
           outcome: 'invalid',
-          detail: `proposed blueprint failed validation: ${result.error.issues.length} issues`,
+          detail: `proposed blueprint failed validation: ${result.error.issues.length} issues — ${result.error.issues
+            .slice(0, 4)
+            .map((i) => `${i.path.join('.')}: ${i.message}`)
+            .join(' | ')}`,
         }
       }
     }

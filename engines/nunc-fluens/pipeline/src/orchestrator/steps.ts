@@ -831,11 +831,16 @@ export function dailyBriefingSteps(): StepDef[] {
     {
       id: 'readme-window', kind: 'llm',
       run: async (ctx) => {
-        // Replay/resume: accept READMEs that already carry today's block.
+        // Replay/resume: accept READMEs that already carry today's block —
+        // and are structurally COMPLETE (end with the `---` separator
+        // readme-checks demands). A generation truncated mid-block
+        // (2026-07-10: fil on the local thinking model) must be redone,
+        // not resumed into a permanently failing gate.
         for (const L of readmeSuffixes(ctx.locales)) {
           const path = join(ctx.newsRepo, `README${L}.md`);
-          const hasToday = existsSync(path)
-            && new RegExp(`^## ${ctx.date}\\s*$`, 'm').test(readFileSync(path, 'utf8'));
+          const txt = existsSync(path) ? readFileSync(path, 'utf8') : '';
+          const hasToday = new RegExp(`^## ${ctx.date}\\s*$`, 'm').test(txt)
+            && /\n---\s*$/.test(txt);
           if (hasToday) continue;
           if (ctx.replay)
             throw new StepFailure('readme-window',

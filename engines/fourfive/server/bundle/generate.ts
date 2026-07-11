@@ -38,7 +38,7 @@ export interface BundleFiles {
 
 const IDENT = /^[a-z][a-z0-9_]*$/
 // Path segments the apps-host API claims for itself under /apps/<slug>/api/.
-const RESERVED_ENTITY_NAMES = new Set(['manifest', 'metrics', 'api', 'mcp', 'health'])
+export const RESERVED_ENTITY_NAMES = new Set(['manifest', 'metrics', 'api', 'mcp', 'health'])
 const AUDIT = ['created_at', 'updated_at', 'archived_at'] as const
 const FORBIDDEN_METRIC_SQL =
   /\b(attach|pragma|insert|update|delete|drop|alter|create|replace|vacuum|reindex|detach|begin|commit|rollback)\b/i

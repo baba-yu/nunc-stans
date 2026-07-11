@@ -11,9 +11,14 @@ import { dirname, join } from 'node:path'
 import { homedir } from 'node:os'
 
 export function configHome(): string {
+  // XDG_CONFIG_HOME wins on EVERY platform, including Windows — tests
+  // and scripts set it to sandbox the config file, and that isolation
+  // must hold on win32 too. The platform default only fills the gap.
+  const xdg = process.env.XDG_CONFIG_HOME
+  if (xdg) return xdg
   return process.platform === 'win32'
     ? (process.env.APPDATA ?? join(homedir(), 'AppData', 'Roaming'))
-    : (process.env.XDG_CONFIG_HOME ?? join(homedir(), '.config'))
+    : join(homedir(), '.config')
 }
 
 export function configFile(): string {

@@ -97,7 +97,10 @@ describe('initInstance', () => {
     }
   });
 
-  it('rolls back a dir it created on failure; leaves a pre-existing dir with a hint', () => {
+  // win32: chmod(0o555) cannot make a directory read-only (the
+  // attribute never blocks child creation), so this failure injection
+  // has no Windows equivalent.
+  it.skipIf(process.platform === 'win32')('rolls back a dir it created on failure; leaves a pre-existing dir with a hint', () => {
     const root = mkdtempSync(join(tmpdir(), 'nf-init-'));
     try {
       // init would have created the dir, but the parent is read-only:
