@@ -205,12 +205,14 @@ export const useSessionStore = defineStore('session', () => {
     }
   }
 
-  // The /strategy stage-3 card (PE12): EPHEMERAL — store state only, gone on
-  // dismiss or session switch. Persistence into superposition_state + the
-  // informed_by edge is a named Phase F prerequisite.
+  // The /strategy stage-3 card (PE12): ephemeral until the user SAVES it as
+  // grounds (Phase F, F-3 — a superposition_state record + informed_by edge).
+  // Dismiss stays the default; ephemeral remains the no-action behavior.
   const strategy = ref<StrategyResponse | null>(null)
   const strategyError = ref<string | null>(null)
   const strategyLoading = ref(false)
+  // F-3 save-path state: 'idle' | 'saving' | 'saved' | an error string.
+  const strategySaveState = ref<'idle' | 'saving' | 'saved' | { error: string }>('idle')
 
   async function runStrategy() {
     if (!current.value || strategyLoading.value) return
@@ -231,6 +233,20 @@ export const useSessionStore = defineStore('session', () => {
   function dismissStrategy() {
     strategy.value = null
     strategyError.value = null
+    strategySaveState.value = 'idle'
+  }
+
+  // F-3: save the read-out as grounds. The card is re-validated server-side
+  // against the live declaration before it is persisted (defense in depth).
+  async function saveStrategy() {
+    if (!current.value || !strategy.value || strategySaveState.value === 'saving') return
+    strategySaveState.value = 'saving'
+    try {
+      await api.saveStrategy(current.value.id, strategy.value.card)
+      strategySaveState.value = 'saved'
+    } catch (e) {
+      strategySaveState.value = { error: (e as Error).message }
+    }
   }
 
   async function openSession(s: Session) {
@@ -453,7 +469,9 @@ export const useSessionStore = defineStore('session', () => {
     strategy,
     strategyError,
     strategyLoading,
+    strategySaveState,
     runStrategy,
     dismissStrategy,
+    saveStrategy,
   }
 })

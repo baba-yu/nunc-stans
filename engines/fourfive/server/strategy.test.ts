@@ -8,6 +8,7 @@ import {
   fetchServedApp,
   fetchServedMetrics,
   parseStrategyCard,
+  saveSuperposition,
   strategyJsonSchema,
 } from './strategy'
 import type { ServedApp } from './strategy'
@@ -157,5 +158,45 @@ describe('offline demo card (PE12 mock-degradation rule)', () => {
     const one = METRICS.slice(0, 1)
     const parsed = parseStrategyCard(demoStrategyCard(one), one.map((m) => m.name))
     expect(parsed.grounding).toEqual(['monthly_external_income'])
+  })
+})
+
+describe('saveSuperposition (the read-out → grounds save-path, F-3)', () => {
+  const CARD = {
+    win: 'Income is diversifying.',
+    constraint: 'Runway is under 8 months.',
+    risk_to_watch: 'Concentration rising again.',
+    grounding: ['cash_runway', 'income_concentration'],
+  }
+
+  it('re-validates and forwards to the ns engine, deriving the informed_by ref', async () => {
+    let captured: any = null
+    const fake = (async (_url: string | URL, init?: RequestInit) => {
+      captured = JSON.parse(String(init?.body))
+      return okJson({ id: 'self/superposition_state/abc', informed_by_edge: 'edge-1' })
+    }) as typeof fetch
+    const saved = await saveSuperposition(CARD, APP, DECLARED, fake, 'http://engine')
+    expect(saved.id).toBe('self/superposition_state/abc')
+    expect(saved.informed_by_edge).toBe('edge-1')
+    // the artifact scope-id + label are derived from the served app version
+    expect(captured.informed_by).toBe('artifact/artifact_version/runway-tracker@v1')
+    expect(captured.informed_by_label).toBe('runway-tracker@v1')
+    expect(captured.grounding).toEqual(['cash_runway', 'income_concentration'])
+  })
+
+  it('refuses an undeclared grounding BEFORE hitting the engine (defense in depth)', async () => {
+    let called = false
+    const fake = (async () => {
+      called = true
+      return okJson({})
+    }) as typeof fetch
+    const bad = { ...CARD, grounding: ['cash_runway', 'burn_rate'] }
+    await expect(saveSuperposition(bad, APP, DECLARED, fake, 'http://engine')).rejects.toBeInstanceOf(StrategyError)
+    expect(called).toBe(false)
+  })
+
+  it('surfaces an engine refusal as an error carrying the status', async () => {
+    const fake = (async () => ({ ok: false, status: 409, text: async () => 'append-only conflict' }) as unknown as Response) as typeof fetch
+    await expect(saveSuperposition(CARD, APP, DECLARED, fake, 'http://engine')).rejects.toThrowError(/409/)
   })
 })

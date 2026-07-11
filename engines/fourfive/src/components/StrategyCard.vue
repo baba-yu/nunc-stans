@@ -2,12 +2,16 @@
 import { computed } from 'vue'
 import { useSessionStore } from '../stores/session'
 
-// The /strategy stage-3 card (Phase E, plan PE12): a metrics-grounded
-// read-out stamped with the SERVED version. Dismissable and EPHEMERAL —
-// nothing here is persisted; a refusal (grounding violation, no served
-// bundle, apps-host down) renders verbatim as the failure state.
+// The /strategy stage-3 card (Phase E PE12; Phase F F-3 save-path): a
+// metrics-grounded read-out stamped with the SERVED version. Ephemeral until
+// the user SAVES it as grounds (a superposition_state record + informed_by
+// edge). Dismiss stays the default; a refusal renders verbatim.
 const store = useSessionStore()
 const res = computed(() => store.strategy)
+const saveState = computed(() => store.strategySaveState)
+const saveError = computed(() =>
+  typeof saveState.value === 'object' ? saveState.value.error : null,
+)
 
 // Grounding chips: only the QUOTED metrics, each with its live value.
 const grounds = computed(() => {
@@ -42,7 +46,7 @@ const grounds = computed(() => {
       <code class="strategy__version">{{ res.app.slug }}@v{{ res.app.version }}</code>
       <button
         class="strategy__close"
-        title="Dismiss — the card is ephemeral and is not saved anywhere"
+        title="Dismiss — the card is ephemeral unless you save it as grounds"
         @click="store.dismissStrategy()"
       >
         ×
@@ -61,6 +65,21 @@ const grounds = computed(() => {
       <span v-for="g in grounds" :key="g.name" class="strategy__chip" :title="g.name">
         {{ g.label }} · {{ g.value }}
       </span>
+    </div>
+    <div class="strategy__save">
+      <button
+        v-if="saveState !== 'saved'"
+        class="strategy__save-btn"
+        :disabled="saveState === 'saving'"
+        title="Save this read-out as grounds — a superposition_state record with an informed_by edge to the served app"
+        @click="store.saveStrategy()"
+      >
+        {{ saveState === 'saving' ? 'Saving…' : 'Save as grounds' }}
+      </button>
+      <span v-else class="strategy__saved" title="Saved to the self vault as grounds for a decision">
+        ✓ Saved as grounds
+      </span>
+      <span v-if="saveError" class="strategy__save-err">{{ saveError }}</span>
     </div>
   </div>
 </template>
@@ -154,5 +173,36 @@ const grounds = computed(() => {
   border-radius: 999px;
   color: var(--text, #e6e8ec);
   background: var(--elev-2, #1d212b);
+}
+.strategy__save {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px 8px;
+}
+.strategy__save-btn {
+  padding: 3px 10px;
+  font-size: 12px;
+  border: 1px solid var(--accent, #18c7d8);
+  border-radius: 6px;
+  background: none;
+  color: var(--accent, #18c7d8);
+  cursor: pointer;
+}
+.strategy__save-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.strategy__save-btn:not(:disabled):hover {
+  background: var(--elev-2, #1d212b);
+}
+.strategy__saved {
+  font-size: 12px;
+  color: var(--accent, #18c7d8);
+}
+.strategy__save-err {
+  font-size: 11px;
+  color: var(--error, #e08f8f);
 }
 </style>

@@ -144,3 +144,60 @@ export function parseStrategyCard(raw: unknown, declared: string[]): StrategyCar
     grounding,
   }
 }
+
+// --- save-path (Phase F, F-3): read-out → superposition_state ------------
+// The card is ephemeral until the user saves it; saving turns a read-out into
+// GROUNDS for a decision (journey T11). The self scope is the ns engine's
+// jurisdiction, so the save is a published-API → published-API hop (§13-A):
+// fourfive never writes the vault, it POSTs the ns engine's own endpoint. The
+// engine draws the informed_by edge to the artifact. Grounding ⊆ declared is
+// re-checked HERE against the live served metrics (defense in depth) before
+// anything is persisted, so a crafted save cannot smuggle an undeclared metric.
+
+/** The ns engine's published API (self scope). Env override for tests/dev. */
+export const NS_ENGINE_URL = process.env.NS_ENGINE_URL ?? 'http://127.0.0.1:8721'
+
+export interface SavedSuperposition {
+  id: string
+  informed_by_edge: string
+}
+
+/** Persist a (re-validated) card as a superposition_state grounded in the
+ * served app. Throws StrategyError('grounding'|'shape') if the card no longer
+ * matches the declaration, or Error on an engine failure (surfaced 502). */
+export async function saveSuperposition(
+  card: StrategyCard,
+  app: ServedApp,
+  declared: string[],
+  f: typeof fetch = fetch,
+  base: string = NS_ENGINE_URL,
+): Promise<SavedSuperposition> {
+  // Re-validate against the live declaration before persisting (the render
+  // enforced it once; a save request is a fresh, untrusted entry point).
+  const validated = parseStrategyCard(card, declared)
+  const versionRef = `artifact/artifact_version/${app.slug}@v${app.version}`
+  const body = {
+    win: validated.win,
+    constraint: validated.constraint,
+    risk_to_watch: validated.risk_to_watch,
+    grounding: validated.grounding,
+    informed_by: versionRef,
+    informed_by_label: `${app.slug}@v${app.version}`,
+  }
+  let res: Response
+  try {
+    res = await f(`${base}/self/superposition_state`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(body),
+      signal: AbortSignal.timeout(5_000),
+    })
+  } catch (err) {
+    throw new Error(`nunc-stans engine is unreachable (${base}): ${(err as Error).message}`)
+  }
+  if (!res.ok) {
+    const detail = await res.text().catch(() => '')
+    throw new Error(`nunc-stans engine refused the save (${res.status}): ${detail}`)
+  }
+  return (await res.json()) as SavedSuperposition
+}

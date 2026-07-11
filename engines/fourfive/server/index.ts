@@ -34,10 +34,10 @@ function stripReservedEntities<T extends { entities: Array<{ name: string }>; me
   return bp
 }
 import { saveBlueprint, getLatestBlueprint, saveMarkdown, setSoftwareStack, createComposedApp, getBlueprintWithDependencies, getSessionApp, freezeAndBundle, FreezeError } from './workspace'
-import { StrategyError, fetchServedApp, fetchServedMetrics, parseStrategyCard } from './strategy'
+import { StrategyError, fetchServedApp, fetchServedMetrics, parseStrategyCard, saveSuperposition } from './strategy'
 import { listComposableApps, updateDependencyPin, DependencyError } from './dependencies'
 import { renderBlueprintMarkdown } from './markdown'
-import type { BlueprintStepStatus, ChatMessage, Message } from '../shared/types'
+import type { BlueprintStepStatus, ChatMessage, Message, StrategyCard } from '../shared/types'
 import type { Blueprint } from '../shared/blueprint'
 
 // Single origin in production (behind the gate) and a same-origin vite
@@ -276,6 +276,36 @@ app.post('/api/sessions/:id/strategy', async (c) => {
   } catch (err) {
     if (err instanceof StrategyError) return c.json({ error: err.message }, err.status)
     throw err
+  }
+})
+
+// --- strategy SAVE (Phase F, F-3): read-out → superposition_state ---------
+// The card the user is looking at becomes GROUNDS for a decision: persisted in
+// the self scope via the ns engine's published API, with an informed_by edge
+// to the served bundle. Dismiss stays the default; this is the opt-in save.
+app.post('/api/sessions/:id/strategy/save', async (c) => {
+  const sessionId = c.req.param('id')
+  if (!db.prepare('SELECT id FROM sessions WHERE id = ?').get(sessionId)) {
+    return c.json({ error: 'session not found' }, 404)
+  }
+  const sessionApp = getSessionApp(sessionId)
+  if (!sessionApp) {
+    return c.json({ error: 'this session has no app — nothing to ground a read-out in' }, 400)
+  }
+  const body = (await c.req.json().catch(() => ({}))) as { card?: StrategyCard }
+  if (!body.card) return c.json({ error: 'a card is required to save' }, 400)
+  try {
+    // Re-fetch the live declaration and re-validate before persisting — the
+    // save endpoint is a fresh entry point, not to be trusted with the client's
+    // word that the grounding is declared (defense in depth).
+    const served = await fetchServedApp(sessionApp.slug)
+    const metrics = await fetchServedMetrics(sessionApp.slug)
+    const saved = await saveSuperposition(body.card, served, metrics.map((m) => m.name))
+    return c.json({ saved: true, ...saved, app: served })
+  } catch (err) {
+    if (err instanceof StrategyError) return c.json({ error: err.message }, err.status)
+    // engine unreachable / refused — an infrastructure failure, surfaced 502
+    return c.json({ error: (err as Error).message }, 502)
   }
 })
 
