@@ -13,8 +13,9 @@
 export interface Snapshot {
   /** me/commitments/<slug>.json */
   commitments: Record<string, unknown>[]
-  /** me/outcomes/<slug>/<component>-NNN.json, flattened with their commitment slug */
-  outcomes: { commitment: string; component: string; result: string; id?: string }[]
+  /** me/outcomes/<slug>/<component>-NNN.json, flattened with their commitment
+   * slug; `raw` is the original json string (append-only compare, check 1). */
+  outcomes: { commitment: string; component: string; result: string; id?: string; raw?: string }[]
   /** me/edges.jsonl */
   edges: Edge[]
   /** me/mandates/<id>.json — injected test data (the mandate lane is SPL v3) */
@@ -113,10 +114,14 @@ export function check1(prev: Snapshot | null, cur: Snapshot): CheckResult {
   const index = (snap: Snapshot, into: Map<string, string>) => {
     snap.commitments.forEach((c, i) => into.set(key('commitment', nodeId(c), `#${i}`), JSON.stringify(c)))
     snap.superposition.forEach((c, i) => into.set(key('superposition', nodeId(c), `#${i}`), JSON.stringify(c)))
-    snap.outcomes.forEach((o, i) => into.set(key('outcome', o.id, `#${i}`), JSON.stringify(o)))
+    // Compare outcomes by their ORIGINAL json (raw) so an in-place edit to a
+    // field the flattened projection drops (note/recorded_at) is still caught.
+    snap.outcomes.forEach((o, i) => into.set(key('outcome', o.id, `#${i}`), o.raw ?? JSON.stringify(o)))
     snap.edges.forEach((e, i) => into.set(key('edge', e.id, `#${i}`), JSON.stringify(e)))
-    snap.mandates.forEach((m) => into.set(key('mandate', m.id, ''), JSON.stringify(m)))
-    snap.interventions.forEach((iv) => into.set(key('intervention', iv.id, ''), JSON.stringify(iv)))
+    // Positional fallback for id-less records too, so two id-less records
+    // cannot collide on one key and mask a disappearance/edit.
+    snap.mandates.forEach((m, i) => into.set(key('mandate', m.id, `#${i}`), JSON.stringify(m)))
+    snap.interventions.forEach((iv, i) => into.set(key('intervention', iv.id, `#${i}`), JSON.stringify(iv)))
   }
   index(cur, curByKey)
   const prevByKey = new Map<string, string>()
@@ -255,6 +260,9 @@ export function mandateStatusAt(m: Mandate, atIso: string): 'active' | 'pending'
   const t = Date.parse(atIso)
   const eff = Date.parse(m.effective_at)
   const exp = Date.parse(m.expires_at)
+  // Fail CLOSED on an unparseable timestamp (mirror the engine's status_at):
+  // never let a NaN comparison fall through to 'active'.
+  if (Number.isNaN(t) || Number.isNaN(eff) || Number.isNaN(exp)) return 'expired'
   const events = (m.events ?? []).filter((e) => Date.parse(e.created_at) <= t)
   if (events.some((e) => e.action === 'revoke')) return 'revoked'
   if (t < eff) return 'pending'
@@ -300,9 +308,14 @@ export function check10(s: Snapshot): CheckResult {
 export function check11(s: Snapshot): CheckResult {
   const name = 'close = two outcomes: external-form (result_type) + felt-sense'
   for (const o of s.outcomes) {
-    if (o.component === 'observable' && !OBSERVABLE.includes(o.result)) {
-      return fail(11, name, `observable outcome '${o.result}' on ${o.commitment} is outside the result_type vocabulary`)
+    // The observable (external-form) vocabulary is EXTENSIBLE (constitution §3;
+    // the engine validates SHAPE only) — match that: a lowercase_snake token,
+    // so a legitimate future result_type is not a false-fail. OBSERVABLE stays
+    // as the documented v1 set.
+    if (o.component === 'observable' && !/^[a-z_]+$/.test(o.result)) {
+      return fail(11, name, `observable outcome '${o.result}' on ${o.commitment} is not a lowercase_snake result_type`)
     }
+    // The felt-sense vocabulary is CLOSED (3 words + refused_to_judge).
     if (o.component === 'subjective' && !SUBJECTIVE.includes(o.result)) {
       return fail(11, name, `felt-sense '${o.result}' on ${o.commitment} is not happy/unhappy/unchanged/refused_to_judge`)
     }

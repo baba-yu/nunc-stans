@@ -243,10 +243,20 @@ t('check 11 fails an out-of-vocabulary felt sense', () => {
   s.outcomes.find((o) => o.component === 'subjective')!.result = 'ecstatic'
   assert.equal(failing(s, 11).pass, false)
 })
-t('check 11 fails an out-of-vocabulary observable result', () => {
+t('check 11 accepts an extensible (shaped) observable but fails a malformed one', () => {
   const s = clean()
-  s.outcomes.find((o) => o.component === 'observable')!.result = 'kinda_worked'
+  // lowercase_snake is legitimate (the result_type vocabulary is extensible)
+  s.outcomes.find((o) => o.component === 'observable')!.result = 'renegotiated'
+  assert.equal(failing(s, 11).pass, true)
+  // a non-snake token (uppercase / punctuation) is refused
+  s.outcomes.find((o) => o.component === 'observable')!.result = 'Confirmed!'
   assert.equal(failing(s, 11).pass, false)
+})
+
+t('check 9 fails closed on an unparseable intervention timestamp', () => {
+  const s = clean()
+  s.interventions[0].created_at = 'not-a-date'
+  assert.equal(failing(s, 9).pass, false)
 })
 
 console.log(`\ncheck self-test: ${passed} assertions passed${process.exitCode ? ', SOME FAILED' : ''}`)

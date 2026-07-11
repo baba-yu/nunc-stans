@@ -35,6 +35,9 @@ function flattenOutcome(commitment: string, raw: Record<string, unknown>): Snaps
     component: String(raw.component ?? ''),
     result: String(raw.result ?? ''),
     id: typeof raw.id === 'string' ? raw.id : undefined,
+    // keep the original json so check 1 (append-only) compares the WHOLE
+    // outcome, not just the flattened projection.
+    raw: JSON.stringify(raw),
   }
 }
 
