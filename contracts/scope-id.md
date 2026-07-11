@@ -9,7 +9,7 @@ A scope ID is composed of three elements: scope/type/original-id.
 ## Scope
 
 - `world`: world prediction, observation, and external context owned by News
-- `self`: self-prediction, commitment, outcome, revision, mandate, and edge owned by Nunc Stans; user-authored world predictions are stored in self with scope=world
+- `self`: self-prediction, commitment, outcome, revision, mandate, superposition_state, and edge owned by Nunc Stans; user-authored world predictions are stored in self with scope=world
 - `artifact`: fixed artifact version owned by FourFive
 
 ## Rules
@@ -25,5 +25,6 @@ A scope ID is composed of three elements: scope/type/original-id.
 ```text
 world/prediction/prediction.3f9a
 self/commitment/2025-08-gpu-server
+self/superposition_state/9b1c…
 artifact/artifact_version/runway-tracker@v1
 ```

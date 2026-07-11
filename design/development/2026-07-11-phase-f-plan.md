@@ -1,12 +1,18 @@
 # Phase F Implementation Plan — v1's final phase (the ONE plan, five lanes)
 
-**Status: DRAFT for the single owner OK (handoff §0.2 — one approval
-satisfies §7 for the whole phase). Written autonomously 2026-07-11 while
-the owner sleeps, on the standing instruction "proceed without plan
-approval; I'll review the deliverables directly." Grounded in
-`design/development/2026-07-11-phase-f-handoff.md` (dev = 620b6f3), not
-reconstructed. Owner reviews this plan AND the executed deliverables in
-one pass; no per-lane review loop (handoff §0.2).**
+**Status: APPROVED — owner OK in session, 2026-07-11 morning (「やる。
+プランOK。」 after reviewing the overnight deliverables summary). Per the
+handoff §0.2, this single approval satisfies §7 for the whole phase —
+PF1–PF12 ratified, execution continues straight through with normal
+evidence discipline and no per-lane review loops. Grounded in
+`design/development/2026-07-11-phase-f-handoff.md` (dev = 620b6f3).**
+
+**Correction recorded at approval time:** PF8's caution that F-2 overlapped
+owner WIP was stale — the SideNav WIP had already landed on dev as 218a3ce;
+the working tree is clean. F-2 builds now (owner: 「やる」), including the
+parts previously deferred as owner-supervised where they can be proven
+offline (mock provider + tests); only the genuinely live legs (real-model
+patrol quality, Topics T7's live run) remain do-with-owner.
 
 Base: `phase/f` off `origin/dev` **620b6f3**, tag `pre-phase-f`. (A first
 draft was mistakenly cut off a stale local `dev` at 95448db, 29 commits

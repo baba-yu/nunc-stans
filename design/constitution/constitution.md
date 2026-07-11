@@ -39,18 +39,18 @@ scope ID = `<scope>/<type>/<original-id>`
 
 ## 3. Vocabulary
 
-Node types: observation / prediction / outcome / revision / dismissal / mandate / artifact_version + **commitment** + **knowledge** (notes and the like born from a commitment)
+Node types: observation / prediction / outcome / revision / dismissal / mandate / artifact_version + **commitment** + **knowledge** (notes and the like born from a commitment) + **superposition_state** (the AI's transparent, versioned understanding of the user's strategy; see "Where the AI's understanding of strategy is placed" below)
 
 Edge types:
 
 | type | from → to | Meaning |
 |---|---|---|
-| informed_by | commitment / prediction → observation / prediction | What prompted this bet / prediction |
+| informed_by | commitment / prediction → observation / prediction; superposition_state → artifact_version | What prompted this bet / prediction; or the app a strategy understanding reads |
 | serves | commitment → prediction (either world / self) | Which prediction this action wagered on |
 | produced | commitment → artifact_version / knowledge | What was produced |
 | closes | outcome → prediction / commitment | Existing |
 | supersedes | between nodes of the same type | Existing (revision linkage) |
-| dismisses | user → AI's prediction or edge | self scope only |
+| dismisses | user → AI's prediction, edge, intervention, or superposition_state | self scope only |
 
 Edge record: `{ id, type, from, to, to_label(required), from_label(optional), author: user|ai|sensor, created_at, note(optional) }`
 
@@ -77,6 +77,7 @@ Edge record: `{ id, type, from, to, to_label(required), from_label(optional), au
 | Close a commitment | — | user only | — |
 | Cut a version | — | — | made by user+AI. A cut version is immutable |
 | Write an edge | AI may propose. author record required | user / AI. author record required. user may dismiss AI's edges | same as left |
+| Write a superposition_state | — | AI only (transparent, versioned; user reads and dismisses, never authors) | — |
 | Delete | rebuilding the cache is allowed. Silent rewriting of source data (git-managed) is not allowed | only cryptographic erasure of the body is allowed. The existence of the record is not erased | versions are immutable (BL-1 is a violation → an entry condition for Pre-v1 Phase 5) |
 
 ---

@@ -1,6 +1,11 @@
 # Phase F vocabulary amendment — `superposition_state` (owner ratifies)
 
-**Status: PROPOSAL for owner ratification (PF11). Phase F's F-3 lane lands
+**Status: APPLIED 2026-07-11 after the owner's in-session plan OK (「プラン
+OK」 + 「全部終わらせておいて」 — the handoff §0.2 single approval covers the
+phase; the diffs below are exactly what was applied, and the branch merge
+remains the final ratification point). Originally drafted as a PROPOSAL:**
+
+**Original: PROPOSAL for owner ratification (PF11). Phase F's F-3 lane lands
 records of a new self-scope node type, `superposition_state`, and draws an
 `informed_by` edge whose endpoints the constitution's §3 edge-table does not
 yet name. Per §11 ("adding a new word is a deliberate commit") and the
