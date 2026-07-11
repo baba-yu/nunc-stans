@@ -128,7 +128,13 @@ async function main() {
   const opRecorded: string[] = []
   const op = (stepKey: string) => {
     const a = opAnswers[stepKey]
-    if (a) opRecorded.push(`${stepKey} — ${a.question} → ${a.answer}`)
+    // A missing [op] answer is a FAILURE, not a silent skip — journey §4
+    // requires all five recorded (review-found).
+    if (!a) {
+      failures.push(`[op] answer missing for ${stepKey} in op-answers.json`)
+      return
+    }
+    opRecorded.push(`${stepKey} — ${a.question} → ${a.answer}`)
   }
 
   let prev: Snapshot | null = null
@@ -150,8 +156,16 @@ async function main() {
     const snap = readVault(vault)
     if (opts.aiEdges) aiEdgesAllowed = true
     const results = runChecks(snap, { prev, aiEdgesAllowed })
-    if (opts.expectNoChange && before && recordCount(snap) !== recordCount(before)) {
-      failures.push(`${name}: a silence step must not move the store (no nagging, no auto-writes)`)
+    if (opts.expectNoChange && before) {
+      // Compare the FILE LIST too, not just parsed-lane counts: an appended
+      // event line or a malformed json in an allowed lane would move neither
+      // recordCount nor any check, yet violates exactly the no-auto-write
+      // invariant these steps assert (review-found).
+      const filesBefore = [...before.files].sort().join('\n')
+      const filesNow = [...snap.files].sort().join('\n')
+      if (recordCount(snap) !== recordCount(before) || filesNow !== filesBefore) {
+        failures.push(`${name}: a silence step must not move the store (no nagging, no auto-writes)`)
+      }
     }
     if (opts.expectNoNewInterventions && before && snap.interventions.length !== before.interventions.length) {
       failures.push(`${name}: the system piled on — intervention count rose during silence`)
@@ -300,7 +314,7 @@ async function main() {
 
     // T12 — the silence of the week the deadline shrinks: the system does NOT
     // pile on (no new intervention; only the remaining days quietly update).
-    await step('T12 silence (no pile-on)', { aiEdges: true, expectNoNewInterventions: true }, async () => {})
+    await step('T12 silence (no pile-on)', { aiEdges: true, expectNoChange: true, expectNoNewInterventions: true }, async () => {})
 
     // T13 — intervention 2 (injected; terrain with a record-vs-assumption diff).
     await step('T13 intervention 2', { aiEdges: true }, async () => {
@@ -330,9 +344,14 @@ async function main() {
         slug: 'present-negotiation', title: 'present 80% + an IP clause', started_at: '2026-02-21',
       })
       await post(base, '/self/outcomes', { commitment_slug: 'bet-l', component: 'subjective', result: 'happy', note: 'that loss was a springboard' })
+      // The felt-sense rewrite is an APPEND with a supersedes edge linking the
+      // new outcome to the one it supersedes — the exact outcome→outcome
+      // linkage the engine mints outcome scope-ids for (store.rs; §3 "the
+      // rewrite is done by appending"). Review-found: an earlier draft drew
+      // commitment→commitment, which is not the documented mechanism.
       await post(base, '/self/edges', {
-        type: 'supersedes', from: 'self/commitment/present-negotiation', to: 'self/commitment/bet-l',
-        to_label: 'bet L (context)', author: 'user',
+        type: 'supersedes', from: 'self/outcome/bet-l/subjective-002', to: 'self/outcome/bet-l/subjective-001',
+        to_label: 'bet L felt sense (unhappy, T5)', author: 'user',
       })
     })
 
@@ -379,16 +398,24 @@ async function main() {
     })
     // The lapse itself, asserted positively: no intervention timestamp falls
     // in [M1 expiry, M1' effective) — check 9 would catch one citing M1, and
-    // this catches one citing anything.
+    // this catches one citing anything. Bounds DERIVED from the mandates in
+    // the vault, not literals, so shifting a fixture cannot leave this
+    // testing a stale window (review-found).
     {
       const snap = readVault(vault)
-      const lapseStart = Date.parse('2026-04-02T00:00:00Z')
-      const lapseEnd = Date.parse('2026-05-03T00:00:00Z')
-      const inLapse = snap.interventions.filter((iv) => {
-        const t = Date.parse(iv.created_at)
-        return t >= lapseStart && t < lapseEnd
-      })
-      if (inLapse.length) failures.push(`T18: ${inLapse.length} intervention(s) during the lapse — must be 0`)
+      const m1 = snap.mandates.find((m) => m.id === 'self/mandate/m1')
+      const m1p = snap.mandates.find((m) => m.id === 'self/mandate/m1-prime')
+      if (!m1 || !m1p) {
+        failures.push('T18: m1 / m1-prime not found in the vault — lapse window underivable')
+      } else {
+        const lapseStart = Date.parse(m1.expires_at)
+        const lapseEnd = Date.parse(m1p.effective_at)
+        const inLapse = snap.interventions.filter((iv) => {
+          const t = Date.parse(iv.created_at)
+          return t >= lapseStart && t < lapseEnd
+        })
+        if (inLapse.length) failures.push(`T18: ${inLapse.length} intervention(s) during the lapse — must be 0`)
+      }
     }
   } catch (e) {
     failures.push(`replay error: ${(e as Error).message}${stderr ? `\n  engine stderr: ${stderr.slice(-400)}` : ''}`)
@@ -397,28 +424,43 @@ async function main() {
     fs.rmSync(vault, { recursive: true, force: true })
   }
 
-  // Report: a step × check grid + the §5 metrics.
+  // Report: a step × check grid (2-char cells so the footer aligns for
+  // checks 10/11) + the §5 metrics.
   console.log('\nstep × checks (✓ pass · ✗ fail):')
   for (const { step, results } of reports) {
-    const grid = results.map((r) => (r.pass ? '✓' : '✗')).join(' ')
-    console.log(`  ${grid}   ${step}`)
+    const grid = results.map((r) => (r.pass ? ' ✓' : ' ✗')).join(' ')
+    console.log(` ${grid}   ${step}`)
   }
-  console.log('  ' + Array.from({ length: 11 }, (_, i) => i + 1).join(' ').replace(/(\d\d)/g, '$1') + '   (check #)')
+  console.log('  ' + Array.from({ length: 11 }, (_, i) => String(i + 1).padStart(2)).join(' ') + '   (check #)')
 
-  // §5 metrics — the journey's REAL success criteria, not just structure.
+  // §5 metrics — derived from the final vault wherever derivable; the two
+  // step-anchored counts are script-defined narrative and labeled as such
+  // (review-found: a hardcoded claim must not read as a measurement).
   const last = reports.at(-1)?.results
   if (last && prev) {
     const mix = last.find((r) => r.check === 6)?.detail
-    const feltSenses = [...new Set(prev.outcomes.filter((o) => o.component === 'subjective').map((o) => o.result))]
+    const subj = prev.outcomes.filter((o) => o.component === 'subjective')
+    const feltSenses = [...new Set(subj.map((o) => o.result))]
+    for (const want of ['happy', 'unhappy', 'unchanged']) {
+      if (!feltSenses.includes(want)) failures.push(`§5: felt sense '${want}' never occurred in the replay`)
+    }
+    // The T14 rewrite, derived: bet-l has ≥2 subjective outcomes, the last is
+    // happy, and a supersedes edge links the new outcome to the old one.
+    const betLSubj = subj.filter((o) => o.commitment === 'bet-l')
+    const rewriteEdge = prev.edges.find(
+      (e) => e.type === 'supersedes' && e.from.startsWith('self/outcome/bet-l/') && e.to.startsWith('self/outcome/bet-l/'),
+    )
+    const rewrite = betLSubj.length >= 2 && betLSubj.at(-1)?.result === 'happy' && !!rewriteEdge
+    if (!rewrite) failures.push('§5: the bet-l felt-sense rewrite (append + outcome→outcome supersedes) is missing')
+    if (opRecorded.length !== 5) failures.push(`§5: expected 5 [op] answers, recorded ${opRecorded.length}`)
     console.log('\n§5 metrics:')
     console.log(`  provenance: ${mix} (recomputed from edges alone, F9)`)
-    console.log('  courage records: 2 — T3 (fear in note, bet placed himself), T14 (map in view, wrote himself)')
-    console.log('  post-intervention authorship: 2/2 = 100% (T9→T10 build; T13→T14 resolve)')
-    console.log('  external/felt divergence: T1 gpu-server (partially_confirmed × happy); T14 bet-l rewrite (contradicted × unhappy→happy)')
-    console.log(`  felt senses present: ${feltSenses.join(', ')} (all three + the rewrite)`)
-    console.log('  mandate-external interventions: 0 (check 9 at every step); lapse interventions: 0 (T18)')
+    console.log(`  felt senses present (derived): ${feltSenses.join(', ')} — asserted ⊇ {happy, unhappy, unchanged}`)
+    console.log(`  external/felt divergence (derived): bet-l observable=contradicted × final felt sense=${betLSubj.at(-1)?.result}, via the appended rewrite (supersedes edge ${rewriteEdge ? 'present' : 'MISSING'})`)
+    console.log('  mandate-external interventions: 0 (check 9 at every step); lapse interventions: 0 (T18, window derived from the mandates)')
+    console.log('  narrative (script-defined, not derived): courage records 2 (T3 fear-in-note bet, T14 map-in-view resolve); post-intervention authorship 2/2 (T9→T10, T13→T14)')
     console.log('  TTFUV: canned in CI — measured live at T9 in real mode')
-    console.log('  [op] answers (canned from op-answers.json; real mode asks the person):')
+    console.log(`  [op] answers (${opRecorded.length}/5, canned from op-answers.json; real mode asks the person):`)
     for (const line of opRecorded) console.log(`    ${line}`)
   }
 
