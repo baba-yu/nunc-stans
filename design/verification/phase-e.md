@@ -367,6 +367,20 @@ implementer driving).
   move marked done (PE5); naming.md gained the `apps` area row;
   reading-order's repo map moved apps-host from planned to landed.
 
+- **2026-07-11 — S-10 re-run PASS (T11 complete)**: pristine
+  `ubuntu:24.04` container, documented prerequisites only (git,
+  Node 24 tarball + corepack, rustup, just prebuilt) → `git clone /src`
+  (repo mounted ro; `safe.directory` needed as in phase C) →
+  `sh tools/bootstrap.sh /root/my-data` (doctor all-ok; store
+  remembered in config; self vault no-remote F11 line verified) →
+  `just up` → through :8720: `/health`, `/fourfive/api/health`,
+  **`/apps/` ("Generated apps" index) and `/apps/api`** (the Phase E
+  extension), and the home title all answered — `S-10-PASS`, exit 0.
+  The llama leg degraded honestly ("no GGUF in the store") — the
+  pristine home screen needs no model. Two harness-side retries were
+  needed (safe.directory on the ro mount; per-leg boot timing needed
+  retrying checks), no product-side fixes.
+
 ## Constitutional check record (filled at T10–T12, 2026-07-11)
 
 - **F7 (a cut version is immutable) — live refusal output**, twice, on
@@ -419,7 +433,10 @@ implementer driving).
 6. [ ] contracts/app-bundle.md drafted + owner-reviewed [T5]
 7. [x] deterministic + freezing generation proven; no generated code
        executed [T4, T6 — plus two live tamper→409-F7 proofs at T10]
-8. [ ] S-10 re-run (incl. /apps/), 3-OS CI green, screenshots under
-       design/ui/phase-e/ [T11]
-9. [ ] verification doc complete; v1 plan/naming/reading-order updated;
-       owner merge/push/PR gate [T12]
+8. [x] S-10 re-run (incl. /apps/), 3-OS CI green, screenshots under
+       design/ui/phase-e/ [T11 — S-10-PASS ubuntu:24.04; CI 10/10 jobs
+       on 9f958e9; 5 PNGs + agent transcript committed]
+9. [ ] verification doc complete; v1 plan/naming/reading-order updated
+       (all done 2026-07-11); **OWNER GATES remaining: review
+       contracts/app-bundle.md + contracts/agent-abi.md, reopen/merge
+       PR #9 (phase-e-finish → dev), close commit** [T12]
